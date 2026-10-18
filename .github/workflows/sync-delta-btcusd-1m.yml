@@ -1,5 +1,10 @@
 name: Sync Delta India BTCUSD 1m candles
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-delta-btcusd-1m.yml'
+      - 'scripts/sync_delta_btcusd_1m.py'
   workflow_dispatch:
     inputs:
       start:
