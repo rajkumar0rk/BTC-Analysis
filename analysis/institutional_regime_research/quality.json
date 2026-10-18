@@ -1,0 +1,40 @@
+{
+  "future_minutes": 943200,
+  "mark_minutes": 943200,
+  "oi_5m": 188640,
+  "funding_hours": 15720,
+  "monthly_partitions": {
+    "futures": 22,
+    "mark": 22,
+    "oi": 22,
+    "funding": 22
+  },
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-10-17 23:59:00+00:00",
+  "zero_volume_futures_minutes": 1819,
+  "features": {
+    "oi30_pct_p01_p50_p99": [
+      -13.87585,
+      0.26353,
+      11.53915
+    ],
+    "basis_bp_p01_p50_p99": [
+      -1.9771,
+      0.0157,
+      2.14
+    ],
+    "funding_p01_p50_p99": [
+      -0.00753898,
+      0.01,
+      0.01
+    ],
+    "non_null_funding_aligned": 188629,
+    "positive_oi_readings": 188640
+  },
+  "signals": 36029,
+  "replay_trades": 216174,
+  "setups": 21,
+  "eligible_entry_exit_pairs": 126,
+  "positive_both_early": 0,
+  "candidates_selected_by_early_periods": 15
+}
