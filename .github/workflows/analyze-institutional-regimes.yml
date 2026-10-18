@@ -1,0 +1,35 @@
+name: Institutional BTC positioning and structure analysis
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/analyze_institutional_regimes.py
+      - .github/workflows/analyze-institutional-regimes.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-institutional-regime-study
+  cancel-in-progress: false
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - name: Study actual market/OI/funding/mark history
+        run: python scripts/analyze_institutional_regimes.py
+      - name: Commit research output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_regime_research
+          if ! git diff --cached --quiet; then
+            git commit -m "research: BTC position regime and structure findings"
+            git pull --rebase origin main
+            git push
+          fi
