@@ -220,8 +220,17 @@ def snapshot():
                 if not isinstance(data,dict) or "buy" not in data or "sell" not in data:
                     raise ValueError("L2 response lacks buy/sell")
             elif category=="recent_trades":
-                if not isinstance(data,dict) or "trades" not in data:
-                    raise ValueError("Public trades response lacks trades")
+                # Public API versions may expose a list rather than a dict
+                # with "trades". Preserve actual records only.
+                if isinstance(data,list):
+                    data={"trades":data,"response_shape":"raw_list"}
+                elif isinstance(data,dict) and isinstance(data.get("trades"),list):
+                    data={"trades":data["trades"],"response_shape":"trades_object"}
+                elif isinstance(data,dict) and isinstance(data.get("result"),list):
+                    data={"trades":data["result"],"response_shape":"nested_result"}
+                else:
+                    detail=(sorted(data.keys()) if isinstance(data,dict) else type(data).__name__)
+                    raise ValueError(f"Unrecognized public trades response shape: {detail}")
             request_data[category]=data
         except Exception as exc:
             failures[category]=str(exc)[:500]
