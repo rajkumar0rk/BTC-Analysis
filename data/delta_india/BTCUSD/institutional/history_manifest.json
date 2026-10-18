@@ -1,0 +1,523 @@
+{
+  "source": "Delta Exchange India public REST v2/history/candles",
+  "base_url": "https://api.india.delta.exchange",
+  "symbol": "BTCUSD",
+  "generated_utc": "2026-10-18T16:05:02.363644Z",
+  "requested_start_utc": "2025-01-01T00:00:00Z",
+  "requested_end_exclusive_utc": "2026-10-18T00:00:00Z",
+  "real_orderbook_history_available": false,
+  "real_trade_tape_history_available": false,
+  "liquidation_history_available": false,
+  "series": {
+    "mark_1m": {
+      "native_source_symbol": "MARK:BTCUSD",
+      "resolution": "1m",
+      "path_prefix": "data/delta_india/BTCUSD/institutional/history/mark_1m",
+      "api_requests": 674,
+      "rows_fetched_this_run": 943200,
+      "rows_saved": 943200,
+      "expected_dense_intervals": 943200,
+      "coverage_pct": 100.0,
+      "missing_dense_intervals": 0,
+      "earliest_utc": "2025-01-01T00:00:00Z",
+      "latest_utc": "2026-10-17T23:59:00Z",
+      "partitions": [
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-01.csv.gz",
+          "rows": 44640,
+          "first_utc": "2025-01-01T00:00:00Z",
+          "last_utc": "2025-01-31T23:59:00Z",
+          "compressed_bytes": 1168944
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-02.csv.gz",
+          "rows": 40320,
+          "first_utc": "2025-02-01T00:00:00Z",
+          "last_utc": "2025-02-28T23:59:00Z",
+          "compressed_bytes": 1044265
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-03.csv.gz",
+          "rows": 44640,
+          "first_utc": "2025-03-01T00:00:00Z",
+          "last_utc": "2025-03-31T23:59:00Z",
+          "compressed_bytes": 1143232
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-04.csv.gz",
+          "rows": 43200,
+          "first_utc": "2025-04-01T00:00:00Z",
+          "last_utc": "2025-04-30T23:59:00Z",
+          "compressed_bytes": 1071245
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-05.csv.gz",
+          "rows": 44640,
+          "first_utc": "2025-05-01T00:00:00Z",
+          "last_utc": "2025-05-31T23:59:00Z",
+          "compressed_bytes": 1150754
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-06.csv.gz",
+          "rows": 43200,
+          "first_utc": "2025-06-01T00:00:00Z",
+          "last_utc": "2025-06-30T23:59:00Z",
+          "compressed_bytes": 1090022
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-07.csv.gz",
+          "rows": 44640,
+          "first_utc": "2025-07-01T00:00:00Z",
+          "last_utc": "2025-07-31T23:59:00Z",
+          "compressed_bytes": 1122639
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-08.csv.gz",
+          "rows": 44640,
+          "first_utc": "2025-08-01T00:00:00Z",
+          "last_utc": "2025-08-31T23:59:00Z",
+          "compressed_bytes": 1145243
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-09.csv.gz",
+          "rows": 43200,
+          "first_utc": "2025-09-01T00:00:00Z",
+          "last_utc": "2025-09-30T23:59:00Z",
+          "compressed_bytes": 1091643
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-10.csv.gz",
+          "rows": 44640,
+          "first_utc": "2025-10-01T00:00:00Z",
+          "last_utc": "2025-10-31T23:59:00Z",
+          "compressed_bytes": 1166014
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-11.csv.gz",
+          "rows": 43200,
+          "first_utc": "2025-11-01T00:00:00Z",
+          "last_utc": "2025-11-30T23:59:00Z",
+          "compressed_bytes": 1129207
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-12.csv.gz",
+          "rows": 44640,
+          "first_utc": "2025-12-01T00:00:00Z",
+          "last_utc": "2025-12-31T23:59:00Z",
+          "compressed_bytes": 1135667
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-01.csv.gz",
+          "rows": 44640,
+          "first_utc": "2026-01-01T00:00:00Z",
+          "last_utc": "2026-01-31T23:59:00Z",
+          "compressed_bytes": 1123705
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-02.csv.gz",
+          "rows": 40320,
+          "first_utc": "2026-02-01T00:00:00Z",
+          "last_utc": "2026-02-28T23:59:00Z",
+          "compressed_bytes": 1049891
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-03.csv.gz",
+          "rows": 44640,
+          "first_utc": "2026-03-01T00:00:00Z",
+          "last_utc": "2026-03-31T23:59:00Z",
+          "compressed_bytes": 1158249
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-04.csv.gz",
+          "rows": 43200,
+          "first_utc": "2026-04-01T00:00:00Z",
+          "last_utc": "2026-04-30T23:59:00Z",
+          "compressed_bytes": 1097434
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-05.csv.gz",
+          "rows": 44640,
+          "first_utc": "2026-05-01T00:00:00Z",
+          "last_utc": "2026-05-31T23:59:00Z",
+          "compressed_bytes": 1118185
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-06.csv.gz",
+          "rows": 43200,
+          "first_utc": "2026-06-01T00:00:00Z",
+          "last_utc": "2026-06-30T23:59:00Z",
+          "compressed_bytes": 1112717
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-07.csv.gz",
+          "rows": 44640,
+          "first_utc": "2026-07-01T00:00:00Z",
+          "last_utc": "2026-07-31T23:59:00Z",
+          "compressed_bytes": 1122341
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-08.csv.gz",
+          "rows": 44640,
+          "first_utc": "2026-08-01T00:00:00Z",
+          "last_utc": "2026-08-31T23:59:00Z",
+          "compressed_bytes": 1107739
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-09.csv.gz",
+          "rows": 43200,
+          "first_utc": "2026-09-01T00:00:00Z",
+          "last_utc": "2026-09-30T23:59:00Z",
+          "compressed_bytes": 1099002
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-10.csv.gz",
+          "rows": 24480,
+          "first_utc": "2026-10-01T00:00:00Z",
+          "last_utc": "2026-10-17T23:59:00Z",
+          "compressed_bytes": 615666
+        }
+      ],
+      "note": "Any gaps remain gaps: no fabricated rows or interpolation."
+    },
+    "open_interest_5m": {
+      "native_source_symbol": "OI:BTCUSD",
+      "resolution": "5m",
+      "path_prefix": "data/delta_india/BTCUSD/institutional/history/open_interest_5m",
+      "api_requests": 135,
+      "rows_fetched_this_run": 188640,
+      "rows_saved": 188640,
+      "expected_dense_intervals": 188640,
+      "coverage_pct": 100.0,
+      "missing_dense_intervals": 0,
+      "earliest_utc": "2025-01-01T00:00:00Z",
+      "latest_utc": "2026-10-17T23:55:00Z",
+      "partitions": [
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-01.csv.gz",
+          "rows": 8928,
+          "first_utc": "2025-01-01T00:00:00Z",
+          "last_utc": "2025-01-31T23:55:00Z",
+          "compressed_bytes": 137585
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-02.csv.gz",
+          "rows": 8064,
+          "first_utc": "2025-02-01T00:00:00Z",
+          "last_utc": "2025-02-28T23:55:00Z",
+          "compressed_bytes": 121940
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-03.csv.gz",
+          "rows": 8928,
+          "first_utc": "2025-03-01T00:00:00Z",
+          "last_utc": "2025-03-31T23:55:00Z",
+          "compressed_bytes": 137236
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-04.csv.gz",
+          "rows": 8640,
+          "first_utc": "2025-04-01T00:00:00Z",
+          "last_utc": "2025-04-30T23:55:00Z",
+          "compressed_bytes": 132291
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-05.csv.gz",
+          "rows": 8928,
+          "first_utc": "2025-05-01T00:00:00Z",
+          "last_utc": "2025-05-31T23:55:00Z",
+          "compressed_bytes": 134762
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-06.csv.gz",
+          "rows": 8640,
+          "first_utc": "2025-06-01T00:00:00Z",
+          "last_utc": "2025-06-30T23:55:00Z",
+          "compressed_bytes": 128531
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-07.csv.gz",
+          "rows": 8928,
+          "first_utc": "2025-07-01T00:00:00Z",
+          "last_utc": "2025-07-31T23:55:00Z",
+          "compressed_bytes": 131978
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-08.csv.gz",
+          "rows": 8928,
+          "first_utc": "2025-08-01T00:00:00Z",
+          "last_utc": "2025-08-31T23:55:00Z",
+          "compressed_bytes": 132778
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-09.csv.gz",
+          "rows": 8640,
+          "first_utc": "2025-09-01T00:00:00Z",
+          "last_utc": "2025-09-30T23:55:00Z",
+          "compressed_bytes": 127067
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-10.csv.gz",
+          "rows": 8928,
+          "first_utc": "2025-10-01T00:00:00Z",
+          "last_utc": "2025-10-31T23:55:00Z",
+          "compressed_bytes": 134706
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-11.csv.gz",
+          "rows": 8640,
+          "first_utc": "2025-11-01T00:00:00Z",
+          "last_utc": "2025-11-30T23:55:00Z",
+          "compressed_bytes": 131193
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-12.csv.gz",
+          "rows": 8928,
+          "first_utc": "2025-12-01T00:00:00Z",
+          "last_utc": "2025-12-31T23:55:00Z",
+          "compressed_bytes": 135158
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-01.csv.gz",
+          "rows": 8928,
+          "first_utc": "2026-01-01T00:00:00Z",
+          "last_utc": "2026-01-31T23:55:00Z",
+          "compressed_bytes": 134446
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-02.csv.gz",
+          "rows": 8064,
+          "first_utc": "2026-02-01T00:00:00Z",
+          "last_utc": "2026-02-28T23:55:00Z",
+          "compressed_bytes": 125915
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-03.csv.gz",
+          "rows": 8928,
+          "first_utc": "2026-03-01T00:00:00Z",
+          "last_utc": "2026-03-31T23:55:00Z",
+          "compressed_bytes": 140080
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-04.csv.gz",
+          "rows": 8640,
+          "first_utc": "2026-04-01T00:00:00Z",
+          "last_utc": "2026-04-30T23:55:00Z",
+          "compressed_bytes": 133791
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-05.csv.gz",
+          "rows": 8928,
+          "first_utc": "2026-05-01T00:00:00Z",
+          "last_utc": "2026-05-31T23:55:00Z",
+          "compressed_bytes": 137191
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-06.csv.gz",
+          "rows": 8640,
+          "first_utc": "2026-06-01T00:00:00Z",
+          "last_utc": "2026-06-30T23:55:00Z",
+          "compressed_bytes": 134704
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-07.csv.gz",
+          "rows": 8928,
+          "first_utc": "2026-07-01T00:00:00Z",
+          "last_utc": "2026-07-31T23:55:00Z",
+          "compressed_bytes": 138909
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-08.csv.gz",
+          "rows": 8928,
+          "first_utc": "2026-08-01T00:00:00Z",
+          "last_utc": "2026-08-31T23:55:00Z",
+          "compressed_bytes": 138695
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-09.csv.gz",
+          "rows": 8640,
+          "first_utc": "2026-09-01T00:00:00Z",
+          "last_utc": "2026-09-30T23:55:00Z",
+          "compressed_bytes": 132608
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-10.csv.gz",
+          "rows": 4896,
+          "first_utc": "2026-10-01T00:00:00Z",
+          "last_utc": "2026-10-17T23:55:00Z",
+          "compressed_bytes": 75439
+        }
+      ],
+      "note": "Any gaps remain gaps: no fabricated rows or interpolation."
+    },
+    "funding_1h": {
+      "native_source_symbol": "FUNDING:BTCUSD",
+      "resolution": "1h",
+      "path_prefix": "data/delta_india/BTCUSD/institutional/history/funding_1h",
+      "api_requests": 12,
+      "rows_fetched_this_run": 15720,
+      "rows_saved": 15720,
+      "expected_dense_intervals": 15720,
+      "coverage_pct": 100.0,
+      "missing_dense_intervals": 0,
+      "earliest_utc": "2025-01-01T00:00:00Z",
+      "latest_utc": "2026-10-17T23:00:00Z",
+      "partitions": [
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-01.csv.gz",
+          "rows": 744,
+          "first_utc": "2025-01-01T00:00:00Z",
+          "last_utc": "2025-01-31T23:00:00Z",
+          "compressed_bytes": 3205
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-02.csv.gz",
+          "rows": 672,
+          "first_utc": "2025-02-01T00:00:00Z",
+          "last_utc": "2025-02-28T23:00:00Z",
+          "compressed_bytes": 3079
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-03.csv.gz",
+          "rows": 744,
+          "first_utc": "2025-03-01T00:00:00Z",
+          "last_utc": "2025-03-31T23:00:00Z",
+          "compressed_bytes": 3464
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-04.csv.gz",
+          "rows": 720,
+          "first_utc": "2025-04-01T00:00:00Z",
+          "last_utc": "2025-04-30T23:00:00Z",
+          "compressed_bytes": 3340
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-05.csv.gz",
+          "rows": 744,
+          "first_utc": "2025-05-01T00:00:00Z",
+          "last_utc": "2025-05-31T23:00:00Z",
+          "compressed_bytes": 2663
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-06.csv.gz",
+          "rows": 720,
+          "first_utc": "2025-06-01T00:00:00Z",
+          "last_utc": "2025-06-30T23:00:00Z",
+          "compressed_bytes": 2810
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-07.csv.gz",
+          "rows": 744,
+          "first_utc": "2025-07-01T00:00:00Z",
+          "last_utc": "2025-07-31T23:00:00Z",
+          "compressed_bytes": 2340
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-08.csv.gz",
+          "rows": 744,
+          "first_utc": "2025-08-01T00:00:00Z",
+          "last_utc": "2025-08-31T23:00:00Z",
+          "compressed_bytes": 2449
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-09.csv.gz",
+          "rows": 720,
+          "first_utc": "2025-09-01T00:00:00Z",
+          "last_utc": "2025-09-30T23:00:00Z",
+          "compressed_bytes": 2407
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-10.csv.gz",
+          "rows": 744,
+          "first_utc": "2025-10-01T00:00:00Z",
+          "last_utc": "2025-10-31T23:00:00Z",
+          "compressed_bytes": 2862
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-11.csv.gz",
+          "rows": 720,
+          "first_utc": "2025-11-01T00:00:00Z",
+          "last_utc": "2025-11-30T23:00:00Z",
+          "compressed_bytes": 2532
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-12.csv.gz",
+          "rows": 744,
+          "first_utc": "2025-12-01T00:00:00Z",
+          "last_utc": "2025-12-31T23:00:00Z",
+          "compressed_bytes": 2612
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-01.csv.gz",
+          "rows": 744,
+          "first_utc": "2026-01-01T00:00:00Z",
+          "last_utc": "2026-01-31T23:00:00Z",
+          "compressed_bytes": 2489
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-02.csv.gz",
+          "rows": 672,
+          "first_utc": "2026-02-01T00:00:00Z",
+          "last_utc": "2026-02-28T23:00:00Z",
+          "compressed_bytes": 2927
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-03.csv.gz",
+          "rows": 744,
+          "first_utc": "2026-03-01T00:00:00Z",
+          "last_utc": "2026-03-31T23:00:00Z",
+          "compressed_bytes": 3291
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-04.csv.gz",
+          "rows": 720,
+          "first_utc": "2026-04-01T00:00:00Z",
+          "last_utc": "2026-04-30T23:00:00Z",
+          "compressed_bytes": 3323
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-05.csv.gz",
+          "rows": 744,
+          "first_utc": "2026-05-01T00:00:00Z",
+          "last_utc": "2026-05-31T23:00:00Z",
+          "compressed_bytes": 3553
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-06.csv.gz",
+          "rows": 720,
+          "first_utc": "2026-06-01T00:00:00Z",
+          "last_utc": "2026-06-30T23:00:00Z",
+          "compressed_bytes": 2834
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-07.csv.gz",
+          "rows": 744,
+          "first_utc": "2026-07-01T00:00:00Z",
+          "last_utc": "2026-07-31T23:00:00Z",
+          "compressed_bytes": 2590
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-08.csv.gz",
+          "rows": 744,
+          "first_utc": "2026-08-01T00:00:00Z",
+          "last_utc": "2026-08-31T23:00:00Z",
+          "compressed_bytes": 2374
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-09.csv.gz",
+          "rows": 720,
+          "first_utc": "2026-09-01T00:00:00Z",
+          "last_utc": "2026-09-30T23:00:00Z",
+          "compressed_bytes": 2759
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-10.csv.gz",
+          "rows": 408,
+          "first_utc": "2026-10-01T00:00:00Z",
+          "last_utc": "2026-10-17T23:00:00Z",
+          "compressed_bytes": 2051
+        }
+      ],
+      "note": "Sparse funding observations are not forward-filled. Empty intervals do NOT mean zero funding."
+    }
+  }
+}
