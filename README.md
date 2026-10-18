@@ -55,3 +55,6 @@ Use `--timeframe 5`, `15`, `30` or `60` for further clock-time scans. Outputs un
 ## Rules for new findings
 
 Pre-register a test before viewing its holdout set, compare against time-of-day/volatility baselines, account for repeated tests and overlapping positions, report absolute price moves plus uncertainty, then run realistic execution replay. Retain null/failed hypotheses as well as successful ones.
+## GitHub upload status (2026-10-18)
+
+This repository has been initialized and contains the complete 5-minute source, complete reconstructed 15-minute and 30-minute OHLCV aggregates, Codex research-handoff notes, and selected research reports/results. **It is not yet a complete mirror of the original 46-file local research archive.** Some large generated CSV scans and the reusable scripts remain in the downloadable archive. The archived local file manifest is not yet published here. Do not interpret missing research tables as negative results; refer to the original archive until synchronization is completed.
