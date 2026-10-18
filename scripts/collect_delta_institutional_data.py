@@ -102,6 +102,9 @@ def validate_ohlc(z,seconds,start_ts,end_ts):
         values={"time":str(t)}
         for k in FIELDS[1:]:
             value=raw.get(k)
+            if value is None and k=="volume":
+                values[k]=""  # Non-traded MARK/OI/FUNDING candles have no volume; do not fabricate zero.
+                continue
             if value is None:raise RuntimeError(f"Missing {k} at {t}")
             f=float(value)
             if not math_isfinite(f):raise RuntimeError(f"Nonfinite {k} at {t}")
