@@ -1,0 +1,14 @@
+{
+  "last_snapshot_utc": "2026-10-18T16:12:53.047346Z",
+  "archived_path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-18.jsonl.gz",
+  "available": [
+    "level2_book",
+    "ticker"
+  ],
+  "failed": {
+    "recent_trades": "Public trades response lacks trades"
+  },
+  "trade_count_latest_poll": 0,
+  "orderbook_buy_levels": 30,
+  "orderbook_sell_levels": 30
+}
