@@ -1,0 +1,11 @@
+<PARSED TEXT FOR SHEET: 1 / 1 TABS
+TAB NAME: btc_futures_key_findings.csv>index,Pattern,Measure,Train_Count,Train_Result,Test_Count,Test_Result,Units,Method
+0,24-high breakout -> SHORT,30-minute favorable direction,1016,55.61,404,60.64,percent,One event at least 35 minutes apart
+1,24-high breakout -> SHORT,Mean signed 30-minute return,1016,1.184,404,1.378,basis points,One event at least 35 minutes apart
+2,24-low breakout -> LONG,30-minute favorable direction,1042,55.47,441,51.7,percent,One event at least 35 minutes apart
+3,Green large candle (>2 ATR) -> SHORT,30-minute favorable direction,567,54.32,246,58.94,percent,One event at least 35 minutes apart
+4,High-volume green candle -> SHORT,30-minute favorable direction,480,55.0,207,58.94,percent,One event at least 35 minutes apart
+5,High ATR regime,Next 60m absolute move >= 0.5 percent,8165,35.04,3452,36.47,percent,All qualifying candles (overlapping future outcomes)
+6,Low ATR regime,Next 60m absolute move >= 0.5 percent,12764,9.28,5440,9.49,percent,All qualifying candles (overlapping future outcomes)
+7,All qualifying candles,Next 60m absolute move >= 0.5 percent,43486,19.11,17544,18.55,percent,All qualifying candles (overlapping future outcomes)
+8,Weekday 13-17 UTC,Next 60m absolute move >= 0.5 percent,6420,39.0,2700,32.85,percent,All qualifying candles (overlapping future outcomes)
