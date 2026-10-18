@@ -1,0 +1,34 @@
+name: Backfill Delta India institutional data
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/collect_delta_institutional_data.py
+      - .github/workflows/backfill-delta-institutional.yml
+permissions:
+  contents: write
+concurrency:
+  group: delta-institutional-data-writes
+  cancel-in-progress: false
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download original exchange funding, OI and mark data
+        run: python scripts/collect_delta_institutional_data.py backfill --end-exclusive 2026-10-18
+      - name: Commit compressed data and source manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/delta_india/BTCUSD/institutional/history data/delta_india/BTCUSD/institutional/history_manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data: genuine Delta mark OI funding historical observations"
+            git pull --rebase origin main
+            git push
+          fi
