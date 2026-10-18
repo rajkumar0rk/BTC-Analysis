@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - .github/workflows/capture-delta-institutional-live.yml
+      - scripts/collect_delta_institutional_data.py
   schedule:
     - cron: "7 * * * *"
   workflow_dispatch:
