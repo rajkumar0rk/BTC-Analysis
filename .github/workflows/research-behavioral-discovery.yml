@@ -1,0 +1,35 @@
+name: Discover BTC behavioral regimes and matched-market effects
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_behavioral_discovery.py
+      - .github/workflows/research-behavioral-discovery.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-behavioral-discovery
+  cancel-in-progress: false
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - name: Discover patterns from genuine Delta futures market data
+        run: python scripts/research_behavioral_discovery.py
+      - name: Save findings, positive or negative
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage2
+          if ! git diff --cached --quiet; then
+            git commit -m "research: validated BTC behavioral regime discoveries"
+            git pull --rebase origin main
+            git push
+          fi
