@@ -1,0 +1,212 @@
+{
+  "source": "https://api.india.delta.exchange/v2/history/candles",
+  "exchange": "Delta Exchange India",
+  "symbol": "BTCUSD",
+  "instrument": "BTC perpetual futures",
+  "resolution": "1m",
+  "timestamp_unit": "unix_seconds_utc",
+  "timestamp_label": "as_returned_by_API",
+  "requested_through_utc": "2026-10-17",
+  "generated_at_utc": "2026-10-18T07:10:10.133437+00:00",
+  "note": "Missing candles are reported but never fabricated; OHLCV is not bid/ask/order book.",
+  "partitions": [
+    {
+      "file": "2025-01.csv.gz",
+      "utc_start": "2025-01-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-02-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "5d0ebde1cc87acf5a099972ab26cd9e9e26d5964a2bc1b2a8e1fa17ca234bba0"
+    },
+    {
+      "file": "2025-02.csv.gz",
+      "utc_start": "2025-02-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-03-01T00:00:00+00:00",
+      "expected_minutes": 40320,
+      "observed_candles": 40320,
+      "missing_minutes": 0,
+      "sha256_gzip": "0f50eed68eca54582d29104a32af94b66a0be4102ee7dd664dd139618303238d"
+    },
+    {
+      "file": "2025-03.csv.gz",
+      "utc_start": "2025-03-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-04-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "04aca2d3944bbcc507f26d301d4ccee0dff06a8e8c56f929b4b31a5941ebaa69"
+    },
+    {
+      "file": "2025-04.csv.gz",
+      "utc_start": "2025-04-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-05-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "5bd04594456dbde7943310201078cbf3169a9cb8a7cb6989d2f81b3ef6793b38"
+    },
+    {
+      "file": "2025-05.csv.gz",
+      "utc_start": "2025-05-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-06-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "c9c670972b786ba16d6b8d8eb0acf15e6b1a517370b7ab090e1c0cc71b65df51"
+    },
+    {
+      "file": "2025-06.csv.gz",
+      "utc_start": "2025-06-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-07-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "93956a2f915be5467f5dda779cd07b00d8f119db0d4b05b54000d52691cc8e78"
+    },
+    {
+      "file": "2025-07.csv.gz",
+      "utc_start": "2025-07-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-08-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "11e969bb74b8f53c9ba208eb41e17b1ff4173a3bf2d5840dbe870f879e429c17"
+    },
+    {
+      "file": "2025-08.csv.gz",
+      "utc_start": "2025-08-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-09-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "f5282ce351d5afab93b2397083e2aebe429dc80757deb2a03af8998f60e78db5"
+    },
+    {
+      "file": "2025-09.csv.gz",
+      "utc_start": "2025-09-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-10-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "bbf4ad093093546242c69509fd6724cba2cdfa8636c7d3d191e2a313395cd2c9"
+    },
+    {
+      "file": "2025-10.csv.gz",
+      "utc_start": "2025-10-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-11-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "641a837a6ee6ca45c57e2f00aeb645e98dfd4adee3361cf305a1d1198539285e"
+    },
+    {
+      "file": "2025-11.csv.gz",
+      "utc_start": "2025-11-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-12-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "29ad16d3c65e386c23cdd523ae4fdc1c4f07f1db1a782b07c2d904e5f4e4a067"
+    },
+    {
+      "file": "2025-12.csv.gz",
+      "utc_start": "2025-12-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-01-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "adc35407d4648dfc4a1bb64d1393a0fc69d2aa43914cce38e1ae8636f7b53f18"
+    },
+    {
+      "file": "2026-01.csv.gz",
+      "utc_start": "2026-01-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-02-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "81bfe747c61384e1819889d7728bd1565adf2f37370320cb9b541e59259e5f6f"
+    },
+    {
+      "file": "2026-02.csv.gz",
+      "utc_start": "2026-02-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-03-01T00:00:00+00:00",
+      "expected_minutes": 40320,
+      "observed_candles": 40320,
+      "missing_minutes": 0,
+      "sha256_gzip": "9f65468800bd92893d7aff4e1e6eb4079c8c9f92c5fc2166afe7b13817e3d2d0"
+    },
+    {
+      "file": "2026-03.csv.gz",
+      "utc_start": "2026-03-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-04-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "2092dbd9ff56827ec98e52312d744b4a24b30e995323478d05ab0aed86392a51"
+    },
+    {
+      "file": "2026-04.csv.gz",
+      "utc_start": "2026-04-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-05-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "ac949c3669ebe2e47eb2e59c98df6da60727a9fdf54274fd9df3a376c844ce36"
+    },
+    {
+      "file": "2026-05.csv.gz",
+      "utc_start": "2026-05-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-06-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "6b66e854500a0edefebf0edb0c24cd218f4de009482e09980fe9041418a3dea8"
+    },
+    {
+      "file": "2026-06.csv.gz",
+      "utc_start": "2026-06-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-07-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "b4e588d4ace8df0ca7a01d92ad2ccf39eba5a624d4c7eba3e658d330b90838e1"
+    },
+    {
+      "file": "2026-07.csv.gz",
+      "utc_start": "2026-07-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-08-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "a41cf0ce175302dcf8da1ed629efb01fc9cbbbf83d2d8e4369cd3b1a9e7d8bd0"
+    },
+    {
+      "file": "2026-08.csv.gz",
+      "utc_start": "2026-08-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-09-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "487592c47d21ff540ba574c11487eb7c1a62e7d498c930fe86e9efd19e9338e0"
+    },
+    {
+      "file": "2026-09.csv.gz",
+      "utc_start": "2026-09-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-10-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "8625a04c80c029ef31abf39c66b0bdf58de38c06228178c5472a203301d071cb"
+    },
+    {
+      "file": "2026-10.csv.gz",
+      "utc_start": "2026-10-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-10-18T00:00:00+00:00",
+      "expected_minutes": 24480,
+      "observed_candles": 24480,
+      "missing_minutes": 0,
+      "sha256_gzip": "7e04a35d23df19ba91141771e0701c39e5fe27dade51be9e4e75775bd1d8236e"
+    }
+  ]
+}
