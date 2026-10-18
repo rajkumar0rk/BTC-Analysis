@@ -1,0 +1,87 @@
+{
+  "venue_pair": "Long Binance BTCUSDT spot / short Delta India BTCUSD perp",
+  "spot_source": [
+    {
+      "month": "2025-10",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-10.zip",
+      "sha256_not_recorded": true,
+      "rows": 744
+    },
+    {
+      "month": "2025-11",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-11.zip",
+      "sha256_not_recorded": true,
+      "rows": 720
+    },
+    {
+      "month": "2025-12",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2025-12.zip",
+      "sha256_not_recorded": true,
+      "rows": 744
+    },
+    {
+      "month": "2026-01",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-01.zip",
+      "sha256_not_recorded": true,
+      "rows": 744
+    },
+    {
+      "month": "2026-02",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-02.zip",
+      "sha256_not_recorded": true,
+      "rows": 672
+    },
+    {
+      "month": "2026-03",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-03.zip",
+      "sha256_not_recorded": true,
+      "rows": 744
+    },
+    {
+      "month": "2026-04",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-04.zip",
+      "sha256_not_recorded": true,
+      "rows": 720
+    },
+    {
+      "month": "2026-05",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-05.zip",
+      "sha256_not_recorded": true,
+      "rows": 744
+    },
+    {
+      "month": "2026-06",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-06.zip",
+      "sha256_not_recorded": true,
+      "rows": 720
+    },
+    {
+      "month": "2026-07",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-07.zip",
+      "sha256_not_recorded": true,
+      "rows": 744
+    },
+    {
+      "month": "2026-08",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-08.zip",
+      "sha256_not_recorded": true,
+      "rows": 744
+    },
+    {
+      "month": "2026-09",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2026-09.zip",
+      "sha256_not_recorded": true,
+      "rows": 720
+    }
+  ],
+  "spot_rows": 8760,
+  "spot_first": "2025-10-01 00:00:00+00:00",
+  "spot_last": "2026-09-30 23:00:00+00:00",
+  "trials_rows_including_scenarios": 2270,
+  "excluded_trial_count": 1094,
+  "settlement_assumption": "00:00/08:00/16:00 UTC; previous completed funding hourly observation proxy",
+  "rate_unit_assumption": "API 0.01 is 0.01% (divide by 100)",
+  "funding_proxy_coverage_pct": 100.0,
+  "warning": "Funding 1h series is NOT settled funding and mark is not hedge cashflow. This is a research feasibility approximation, not a valid executable backtest.",
+  "risk": "Binance USDT not identical to Delta USD; hedge availability/Indian access/capital transfers/margin risk not reconstructed"
+}
