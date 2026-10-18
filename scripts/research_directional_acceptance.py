@@ -88,8 +88,8 @@ def replay(f, h, rules):
                 # All stops/targets calculated relative to observed entry quote proxy.
                 stop = entry_mid - side*350
                 target = entry_mid + side*500
-                first_stop = 60
-                first_target = 60
+                first_stop = k + 60
+                first_target = k + 60
                 for j in range(entry_k, k+60):
                     if (side == 1 and lo[j] <= stop) or (side == -1 and hi[j] >= stop):
                         first_stop = j
@@ -98,11 +98,11 @@ def replay(f, h, rules):
                     if (side == 1 and hi[j] >= target) or (side == -1 and lo[j] <= target):
                         first_target = j
                         break
-                if first_stop <= first_target and first_stop < 60:
+                if first_stop <= first_target and first_stop < k + 60:
                     end = first_stop
                     exit_mid = stop
                     reason = "stop"
-                elif first_target < 60:
+                elif first_target < k + 60:
                     end = first_target
                     exit_mid = target
                     reason = "target"
