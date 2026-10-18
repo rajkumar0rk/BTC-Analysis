@@ -1,0 +1,7 @@
+period,split,weekday,days,median_range_points,days_range_ge200_pct,days_range_ge500_pct
+NY_0930_to_1130,discovery,True,390,1519.0,100.0,98.97
+NY_0930_to_1130,holdout,True,78,979.5,100.0,97.44
+full_NY_day,discovery,False,156,2046.2,100.0,98.72
+full_NY_day,discovery,True,391,2888.5,100.0,100.0
+full_NY_day,holdout,False,31,1054.0,100.0,90.32
+full_NY_day,holdout,True,78,1850.2,100.0,100.0
