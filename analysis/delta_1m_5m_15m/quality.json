@@ -1,0 +1,15 @@
+{
+  "source_months": 22,
+  "source_candles": 943200,
+  "missing_minutes": 0,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-10-17 23:59:00+00:00",
+  "zero_volume": 1819,
+  "bars_by_resolution": {
+    "1": 943200,
+    "5": 188640,
+    "15": 62880
+  },
+  "train_last_utc": "2026-06-30",
+  "holdout_start_utc": "2026-07-01"
+}
