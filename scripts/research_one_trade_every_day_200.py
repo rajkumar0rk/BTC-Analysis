@@ -280,7 +280,7 @@ def main():
         last_utc=str(d.index.max()),zero_volume_minutes=int((d.volume==0).sum()),
         stop_points=list(STOPS),hold_minutes=list(HOLDS),targets=list(TARGETS),
         fee_model="0.05% taker each side + GST18%; slippage 5 BTC points each side",
-        "selection":"2025 training plus Jan-Jun 2026 validation; Jul-Oct 2026 reserved")
+        selection="2025 training plus Jan-Jun 2026 validation; Jul-Oct 2026 reserved")
     results=replay(d,entries,last)
     quality["simulated_trades"]=len(results)
     perrule=describe(results)
