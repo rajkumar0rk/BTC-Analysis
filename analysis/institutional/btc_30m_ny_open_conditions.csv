@@ -1,0 +1,34 @@
+<PARSED TEXT FOR SHEET: 1 / 1 TABS
+TAB NAME: btc_30m_ny_open_conditions.csv>index,rule,period,n,wins,median_bp,mean_bp,p25,pminus25
+0,NY open bearish strong body ≥70% (LONG),test,4,50.0,39.07,52.47,50.0,50.0
+1,NY open bearish strong body ≥70% (LONG),train,10,30.0,-20.95,-5.67,30.0,50.0
+2,NY open bearish strong body ≥70% (LONG),validate,2,50.0,-26.95,-26.95,50.0,50.0
+3,NY open bearish strong body ≥70% (SHORT),test,4,50.0,-39.07,-52.47,50.0,50.0
+4,NY open bearish strong body ≥70% (SHORT),train,10,70.0,20.95,5.67,50.0,30.0
+5,NY open bearish strong body ≥70% (SHORT),validate,2,50.0,26.95,26.95,50.0,50.0
+6,"NY open bearish, volume ≥2x prior 8 bars (SHORT)",test,17,41.2,-40.63,-10.34,35.3,52.9
+7,"NY open bearish, volume ≥2x prior 8 bars (SHORT)",train,41,48.8,-1.17,-13.5,39.0,41.5
+8,"NY open bearish, volume ≥2x prior 8 bars (SHORT)",validate,13,46.2,-17.51,-4.9,30.8,46.2
+9,NY open bullish strong body ≥70% (LONG),test,7,57.1,1.52,-17.74,14.3,42.9
+10,NY open bullish strong body ≥70% (LONG),train,4,25.0,-54.92,10.48,25.0,75.0
+11,NY open bullish strong body ≥70% (SHORT),test,7,42.9,-1.52,17.74,42.9,14.3
+12,NY open bullish strong body ≥70% (SHORT),train,4,75.0,54.92,-10.48,75.0,25.0
+13,"NY open bullish, volume ≥2x prior 8 bars (LONG)",test,21,47.6,-15.13,-3.15,28.6,47.6
+14,"NY open bullish, volume ≥2x prior 8 bars (LONG)",train,34,58.8,23.74,22.22,50.0,32.4
+15,"NY open bullish, volume ≥2x prior 8 bars (LONG)",validate,4,25.0,-42.55,-22.03,25.0,75.0
+16,NY open closes in bottom 20% of its candle (SHORT),test,8,50.0,17.89,3.8,50.0,37.5
+17,NY open closes in bottom 20% of its candle (SHORT),train,17,70.6,32.53,32.89,52.9,23.5
+18,NY open closes in bottom 20% of its candle (SHORT),validate,6,33.3,-26.94,-48.15,16.7,50.0
+19,NY open closes in top 20% of its candle (LONG),test,11,54.5,1.52,-7.1,27.3,36.4
+20,NY open closes in top 20% of its candle (LONG),train,15,73.3,27.36,42.08,53.3,20.0
+21,NY open takes premarket HIGH then closes ABOVE (LONG),test,5,60.0,3.01,12.58,40.0,20.0
+22,NY open takes premarket HIGH then closes ABOVE (LONG),train,12,75.0,56.03,80.36,75.0,16.7
+23,NY open takes premarket HIGH then closes ABOVE (LONG),validate,1,0.0,-37.74,-37.74,0.0,100.0
+24,NY open takes premarket HIGH then closes back UNDER it (SHORT),test,4,100.0,49.66,49.04,100.0,0.0
+25,NY open takes premarket HIGH then closes back UNDER it (SHORT),train,11,27.3,-7.73,-28.06,27.3,45.5
+26,NY open takes premarket LOW then closes BELOW (SHORT),test,10,60.0,28.89,21.17,50.0,30.0
+27,NY open takes premarket LOW then closes BELOW (SHORT),train,14,71.4,20.95,23.04,50.0,21.4
+28,NY open takes premarket LOW then closes BELOW (SHORT),validate,5,60.0,16.6,22.36,40.0,40.0
+29,NY open takes premarket LOW then closes back ABOVE (LONG),test,6,50.0,0.29,15.3,50.0,50.0
+30,NY open takes premarket LOW then closes back ABOVE (LONG),train,16,62.5,88.35,51.66,62.5,25.0
+31,NY open takes premarket LOW then closes back ABOVE (LONG),validate,3,66.7,17.51,14.78,33.3,33.3
