@@ -182,7 +182,7 @@ def main():
     a.to_csv(OUT/"signal_exclusions.csv",index=False)
     t.to_csv(OUT/"trade_ledger.csv.gz",index=False,compression="gzip")
     quality=dict(minute_rows=len(f),five_minute_rows=len(five),first=str(f.index[0]),
-        last=str(f.index[-1]),configurations_per_period=128,configuration_period_rows=len(summ),
+        last=str(f.index[-1]),configurations_per_period=256,configuration_period_rows=len(summ),
         scenario_trade_records=len(t),data_source="Original Delta India BTCUSD 1m OHLCV archive",
         roundtrip_futures_taker_rate_including_gst=FEE*2,slippage_each_side=SLIP,
         max_exposure_minutes=240,broker_l1_not_available=True,prior_recheck_already_seen=True)
