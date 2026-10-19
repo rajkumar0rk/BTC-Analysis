@@ -41,7 +41,7 @@ def spot_months():
             df = pd.read_csv(io.BytesIO(z.read(files[0])), header=None, usecols=[0, 1, 4])
         t = pd.to_numeric(df.iloc[:, 0], errors="raise").astype("int64")
         unit = "us" if t.iloc[0] > 10**14 else "ms"
-        idx = pd.to_datetime(t, unit=unit, utc=True)
+        idx = pd.DatetimeIndex(pd.to_datetime(t, unit=unit, utc=True))
         first = m.start_time.tz_localize("UTC")
         last = (m + 1).start_time.tz_localize("UTC")
         expected = pd.date_range(first, last, freq="1min", inclusive="left")
