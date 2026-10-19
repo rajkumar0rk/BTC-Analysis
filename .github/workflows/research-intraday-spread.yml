@@ -32,3 +32,4 @@ jobs:
             git commit -m "research: save intraday spread execution study"
             git pull --rebase origin main
             git push
+          fi
