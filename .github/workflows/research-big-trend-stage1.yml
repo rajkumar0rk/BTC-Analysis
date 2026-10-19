@@ -1,0 +1,35 @@
+name: Research BTC selective big-trend 1h 5m
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_big_trend_stage1.py
+      - .github/workflows/research-big-trend-stage1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-big-trend-stage1
+  cancel-in-progress: false
+jobs:
+  study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - name: Replay 1h 5m big-trend long short candidates
+        run: python scripts/research_big_trend_stage1.py
+      - name: Persist all research results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/big_trend_stage1
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save BTC big trend long short outcomes"
+            git pull --rebase origin main
+            git push
+          fi
