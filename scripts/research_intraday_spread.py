@@ -45,15 +45,26 @@ def spot_months():
         first = m.start_time.tz_localize("UTC")
         last = (m + 1).start_time.tz_localize("UTC")
         expected = pd.date_range(first, last, freq="1min", inclusive="left")
-        if not idx.equals(expected):
-            raise ValueError(f"Missing/duplicate/misaligned official Binance minute candles: {month}")
+        if not idx.is_unique or not idx.is_monotonic_increasing:
+            raise ValueError(f"Duplicate or unsorted official Binance timestamps: {month}")
+        unexpected = idx.difference(expected)
+        if len(unexpected):
+            raise ValueError(f"Off-grid Binance timestamps {month}: {unexpected[:5].tolist()}")
+        missing = expected.difference(idx)
         op = pd.to_numeric(df.iloc[:, 1], errors="raise").to_numpy(dtype=float)
         cl = pd.to_numeric(df.iloc[:, 2], errors="raise").to_numpy(dtype=float)
         if not np.isfinite(op).all() or not np.isfinite(cl).all() or np.any(op <= 0) or np.any(cl <= 0):
             raise ValueError("Invalid Binance prices: " + month)
-        series.append(pd.DataFrame({"spot_open": op, "spot_close": cl}, index=idx))
-        provenance.append({"month": month, "url": url, "zip_sha256": digest, "rows": len(idx)})
-        print(f"SPOT_MONTH {month} {len(idx)}", flush=True)
+        # Do NOT invent candles. Preserve missing minutes as NaN and exclude any
+        # signal whose 12h lookback or possible holding interval intersects a gap.
+        month_frame = pd.DataFrame({"spot_open": op, "spot_close": cl}, index=idx).reindex(expected)
+        series.append(month_frame)
+        provenance.append({"month": month, "url": url, "zip_sha256": digest,
+                           "source_rows": len(idx), "expected_rows": len(expected),
+                           "missing_minutes": len(missing),
+                           "missing_examples_utc": [str(t) for t in missing[:5]]})
+        print(f"SPOT_MONTH {month}: source={len(idx)} expected={len(expected)} "
+              f"missing={len(missing)} examples={missing[:3].tolist()}", flush=True)
     return pd.concat(series), provenance
 
 
@@ -74,11 +85,11 @@ def delta_minutes(index):
     d = pd.concat(frames).sort_index()
     if not d.index.is_unique:
         raise ValueError("Duplicate Delta minute timestamps")
-    d = d.reindex(index)
-    if d.isna().any().any():
-        raise ValueError(f"Delta 1m gaps: {d.isna().sum().to_dict()}; no interpolation allowed")
     if not np.isfinite(d.to_numpy()).all() or (d.to_numpy() <= 0).any():
-        raise ValueError("Nonpositive or nonfinite Delta prices")
+        raise ValueError("Nonpositive or nonfinite observed Delta prices")
+    d = d.reindex(index)
+    missing = int(d.perp_open.isna().sum())
+    print(f"DELTA_MINUTE_COVERAGE observed={len(d)-missing} missing={missing}", flush=True)
     return d
 
 
@@ -123,6 +134,10 @@ def main():
     p_open = both.perp_open.to_numpy(float)
     p_close = both.perp_close.to_numpy(float)
     spread = p_close - s_close
+    complete = np.isfinite(s_open) & np.isfinite(s_close) & np.isfinite(p_open) & np.isfinite(p_close)
+    incomplete_prefix = np.r_[0, np.cumsum((~complete).astype(np.int64))]
+    print(f"PAIRED_MINUTE_COVERAGE total={n} complete={int(complete.sum())} "
+          f"missing={int((~complete).sum())}", flush=True)
     # Signal at the END of minute i, baseline uses minutes i-720 through i-1 only.
     spread_series = pd.Series(spread, index=idx)
     mean = spread_series.rolling(720, min_periods=720).mean().shift(1).to_numpy(float)
@@ -134,12 +149,12 @@ def main():
     records, audit, summary = [], [], []
     for tf, z, hurdle, max_hold in itertools.product(TF, ZS, HURDLES, HOLDS):
         name = f"tf{tf}m_z{z:g}_hurdle{hurdle:.4f}_max{max_hold}m"
-        valid_signal = ((positions % tf) == tf-1) & np.isfinite(mean) & np.isfinite(sd) & (sd > 0)
+        valid_signal = ((positions % tf) == tf-1) & complete & np.isfinite(mean) & np.isfinite(sd) & (sd > 0)
         excess = spread - mean
         valid_signal &= (excess > z * sd) & (excess >= hurdle * s_close)
         candidates = np.flatnonzero(valid_signal)
         last_exit = -1
-        skipped_funding = skipped_overlap = skipped_end = 0
+        skipped_funding = skipped_overlap = skipped_end = skipped_gaps = 0
         entries = []
         for i in candidates:
             entry = int(i) + 1
@@ -149,6 +164,9 @@ def main():
                 continue
             if entry <= last_exit:
                 skipped_overlap += 1
+                continue
+            if incomplete_prefix[timeout+1] - incomplete_prefix[entry] > 0:
+                skipped_gaps += 1
                 continue
             if settlement_prefix[timeout+1] - settlement_prefix[entry] > 0:
                 skipped_funding += 1
@@ -198,6 +216,7 @@ def main():
         audit.append({"rule": name, "signal_candidates": len(candidates),
                       "excluded_funding_window": skipped_funding,
                       "excluded_overlapping_position": skipped_overlap,
+                      "excluded_missing_paired_minutes": skipped_gaps,
                       "excluded_end_of_history": skipped_end,
                       "completed_trades": len(entries) // len(SCENARIOS)})
         records.extend(entries)
@@ -221,6 +240,8 @@ def main():
     quality = {"spot_data": provenance, "rows": n, "start_utc": str(idx[0]),
                "end_utc": str(idx[-1]), "strategies": len(audit_df),
                "scenario_rows": len(ledger), "config_period_rows": len(results),
+               "paired_missing_minutes": int((~complete).sum()),
+               "no_interpolation": "True: missing source candles remain NaN; signals and complete possible hold windows crossing gaps are excluded.",
                "fee_assumptions": {"delta_taker_each_side_with_gst": FUT_FEE,
                                    "spot_taker_each_side_assumed": SPOT_FEE,
                                    "slippage_points_each_leg_each_side": 5,
