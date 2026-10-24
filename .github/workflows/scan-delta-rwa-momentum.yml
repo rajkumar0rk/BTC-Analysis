@@ -1,0 +1,32 @@
+name: Scan Delta RWA momentum
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'rwa_scanner/**'
+      - '.github/workflows/scan-delta-rwa-momentum.yml'
+permissions:
+  contents: read
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests
+        run: python -m unittest discover -s rwa_scanner -p 'test_*.py'
+      - name: Scan public Delta India RWA futures
+        env:
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+        run: python rwa_scanner/scan.py --output rwa_scanner/output --max-symbols 10
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rwa-momentum-scan
+          path: rwa_scanner/output/
+          if-no-files-found: warn
+          retention-days: 14
