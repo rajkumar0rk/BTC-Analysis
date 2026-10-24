@@ -1,19 +1,34 @@
-# Delta India RWA momentum scanner
+# RWA Futures US-stock-first momentum scanner
 
-Research-only, read-only scanner inspired by Ross Cameron's first-pullback method. Does **not** submit orders or assert guaranteed profitability.
+Version 2 scans Delta India tokenized US stock perpetual futures, using actual underlying US-share price movement and comparable intraday share volume where available.
 
-## Run
+## Data sources
+
+- **Delta India public API:** live listed futures, 1-minute bars, order-book depth and 24h USD turnover.
+- **Yahoo Finance via yfinance:** underlying US stock 5-minute volume/price, and optional shares float (unofficial source; missing data is reported).
+- **Financial Modeling Prep (optional):** /stable/shares-float with an FMP_API_KEY repository secret, preferred over Yahoo float.
+- **Google News RSS:** Reuters, AP, Bloomberg, CNBC, WSJ, FT, Barron's or MarketWatch publisher attributed items from recent 48h. Headline polarity is rule-based; these are NOT verified positive catalysts.
+- **pandas-market-calendars:** NYSE trading holidays, early closes and US daylight-saving rules.
+
+## Screening
+
+During NYSE 09:30–11:30 ET only: underlying stock session gain >=10%; underlying session-to-date volume / average comparable session-to-date volume across 3+ prior sessions >=5; underlying stock between USD 2 and 20; float <20 million shares; at least one recent positive headline **candidate**; Delta 1m first pullback confirmed on closed candle; Delta L2 spread <=0.35% and futures 24h USD turnover >=20,000, nonempty fresh book. Every check is preserved as pass/fail/unknown.
+
+`WATCHLIST_MANUAL_NEWS_REVIEW` is never a trade recommendation. Verify actual underlying news and broker-specific Delta liquidity before making decisions. It never sends orders.
+
+## GitHub Actions
+
+Workflow `Scan Delta RWA momentum` automatically checks during likely market hours twice an hour on weekdays (GitHub scheduled jobs can start late). It also runs on code changes and manual dispatch. **Outside NYSE hours it logs MARKET_CLOSED_NO_SCAN** rather than presenting stale BUY entries. For an after-hours diagnostic, manually tick "force_after_hours_research"; this will always be labeled research only. Artifacts: `rwa-momentum-scan-v2` with `results.json` and `summary.md`.
+
+Optional: Settings → Secrets and variables → Actions → New repository secret `FMP_API_KEY`. Unset keys don't break the scan; float may be obtained from Yahoo without a reliably known as-of date.
+
+## Local execution
+
 ```bash
-python rwa_scanner/scan.py --output rwa_scanner/output --max-symbols 10
+pip install 'yfinance>=0.2.55,<2' 'pandas-market-calendars>=4.4,<6'
 python -m unittest discover -s rwa_scanner -p 'test_*.py'
+python rwa_scanner/run.py --output rwa_scanner/output
+python rwa_scanner/run.py --force-after-hours-research
 ```
 
-Uses Delta India public tickers + one-minute candle history, with a curated **explicit** Delta-symbol -> underlying-US-equity mapping. No API key needed for Delta market-data endpoints. Known symbols may be delisted or renamed. Only matches reported by Delta live tickers are scanned. Scans the top 10 mapped symbols by Delta turnover by default; set `--max-symbols 0` to scan all mapped symbols. A completed 1-minute candle (not intra-bar execution) confirms a first pullback.
-
-For share float, actual US equity prices and stock news, add an Actions repository secret `FMP_API_KEY` from [Financial Modeling Prep](https://financialmodelingprep.com/). FMP endpoint availability depends on subscription; missing/quota-denied metrics stay **N/A**, never invented. For news without FMP, a Google News RSS search limited to major attributed publishers is a best-effort fallback. A headline is NOT validated positive news. RSS is not guaranteed and coverage may be delayed.
-
-The original Ross Cameron screen requires **underlying US stock** gain ≥10%, daily relative volume ≥5×, $2–$20 stock, float below 20 million shares and meaningful favorable news. This tool instead presents Delta futures 24-hour percentage change and **1-minute volume relative to prior 20 minutes** as clearly labeled *proxies*. These are not interchangeable with stock-day metrics. It does not verify all original conditions.
-
-The workflow runs on push to `main` and manually with **Actions → Scan Delta RWA momentum → Run workflow**. Daily scheduled scans are intentionally not enabled to avoid unnecessary polling. Download the `rwa-momentum-scan` artifact for full `results.json` and `summary.md`; this workflow does not auto-commit time-sensitive market observations. Results include a timestamp, missing-data flags, and source URLs.
-
-Failures: when Delta is unavailable, results are still written and the job fails. When enrichment fails, a partial report is written and unknowns remain unknown. No order placement, no account credentials, no investment advice.
+Caveats: Yahoo is an unofficial source, volume may be delayed or unavailable, lexical headline polarity can be wrong, small-float company data can be stale, and a 1m closed-candle confirmation differs from Ross Cameron's intrabar stop-entry. RWA perpetual futures price and fill risk differ from US equities.
