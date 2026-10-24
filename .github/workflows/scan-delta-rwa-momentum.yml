@@ -1,6 +1,13 @@
 name: Scan Delta RWA momentum
 on:
   workflow_dispatch:
+    inputs:
+      force_after_hours_research:
+        description: "Inspect after hours (not a trading alert)"
+        type: boolean
+        default: false
+  schedule:
+    - cron: '5,35 14-15 * * 1-5'
   push:
     branches: [main]
     paths:
@@ -11,22 +18,30 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Unit tests
+      - name: Install US market data and calendar dependencies
+        run: python -m pip install 'yfinance>=0.2.55,<2' 'pandas-market-calendars>=4.4,<6'
+      - name: Scanner tests
         run: python -m unittest discover -s rwa_scanner -p 'test_*.py'
-      - name: Scan public Delta India RWA futures
+      - name: NYSE stock and Delta RWA quality scan
         env:
           FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
-        run: python rwa_scanner/scan.py --output rwa_scanner/output --max-symbols 10
+          FORCE_RESEARCH: ${{ inputs.force_after_hours_research || 'false' }}
+        run: |
+          if [ "$FORCE_RESEARCH" = "true" ]; then
+            python rwa_scanner/run.py --output rwa_scanner/output --force-after-hours-research
+          else
+            python rwa_scanner/run.py --output rwa_scanner/output
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: rwa-momentum-scan
+          name: rwa-momentum-scan-v2
           path: rwa_scanner/output/
-          if-no-files-found: warn
           retention-days: 14
+          if-no-files-found: warn
