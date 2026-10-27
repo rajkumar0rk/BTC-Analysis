@@ -1,6 +1,6 @@
 {
-  "last_snapshot_utc": "2026-10-26T23:47:23.750755Z",
-  "archived_path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-26.jsonl.gz",
+  "last_snapshot_utc": "2026-10-27T04:53:30.547673Z",
+  "archived_path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-27.jsonl.gz",
   "available": [
     "level2_book",
     "recent_trades",
