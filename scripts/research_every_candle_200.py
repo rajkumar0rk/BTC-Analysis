@@ -117,17 +117,13 @@ def first_passage(op, hi, lo, seg_end, stops, horizon):
 
 
 def periods(ix):
-    t = ix.view("i8")
-    c1 = pd.Timestamp("2026-01-01", tz="UTC").value
-    c2 = pd.Timestamp("2026-07-01", tz="UTC").value
-    c3 = pd.Timestamp("2026-11-01", tz="UTC").value
-    p = np.empty(len(ix), np.int8)
-    p[:] = 3
-    p[t < c3] = 2
-    p[t < c2] = 1
-    p[t < c1] = 0
+    """Compare actual timezone-aware timestamps, independent of pandas resolution."""
+    p = np.select([
+        ix < pd.Timestamp("2026-01-01", tz="UTC"),
+        ix < pd.Timestamp("2026-07-01", tz="UTC"),
+        ix < pd.Timestamp("2026-11-01", tz="UTC")
+    ], [0,1,2], default=3).astype(np.int8)
     return p
-
 
 def engineer_features(f, seg_start, seg_end, p):
     """Predeclared price and volume features, available at signal close."""
@@ -360,6 +356,9 @@ def main():
     f, seg_start, seg_end,quality=read_archive()
     p=periods(f.index)
     masks,valid=engineer_features(f,seg_start,seg_end,p)
+    split_counts = {PERIOD_NAMES[i]: int(np.sum(valid & (p == i))) for i in range(4)}
+    if any(n < 1000 for n in split_counts.values()):
+        raise ValueError("Chronological split invalid: " + str(split_counts))
     op=f.open.to_numpy(np.float64)
     hi=f.high.to_numpy(np.float64)
     lo=f.low.to_numpy(np.float64)
@@ -430,6 +429,7 @@ def main():
     ranked=sub[sub.period=="2025_train"].sort_values(
                 ["avg_net_pts","trades"],ascending=[False,False])
     quality.update(dict(usable_entry_candles=int(valid.sum()),
+        eligible_entries_by_period=split_counts,
         evaluated_directions=int(valid.sum())*2,
         direction_labels_stored=int(valid.sum())*2,
         conditional_rules=len(masks), conditional_rate_rows=len(rates),
@@ -507,7 +507,7 @@ def main():
         "Conclusions must come from the actual table, not from choosing perfect historical candles.",
     ]
     (OUT/"RESEARCH_REPORT.md").write_text("\n".join(report)+"\n")
-    print("STAGE6_COMPLETE",json.dumps(dict(candles=len(f),usable=int(valid.sum()),
+    print("STAGE6_COMPLETE",json.dumps(dict(candles=len(f),split_counts=split_counts,usable=int(valid.sum()),
         paths=2*int(valid.sum()),missing=quality["missing_minutes"],
         replay_rows=len(ledger),strict_zero_loss_cells=len(strict))))
     print("ALL_CANDLE_REFERENCE\n",baseline.to_string(index=False))
