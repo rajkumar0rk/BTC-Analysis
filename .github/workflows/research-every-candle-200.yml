@@ -1,0 +1,37 @@
+name: Research BTC every candle 200-point zero-loss hypothesis
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_every_candle_200.py
+      - .github/workflows/research-every-candle-200.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-every-candle-200
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install data research libraries
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Execute all-candle 200-point research
+        run: python scripts/research_every_candle_200.py
+      - name: Commit results including negative outcomes
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage6_every_candle_200
+          if ! git diff --cached --quiet; then
+            git commit -m "research: store exhaustive 200-point candle outcomes"
+            git pull --rebase origin main
+            git push
+          fi
