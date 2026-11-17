@@ -114,6 +114,7 @@ def prepare_events(f,seg_start,seg_end,p):
     newer,_=trend_events(f,seg_start,seg_end,p)
     newer=newer.rename(columns={"pullback":"family",
                                 "volume_ratio":"volume_ratio_5m",
+                                "unix":"entry_unix",
                                 "risk_pts":"risk_pts"})
     newer["family"]=newer.family.map(lambda s:"S13_pullback_"+s)
     newer["range_ratio_5m"]=np.nan
