@@ -1,5 +1,10 @@
 name: Collect BTC Forward Order Books and Funding
 on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/collect_market_microstructure.py
+      - .github/workflows/collect-btc-forward-microstructure.yml
   workflow_dispatch:
   schedule:
     - cron: '*/15 * * * *'
