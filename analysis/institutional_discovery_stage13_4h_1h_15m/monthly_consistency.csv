@@ -1,0 +1,17 @@
+pullback,volume,target_R,max_hold_min,trades_2025,profitable_2025,losing_2025,no_trade_2025,net_2025,trades_2026,profitable_2026,losing_2026,no_trade_2026,net_2026,sufficient_samples,positive_2025_H1_H2,passes_monthly_gate
+near_half_atr,any,2.0,240,371,2,10,0,-26559.92,293,3,8,0,-31534.15,True,False,False
+near_half_atr,any,2.0,480,319,4,8,0,-22083.69,258,1,10,0,-22580.97,True,False,False
+near_half_atr,any,3.0,240,362,4,8,0,-25514.32,289,4,7,0,-27133.69,True,False,False
+near_half_atr,any,3.0,480,303,5,7,0,-13944.98,250,2,9,0,-17651.73,True,False,False
+near_half_atr,volume_1p2x,2.0,240,254,2,10,0,-15989.72,205,4,7,0,-18900.57,True,False,False
+near_half_atr,volume_1p2x,2.0,480,232,4,8,0,-9553.46,187,4,7,0,-13828.19,True,False,False
+near_half_atr,volume_1p2x,3.0,240,249,1,11,0,-16450.08,202,4,7,0,-13081.28,True,False,False
+near_half_atr,volume_1p2x,3.0,480,222,5,7,0,-4109.43,181,3,8,0,-8240.01,True,False,False
+touch,any,2.0,240,202,1,11,0,-22978.44,151,3,8,0,-17260.71,True,False,False
+touch,any,2.0,480,183,2,10,0,-23711.46,142,1,10,0,-24136.12,True,False,False
+touch,any,3.0,240,201,1,11,0,-19960.87,151,3,8,0,-16601.31,True,False,False
+touch,any,3.0,480,182,3,9,0,-15510.43,141,2,9,0,-19556.84,True,False,False
+touch,volume_1p2x,2.0,240,141,3,9,0,-9997.38,98,3,8,0,-7769.72,True,False,False
+touch,volume_1p2x,2.0,480,135,3,9,0,-13780.09,94,3,8,0,-12125.88,True,False,False
+touch,volume_1p2x,3.0,240,140,5,7,0,-8017.6,97,3,8,0,-5267.66,True,False,False
+touch,volume_1p2x,3.0,480,134,3,9,0,-9039.61,92,3,8,0,-6330.94,True,False,False
