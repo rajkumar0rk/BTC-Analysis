@@ -1,0 +1,35 @@
+name: Collect BTC Forward Order Books and Funding
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: btc-forward-market-microstructure
+  cancel-in-progress: false
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify parser and deterministic sample fixtures
+        run: python scripts/collect_market_microstructure.py --self-test
+      - name: Collect one public quote and funding observation
+        run: python scripts/collect_market_microstructure.py --once
+      - name: Commit observations for forward research
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/forward_microstructure/snapshots/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: append forward BTC book and funding observations"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
