@@ -1,0 +1,54 @@
+name: Research BTC Stage 11 structural RR patterns
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_structure_rr_stage11.py
+      - .github/workflows/research-structure-rr-stage11.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-stage11-structure-rr
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install packages
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Replay structural stops and reward multiples
+        run: python scripts/research_structure_rr_stage11.py
+      - name: Preserve complete trade ledger as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-stage11-structural-rr-trades
+          path: |
+            analysis/institutional_discovery_stage11_structure_rr/trade_ledger.csv.gz
+            analysis/institutional_discovery_stage11_structure_rr/structural_events.csv.gz
+          if-no-files-found: error
+          retention-days: 30
+      - name: Commit compact research reports including negative results
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage11_structure_rr/RESEARCH_REPORT.md
+          git add analysis/institutional_discovery_stage11_structure_rr/rr_strategy_summary.csv
+          git add analysis/institutional_discovery_stage11_structure_rr/chronological_stability.csv
+          git add analysis/institutional_discovery_stage11_structure_rr/quality.json
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save Stage 11 structural risk reward pattern results"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
