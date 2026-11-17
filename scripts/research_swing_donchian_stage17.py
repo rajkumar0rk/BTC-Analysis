@@ -30,7 +30,7 @@ TRAIL_MULS=(3.0,4.0)
 def build_months(f):
     starts=pd.date_range("2025-01-01","2026-12-01",freq="MS",
         tz="Asia/Kolkata").tz_convert("UTC")
-    boundary=(starts.asi8//10**9).astype(np.int64)
+    boundary=np.asarray([int(ts.timestamp()) for ts in starts],dtype=np.int64)
     codes=np.searchsorted(boundary,f.time.to_numpy(np.int64),side="right")-1
     if codes.min()<0 or codes.max()>=len(starts)-1:
         raise ValueError(f"archive outside boundaries: codes={codes.min()}, {codes.max()}; boundary={boundary[0]}, {boundary[-1]}; first,last = {int(f.time.iloc[0])}, {int(f.time.iloc[-1])}")
