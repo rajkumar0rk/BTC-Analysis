@@ -1,0 +1,37 @@
+name: Research BTC 200pt time day volume volatility
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_time_day_volume_200.py
+      - .github/workflows/research-time-day-volume-200.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-stage7-time-day-volume
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install tools
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Analyze every 1m candle across time, weekday, volume, volatility
+        run: python scripts/research_time_day_volume_200.py
+      - name: Save all results including unprofitable combinations
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage7_time_volume
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist Stage 7 time/day/volatility results"
+            git pull --rebase origin main
+            git push
+          fi
