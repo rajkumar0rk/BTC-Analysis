@@ -236,7 +236,7 @@ def main():
         exit_models=list(MODELS),stop_models=list(STOP_METHODS),
         hold_windows_minutes=list(HORIZONS),
         consistent_positive_models=len(good),
-        2025_2026_have_previously_been_studied=True,
+        historical_periods_previously_studied=True,
         fee_per_side_including_gst=FEE,slippage_pts_per_side=SLIPPAGE,
         assumptions=[
             "M exhaustion reversal entry reproduced EXACTLY from Stage8",
