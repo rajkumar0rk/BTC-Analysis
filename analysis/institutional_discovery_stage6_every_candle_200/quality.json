@@ -39,13 +39,19 @@
       "missing_minutes": 1440
     }
   ],
-  "usable_entry_candles": 984122,
-  "evaluated_directions": 1968244,
-  "direction_labels_stored": 1968244,
+  "usable_entry_candles": 983644,
+  "eligible_entries_by_period": {
+    "2025_train": 525181,
+    "2026_H1_validation": 260401,
+    "2026_H2_seen_recheck": 175441,
+    "2026_Nov_recent_exploratory": 22621
+  },
+  "evaluated_directions": 1967288,
+  "direction_labels_stored": 1967288,
   "conditional_rules": 18,
-  "conditional_rate_rows": 54,
-  "separately_replayed_trade_rows": 1351868,
-  "strategy_summary_rows": 180,
+  "conditional_rate_rows": 216,
+  "separately_replayed_trade_rows": 1351540,
+  "strategy_summary_rows": 720,
   "confirmed_zero_loss_candidates": 0,
   "warning": "Overlapping hypothetical labels are NOT independent trades",
   "splits": [
