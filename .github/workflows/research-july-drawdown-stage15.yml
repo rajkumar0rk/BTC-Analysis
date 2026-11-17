@@ -1,0 +1,64 @@
+name: Research BTC Stage15 July loss filters and risk guards
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_july_drawdown_stage15.py
+      - .github/workflows/research-july-drawdown-stage15.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: btc-stage15-july-losses
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Download original Stage14 research evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: btc-stage14-monthly-regime-trades
+          run-id: 44118024590
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: stage14_original_evidence
+      - name: Verify old entries and inspect July losses with causal protective rules
+        run: python scripts/research_july_drawdown_stage15.py --original-artifact stage14_original_evidence
+      - name: Save full filtered trade evidence as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-stage15-july-protection-trade-ledger
+          path: analysis/institutional_discovery_stage15_july_loss_controls/variant_trade_ledger.csv.gz
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit reproducible compact reports
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage15_july_loss_controls/RESEARCH_REPORT.md
+          git add analysis/institutional_discovery_stage15_july_loss_controls/july_2025_original_trade_diagnostics.csv
+          git add analysis/institutional_discovery_stage15_july_loss_controls/july_2025_breakdown.csv
+          git add analysis/institutional_discovery_stage15_july_loss_controls/july_winner_loser_feature_comparison.csv
+          git add analysis/institutional_discovery_stage15_july_loss_controls/protective_filter_comparison.csv
+          git add analysis/institutional_discovery_stage15_july_loss_controls/month_by_month.csv
+          git add analysis/institutional_discovery_stage15_july_loss_controls/ranked_without_july_lookback.csv
+          git add analysis/institutional_discovery_stage15_july_loss_controls/quality.json
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save Stage15 reconciled July loss analysis and protective filters"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
