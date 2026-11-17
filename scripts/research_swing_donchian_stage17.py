@@ -33,7 +33,7 @@ def build_months(f):
     boundary=(starts.asi8//10**9).astype(np.int64)
     codes=np.searchsorted(boundary,f.time.to_numpy(np.int64),side="right")-1
     if codes.min()<0 or codes.max()>=len(starts)-1:
-        raise ValueError("archive outside 2025-Jan to 2026-Nov month range")
+        raise ValueError(f"archive outside boundaries: codes={codes.min()}, {codes.max()}; boundary={boundary[0]}, {boundary[-1]}; first,last = {int(f.time.iloc[0])}, {int(f.time.iloc[-1])}")
     labels=starts.tz_convert("Asia/Kolkata").strftime("%Y-%m").tolist()[:-1]
     return codes.astype(np.int32),labels
 
