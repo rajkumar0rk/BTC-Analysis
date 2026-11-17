@@ -1,0 +1,64 @@
+name: BTC First Forward Arbitrage Review — 24 Nov 2026
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/analyze_first_forward_arbitrage.py
+      - .github/workflows/btc-first-arbitrage-review-2026-11-24.yml
+  schedule:
+    - cron: '0 5 24 11 *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-first-arbitrage-review-2026-11-24
+  cancel-in-progress: false
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate the analysis formulas and parser
+        run: python scripts/analyze_first_forward_arbitrage.py --self-test
+      - name: Dry-run on push or manual trigger (no premature conclusion)
+        if: github.event_name != 'schedule'
+        run: |
+          python scripts/analyze_first_forward_arbitrage.py \
+            --asof-utc "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+            --out /tmp/forward-arbitrage-smoke
+          test -s /tmp/forward-arbitrage-smoke/REPORT.md
+          test -s /tmp/forward-arbitrage-smoke/summary.json
+      - name: Check intended scheduled date
+        if: github.event_name == 'schedule'
+        run: |
+          test "$(date -u +'%Y-%m-%d')" = '2026-11-24' || {
+            echo "This one-time study is only intended to run on 2026-11-24"
+            exit 1
+          }
+      - name: Generate date-fixed seven-day report
+        if: github.event_name == 'schedule'
+        run: python scripts/analyze_first_forward_arbitrage.py --asof-utc '2026-11-24T05:00:00Z'
+      - name: Upload completed report
+        if: github.event_name == 'schedule'
+        uses: actions/upload-artifact@v4
+        with:
+          name: BTC-Arbitrage-24-Nov-2026
+          path: analysis/forward_microstructure/first_review_2026-11-24/
+          if-no-files-found: error
+      - name: Commit report
+        if: github.event_name == 'schedule'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/forward_microstructure/first_review_2026-11-24/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist first 2026-11-24 forward arbitrage review"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
