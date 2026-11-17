@@ -13,7 +13,8 @@ import json
 import numpy as np
 import pandas as pd
 
-import research_behavioral_discovery as historical\nfrom research_behavioral_discovery import SLIP
+import research_behavioral_discovery as historical
+from research_behavioral_discovery import SLIP
 from research_directional_acceptance import signals
 
 OUT = Path("analysis/institutional_discovery_stage4")
