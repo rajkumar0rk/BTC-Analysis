@@ -1,0 +1,17 @@
+model,timeframe,channel_lookback,trend,trail_ATR,signals_seen,trades,max_trade_to_trade_drawdown_pct,total_return_pct,last_month_valuation,profit_2025,loss_2025,inactive_2025,active_2025,return_2025_pct,profit_2026,loss_2026,inactive_2026,active_2026,return_2026_pct,monthly_gate_pass
+1D_channel_20_ema50_agrees_trail_3atr,1D,20,ema50_agrees,3.0,32,20,2.205,2.302,102.3016,4,4,4,8,-0.209,6,4,1,10,2.516,False
+1D_channel_20_ema50_agrees_trail_4atr,1D,20,ema50_agrees,4.0,32,20,2.432,2.159,102.1592,4,4,4,8,-0.44,6,4,1,10,2.611,False
+1D_channel_20_no_trend_filter_trail_3atr,1D,20,no_trend_filter,3.0,39,24,2.469,1.903,101.9033,3,5,4,8,-1.23,6,4,1,10,3.172,False
+1D_channel_20_no_trend_filter_trail_4atr,1D,20,no_trend_filter,4.0,39,24,2.695,1.761,101.7614,3,5,4,8,-1.458,6,4,1,10,3.267,False
+1D_channel_55_ema50_agrees_trail_3atr,1D,55,ema50_agrees,3.0,20,13,0.827,1.843,101.843,4,2,6,6,0.602,4,4,3,8,1.233,False
+1D_channel_55_ema50_agrees_trail_4atr,1D,55,ema50_agrees,4.0,20,13,0.827,1.937,101.9372,4,2,6,6,0.602,4,4,3,8,1.327,False
+1D_channel_55_no_trend_filter_trail_3atr,1D,55,no_trend_filter,3.0,20,13,0.827,1.843,101.843,4,2,6,6,0.602,4,4,3,8,1.233,False
+1D_channel_55_no_trend_filter_trail_4atr,1D,55,no_trend_filter,4.0,20,13,0.827,1.937,101.9372,4,2,6,6,0.602,4,4,3,8,1.327,False
+4H_channel_24_ema50_agrees_trail_3atr,4H,24,ema50_agrees,3.0,226,110,8.84,0.896,100.8958,6,6,0,12,-2.532,3,7,1,10,3.517,False
+4H_channel_24_ema50_agrees_trail_4atr,4H,24,ema50_agrees,4.0,226,99,9.064,-1.182,98.8178,4,8,0,12,-6.111,3,7,1,10,5.25,False
+4H_channel_24_no_trend_filter_trail_3atr,4H,24,no_trend_filter,3.0,239,116,7.677,0.219,100.2191,6,6,0,12,-3.263,3,7,1,10,3.599,False
+4H_channel_24_no_trend_filter_trail_4atr,4H,24,no_trend_filter,4.0,239,104,9.769,-3.187,96.8131,4,8,0,12,-6.424,3,7,1,10,3.459,False
+4H_channel_55_ema50_agrees_trail_3atr,4H,55,ema50_agrees,3.0,145,71,7.503,-5.103,94.8972,5,7,0,12,-5.138,5,5,1,10,0.037,False
+4H_channel_55_ema50_agrees_trail_4atr,4H,55,ema50_agrees,4.0,145,67,7.826,-6.674,93.3261,4,8,0,12,-6.417,4,6,1,10,-0.275,False
+4H_channel_55_no_trend_filter_trail_3atr,4H,55,no_trend_filter,3.0,145,71,7.503,-5.103,94.8972,5,7,0,12,-5.138,5,5,1,10,0.037,False
+4H_channel_55_no_trend_filter_trail_4atr,4H,55,no_trend_filter,4.0,145,67,7.826,-6.674,93.3261,4,8,0,12,-6.417,4,6,1,10,-0.275,False
