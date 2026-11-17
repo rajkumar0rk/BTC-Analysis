@@ -1,0 +1,180 @@
+[
+  {
+    "side": "LONG",
+    "selected_threshold": 0.2,
+    "selection_trades": 417,
+    "selection_net": -128.42,
+    "scored_grid": [
+      {
+        "threshold": 0.2,
+        "trades": 417,
+        "mean_net_pts": -128.42,
+        "profit_factor": 0.256,
+        "wins": 96,
+        "losses": 321,
+        "win_pct": 23.02,
+        "sum_net_pts": -53550.69,
+        "whatif_avg_pts": -69.03
+      },
+      {
+        "threshold": 0.25,
+        "trades": 3,
+        "mean_net_pts": -238.53,
+        "profit_factor": 0.0,
+        "wins": 0,
+        "losses": 3,
+        "win_pct": 0.0,
+        "sum_net_pts": -715.58,
+        "whatif_avg_pts": -174.3
+      },
+      {
+        "threshold": 0.3,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.35,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.4,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.45,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.5,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.6,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.7,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      }
+    ]
+  },
+  {
+    "side": "SHORT",
+    "selected_threshold": 0.25,
+    "selection_trades": 32,
+    "selection_net": -91.49,
+    "scored_grid": [
+      {
+        "threshold": 0.2,
+        "trades": 774,
+        "mean_net_pts": -116.03,
+        "profit_factor": 0.301,
+        "wins": 198,
+        "losses": 576,
+        "win_pct": 25.58,
+        "sum_net_pts": -89810.73,
+        "whatif_avg_pts": -56.98
+      },
+      {
+        "threshold": 0.25,
+        "trades": 32,
+        "mean_net_pts": -91.49,
+        "profit_factor": 0.389,
+        "wins": 10,
+        "losses": 22,
+        "win_pct": 31.25,
+        "sum_net_pts": -2927.75,
+        "whatif_avg_pts": -35.58
+      },
+      {
+        "threshold": 0.3,
+        "trades": 5,
+        "mean_net_pts": -140.09,
+        "profit_factor": 0.222,
+        "wins": 1,
+        "losses": 4,
+        "win_pct": 20.0,
+        "sum_net_pts": -700.46,
+        "whatif_avg_pts": -83.78
+      },
+      {
+        "threshold": 0.35,
+        "trades": 1,
+        "mean_net_pts": -213.45,
+        "profit_factor": 0.0,
+        "wins": 0,
+        "losses": 1,
+        "win_pct": 0.0,
+        "sum_net_pts": -213.45,
+        "whatif_avg_pts": -161.69
+      },
+      {
+        "threshold": 0.4,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.45,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.5,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.6,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.7,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      }
+    ]
+  }
+]
