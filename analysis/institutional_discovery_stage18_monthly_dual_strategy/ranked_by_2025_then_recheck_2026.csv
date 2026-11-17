@@ -1,0 +1,13 @@
+name,stage15,stage17,swing_weight,positive_months_2025,losing_months_2025,no_exposure_months_2025,return_2025_pct,positive_months_2026,losing_months_2026,no_exposure_months_2026,return_2026_pct,max_month_end_drawdown_pct
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,9,1,2,4.7359,6,3,2,5.0762,1.3244
+quiet_1h_daily2_weekly3 + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_daily2_weekly3,1D_channel_55_ema50_agrees_trail_3atr,0.25,9,1,2,4.7359,6,3,2,5.0762,1.3244
+quiet_1h_weekly_3R + 1D_channel_20_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_20_ema50_agrees_trail_3atr,0.25,9,1,2,4.5274,7,3,1,5.4128,1.1332
+quiet_1h_daily2_weekly3 + 1D_channel_20_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_daily2_weekly3,1D_channel_20_ema50_agrees_trail_3atr,0.25,9,1,2,4.5274,7,3,1,5.4128,1.1332
+quiet_1h_weekly_3R + 1D_channel_20_ema50_agrees_trail_4atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_20_ema50_agrees_trail_4atr,0.25,9,1,2,4.4673,7,3,1,5.4371,1.1332
+quiet_1h_daily2_weekly3 + 1D_channel_20_ema50_agrees_trail_4atr + swing_25pct,quiet_1h_daily2_weekly3,1D_channel_20_ema50_agrees_trail_4atr,0.25,9,1,2,4.4673,7,3,1,5.4371,1.1332
+quiet_1h_weekly_3R + 1D_channel_20_no_trend_filter_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_20_no_trend_filter_trail_3atr,0.25,9,1,2,4.2616,8,2,1,5.587,1.0197
+quiet_1h_daily2_weekly3 + 1D_channel_20_no_trend_filter_trail_3atr + swing_25pct,quiet_1h_daily2_weekly3,1D_channel_20_no_trend_filter_trail_3atr,0.25,9,1,2,4.2616,8,2,1,5.587,1.0197
+quiet_1h_weekly_3R + 1D_channel_20_no_trend_filter_trail_4atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_20_no_trend_filter_trail_4atr,0.25,9,1,2,4.2018,8,2,1,5.6114,1.0197
+quiet_1h_daily2_weekly3 + 1D_channel_20_no_trend_filter_trail_4atr + swing_25pct,quiet_1h_daily2_weekly3,1D_channel_20_no_trend_filter_trail_4atr,0.25,9,1,2,4.2018,8,2,1,5.6114,1.0197
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_50pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.5,9,1,2,3.3469,6,3,2,3.7912,1.0665
+quiet_1h_daily2_weekly3 + 1D_channel_55_ema50_agrees_trail_3atr + swing_50pct,quiet_1h_daily2_weekly3,1D_channel_55_ema50_agrees_trail_3atr,0.5,9,1,2,3.3469,6,3,2,3.7912,1.0665

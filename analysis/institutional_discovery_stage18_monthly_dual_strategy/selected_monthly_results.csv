@@ -1,0 +1,24 @@
+name,stage15,stage17,swing_weight,month_ist,range_component_pct,swing_component_pct,portfolio_pct,traded_or_held,status
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-01,0.0,0.0,0.0,0,No exposure
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-02,1.536937,0.0,1.152703,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-03,0.0,0.0,0.0,0,No exposure
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-04,1.804357,0.0,1.353267,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-05,-0.152482,0.5311,0.018413,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-06,0.729788,0.0962,0.571391,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-07,0.376417,0.2204,0.337413,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-08,0.920149,-0.5136,0.561712,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-09,0.510266,0.0,0.3827,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-10,0.794506,0.0,0.59588,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-11,0.834213,0.3093,0.702985,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2025-12,-1.346474,-0.0393,-1.01968,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-01,-0.23945,-0.5129,-0.307812,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-02,3.472385,0.6805,2.774414,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-03,2.668004,0.0,2.001003,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-04,0.353094,-0.0862,0.24327,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-05,0.328738,-0.2743,0.177978,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-06,-0.316307,0.1176,-0.20783,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-07,0.0,0.0,0.0,0,No exposure
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-08,0.0,1.6952,0.4238,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-09,0.0,-0.5596,-0.1399,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-10,0.0,0.1854,0.04635,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_25pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.25,2026-11,0.0,0.0,0.0,0,No exposure
