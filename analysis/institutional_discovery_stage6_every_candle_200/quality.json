@@ -1,0 +1,80 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m compressed API candles",
+  "months": 23,
+  "partitions": [
+    "2025-01.csv.gz",
+    "2025-02.csv.gz",
+    "2025-03.csv.gz",
+    "2025-04.csv.gz",
+    "2025-05.csv.gz",
+    "2025-06.csv.gz",
+    "2025-07.csv.gz",
+    "2025-08.csv.gz",
+    "2025-09.csv.gz",
+    "2025-10.csv.gz",
+    "2025-11.csv.gz",
+    "2025-12.csv.gz",
+    "2026-01.csv.gz",
+    "2026-02.csv.gz",
+    "2026-03.csv.gz",
+    "2026-04.csv.gz",
+    "2026-05.csv.gz",
+    "2026-06.csv.gz",
+    "2026-07.csv.gz",
+    "2026-08.csv.gz",
+    "2026-09.csv.gz",
+    "2026-10.csv.gz",
+    "2026-11.csv.gz"
+  ],
+  "observed_candles": 984960,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-16 23:59:00+00:00",
+  "expected_dense_candles": 986400,
+  "missing_minutes": 1440,
+  "continuous_segments": 2,
+  "gaps": [
+    {
+      "after_utc": "2026-10-30 23:59:00+00:00",
+      "before_utc": "2026-11-01 00:00:00+00:00",
+      "missing_minutes": 1440
+    }
+  ],
+  "usable_entry_candles": 984122,
+  "evaluated_directions": 1968244,
+  "direction_labels_stored": 1968244,
+  "conditional_rules": 18,
+  "conditional_rate_rows": 54,
+  "separately_replayed_trade_rows": 1351868,
+  "strategy_summary_rows": 180,
+  "confirmed_zero_loss_candidates": 0,
+  "warning": "Overlapping hypothetical labels are NOT independent trades",
+  "splits": [
+    "2025_train",
+    "2026_H1_validation",
+    "2026_H2_seen_recheck",
+    "2026_Nov_recent_exploratory"
+  ],
+  "models": "200 gross point TP; stop 100, 200, or no stop; 30/60min forced timeout",
+  "gross200_vs_net200": "200 net requires fee-adjusted larger first-passage target",
+  "no_adverse": "strict conservative OHLC: entire TP minute may move against entry",
+  "fill": "following minute open; stop wins ambiguous OHLC same-bar touches",
+  "historical_fee_assumptions": {
+    "taker_per_side": 0.0005,
+    "GST_on_fee": 0.18,
+    "slip_points_per_side": 5.0,
+    "optional_scalper_zero_exit_fee_if_hold_le_30m": true,
+    "offer_eligibility_not_verified_for_historical_trades": true
+  },
+  "limitations": [
+    "No historical bid/ask quote, order-book depth or intraminute tick path",
+    "Favorable target may be unfillable at modeled high/low",
+    "Missing source minutes not fabricated; skip signals spanning gaps",
+    "All four historical splits are used for exploratory research, not pristine forward testing",
+    "Overlapping minute labels produce severely correlated observations",
+    "Fee voucher credits are not counted as cash; historical Scalper Offer unknown",
+    "Funding, market impact, liquidation, capital and margin not reconstructed",
+    "No ability to guarantee a 200-point move without losses",
+    "Only rule-based subset scanned; many possible rules not tested",
+    "200 BTC points represents quote-price move, not dollar account P&L"
+  ]
+}
