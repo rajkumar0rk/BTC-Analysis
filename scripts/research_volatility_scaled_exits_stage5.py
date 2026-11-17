@@ -136,7 +136,7 @@ def main():
                 records.append(dict(rule=rule,exit_model=model,
                     period=bucket(t),ny_date=z.ny_date,side=side,
                     signal_utc=str(t),entry_utc=str(ix[k]),
-                    exit_utc=str(ix[sim["last"]]),reason=sim["reason"],
+                    exit_utc=str(ix[sim["last"]]),
                     **{a:round(float(v),4) if isinstance(v,(float,np.floating)) else v
                        for a,v in sim.items() if a!="last"}))
     df=pd.DataFrame(records)
