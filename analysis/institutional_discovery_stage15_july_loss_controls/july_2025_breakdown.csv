@@ -1,0 +1,8 @@
+segment,value,trades,net_pts,net_R,wins,average_risk_pts
+side,LONG,14,-2601.71,-0.66,4,616.52
+side,SHORT,1,333.12,0.586,1,568.77
+reason,stop,4,-2848.09,-5.211,0,562.08
+reason,target,3,2715.01,7.695,3,349.31
+reason,timeout,8,-2135.51,-2.558,2,737.97
+result,loss_or_flat,10,-5657.11,-9.016,0,706.81
+result,profit,5,3388.53,8.942,5,426.37

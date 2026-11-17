@@ -1,0 +1,15 @@
+feature,outcome,trades,median,mean
+h4_adx,loss_or_flat,10,12.5493,12.7944
+h4_adx,profit,5,12.3258,13.2654
+h4_eff8,loss_or_flat,10,0.3561,0.3082
+h4_eff8,profit,5,0.2787,0.2611
+h4_atr_ratio,loss_or_flat,10,0.9854,0.9162
+h4_atr_ratio,profit,5,1.0466,0.9318
+h1_vr,loss_or_flat,10,0.7385,0.9643
+h1_vr,profit,5,1.0928,1.1576
+volume_ratio_5m,loss_or_flat,10,1.5644,1.8943
+volume_ratio_5m,profit,5,1.0367,1.0485
+initial_risk_pts,loss_or_flat,10,809.082,706.8139
+initial_risk_pts,profit,5,465.804,426.3736
+previous_month_eff,loss_or_flat,10,0.0309,0.0309
+previous_month_eff,profit,5,0.0309,0.0309
