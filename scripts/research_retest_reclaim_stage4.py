@@ -13,7 +13,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from research_behavioral_discovery import features, SLIP
+import research_behavioral_discovery as historical\nfrom research_behavioral_discovery import SLIP
 from research_directional_acceptance import signals
 
 OUT = Path("analysis/institutional_discovery_stage4")
@@ -122,9 +122,38 @@ def summarize(tr):
             ci95_low=round(float(lo_ci), 2), ci95_high=round(float(hi_ci), 2)))
     return pd.DataFrame(rows)
 
+def aligned_features():
+    """Restrict the newly synced futures data to MARK-observed timestamps.
+
+    Historical mark/OI/funding archives may lag the daily futures sync. Do not
+    allow future-only rows, fabricated marks, or forward-filled timestamps.
+    Reuse Stage 2's established feature calculation on the exact common range.
+    """
+    mark = historical.load(historical.BASE / "institutional/history/mark_1m")
+    fut = historical.load(historical.BASE / "1m")
+    if not mark.index.isin(fut.index).all():
+        raise ValueError("Historical MARK timestamps missing from futures archive; cannot safely align")
+    common = fut.loc[mark.index]
+    if common[["open", "high", "low", "close"]].isna().any().any():
+        raise ValueError("Missing data inside the common observation window")
+    original_load = historical.load
+    try:
+        def aligned_load(folder):
+            if folder == historical.BASE / "1m":
+                return common
+            return original_load(folder)
+        historical.load = aligned_load
+        f, h, q = historical.features()
+    finally:
+        historical.load = original_load
+    q["futures_total_before_alignment"] = len(fut)
+    q["futures_matched_with_mark"] = len(common)
+    q["futures_excluded_newer_or_unmatched"] = len(fut) - len(common)
+    return f, h, q
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    f, h, base_quality = features()
+    f, h, base_quality = aligned_features()
     signal_map = signals(h)
     op = f.open.to_numpy(float)
     hi = f.high.to_numpy(float)
