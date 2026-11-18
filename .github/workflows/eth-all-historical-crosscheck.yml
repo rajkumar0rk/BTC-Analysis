@@ -1,13 +1,5 @@
 name: Replay historical BTC strategy research on ETHUSD separately
 on:
-  push:
-    branches: [research/eth-all-historical-crosscheck]
-    paths:
-      - scripts/eth_all_prior_strategy_runner.py
-      - scripts/eth_all_reports_summary.py
-      - scripts/eth_transfer_stage24.py
-      - scripts/eth_transfer_stage25.py
-      - .github/workflows/eth-all-historical-crosscheck.yml
   workflow_dispatch:
 permissions:
   contents: write
