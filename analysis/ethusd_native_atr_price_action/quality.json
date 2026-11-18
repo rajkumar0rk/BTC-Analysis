@@ -1,0 +1,49 @@
+{
+  "symbol": "ETHUSD",
+  "source": {
+    "raw_rows": 987840,
+    "rows_through_october_ist": 963030,
+    "utc_start": "2025-01-01 00:00:00+00:00",
+    "utc_last": "2026-10-31 18:29:00+00:00",
+    "sha256_checked_partitions": 23,
+    "last_month_for_scoring": "2026-10",
+    "slippage_pct_each_side": 0.02
+  },
+  "old_BTC_200_point_target_used": false,
+  "stop": "1.5x or 3x authentic ETH ATR14 on signal timeframe",
+  "take_profit": "2R or 3R of ATR-based stop distance",
+  "timeframes": [
+    "5min",
+    "1h",
+    "4h"
+  ],
+  "distinct_pattern_families": 8,
+  "unique_models": 192,
+  "total_independent_replayed_trade_rows": 298299,
+  "historical_all22_positive_models": 0,
+  "selected_2025_only": {
+    "model": "4h_strong_momentum|SL=1.5ATR|TP=3R|hold=240m",
+    "months_positive_2025": 9,
+    "months_positive_2026": 4,
+    "months_positive_all": 13,
+    "complete_22_positive": false,
+    "compounding_2025_pct": 2.1787,
+    "compounding_2026_pct": -2.0171,
+    "max_month_end_drawdown_pct": 4.18016,
+    "trades": 216,
+    "wins": 92,
+    "losses": 124
+  },
+  "standard_costs": "Taker 0.05% each side + GST 18%; assumed 0.02% adverse price slippage each side",
+  "assumptions": [
+    "ETHUSD source is native raw unscaled data with sha256 verified per partition",
+    "No literal 200-point BTC stops, targets, or virtual BTC price units",
+    "ATR/percent distances adapt natively to ETH price history; actual ETH USD stop/target shown in audit",
+    "0.02% slippage assumption is not measured spread, realized fill or market impact",
+    "Funding, contract lot size, margin availability, liquidation and actual spread are NOT included",
+    "One exclusive trade per model, returns compounded at monthly IST exit time",
+    "2026 is previously explored through BTC strategy research, not a pristine OOS sample",
+    "Selection uses 2025 only, then reports 2026 without parameter alteration",
+    "2026 November excluded; full Jan25-Oct26 data all verified complete"
+  ]
+}
