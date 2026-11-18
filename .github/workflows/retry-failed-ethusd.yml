@@ -29,22 +29,24 @@ jobs:
         run: |
           python -m py_compile scripts/run_eth_strategy_census.py
           python -m py_compile scripts/retry_eth_failed_studies.py
-      - name: Retry previously failed ETHUSD studies with ETH-only prerequisites
+      - name: Retry only the remaining ETHUSD dependent studies
+        env:
+          ETH_RETRY_REMAINING_ONLY: "1"
         run: python scripts/retry_eth_failed_studies.py
       - name: Publish all pass and failure details, even when some scripts fail
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ethusd-failed-studies-retry
+          name: ethusd-remaining-studies-retry
           path: |
-            eth_strategy_replay/failed_retry/result_summary.json
-            eth_strategy_replay/failed_retry/results.csv
-            eth_strategy_replay/failed_retry/status.json
-            eth_strategy_replay/failed_retry/retry_patch_log.json
-            eth_strategy_replay/failed_retry/logs/*
-            eth_strategy_replay/failed_retry/workspace/analysis/**/*.md
-            eth_strategy_replay/failed_retry/workspace/analysis/**/*monthly*.csv
-            eth_strategy_replay/failed_retry/workspace/analysis/**/quality.json
-            eth_strategy_replay/failed_retry/workspace/analysis/**/strategy_summary.csv
+            eth_strategy_replay/remaining_retry/result_summary.json
+            eth_strategy_replay/remaining_retry/results.csv
+            eth_strategy_replay/remaining_retry/status.json
+            eth_strategy_replay/remaining_retry/retry_patch_log.json
+            eth_strategy_replay/remaining_retry/logs/*
+            eth_strategy_replay/remaining_retry/workspace/analysis/**/*.md
+            eth_strategy_replay/remaining_retry/workspace/analysis/**/*monthly*.csv
+            eth_strategy_replay/remaining_retry/workspace/analysis/**/quality.json
+            eth_strategy_replay/remaining_retry/workspace/analysis/**/strategy_summary.csv
           retention-days: 30
           if-no-files-found: warn
