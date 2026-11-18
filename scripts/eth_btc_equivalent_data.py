@@ -29,7 +29,8 @@ import pandas as pd
 
 DEST=Path("data/eth_normalized_2025_anchor")
 OHLC=("open","high","low","close")
-MONTHS=[str(x) for x in pd.period_range("2025-01","2026-10",freq="M")]
+MONTHS=[str(x) for x in pd.period_range("2025-01","2026-11",freq="M")]
+TARGET_MONTHS=[str(x) for x in pd.period_range("2025-01","2026-10",freq="M")]
 
 def first_row(path):
     with gzip.open(path,"rt") as f:
@@ -98,6 +99,8 @@ def prepare():
        "source":"Original Delta Exchange India ETHUSD 1m; constant scalar index for original BTC-point models",
        "method":"Fixed price ratio anchored on FIRST available Jan 1, 2025 minute",
        "reference_timestamp_utc":"2025-01-01T00:00:00Z",
+       "target_months":TARGET_MONTHS,
+       "diagnostic_only_partial_november_2026":True,
        "btc_first_open":bo,"eth_first_open":eo,
        "synthetic_multiplier_btc_index_per_eth_price_point":scale,
        "equivalent_eth_price_points_per_200_btc_index_points":200./scale,
@@ -113,7 +116,7 @@ def prepare():
           "Original BTC point targets/slippage are now native ETH 200/scale and 5/scale respectively",
           "Model results depend on original strategy code; no funding, bid/ask or liquidation model automatically added",
           "A 2025-01 first 00:00 UTC source means initial 5.5 hours of IST Jan 2025 unavailable",
-          "2026-11 excluded due unfinished calendar month",
+          "2026-11 PARTIAL data included only to satisfy original historical split diagnostics; November must be EXCLUDED from all 22-month profitability targets",
           "Code consuming multiple feeds must ensure units and timestamp conventions are consistent"
        ]
     }
