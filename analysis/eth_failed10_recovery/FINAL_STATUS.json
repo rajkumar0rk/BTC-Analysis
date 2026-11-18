@@ -1,0 +1,95 @@
+{
+  "market": "ETHUSD Delta Exchange India original 1m",
+  "original_failed_script_total": 10,
+  "attempted": 10,
+  "verified_rerun_success": 8,
+  "still_unresolved": 2,
+  "missing_targets": [],
+  "duplicate_target_attempts": {},
+  "dependencies": [
+    {
+      "script": "research_pretrend_market_state_stage12.py",
+      "status": "success"
+    },
+    {
+      "script": "research_monthly_regime_stage14.py",
+      "status": "success"
+    },
+    {
+      "script": "research_swing_donchian_stage17.py",
+      "status": "success"
+    },
+    {
+      "script": "research_new_1h_patterns_stage19.py",
+      "status": "success"
+    },
+    {
+      "script": "research_monthly_10pct_stage19.py",
+      "status": "success"
+    },
+    {
+      "script": "research_signal_inversion_stage20.py",
+      "status": "success"
+    }
+  ],
+  "target_months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10"
+  ],
+  "include_partial_november_2026_for_original_diagnostic_splits": true,
+  "exclude_partial_november_from_profitable_month_target": true,
+  "current_status": "PARTIAL_OR_BLOCKED",
+  "earlier_btc_results_used_as_inputs": false,
+  "original_source_modified_in_main": false,
+  "fixed_point_conversion": "ETH OHLC translated to constant Jan2025 BTC price-index units for original BTC-model point distance sensitivity",
+  "caveats": [
+    "Original research variants can overlap, and each script may have many distinct models",
+    "Script executed successfully != every monthly return is positive",
+    "Stages 12 and 22 use fresh ETH source counts rather than hardcoded BTC counts; model entry/exit code unchanged",
+    "Portfolio variants are not proved valid until ledger reconciliations pass",
+    "Native ETH portfolio margin, funding and real-world bid/ask are not independently verified",
+    "2026 November is only a partial diagnostics period; target ends October 2026"
+  ],
+  "failures": [
+    {
+      "script": "research_monthly_portfolio_stage18.py",
+      "status": "failed",
+      "error": "mf04me9/research_monthly_portfolio_stage18.py\", line 263, in <module>\n    main()\n  File \"/tmp/eth_fix10_lmf04me9/research_monthly_portfolio_stage18.py\", line 192, in main\n    chosen=train.iloc[0].to_dict()\n           ~~~~~~~~~~^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/core/indexing.py\", line 1342, in __getitem__\n    return self._getitem_axis(maybe_callable, axis=axis)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/core/indexing.py\", line 2432, in _getitem_axis\n    self._validate_integer(key, axis)\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/core/indexing.py\", line 2365, in _validate_integer\n    raise IndexError(\"single positional indexer is out-of-bounds\")\nIndexError: single positional indexer is out-of-bounds\n"
+    },
+    {
+      "script": "research_trade_counts_stage22.py",
+      "status": "failed",
+      "error": "Traceback (most recent call last):\n  File \"/tmp/eth_fix10_lmf04me9/research_trade_counts_stage22.py\", line 214, in <module>\n    main()\n  File \"/tmp/eth_fix10_lmf04me9/research_trade_counts_stage22.py\", line 161, in main\n    months,_,_=verify_ledger(trades)\n               ^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/eth_fix10_lmf04me9/research_trade_counts_stage22.py\", line 106, in verify_ledger\n    raise AssertionError(f\"Stage20 source PnL disagrees {m}\")\nAssertionError: Stage20 source PnL disagrees 2025-02\n"
+    }
+  ],
+  "successful_scripts": [
+    "research_every_candle_200.py",
+    "research_july_drawdown_stage15.py",
+    "research_monthly_fixed_weight_stage21.py",
+    "research_monthly_regime_switch_stage16.py",
+    "research_stage12_monthly.py",
+    "research_three_sleeve_stage20.py",
+    "research_time_day_volume_200.py",
+    "research_wide_monthly_stage23.py"
+  ]
+}

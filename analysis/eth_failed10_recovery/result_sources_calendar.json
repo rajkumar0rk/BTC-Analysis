@@ -1,0 +1,58 @@
+[
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage6_every_candle_200/RESEARCH_REPORT.md",
+    "bytes": 22897
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage6_every_candle_200/all_candle_conditional_rates.csv",
+    "bytes": 26195
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage6_every_candle_200/every_candle_directional_labels.csv.gz",
+    "bytes": 32922937
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage6_every_candle_200/new_york_hour_profile.csv",
+    "bytes": 10076
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage6_every_candle_200/quality.json",
+    "bytes": 2858
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage6_every_candle_200/trade_ledger.csv.gz",
+    "bytes": 30655429
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage6_every_candle_200/trade_summary.csv",
+    "bytes": 113152
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage6_every_candle_200/zero_loss_candidates.csv",
+    "bytes": 201
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage7_time_volume/RESEARCH_REPORT.md",
+    "bytes": 16796
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage7_time_volume/all_time_day_volume_volatility_rates.csv",
+    "bytes": 478786
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage7_time_volume/quality.json",
+    "bytes": 2407
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage7_time_volume/selected_filters_2025_only.csv",
+    "bytes": 2742
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage7_time_volume/trade_ledger.csv.gz",
+    "bytes": 117256217
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage7_time_volume/trade_summary.csv",
+    "bytes": 630364
+  }
+]

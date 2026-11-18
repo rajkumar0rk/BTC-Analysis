@@ -1,0 +1,58 @@
+{
+  "part": "calendar",
+  "source": "ETHUSD Delta historical, normalized with predeclared Jan2025 anchor",
+  "target_months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10"
+  ],
+  "partial_november_for_diagnostics": true,
+  "btc_first_open": 93548.5,
+  "eth_first_open": 3336.55,
+  "native_eth_point_value_for_btc_200": 7.13330518394202,
+  "scripts": [
+    {
+      "script": "research_every_candle_200.py",
+      "arguments": [],
+      "original_source_sha256": "7b7101b3371bbab7c99a478df6bad39f7822400357a498dc1da92980de31bfef",
+      "translated_sha256": "3f4cd5addfe9bffd91b8110e76af357199cec50905c13fe804c98097acaee1ca",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "breakout_short    -1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker     120           27                 29              91    24.17      -94.015      -11281.74              -190.09          0.226          11543.16                 11         11.57\n     60m_rejected_sweep_long     1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker      93           20                 23              70    24.73      -94.850       -8821.06              -190.15          0.230           8952.82                  8         10.61\n    60m_rejected_sweep_short    -1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker      63           15                 24              39    38.10      -57.828       -3643.17              -190.70          0.371           3772.88                  8         15.89\n      compression_break_long     1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker      25            0                  0              25     0.00     -157.095       -3927.38              -190.51          0.000           3927.38                 25         15.44\n     compression_break_short    -1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker      33            4                  6              27    18.18      -95.839       -3162.69              -190.27          0.153           3162.69                  7         18.64\n           every_minute_long     1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker    2488          659                731            1757    29.38      -82.366     -204925.98              -190.78          0.289         205181.40                 20          9.75\n          every_minute_short    -1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker    2427          713                811            1616    33.42      -71.253     -172931.90              -190.84          0.345         172931.90                 36          9.99\n           strong_burst_long     1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker     250           43                 51             199    20.40     -104.959      -26239.72              -190.64          0.176          26286.75                 18         11.12\n          strong_burst_short    -1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker     277           74                 83             194    29.96      -78.236      -21671.28              -190.40          0.298          21802.84                 17         12.74\n trend_pullback_reclaim_long     1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker     250           55                 64             186    25.60      -86.388      -21597.03              -190.63          0.242          21757.59                 13         14.52\ntrend_pullback_reclaim_short    -1 sl100_tp200_30m 2026_Nov_recent_exploratory standard_taker     387          104                117             270    30.23      -76.923      -29769.04              -190.35          0.302          29861.96                 21         11.83\n",
+      "stderr_tail": "/tmp/eth_fix10_l5vbuw1r/research_every_candle_200.py:381: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  n_weekday=np.asarray(ny.dayofweek,dtype=np.int8)\n",
+      "duration_s": 92.58,
+      "was_previous_failure": true
+    },
+    {
+      "script": "research_time_day_volume_200.py",
+      "arguments": [],
+      "original_source_sha256": "92352dd2e0c8f7cb6f1972920bf05d24ac5cf1b199a3d018beae17c40da415ab",
+      "translated_sha256": "2bf445cf64ac4785f0549819254bb64efda3aa64511e0294f877947ece36cb54",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "            3                  4               7    36.36      -55.906        -614.96              -180.45          0.420            744.82                  4         17.64\nThu_IST_07h SHORT SL100_TP200_30m        2026_H2_seen_recheck standard_taker     131           49                 52              79    39.69      -58.134       -7615.49              -199.00          0.422           7843.02                  7          9.47\nThu_IST_19h  LONG SL100_TP200_30m        2026_H2_seen_recheck standard_taker     233           97                 98             135    42.06      -58.136      -13545.77              -199.24          0.448          13695.99                  9          5.15\nWed_IST_19h SHORT SL100_TP200_30m 2026_Nov_recent_exploratory standard_taker       5            1                  1               4    20.00      -59.288        -296.44              -178.04          0.292            296.44                  3         24.20\n    IST_03h SHORT SL100_TP200_30m 2026_Nov_recent_exploratory standard_taker     126           41                 49              77    38.89      -60.981       -7683.55              -190.54          0.412           7864.40                  8          9.03\n    IST_05h SHORT SL100_TP200_30m 2026_Nov_recent_exploratory standard_taker     100           31                 35              65    35.00      -60.984       -6098.44              -190.29          0.391           6445.20                 10         11.68\n    IST_09h SHORT SL100_TP200_30m 2026_Nov_recent_exploratory standard_taker      93           28                 32              61    34.41      -61.162       -5688.08              -190.45          0.387           5817.55                  9         12.30\nTue_IST_18h SHORT SL100_TP200_30m          2026_H1_validation standard_taker     143           49                 54              89    37.76      -62.016       -8868.31              -216.95          0.406           9151.96                  6         11.62\nWed_IST_19h SHORT SL100_TP200_30m        2026_H2_seen_recheck standard_taker     241           98                 98             143    40.66      -62.352      -15026.88              -200.24          0.422          15203.28                 12          4.94\n    IST_22h SHORT SL100_TP200_30m 2026_Nov_recent_exploratory standard_taker     135           46                 48              87    35.56      -62.980       -8502.29              -190.71          0.398           8764.19                  7          8.73\n    IST_12h SHORT SL100_TP200_30m 2026_Nov_recent_exploratory standard_taker      81           23                 26              55    32.10      -63.165       -5116.36              -190.46          0.361           5116.36                  5         13.75\nThu_IST_07h SHORT SL100_TP200_30m          2026_H1_validation standard_taker     197           69                 74             123    37.56      -63.675      -12544.03              -220.15          0.396          12544.03                  6          8.84\n",
+      "stderr_tail": "/tmp/eth_fix10_l5vbuw1r/research_time_day_volume_200.py:55: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  weekday = np.asarray(india.dayofweek, dtype=np.int8)\n",
+      "duration_s": 382.99,
+      "was_previous_failure": true
+    }
+  ]
+}

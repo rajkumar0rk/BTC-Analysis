@@ -1,0 +1,483 @@
+{
+  "target": "Positive net monthly account PNL in all twelve 2025 and all observed 2026 months",
+  "models_total_before_pruning": 5585,
+  "models_unique_before_pruning": 4570,
+  "models_train_2025_only_filtered": 703,
+  "model_sources": [
+    "stage16",
+    "stage17",
+    "stage18",
+    "stage19_5m",
+    "stage19_hourly",
+    "stage20_inverse_5m",
+    "stage20_portfolio"
+  ],
+  "original_preserved_stage18": {
+    "y2025": {
+      "profitable": 3,
+      "losing": 5,
+      "neutral": 4,
+      "worst_pct": -1.238954,
+      "compounded_pct": 0.06126
+    },
+    "y2026": {
+      "profitable": 6,
+      "losing": 5,
+      "neutral": 0,
+      "worst_pct": -2.173499,
+      "compounded_pct": -2.29864
+    },
+    "all_months_positive": false,
+    "max_month_end_drawdown_pct": 4.1212
+  },
+  "fixed_2025_train_allocations_and_2026_rechecks": {
+    "Train2025_35pct_anchor15pct_cap": {
+      "label": "Train2025_35pct_anchor15pct_cap",
+      "floor_month_pct": 0.093319,
+      "scores": {
+        "y2025": {
+          "profitable": 12,
+          "losing": 0,
+          "neutral": 0,
+          "worst_pct": 0.093319,
+          "compounded_pct": 3.86004
+        },
+        "y2026": {
+          "profitable": 2,
+          "losing": 9,
+          "neutral": 0,
+          "worst_pct": -1.547979,
+          "compounded_pct": -7.26322
+        },
+        "all_months_positive": false,
+        "max_month_end_drawdown_pct": 7.2832
+      },
+      "selected_sleeves": 9,
+      "allocations": [
+        {
+          "model": "PRESERVED_STAGE18",
+          "source": "stage18",
+          "allocation_pct": 35.0,
+          "gross_trades_2025": 0,
+          "gross_trades_2026": 0
+        },
+        {
+          "model": "SWING:4H_channel_55_no_trend_filter_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 15.0,
+          "gross_trades_2025": 33,
+          "gross_trades_2026": 33
+        },
+        {
+          "model": "HOURLY:failed_break_12h__4h_atr_ratio_le1__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 12.59768,
+          "gross_trades_2025": 94,
+          "gross_trades_2026": 87
+        },
+        {
+          "model": "HOURLY:ema20_pullback_confirm__4h_adx_le20__3R__240min",
+          "source": "stage19_hourly",
+          "allocation_pct": 11.77753,
+          "gross_trades_2025": 64,
+          "gross_trades_2026": 76
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:atr1p5:1.5:120:1.0:10.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 7.80922,
+          "gross_trades_2025": 57,
+          "gross_trades_2026": 37
+        },
+        {
+          "model": "HOURLY:overextension_reversal__4h_atr_ratio_le1__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 5.51664,
+          "gross_trades_2025": 142,
+          "gross_trades_2026": 157
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:atr1p5:2.5:120:1.0:10.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 5.10517,
+          "gross_trades_2025": 57,
+          "gross_trades_2026": 37
+        },
+        {
+          "model": "SWING:4H_channel_55_ema50_agrees_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 4.51977,
+          "gross_trades_2025": 33,
+          "gross_trades_2026": 33
+        },
+        {
+          "model": "SWING:4H_channel_24_no_trend_filter_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 2.67399,
+          "gross_trades_2025": 52,
+          "gross_trades_2026": 55
+        }
+      ]
+    },
+    "Train2025_50pct_anchor10pct_cap": {
+      "label": "Train2025_50pct_anchor10pct_cap",
+      "floor_month_pct": -0.075621,
+      "scores": {
+        "y2025": {
+          "profitable": 4,
+          "losing": 8,
+          "neutral": 0,
+          "worst_pct": -0.075621,
+          "compounded_pct": 2.12547
+        },
+        "y2026": {
+          "profitable": 1,
+          "losing": 10,
+          "neutral": 0,
+          "worst_pct": -1.65114,
+          "compounded_pct": -7.43018
+        },
+        "all_months_positive": false,
+        "max_month_end_drawdown_pct": 7.7099
+      },
+      "selected_sleeves": 10,
+      "allocations": [
+        {
+          "model": "PRESERVED_STAGE18",
+          "source": "stage18",
+          "allocation_pct": 50.0,
+          "gross_trades_2025": 0,
+          "gross_trades_2026": 0
+        },
+        {
+          "model": "SWING:4H_channel_55_no_trend_filter_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 10.0,
+          "gross_trades_2025": 33,
+          "gross_trades_2026": 33
+        },
+        {
+          "model": "HOURLY:failed_break_12h__4h_atr_ratio_le1__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 9.83702,
+          "gross_trades_2025": 94,
+          "gross_trades_2026": 87
+        },
+        {
+          "model": "HOURLY:ema20_pullback_confirm__4h_adx_le20__3R__240min",
+          "source": "stage19_hourly",
+          "allocation_pct": 9.25311,
+          "gross_trades_2025": 64,
+          "gross_trades_2026": 76
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:atr1p5:1.5:120:1.0:10.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 8.72804,
+          "gross_trades_2025": 57,
+          "gross_trades_2026": 37
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:atr1p5:2.5:120:1.0:10.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 5.31046,
+          "gross_trades_2025": 57,
+          "gross_trades_2026": 37
+        },
+        {
+          "model": "SWING:4H_channel_55_ema50_agrees_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 4.8684,
+          "gross_trades_2025": 33,
+          "gross_trades_2026": 33
+        },
+        {
+          "model": "HOURLY:ema20_pullback_confirm__4h_adx_le20__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 0.86848,
+          "gross_trades_2025": 63,
+          "gross_trades_2026": 73
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:reverse:hour_trend_opposes_trade:atr3:4.0:120:1.0:10.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 0.60767,
+          "gross_trades_2025": 257,
+          "gross_trades_2026": 277
+        },
+        {
+          "model": "SWING:4H_channel_24_no_trend_filter_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 0.52683,
+          "gross_trades_2025": 52,
+          "gross_trades_2026": 55
+        }
+      ]
+    },
+    "Train2025_25pct_anchor15pct_cap": {
+      "label": "Train2025_25pct_anchor15pct_cap",
+      "floor_month_pct": 0.194625,
+      "scores": {
+        "y2025": {
+          "profitable": 12,
+          "losing": 0,
+          "neutral": 0,
+          "worst_pct": 0.194625,
+          "compounded_pct": 4.97273
+        },
+        "y2026": {
+          "profitable": 3,
+          "losing": 8,
+          "neutral": 0,
+          "worst_pct": -1.602738,
+          "compounded_pct": -7.07403
+        },
+        "all_months_positive": false,
+        "max_month_end_drawdown_pct": 7.2088
+      },
+      "selected_sleeves": 9,
+      "allocations": [
+        {
+          "model": "PRESERVED_STAGE18",
+          "source": "stage18",
+          "allocation_pct": 25.0,
+          "gross_trades_2025": 0,
+          "gross_trades_2026": 0
+        },
+        {
+          "model": "SWING:4H_channel_55_no_trend_filter_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 15.0,
+          "gross_trades_2025": 33,
+          "gross_trades_2026": 33
+        },
+        {
+          "model": "HOURLY:failed_break_12h__4h_atr_ratio_le1__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 13.57283,
+          "gross_trades_2025": 94,
+          "gross_trades_2026": 87
+        },
+        {
+          "model": "HOURLY:ema20_pullback_confirm__4h_adx_le20__3R__240min",
+          "source": "stage19_hourly",
+          "allocation_pct": 11.24156,
+          "gross_trades_2025": 64,
+          "gross_trades_2026": 76
+        },
+        {
+          "model": "HOURLY:overextension_reversal__4h_atr_ratio_le1__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 11.17901,
+          "gross_trades_2025": 142,
+          "gross_trades_2026": 157
+        },
+        {
+          "model": "SWING:4H_channel_55_ema50_agrees_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 8.68006,
+          "gross_trades_2025": 33,
+          "gross_trades_2026": 33
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:atr1p5:1.5:120:1.0:10.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 6.27874,
+          "gross_trades_2025": 57,
+          "gross_trades_2026": 37
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:atr1p5:2.5:120:1.0:10.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 4.63204,
+          "gross_trades_2025": 57,
+          "gross_trades_2026": 37
+        },
+        {
+          "model": "SWING:4H_channel_24_no_trend_filter_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 4.41576,
+          "gross_trades_2025": 52,
+          "gross_trades_2026": 55
+        }
+      ]
+    },
+    "HINDSIGHT_ALL23_35pct_anchor15pct_cap": {
+      "label": "HINDSIGHT_ALL23_35pct_anchor15pct_cap",
+      "floor_month_pct": -0.29939,
+      "scores": {
+        "y2025": {
+          "profitable": 2,
+          "losing": 10,
+          "neutral": 0,
+          "worst_pct": -0.29939,
+          "compounded_pct": 0.36484
+        },
+        "y2026": {
+          "profitable": 2,
+          "losing": 9,
+          "neutral": 0,
+          "worst_pct": -0.29939,
+          "compounded_pct": -1.83083
+        },
+        "all_months_positive": false,
+        "max_month_end_drawdown_pct": 2.7646
+      },
+      "selected_sleeves": 13,
+      "allocations": [
+        {
+          "model": "PRESERVED_STAGE18",
+          "source": "stage18",
+          "allocation_pct": 35.0,
+          "gross_trades_2025": 0,
+          "gross_trades_2026": 0
+        },
+        {
+          "model": "SWING:1D_channel_20_no_trend_filter_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 15.0,
+          "gross_trades_2025": 7,
+          "gross_trades_2026": 11
+        },
+        {
+          "model": "HOURLY:compression_expansion_12h__4h_adx_le20__2R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 13.5095,
+          "gross_trades_2025": 4,
+          "gross_trades_2026": 6
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:reverse:large_atr:struct3:4.0:120:0.5:5.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 10.86898,
+          "gross_trades_2025": 15,
+          "gross_trades_2026": 28
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:struct3:1.5:120:0.5:5.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 5.02076,
+          "gross_trades_2025": 58,
+          "gross_trades_2026": 43
+        },
+        {
+          "model": "SWING:1D_channel_20_no_trend_filter_trail_4atr",
+          "source": "stage17",
+          "allocation_pct": 4.31954,
+          "gross_trades_2025": 7,
+          "gross_trades_2026": 11
+        },
+        {
+          "model": "HOURLY:strong_momentum_6h__4h_atr_ratio_le1__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 3.88398,
+          "gross_trades_2025": 65,
+          "gross_trades_2026": 71
+        },
+        {
+          "model": "HOURLY:overextension_reversal__4h_atr_ratio_le1__2R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 3.33847,
+          "gross_trades_2025": 143,
+          "gross_trades_2026": 157
+        },
+        {
+          "model": "HOURLY:strong_momentum_6h__4h_efficiency_ge30__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 3.31416,
+          "gross_trades_2025": 40,
+          "gross_trades_2026": 66
+        },
+        {
+          "model": "SWING:4H_channel_24_ema50_agrees_trail_3atr",
+          "source": "stage17",
+          "allocation_pct": 2.80951,
+          "gross_trades_2025": 47,
+          "gross_trades_2026": 53
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:atr1p5:2.5:120:0.5:5.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 1.51178,
+          "gross_trades_2025": 57,
+          "gross_trades_2026": 37
+        },
+        {
+          "model": "FIVE_MIN_INVERT:compression_break:original:low_volume:atr3:4.0:120:0.5:5.0",
+          "source": "stage20_inverse_5m",
+          "allocation_pct": 1.01639,
+          "gross_trades_2025": 58,
+          "gross_trades_2026": 65
+        },
+        {
+          "model": "HOURLY:strong_momentum_6h__4h_adx_ge25__3R__480min",
+          "source": "stage19_hourly",
+          "allocation_pct": 0.40692,
+          "gross_trades_2025": 41,
+          "gross_trades_2026": 51
+        }
+      ]
+    }
+  },
+  "historical_full_hindsight_oracle": {
+    "minimum_modeled_month_pct": -0.221297,
+    "scores": {
+      "y2025": {
+        "profitable": 4,
+        "losing": 8,
+        "neutral": 0,
+        "worst_pct": -0.221297,
+        "compounded_pct": 0.62863
+      },
+      "y2026": {
+        "profitable": 2,
+        "losing": 9,
+        "neutral": 0,
+        "worst_pct": -0.221297,
+        "compounded_pct": -1.18191
+      },
+      "all_months_positive": false,
+      "max_month_end_drawdown_pct": 2.0662
+    },
+    "noncausal_not_tradable": true
+  },
+  "monthly_span": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10",
+    "2026-11"
+  ],
+  "cost_model": "Every candidate source includes standard taker 0.05% per side, GST 18%, adverse 5 BTC price points per side. Scalper Offer is NOT assumed.",
+  "limitations": [
+    "The only test that uses 2026 in allocation fitting is clearly marked INVALID historical oracle",
+    "Even 2025-only fit is likely overfit due to thousands of configurations",
+    "All 2026 candle histories exposed by previous research; no pristine forward evaluation",
+    "Original Stage18 and Stage20 are unchanged, only independent fixed-capital sleeves added",
+    "Portfolio returns are fixed monthly weight averages of independently simulated strategies, not one integrated intraminute equity/margin engine",
+    "No funding payments, actual spread, order book market impact, cross-venue hedge costs, monthly rebalancing fees, liquidation or contract lot granularity",
+    "A positive historical NAV month does not imply guaranteed positive future months",
+    "Some sources use exact fractional per-trade risk and max 5-10x exposure but actual exchange position feasibility unverified",
+    "Trade counts in monthly output sum independent sleeves, which can overlap; not unique unified portfolio orders",
+    "September 2026 is previously studied; no filter may select a strategy specifically because the month is September",
+    "2026-10-31 source day missing; November 2026 only through November 16"
+  ]
+}

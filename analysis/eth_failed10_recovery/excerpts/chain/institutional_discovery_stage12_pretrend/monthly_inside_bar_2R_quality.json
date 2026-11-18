@@ -1,0 +1,40 @@
+{
+  "pattern": "06_inside_bar_break",
+  "environment": "aligned_trend_plus_5m_compression_break",
+  "target_R": 2.0,
+  "max_holding_minutes": 120,
+  "source_action_run": 44108340139,
+  "source_artifact_id": 14339268107,
+  "time_zone": "Asia/Kolkata, month of entry",
+  "trades": 58,
+  "profitable_months": 8,
+  "losing_months": 13,
+  "flat_months": 0,
+  "no_trade_months": 2,
+  "net_total_price_points_equivalent": -6849.42,
+  "year_summary": {
+    "2025": {
+      "months": 12,
+      "profitable": 5,
+      "loss": 6,
+      "no_trades": 1,
+      "trades": 32,
+      "net_pts": -4571.18
+    },
+    "2026": {
+      "months": 11,
+      "profitable": 3,
+      "loss": 7,
+      "no_trades": 1,
+      "trades": 26,
+      "net_pts": -2278.24
+    }
+  },
+  "limitations": [
+    "Modeled net BTC quote-price points, not dollar-account return",
+    "Standard taker fees, GST and slippage included; funding and order-book impact not",
+    "2026-10-31 missing from source, 2026-11 partial",
+    "This original historical dataset was previously researched; not an untouched forward test",
+    "Entry month grouped in IST; no trades are not a profitable month"
+  ]
+}
