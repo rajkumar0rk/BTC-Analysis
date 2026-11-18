@@ -1,0 +1,45 @@
+name: ETHUSD native cross-family 22-month account backtest
+on:
+  push:
+    branches: [research/eth-all-normalized-crosscheck-v2]
+    paths:
+      - scripts/eth_native_crossfamily_v2.py
+      - .github/workflows/eth-native-crossfamily-v2.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eth-all-normalized-crosscheck-v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Full 22-month ETH native-price trading-family research
+        run: python scripts/eth_native_crossfamily_v2.py
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: eth-native-crossfamily-v2
+          path: analysis/eth_native_crossfamily_v2/
+      - name: Commit separate ETH-only results
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_native_crossfamily_v2/
+          if ! git diff --cached --quiet; then
+            git commit -m "research(ETH): archive independently replayed native price strategy families"
+            for attempt in 1 2 3 4; do
+              git fetch origin research/eth-all-normalized-crosscheck-v2
+              git rebase origin/research/eth-all-normalized-crosscheck-v2
+              if git push origin HEAD:research/eth-all-normalized-crosscheck-v2; then exit 0; fi
+            done
+            exit 1
+          fi
