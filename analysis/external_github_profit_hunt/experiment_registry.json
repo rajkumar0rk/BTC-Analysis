@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T15:08:00Z",
+  "last_updated_utc": "2026-11-18T15:44:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -259,6 +259,60 @@
       ],
       "verdict": "Both assets losing; no strong monthly PF consistency, no 500% annual return, not worth checking",
       "next_action": "Find distinct pinned open-source strategy; continue paired BTC/ETH testing, repair data and funding limitations"
+    },
+    {
+      "id": "3kpro-donchian20-atr14-20261118",
+      "source_repo": "https://github.com/3kpro/3K_Trading_Bot_V2",
+      "source_commit": "ce1656d3589db4446330d981f5cf2c8b770d29e6",
+      "source_path": "bot.py",
+      "strategy": "1h Donchian20 close breakout, ATR14 2x initial stop, unrestricted RSI0-100, stop or opposite breakout exit",
+      "causal_adaptations": "next 1h open fill for completed 1h signals, 1m stop checking, 1% equity risk capped 1x notional, no same-bar reentry",
+      "backtest_repository": "rajkumar0rk/BTC-Analysis",
+      "working_branch": "feature/github-external-volpersistence-22m-20261118",
+      "script": "scripts/replay_3kpro_donchian20_paired.py",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44338610629",
+      "action_artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44338610629/artifacts/14441314436",
+      "status": "COMPLETED_DIAGNOSTIC_NOT_QUALIFIED",
+      "assumptions": {
+        "fee_taker_per_side": 0.0005,
+        "GST_on_fees": 0.18,
+        "BTC_adverse_slippage_bps_each_side": 5,
+        "ETH_adverse_slippage_bps_each_side": 2,
+        "month_end_MTM": true,
+        "settled_funding": false,
+        "leverage_cap": 1
+      },
+      "BTCUSD": {
+        "trades": 408,
+        "profitable_months": 6,
+        "losing_months": 16,
+        "high_pf_months": 4,
+        "aggregate_pf": 0.70109737,
+        "net_22m_pct": -57.95796717,
+        "year_2025_net_pct": -45.4638283,
+        "year_2026_jan_oct_net_pct": -22.90982018,
+        "max_month_end_drawdown_pct": 57.95796717
+      },
+      "ETHUSD": {
+        "trades": 359,
+        "profitable_months": 11,
+        "losing_months": 11,
+        "high_pf_months": 7,
+        "aggregate_pf": 1.09071058,
+        "net_22m_pct": 25.7951845,
+        "year_2025_net_pct": 7.17538344,
+        "year_2026_jan_oct_net_pct": 17.37320686,
+        "max_month_end_drawdown_pct": 11.24310984
+      },
+      "verdict": "ETH profitable in diagnostic replay but only 7/22 high-PF months, overall PF 1.09, not an independently verified stable monthly edge; BTC substantially negative. Not worth alerting as a promising candidate.",
+      "caveats": [
+        "January 2025 IST missing Dec 31 2024 18:30-23:59 UTC",
+        "Actual settled funding, L1 depth, spread, liquidation and margin not modeled",
+        "Source same-bar fills corrected to next-hour open, so this is not original backtest execution",
+        "No first-minute intrabar stop on entry minute; could slightly overstate results",
+        "2026 previously researched, not pristine OOS"
+      ],
+      "next_action": "Test a distinct pinned open-source strategy with stronger causal source quality; repair missing IST coverage and funding before qualifying any result"
     }
   ]
 }
