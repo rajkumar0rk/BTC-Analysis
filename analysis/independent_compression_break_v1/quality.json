@@ -1,0 +1,18 @@
+{
+  "strategy": "Prior completed 12/24/48-hour price channel compression relative to lagged ATR, confirmed 1H close breakout with directional body; next 1m open entry",
+  "models_per_market": 36,
+  "selection": "2025-only",
+  "data": "Delta native 1m BTC and ETH; Jan2025 IST first 5.5h unavailable",
+  "fee": "0.05% each side + 18% GST",
+  "slippage": "BTC 5 price points/side, ETH 0.02%/side",
+  "risk": "0.5% equity at stop, capped at 3x notional",
+  "omitted": [
+    "funding",
+    "verified spread",
+    "impact",
+    "lot sizes",
+    "margin/liquidation"
+  ],
+  "monthly_accounting": "trades closed at IST month boundary; month equity includes net exit PnL; NOT continuous mark-to-market",
+  "not_pristine_2026": true
+}
