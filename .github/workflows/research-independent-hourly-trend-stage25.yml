@@ -1,10 +1,10 @@
 name: Independent BTC raw-candle monthly 10 percent research (Stage25)
 on:
   push:
-    branches: [research/stage25-monthly10]
+    branches: [research/stage25-new-trend]
     paths:
       - scripts/research_independent_hourly_trend_stage25.py
-      - .github/workflows/research-independent-monthly10-stage25.yml
+      - .github/workflows/research-independent-hourly-trend-stage25.yml
   workflow_dispatch:
 permissions:
   contents: write
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: research/stage25-monthly10
+          ref: research/stage25-new-trend
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -41,9 +41,9 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "research: archive independent Stage25 results"
             for attempt in 1 2 3 4 5; do
-              git fetch origin research/stage25-monthly10
-              git rebase origin/research/stage25-monthly10
-              if git push origin HEAD:research/stage25-monthly10; then exit 0; fi
+              git fetch origin research/stage25-new-trend
+              git rebase origin/research/stage25-new-trend
+              if git push origin HEAD:research/stage25-new-trend; then exit 0; fi
               sleep 3
             done
             exit 1
