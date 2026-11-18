@@ -1,0 +1,3 @@
+symbol,model,signals,trades,wins,losses,win_rate_pct,profit_factor,avg_win_loss_ratio,biggest_winner_R,winners_over_10R,net_return_pct,max_drawdown_pct,fees_usd,funding_proxy_usd,return_2025_pct,return_2026_pct,profit_months,loss_months,active_months
+ETHUSD,sweep48_wick1.5_ema0_init1.25atr_trail6atr,154,131,34,97,25.954,1.7613,5.0249,83.992,3,40.005,-14.657,72.456,-0.871,1.111,38.466,10,13,23
+ETHUSD,sweep48_wick2.5_ema0_init1.25atr_trail6atr,115,104,24,80,23.077,1.8545,6.1815,83.992,3,36.908,-14.693,59.11,-1.801,0.767,35.866,9,14,23

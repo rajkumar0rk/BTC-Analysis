@@ -1,0 +1,43 @@
+# Independent failed-auction reclaim strategy research
+
+**Predeclared qualifying models: 0/64**
+
+## Qualifying results
+None
+
+## Top models by 2025 performance (2026 reported without selecting on it)
+| symbol   | model                                       |   signals |   trades |   wins |   losses |   win_rate_pct |   profit_factor |   avg_win_loss_ratio |   biggest_winner_R |   winners_over_10R |   net_return_pct |   max_drawdown_pct |   fees_usd |   funding_proxy_usd |   return_2025_pct |   return_2026_pct |   profit_months |   loss_months |   active_months |
+|:---------|:--------------------------------------------|----------:|---------:|-------:|---------:|---------------:|----------------:|---------------------:|-------------------:|-------------------:|-----------------:|-------------------:|-----------:|--------------------:|------------------:|------------------:|----------------:|--------------:|----------------:|
+| BTCUSD   | sweep48_wick2.5_ema1_init1.25atr_trail10atr |        18 |       17 |      3 |       14 |         17.647 |          2.2692 |              10.5894 |             23.019 |                  2 |           11.906 |            -10.247 |     19.403 |               1.068 |             4.326 |             7.266 |               4 |            10 |              14 |
+| ETHUSD   | sweep48_wick2.5_ema1_init1.25atr_trail6atr  |        20 |       20 |      4 |       16 |         20     |          1.3893 |               5.5573 |             17.441 |                  1 |            3.351 |             -6.826 |     12.088 |              -0.609 |             3.891 |            -0.52  |               5 |            10 |              15 |
+| ETHUSD   | sweep48_wick1.5_ema1_init1.25atr_trail6atr  |        24 |       24 |      5 |       19 |         20.833 |          1.385  |               5.2629 |             17.441 |                  1 |            3.985 |             -7.004 |     14.812 |              -0.521 |             3.328 |             0.636 |               5 |            12 |              17 |
+| ETHUSD   | sweep48_wick2.5_ema1_init1.25atr_trail10atr |        20 |       20 |      4 |       16 |         20     |          1.2562 |               5.0247 |             15.635 |                  1 |            2.325 |             -9.227 |     11.941 |              -1.383 |             3.024 |            -0.679 |               5 |            10 |              15 |
+| ETHUSD   | sweep48_wick1.5_ema1_init1.25atr_trail10atr |        24 |       24 |      5 |       19 |         20.833 |          1.2348 |               4.6921 |             15.635 |                  1 |            2.528 |            -10.325 |     14.593 |              -1.225 |             2.465 |             0.062 |               5 |            12 |              17 |
+| BTCUSD   | sweep48_wick1.5_ema1_init1.25atr_trail10atr |        22 |       21 |      3 |       18 |         14.286 |          1.7597 |              10.5585 |             23.019 |                  2 |            9.035 |            -11.898 |     23.23  |               2.314 |             2.233 |             6.653 |               4 |            10 |              14 |
+| ETHUSD   | sweep96_wick2.5_ema0_init0.75atr_trail6atr  |        66 |       62 |     13 |       49 |         20.968 |          1.2052 |               4.5426 |             18.035 |                  1 |            6.049 |            -16.71  |     51.14  |              -2.532 |             1.944 |             4.027 |               7 |            13 |              20 |
+| ETHUSD   | sweep48_wick1.5_ema0_init1.25atr_trail6atr  |       154 |      131 |     34 |       97 |         25.954 |          1.7613 |               5.0249 |             83.992 |                  3 |           40.005 |            -14.657 |     72.456 |              -0.871 |             1.111 |            38.466 |              10 |            13 |              23 |
+| ETHUSD   | sweep48_wick2.5_ema0_init1.25atr_trail6atr  |       115 |      104 |     24 |       80 |         23.077 |          1.8545 |               6.1815 |             83.992 |                  3 |           36.908 |            -14.693 |     59.11  |              -1.801 |             0.767 |            35.866 |               9 |            14 |              23 |
+| ETHUSD   | sweep96_wick2.5_ema0_init1.25atr_trail6atr  |        66 |       61 |     17 |       44 |         27.869 |          1.1342 |               2.9357 |             10.821 |                  1 |            3.124 |            -10.353 |     29.429 |              -2.395 |            -0.009 |             3.132 |               9 |            11 |              20 |
+| ETHUSD   | sweep96_wick1.5_ema1_init1.25atr_trail6atr  |         2 |        2 |      1 |        1 |         50     |          4.3343 |               4.3343 |              4.803 |                  0 |            1.837 |             -1.915 |      0.999 |               0.091 |            -0.551 |             2.401 |               2 |             1 |               3 |
+| ETHUSD   | sweep96_wick2.5_ema1_init1.25atr_trail6atr  |         1 |        1 |      0 |        1 |          0     |          0      |             nan      |             -1.102 |                  0 |           -0.551 |             -1.516 |      0.389 |               0.101 |            -0.551 |             0     |               1 |             1 |               2 |
+
+## Promising exploratory candidates (not validated)
+| symbol   | model                                      |   signals |   trades |   wins |   losses |   win_rate_pct |   profit_factor |   avg_win_loss_ratio |   biggest_winner_R |   winners_over_10R |   net_return_pct |   max_drawdown_pct |   fees_usd |   funding_proxy_usd |   return_2025_pct |   return_2026_pct |   profit_months |   loss_months |   active_months |
+|:---------|:-------------------------------------------|----------:|---------:|-------:|---------:|---------------:|----------------:|---------------------:|-------------------:|-------------------:|-----------------:|-------------------:|-----------:|--------------------:|------------------:|------------------:|----------------:|--------------:|----------------:|
+| ETHUSD   | sweep48_wick1.5_ema0_init1.25atr_trail6atr |       154 |      131 |     34 |       97 |         25.954 |          1.7613 |               5.0249 |             83.992 |                  3 |           40.005 |            -14.657 |     72.456 |              -0.871 |             1.111 |            38.466 |              10 |            13 |              23 |
+| ETHUSD   | sweep48_wick2.5_ema0_init1.25atr_trail6atr |       115 |      104 |     24 |       80 |         23.077 |          1.8545 |               6.1815 |             83.992 |                  3 |           36.908 |            -14.693 |     59.11  |              -1.801 |             0.767 |            35.866 |               9 |            14 |              23 |
+
+## Candidate trade concentration
+| symbol   | model                                      |   trades |   max_consecutive_losses |   biggest_profit_usd |   top1_fraction_of_positive_pnl |   top3_fraction_of_positive_pnl |   net_after_removing_largest_winner_usd |   average_positive_trade_usd |   average_negative_trade_usd |
+|:---------|:-------------------------------------------|---------:|-------------------------:|---------------------:|--------------------------------:|--------------------------------:|----------------------------------------:|-----------------------------:|-----------------------------:|
+| ETHUSD   | sweep48_wick1.5_ema0_init1.25atr_trail6atr |      131 |                       12 |              395.309 |                          0.4271 |                          0.5704 |                                  4.7382 |                      27.2209 |                      -5.4172 |
+| ETHUSD   | sweep48_wick2.5_ema0_init1.25atr_trail6atr |      104 |                       16 |              395.096 |                          0.4932 |                          0.6587 |                                -26.0118 |                      33.3764 |                      -5.3994 |
+
+## Caution
+- Open source historical data already research-exposed; 2026 is not independent untouched holdout
+- Monthly NAV and unrealized liquidation fee at IST calendar boundary
+- 1min bar OHLC cannot provide order book, spread, or exact intrabar order
+- The same-minute entry candle stop check deferred to next 1min open
+- True settled funding cashflows and liquidation margin not independently verified
+- 2026 November partial; no 2022-2024 Delta history in repository
+- No qualifying model is NOT evidence all asymmetric strategies fail
