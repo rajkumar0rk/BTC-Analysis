@@ -1,0 +1,47 @@
+name: External 3kpro Donchian20 BTC ETH monthly replay
+on:
+  push:
+    branches:
+      - feature/github-external-volpersistence-22m-20261118
+    paths:
+      - .github/workflows/external-donchian20-paired.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: external-3kpro-donchian20-paired
+  cancel-in-progress: false
+jobs:
+  paired-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check pinned public source
+        uses: actions/checkout@v4
+        with:
+          repository: 3kpro/3K_Trading_Bot_V2
+          ref: ce1656d3589db4446330d981f5cf2c8b770d29e6
+          path: external_strategy
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis packages
+        run: python -m pip install numpy pandas
+      - name: Verify pinned source and compile
+        run: |
+          test "$(git -C external_strategy rev-parse HEAD)" = "ce1656d3589db4446330d981f5cf2c8b770d29e6"
+          python -m py_compile scripts/replay_3kpro_donchian20_paired.py
+      - name: Replay BTCUSD and ETHUSD on native Delta 1m data
+        run: python scripts/replay_3kpro_donchian20_paired.py
+      - name: Upload 22-month paired results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: external-donchian20-btc-eth-22months
+          path: analysis/external_github_profit_hunt/3kpro_donchian20_1h/*
+          retention-days: 30
+          if-no-files-found: warn
