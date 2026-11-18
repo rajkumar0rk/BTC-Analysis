@@ -1,7 +1,7 @@
 """Standalone synthetic-only QA. No historical return claims are made here."""
 import pandas as pd
 import numpy as np
-from run_all import Book, repair_minute_in_memory, make_hourly, daily_with_warmup, self_test, history_delta
+from run_all import Book, repair_minute_in_memory, make_hourly, daily_with_warmup, self_test, history_delta, reward_target
 
 
 def run():
@@ -33,6 +33,8 @@ def run():
     f=history_delta('FUNDING:BTCUSD','1h',pd.Timestamp('2025-01-01',tz='UTC'),
        pd.Timestamp('2025-01-01 01:00',tz='UTC'),3600,session=FakeSession())
     assert f.close.iloc[0]==-.015, 'Negative funding must remain valid'
+    assert reward_target(100,-1,5,2)==90
+    assert reward_target(100,1,5,2)==110
     print('PASS: synthetic accounting, resampling, warmup veto, tax, funding proxy')
 
 

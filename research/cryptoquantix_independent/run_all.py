@@ -136,7 +136,16 @@ def load_funding(root, *,fetch=True):
                 data=pd.concat([data,new]).sort_index()
             except Exception as exc: print(f'WARNING funding gap {st}..{en}: {exc}',file=sys.stderr)
     if not data.index.is_unique:raise ValueError('Duplicate funding hours')
-    info.update(observations_final=len(data),hours_missing=len(expected.difference(data.index)))
+    # Last hour of 2024 is needed for a Jan 1 funding event if a position is open.
+    boundary=START-pd.Timedelta(hours=1)
+    if fetch and boundary not in data.index:
+        try:
+            old=history_delta('FUNDING:BTCUSD','1h',boundary,START,3600)
+            data=pd.concat([data,old.close]).sort_index()
+        except Exception as exc:
+            print(f'WARNING cannot retrieve boundary funding rate: {exc}',file=sys.stderr)
+    info.update(observations_final=len(data),hours_missing=len(expected.difference(data.index)),
+                prior_2025_settlement_observation_available=bool(boundary in data.index))
     # Each hourly candle is a rate observation (percent units; 0.01 means 0.01%).
     # The previous completed hour alone may be observed at settlement time.
     return data,info
@@ -298,6 +307,12 @@ class Book:
             self.costs['funding_proxy']+=amount
 
 
+def reward_target(entry_price, side, stop_distance, risk_reward):
+    # Correct orientation is essential: SHORT targets BELOW entry.
+    if risk_reward<=0:return None
+    return entry_price+side*stop_distance*risk_reward
+
+
 def backtest(minute,daily,hourly,funding,*,capital,fee,slip,gst,contract,scalp,cap):
     b=Book(capital,fee,slip,gst,contract,scalp,cap)
     # Signals and cashflows are only based on completed previous bars.
@@ -352,7 +367,7 @@ def backtest(minute,daily,hourly,funding,*,capital,fee,slip,gst,contract,scalp,c
                         dist=2*bar.atr14
                         risk=min(max(b.equity(o),0)*.01/dist, max(b.equity(o),0)/o)
                         b.open('TrendBreakdown',sig,o,risk,t,sl=o-sig*dist,
-                               tp=o-sig*dist*(2 if sig<0 else 0) if sig<0 else None,
+                               tp=reward_target(o,sig,dist,2.) if sig<0 else None,
                                maxhold=pd.Timedelta(hours=hold))
                 # FundingSqueeze contrarian: previous completed funding hour observed,
                 # assumed 8h settlement. A proxy for research, NOT live payout.
@@ -437,7 +452,9 @@ def self_test():
     c.open('tb',-1,100.,10.,t)
     c.close('tb',99.,t+pd.Timedelta(minutes=20),'test')
     assert c.trades[0]['scalper_fee_waiver'] and c.trades[0]['net_model_usd']>0
-    print('SELF_TEST_PASS fee,gst,slippage,scalper_waiver,portfolio_bookkeeping')
+    assert reward_target(100,-1,5,2)==90, 'SHORT TP must be below entry'
+    assert reward_target(100,1,5,2)==110, 'LONG TP must be above entry'
+    print('SELF_TEST_PASS fee,gst,slippage,scalper_waiver,portfolio_bookkeeping,TP_orientation')
 
 
 def main():
