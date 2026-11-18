@@ -1,0 +1,23 @@
+{
+  "source": "original Delta India native trade 1m SHA256 checked by load()",
+  "months": 22,
+  "initial_equity_usd": 1000,
+  "risk_per_trade_pct": 0.5,
+  "max_notional_leverage": 3,
+  "taker_fee_each_side": 0.0005,
+  "GST": 0.18,
+  "BTC_slippage_points_per_side": 5,
+  "ETH_slippage_fraction_each_side": 0.0002,
+  "months_nav": "Mark-to-market at IST calendar month boundary, open trades retained; monthly PF based on exits",
+  "missing_first_ist_2025_hours": 5.5,
+  "excluded_november_2026": true,
+  "unmodeled": [
+    "funding",
+    "real order-book spread",
+    "market impact",
+    "margin/liquidation",
+    "lot constraints",
+    "live fills"
+  ],
+  "caveat": "Bipower jump fraction is a proxy for jump dominance, not an identified tradeable shock; 2026 already research-exposed"
+}
