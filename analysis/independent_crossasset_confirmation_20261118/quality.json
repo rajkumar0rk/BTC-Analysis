@@ -1,0 +1,36 @@
+{
+  "original_data_sha256_verified": true,
+  "markets": [
+    "BTCUSD",
+    "ETHUSD"
+  ],
+  "families": [
+    "4h:engulfing_reversal",
+    "15min:trend_retest",
+    "1h:failed_auction"
+  ],
+  "cross_modes": [
+    "direction_agree",
+    "direction_and_body_035atr"
+  ],
+  "models_per_market": 24,
+  "2025_train_only_selection": true,
+  "2026_not_pristine_oos": true,
+  "fee_each_side": 0.0005,
+  "GST_on_fee": 0.18,
+  "BTC_slip_each_side_points": 5,
+  "ETH_slip_each_side_fraction": 0.0002,
+  "risk_per_stop": 0.005,
+  "notional_leverage_cap": 3.0,
+  "first_IST_month_missing": "Jan2025 first 5.5h absent",
+  "omitted": [
+    "funding",
+    "verified spread",
+    "market impact",
+    "lot sizes",
+    "liquidation/margin",
+    "actual fills"
+  ],
+  "novelty": "Partial overlap: cross-asset confirmation only; prior family entries and exits reused",
+  "monthly_equity": "exit-based, positions closed at month boundaries by replay"
+}
