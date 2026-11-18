@@ -29,7 +29,7 @@ from datetime import datetime, timezone
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "delta_india" / "ETHUSD"
 OUT = ROOT / "eth_strategy_replay"
-QUOTE_POINT_SCALE = 0.04
+QUOTE_POINT_SCALE = 0.04  # BTC point studies normalized to ETH quote-units: 200 -> 8, 500 -> 20
 SLIP_ETH = 0.20  # assumed adverse ETHUSD price units per execution side
 COMPLETE_MONTHS = tuple(f"{year}-{month:02d}" for year, first, last in ((2025, 1, 12), (2026, 1, 10))
                         for month in range(first, last+1))
@@ -85,6 +85,8 @@ POINT_PATCHES = {
     "research_monthly_10pct_stage19.py": [
         ("MIN_STOP=120.", "MIN_STOP=4.8"),
         ("MAX_STOP=1400.", "MAX_STOP=56."),
+        ("fixedrisk=max(120.,1.5*atr)", "fixedrisk=max(4.8,1.5*atr)"),
+        ("structbuffer=max(10.,.1*atr)", "structbuffer=max(.4,.1*atr)"),
     ],
     "research_one_trade_every_day_200.py": [
         ("STOPS=(150,250,400)", "STOPS=(6,10,16)"),
@@ -160,6 +162,7 @@ def rewrite(text: str, name: str):
     text = text.replace("MARK:BTCUSD", "MARK:ETHUSD")
     text = text.replace("OI:BTCUSD", "OI:ETHUSD")
     text = text.replace("FUNDING:BTCUSD", "FUNDING:ETHUSD")
+    text = text.replace("BTCUSD", "ETHUSD")
     text = re.sub(r"(?m)^(\s*)(SLIPPAGE|SLIP)\s*=\s*5(?:\.0?)?(\s*(?:#.*)?)$",
                   lambda m: f"{m.group(1)}{m.group(2)} = {SLIP_ETH}{m.group(3)}", text)
     if name in POINT_PATCHES:
@@ -262,7 +265,9 @@ def execute(group: str, timeout: int):
             "seconds": round(time.monotonic()-started,1),
             "output_file_count": len(new_files), "output_sample": new_files[:8],
             "price_port": model_kind,
-            "cost_assumption": "0.05% taker each side + 18% GST, 0.20 ETH price points adverse slippage per side when source exposes SLIP",
+            "btc_200_target_replaced_with_eth_8": script in REQUIRES_MANUAL_PRICE_REVIEW and script in POINT_PATCHES,
+            "fixed_200_eth_target_used": False,
+            "cost_assumption": "Sensitivity model: assumed 0.05% taker each side + GST18%, adverse 0.20 ETH quote-units per side (when source exposes SLIP)",
             "limitations": "Funding settlements, historical bid/ask spread, liquidation and true L1 impact not verified; original research may contain additional BTC-specific thresholds",
             "reason": reason[:2500],
         }
