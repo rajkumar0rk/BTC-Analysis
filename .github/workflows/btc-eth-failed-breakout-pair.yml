@@ -1,0 +1,33 @@
+name: BTC ETH independent failed breakout PF research
+on:
+  push:
+    branches: [research/btc-eth-pf-failed-breakout-20261118]
+    paths:
+      - scripts/research_btc_eth_failed_breakout_pair.py
+      - .github/workflows/btc-eth-failed-breakout-pair.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  pair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas numba tabulate
+      - name: Run BTC and ETH native 1m backtests
+        run: python scripts/research_btc_eth_failed_breakout_pair.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-failed-breakout-research
+          path: analysis/btc_eth_failed_breakout_pair_20261118/
+      - name: Commit reproducible results on isolated research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_eth_failed_breakout_pair_20261118/
+          git commit -m "research: archive BTC ETH failed-breakout PF ledgers"
+          git push origin HEAD:research/btc-eth-pf-failed-breakout-20261118
