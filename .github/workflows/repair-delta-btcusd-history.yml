@@ -1,0 +1,54 @@
+name: Repair and extend Delta BTCUSD history (isolated)
+on:
+  push:
+    branches:
+      - feature/btcusd-history-repair-20261118
+    paths:
+      - .github/workflows/repair-delta-btcusd-history.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btcusd-isolated-history-repair-20261118
+  cancel-in-progress: false
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout isolated repair branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check repair script syntax
+        run: |
+          python -m py_compile scripts/repair_delta_btcusd_history.py
+          python -m py_compile scripts/sync_delta_btcusd_1m.py
+          python -m py_compile scripts/collect_delta_institutional_data.py
+      - name: Repair October BTCUSD 1m and extend historical mark/OI/funding through yesterday
+        run: python scripts/repair_delta_btcusd_history.py
+      - name: Commit BTC historical data only to repair branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/delta_india/BTCUSD/1m data/delta_india/BTCUSD/institutional/history data/delta_india/BTCUSD/institutional/history_manifest.json
+          if git diff --cached --quiet; then
+            echo "No historical data changes."
+          else
+            git commit -m "data(btcusd): repair October gaps and extend actual Delta market history"
+            git push origin HEAD:feature/btcusd-history-repair-20261118
+          fi
+      - name: Upload dataset manifests for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btcusd-repaired-data-manifests
+          path: |
+            data/delta_india/BTCUSD/1m/manifest.json
+            data/delta_india/BTCUSD/institutional/history_manifest.json
+          retention-days: 30
+          if-no-files-found: warn
