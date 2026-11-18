@@ -37,5 +37,7 @@ jobs:
           git add analysis/daily_funding_window_drift_20261119/REPORT.md
           if ! git diff --cached --quiet; then
             git commit -m "research: archive daily funding-window drift test"
+            git fetch origin research/daily-funding-window-drift-20261119
+            git rebase origin/research/daily-funding-window-drift-20261119
             git push origin HEAD:research/daily-funding-window-drift-20261119
           fi
