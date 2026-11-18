@@ -1,0 +1,28 @@
+{
+  "quality": [
+    {
+      "symbol": "BTCUSD",
+      "minutes": 987840,
+      "first": "2025-01-01 00:00:00+00:00",
+      "last": "2026-11-17 23:59:00+00:00",
+      "funding_observations": 16464,
+      "missing_funding_settlements": 1
+    },
+    {
+      "symbol": "ETHUSD",
+      "minutes": 987840,
+      "first": "2025-01-01 00:00:00+00:00",
+      "last": "2026-11-17 23:59:00+00:00",
+      "funding_observations": 16464,
+      "missing_funding_settlements": 1
+    }
+  ],
+  "models": 64,
+  "strict_qualifiers": 0,
+  "start_capital": 1000.0,
+  "risk_fraction": 0.005,
+  "leverage_cap": 10.0,
+  "fee_per_side": 0.00059,
+  "slippage_per_side": 0.0002,
+  "model_family": "72/168h breakout, 6/12h controlled retest, 72/168h trailing channel"
+}
