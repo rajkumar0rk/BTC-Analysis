@@ -7,7 +7,7 @@
   "timestamp_unit": "unix_seconds_utc",
   "timestamp_label": "as_returned_by_API",
   "requested_through_utc": "2026-11-17",
-  "generated_at_utc": "2026-11-18T09:27:05.969343+00:00",
+  "generated_at_utc": "2026-11-18T10:29:46.766182+00:00",
   "note": "Missing candles are reported but never fabricated; OHLCV is not bid/ask/order book.",
   "partitions": [
     {
