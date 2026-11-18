@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T15:44:00Z",
+  "last_updated_utc": "2026-11-18T16:55:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -313,6 +313,26 @@
         "2026 previously researched, not pristine OOS"
       ],
       "next_action": "Test a distinct pinned open-source strategy with stronger causal source quality; repair missing IST coverage and funding before qualifying any result"
+    },
+    {
+      "id": "freqtrade-hlhb-4h-paired-20261118",
+      "source_repo": "https://github.com/freqtrade/freqtrade-strategies",
+      "source_commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "source_path": "user_data/strategies/hlhb.py",
+      "source_strategy": "4h simultaneous RSI10(hl2) crossing 50 and EMA5/10 crossover with ADX14>25, long-only; reverse simultaneous cross exit, 32.11% SL, trailing +1.86% activation / 1.17% pullback, source ROI schedule",
+      "adaptations": "1x exposure one position, next 4h open entry, conservative 1m OHLC stop-first, taker+GST 0.059% each side, BTC 5bps and ETH 2bps adverse slippage, monthly MTM; original limit fills not reproduced",
+      "script": "scripts/replay_freqtrade_hlhb_4h_paired.py",
+      "workflow": ".github/workflows/external-hlhb-paired.yml",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44352807242",
+      "status": "RUNNING_PAIRED_BACKTEST_NOT_VERIFIED",
+      "quality_caveats": [
+        "January 2025 IST missing 2024-12-31 18:30-23:59 UTC",
+        "No settled funding or order book liquidity",
+        "Wilder RSI/ADX approximate TA-Lib initialization",
+        "No liquidation or margin constraints",
+        "2026 research-exposed"
+      ],
+      "next_action": "Read actual completed workflow run and 22-row paired monthly PF/return artifacts, reject or shortlist only after evidence"
     }
   ]
 }
