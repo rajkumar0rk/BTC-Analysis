@@ -71,7 +71,7 @@ def main():
         source="native BTCUSD/ETHUSD 1m manifest SHA verified by load()",months=MONTHS,
         model_count_per_market=int(len(s)//2),
         selection_2025="minimum 12 trades, 2025-only high-PF-month count, positive-month count and 2025 return",
-        2026="2026 Jan-Oct YTD only; previously researched, not pristine OOS",
+        period_2026="2026 Jan-Oct YTD only; previously researched, not pristine OOS",
         fees="0.05% taker per side plus 18% GST",slippage="BTC 5 points per side; ETH 0.02% per side",
         risk="0.5% equity at stop, 3x notional cap",
         missing="funding, actual spreads, impact, margin/liquidation, lot sizes",
