@@ -1,0 +1,61 @@
+{
+  "goal": "At least one asset BTCUSD or ETHUSD with strictly positive net account return in all 22 completed IST months January 2025 through October 2026",
+  "experiment_registry_version": 1,
+  "last_updated_utc": "2026-11-18T10:42:00Z",
+  "experiments": [
+    {
+      "id": "external-volatility-persistence-ny-fix-20261118",
+      "source_repo": "https://github.com/anaysharma1717-svg/Volatility-Persistence-Trading-Strategy",
+      "source_commit": "4987ed61c4fc7f6fc738d88a6eb844b08190a838",
+      "source_strategy": "ny_fix high-volatility 1H NY-session entry with previous-hour candle sign, 4H EMA200 trend, 2 ATR5 stop and 3R take profit",
+      "backtest_repository": "rajkumar0rk/BTC-Analysis",
+      "working_branch": "feature/github-external-volpersistence-22m-20261118",
+      "script": "scripts/replay_external_github_volpersistence.py",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44287674527",
+      "action_artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44287674527/artifacts/14420042057",
+      "execution": "completed_successfully",
+      "verdict": "rejected_under_22_month_criterion",
+      "assumptions": {
+        "fee_rate_each_side": 0.00059,
+        "fee_components": "0.05% taker and 18% GST on fees",
+        "BTC_slippage_bps_each_side": 5,
+        "ETH_slippage_bps_each_side": 2,
+        "risk_fraction": 0.01,
+        "max_positions": 1,
+        "max_gross_leverage": 2,
+        "funding_cashflows": false,
+        "mark_to_market_month_end": false,
+        "full_first_ist_month": false
+      },
+      "BTCUSD": {
+        "profitable_months": 12,
+        "months_total": 22,
+        "modeled_total_return_pct": 7.39119,
+        "trades": 132,
+        "wins": 43,
+        "losses": 89,
+        "trade_close_drawdown_pct": 16.9865,
+        "verified_22_months": false
+      },
+      "ETHUSD": {
+        "profitable_months": 13,
+        "months_total": 22,
+        "modeled_total_return_pct": 47.99925,
+        "trades": 147,
+        "wins": 51,
+        "losses": 96,
+        "trade_close_drawdown_pct": 17.0531,
+        "verified_22_months": false
+      },
+      "quality_caveats": [
+        "First IST month lacks Dec 2024 UTC data",
+        "Settlement funding not modeled",
+        "Month-end open position MTM not modeled",
+        "Live market depth and liquidation unmodeled",
+        "2026 is research-exposed",
+        "Not eligible for 22/22 even if naive month counter passes"
+      ],
+      "next_action": "Search and test a different source strategy; do not repeat this strategy or claim 22/22 on the basis of upstream performance claims."
+    }
+  ]
+}
