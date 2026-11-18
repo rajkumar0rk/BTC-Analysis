@@ -85,6 +85,10 @@ GROUPS={
     "analyze_delta_mtf_institutional.py",
     "research_july_drawdown_stage15.py"
   ],
+  "research_branches":[
+    "eth_transfer_stage24.py",
+    "eth_transfer_stage25.py"
+  ],
   "portfolio":[
     "research_monthly_portfolio_stage18.py",
     "research_three_sleeve_stage20.py",
