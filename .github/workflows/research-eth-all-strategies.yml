@@ -1,0 +1,112 @@
+name: ETHUSD replay all BTC rule strategy families
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_eth_all_strategies_replay.py
+      - .github/workflows/research-eth-all-strategies.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-replay-all-btc-families
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - price_structures
+          - high_frequency
+          - time_day
+          - five_minute
+          - other_systems
+          - older_systems
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install required data and backtest libraries
+        run: python -m pip install pandas numpy numba scipy tabulate
+      - name: Execute ETH-only strategy backtests in isolated temporary sandbox
+        run: |
+          python scripts/research_eth_all_strategies_replay.py \
+            --suite ${{ matrix.suite }} \
+            --per-script-timeout-seconds 1500
+      - name: Keep the ETH research evidence even if some original engines fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-rule-replay-${{ matrix.suite }}
+          path: analysis/ethusd_all_strategy_replay/${{ matrix.suite }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  archive:
+    needs: [replay]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download independent ETH research job outputs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: eth-rule-replay-*
+          path: analysis/ethusd_all_strategy_replay/
+      - name: Reorganize and index the ETH research results
+        run: |
+          python - <<'PY'
+          import pathlib,json,shutil
+          base=pathlib.Path('analysis/ethusd_all_strategy_replay')
+          results=[]
+          for f in sorted(base.glob('eth-rule-replay-*/RUN_REPORT.json')):
+            source=f.parent
+            d=json.loads(f.read_text())
+            suite=d['suite']
+            dst=base/suite
+            if dst.exists():shutil.rmtree(dst)
+            source.rename(dst)
+            results.append(dict(suite=suite,attempted=d['attempted'],completed=d['completed'],
+                skipped_or_failed=d['attempted']-d['completed'],
+                monthly_summaries=len(d['monthly_result_summaries'])))
+          report=dict(instrument='ETHUSD',completed_months='2025-01 through 2026-10',
+            price_scaling='fixed BTC/ETH ratio at 2025-01-01 00:00 UTC',
+            fees='0.05% taker each side and 18% GST; 5 virtual points per side',
+            suites=results,total_attempted=sum(x['attempted'] for x in results),
+            total_completed=sum(x['completed'] for x in results),
+            caveat='No funding or actual spread/market impact modeled. Failed engines are not counted as backtests.')
+          (base/'INDEX.json').write_text(json.dumps(report,indent=2)+'\n')
+          (base/'INDEX.md').write_text('# ETHUSD historical rule-strategy replay\n\n'
+            'The original BTC algorithms are applied to authentic Delta India ETHUSD 1m history '
+            'after a fixed January 1, 2025 BTC/ETH price-scale normalization. '
+            'Model results are not live execution proofs.\n\n'
+            '| Suite | Engines attempted | Completed | Failed / skipped |\n|---|---:|---:|---:|\n'
+            +''.join(f"| {x['suite']} | {x['attempted']} | {x['completed']} | {x['skipped_or_failed']} |\n" for x in results)
+            +f"\n**Total: {report['total_completed']} of {report['total_attempted']} engines completed.**\n"
+            + '\nOnly January 2025–October 2026 is scored; November 2026 is excluded. '
+              'See per-suite reports and failures.\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Commit only new isolated ETH research output
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ethusd_all_strategy_replay/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive isolated ETHUSD replays of BTC strategy families"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
