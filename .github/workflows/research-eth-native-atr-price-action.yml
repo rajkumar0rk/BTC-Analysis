@@ -1,0 +1,55 @@
+name: ETHUSD native ATR price-action strategy research
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_eth_native_atr_price_action.py
+      - .github/workflows/research-eth-native-atr-price-action.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-native-atr-price-action-study
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical and tabular dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Replay ETH-native ATR patterns without BTC 200 point exits
+        run: python scripts/research_eth_native_atr_price_action.py
+      - name: Archive full ETH 1m independent trade evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-native-atr-trade-ledger
+          path: |
+            analysis/ethusd_native_atr_price_action/full_trade_ledger.csv.gz
+            analysis/ethusd_native_atr_price_action/all_model_monthly.csv.gz
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit monthly metrics and native ETH dollar stop target estimates
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ethusd_native_atr_price_action/quality.json
+          git add analysis/ethusd_native_atr_price_action/RESEARCH_REPORT.md
+          git add analysis/ethusd_native_atr_price_action/all_model_summary.csv
+          git add analysis/ethusd_native_atr_price_action/selected_2025_ranked_monthly.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save native ETHUSD ATR rule monthly performance and win/loss counts"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
