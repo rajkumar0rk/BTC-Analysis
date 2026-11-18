@@ -125,8 +125,8 @@ def main():
     pd.DataFrame(monthly).to_csv(OUT/"selected_monthly.csv",index=False)
     quality=dict(hypothesis="Kaufman efficiency ratio intraday trend vs fade",input=qualities,
       models_per_asset=len(LOOKS)*len(ER)*len(MODE)*len(TARGET)*len(STOP)*len(HOLD),
-      2025_selection="positive 2025 net, PF>1, >=50 trades then highest positive calendar day fraction; otherwise highest 2025 net",
-      2026_check="fixed params, research-exposed not untouched holdout",
+      train_selection="positive 2025 net, PF>1, >=50 trades then highest positive calendar day fraction; otherwise highest 2025 net",
+      evaluation_check="fixed params, research-exposed not untouched holdout",
       costs=dict(taker_fee_plus_GST_per_side=FEE,adverse_slippage_per_side=SLIP,funding_debit_per_8h_boundary=FUND),
       risk=dict(stop_risk_per_trade=RISK,max_notional_leverage=MAXLEV,one_trade_per_UTC_day=True),
       limitations=["No guaranteed daily net profit","1m intrabar ambiguous stop-first","No orderbook, real funding, precise lot/margin, or liquidation engine","2026 through Nov 17 UTC only"])
