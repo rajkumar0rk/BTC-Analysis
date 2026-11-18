@@ -1,0 +1,45 @@
+name: Paired BB RSI Mean Reversion BTC ETH Monthly PF
+on:
+  push:
+    branches:
+      - feature/github-external-volpersistence-22m-20261118
+    paths:
+      - .github/workflows/external-bb-rsi-paired.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: external-bb-rsi-paired-20261118
+  cancel-in-progress: false
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: PatrickSebastine/mean-reversion-trading-bot
+          ref: c00091d34ad1ee10ede37996883934099bb533c9
+          path: external_source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas
+      - name: Verify pinned source and syntax
+        run: |
+          test "$(git -C external_source rev-parse HEAD)" = "c00091d34ad1ee10ede37996883934099bb533c9"
+          python -m py_compile scripts/replay_patrick_bb_rsi_paired.py
+      - name: Paired historical replay and monthly PF
+        run: python scripts/replay_patrick_bb_rsi_paired.py
+      - name: Upload paired 22-month tables and trades
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paired-patrick-bb-rsi-monthly
+          path: analysis/external_github_profit_hunt/patrick_bb_rsi_15m/*
+          if-no-files-found: warn
+          retention-days: 30
