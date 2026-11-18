@@ -1,0 +1,42 @@
+name: Research BTC Stage21 monthly fixed weight portfolio feasibility
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_monthly_fixed_weight_stage21.py
+      - .github/workflows/research-monthly-fixed-weight-stage21.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-stage21-monthly-fixed-weight
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical solvers
+        run: python -m pip install numpy pandas scipy tabulate
+      - name: Search 2025 selected fixed allocations and assess 2026
+        run: python scripts/research_monthly_fixed_weight_stage21.py
+      - name: Persist all research results and caveats
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage21_monthly_perfect_search/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save Stage21 train-only fixed-weight portfolio study"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
