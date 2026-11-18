@@ -1,0 +1,32 @@
+{
+  "markets": [
+    "BTCUSD",
+    "ETHUSD"
+  ],
+  "families": 52,
+  "paired_models": 205,
+  "executed_rows": 410,
+  "months_per_market": 22,
+  "initial_account_usd": 1000.0,
+  "risk_per_stop_pct": 0.5,
+  "cap_notional_leverage": 3.0,
+  "fees_per_side": 0.0005,
+  "GST_on_fees": 0.18,
+  "BTC_slippage_points_per_side": 5.0,
+  "ETH_slippage_fraction_per_side": 0.0002,
+  "ETH_original_replay_reconciled": true,
+  "novel_pre_entry_filter": "24 previously completed hourly bars mean normalized upper-minus-lower wick imbalance within [-0.07,+0.07], shifted one hour",
+  "initial_month_gap": "Jan 2025 IST first 5.5 hours absent: source starts Jan1 UTC",
+  "Nov2026": "Excluded from monthly selection and entry eligibility",
+  "omitted_costs": [
+    "Funding",
+    "verified bid/ask spread",
+    "market impact",
+    "lot size",
+    "margin/liquidation",
+    "actual fills"
+  ],
+  "selection": "2025 train candidates chosen before reading 2026; 2026 previously researched in repo; not independent forward data",
+  "previous_scripts_modified": false,
+  "novelty": "New predeclared prior-hour wick-imbalance regime gate applied to 52 prior causal families; not a novel underlying entry family"
+}
