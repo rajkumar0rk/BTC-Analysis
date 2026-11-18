@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T13:01:00Z",
+  "last_updated_utc": "2026-11-18T13:55:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -181,6 +181,40 @@
       },
       "verdict": "Neither asset profitable, neither meets 12/22 high-PF months nor >500% 2025; DO NOT NOTIFY",
       "quality_warning": "Near-zero winning trades suggest adapted exit logic and intrabar stop assumptions need review before interpreting precise losses; no funding, incomplete Jan IST, no L1 execution"
+    },
+    {
+      "id": "aungs8430-supertrend-source-audit-20261118",
+      "source_repo": "https://github.com/AungS8430/supertrend-binance-futures-bot",
+      "source_commit": "14cde7eab8e5ad84937acb2ce31aca275b5ac26b",
+      "source_path": "src/supertrend.py",
+      "status": "SOURCE_AUDITED_NOT_BACKTESTED",
+      "verdict": "BLOCKED_BY_SOURCE_CORRECTNESS",
+      "issues": [
+        "4h HA supertrend uses rolling SMA ATR on nonstandard true-range referencing previous hl2",
+        "trend update compares close only with prior up band, lacks prior trend state in transitions",
+        "trend assigned as strings to numeric pandas series, fragile on current pandas",
+        "signals use current closed 4h candles, next-bar timing must be enforced",
+        "hard-coded BTC/USDT order even when iterating other coins",
+        "position logic references dict attributes as object and calls check_positions with missing parameters"
+      ],
+      "next_action": "Only backtest if a pinned, explicitly documented corrected causal interpretation is accepted; otherwise select better-defined strategy."
+    },
+    {
+      "id": "cyberpunkmetalhead-1m-momentum-source-audit-20261118",
+      "source_repo": "https://github.com/CyberPunkMetalHead/backtesting-for-cryptocurrency-trading",
+      "source_commit": "d09a6ee4cdce75a1f4e6f116c23074ae2943ab48",
+      "source_path": "maintester.py",
+      "status": "SOURCE_AUDITED_NOT_BACKTESTED",
+      "verdict": "BLOCKED_BY_SOURCE_CORRECTNESS",
+      "issues": [
+        "1m candle close > previous close by 1% entry; TP 10% SL 5%",
+        "duplicate self.buy() orders per signal, first untracked",
+        "duplicate self.close() orders per exit, first untracked",
+        "order.executed.price read immediately before asynchronous fill",
+        "no short entry despite paired futures objective",
+        "source downloads unrelated old Binance data on import"
+      ],
+      "next_action": "Avoid reporting original source backtest as credible; next iteration select well-specified code with safe one-order entry/exit and run BTC and ETH paired replay."
     }
   ]
 }
