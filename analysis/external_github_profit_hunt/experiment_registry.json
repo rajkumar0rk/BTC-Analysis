@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T20:01:00Z",
+  "last_updated_utc": "2026-11-18T21:10:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -424,6 +424,27 @@
       ],
       "verdict": "NOT_WORTH_CHECKING_UNTIL_CAUSAL_PAIRED_REPLAY",
       "next_action": "Prefer bounded-risk source; if replayed verify 3h closed-candle timestamps and 1m liquidation and month-end MTM."
+    },
+    {
+      "id": "freqtrade-trendrider-1h-source-audit-20261119",
+      "source_repo": "https://github.com/freqtrade/freqtrade-strategies",
+      "source_commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "source_path": "user_data/strategies/TrendRiderStrategy.py",
+      "source_blob_sha": "9a03fc608fbd760acc74bbf94397e6c08d4e0680",
+      "status": "SOURCE_AUDITED_NOT_BACKTESTED",
+      "strategy": "1h long-only multi-entry trend strategy with EMA9/16, RSI16, ADX, volume, MACD, BB, 4h and daily context, 6% fixed stop, 5% trailing activation with 3% trail, time-varying ROI. Original buy_params/sell_params differ from declared defaults.",
+      "audit_findings": [
+        "Hyperopt-optimized 2026-03-23 on 5 pairs, hence 2026 sample is research-exposed; cannot claim untouched OOS.",
+        "Six distinct entry patterns overlap; tagging and order priority require parity validation, not simplified arbitrary subset.",
+        "BTC/USDT:USDT external sentiment is not identical to Delta India BTCUSD; same-asset causal BTCUSD data must replace it and disclose adaptation.",
+        "4h/1d informative merges must be verified to use only fully closed candles; Freqtrade merge_informative_pair intended to shift but must check signal timestamps.",
+        "Fear/greed=50, funding=0, open interest=0 are hardcoded defaults rather than actual observations; never interpret as actual funding accounting.",
+        "Protection rules cooldown, stoploss guard, max drawdown and trailing/ROI exit precedence must be reproduced; 210 1h warmup and daily EMA200 require authentic 2024 history.",
+        "No paired BTCUSD/ETHUSD 22-month replay completed, and missing 2024-12-31 18:30-23:59 UTC still blocks complete Jan IST validation."
+      ],
+      "verdict": "AUDIT_ONLY_NO_QUALIFIED_RESULT",
+      "notification_eligible": false,
+      "next_action": "Prefer simpler bounded-risk causal strategy for paired replay, or implement full Freqtrade indicator, protections and ROI parity before testing; resolve authentic January IST coverage and funding."
     }
   ]
 }
