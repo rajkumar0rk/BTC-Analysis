@@ -130,7 +130,7 @@ def main():
     summary=[];ledger=[];monthly=[];quality=[]
     # Fixed month boundaries in IST, 23 months Jan 2025-Nov 2026
     bounds=pd.date_range("2025-01-01","2026-12-01",freq="MS",tz="Asia/Kolkata")
-    stamps=(bounds.tz_convert("UTC").astype("int64")//10**9).to_numpy()
+    stamps=np.array([int(x.timestamp()) for x in bounds.tz_convert("UTC")],dtype=np.int64)
     labels=bounds.strftime("%Y-%m").tolist()[:-1]
     for sym in ("BTCUSD","ETHUSD"):
         d=load(sym);t=d.time.to_numpy(np.int64);fr,q=funding(sym,t)
