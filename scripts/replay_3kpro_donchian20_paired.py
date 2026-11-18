@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Independent causal replay of PatrickSebastine Bollinger RSI mean reversion.
-Source SHA ce1656d3589db4446330d981f5cf2c8b770d29e6.
-15m completed BB20/2 RSI14 (25/75) extremes; next 15m open, 2% SL / 4% TP,
-1x gross exposure, one trade, 1m conservative stop-first fills.
-Uses native Delta India BTCUSD/ETHUSD 1m candles with checksums.
-January IST incomplete and funding unmodeled: diagnostic, never certified.
+"""Paired causal Donchian20 breakout / ATR14 stop replay.
+Pinned upstream: https://github.com/3kpro/3K_Trading_Bot_V2
+SHA ce1656d3589db4446330d981f5cf2c8b770d29e6.
+1h completed close vs prior 20h high/low; next 1h open entry.
+Stop 2x ATR14; opposite breakout next-hour-open exit; 1m stop monitoring.
+1% equity risk capped at 1x exposure, 0.05% taker each side + 18% GST,
+BTC 5bps and ETH 2bps adverse per side, month-end MTM.
+Corrected causal execution differs from source's same-bar close fills.
+Diagnostic: missing Dec 2024 IST January hours and funding/depth data.
 """
 import hashlib,json
 from pathlib import Path
@@ -17,7 +20,7 @@ MONTHS=pd.period_range("2025-01","2026-10",freq="M").astype(str).tolist()
 START=10000.0
 FEE=0.0005*1.18
 SRC="https://github.com/3kpro/3K_Trading_Bot_V2"
-SHA="c00091d34ad1ee10ede37996883934099bb533c9"
+SHA="ce1656d3589db4446330d981f5cf2c8b770d29e6"
 
 def load(symbol):
     base=ROOT/"data"/"delta_india"/symbol/"1m"
