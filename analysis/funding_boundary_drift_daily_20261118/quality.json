@@ -1,0 +1,39 @@
+{
+  "hypothesis": "post-8h-funding-boundary directional drift/fade conditional on completed pre and post settlement price impulses",
+  "novelty": "Specific funding-boundary event study, distinct from broad clock-only entry and unrelated funding carry; no funding-rate prediction",
+  "data_quality": [
+    {
+      "symbol": "BTCUSD",
+      "bars": 987840,
+      "months": 23,
+      "missing_minutes": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    },
+    {
+      "symbol": "ETHUSD",
+      "bars": 987840,
+      "months": 23,
+      "missing_minutes": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    }
+  ],
+  "models_per_symbol": 192,
+  "selection": "2025 positive PF>1, net>0 and >=50 trades, then calendar positive-day rate; otherwise least negative 2025; unchanged 2026",
+  "fee_each_side": 0.00059,
+  "slippage_each_side": 0.0002,
+  "funding_debit_each_crossing": 0.0001,
+  "risk_fraction_per_trade": 0.005,
+  "leverage_notional_cap": 2.0,
+  "caveats": [
+    "No verified historical funding-rate inputs; study tests boundary timing, NOT actual carry",
+    "2026 previously research-exposed, not a pristine holdout",
+    "Funding debit is conservative proxy, not actual settlement",
+    "No order book, lot-size, liquidation/margin or intraminute tick-path simulation",
+    "Stop wins tie against target, conservative",
+    "2026 Nov partial through Nov 17 UTC",
+    "No-trade days count against positive calendar-day frequency",
+    "No strategy guarantees daily profits"
+  ]
+}
