@@ -1,0 +1,53 @@
+name: CryptoQuantix independent BTC replay (isolated branch only)
+
+on:
+  push:
+    branches:
+      - feature/cryptoquantix-isolated-20261118
+    paths:
+      - 'research/cryptoquantix_independent/**'
+      - '.github/workflows/cryptoquantix-independent.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cryptoquantix-isolated-replay
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Read-only checkout of the isolated research branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install -r research/cryptoquantix_independent/requirements.txt
+      - name: Test rule calculations on synthetic data
+        run: |
+          python research/cryptoquantix_independent/run_all.py --self-test
+          python research/cryptoquantix_independent/run_macrocore.py --self-test
+          python research/cryptoquantix_independent/test_smoke.py
+      - name: Read historical Delta BTCUSD, repair only gaps, evaluate all available sleeves
+        run: |
+          python research/cryptoquantix_independent/run_all.py \
+            --data-root "$GITHUB_WORKSPACE" \
+            --output-dir "$RUNNER_TEMP/cryptoquantix-results" \
+            --flow-mode binance-proxy \
+            --capital 10000 --fee 0.0005 --slippage 0.0002 --gst 0.18
+      - name: Upload independent reports (never commit results to source)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryptoquantix-independent-22-month-research
+          path: ${{ runner.temp }}/cryptoquantix-results/
+          retention-days: 30
+          if-no-files-found: warn
