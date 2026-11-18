@@ -1,0 +1,55 @@
+{
+  "stage18_preserved": true,
+  "stage18_baseline_config": {
+    "stage15": "quiet_1h_weekly_3R",
+    "stage17": "1D_channel_20_no_trend_filter_trail_3atr",
+    "swing_weight": 0.25
+  },
+  "stage18_baseline_stats": {
+    "profitable_2025": 9,
+    "losing_2025": 1,
+    "idle_2025": 2,
+    "return_2025_pct": 4.2616224420322535,
+    "profitable_2026": 8,
+    "losing_2026": 2,
+    "idle_2026": 1,
+    "return_2026_pct": 5.587033843670408,
+    "max_month_end_dd": 1.0196800000000006
+  },
+  "stage19_distinct_model_count": 140,
+  "total_three_sleeve_variants": 420,
+  "selection_method_2025": "2025 profitable month count, then losing months, then compounded return, then worst month-end drawdown",
+  "historical_perfect_monthly_count": 0,
+  "selected": {
+    "variant": "strong_momentum_6h__4h_adx_le20__3R__480min + auxiliary 10%",
+    "stage19_model": "strong_momentum_6h__4h_adx_le20__3R__480min",
+    "new_pattern_weight": 0.1,
+    "quiet_volume_weight": 0.675,
+    "daily20_weight": 0.225,
+    "profitable_2025": 10,
+    "losing_2025": 1,
+    "idle_2025": 1,
+    "return_2025_pct": 3.41315,
+    "profitable_2026": 8,
+    "losing_2026": 2,
+    "idle_2026": 1,
+    "return_2026_pct": 4.2994,
+    "month_end_max_drawdown_pct": 0.97456,
+    "all23_positive": false
+  },
+  "position_sizing": "compounded monthly NAV weights 67.5/22.5/10 percent if 10% auxiliary",
+  "monthly_costs": "Component simulations include taker fees 0.05% each side, GST 18%, 5 adverse BTC points per side",
+  "important_caveats": [
+    "All 2025/2026 candles previously explored; 2026 not pristine out of sample",
+    "Stage18 baseline was itself selected using 2026 historical performance",
+    "Exploratory 420 trials are subject to substantial data-mining bias",
+    "Portfolio uses separate concurrent sleeves, modelled by monthly return blends rather than portfolio-level order replay",
+    "Rebalancing commissions, margin, funding, true bid ask, liquidation are not included",
+    "Stage19 1H hourly pattern trade net R is booked at exit IST month while Stage18 daily swing marks open positions at month-end",
+    "Month-end max drawdown excludes intraday peaks and troughs",
+    "Fractional 0.5% risk per component requires compatible exchange contract granularity",
+    "Zero or no exposure is not a winning month",
+    "November 2026 data through 16th; 2026-10-31 source missing",
+    "Historical 100% consistency would not imply guaranteed future profits"
+  ]
+}
