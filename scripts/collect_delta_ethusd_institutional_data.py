@@ -81,14 +81,21 @@ def read_csv_gzip(path):
         return {int(r["time"]):r for r in csv.DictReader(file)}
 
 def write_csv_gzip(path,rows):
+    """Stable gzip bytes on repeated runs; do not rewrite unchanged archives."""
     path.parent.mkdir(parents=True,exist_ok=True)
+    buf=io.StringIO(newline="")
+    writer=csv.DictWriter(buf,fieldnames=FIELDS,lineterminator="\n")
+    writer.writeheader()
+    for t in sorted(rows):
+        writer.writerow({k:rows[t][k] for k in FIELDS})
     tmp=path.with_name(path.name+".tmp")
-    with gzip.open(tmp,"wt",newline="",encoding="utf-8",compresslevel=6) as file:
-        writer=csv.DictWriter(file,fieldnames=FIELDS)
-        writer.writeheader()
-        for t in sorted(rows):
-            writer.writerow({k:rows[t][k] for k in FIELDS})
-    os.replace(tmp,path)
+    with open(tmp,"wb") as target:
+        with gzip.GzipFile(filename="",fileobj=target,mode="wb",mtime=0,compresslevel=6) as archive:
+            archive.write(buf.getvalue().encode("utf-8"))
+    if path.exists() and hashlib.sha256(path.read_bytes()).digest()==hashlib.sha256(tmp.read_bytes()).digest():
+        tmp.unlink()
+    else:
+        os.replace(tmp,path)
 
 def validate_ohlc(z,seconds,start_ts,end_ts):
     if not isinstance(z,list):raise RuntimeError("Historical candles response is not list")
