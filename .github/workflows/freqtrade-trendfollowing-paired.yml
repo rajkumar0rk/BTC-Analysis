@@ -1,0 +1,42 @@
+name: Paired Freqtrade TrendFollowing BTC ETH monthly PF
+on:
+  push:
+    branches: [feature/github-external-volpersistence-22m-20261118]
+    paths: [.github/workflows/freqtrade-trendfollowing-paired.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pin upstream source
+        uses: actions/checkout@v4
+        with:
+          repository: freqtrade/freqtrade-strategies
+          ref: f3340ce11f5bdf62f598522e64d1f5638eaa13f5
+          path: upstream_freqtrade
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install libraries
+        run: python -m pip install numpy pandas
+      - name: Verify pinned upstream
+        run: |
+          test "$(git -C upstream_freqtrade rev-parse HEAD)" = "f3340ce11f5bdf62f598522e64d1f5638eaa13f5"
+          test -s upstream_freqtrade/user_data/strategies/futures/TrendFollowingStrategy.py
+          python -m py_compile scripts/replay_freqtrade_trendfollowing_pair.py
+      - name: Replay paired markets
+        run: python scripts/replay_freqtrade_trendfollowing_pair.py
+      - name: Archive monthly tables and trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paired-freqtrade-trendfollowing-monthly
+          path: analysis/external_github_profit_hunt/freqtrade_trendfollowing_20261118/*
+          if-no-files-found: warn
