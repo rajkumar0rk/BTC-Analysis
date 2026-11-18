@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T13:55:00Z",
+  "last_updated_utc": "2026-11-18T15:08:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -215,6 +215,50 @@
         "source downloads unrelated old Binance data on import"
       ],
       "next_action": "Avoid reporting original source backtest as credible; next iteration select well-specified code with safe one-order entry/exit and run BTC and ETH paired replay."
+    },
+    {
+      "id": "patricksebastine-bb-rsi-15m-20261118",
+      "source_repo": "https://github.com/PatrickSebastine/mean-reversion-trading-bot",
+      "source_commit": "c00091d34ad1ee10ede37996883934099bb533c9",
+      "source_path": "strategies.py",
+      "source_strategy": "MeanReversionStrategy: 15m close below BB20 2std and RSI14<25 long; above upper BB and RSI14>75 short; original config 2% stop, 4% take profit",
+      "adaptation": "Completed 15m signal, next 15m open, one position at a time, 1x exposure instead of source's 3x, stop-first 1m execution, Delta India 0.05% taker each side + 18% GST, BTC 5bps adverse slippage and ETH 2bps adverse slippage per side",
+      "script": "scripts/replay_patrick_bb_rsi_paired.py",
+      "workflow": ".github/workflows/external-bb-rsi-paired.yml",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44331759626",
+      "artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44331759626/artifacts/14438888773",
+      "status": "COMPLETED_REJECTED_NOT_WORTH_CHECKING",
+      "BTCUSD": {
+        "trades": 303,
+        "profitable_months": 6,
+        "losing_months": 16,
+        "high_pf_months": 4,
+        "overall_pf": 0.8367179443,
+        "net_22m_pct": -49.39467375,
+        "net_2025_pct": -29.1700731,
+        "net_2026_ytd_pct": -28.55375057,
+        "max_month_end_drawdown_pct": 52.68755938
+      },
+      "ETHUSD": {
+        "trades": 509,
+        "profitable_months": 6,
+        "losing_months": 16,
+        "high_pf_months": 0,
+        "overall_pf": 0.74744246697,
+        "net_22m_pct": -83.99344685,
+        "net_2025_pct": -76.11582375,
+        "net_2026_ytd_pct": -32.98260329,
+        "max_month_end_drawdown_pct": 84.61524718
+      },
+      "quality": [
+        "22 full UTC monthly 1m data partitions checksummed but missing 2024-12-31 18:30-23:59 UTC for first IST month",
+        "Month-end MTM equity used",
+        "Actual settled funding, L1 depth, margin/liquidation and spread not modeled",
+        "Source's original 3x leverage reduced to 1x; adapted replay is not exact source execution",
+        "2026 historical data previously researched; not pristine out-of-sample"
+      ],
+      "verdict": "Both assets losing; no strong monthly PF consistency, no 500% annual return, not worth checking",
+      "next_action": "Find distinct pinned open-source strategy; continue paired BTC/ETH testing, repair data and funding limitations"
     }
   ]
 }
