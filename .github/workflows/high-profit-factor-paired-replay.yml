@@ -1,0 +1,47 @@
+name: BTC and ETH high profit factor historical recheck
+on:
+  push:
+    branches:
+      - feature/github-external-volpersistence-22m-20261118
+    paths:
+      - .github/workflows/high-profit-factor-paired-replay.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: high-pf-replay-volpersistence-paired-20261118
+  cancel-in-progress: false
+jobs:
+  paired-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout pinned public candidate
+        uses: actions/checkout@v4
+        with:
+          repository: anaysharma1717-svg/Volatility-Persistence-Trading-Strategy
+          ref: 4987ed61c4fc7f6fc738d88a6eb844b08190a838
+          path: external_strategy
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install backtest libraries
+        run: python -m pip install numpy pandas scipy pytz numba tabulate scikit-learn
+      - name: Verify source integrity
+        run: |
+          python -m py_compile scripts/replay_external_github_volpersistence.py scripts/score_external_volpersistence_pf.py
+          test "$(git -C external_strategy rev-parse HEAD)" = "4987ed61c4fc7f6fc738d88a6eb844b08190a838"
+      - name: Run original strategy on BTC AND ETH and compute all 22 monthly profit factors
+        run: python scripts/score_external_volpersistence_pf.py
+      - name: Save reproducible 22-month result tables and trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-high-profit-factor-22m-recheck
+          path: analysis/github_external_volatility_persistence_20261118/*
+          retention-days: 30
+          if-no-files-found: warn
