@@ -1,0 +1,25 @@
+name: Test BTC VPS WebSocket collector
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/collect_btc_websocket_vps.py
+      - .github/workflows/test-btc-ws-collector.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install websocket client
+        run: python -m pip install 'websockets>=14,<17'
+      - name: Test book CRC32, sequence handling and compressed recorder
+        run: python scripts/collect_btc_websocket_vps.py --self-test
+      - name: Check Python syntax
+        run: python -m py_compile scripts/collect_btc_websocket_vps.py
