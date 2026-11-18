@@ -1,4 +1,4 @@
-# Independent convex compression-expansion strategy research
+# Independent failed-auction reclaim reversal strategy research
 
 **Predeclared qualifying models: 0/64**
 
