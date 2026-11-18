@@ -1,0 +1,50 @@
+name: ETHUSD final corrected strategy suite audit
+on:
+  push:
+    branches:
+      - feature/eth-replay-all-strategies-20261118
+    paths:
+      - .github/workflows/ethusd-final-audit-rerun.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ethusd-final-audit-20261118-unique
+  cancel-in-progress: false
+jobs:
+  final-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas scipy numba tabulate pytz scikit-learn statsmodels
+      - name: Verify patched ETH research runner
+        run: |
+          python -m py_compile scripts/run_eth_strategy_census.py
+          python -m py_compile scripts/retry_eth_failed_studies.py
+      - name: Replay remaining ETH research failures and dependencies
+        env:
+          ETH_RETRY_REMAINING_ONLY: '1'
+        run: python scripts/retry_eth_failed_studies.py
+      - name: Publish final status and ETH-only research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ethusd-final-remaining-audit
+          path: |
+            eth_strategy_replay/remaining_retry/result_summary.json
+            eth_strategy_replay/remaining_retry/results.csv
+            eth_strategy_replay/remaining_retry/status.json
+            eth_strategy_replay/remaining_retry/retry_patch_log.json
+            eth_strategy_replay/remaining_retry/logs/*
+            eth_strategy_replay/remaining_retry/workspace/analysis/**/*.md
+            eth_strategy_replay/remaining_retry/workspace/analysis/**/*monthly*.csv
+            eth_strategy_replay/remaining_retry/workspace/analysis/**/quality.json
+          retention-days: 30
+          if-no-files-found: warn
