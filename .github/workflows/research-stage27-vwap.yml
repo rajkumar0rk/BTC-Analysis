@@ -1,0 +1,34 @@
+name: Independent BTC Stage27 prior-day VWAP reclaim
+on:
+  push:
+    branches: [research/independent-stage27-prior-day-vwap-reclaim]
+    paths:
+      - '.github/workflows/research-stage27-vwap.yml'
+  workflow_dispatch:
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas tabulate
+      - name: Replay fixed Stage27 on verified raw candles
+        run: python scripts/research_stage27_prior_day_vwap.py
+      - name: Commit isolated report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/independent_stage27_prior_day_vwap
+          git diff --cached --quiet || (git commit -m "Record Stage27 independent ETH-free BTC results" && git push)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage27-prior-day-vwap
+          path: analysis/independent_stage27_prior_day_vwap/
