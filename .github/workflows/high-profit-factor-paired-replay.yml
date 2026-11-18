@@ -37,6 +37,16 @@ jobs:
           test "$(git -C external_strategy rev-parse HEAD)" = "4987ed61c4fc7f6fc738d88a6eb844b08190a838"
       - name: Run original strategy on BTC AND ETH and compute all 22 monthly profit factors
         run: python scripts/score_external_volpersistence_pf.py
+      - name: Run independent external EMA crossover candidate on both markets
+        run: python scripts/replay_erfaniaa_ema_crossover_paired.py
+      - name: Save independent external EMA crossover monthly results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-ema-crossover-monthly-pf-22m
+          path: analysis/external_github_profit_hunt/erfaniaa_ema50_100/*
+          retention-days: 30
+          if-no-files-found: warn
       - name: Save reproducible 22-month result tables and trade ledgers
         if: always()
         uses: actions/upload-artifact@v4
