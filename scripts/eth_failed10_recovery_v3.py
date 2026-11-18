@@ -36,19 +36,12 @@ S19=OUTPUT/"institutional_discovery_stage19_new_1h_patterns"
 S20=OUTPUT/"institutional_discovery_stage20_three_sleeve"
 S22=OUTPUT/"institutional_discovery_stage22_trade_audit"
 CHAIN=[
- ("research_pretrend_market_state_stage12.py",[],False),
  ("research_monthly_regime_stage14.py",[],False),
  ("research_swing_donchian_stage17.py",[],False),
  ("research_new_1h_patterns_stage19.py",[],False),
- ("research_monthly_10pct_stage19.py",[],False),
- ("research_signal_inversion_stage20.py",[],False),
- ("research_stage12_monthly.py",["--ledger",str(S12/"trade_ledger.csv.gz")],True),
- ("research_monthly_regime_switch_stage16.py",["--original-artifact",str(S14)],True),
- ("research_july_drawdown_stage15.py",["--original-artifact",str(S14)],True),
+ ("research_july_drawdown_stage15.py",["--original-artifact",str(S14)],False),
  ("research_monthly_portfolio_stage18.py",["--stage15-ledger",str(S15/"variant_trade_ledger.csv.gz")],True),
- ("research_three_sleeve_stage20.py",[],True),
- ("research_monthly_fixed_weight_stage21.py",[],True),
- ("research_wide_monthly_stage23.py",[],True),
+ ("research_three_sleeve_stage20.py",[],False),
  ("research_trade_counts_stage22.py",[
     "--stage15",str(S15/"variant_trade_ledger.csv.gz"),
     "--stage17",str(S17/"trade_ledger.csv.gz"),
