@@ -51,8 +51,8 @@ def indicators(d):
     atr=wilder(tr,14);pdi=100*wilder(pdm,14)/atr;mdi=100*wilder(mdm,14)/atr
     dx=100*abs(pdi-mdi)/(pdi+mdi)
     adx=wilder(dx,14)
-    cross_up=(rsi>50)&(np.r_[False,rsi[:-1]<=50])&(e5>e10)&(np.r_[False,e5[:-1]<=e10])&(adx>25)
-    cross_dn=(rsi<50)&(np.r_[False,rsi[:-1]>=50])&(e5<e10)&(np.r_[False,e5[:-1]>=e10])&(adx>25)
+    cross_up=(rsi>50)&(np.r_[False,rsi[:-1]<=50])&(e5>e10)&(np.r_[False,e5[:-1]<=e10[:-1]])&(adx>25)
+    cross_dn=(rsi<50)&(np.r_[False,rsi[:-1]>=50])&(e5<e10)&(np.r_[False,e5[:-1]>=e10[:-1]])&(adx>25)
     enter=np.zeros(len(d),dtype=np.int8);exit_sig=np.zeros(len(d),dtype=np.int8)
     enter[240::240]=cross_up[:-1].astype(np.int8)
     exit_sig[240::240]=cross_dn[:-1].astype(np.int8)
