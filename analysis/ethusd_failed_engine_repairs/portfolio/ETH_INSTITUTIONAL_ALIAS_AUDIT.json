@@ -1,0 +1,26 @@
+{
+  "mark_1m": {
+    "partitions": 23,
+    "observations": 987840,
+    "coverage_pct": 100.0,
+    "original_symbol": "MARK:ETHUSD",
+    "price_scaled": true,
+    "prices_from": "ETHUSD, never BTCUSD"
+  },
+  "open_interest_5m": {
+    "partitions": 23,
+    "observations": 197568,
+    "coverage_pct": 100.0,
+    "original_symbol": "OI:ETHUSD",
+    "price_scaled": false,
+    "prices_from": "ETHUSD, never BTCUSD"
+  },
+  "funding_1h": {
+    "partitions": 23,
+    "observations": 16464,
+    "coverage_pct": 100.0,
+    "original_symbol": "FUNDING:ETHUSD",
+    "price_scaled": false,
+    "prices_from": "ETHUSD, never BTCUSD"
+  }
+}

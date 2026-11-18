@@ -1,0 +1,36 @@
+{
+  "source": "Delta Exchange India BTCUSD 1-minute historical candles",
+  "observed_1minute_candles": 987840,
+  "missing_minutes": 0,
+  "dates": [
+    "2025-01-01 00:00:00+00:00",
+    "2026-11-17 23:59:00+00:00"
+  ],
+  "strategy_family": "Long-horizon 4H/Daily Donchian CLOSE breakout with ATR trailing",
+  "configs": 16,
+  "replayed_trade_rows": 746,
+  "monthly_gate_passes": 0,
+  "monthly_equity_rule": "Monthly end-of-month mark-to-market in IST, net of hypothetical liquidation fees",
+  "risk_fraction_per_trade": 0.005,
+  "fees": "0.05% taker each leg, GST 18%, 5 points adverse slippage per leg",
+  "exits": [
+    "2x ATR initial stop",
+    "3x or 4x ATR trailing tightened on full TF candle close",
+    "opposite breakout",
+    "14 elapsed-day cap",
+    "close before historical source gap"
+  ],
+  "caveats": [
+    "All 2025 and 2026 are research-exposed; no new forward holdout",
+    "2026-10-31 source missing; 2026-11 incomplete through Nov16",
+    "Month-end marks on last available minute, not necessarily an executable liquidation",
+    "Exact fractional position size assumed; real minimum contract, leverage and margin can differ",
+    "Trading fees/GST and assumed slippage included, not actual quote spread/market depth/funding",
+    "Losses may exceed initial risk in adverse gap fills; no guaranteed monthly profit",
+    "No fixed monthly exit; month returns reflect mark-to-market unrealized PnL",
+    "One position at a time across LONG and SHORT; no concurrent trades",
+    "Signal on FULL completed 4H or Daily candle, next 1m open execution",
+    "A missing source day triggers a conservative forced exit on last observed candle",
+    "16 configurations create multiple testing risk; any attractive result remains exploratory"
+  ]
+}

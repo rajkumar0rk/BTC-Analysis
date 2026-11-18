@@ -1,0 +1,69 @@
+{
+  "source": "BTCUSD Delta India historical 1m OHLCV",
+  "dataset_observed_1m_candles": 987840,
+  "source_missing_minutes": 0,
+  "event_rows": 24469,
+  "standalone_trade_rows": 205451,
+  "strategy_combinations": 424,
+  "monthly_research_gate_passes": 0,
+  "period_split": [
+    "2025_train",
+    "2026_H1_validation",
+    "2026_H2_seen_recheck",
+    "2026_Nov_recent_exploratory"
+  ],
+  "model_families": [
+    "S11_01_sweep_rejection",
+    "S11_02_sweep_then_confirm",
+    "S11_03_breakout_retest",
+    "S11_04_trend_pullback_engulf",
+    "S11_05_market_structure_shift",
+    "S11_06_inside_bar_break",
+    "S11_07_failed_break_followthrough",
+    "S11_08_compression_breakout",
+    "S13_pullback_near_half_atr",
+    "S13_pullback_touch"
+  ],
+  "tested_regimes": [
+    "all_entries",
+    "4h_adx25",
+    "4h_efficiency30_adx25",
+    "4h_adx25_directional_drift",
+    "4h_low_atr_then_5m_burst",
+    "4h_high_atr_adx25",
+    "1h_volume_burst_adx20",
+    "1h_quiet_4h_trending",
+    "4h_channel_break_in_direction",
+    "4h_ranging_adx18",
+    "previous_month_trending_4h_adx25",
+    "previous_month_ranging_4h_adx18"
+  ],
+  "rewards_R": [
+    2.0,
+    3.0
+  ],
+  "max_holds_min": [
+    240,
+    480
+  ],
+  "risk_points": [
+    150.0,
+    1200.0
+  ],
+  "gate": ">=9 active 2025 and >=8 active 2026; >=75% profitable active months each year; >=60/30/20 trades and net-positive 2025/H1/H2",
+  "standard_costs": "0.05pct taker each side, 18pct GST, 5pts adverse slip each side",
+  "caveats": [
+    "Stage11 and Stage13 original entry criteria reused, no future information",
+    "Previous-month regime values lag one calendar month, in Asia/Kolkata",
+    "Higher-timeframe ADX and volume are from complete 4H/1H bars",
+    "A no-trade month is not a winning month; sparse models excluded by sample gate",
+    "Trade variants are standalone and overlap; never add net PnL across configurations",
+    "All historical 2026 windows have already been used in research; no virgin holdout",
+    "No bid/ask spread history, funding cashflows, order book impact, margin or liquidation",
+    "1m OHLC stop-first, gapped stops fill at worse open or stop; intraminute uncertainty",
+    "Many tested conditions create multiple-testing/selection bias",
+    "Net BTC price points, not risk-sized dollar account monthly return",
+    "2026-10-31 missing from source; 2026-11 through the 16th only",
+    "Nothing establishes zero-loss months or future profitability"
+  ]
+}

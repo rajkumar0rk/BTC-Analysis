@@ -1,0 +1,44 @@
+{
+  "instrument": "ETHUSD",
+  "initial_completed_engines": 35,
+  "failed_in_initial_review": 6,
+  "failed_rerun_attempted": 6,
+  "repaired_engines": 6,
+  "remaining_engine_failures": 0,
+  "completed_engines_now": 41,
+  "total_original_engines": 41,
+  "all_41_engines_completed": true,
+  "stage18_caveat": "No candidate passed 2025 qualification; diagnostic fallback reported as unqualified",
+  "prices": "ETH price normalized by a fixed historical ratio for legacy BTC rules; not unscaled native ETH dollar points",
+  "source": "Genuine Delta India ETH 1m OHLCV and MARK:ETHUSD, OI:ETHUSD, FUNDING:ETHUSD",
+  "no_legacy_BTC_source_edited": true,
+  "jobs": [
+    {
+      "suite": "high_frequency",
+      "attempted": 1,
+      "completed": 1,
+      "remaining": 0,
+      "status": "all_repaired",
+      "stage18": {}
+    },
+    {
+      "suite": "institutional",
+      "attempted": 4,
+      "completed": 4,
+      "remaining": 0,
+      "status": "all_repaired",
+      "stage18": {}
+    },
+    {
+      "suite": "portfolio",
+      "attempted": 1,
+      "completed": 1,
+      "remaining": 0,
+      "status": "all_repaired",
+      "stage18": {
+        "stage18_qualified_2025_models": 0,
+        "stage18_selected_unqualified_fallback": true
+      }
+    }
+  ]
+}

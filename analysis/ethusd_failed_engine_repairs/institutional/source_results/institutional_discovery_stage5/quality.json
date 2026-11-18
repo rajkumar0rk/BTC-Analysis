@@ -1,0 +1,72 @@
+{
+  "source": "Delta Exchange India archived 1m futures and matched mark/OI/funding",
+  "source_quality": {
+    "futures_1m": 987840,
+    "mark_1m": 987840,
+    "OI_5m": 197568,
+    "funding_1h": 16464,
+    "available_hourly_events": 16283,
+    "first": "2025-01-08 12:00:00+00:00",
+    "last": "2026-11-17 22:00:00+00:00",
+    "oi_changes_pct_p01_p50_p99": [
+      -16.926,
+      0.359,
+      14.877
+    ],
+    "hourly_range_points_p01_p50_p99": [
+      107.94,
+      548.13,
+      3008.03
+    ],
+    "funding_distinct_values": 818,
+    "funding_fraction_exact_point01": 0.603,
+    "futures_total_before_alignment": 987840,
+    "futures_matched_with_mark": 987840,
+    "futures_excluded_newer_or_unmatched": 0
+  },
+  "replayed_trades": 10614,
+  "decisions_considered": 10614,
+  "rule_names": [
+    "expansion_follow",
+    "accepted_12h_breakout",
+    "rejected_12h_sweep"
+  ],
+  "exit_models": {
+    "fixed_60m_reference": {
+      "mode": "fixed",
+      "max_bars": 60
+    },
+    "vol_2R_4h": {
+      "mode": "vol_target",
+      "max_bars": 240
+    },
+    "vol_trail_4h": {
+      "mode": "vol_trail",
+      "max_bars": 240
+    },
+    "vol_timeout_4h": {
+      "mode": "vol_timeout",
+      "max_bars": 240
+    }
+  },
+  "assumptions": {
+    "fee_per_side_plus_gst": 0.00059,
+    "slippage_per_side_pts": 5.0,
+    "risk_pts": "clipped prior 48h median hourly range 200..1200",
+    "volatility_target_R": 2,
+    "trail_activation_R": 0.75,
+    "trailing_distance_R": 0.5,
+    "trail_updates": "after each completed minute close only",
+    "signal": "completed hourly candle; entry next hourly open",
+    "priority": "stop first on ambiguous 1m bars",
+    "portfolios": "non-overlapping trades independently within model/rule"
+  },
+  "caveats": [
+    "The later 2026 period is previously researched, not untouched",
+    "Stop and take fills are 1m OHLC approximations",
+    "No historical spread, L2 impact or funding cashflows",
+    "No live position sizing, liquidation/margin, or account PNL",
+    "Multiple comparisons; bootstrap intervals are exploratory",
+    "No conclusions from 2026 seen recheck alone"
+  ]
+}
