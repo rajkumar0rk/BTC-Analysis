@@ -1,0 +1,221 @@
+{
+  "source": "https://api.india.delta.exchange/v2/history/candles",
+  "exchange": "Delta Exchange India",
+  "symbol": "ETHUSD",
+  "instrument": "ETH perpetual futures",
+  "resolution": "1m",
+  "timestamp_unit": "unix_seconds_utc",
+  "timestamp_label": "as_returned_by_API",
+  "requested_through_utc": "2026-11-17",
+  "generated_at_utc": "2026-11-18T09:05:23.568502+00:00",
+  "note": "Missing candles are reported but never fabricated; OHLCV is not bid/ask/order book.",
+  "partitions": [
+    {
+      "file": "2025-01.csv.gz",
+      "utc_start": "2025-01-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-02-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "ec8b73a45e93258f11850cbb7b07913e26f1fdb623d7f9c18bbc637e219270cc"
+    },
+    {
+      "file": "2025-02.csv.gz",
+      "utc_start": "2025-02-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-03-01T00:00:00+00:00",
+      "expected_minutes": 40320,
+      "observed_candles": 40320,
+      "missing_minutes": 0,
+      "sha256_gzip": "065233cc53e2ee19ce2c3f41c57e22d3b2dee9f91458b83b2072f4facadd4e1d"
+    },
+    {
+      "file": "2025-03.csv.gz",
+      "utc_start": "2025-03-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-04-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "0d13ec3a042b2d2ce89763003876311f8f96bba1609f3edb6ff2b5480752f852"
+    },
+    {
+      "file": "2025-04.csv.gz",
+      "utc_start": "2025-04-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-05-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "56bafdbbfd1968c15a3bd92157150141d3c97e13cf133541d6474106e308d9de"
+    },
+    {
+      "file": "2025-05.csv.gz",
+      "utc_start": "2025-05-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-06-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "6034f38fa7ec4cc319af69bc9905cbb87a9aab796069d0a7d8c9cb8ae0cac855"
+    },
+    {
+      "file": "2025-06.csv.gz",
+      "utc_start": "2025-06-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-07-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "6121275461d16465dd377c2337752e24bc4ca43190695ebda76c210e6c4907de"
+    },
+    {
+      "file": "2025-07.csv.gz",
+      "utc_start": "2025-07-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-08-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "259616aad32315dce665ca47c0101c9e18b32352171c1a431de7ac31333dba8e"
+    },
+    {
+      "file": "2025-08.csv.gz",
+      "utc_start": "2025-08-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-09-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "7f3605addb5e9d9c470d36d1f1adb42f6641f1b4ee1e94c60b63504837c264af"
+    },
+    {
+      "file": "2025-09.csv.gz",
+      "utc_start": "2025-09-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-10-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "2bc385d896a639e4c45cf827bc6d8c8250bb0e77132bb3607ce8b04bc74d95ca"
+    },
+    {
+      "file": "2025-10.csv.gz",
+      "utc_start": "2025-10-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-11-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "c9484143d69ce7bed794741753b5de56dca0415d842371e1c6f9068bb7b3ef18"
+    },
+    {
+      "file": "2025-11.csv.gz",
+      "utc_start": "2025-11-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-12-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "e81025b5550c496463617158b046bb8a91d30cb3277614964eee844b5ab1c770"
+    },
+    {
+      "file": "2025-12.csv.gz",
+      "utc_start": "2025-12-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-01-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "239546a1b57d78c4f6f046a7e425d38a7ea648e5a4923b0038ef639d10b713ef"
+    },
+    {
+      "file": "2026-01.csv.gz",
+      "utc_start": "2026-01-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-02-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "949d680d39c19f554ab0d0eee5c90bd7b7e632051897651c8c7800db775e7a79"
+    },
+    {
+      "file": "2026-02.csv.gz",
+      "utc_start": "2026-02-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-03-01T00:00:00+00:00",
+      "expected_minutes": 40320,
+      "observed_candles": 40320,
+      "missing_minutes": 0,
+      "sha256_gzip": "56734d2cbe9847e01d6441cb8e6a1d9266caa29849d96afe4a76bf46c461364b"
+    },
+    {
+      "file": "2026-03.csv.gz",
+      "utc_start": "2026-03-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-04-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "1ede5a30ee76b051670c8e379dad6b409758ba7c4121bd066a6f70247ee145fd"
+    },
+    {
+      "file": "2026-04.csv.gz",
+      "utc_start": "2026-04-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-05-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "fd1f0e4f5352bd55945c326e76d06692fc1f3e933e8e5ac85f769ac905df251c"
+    },
+    {
+      "file": "2026-05.csv.gz",
+      "utc_start": "2026-05-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-06-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "e3ebe5d1731e84481692cbba5c10aaffc85a1b4cec9142bd9fcd498bd32151f9"
+    },
+    {
+      "file": "2026-06.csv.gz",
+      "utc_start": "2026-06-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-07-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "40de88ecaa0125db6046d9306ecb4dbe8cdcb28993ae7adc49ee707ccc88b1db"
+    },
+    {
+      "file": "2026-07.csv.gz",
+      "utc_start": "2026-07-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-08-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "fc47057f758b28b47062b162fe847825b9e1eb8219763f20372bcf5443076004"
+    },
+    {
+      "file": "2026-08.csv.gz",
+      "utc_start": "2026-08-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-09-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "5e189c23f0ec164da952acc47189cd2d87491517e1128f7b3a0913ae087e84f0"
+    },
+    {
+      "file": "2026-09.csv.gz",
+      "utc_start": "2026-09-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-10-01T00:00:00+00:00",
+      "expected_minutes": 43200,
+      "observed_candles": 43200,
+      "missing_minutes": 0,
+      "sha256_gzip": "610cad705b83daf22756fe4b7408078f0aadbcd24239bc6f0c46751b093198f4"
+    },
+    {
+      "file": "2026-10.csv.gz",
+      "utc_start": "2026-10-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-11-01T00:00:00+00:00",
+      "expected_minutes": 44640,
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "246e8e1cbdae00a9832a69be3cc2a399fff764dec6822edbe867efae84db0d2b"
+    },
+    {
+      "file": "2026-11.csv.gz",
+      "utc_start": "2026-11-01T00:00:00+00:00",
+      "utc_end_exclusive": "2026-11-18T00:00:00+00:00",
+      "expected_minutes": 24480,
+      "observed_candles": 24480,
+      "missing_minutes": 0,
+      "sha256_gzip": "2fa13ebf9d3219a5305f15ad982714c3ae3c2f96ae665ddd01157812dda05cf2"
+    }
+  ]
+}
