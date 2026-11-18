@@ -1,0 +1,32 @@
+name: Independent volume-climax convex BTC ETH research
+on:
+  push:
+    branches: [research/volume-climax-continuation-20261119]
+    paths:
+      - scripts/research_volume_climax_continuation_20261119.py
+      - .github/workflows/research-volume-climax-20261119.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: volume-climax-research-20261119
+  cancel-in-progress: false
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy pandas numba tabulate
+      - name: Run BTC and ETH independent 1m backtest
+        run: python -u scripts/research_volume_climax_continuation_20261119.py
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: volume-climax-research-20261119
+          path: analysis/volume_climax_continuation_20261119/
+          retention-days: 30
+          if-no-files-found: error
