@@ -7,7 +7,9 @@
     "utc_last": "2026-10-31 18:29:00+00:00",
     "sha256_checked_partitions": 23,
     "last_month_for_scoring": "2026-10",
-    "slippage_pct_each_side": 0.02
+    "slippage_pct_each_side": 0.02,
+    "first_ist_month_missing_utc_minutes": 330,
+    "january_2025_ist_coverage_complete": false
   },
   "old_BTC_200_point_target_used": false,
   "stop": "1.5x or 3x authentic ETH ATR14 on signal timeframe",
@@ -44,6 +46,6 @@
     "One exclusive trade per model, returns compounded at monthly IST exit time",
     "2026 is previously explored through BTC strategy research, not a pristine OOS sample",
     "Selection uses 2025 only, then reports 2026 without parameter alteration",
-    "2026 November excluded; full Jan25-Oct26 data all verified complete"
+    "2026 November excluded; 2025 January lacks first 5.5 IST hours (Dec 31 2024 18:30-23:59 UTC), so not all 22 IST months have complete source coverage"
   ]
 }

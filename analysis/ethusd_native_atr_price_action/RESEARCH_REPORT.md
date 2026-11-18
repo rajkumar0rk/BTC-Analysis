@@ -1,6 +1,7 @@
 # Native ETHUSD ATR price-action family backtest
 
 All source ETHUSD candles are UNscaled. **No BTC fixed 200-point stop/target.**
+Data limitation: Jan 1, 2025 00:00–05:29 IST is absent because the archive begins Jan 1 UTC; other scored IST months have complete source coverage.
 Tested 8 entry-pattern families × 3 timeframes × 2 ATR stops × 2R/3R
 × 240/720-minute maximum hold.
 
@@ -68,4 +69,4 @@ Taker fee 0.05% per side plus GST 18%. Missing funding/real order book.
 - One exclusive trade per model, returns compounded at monthly IST exit time
 - 2026 is previously explored through BTC strategy research, not a pristine OOS sample
 - Selection uses 2025 only, then reports 2026 without parameter alteration
-- 2026 November excluded; full Jan25-Oct26 data all verified complete
+- 2026 November excluded; 2025 January lacks first 5.5 IST hours (Dec 31 2024 18:30-23:59 UTC), so not all 22 IST months have complete source coverage
