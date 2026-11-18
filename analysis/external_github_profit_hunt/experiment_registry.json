@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T18:29:45Z",
+  "last_updated_utc": "2026-11-18T20:01:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -408,6 +408,22 @@
       "verdict": "RESEARCH LEAD ONLY; source backtest performance not credible until lookahead/stop logic repaired; no paired test or monthly results this iteration",
       "notification_eligible": false,
       "next_action": "Only replay a clearly documented corrected causal variant after source parity and full data validation; otherwise seek a cleaner pinned external strategy."
+    },
+    {
+      "id": "freqtrade-volatilitysystem-3h-atr-source-audit-20261119",
+      "source_repo": "https://github.com/freqtrade/freqtrade-strategies",
+      "source_commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "source_path": "user_data/strategies/futures/VolatilitySystem.py",
+      "status": "SOURCE_AUDITED_NOT_BACKTESTED",
+      "source_rules": "1h strategy using 3h resampled close change > 2*ATR14 (previous 3h threshold) for long, negative for short; opposite signal exits; 2x leverage, 50% stake then potential add-on",
+      "audit_findings": [
+        "3h resampled indicator merged and forward filled to 1h; must verify no incomplete 3h lookahead",
+        "stoploss=-1 and ROI=100 effectively disable practical exits except opposite signal",
+        "2x leverage plus stake add-on requires explicit liquidation and margin accounting",
+        "No Delta India cost or funding modeling; not validated on BTCUSD/ETHUSD 22 months"
+      ],
+      "verdict": "NOT_WORTH_CHECKING_UNTIL_CAUSAL_PAIRED_REPLAY",
+      "next_action": "Prefer bounded-risk source; if replayed verify 3h closed-candle timestamps and 1m liquidation and month-end MTM."
     }
   ]
 }
