@@ -21,7 +21,49 @@ import math
 import numpy as np
 import pandas as pd
 from numba import njit
-from research_every_candle_200 import read_archive, FEE, SLIPPAGE
+# Self-contained new research. Reads ORIGINAL candle partitions only;
+# never imports a previous analysis module or its fitted results.
+BASE = Path("data/delta_india/BTCUSD/1m")
+FEE = 0.0005 * 1.18
+SLIPPAGE = 5.0
+
+def read_archive():
+    sources = sorted(BASE.glob("20??-??.csv.gz"))
+    if len(sources) < 22:
+        raise RuntimeError("Need full raw 2025 + Jan-Oct 2026 BTCUSD partitions")
+    parts = [pd.read_csv(s, compression="gzip",
+              usecols=["time","open","high","low","close","volume"])
+              for s in sources]
+    raw = pd.concat(parts,ignore_index=True).sort_values("time",kind="stable")
+    raw = raw.reset_index(drop=True)
+    unix = raw.time.to_numpy(np.int64)
+    if not np.all(np.diff(unix)>0): raise ValueError("Timestamps duplicate/out of order")
+    if not np.all((np.diff(unix)%60)==0): raise ValueError("Nonminute timestamps")
+    for field in ["open","high","low","close","volume"]:
+        if not np.isfinite(raw[field].to_numpy(float)).all():
+            raise ValueError("Invalid raw OHLCV "+field)
+    if ((raw.low<=0)|(raw.high<raw.low)|(raw.open<raw.low)|
+        (raw.close<raw.low)|(raw.open>raw.high)|
+        (raw.close>raw.high)|(raw.volume<0)).any():
+        raise ValueError("Inconsistent raw candles")
+    breaks=np.flatnonzero(np.diff(unix)!=60)+1
+    begins=np.r_[0,breaks].astype(np.int32)
+    ends=np.r_[breaks,len(raw)].astype(np.int32)
+    segstart=np.empty(len(raw),np.int32)
+    segend=np.empty(len(raw),np.int32)
+    for start,end in zip(begins,ends):
+        segstart[start:end]=start
+        segend[start:end]=end
+    qual={"source":"ORIGINAL Delta India BTCUSD 1m raw .csv.gz partitions only",
+        "partition_count":len(sources),"first_utc":str(pd.to_datetime(unix[0],unit="s",utc=True)),
+        "last_utc":str(pd.to_datetime(unix[-1],unit="s",utc=True)),
+        "observed":int(len(raw)),"missing_minutes":int((unix[-1]-unix[0])//60+1-len(raw)),
+        "gaps":[{"before":str(pd.to_datetime(unix[j-1],unit="s",utc=True)),
+            "after":str(pd.to_datetime(unix[j],unit="s",utc=True)),
+            "missing":int((unix[j]-unix[j-1])//60-1)} for j in breaks]}
+    raw.index=pd.to_datetime(raw.time,unit="s",utc=True)
+    return raw,segstart,segend,qual
+
 
 OUT=Path("analysis/institutional_discovery_stage24_structure_monthly10")
 MONTHS=pd.period_range("2025-01","2026-10",freq="M").astype(str)
@@ -152,9 +194,11 @@ def replay_series(op,hi,lo,cl,seg_end,month_codes,
                 break
             # Flatten BEFORE the next calendar month (IST), at the current
             # minute close, so no trade carries unrealized PnL across months.
-            if ix+1==limit or month_codes[ix+1]!=month_codes[ix]:
+            month_ends_here=(ix+1<len(month_codes) and
+                             month_codes[ix+1]!=month_codes[ix])
+            if ix+1==limit or month_ends_here:
                 exitmid=cl[ix]
-                reason=2 if month_codes[ix+1]!=month_codes[ix] else 3 if ix+1==limit else 2
+                reason=2 if month_ends_here else 3
                 break
             # Trailing updates are based on the COMPLETED current minute;
             # therefore updated stop may be hit no earlier than NEXT minute.
@@ -205,14 +249,22 @@ def stats(trades,months,stoprisk,lev,model):
                         "losses":int((v<0).sum()),"flat":int((v==0).sum())})
     train=monthly[:12]; check=monthly[12:22]
     cap=100.;peak=100.;dd=0.
-    for x in ret:
+    train_dd=0.;train_cap=100.;train_peak=100.
+    for x,mc in zip(ret,code):
         cap*=1.+x
         peak=max(peak,cap)
         dd=max(dd,100*(1.-cap/peak))
+        if mc < 202601:
+            train_cap*=1.+x
+            train_peak=max(train_peak,train_cap)
+            train_dd=max(train_dd,100*(1.-train_cap/train_peak))
     def csum(series):
         return round((np.prod([1.+s["return_pct"]/100 for s in series])-1)*100,5)
     row={**model,"risk_pct":stoprisk*100,"max_leverage":lev,
-         "trades_total":int(len(trades)),"wins":int((pnl>0).sum()),
+         "trades_total":int(len(trades)),
+         "trades_2025":int((code<202601).sum()),
+         "2025_trade_close_drawdown_pct":round(train_dd,4),
+         "wins":int((pnl>0).sum()),
          "losses":int((pnl<0).sum()),"flat":int((pnl==0).sum()),
          "win_rate_pct":round(100*float((pnl>0).mean()),3),
          "2025_months_ge10":sum(m["return_pct"]>=10. for m in train),
@@ -239,6 +291,8 @@ def main():
     op=f.open.to_numpy(np.float64);hi=f.high.to_numpy(np.float64)
     lo=f.low.to_numpy(np.float64);cl=f.close.to_numpy(np.float64)
     rows=[]; ledgers={}; summaries={}; nreplays=0
+    # Never include uncompleted November 2026 in account-model searches.
+    events=events[events.k.map(lambda k: monthcode[int(k)]<=202610)]
     for pat in PATS:
       for lb in LOOKBACKS:
         for align in ALIGN:
@@ -271,9 +325,9 @@ def main():
     # Model CHOICE must use 2025 ONLY. 2026 scores are not ranking inputs.
     rank=summary.sort_values(
         ["2025_months_ge10","2025_positive","worst_2025_pct",
-         "net_2025_pct","max_trade_close_drawdown_pct"],
+         "net_2025_pct","2025_trade_close_drawdown_pct"],
         ascending=[False,False,False,False,True],kind="stable")
-    safe=rank[(rank.max_trade_close_drawdown_pct<=40)&(rank.trades_total>=35)]
+    safe=rank[(rank["2025_trade_close_drawdown_pct"]<=40)&(rank.trades_2025>=35)]
     choice=(safe if not safe.empty else rank).iloc[0]
     key=(choice["pattern"],int(choice["lookback"]),bool(choice["hour_align"]),
          float(choice["stop_atr"]),choice["exit_policy"],int(choice["max_hold_minutes"]))
