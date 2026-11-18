@@ -62,6 +62,7 @@ def main():
                     else:
                         j=k+hold-1;px=cl[j];reason="timeout"
                     busy=j
+                    if idx[j].strftime('%Y-%m') not in MONTHS:continue
                     entryfill=op[k]+side*SLIPPAGE
                     exitfill=px-side*SLIPPAGE
                     net=side*(exitfill-entryfill)-FEE*(entryfill+exitfill)
