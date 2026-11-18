@@ -1,0 +1,29 @@
+name: Audit ETH 4H engulfing profit factor
+on:
+  push:
+    branches: [research/eth-all-normalized-crosscheck-v2]
+    paths:
+      - scripts/eth_engulfing_profit_factor_audit.py
+      - .github/workflows/eth-engulfing-profit-factor-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas numba tabulate
+      - name: Reproduce original ETH trades and compute after-fee profit factor
+        run: python scripts/eth_engulfing_profit_factor_audit.py
+      - name: Save exact trade PnL based audit without altering previous research
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_native_crossfamily_v2/engulfing_profit_factor_audit.json
+          git commit -m "research: publish reproducible net profit factors for ETH engulfing"
+          git push origin HEAD:research/eth-all-normalized-crosscheck-v2
