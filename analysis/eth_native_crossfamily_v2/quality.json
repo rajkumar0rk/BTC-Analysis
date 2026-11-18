@@ -1,0 +1,28 @@
+{
+  "test": "Independent native ETH cross-family proxy replay. NOT a byte-identical port of all historic BTC scripts.",
+  "source": "Original Delta Exchange India ETHUSD and BTCUSD 1m 2025-01 through 2026-10",
+  "native_eth_minute_candles": 963360,
+  "BTC_200pts_to_ETH_formula": "200 * ETH_entry_price / BTC_entry_price, applied per trade for fixed100_200 family",
+  "fixedpoint_200_is_not_200_ETH": true,
+  "family_count": 52,
+  "account_model_count": 205,
+  "models_all22_positive": 0,
+  "models_all22_ge10": 0,
+  "best_2025_ranked_model": "1h:hourly_reversal_3c__SL2.5_RR2",
+  "fees_taker_per_side": 0.0005,
+  "GST_on_exchange_fees": 0.18,
+  "assumed_ETH_slippage_per_side_points": 0.25,
+  "unmodelled": [
+    "funding",
+    "actual bid-ask spread",
+    "market impact",
+    "lot-size increments",
+    "margin and liquidation",
+    "order queue"
+  ],
+  "calendar": "IST months, January 2025 IST initial 5.5h absent because history begins Jan1 UTC",
+  "not_blind_OOS": "2026 data already researched in other studies",
+  "NOV2026": "Excluded unfinished",
+  "source_provenance": "All 22 UTC-month source manifests SHA256 checked for BOTH ETHUSD and BTCUSD",
+  "candidate_selection": "2025 monthly-positive count and 2025 train cumulative return only"
+}
