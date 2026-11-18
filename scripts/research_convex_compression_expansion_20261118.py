@@ -253,6 +253,43 @@ def main():
         (summ.profit_factor>=1.5)&(summ.return_2025_pct>0)&
         (summ.return_2026_pct>0)&(summ.max_drawdown_pct>-30)].copy()
     selected.to_csv(OUT/"qualifying_models.csv",index=False)
+    # Exploratory asymmetric candidates have a lower PF threshold than confirmed models.
+    # Report them transparently but NEVER call them validated without untouched holdout.
+    candidate=summ[(summ.trades>=60)&(summ.win_rate_pct<=40)&
+        (summ.avg_win_loss_ratio>=5)&(summ.biggest_winner_R>=10)&
+        (summ.profit_factor>=1.3)&(summ.return_2025_pct>0)&
+        (summ.return_2026_pct>0)&(summ.max_drawdown_pct>-25)].copy()
+    candidate.to_csv(OUT/"promising_exploratory_models.csv",index=False)
+    cand_month=[];cand_stats=[];cand_ledger=[]
+    for _,chosen in candidate.iterrows():
+        sym=chosen["symbol"];model=chosen["model"]
+        t=ledger[(ledger.symbol==sym)&(ledger.model==model)].copy()
+        t["exit_month_ist"]=pd.to_datetime(t.exit_utc,utc=True).dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")
+        w=t[t.pnl_usd>0].pnl_usd.to_numpy(float);loss=t[t.pnl_usd<0].pnl_usd.to_numpy(float)
+        vals=t.pnl_usd.to_numpy(float)
+        max_l=cur=0
+        for v in vals:
+            if v<=0:cur+=1;max_l=max(max_l,cur)
+            else:cur=0
+        top=sorted([float(v) for v in w],reverse=True)
+        cand_stats.append(dict(symbol=sym,model=model,trades=len(t),
+            max_consecutive_losses=max_l,biggest_profit_usd=round(top[0],4) if top else None,
+            top1_fraction_of_positive_pnl=round(top[0]/sum(top),4) if top else None,
+            top3_fraction_of_positive_pnl=round(sum(top[:3])/sum(top),4) if top else None,
+            net_after_removing_largest_winner_usd=round(sum(vals)-(top[0] if top else 0),4),
+            average_positive_trade_usd=round(np.mean(w),4) if len(w) else None,
+            average_negative_trade_usd=round(np.mean(loss),4) if len(loss) else None))
+        cand_ledger.append(t)
+        for mon,group in t.groupby("exit_month_ist"):
+            p=group.pnl_usd.to_numpy(float)
+            gp=float(p[p>0].sum());gl=float(-p[p<0].sum())
+            cand_month.append(dict(symbol=sym,model=model,exit_month_ist=mon,
+                closed_trades=len(group),win_trades=int((p>0).sum()),
+                loss_trades=int((p<0).sum()),net_realized_usd=round(float(p.sum()),4),
+                realized_profit_factor=round(gp/gl,4) if gl else None))
+    pd.DataFrame(cand_stats).to_csv(OUT/"candidate_concentration.csv",index=False)
+    pd.DataFrame(cand_month).to_csv(OUT/"candidate_monthly_pf.csv",index=False)
+    if cand_ledger:pd.concat(cand_ledger,ignore_index=True).to_csv(OUT/"candidate_trade_ledger.csv",index=False)
     meta=dict(study="Independent compression-to-breakout with asymmetric trailing",
         tested_period="2025-01-01 to 2026-11-17 UTC",
         signal="Completed 1H breakout after 12h compression + volume confirmation, EMA trend optional",
@@ -268,13 +305,15 @@ def main():
                  "True settled funding cashflows and liquidation margin not independently verified",
                  "2026 November partial; no 2022-2024 Delta history in repository",
                  "No qualifying model is NOT evidence all asymmetric strategies fail"],
-        data=quality,models=len(summ),passing_models=len(selected))
+        data=quality,models=len(summ),passing_models=len(selected),promising_exploratory_models=len(candidate))
     (OUT/"quality.json").write_text(json.dumps(meta,indent=2)+"\n")
     report=["# Independent convex compression-expansion strategy research",
         "",f"**Predeclared qualifying models: {len(selected)}/{len(summ)}**",
         "","## Qualifying results",selected.to_markdown(index=False) if len(selected) else "None",
         "","## Top models by 2025 performance (2026 reported without selecting on it)",
         summ.sort_values("return_2025_pct",ascending=False).head(12).to_markdown(index=False),
+        "","## Promising exploratory candidates (not validated)",candidate.to_markdown(index=False) if len(candidate) else "None",
+        "","## Candidate trade concentration",pd.DataFrame(cand_stats).to_markdown(index=False) if cand_stats else "None",
         "","## Caution",*[f"- {s}" for s in meta["caveats"]]]
     (OUT/"RESEARCH_REPORT.md").write_text("\n".join(report)+"\n")
     print("QUALIFIERS",len(selected))
