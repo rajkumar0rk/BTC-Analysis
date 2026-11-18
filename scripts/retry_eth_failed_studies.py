@@ -195,7 +195,7 @@ PATCHES = {
         # BTC-selected hourly sleeve. Read the frozen ETH selection from the
         # ETH-produced Stage20 quality manifest.
         ('S19_MODEL="strong_momentum_6h__4h_adx_le20__3R__480min"',
-         'S19_SELECTED=json.loads((BASE20/"quality.json").read_text())["selected"]\\nS19_MODEL=S19_SELECTED["stage19_model"]\\nS19_WEIGHT=float(S19_SELECTED["new_pattern_weight"])'),
+         'S19_SELECTED=json.loads((BASE20/"quality.json").read_text())["selected"]\nS19_MODEL=S19_SELECTED["stage19_model"]\nS19_WEIGHT=float(S19_SELECTED["new_pattern_weight"])'),
         ('expected20=.9*expected18+.1*h_r',
          'expected20=(1-S19_WEIGHT)*expected18+S19_WEIGHT*h_r'),
         ('if len(a)!=64:', 'if len(a)<0:'),
