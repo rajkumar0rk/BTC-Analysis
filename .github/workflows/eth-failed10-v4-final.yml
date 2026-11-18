@@ -1,0 +1,46 @@
+name: ETHUSD finish failed Stage18 and Stage22 cross-market replay
+on:
+  push:
+    branches: [research/eth-failed10-recovery-v4]
+    paths:
+      - scripts/eth_failed10_recovery_v3.py
+      - .github/workflows/eth-failed10-v4-final.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-failed10-v4-only
+  cancel-in-progress: false
+jobs:
+  stage18_stage22:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eth-failed10-recovery-v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install numpy pandas scipy numba tabulate scikit-learn
+      - name: Rerun Stage18 and Stage22 with regenerated ETH original ledgers
+        run: python scripts/eth_failed10_recovery_v3.py --part chain --timeout 450
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eth-final-stage18-stage22-audit
+          path: analysis/eth_failed10_recovery/
+          retention-days: 30
+      - name: Save final repaired ETH-only audit
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/eth_failed10_recovery/
+          if ! git diff --cached --quiet; then
+            git commit -m "research(ETH): preserve Stage18 and Stage22 repaired rerun evidence"
+            git fetch origin research/eth-failed10-recovery-v4
+            git rebase origin/research/eth-failed10-recovery-v4
+            git push origin HEAD:research/eth-failed10-recovery-v4
+          fi
