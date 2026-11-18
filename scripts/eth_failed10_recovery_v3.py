@@ -117,7 +117,7 @@ def patched_source(name,orig):
         train=train.sort_values(
             ["positive_months_2025","losing_months_2025","return_2025_pct"],
             ascending=[False,True,False],kind="stable")
-    '''+anchor)
+'''+anchor)
         status='        selection_only_on="2025 monthly positive count, then losing count and 2025 return",'
         if status not in s:raise ValueError("Stage18 meta source changed")
         s=s.replace(status,status+'''
