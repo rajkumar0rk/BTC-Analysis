@@ -1,0 +1,106 @@
+{
+  "sources": {
+    "stage15": "GH Actions 44120459865 Stage15 original full ledger",
+    "stage17": "GH Actions 44128535269 Stage17 original full ledger",
+    "stage19": "GH Actions 44234824670 Stage19 original full ledger"
+  },
+  "preserved_candidates": [
+    "Stage14",
+    "Stage18",
+    "Stage20",
+    "Stage21"
+  ],
+  "months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10",
+    "2026-11"
+  ],
+  "stage18_definition": "75% quiet-volume pullback / 25% Daily20 Donchian",
+  "stage20_definition": "67.5% quiet-volume / 22.5% Daily20 Donchian / 10% 1H strong momentum breakout",
+  "cost_model": "Net_R after standard 0.05% taker on entry and exit, GST 18%, 5 points adverse slippage per side",
+  "total_closed_component_trades": 207,
+  "annual": [
+    {
+      "strategy": "stage18",
+      "year": "2025",
+      "observed_months": 12,
+      "profitable_months": 9,
+      "losing_months": 1,
+      "neutral_months": 2,
+      "total_trades": 56,
+      "winning_trades": 27,
+      "losing_trades": 29,
+      "flat_trades": 0,
+      "compounded_return_pct": 4.2616
+    },
+    {
+      "strategy": "stage20",
+      "year": "2025",
+      "observed_months": 12,
+      "profitable_months": 10,
+      "losing_months": 1,
+      "neutral_months": 1,
+      "total_trades": 122,
+      "winning_trades": 52,
+      "losing_trades": 70,
+      "flat_trades": 0,
+      "compounded_return_pct": 3.4131
+    },
+    {
+      "strategy": "stage18",
+      "year": "2026",
+      "observed_months": 11,
+      "profitable_months": 8,
+      "losing_months": 2,
+      "neutral_months": 1,
+      "total_trades": 32,
+      "winning_trades": 17,
+      "losing_trades": 15,
+      "flat_trades": 0,
+      "compounded_return_pct": 5.587
+    },
+    {
+      "strategy": "stage20",
+      "year": "2026",
+      "observed_months": 11,
+      "profitable_months": 8,
+      "losing_months": 2,
+      "neutral_months": 1,
+      "total_trades": 85,
+      "winning_trades": 35,
+      "losing_trades": 50,
+      "flat_trades": 0,
+      "compounded_return_pct": 4.2994
+    }
+  ],
+  "limitations": [
+    "Counted closed component trades, not one unified execution position; simultaneous overlapping sleeves can occur",
+    "Stage18 counts only range + daily swing component; Stage20 adds momentum component",
+    "Monthly percentage accounts for Daily swing mark-to-market open positions; its trade counts are based on EXIT month",
+    "Monthly net R sums across sleeves ignore allocation weights and must not be interpreted as portfolio return",
+    "No margin, contract minimums, funding, rebalancing, actual order book execution/impact",
+    "Max drawdown from monthly NAV is not true intraday drawdown",
+    "2026 November through 16th and 2026 Oct 31 source missing",
+    "Only modeled historical returns are available; no future month can be guaranteed positive"
+  ]
+}

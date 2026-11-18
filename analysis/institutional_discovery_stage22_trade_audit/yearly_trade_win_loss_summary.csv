@@ -1,0 +1,5 @@
+strategy,year,observed_months,profitable_months,losing_months,neutral_months,total_trades,winning_trades,losing_trades,flat_trades,compounded_return_pct
+stage18,2025,12,9,1,2,56,27,29,0,4.2616
+stage20,2025,12,10,1,1,122,52,70,0,3.4131
+stage18,2026,11,8,2,1,32,17,15,0,5.587
+stage20,2026,11,8,2,1,85,35,50,0,4.2994
