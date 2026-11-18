@@ -1,0 +1,11 @@
+# Pre-run novelty check — cross-asset 4H candle confirmation
+
+Decision: **PARTIAL OVERLAP — approved differential**.
+
+Core base signals are already researched and are NOT novel: `scripts/eth_native_crossfamily_v2.py` and `scripts/research_btc_eth_profit_factor_pairs.py` (paired BTC and ETH 205 configurations); main `scripts/research_monthly_10pct_stage19.py`, `scripts/research_monthly_regime_stage14.py`, and `scripts/research_trend_pullback_breakout_stage13.py` study related single-asset candle/regime filters. Stage 24/25 research also covers structure and trend. Do not claim new engulfing, failed-auction or trend-retest patterns.
+
+**Incremental hypothesis:** whether the *other asset's last completed 4H candle* direction agreeing with the local signal side can distinguish genuine broad-market moves from single-asset false signals. This paired BTC/ETH cross-market confirmation was not tested in the paired 205 model ledger, and changes both entry selection and trade frequency. This is NOT independent data or out-of-sample validation. The signal uses only completed 4H OHLC of the other asset at entry, not future prices; tested both assets with symmetric filters and fixed parameters.
+
+Predeclared families: 4H engulfing reversal, 15min trend retest, 1H failed auction. Stop=1.5/2.5 ATR, RR=2/3; identical per-asset rules. Filter modes: other asset last 4H candle direction agrees with entry, or agrees AND other asset 4H candle absolute body exceeds 0.35 ATR. Baseline already available separately. Enter at next available 1m open after signal close; 1m conservative stop-before-target, 0.5% account risk/stop, 3x notional cap, 0.05% fee/side +18% GST, BTC 5 price points slip/side, ETH 0.02%/side. Max holding 4H 3d, 1H 1d, 15min 12h. Full 22 IST months Jan2025–Oct2026, no Nov2026; first 5.5h Jan2025 IST missing. Original 22 UTC partitions verified by loader hashes; BTC Oct31 repair must pass manifest. No funding/verified spread/impact/margin/lot fills.
+
+2025-only ranking, report 2026 as historically exposed check (not pristine OOS). No per-asset optimized rule changes; selection of a candidate for review is based on 2025 only. Do not merge with main or alter other automation/branch. Result is exploratory.
