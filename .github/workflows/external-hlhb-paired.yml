@@ -1,0 +1,30 @@
+name: External HLHB 4h BTC ETH paired monthly replay
+on:
+  push:
+    branches: [feature/github-external-volpersistence-22m-20261118]
+    paths: [.github/workflows/external-hlhb-paired.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas
+      - name: Validate replay
+        run: python -m py_compile scripts/replay_freqtrade_hlhb_4h_paired.py
+      - name: Paired BTC ETH 22 month replay
+        run: python scripts/replay_freqtrade_hlhb_4h_paired.py
+      - name: Save monthly PF returns and trades
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: freqtrade-hlhb-4h-btc-eth-22-months
+          path: analysis/external_github_profit_hunt/freqtrade_hlhb_4h/*
+          retention-days: 30
+          if-no-files-found: warn
