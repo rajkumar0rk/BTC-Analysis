@@ -1,0 +1,32 @@
+{
+  "files": 22,
+  "one_minute_candles": 963360,
+  "five_minute_candles": 192672,
+  "fifteen_minute_candles": 64224,
+  "hourly_candles": 16056,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-10-31 23:59:00+00:00",
+  "zero_volume": 1887,
+  "entry_events": 4178,
+  "trade_simulations": 37602,
+  "entries_by_setup": {
+    "h1_trend_15m_reclaim": 164,
+    "impulse_fade_open": 459,
+    "impulse_trend_strict": 280,
+    "opening_break_strict": 173,
+    "opening_break_weak": 220,
+    "session_vwap_reclaim": 164,
+    "session_vwap_weak": 323,
+    "sweep_24bar_countertrend": 257,
+    "sweep_24bar_opening": 271,
+    "sweep_24bar_trend": 212,
+    "trend_12bar_break_strict": 243,
+    "trend_12bar_break_weak": 345,
+    "trend_24bar_break": 297,
+    "trend_pullback_ema20": 331,
+    "trend_pullback_weak": 439
+  },
+  "train_validation_positive_candidates": 0,
+  "eligible_entry_exit_combinations": 135,
+  "selection_note": "Ranking uses train and validation only; holdout not used for selection"
+}

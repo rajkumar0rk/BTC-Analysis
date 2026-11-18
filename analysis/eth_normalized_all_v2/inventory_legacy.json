@@ -1,0 +1,122 @@
+[
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_5m_15m/RESEARCH_REPORT.md",
+    "bytes": 9160
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_5m_15m/all_weekday_time_slots.csv",
+    "bytes": 1462569
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_5m_15m/new_candle_sequences.csv",
+    "bytes": 1841
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_5m_15m/quality.json",
+    "bytes": 340
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_5m_15m/session_clock_events.csv",
+    "bytes": 11746
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_5m_15m/session_event_summary.csv",
+    "bytes": 2183
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_5m_15m/session_event_trades.csv",
+    "bytes": 251666
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_exit_research/RESEARCH_REPORT.md",
+    "bytes": 10971
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_exit_research/entries.csv",
+    "bytes": 127737
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_exit_research/exit_comparison.csv",
+    "bytes": 11545
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_exit_research/quality.json",
+    "bytes": 304
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_exit_research/trades.csv",
+    "bytes": 2536041
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_1m_exit_research/training_selected_exits_holdout.csv",
+    "bytes": 2456
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_1_2025/V7_1_RESEARCH_REPORT.md",
+    "bytes": 2473
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_1_2025/V7_1_retest_exclusive_trades.csv",
+    "bytes": 5079
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_1_2025/V7_control_exclusive_trades.csv",
+    "bytes": 20555
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_1_2025/v7_1_event_ledger.csv",
+    "bytes": 63624
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_1_2025/v7_1_summary.json",
+    "bytes": 1366
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_2_2025/V7_2_RESEARCH_REPORT.md",
+    "bytes": 2796
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_2_2025/v7_2_signals.csv",
+    "bytes": 19075
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_2_2025/v7_2_summary.json",
+    "bytes": 2337
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v7_2_2025/v7_2_trades.csv",
+    "bytes": 46241
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v8_1_2025_exits/V8_1_RESEARCH_REPORT.md",
+    "bytes": 4237
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v8_1_2025_exits/v8_1_entry_signals.csv",
+    "bytes": 67011
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v8_1_2025_exits/v8_1_summary.json",
+    "bytes": 21787
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v8_1_2025_exits/v8_1_trade_ledger.csv",
+    "bytes": 1130832
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v8_2025_behavior/V8_RESEARCH_REPORT.md",
+    "bytes": 4500
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v8_2025_behavior/v8_confirmed_legs.csv",
+    "bytes": 292965
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v8_2025_behavior/v8_hourly_opportunities.csv",
+    "bytes": 2431290
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/v8_2025_behavior/v8_summary.json",
+    "bytes": 18314
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "source": "Delta Exchange India historical futures 1m, mark 1m, OI 5m, funding 1h",
+  "input_hourly_rows": 15875,
+  "directional_observations": 6635,
+  "replayed_trades": 9855,
+  "first_utc": "2025-01-08 12:00:00+00:00",
+  "last_utc": "2026-10-31 22:00:00+00:00",
+  "fixed_predeclared_rules": [
+    "expansion_follow",
+    "expansion_fade",
+    "strong_close_follow",
+    "strong_close_follow__oi_rising",
+    "strong_close_follow__oi_falling",
+    "weak_close_fade",
+    "accepted_12h_breakout",
+    "accepted_12h_breakout__oi_rising",
+    "accepted_12h_breakout__oi_falling",
+    "rejected_12h_sweep",
+    "rejected_12h_sweep__oi_rising",
+    "rejected_12h_sweep__oi_falling"
+  ],
+  "cost_model": {
+    "taker_per_side_with_gst": 0.00059,
+    "slippage_points_per_side": 5.0
+  },
+  "execution": "completed hourly signal; immediate at following hour open or first completed 5m move confirmed and minute 5 open; intraminute stop-first; one-hour timeout",
+  "important_caveats": [
+    "2026 July-Oct is previously seen, NOT a globally untouched holdout",
+    "L1 bid/ask historical spread and market impact unavailable; simulated fills only",
+    "OI is descriptive positioning proxy, not observed institutional trades",
+    "Funding for sub-hour holds not reconstructed; additional real cost possible",
+    "Multiple variants and repeated research create selection bias",
+    "BTC points are not account USD; sizes, collateral and liquidation excluded",
+    "Day bootstrap intervals unadjusted for multiple hypothesis tests",
+    "Overlapping strategy variants must NEVER be aggregated as independent returns"
+  ]
+}

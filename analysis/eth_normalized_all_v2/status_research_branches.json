@@ -1,0 +1,72 @@
+{
+  "group": "research_branches",
+  "source": {
+    "source": "https://api.india.delta.exchange/v2/history/candles",
+    "symbol": "ETHUSD",
+    "periods": [
+      "2025-01.csv.gz",
+      "2025-02.csv.gz",
+      "2025-03.csv.gz",
+      "2025-04.csv.gz",
+      "2025-05.csv.gz",
+      "2025-06.csv.gz",
+      "2025-07.csv.gz",
+      "2025-08.csv.gz",
+      "2025-09.csv.gz",
+      "2025-10.csv.gz",
+      "2025-11.csv.gz",
+      "2025-12.csv.gz",
+      "2026-01.csv.gz",
+      "2026-02.csv.gz",
+      "2026-03.csv.gz",
+      "2026-04.csv.gz",
+      "2026-05.csv.gz",
+      "2026-06.csv.gz",
+      "2026-07.csv.gz",
+      "2026-08.csv.gz",
+      "2026-09.csv.gz",
+      "2026-10.csv.gz"
+    ],
+    "total_utc_minutes": 963360,
+    "first_IST_month_unavailable_hours": 5.5,
+    "source_manifest_time": "2026-11-18T09:05:23.568502+00:00",
+    "normalization": {
+      "btc_open_reference": 93548.5,
+      "eth_open_reference": 3336.55,
+      "constant_index_scale": 28.03749381846518,
+      "eth_points_for_200_btc_index": 7.13330518394202,
+      "eth_slippage_for_5_btc_index": 0.1783326295985505,
+      "not_time_local": true
+    }
+  },
+  "runs": [
+    {
+      "script": "eth_transfer_stage24.py",
+      "source_sha256": "1a0af6b53133d1c36f5036e668a007787632ab2db6d16d5010ba6ec8515aa78c",
+      "port_sha256": "520f0d1c13d6d5db5ad952ca48be598d86b1af6e599d1e4346b848d90535b52e",
+      "modifications": "BTCUSD source to 2025-reference CONSTANT normalized ETH index, isolated reports. Strategy rules unchanged",
+      "costs_in_original_model": "unchanged; must inspect individual report",
+      "point_thresholds": "Original BTC index thresholds now ETH pts = BTC index pts / constant Jan2025 BTC/ETH price ratio",
+      "run_time_seconds": 4.06,
+      "status": "success",
+      "return_code": 0,
+      "stdout_tail": "STAGE24_RESULTS {\"account_models\": 1920, \"signals\": 22516, \"trading_replays\": 320, \"all_22_months_over_10\": 0, \"selected\": {\"pattern\": \"retest\", \"lookback\": 8, \"hour_align\": true, \"stop_atr\": 2.5, \"exit_policy\": \"fixed_2R\", \"max_hold_minutes\": 720, \"risk_pct\": 2.0, \"max_leverage\": 5.0, \"trades_total\": 158, \"wins\": 52, \"losses\": 106, \"2025_months_ge10\": 2, \"2026_months_ge10\": 0, \"2025_positive\": 7, \"2026_positive\": 1, \"worst_2025_pct\": -7.435776, \"worst_2026_pct\": -13.79457, \"net_2025_pct\": 4.7987, \"net_2026_pct\": -47.88243, \"max_trade_close_drawdown_pct\": 58.4334}}\nMONTHLY\nmonth_ist  return_pct  trades  wins  losses  flat\n  2025-01    0.153823       9     3       6     0\n  2025-02   -1.296369       6     2       4     0\n  2025-03    0.929977       5     2       3     0\n  2025-04   -1.771877       7     2       5     0\n  2025-05   10.732334       5     4       1     0\n  2025-06   -6.516613       8     3       5     0\n  2025-07   12.766788       9     6       3     0\n  2025-08    2.290221      12     4       8     0\n  2025-09    2.481107      15     6       9     0\n  2025-10    0.253710       8     4       4     0\n  2025-11   -5.835418      12     3       9     0\n  2025-12   -7.435776       7     2       5     0\n  2026-01   -9.503372      10     2       8     0\n  2026-02  -13.794570       8     1       7     0\n  2026-03   -4.423419       2     0       2     0\n  2026-04  -11.008401       5     0       5     0\n  2026-05  -10.697698       6     1       5     0\n  2026-06    6.586886       8     4       4     0\n  2026-07   -2.876274       4     1       3     0\n  2026-08   -8.955533       4     0       4     0\n  2026-09   -4.621803       2     0       2     0\n  2026-10   -2.158700       6     2       4     0\n",
+      "stderr_tail": "",
+      "output_dir_count_after": 1
+    },
+    {
+      "script": "eth_transfer_stage25.py",
+      "source_sha256": "605d27ee8250f71b32b477b5b3869121551e4f69b534f6f7ece156f4a210563f",
+      "port_sha256": "611656a41bd6ba9f88fb3696058c94b26746895c1b1a9ee8ffad8623a8a45cfd",
+      "modifications": "BTCUSD source to 2025-reference CONSTANT normalized ETH index, isolated reports. Strategy rules unchanged",
+      "costs_in_original_model": "unchanged; must inspect individual report",
+      "point_thresholds": "Original BTC index thresholds now ETH pts = BTC index pts / constant Jan2025 BTC/ETH price ratio",
+      "run_time_seconds": 3.33,
+      "status": "success",
+      "return_code": 0,
+      "stdout_tail": "STAGE24_RESULTS {\"account_models\": 2880, \"signals\": 8604, \"trading_replays\": 320, \"all_22_months_over_10\": 0, \"selected\": {\"pattern\": \"donchian_break\", \"lookback\": 12, \"hour_align\": false, \"stop_atr\": 1.5, \"exit_policy\": \"trail_2R\", \"max_hold_minutes\": 2880, \"risk_pct\": 2.0, \"max_leverage\": 3.0, \"trades_total\": 516, \"wins\": 187, \"losses\": 329, \"2025_months_ge10\": 5, \"2026_months_ge10\": 2, \"2025_positive\": 7, \"2026_positive\": 6, \"worst_2025_pct\": -23.895339, \"worst_2026_pct\": -23.747731, \"net_2025_pct\": 19.62604, \"net_2026_pct\": -13.5622, \"max_trade_close_drawdown_pct\": 58.8114}}\nMONTHLY\nmonth_ist  return_pct  trades  wins  losses  flat\n  2025-01   -3.008939      21     7      14     0\n  2025-02    2.266802      26    10      16     0\n  2025-03   13.294592      19     8      11     0\n  2025-04  -14.927886      30     8      22     0\n  2025-05   43.616381      20    12       8     0\n  2025-06   14.646778      27     9      18     0\n  2025-07  -23.895339      31     8      23     0\n  2025-08   12.862315      29    15      14     0\n  2025-09   -3.931814      23     7      16     0\n  2025-10   15.881882      28    13      15     0\n  2025-11  -22.556986      27     7      20     0\n  2025-12    2.626500      19     7      12     0\n  2026-01    2.704144      25     9      16     0\n  2026-02    1.186712      23     9      14     0\n  2026-03   -9.132055      20     6      14     0\n  2026-04    2.398389      19     9      10     0\n  2026-05  -23.747731      24     6      18     0\n  2026-06   -8.447534      23     5      18     0\n  2026-07    5.519634      21    10      11     0\n  2026-08   22.385406      16     6      10     0\n  2026-09   17.089007      22    10      12     0\n  2026-10  -15.318887      23     6      17     0\n",
+      "stderr_tail": "",
+      "output_dir_count_after": 2
+    }
+  ]
+}

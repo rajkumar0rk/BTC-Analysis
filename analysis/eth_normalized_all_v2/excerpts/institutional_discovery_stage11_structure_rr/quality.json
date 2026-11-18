@@ -1,0 +1,53 @@
+{
+  "source": "Delta Exchange India 1m ETHUSD futures",
+  "candles": 963360,
+  "timestamps_from_utc": "2025-01-01 00:00:00+00:00",
+  "timestamps_through_utc": "2026-10-31 23:59:00+00:00",
+  "missing_minutes": 0,
+  "patterns": 8,
+  "skipped_missing_or_incomplete": 3,
+  "raw_eligible": 32747,
+  "executed_independent_model_trades": 337904,
+  "total_summary_cells": 1536,
+  "tested_R": [
+    1.5,
+    2.0,
+    3.0,
+    4.0
+  ],
+  "tested_holding_windows": [
+    60,
+    240
+  ],
+  "risk_limits": {
+    "tight_100_700": [
+      100.0,
+      700.0
+    ],
+    "wide_200_1200": [
+      200.0,
+      1200.0
+    ]
+  },
+  "relative_volume_filters": {
+    "any_volume": 1.0,
+    "volume_ge_1p5x": 1.5
+  },
+  "positive_standard_cells": 0,
+  "stable_positive_models": 0,
+  "no_loss_standard_cells": 0,
+  "realistic_execution_assumptions": [
+    "5m bars fully closed then enter at following minute's OPEN",
+    "Risk is difference from entry OPEN to PRECONFIRMED market-structure stop",
+    "Stop-first when both touch same 1m bar, gaps worse-of-open-or-stop",
+    "Stop and TP frozen at entry: no dynamic lookahead or intrabar stop move",
+    "Risk band filters use only entry-known risk, relative volume references prior 24 bars",
+    "One open position across LONG+SHORT in each independent model",
+    "Trading costs 0.05% taker each side plus 18% GST and 5pt per-side slippage",
+    "Scalper offer only shown as hypothetical fee scenario if <=30m",
+    "Funding, order book, actual bid-ask spread, liquidation and margin excluded",
+    "Every 2026 segment has been researched before; no pristine forward sample",
+    "Multiple patterns/R ratios can appear promising by chance",
+    "Profit targets are a multiple of initial STRUCTURAL risk, not a fixed 200pts"
+  ]
+}

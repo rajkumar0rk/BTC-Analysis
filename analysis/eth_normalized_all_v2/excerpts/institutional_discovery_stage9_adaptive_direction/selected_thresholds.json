@@ -1,0 +1,183 @@
+[
+  {
+    "side": "LONG",
+    "selected_threshold": 0.25,
+    "selection_trades": 192,
+    "selection_net": -117.07,
+    "scored_grid": [
+      {
+        "threshold": 0.2,
+        "trades": 4569,
+        "mean_net_pts": -122.59,
+        "profit_factor": 0.27,
+        "wins": 1091,
+        "losses": 3478,
+        "win_pct": 23.88,
+        "sum_net_pts": -560122.57,
+        "whatif_avg_pts": -65.01
+      },
+      {
+        "threshold": 0.25,
+        "trades": 192,
+        "mean_net_pts": -117.07,
+        "profit_factor": 0.296,
+        "wins": 48,
+        "losses": 144,
+        "win_pct": 25.0,
+        "sum_net_pts": -22478.4,
+        "whatif_avg_pts": -59.9
+      },
+      {
+        "threshold": 0.3,
+        "trades": 1,
+        "mean_net_pts": -212.14,
+        "profit_factor": 0.0,
+        "wins": 0,
+        "losses": 1,
+        "win_pct": 0.0,
+        "sum_net_pts": -212.14,
+        "whatif_avg_pts": -161.1
+      },
+      {
+        "threshold": 0.35,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.4,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.45,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.5,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.6,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.7,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      }
+    ]
+  },
+  {
+    "side": "SHORT",
+    "selected_threshold": 0.3,
+    "selection_trades": 133,
+    "selection_net": -92.35,
+    "scored_grid": [
+      {
+        "threshold": 0.2,
+        "trades": 6973,
+        "mean_net_pts": -118.33,
+        "profit_factor": 0.287,
+        "wins": 1728,
+        "losses": 5245,
+        "win_pct": 24.78,
+        "sum_net_pts": -825113.22,
+        "whatif_avg_pts": -60.59
+      },
+      {
+        "threshold": 0.25,
+        "trades": 773,
+        "mean_net_pts": -102.29,
+        "profit_factor": 0.357,
+        "wins": 224,
+        "losses": 549,
+        "win_pct": 28.98,
+        "sum_net_pts": -79068.65,
+        "whatif_avg_pts": -44.87
+      },
+      {
+        "threshold": 0.3,
+        "trades": 133,
+        "mean_net_pts": -92.35,
+        "profit_factor": 0.396,
+        "wins": 41,
+        "losses": 92,
+        "win_pct": 30.83,
+        "sum_net_pts": -12282.42,
+        "whatif_avg_pts": -36.38
+      },
+      {
+        "threshold": 0.35,
+        "trades": 11,
+        "mean_net_pts": -102.0,
+        "profit_factor": 0.348,
+        "wins": 3,
+        "losses": 8,
+        "win_pct": 27.27,
+        "sum_net_pts": -1122.01,
+        "whatif_avg_pts": -49.8
+      },
+      {
+        "threshold": 0.4,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.45,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.5,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.6,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      },
+      {
+        "threshold": 0.7,
+        "trades": 0,
+        "mean_net_pts": null,
+        "profit_factor": null,
+        "wins": 0,
+        "losses": 0
+      }
+    ]
+  }
+]

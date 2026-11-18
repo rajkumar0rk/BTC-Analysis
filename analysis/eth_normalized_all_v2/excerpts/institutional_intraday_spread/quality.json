@@ -1,0 +1,131 @@
+{
+  "spot_data": [
+    {
+      "month": "2025-10",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2025-10.zip",
+      "zip_sha256": "a384d1bea37e4f59f7cae491a6f3f2dffe262259a4a0bc9324310a9aef16a843",
+      "source_rows": 44640,
+      "expected_rows": 44640,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2025-11",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2025-11.zip",
+      "zip_sha256": "30b80de8cbbd68edf2b2bf76154f60e6edb0f8365e08e6d5afc63657e26e0f7c",
+      "source_rows": 43200,
+      "expected_rows": 43200,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2025-12",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2025-12.zip",
+      "zip_sha256": "57b653e4ff3558fae8d2e6da616c40e6cfad4002f131584f82ae7a80bd228293",
+      "source_rows": 44640,
+      "expected_rows": 44640,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-01",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-01.zip",
+      "zip_sha256": "cadd060ab73bd03fee94708b78738144da76d007fc2170d8ad2cec678de7a654",
+      "source_rows": 44640,
+      "expected_rows": 44640,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-02",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-02.zip",
+      "zip_sha256": "1ddb64d08739a40b7f66a37bccf5ca5fec58339c7f01e83311086116f41b445f",
+      "source_rows": 40320,
+      "expected_rows": 40320,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-03",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-03.zip",
+      "zip_sha256": "5747c9f1f76be7afbf9513d50ea65ff6e979fa9684c75a775b6974e64c751844",
+      "source_rows": 44640,
+      "expected_rows": 44640,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-04",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-04.zip",
+      "zip_sha256": "8a2f0a2907764827ca3c52416bd9357c5d6213f3816fadbd0515bf504ea75ffd",
+      "source_rows": 43200,
+      "expected_rows": 43200,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-05",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-05.zip",
+      "zip_sha256": "bc0e625d18c0fa5378cecd0119aa20721b8830c24c3a55094f4c4c966ff8f710",
+      "source_rows": 44640,
+      "expected_rows": 44640,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-06",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-06.zip",
+      "zip_sha256": "770fdf44aac01dbe136e5b37a10501e57069af4048e76fbb3a3a2de2e9662934",
+      "source_rows": 43200,
+      "expected_rows": 43200,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-07",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-07.zip",
+      "zip_sha256": "1ad273218d6c33fd62515198276f00c0656ae002c0d1d9ab10cca0f5d0f7adc2",
+      "source_rows": 44640,
+      "expected_rows": 44640,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-08",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-08.zip",
+      "zip_sha256": "f2f2fe8da85467fb8ec8185e07f16f3af9f4ebcb266633ba494e76ac73c40c0c",
+      "source_rows": 44640,
+      "expected_rows": 44640,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    },
+    {
+      "month": "2026-09",
+      "url": "https://data.binance.vision/data/spot/monthly/klines/ETHUSDT/1m/ETHUSDT-1m-2026-09.zip",
+      "zip_sha256": "827b46043bdc877d542edf8ff178dc0411cfa166a56fa73f2f850ad06c951b50",
+      "source_rows": 43200,
+      "expected_rows": 43200,
+      "missing_minutes": 0,
+      "missing_examples_utc": []
+    }
+  ],
+  "rows": 525600,
+  "start_utc": "2025-10-01 00:00:00+00:00",
+  "end_utc": "2026-09-30 23:59:00+00:00",
+  "strategies": 36,
+  "scenario_rows": 96972,
+  "config_period_rows": 324,
+  "paired_missing_minutes": 0,
+  "no_interpolation": "True: missing source candles remain NaN; signals and complete possible hold windows crossing gaps are excluded.",
+  "fee_assumptions": {
+    "delta_taker_each_side_with_gst": 0.00059,
+    "spot_taker_each_side_assumed": 0.001,
+    "slippage_points_each_leg_each_side": 5,
+    "stress_slippage_points_each_leg_each_side": 15,
+    "stress_financing_annual": 0.05
+  },
+  "funding": "All candidate trades touching a potential scheduled settlement are excluded",
+  "non_executable": "Trade-price OHLC opens are not actual bid/ask quotes; historical L2, queue, liquidity, cross-venue capital constraints unavailable.",
+  "venue_risk": "ETHUSDT on Binance and ETHUSD on Delta India differ in quote asset, venue and collateral; true executable arbitrage not established.",
+  "research_warning": "Many correlated configurations, same historical archive, selection bias. Never aggregate variant returns as independent strategies."
+}

@@ -1,0 +1,59 @@
+{
+  "source": "2025 Delta India ETHUSD 1m OHLCV",
+  "initial_signals": 118,
+  "signal_events": {
+    "V7_control": {
+      "base_signal_count": 118,
+      "entered": 118,
+      "signals": 118,
+      "target_first": 35,
+      "success_pct": 29.66
+    },
+    "V7_1_retest": {
+      "base_signal_count": 118,
+      "entered": 21,
+      "missed_without_confirmation": 97,
+      "signals": 21,
+      "target_first": 7,
+      "success_pct": 33.33
+    }
+  },
+  "exclusive": {
+    "V7_control": {
+      "trades": 107,
+      "target_hits": 33,
+      "net_points": -14423.85,
+      "profitable_months": 4,
+      "monthly_net_points": {
+        "2025-03": 29.34,
+        "2025-04": -541.84,
+        "2025-05": 3568.22,
+        "2025-06": 1283.79,
+        "2025-07": -4337.38,
+        "2025-08": -8847.76,
+        "2025-09": -3067.78,
+        "2025-10": 7.79,
+        "2025-11": -1305.98,
+        "2025-12": -1212.27
+      }
+    },
+    "V7_1_retest": {
+      "trades": 21,
+      "target_hits": 7,
+      "net_points": -2004.29,
+      "profitable_months": 3,
+      "monthly_net_points": {
+        "2025-03": 357.14,
+        "2025-04": 753.34,
+        "2025-05": 2729.56,
+        "2025-06": -272.19,
+        "2025-07": -3046.36,
+        "2025-08": -1279.03,
+        "2025-09": -646.46,
+        "2025-10": 0.0,
+        "2025-11": -600.29,
+        "2025-12": 0.0
+      }
+    }
+  }
+}

@@ -1,0 +1,218 @@
+[
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/RESEARCH_REPORT.md",
+    "bytes": 36349
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/all_conditional_findings.csv",
+    "bytes": 41246
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/all_eligible_features.csv",
+    "bytes": 25655
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/day_block_intervals.csv",
+    "bytes": 6445
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/directional_trade_ledger.csv",
+    "bytes": 2402799
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/directional_trade_results.csv",
+    "bytes": 9836
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/quality.json",
+    "bytes": 1198
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/ranked_early_periods.csv",
+    "bytes": 15777
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage2/six_hourly_feature_samples.csv",
+    "bytes": 479864
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage3/RESEARCH_REPORT.md",
+    "bytes": 28596
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage3/directional_observations.csv",
+    "bytes": 618261
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage3/directional_summary.csv",
+    "bytes": 2508
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage3/oi_incremental_comparison.csv",
+    "bytes": 1519
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage3/quality.json",
+    "bytes": 1620
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage3/trade_ledger.csv",
+    "bytes": 1175586
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage3/trade_summary.csv",
+    "bytes": 7744
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage4/RESEARCH_REPORT.md",
+    "bytes": 30385
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage4/event_observations.csv",
+    "bytes": 312813
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage4/event_summary.csv",
+    "bytes": 854
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage4/oi_conditional_summary.csv",
+    "bytes": 2240
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage4/quality.json",
+    "bytes": 2334
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage4/trade_ledger.csv",
+    "bytes": 2351480
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage4/trade_summary.csv",
+    "bytes": 11729
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage5/RESEARCH_REPORT.md",
+    "bytes": 10874
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage5/quality.json",
+    "bytes": 2114
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage5/trade_ledger.csv",
+    "bytes": 2064934
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage5/trade_summary.csv",
+    "bytes": 4878
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage9_adaptive_direction/RESEARCH_REPORT.md",
+    "bytes": 12033
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage9_adaptive_direction/feature_importance.csv",
+    "bytes": 1709
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage9_adaptive_direction/model_skill.csv",
+    "bytes": 579
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage9_adaptive_direction/quality.json",
+    "bytes": 1926
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage9_adaptive_direction/selected_thresholds.json",
+    "bytes": 3960
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage9_adaptive_direction/strategy_performance.csv",
+    "bytes": 3805
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_intraday_spread/RESEARCH_REPORT.md",
+    "bytes": 128153
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_intraday_spread/all_configurations.csv",
+    "bytes": 45742
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_intraday_spread/quality.json",
+    "bytes": 5367
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_intraday_spread/signal_audit.csv",
+    "bytes": 1988
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_intraday_spread/trade_ledger.csv",
+    "bytes": 22333777
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/RESEARCH_REPORT.md",
+    "bytes": 8010
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/all_exit_trades.csv",
+    "bytes": 37549810
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/all_results.csv",
+    "bytes": 39607
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/candidate_signals.csv",
+    "bytes": 6316850
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/full_train_validation_rank.csv",
+    "bytes": 20865
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/hourly_feature_observations.csv",
+    "bytes": 2695731
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/preselected_holdout_results.csv",
+    "bytes": 3046
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/quality.json",
+    "bytes": 835
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/session_results.csv",
+    "bytes": 109583
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_regime_research/setup_signal_counts.csv",
+    "bytes": 3700
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/selective_big_move_research/RESEARCH_REPORT.md",
+    "bytes": 26932
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/selective_big_move_research/all_summary.csv",
+    "bytes": 44787
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/selective_big_move_research/all_trade_replays.csv",
+    "bytes": 5057626
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/selective_big_move_research/candidate_entries.csv",
+    "bytes": 461941
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/selective_big_move_research/quality.json",
+    "bytes": 1008
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/selective_big_move_research/ranked_candidates.csv",
+    "bytes": 19151
+  }
+]

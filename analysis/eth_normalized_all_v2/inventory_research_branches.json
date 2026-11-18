@@ -1,0 +1,50 @@
+[
+  {
+    "path": "analysis/eth_normalized_execution_results/independent_stage25_hourly_trend/RESEARCH_REPORT.md",
+    "bytes": 8402
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/independent_stage25_hourly_trend/all_account_models.csv",
+    "bytes": 410838
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/independent_stage25_hourly_trend/quality.json",
+    "bytes": 2573
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/independent_stage25_hourly_trend/selected_monthly_2025_2026.csv",
+    "bytes": 663
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/independent_stage25_hourly_trend/selected_trade_ledger.csv",
+    "bytes": 88815
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/independent_stage25_hourly_trend/top_2025_only.csv",
+    "bytes": 4784
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage24_structure_monthly10/RESEARCH_REPORT.md",
+    "bytes": 8318
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage24_structure_monthly10/all_account_models.csv",
+    "bytes": 273895
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage24_structure_monthly10/quality.json",
+    "bytes": 2560
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage24_structure_monthly10/selected_monthly_2025_2026.csv",
+    "bytes": 614
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage24_structure_monthly10/selected_trade_ledger.csv",
+    "bytes": 27430
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage24_structure_monthly10/top_2025_only.csv",
+    "bytes": 4620
+  }
+]

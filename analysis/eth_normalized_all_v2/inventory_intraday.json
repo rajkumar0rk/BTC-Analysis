@@ -1,0 +1,138 @@
+[
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_points_200_500/README.md",
+    "bytes": 12082
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_points_200_500/candidate_entries.csv",
+    "bytes": 140606
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_points_200_500/daily_opportunity_summary.csv",
+    "bytes": 389
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_points_200_500/individual_trade_replay.csv",
+    "bytes": 1224662
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/delta_points_200_500/target_stop_results.csv",
+    "bytes": 6299
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage8_dynamic_patterns/RESEARCH_REPORT.md",
+    "bytes": 31385
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage8_dynamic_patterns/chronological_stability.csv",
+    "bytes": 25400
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage8_dynamic_patterns/events.csv.gz",
+    "bytes": 832583
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage8_dynamic_patterns/pattern_probabilities.csv",
+    "bytes": 20893
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage8_dynamic_patterns/quality.json",
+    "bytes": 1292
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage8_dynamic_patterns/strategy_results.csv",
+    "bytes": 244892
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/institutional_discovery_stage8_dynamic_patterns/trade_ledger.csv.gz",
+    "bytes": 3832746
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/one_daily_trade_200_points/RESEARCH_REPORT.md",
+    "bytes": 11066
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/one_daily_trade_200_points/all_daily_rule_exit_summary.csv",
+    "bytes": 545630
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/one_daily_trade_200_points/daily_trade_ledger_selected.csv",
+    "bytes": 1377527
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/one_daily_trade_200_points/one_entry_per_day_rules.csv",
+    "bytes": 2833569
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/one_daily_trade_200_points/preselected_daily_candidates.csv",
+    "bytes": 5919
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/one_daily_trade_200_points/quality.json",
+    "bytes": 903
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/one_daily_trade_200_points/ranked_daily_rules_preholdout.csv",
+    "bytes": 414076
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/price_action_time_day/RESEARCH_REPORT.md",
+    "bytes": 15855
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/price_action_time_day/all_exit_trades.csv",
+    "bytes": 16062305
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/price_action_time_day/preselected_candidates.csv",
+    "bytes": 5321
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/price_action_time_day/price_action_signals.csv",
+    "bytes": 2071712
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/price_action_time_day/quality.json",
+    "bytes": 619
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/price_action_time_day/ranked_rules_preholdout.csv",
+    "bytes": 450760
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/price_action_time_day/time_day_breakdown.csv",
+    "bytes": 1136909
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/time_day_strategy_research/RESEARCH_REPORT.md",
+    "bytes": 9927
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/time_day_strategy_research/all_time_day_rules.csv",
+    "bytes": 23233303
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/time_day_strategy_research/eligible_ranked_by_preholdout.csv",
+    "bytes": 23233303
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/time_day_strategy_research/hourly_weekday_baselines.csv",
+    "bytes": 185476
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/time_day_strategy_research/preselected_candidates.csv",
+    "bytes": 6283
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/time_day_strategy_research/quality.json",
+    "bytes": 609
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/time_day_strategy_research/selected_rule_stop_target_summary.csv",
+    "bytes": 22406
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/time_day_strategy_research/selected_rule_stop_trades.csv",
+    "bytes": 1376896
+  }
+]

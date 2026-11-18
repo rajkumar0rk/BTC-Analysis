@@ -1,0 +1,138 @@
+[
+  {
+    "path": "analysis/eth_normalized_execution_results/big_trend_stage1/RESEARCH_REPORT.md",
+    "bytes": 321608
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/big_trend_stage1/all_scenarios.csv",
+    "bytes": 94971
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/big_trend_stage1/quality.json",
+    "bytes": 499
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/big_trend_stage1/signal_exclusions.csv",
+    "bytes": 20117
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/big_trend_stage1/trade_ledger.csv.gz",
+    "bytes": 451912
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_fixed3r/RESEARCH_REPORT.md",
+    "bytes": 207723
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_fixed3r/all_combinations.csv",
+    "bytes": 81609
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_fixed3r/quality.json",
+    "bytes": 363
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_fixed3r/trade_ledger.csv.gz",
+    "bytes": 13329722
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_long/RESEARCH_REPORT.md",
+    "bytes": 108813
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_long/all_combinations.csv",
+    "bytes": 39171
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_long/quality.json",
+    "bytes": 363
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_long/trade_ledger.csv.gz",
+    "bytes": 6959179
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_long_fixed2r/RESEARCH_REPORT.md",
+    "bytes": 207722
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_long_fixed2r/all_combinations.csv",
+    "bytes": 81313
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_long_fixed2r/quality.json",
+    "bytes": 363
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_long_fixed2r/trade_ledger.csv.gz",
+    "bytes": 14562208
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_short_fixed2r/RESEARCH_REPORT.md",
+    "bytes": 208550
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_short_fixed2r/all_combinations.csv",
+    "bytes": 81779
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_short_fixed2r/quality.json",
+    "bytes": 364
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_short_fixed2r/trade_ledger.csv.gz",
+    "bytes": 14876562
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_short_fixed3r/RESEARCH_REPORT.md",
+    "bytes": 208551
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_short_fixed3r/all_combinations.csv",
+    "bytes": 81990
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_short_fixed3r/quality.json",
+    "bytes": 364
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_swing_range_short_fixed3r/trade_ledger.csv.gz",
+    "bytes": 13580275
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_uptrend_short_fixed3r/RESEARCH_REPORT.md",
+    "bytes": 207747
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_uptrend_short_fixed3r/all_combinations.csv",
+    "bytes": 81706
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_uptrend_short_fixed3r/quality.json",
+    "bytes": 377
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/mtf_uptrend_short_fixed3r/trade_ledger.csv.gz",
+    "bytes": 14288471
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/previous_day_range_swing/RESEARCH_REPORT.md",
+    "bytes": 850086
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/previous_day_range_swing/all_scenarios.csv",
+    "bytes": 339083
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/previous_day_range_swing/quality.json",
+    "bytes": 438
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/previous_day_range_swing/signal_exclusions.csv",
+    "bytes": 65222
+  },
+  {
+    "path": "analysis/eth_normalized_execution_results/previous_day_range_swing/trade_ledger.csv.gz",
+    "bytes": 3149157
+  }
+]

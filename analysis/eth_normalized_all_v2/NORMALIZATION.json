@@ -1,0 +1,23 @@
+{
+  "source": "Original Delta Exchange India ETHUSD 1m; constant scalar index for original BTC-point models",
+  "method": "Fixed price ratio anchored on FIRST available Jan 1, 2025 minute",
+  "reference_timestamp_utc": "2025-01-01T00:00:00Z",
+  "btc_first_open": 93548.5,
+  "eth_first_open": 3336.55,
+  "synthetic_multiplier_btc_index_per_eth_price_point": 28.03749381846518,
+  "equivalent_eth_price_points_per_200_btc_index_points": 7.13330518394202,
+  "equivalent_eth_price_points_per_100_btc_index_points": 3.56665259197101,
+  "equivalent_eth_slippage_price_points_per_5_index_points": 0.1783326295985505,
+  "synthetic_equivalent_not_current_ratio": true,
+  "btc_oct31_source_NOT_REQUIRED": "Only Jan 1 2025 BTC reference candle is used; no BTC Oct data used",
+  "cautions": [
+    "ETHUSD candles have been linearly scaled into a BTC-index price unit; results in price-point terms are NOT native ETH units",
+    "A fixed ratio from January 2025 does not represent current BTC/ETH ratio on every future trade; this is an anchor-based sensitivity",
+    "The scale DOES NOT change native ETH volume, OI, funding, order book, contract precision or margin",
+    "Original BTC point targets/slippage are now native ETH 200/scale and 5/scale respectively",
+    "Model results depend on original strategy code; no funding, bid/ask or liquidation model automatically added",
+    "A 2025-01 first 00:00 UTC source means initial 5.5 hours of IST Jan 2025 unavailable",
+    "2026-11 excluded due unfinished calendar month",
+    "Code consuming multiple feeds must ensure units and timestamp conventions are consistent"
+  ]
+}

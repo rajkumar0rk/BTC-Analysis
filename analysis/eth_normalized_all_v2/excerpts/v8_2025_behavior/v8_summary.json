@@ -1,0 +1,627 @@
+{
+  "period": "2025-03-01 to 2025-12-31, no 2026 candles",
+  "source": "Delta India ETHUSD 1min futures OHLCV",
+  "leg_confirmation_reversal_points": 1000.0,
+  "risk_barrier_points": 1000.0,
+  "opportunity_rows": 14594,
+  "trend_leg_counts": {
+    "2000": 886,
+    "5000": 86
+  },
+  "cohort_signal_quality": {
+    "Mar-Aug_2025": {
+      "all_days": {
+        "baseline_all_hours": {
+          "opportunities": 8832,
+          "hit2000_24h": 2354,
+          "rate2000_24h_pct": 26.65,
+          "hit2000_48h": 2721,
+          "rate2000_48h_pct": 30.81,
+          "hit5000_24h": 675,
+          "rate5000_24h_pct": 7.64,
+          "hit5000_48h": 1002,
+          "rate5000_48h_pct": 11.35
+        },
+        "momentum6": {
+          "opportunities": 3245,
+          "hit2000_24h": 1000,
+          "rate2000_24h_pct": 30.82,
+          "hit2000_48h": 1124,
+          "rate2000_48h_pct": 34.64,
+          "hit5000_24h": 311,
+          "rate5000_24h_pct": 9.58,
+          "hit5000_48h": 456,
+          "rate5000_48h_pct": 14.05
+        },
+        "day4h_alignment": {
+          "opportunities": 2000,
+          "hit2000_24h": 632,
+          "rate2000_24h_pct": 31.6,
+          "hit2000_48h": 680,
+          "rate2000_48h_pct": 34.0,
+          "hit5000_24h": 228,
+          "rate5000_24h_pct": 11.4,
+          "hit5000_48h": 349,
+          "rate5000_48h_pct": 17.45
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 302,
+          "hit2000_24h": 85,
+          "rate2000_24h_pct": 28.15,
+          "hit2000_48h": 94,
+          "rate2000_48h_pct": 31.13,
+          "hit5000_24h": 33,
+          "rate5000_24h_pct": 10.93,
+          "hit5000_48h": 49,
+          "rate5000_48h_pct": 16.23
+        },
+        "range_volume_impulse": {
+          "opportunities": 283,
+          "hit2000_24h": 82,
+          "rate2000_24h_pct": 28.98,
+          "hit2000_48h": 93,
+          "rate2000_48h_pct": 32.86,
+          "hit5000_24h": 27,
+          "rate5000_24h_pct": 9.54,
+          "hit5000_48h": 41,
+          "rate5000_48h_pct": 14.49
+        },
+        "trend_and_breakout": {
+          "opportunities": 93,
+          "hit2000_24h": 27,
+          "rate2000_24h_pct": 29.03,
+          "hit2000_48h": 28,
+          "rate2000_48h_pct": 30.11,
+          "hit5000_24h": 14,
+          "rate5000_24h_pct": 15.05,
+          "hit5000_48h": 20,
+          "rate5000_48h_pct": 21.51
+        },
+        "trend_and_pullback": {
+          "opportunities": 115,
+          "hit2000_24h": 32,
+          "rate2000_24h_pct": 27.83,
+          "hit2000_48h": 36,
+          "rate2000_48h_pct": 31.3,
+          "hit5000_24h": 11,
+          "rate5000_24h_pct": 9.57,
+          "hit5000_48h": 18,
+          "rate5000_48h_pct": 15.65
+        },
+        "trend_and_impulse": {
+          "opportunities": 68,
+          "hit2000_24h": 19,
+          "rate2000_24h_pct": 27.94,
+          "hit2000_48h": 21,
+          "rate2000_48h_pct": 30.88,
+          "hit5000_24h": 10,
+          "rate5000_24h_pct": 14.71,
+          "hit5000_48h": 16,
+          "rate5000_48h_pct": 23.53
+        }
+      },
+      "weekdays_IST": {
+        "baseline_all_hours": {
+          "opportunities": 6250,
+          "hit2000_24h": 1744,
+          "rate2000_24h_pct": 27.9,
+          "hit2000_48h": 1947,
+          "rate2000_48h_pct": 31.15,
+          "hit5000_24h": 540,
+          "rate5000_24h_pct": 8.64,
+          "hit5000_48h": 735,
+          "rate5000_48h_pct": 11.76
+        },
+        "momentum6": {
+          "opportunities": 2402,
+          "hit2000_24h": 771,
+          "rate2000_24h_pct": 32.1,
+          "hit2000_48h": 851,
+          "rate2000_48h_pct": 35.43,
+          "hit5000_24h": 258,
+          "rate5000_24h_pct": 10.74,
+          "hit5000_48h": 343,
+          "rate5000_48h_pct": 14.28
+        },
+        "day4h_alignment": {
+          "opportunities": 1516,
+          "hit2000_24h": 432,
+          "rate2000_24h_pct": 28.5,
+          "hit2000_48h": 442,
+          "rate2000_48h_pct": 29.16,
+          "hit5000_24h": 164,
+          "rate5000_24h_pct": 10.82,
+          "hit5000_48h": 212,
+          "rate5000_48h_pct": 13.98
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 232,
+          "hit2000_24h": 72,
+          "rate2000_24h_pct": 31.03,
+          "hit2000_48h": 79,
+          "rate2000_48h_pct": 34.05,
+          "hit5000_24h": 28,
+          "rate5000_24h_pct": 12.07,
+          "hit5000_48h": 42,
+          "rate5000_48h_pct": 18.1
+        },
+        "range_volume_impulse": {
+          "opportunities": 246,
+          "hit2000_24h": 74,
+          "rate2000_24h_pct": 30.08,
+          "hit2000_48h": 85,
+          "rate2000_48h_pct": 34.55,
+          "hit5000_24h": 23,
+          "rate5000_24h_pct": 9.35,
+          "hit5000_48h": 36,
+          "rate5000_48h_pct": 14.63
+        },
+        "trend_and_breakout": {
+          "opportunities": 72,
+          "hit2000_24h": 21,
+          "rate2000_24h_pct": 29.17,
+          "hit2000_48h": 22,
+          "rate2000_48h_pct": 30.56,
+          "hit5000_24h": 11,
+          "rate5000_24h_pct": 15.28,
+          "hit5000_48h": 16,
+          "rate5000_48h_pct": 22.22
+        },
+        "trend_and_pullback": {
+          "opportunities": 85,
+          "hit2000_24h": 20,
+          "rate2000_24h_pct": 23.53,
+          "hit2000_48h": 20,
+          "rate2000_48h_pct": 23.53,
+          "hit5000_24h": 6,
+          "rate5000_24h_pct": 7.06,
+          "hit5000_48h": 8,
+          "rate5000_48h_pct": 9.41
+        },
+        "trend_and_impulse": {
+          "opportunities": 56,
+          "hit2000_24h": 16,
+          "rate2000_24h_pct": 28.57,
+          "hit2000_48h": 18,
+          "rate2000_48h_pct": 32.14,
+          "hit5000_24h": 8,
+          "rate5000_24h_pct": 14.29,
+          "hit5000_48h": 13,
+          "rate5000_48h_pct": 23.21
+        }
+      }
+    },
+    "Sep-Dec_2025": {
+      "all_days": {
+        "baseline_all_hours": {
+          "opportunities": 5762,
+          "hit2000_24h": 1660,
+          "rate2000_24h_pct": 28.81,
+          "hit2000_48h": 1816,
+          "rate2000_48h_pct": 31.52,
+          "hit5000_24h": 553,
+          "rate5000_24h_pct": 9.6,
+          "hit5000_48h": 812,
+          "rate5000_48h_pct": 14.09
+        },
+        "momentum6": {
+          "opportunities": 2220,
+          "hit2000_24h": 624,
+          "rate2000_24h_pct": 28.11,
+          "hit2000_48h": 664,
+          "rate2000_48h_pct": 29.91,
+          "hit5000_24h": 201,
+          "rate5000_24h_pct": 9.05,
+          "hit5000_48h": 295,
+          "rate5000_48h_pct": 13.29
+        },
+        "day4h_alignment": {
+          "opportunities": 1145,
+          "hit2000_24h": 312,
+          "rate2000_24h_pct": 27.25,
+          "hit2000_48h": 318,
+          "rate2000_48h_pct": 27.77,
+          "hit5000_24h": 126,
+          "rate5000_24h_pct": 11.0,
+          "hit5000_48h": 156,
+          "rate5000_48h_pct": 13.62
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 197,
+          "hit2000_24h": 64,
+          "rate2000_24h_pct": 32.49,
+          "hit2000_48h": 66,
+          "rate2000_48h_pct": 33.5,
+          "hit5000_24h": 26,
+          "rate5000_24h_pct": 13.2,
+          "hit5000_48h": 33,
+          "rate5000_48h_pct": 16.75
+        },
+        "range_volume_impulse": {
+          "opportunities": 240,
+          "hit2000_24h": 81,
+          "rate2000_24h_pct": 33.75,
+          "hit2000_48h": 82,
+          "rate2000_48h_pct": 34.17,
+          "hit5000_24h": 27,
+          "rate5000_24h_pct": 11.25,
+          "hit5000_48h": 37,
+          "rate5000_48h_pct": 15.42
+        },
+        "trend_and_breakout": {
+          "opportunities": 49,
+          "hit2000_24h": 21,
+          "rate2000_24h_pct": 42.86,
+          "hit2000_48h": 21,
+          "rate2000_48h_pct": 42.86,
+          "hit5000_24h": 7,
+          "rate5000_24h_pct": 14.29,
+          "hit5000_48h": 8,
+          "rate5000_48h_pct": 16.33
+        },
+        "trend_and_pullback": {
+          "opportunities": 61,
+          "hit2000_24h": 12,
+          "rate2000_24h_pct": 19.67,
+          "hit2000_48h": 12,
+          "rate2000_48h_pct": 19.67,
+          "hit5000_24h": 3,
+          "rate5000_24h_pct": 4.92,
+          "hit5000_48h": 4,
+          "rate5000_48h_pct": 6.56
+        },
+        "trend_and_impulse": {
+          "opportunities": 51,
+          "hit2000_24h": 25,
+          "rate2000_24h_pct": 49.02,
+          "hit2000_48h": 25,
+          "rate2000_48h_pct": 49.02,
+          "hit5000_24h": 9,
+          "rate5000_24h_pct": 17.65,
+          "hit5000_48h": 9,
+          "rate5000_48h_pct": 17.65
+        }
+      },
+      "weekdays_IST": {
+        "baseline_all_hours": {
+          "opportunities": 4130,
+          "hit2000_24h": 1312,
+          "rate2000_24h_pct": 31.77,
+          "hit2000_48h": 1343,
+          "rate2000_48h_pct": 32.52,
+          "hit5000_24h": 461,
+          "rate5000_24h_pct": 11.16,
+          "hit5000_48h": 613,
+          "rate5000_48h_pct": 14.84
+        },
+        "momentum6": {
+          "opportunities": 1684,
+          "hit2000_24h": 501,
+          "rate2000_24h_pct": 29.75,
+          "hit2000_48h": 513,
+          "rate2000_48h_pct": 30.46,
+          "hit5000_24h": 161,
+          "rate5000_24h_pct": 9.56,
+          "hit5000_48h": 222,
+          "rate5000_48h_pct": 13.18
+        },
+        "day4h_alignment": {
+          "opportunities": 824,
+          "hit2000_24h": 271,
+          "rate2000_24h_pct": 32.89,
+          "hit2000_48h": 277,
+          "rate2000_48h_pct": 33.62,
+          "hit5000_24h": 118,
+          "rate5000_24h_pct": 14.32,
+          "hit5000_48h": 136,
+          "rate5000_48h_pct": 16.5
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 159,
+          "hit2000_24h": 57,
+          "rate2000_24h_pct": 35.85,
+          "hit2000_48h": 58,
+          "rate2000_48h_pct": 36.48,
+          "hit5000_24h": 21,
+          "rate5000_24h_pct": 13.21,
+          "hit5000_48h": 27,
+          "rate5000_48h_pct": 16.98
+        },
+        "range_volume_impulse": {
+          "opportunities": 204,
+          "hit2000_24h": 69,
+          "rate2000_24h_pct": 33.82,
+          "hit2000_48h": 70,
+          "rate2000_48h_pct": 34.31,
+          "hit5000_24h": 24,
+          "rate5000_24h_pct": 11.76,
+          "hit5000_48h": 31,
+          "rate5000_48h_pct": 15.2
+        },
+        "trend_and_breakout": {
+          "opportunities": 43,
+          "hit2000_24h": 19,
+          "rate2000_24h_pct": 44.19,
+          "hit2000_48h": 19,
+          "rate2000_48h_pct": 44.19,
+          "hit5000_24h": 7,
+          "rate5000_24h_pct": 16.28,
+          "hit5000_48h": 8,
+          "rate5000_48h_pct": 18.6
+        },
+        "trend_and_pullback": {
+          "opportunities": 37,
+          "hit2000_24h": 10,
+          "rate2000_24h_pct": 27.03,
+          "hit2000_48h": 10,
+          "rate2000_48h_pct": 27.03,
+          "hit5000_24h": 3,
+          "rate5000_24h_pct": 8.11,
+          "hit5000_48h": 4,
+          "rate5000_48h_pct": 10.81
+        },
+        "trend_and_impulse": {
+          "opportunities": 46,
+          "hit2000_24h": 23,
+          "rate2000_24h_pct": 50.0,
+          "hit2000_48h": 23,
+          "rate2000_48h_pct": 50.0,
+          "hit5000_24h": 9,
+          "rate5000_24h_pct": 19.57,
+          "hit5000_48h": 9,
+          "rate5000_48h_pct": 19.57
+        }
+      }
+    },
+    "All_Mar_Dec": {
+      "all_days": {
+        "baseline_all_hours": {
+          "opportunities": 14594,
+          "hit2000_24h": 4014,
+          "rate2000_24h_pct": 27.5,
+          "hit2000_48h": 4537,
+          "rate2000_48h_pct": 31.09,
+          "hit5000_24h": 1228,
+          "rate5000_24h_pct": 8.41,
+          "hit5000_48h": 1814,
+          "rate5000_48h_pct": 12.43
+        },
+        "momentum6": {
+          "opportunities": 5465,
+          "hit2000_24h": 1624,
+          "rate2000_24h_pct": 29.72,
+          "hit2000_48h": 1788,
+          "rate2000_48h_pct": 32.72,
+          "hit5000_24h": 512,
+          "rate5000_24h_pct": 9.37,
+          "hit5000_48h": 751,
+          "rate5000_48h_pct": 13.74
+        },
+        "day4h_alignment": {
+          "opportunities": 3145,
+          "hit2000_24h": 944,
+          "rate2000_24h_pct": 30.02,
+          "hit2000_48h": 998,
+          "rate2000_48h_pct": 31.73,
+          "hit5000_24h": 354,
+          "rate5000_24h_pct": 11.26,
+          "hit5000_48h": 505,
+          "rate5000_48h_pct": 16.06
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 499,
+          "hit2000_24h": 149,
+          "rate2000_24h_pct": 29.86,
+          "hit2000_48h": 160,
+          "rate2000_48h_pct": 32.06,
+          "hit5000_24h": 59,
+          "rate5000_24h_pct": 11.82,
+          "hit5000_48h": 82,
+          "rate5000_48h_pct": 16.43
+        },
+        "range_volume_impulse": {
+          "opportunities": 523,
+          "hit2000_24h": 163,
+          "rate2000_24h_pct": 31.17,
+          "hit2000_48h": 175,
+          "rate2000_48h_pct": 33.46,
+          "hit5000_24h": 54,
+          "rate5000_24h_pct": 10.33,
+          "hit5000_48h": 78,
+          "rate5000_48h_pct": 14.91
+        },
+        "trend_and_breakout": {
+          "opportunities": 142,
+          "hit2000_24h": 48,
+          "rate2000_24h_pct": 33.8,
+          "hit2000_48h": 49,
+          "rate2000_48h_pct": 34.51,
+          "hit5000_24h": 21,
+          "rate5000_24h_pct": 14.79,
+          "hit5000_48h": 28,
+          "rate5000_48h_pct": 19.72
+        },
+        "trend_and_pullback": {
+          "opportunities": 176,
+          "hit2000_24h": 44,
+          "rate2000_24h_pct": 25.0,
+          "hit2000_48h": 48,
+          "rate2000_48h_pct": 27.27,
+          "hit5000_24h": 14,
+          "rate5000_24h_pct": 7.95,
+          "hit5000_48h": 22,
+          "rate5000_48h_pct": 12.5
+        },
+        "trend_and_impulse": {
+          "opportunities": 119,
+          "hit2000_24h": 44,
+          "rate2000_24h_pct": 36.97,
+          "hit2000_48h": 46,
+          "rate2000_48h_pct": 38.66,
+          "hit5000_24h": 19,
+          "rate5000_24h_pct": 15.97,
+          "hit5000_48h": 25,
+          "rate5000_48h_pct": 21.01
+        }
+      },
+      "weekdays_IST": {
+        "baseline_all_hours": {
+          "opportunities": 10380,
+          "hit2000_24h": 3056,
+          "rate2000_24h_pct": 29.44,
+          "hit2000_48h": 3290,
+          "rate2000_48h_pct": 31.7,
+          "hit5000_24h": 1001,
+          "rate5000_24h_pct": 9.64,
+          "hit5000_48h": 1348,
+          "rate5000_48h_pct": 12.99
+        },
+        "momentum6": {
+          "opportunities": 4086,
+          "hit2000_24h": 1272,
+          "rate2000_24h_pct": 31.13,
+          "hit2000_48h": 1364,
+          "rate2000_48h_pct": 33.38,
+          "hit5000_24h": 419,
+          "rate5000_24h_pct": 10.25,
+          "hit5000_48h": 565,
+          "rate5000_48h_pct": 13.83
+        },
+        "day4h_alignment": {
+          "opportunities": 2340,
+          "hit2000_24h": 703,
+          "rate2000_24h_pct": 30.04,
+          "hit2000_48h": 719,
+          "rate2000_48h_pct": 30.73,
+          "hit5000_24h": 282,
+          "rate5000_24h_pct": 12.05,
+          "hit5000_48h": 348,
+          "rate5000_48h_pct": 14.87
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 391,
+          "hit2000_24h": 129,
+          "rate2000_24h_pct": 32.99,
+          "hit2000_48h": 137,
+          "rate2000_48h_pct": 35.04,
+          "hit5000_24h": 49,
+          "rate5000_24h_pct": 12.53,
+          "hit5000_48h": 69,
+          "rate5000_48h_pct": 17.65
+        },
+        "range_volume_impulse": {
+          "opportunities": 450,
+          "hit2000_24h": 143,
+          "rate2000_24h_pct": 31.78,
+          "hit2000_48h": 155,
+          "rate2000_48h_pct": 34.44,
+          "hit5000_24h": 47,
+          "rate5000_24h_pct": 10.44,
+          "hit5000_48h": 67,
+          "rate5000_48h_pct": 14.89
+        },
+        "trend_and_breakout": {
+          "opportunities": 115,
+          "hit2000_24h": 40,
+          "rate2000_24h_pct": 34.78,
+          "hit2000_48h": 41,
+          "rate2000_48h_pct": 35.65,
+          "hit5000_24h": 18,
+          "rate5000_24h_pct": 15.65,
+          "hit5000_48h": 24,
+          "rate5000_48h_pct": 20.87
+        },
+        "trend_and_pullback": {
+          "opportunities": 122,
+          "hit2000_24h": 30,
+          "rate2000_24h_pct": 24.59,
+          "hit2000_48h": 30,
+          "rate2000_48h_pct": 24.59,
+          "hit5000_24h": 9,
+          "rate5000_24h_pct": 7.38,
+          "hit5000_48h": 12,
+          "rate5000_48h_pct": 9.84
+        },
+        "trend_and_impulse": {
+          "opportunities": 102,
+          "hit2000_24h": 39,
+          "rate2000_24h_pct": 38.24,
+          "hit2000_48h": 41,
+          "rate2000_48h_pct": 40.2,
+          "hit5000_24h": 17,
+          "rate5000_24h_pct": 16.67,
+          "hit5000_48h": 22,
+          "rate5000_48h_pct": 21.57
+        }
+      }
+    }
+  },
+  "early_leg_coverage": {
+    "2000": {
+      "legs": 886,
+      "conditions": {
+        "momentum6": {
+          "detected_early": 212,
+          "pct": 23.93
+        },
+        "day4h_alignment": {
+          "detected_early": 136,
+          "pct": 15.35
+        },
+        "accepted_12h_breakout": {
+          "detected_early": 14,
+          "pct": 1.58
+        },
+        "range_volume_impulse": {
+          "detected_early": 44,
+          "pct": 4.97
+        },
+        "trend_and_breakout": {
+          "detected_early": 5,
+          "pct": 0.56
+        },
+        "trend_and_pullback": {
+          "detected_early": 10,
+          "pct": 1.13
+        },
+        "trend_and_impulse": {
+          "detected_early": 6,
+          "pct": 0.68
+        }
+      }
+    },
+    "5000": {
+      "legs": 86,
+      "conditions": {
+        "momentum6": {
+          "detected_early": 28,
+          "pct": 32.56
+        },
+        "day4h_alignment": {
+          "detected_early": 12,
+          "pct": 13.95
+        },
+        "accepted_12h_breakout": {
+          "detected_early": 3,
+          "pct": 3.49
+        },
+        "range_volume_impulse": {
+          "detected_early": 6,
+          "pct": 6.98
+        },
+        "trend_and_breakout": {
+          "detected_early": 1,
+          "pct": 1.16
+        },
+        "trend_and_pullback": {
+          "detected_early": 1,
+          "pct": 1.16
+        },
+        "trend_and_impulse": {
+          "detected_early": 1,
+          "pct": 1.16
+        }
+      }
+    }
+  }
+}

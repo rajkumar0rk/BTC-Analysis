@@ -1,0 +1,20 @@
+{
+  "source": "Delta Exchange India ETHUSD perpetual native 1m",
+  "months": 22,
+  "minute_candles": 963360,
+  "utc_start": "2025-01-01 00:00:00+00:00",
+  "utc_end": "2026-10-31 23:59:00+00:00",
+  "zero_volume_candles": 1887,
+  "evaluated_event_outcomes": 5366724,
+  "periods": {
+    "train": "2025",
+    "validation": "Jan-Jun 2026",
+    "holdout": "Jul-Oct 17 2026"
+  },
+  "eligible_rules": 80640,
+  "positive_both_train_validation": 2486,
+  "strong_train_validation": 0,
+  "final_candidates": 20,
+  "tested_unique_rules": 80640,
+  "selection": "Rank strictly on 2025 and Jan-Jun 2026. Holdout not used."
+}
