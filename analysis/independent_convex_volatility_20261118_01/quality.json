@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "symbol": "BTCUSD",
+      "rows": 987840,
+      "missing_minutes": 0,
+      "funding_rows": 16464,
+      "long_signals": 172,
+      "short_signals": 168
+    },
+    {
+      "symbol": "ETHUSD",
+      "rows": 987840,
+      "missing_minutes": 0,
+      "funding_rows": 16464,
+      "long_signals": 139,
+      "short_signals": 135
+    }
+  ],
+  "settings": {
+    "risk_per_trade": 0.005,
+    "fee_per_fill": 0.00059,
+    "slippage_per_fill": 0.0002,
+    "funding_proxy": "previous hour Delta FUNDING, assumed 0.01% debit if missing",
+    "start": "2025-01-01",
+    "end_exclusive": "2026-11-18",
+    "warning": "2025 is research exposed; 2026 is NOT an untouched holdout; margin/liquidation not simulated; signal 4h EMA uses last completed 4h close"
+  }
+}
