@@ -1,0 +1,47 @@
+name: Independent BTC ETH asymmetric Quattro breakout backtest
+on:
+  push:
+    branches:
+      - research/asymmetric-quattro-independent-20261118
+    paths:
+      - scripts/research_asymmetric_quattro_independent.py
+      - .github/workflows/research-asymmetric-quattro-independent.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-quattro-asymmetric-20261118
+  cancel-in-progress: false
+jobs:
+  independent_backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Run independent BTC and ETH 1 minute historical backtests
+        run: python -u scripts/research_asymmetric_quattro_independent.py
+      - name: Preserve trade-by-trade research evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: independent-quattro-btc-eth-20261118
+          path: analysis/asymmetric_quattro_independent_20261118/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit compact evidence to this ISOLATED branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/asymmetric_quattro_independent_20261118/summary.csv
+          git add analysis/asymmetric_quattro_independent_20261118/monthly_ist.csv
+          git add analysis/asymmetric_quattro_independent_20261118/quality.json
+          git add analysis/asymmetric_quattro_independent_20261118/RESEARCH_REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save independent Quattro BTC and ETH backtest metrics"
+            git push origin HEAD:research/asymmetric-quattro-independent-20261118
+          fi
