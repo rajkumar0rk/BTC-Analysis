@@ -2,7 +2,7 @@ name: Independent two-leg BTC ETH residual monthly PF audit
 on:
   push:
     branches: [research/independent-pairs-residual-20261118-v1]
-    paths: [.github/workflows/independent-pairs-residual-v1.yml]
+    paths: [.github/workflows/independent-pairs-residual-v1.yml, scripts/research_independent_pairs_residual_v1.py]
   workflow_dispatch:
 permissions:
   contents: write
