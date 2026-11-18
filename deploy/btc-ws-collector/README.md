@@ -29,7 +29,8 @@ The commands assume your checkout is at `/opt/BTC-Analysis`. If you cloned into 
 ```bash
 sudo mkdir -p /opt
 sudo mv ~/BTC-Analysis /opt/BTC-Analysis
-sudo useradd --system --home /var/lib/btc-market-data --shell /usr/sbin/nologin btcdata || true
+sudo groupadd --system btcdata || true
+sudo useradd --system --gid btcdata --home /var/lib/btc-market-data --shell /usr/sbin/nologin btcdata || true
 sudo mkdir -p /var/lib/btc-market-data
 sudo chown -R btcdata:btcdata /var/lib/btc-market-data
 sudo cp /opt/BTC-Analysis/deploy/btc-ws-collector/btc-websocket.service /etc/systemd/system/
