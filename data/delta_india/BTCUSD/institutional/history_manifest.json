@@ -2,9 +2,9 @@
   "source": "Delta Exchange India public REST v2/history/candles",
   "base_url": "https://api.india.delta.exchange",
   "symbol": "BTCUSD",
-  "generated_utc": "2026-10-18T16:19:53.095981Z",
+  "generated_utc": "2026-11-18T09:27:10.782581Z",
   "requested_start_utc": "2025-01-01T00:00:00Z",
-  "requested_end_exclusive_utc": "2026-10-18T00:00:00Z",
+  "requested_end_exclusive_utc": "2026-11-18T00:00:00Z",
   "real_orderbook_history_available": false,
   "real_trade_tape_history_available": false,
   "liquidation_history_available": false,
@@ -13,14 +13,14 @@
       "native_source_symbol": "MARK:BTCUSD",
       "resolution": "1m",
       "path_prefix": "data/delta_india/BTCUSD/institutional/history/mark_1m",
-      "api_requests": 0,
-      "rows_fetched_this_run": 0,
-      "rows_saved": 943200,
-      "expected_dense_intervals": 943200,
+      "api_requests": 33,
+      "rows_fetched_this_run": 45640,
+      "rows_saved": 987840,
+      "expected_dense_intervals": 987840,
       "coverage_pct": 100.0,
       "missing_dense_intervals": 0,
       "earliest_utc": "2025-01-01T00:00:00Z",
-      "latest_utc": "2026-10-17T23:59:00Z",
+      "latest_utc": "2026-11-17T23:59:00Z",
       "partitions": [
         {
           "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2025-01.csv.gz",
@@ -171,10 +171,17 @@
         },
         {
           "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-10.csv.gz",
-          "rows": 24480,
+          "rows": 44640,
           "first_utc": "2026-10-01T00:00:00Z",
-          "last_utc": "2026-10-17T23:59:00Z",
-          "compressed_bytes": 615666
+          "last_utc": "2026-10-31T23:59:00Z",
+          "compressed_bytes": 1126993
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-11.csv.gz",
+          "rows": 24480,
+          "first_utc": "2026-11-01T00:00:00Z",
+          "last_utc": "2026-11-17T23:59:00Z",
+          "compressed_bytes": 627733
         }
       ],
       "note": "Any gaps remain gaps: no fabricated rows or interpolation."
@@ -183,14 +190,14 @@
       "native_source_symbol": "OI:BTCUSD",
       "resolution": "5m",
       "path_prefix": "data/delta_india/BTCUSD/institutional/history/open_interest_5m",
-      "api_requests": 0,
-      "rows_fetched_this_run": 0,
-      "rows_saved": 188640,
-      "expected_dense_intervals": 188640,
+      "api_requests": 8,
+      "rows_fetched_this_run": 9968,
+      "rows_saved": 197568,
+      "expected_dense_intervals": 197568,
       "coverage_pct": 100.0,
       "missing_dense_intervals": 0,
       "earliest_utc": "2025-01-01T00:00:00Z",
-      "latest_utc": "2026-10-17T23:55:00Z",
+      "latest_utc": "2026-11-17T23:55:00Z",
       "partitions": [
         {
           "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2025-01.csv.gz",
@@ -341,10 +348,17 @@
         },
         {
           "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-10.csv.gz",
-          "rows": 4896,
+          "rows": 8928,
           "first_utc": "2026-10-01T00:00:00Z",
-          "last_utc": "2026-10-17T23:55:00Z",
-          "compressed_bytes": 75439
+          "last_utc": "2026-10-31T23:55:00Z",
+          "compressed_bytes": 138328
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/open_interest_5m/2026-11.csv.gz",
+          "rows": 4896,
+          "first_utc": "2026-11-01T00:00:00Z",
+          "last_utc": "2026-11-17T23:55:00Z",
+          "compressed_bytes": 77263
         }
       ],
       "note": "Any gaps remain gaps: no fabricated rows or interpolation."
@@ -353,14 +367,14 @@
       "native_source_symbol": "FUNDING:BTCUSD",
       "resolution": "1h",
       "path_prefix": "data/delta_india/BTCUSD/institutional/history/funding_1h",
-      "api_requests": 0,
-      "rows_fetched_this_run": 0,
-      "rows_saved": 15720,
-      "expected_dense_intervals": 15720,
+      "api_requests": 1,
+      "rows_fetched_this_run": 1064,
+      "rows_saved": 16464,
+      "expected_dense_intervals": 16464,
       "coverage_pct": 100.0,
       "missing_dense_intervals": 0,
       "earliest_utc": "2025-01-01T00:00:00Z",
-      "latest_utc": "2026-10-17T23:00:00Z",
+      "latest_utc": "2026-11-17T23:00:00Z",
       "partitions": [
         {
           "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2025-01.csv.gz",
@@ -511,10 +525,17 @@
         },
         {
           "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-10.csv.gz",
-          "rows": 408,
+          "rows": 744,
           "first_utc": "2026-10-01T00:00:00Z",
-          "last_utc": "2026-10-17T23:00:00Z",
-          "compressed_bytes": 2051
+          "last_utc": "2026-10-31T23:00:00Z",
+          "compressed_bytes": 3585
+        },
+        {
+          "partition": "data/delta_india/BTCUSD/institutional/history/funding_1h/2026-11.csv.gz",
+          "rows": 408,
+          "first_utc": "2026-11-01T00:00:00Z",
+          "last_utc": "2026-11-17T23:00:00Z",
+          "compressed_bytes": 1900
         }
       ],
       "note": "Sparse funding observations are not forward-filled. Empty intervals do NOT mean zero funding."
