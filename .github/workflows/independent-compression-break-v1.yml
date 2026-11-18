@@ -36,5 +36,7 @@ jobs:
           git add analysis/independent_compression_break_v1/
           if ! git diff --cached --quiet; then
             git commit -m 'research: archive independent paired compression breakout monthly ledgers'
+            git fetch origin research/independent-btc-eth-compression-break-v1
+            git rebase origin/research/independent-btc-eth-compression-break-v1
             git push origin HEAD:research/independent-btc-eth-compression-break-v1
           fi
