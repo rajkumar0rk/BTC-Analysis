@@ -1,0 +1,78 @@
+name: Research BTC Stage22 audited monthly trade win loss counts
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_trade_counts_stage22.py
+      - .github/workflows/research-trade-counts-stage22.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: btc-stage22-trade-audit
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis dependencies
+        run: python -m pip install pandas numpy tabulate
+      - name: Fetch Stage15 original trade ledger
+        uses: actions/download-artifact@v4
+        with:
+          name: btc-stage15-july-protection-trade-ledger
+          run-id: 44120459865
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: original_stage15
+      - name: Fetch Stage17 original trade ledger
+        uses: actions/download-artifact@v4
+        with:
+          name: btc-stage17-swing-breakout-ledger
+          run-id: 44128535269
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: original_stage17
+      - name: Fetch Stage19 original trade ledger
+        uses: actions/download-artifact@v4
+        with:
+          name: btc-stage19-hourly-pattern-ledger
+          run-id: 44234824670
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: original_stage19
+      - name: Audit exact monthly trades winners losers and net after costs
+        run: |
+          python scripts/research_trade_counts_stage22.py \
+            --stage15 original_stage15/variant_trade_ledger.csv.gz \
+            --stage17 original_stage17/trade_ledger.csv.gz \
+            --stage19 original_stage19/trade_ledger.csv.gz
+      - name: Archive detailed closed trades
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-stage22-audited-closed-trades
+          path: analysis/institutional_discovery_stage22_trade_audit/closed_trade_details.csv.gz
+          retention-days: 30
+          if-no-files-found: error
+      - name: Persist monthly audits
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage22_trade_audit/monthly_trade_win_loss_audit.csv
+          git add analysis/institutional_discovery_stage22_trade_audit/yearly_trade_win_loss_summary.csv
+          git add analysis/institutional_discovery_stage22_trade_audit/quality.json
+          git add analysis/institutional_discovery_stage22_trade_audit/RESEARCH_REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save Stage22 monthly win loss audit of BTC portfolios"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
