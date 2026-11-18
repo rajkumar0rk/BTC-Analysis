@@ -1,0 +1,33 @@
+name: Verify genuine Delta October 31 BTCUSD 1m backfill
+on:
+  push:
+    branches: [research/oct31-raw-repair]
+    paths:
+      - scripts/repair_oct31_original_data.py
+      - .github/workflows/recover-oct31-btc-raw.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/oct31-raw-repair
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch ONLY missing Oct 31 and verify all original October minute timestamps
+        run: python scripts/repair_oct31_original_data.py
+      - name: Commit authenticated, complete raw archive only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/delta_india/BTCUSD/1m/2026-10.csv.gz data/delta_india/BTCUSD/1m/manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data: validate and restore original 2026-10-31 BTCUSD 1m bars"
+            git push origin HEAD:research/oct31-raw-repair
+          fi
