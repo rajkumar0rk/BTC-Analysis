@@ -36,12 +36,19 @@ jobs:
           python research/cryptoquantix_independent/run_all.py --self-test
           python research/cryptoquantix_independent/run_macrocore.py --self-test
           python research/cryptoquantix_independent/test_smoke.py
-      - name: Read historical Delta BTCUSD, repair only gaps, evaluate all available sleeves
+      - name: Three-sleeve proxy-flow replay (Delta prices; Binance Vision flow if REST blocked)
         run: |
           python research/cryptoquantix_independent/run_all.py \
             --data-root "$GITHUB_WORKSPACE" \
-            --output-dir "$RUNNER_TEMP/cryptoquantix-results" \
+            --output-dir "$RUNNER_TEMP/cryptoquantix-results/proxy_flow" \
             --flow-mode binance-proxy \
+            --capital 10000 --fee 0.0005 --slippage 0.0002 --gst 0.18
+      - name: Explicit no-flow-filter research ablation (NOT original TrendBreakdown)
+        run: |
+          python research/cryptoquantix_independent/run_all.py \
+            --data-root "$GITHUB_WORKSPACE" \
+            --output-dir "$RUNNER_TEMP/cryptoquantix-results/no_flow_gate_ablation" \
+            --flow-mode no-flow-filter \
             --capital 10000 --fee 0.0005 --slippage 0.0002 --gst 0.18
       - name: Upload independent reports (never commit results to source)
         if: always()

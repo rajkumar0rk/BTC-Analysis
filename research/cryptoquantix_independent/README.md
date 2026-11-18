@@ -5,7 +5,7 @@
 This is an **independent implementation** of the published [CryptoQuantix](https://github.com/CryptoQuantix/CryptoQuantix) rules, not the original author’s backtest running unchanged. Its three sleeves are:
 
 - **MacroCore:** Daily close above SMA200 -> buy next daily open, 5×ATR20 daily-close Chandelier exit next open, 25% catastrophe stop and 30% annual-volatility exposure with 25% step sizing.
-- **TrendBreakdown:** Long on 168h high breakout in daily uptrend; short on 48h low breakdown in daily downtrend, 48h SMA gate, 2×ATR14 stop. Short 2R TP/24h max hold, long no TP/168h max hold. **Needs taker buy ratio**, not present in the Delta OHLCV archive. `--flow-mode binance-proxy` uses Binance BTCUSDT Futures hourly aggressor-volume ratios, so results **are not exact Delta rule parity**. For genuine Delta data supply `--flow-mode strict --flow-csv file.csv` containing UTC `time,buy_ratio`. With no CSV, the sleeve is disabled rather than pretending to have the missing data. `--flow-mode no-flow-filter` removes the condition and is an explicitly different strategy.
+- **TrendBreakdown:** Long on 168h high breakout in daily uptrend; short on 48h low breakdown in daily downtrend, 48h SMA gate, 2×ATR14 stop. Short 2R TP/24h max hold, long no TP/168h max hold. **Needs taker buy ratio**, not present in the Delta OHLCV archive. `--flow-mode binance-proxy` uses Binance BTCUSDT Futures hourly aggressor-volume ratios (Futures REST first, archived Binance Vision files if REST returns HTTP 451), so results **are not exact Delta rule parity**. For genuine Delta data supply `--flow-mode strict --flow-csv file.csv` containing UTC `time,buy_ratio`. With no CSV, the sleeve is disabled rather than pretending to have the missing data. `--flow-mode no-flow-filter` removes the condition and is an explicitly different strategy.
 - **FundingSqueeze:** Short in macro bear when the daily 200SMA is falling relative to 30 days prior, 1h close below SMA48, and the last completed Delta funding-rate observation is at least 0.01% around an assumed 8h funding event; 2×ATR14 SL/2R TP/24h max hold. Funding is an **hourly chart rate observation, not an actual funding payment ledger**. This is a research proxy and needs live parity tests.
 
 ## Data access, gaps and 2024 warm-up
@@ -42,7 +42,7 @@ python research/cryptoquantix_independent/run_all.py --data-root . \
   --output-dir /tmp/cryptoquantix-existing-data-only --flow-mode strict --no-api
 ```
 
-The isolated branch-only `.github/workflows/cryptoquantix-independent.yml` performs the first run when code is pushed to **its own branch**, and uploads `monthly_results.csv`, `daily_equity.csv`, `closed_trades.csv`, `fills.csv`, `archive_manifest_verified.csv`, `summary.json`. Existing workflows are not modified and nothing is pushed to `main`.
+The isolated branch-only `.github/workflows/cryptoquantix-independent.yml` produces separate `proxy_flow/` and `no_flow_gate_ablation/` reports; only the first uses a cross-exchange flow proxy. It performs its run when code is pushed to **its own branch**, and uploads `monthly_results.csv`, `daily_equity.csv`, `closed_trades.csv`, `fills.csv`, `archive_manifest_verified.csv`, `summary.json`. Existing workflows are not modified and nothing is pushed to `main`.
 
 **Benchmark:** January 2025–October 2026, exactly 22 months. Compare monthly return and loss severity, win/loss counts, maximum daily marked-to-market drawdown, cost breakdown. **Do not accept a high total profit with -15% months as a match for the goal.**
 

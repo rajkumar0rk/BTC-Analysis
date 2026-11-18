@@ -1,7 +1,7 @@
 """Standalone synthetic-only QA. No historical return claims are made here."""
 import pandas as pd
 import numpy as np
-from run_all import Book, repair_minute_in_memory, make_hourly, daily_with_warmup, self_test
+from run_all import Book, repair_minute_in_memory, make_hourly, daily_with_warmup, self_test, history_delta
 
 
 def run():
@@ -23,6 +23,16 @@ def run():
     b.close('t',101,now+pd.Timedelta(minutes=31),'time')
     assert b.trades[0]['funding_proxy_usd']>0
     assert not b.trades[0]['scalper_fee_waiver']
+    # The chart for FUNDING:BTCUSD is a signed rate series, not a positive price.
+    class FakeResponse:
+        def raise_for_status(self): return None
+        def json(self):
+            return {'success':True,'result':[{'time':1735689600,'open':-.01,'high':-.005,'low':-.02,'close':-.015,'volume':None}]}
+    class FakeSession:
+        def get(self,*args,**kwargs): return FakeResponse()
+    f=history_delta('FUNDING:BTCUSD','1h',pd.Timestamp('2025-01-01',tz='UTC'),
+       pd.Timestamp('2025-01-01 01:00',tz='UTC'),3600,session=FakeSession())
+    assert f.close.iloc[0]==-.015, 'Negative funding must remain valid'
     print('PASS: synthetic accounting, resampling, warmup veto, tax, funding proxy')
 
 

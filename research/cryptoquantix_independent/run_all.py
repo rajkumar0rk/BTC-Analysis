@@ -7,7 +7,7 @@ FundingSqueeze: uses indicative Delta funding OHLC observation, NOT settled cash
 No changes to BTC-Analysis files. Never infer missing market data.
 """
 from __future__ import annotations
-import argparse, json, csv, math, time, hashlib, sys
+import argparse, json, csv, math, time, hashlib, sys, io, zipfile
 from pathlib import Path
 from datetime import datetime, timezone
 import pandas as pd
@@ -49,8 +49,11 @@ def history_delta(symbol, resolution, start, stop, chunk_seconds, session=None):
     for col in ['open','high','low','close','volume']:
         if col not in df: df[col]=np.nan
         df[col]=pd.to_numeric(df[col],errors='coerce')
-    if df[['open','high','low','close']].isna().any().any() or (df.low<=0).any():
-        raise ValueError(f'Nonfinite or invalid Delta candles: {symbol} {resolution}')
+    if df[['open','high','low','close']].isna().any().any():
+        raise ValueError(f'Nonfinite Delta data: {symbol} {resolution}')
+    # FUNDING:BTCUSD is a rate series. Negative funding is legitimate!
+    if not symbol.startswith('FUNDING:') and (df.low<=0).any():
+        raise ValueError(f'Invalid nonpositive price: {symbol} {resolution}')
     return df
 
 
@@ -155,18 +158,50 @@ def load_flow(root,hours,mode,flow_path=None):
     if mode!='binance-proxy':raise ValueError(f'Unknown flow mode {mode}')
     session=requests.Session();all_bars=[]
     st=int(hours.min().timestamp()*1000);stop=int((hours.max()+pd.Timedelta(hours=1)).timestamp()*1000)
+    api_error=None
     for lo in range(st,stop,1250*3600000):
         hi=min(stop-1,lo+1250*3600000-1)
         try:
             resp=session.get('https://fapi.binance.com/fapi/v1/klines',params={'symbol':'BTCUSDT','interval':'1h','startTime':lo,'endTime':hi,'limit':1500},timeout=45)
             resp.raise_for_status();all_bars.extend(resp.json())
         except Exception as exc:
-            print(f'WARNING Binance cross-venue proxy unavailable, leaving TB disabled: {exc}',file=sys.stderr)
-            return pd.Series(np.nan,index=hours),{'mode':'binance-proxy','available':0,'error':str(exc)}
+            api_error=str(exc);break
         time.sleep(.1)
-    vals={pd.Timestamp(int(v[0]),unit='ms',tz='UTC'):float(v[9])/float(v[5]) if float(v[5])>0 else np.nan for v in all_bars}
+    if api_error:
+        # Binance Futures REST returns HTTP 451 to some GitHub-hosted runners.
+        # Public archive files are still accessible from Binance Vision CDN.
+        all_bars=[]
+        vision_error=None
+        for month in pd.period_range('2025-01','2026-10',freq='M'):
+            key=str(month)
+            url=f'https://data.binance.vision/data/futures/um/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-{key}.zip'
+            try:
+                rr=session.get(url,timeout=65)
+                rr.raise_for_status()
+                with zipfile.ZipFile(io.BytesIO(rr.content)) as zf:
+                    names=[name for name in zf.namelist() if name.endswith('.csv')]
+                    if not names:raise ValueError('Binance Vision archive contains no CSV')
+                    with zf.open(names[0]) as f:
+                        for row in csv.reader(io.TextIOWrapper(f,encoding='utf-8')):
+                            if not row or not row[0].isdigit():continue
+                            all_bars.append(row)
+            except Exception as exc:
+                vision_error=f'{key}: {exc}'
+                break
+        if vision_error:
+            print(f'WARNING Binance API {api_error}; Binance Vision {vision_error}; TrendBreakdown flow unavailable',file=sys.stderr)
+            return pd.Series(np.nan,index=hours),{'mode':'binance-proxy','available':0,
+                'api_error':api_error,'vision_error':vision_error}
+    def stamp_to_utc(v):
+        x=int(v)
+        return pd.Timestamp(x,unit='us' if x>10**14 else 'ms',tz='UTC')
+    vals={stamp_to_utc(v[0]):float(v[9])/float(v[5]) if float(v[5])>0 else np.nan for v in all_bars}
     s=pd.Series(vals).reindex(hours)
-    return s,{'mode':'BINANCE_BTCUSDT_CROSS_VENUE_PROXY_NOT_DELTA','available':int(s.notna().sum()),'note':'Market taker direction is from another instrument and venue; this does NOT reproduce Delta buy_ratio'}
+    coverage=s.notna().groupby(s.index.strftime('%Y-%m')).sum().astype(int).to_dict()
+    return s,{'mode':'BINANCE_BTCUSDT_CROSS_VENUE_PROXY_NOT_DELTA','available':int(s.notna().sum()),
+              'monthly_available':coverage,
+              'source':'Binance Futures REST' if not api_error else 'Binance Vision monthly archive',
+              'note':'Aggressor direction is from another instrument and venue; NOT exact Delta trade flow'}
 
 
 def make_hourly(minute,flow):
@@ -185,7 +220,7 @@ class Book:
         self.cash=float(capital);self.fee=fee;self.slip=slip;self.gst=gst
         self.contract=contract;self.scalp=scalp;self.gross_cap=cap
         self.positions={};self.fills=[];self.trades=[];self.daily=[]
-        self.costs={'fee':0.,'gst':0.,'slippage':0.,'funding_proxy':0.};self.missing_funding=0
+        self.costs={'fee':0.,'gst':0.,'slippage':0.,'funding_proxy':0.};self.missing_funding=0;self.missing_funding_times=[]
     def equity(self,price):
         return self.cash+sum(p['side']*p['qty']*(price-p['entry_exec']) for p in self.positions.values())
     def cap_qty(self,price,qty):
@@ -254,7 +289,8 @@ class Book:
     def fund(self,rate,price,t):
         # Only an INDICATIVE cashflow scenario, never a confirmed funding ledger.
         if rate is None or not math.isfinite(rate):
-            if self.positions:self.missing_funding+=1
+            if self.positions:
+                self.missing_funding+=1;self.missing_funding_times.append(t)
             return
         for p in self.positions.values():
             amount=p['side']*p['qty']*price*rate
@@ -369,8 +405,12 @@ def monthly_report(book,source_audit,minute,warm_info,flow_info,funding_info,cap
         # Distinguish an estimated PnL with missing cost data from a complete estimate.
         fr_expected=pd.date_range(st,en,freq='8h',inclusive='left')
         f_in_month=funding_series.index.intersection(fr_expected-pd.Timedelta(hours=1)) if funding_series is not None else []
-        funding_complete=bool(len(f_in_month)==len(fr_expected))
-        flow_complete=bool(flow_info['mode']=='ABLATION_WITHOUT_FLOW_GATE' or flow_info.get('available',0)>=len(pd.date_range(START,END,freq='h',inclusive='left')))
+        funding_complete=not any(st<=tt<en for tt in book.missing_funding_times)
+        flow_complete=bool(flow_info['mode']=='ABLATION_WITHOUT_FLOW_GATE' or (
+            flow_info['mode'] in ('strict','genuine_user_supplied_flow') and flow_info.get('available',0)>0) or
+            flow_info.get('monthly_available',{}).get(s,0)==int((en-st)/pd.Timedelta(hours=1)))
+        # A missing flow gate disables TB entirely in strict mode and must not be
+        # mislabeled as a valid reproduction of the combined three-sleeve system.
         status=('MODELLED' if complete and warmup and funding_complete and flow_complete else
             ('MISSING_CANDLES' if not complete else 'UNWARMED_SMA200' if not warmup else
              'FUNDING_RATE_GAP' if not funding_complete else 'FLOW_MISSING'))
