@@ -5,7 +5,7 @@ BTC's direction for 10-30m; reciprocal variant trades BTC on ETH's move.
 No overlap, at most one entry per UTC day. Intraminute stop-first, next-minute
 open entry. Standard taker 0.05%*1.18 GST on each side, 2bp slippage each
 side; 1bp debit per funding timestamp, no credit. 0.5% risk, 2x max leverage.
-No maker fills assumed. Funding cashflow proxy, not exchange ledger.
+No maker fills assumed. Explicitly compare both leader directions. Funding cashflow proxy, not exchange ledger.
 """
 import itertools,json
 from pathlib import Path
