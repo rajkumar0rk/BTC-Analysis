@@ -138,7 +138,7 @@ def call_script(file,workdir,timeout_s):
     executable=workdir/file
     executable.write_text(rewritten)
     # Explicit checks: ensure every script's results go to the ETH-specific root.
-    if "analysis/" in orig and "analysis/eth_all_original_rules/" not in rewritten:
+    if "analysis/" in orig and "analysis/eth_normalized_execution_results/" not in rewritten:
         raise ValueError("ETH output isolation failed")
     t0=time.monotonic()
     entry={
