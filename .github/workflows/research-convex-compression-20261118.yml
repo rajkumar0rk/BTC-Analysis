@@ -37,6 +37,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add analysis/convex_compression_expansion_20261118/model_comparison.csv
           git add analysis/convex_compression_expansion_20261118/qualifying_models.csv
+          git add analysis/convex_compression_expansion_20261118/promising_exploratory_models.csv
+          git add analysis/convex_compression_expansion_20261118/candidate_concentration.csv
+          git add analysis/convex_compression_expansion_20261118/candidate_monthly_pf.csv
+          git add analysis/convex_compression_expansion_20261118/candidate_trade_ledger.csv
           git add analysis/convex_compression_expansion_20261118/quality.json
           git add analysis/convex_compression_expansion_20261118/RESEARCH_REPORT.md
           if ! git diff --cached --quiet; then
