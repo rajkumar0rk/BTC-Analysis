@@ -37,5 +37,6 @@
     }
   ],
   "models": 64,
-  "passing_models": 0
+  "passing_models": 0,
+  "promising_exploratory_models": 1
 }

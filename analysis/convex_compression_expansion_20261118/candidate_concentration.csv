@@ -1,0 +1,2 @@
+symbol,model,trades,max_consecutive_losses,biggest_profit_usd,top1_fraction_of_positive_pnl,top3_fraction_of_positive_pnl,net_after_removing_largest_winner_usd,average_positive_trade_usd,average_negative_trade_usd
+ETHUSD,break24_squeeze1.1_ema1_init1.25atr_trail6atr,184,13,279.0529,0.1974,0.3824,156.8572,35.3481,-6.7917

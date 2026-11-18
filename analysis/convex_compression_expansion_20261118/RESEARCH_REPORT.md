@@ -21,6 +21,16 @@ None
 | ETHUSD   | break72_squeeze1.1_ema1_init1.25atr_trail4atr  |       166 |      125 |     32 |       93 |         25.6   |          1.3273 |               3.8574 |             45.145 |                  3 |           16.202 |            -17.224 |     71.56  |               2.523 |             9.405 |             6.212 |              11 |            12 |              23 |
 | BTCUSD   | break72_squeeze1.1_ema0_init1.75atr_trail4atr  |       219 |      151 |     43 |      108 |         28.477 |          0.8446 |               2.1212 |              9.723 |                  0 |           -8.383 |            -20.45  |     96.353 |               1.263 |             9.285 |           -16.167 |               8 |            15 |              23 |
 
+## Promising exploratory candidates (not validated)
+| symbol   | model                                         |   signals |   trades |   wins |   losses |   win_rate_pct |   profit_factor |   avg_win_loss_ratio |   biggest_winner_R |   winners_over_10R |   net_return_pct |   max_drawdown_pct |   fees_usd |   funding_proxy_usd |   return_2025_pct |   return_2026_pct |   profit_months |   loss_months |   active_months |
+|:---------|:----------------------------------------------|----------:|---------:|-------:|---------:|---------------:|----------------:|---------------------:|-------------------:|-------------------:|-----------------:|-------------------:|-----------:|--------------------:|------------------:|------------------:|----------------:|--------------:|----------------:|
+| ETHUSD   | break24_squeeze1.1_ema1_init1.25atr_trail6atr |       306 |      184 |     40 |      144 |         21.739 |          1.4457 |               5.2046 |             43.923 |                  8 |           43.591 |            -17.261 |    143.292 |               7.546 |            17.796 |            21.898 |              11 |            12 |              23 |
+
+## Candidate trade concentration
+| symbol   | model                                         |   trades |   max_consecutive_losses |   biggest_profit_usd |   top1_fraction_of_positive_pnl |   top3_fraction_of_positive_pnl |   net_after_removing_largest_winner_usd |   average_positive_trade_usd |   average_negative_trade_usd |
+|:---------|:----------------------------------------------|---------:|-------------------------:|---------------------:|--------------------------------:|--------------------------------:|----------------------------------------:|-----------------------------:|-----------------------------:|
+| ETHUSD   | break24_squeeze1.1_ema1_init1.25atr_trail6atr |      184 |                       13 |              279.053 |                          0.1974 |                          0.3824 |                                 156.857 |                      35.3481 |                      -6.7917 |
+
 ## Caution
 - Open source historical data already research-exposed; 2026 is not independent untouched holdout
 - Monthly NAV and unrealized liquidation fee at IST calendar boundary
