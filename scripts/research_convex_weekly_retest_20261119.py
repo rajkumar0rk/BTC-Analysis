@@ -39,6 +39,33 @@ def funding(sym,t):
         if np.isnan(x[i]):missing+=1
     return x,dict(funding_observations=len(d),missing_funding_settlements=missing)
 
+@njit(cache=True)
+def signal_loop(n,hopen,hhigh,hlow,hclose,high,low,atr,bull,bear,wait,tol,trail):
+    sig=np.zeros(n,np.int8);entryatr=np.zeros(n);tl=np.zeros(n);th=np.zeros(n)
+    armed=0;remaining=0;level=0.;armed_atr=0.
+    for j in range(200,len(hclose)-1):
+        k=(j+1)*60
+        if k>=n:break
+        if armed!=0:
+            remaining-=1
+            if armed==1 and hlow[j]<=level+tol*armed_atr and hclose[j]>level and hclose[j]>hopen[j]:
+                sig[k]=1;entryatr[k]=atr[j];armed=0
+            elif armed==-1 and hhigh[j]>=level-tol*armed_atr and hclose[j]<level and hclose[j]<hopen[j]:
+                sig[k]=-1;entryatr[k]=atr[j];armed=0
+            if remaining<=0:armed=0
+        if armed==0 and sig[k]==0 and np.isfinite(atr[j]) and atr[j]>0:
+            if bull[j]:
+                armed=1;remaining=wait;level=high[j];armed_atr=atr[j]
+            elif bear[j]:
+                armed=-1;remaining=wait;level=low[j];armed_atr=atr[j]
+        if j>=trail:
+            lowmin=hlow[j];highmax=hhigh[j]
+            for z in range(j-trail+1,j+1):
+                if hlow[z]<lowmin:lowmin=hlow[z]
+                if hhigh[z]>highmax:highmax=hhigh[z]
+            tl[k]=lowmin;th[k]=highmax
+    return sig,entryatr,tl,th
+
 def prepare(d,lookback,wait,tol,stop,trail):
     h=d[["open","high","low","close","volume"]].resample("1h").agg({"open":"first","high":"max","low":"min","close":"last","volume":"sum"})
     count=d.close.resample("1h").count()
@@ -50,34 +77,12 @@ def prepare(d,lookback,wait,tol,stop,trail):
     high=h.high.shift(1).rolling(lookback,min_periods=lookback).max()
     low=h.low.shift(1).rolling(lookback,min_periods=lookback).min()
     vol=h.volume.shift(1).rolling(48,min_periods=48).median()
-    # Breakout candle must close beyond channel; wait for controlled retest.
-    bull=(h.close>high)&(h.close>ema)&(ema>ema.shift(24))&(h.volume>vol)
-    bear=(h.close<low)&(h.close<ema)&(ema<ema.shift(24))&(h.volume>vol)
-    n=len(d);sig=np.zeros(n,np.int8);entryatr=np.zeros(n);tl=np.zeros(n);th=np.zeros(n)
-    # Arm only AFTER breakout hour closes. Retest within wait hours and close
-    # back above breakout price (or below for short); no use of future candles.
-    armed=0;remaining=0;level=0.;a=0.
-    for j in range(200,len(h)-1):
-        k=(j+1)*60
-        if k>=n:break
-        # Signal derived from completed hour j, executed next hour open.
-        if armed:
-            remaining-=1
-            if armed==1 and h.low.iloc[j]<=level+tol*a and h.close.iloc[j]>level and h.close.iloc[j]>h.open.iloc[j]:
-                sig[k]=1;entryatr[k]=float(atr.iloc[j]);armed=0
-            elif armed==-1 and h.high.iloc[j]>=level-tol*a and h.close.iloc[j]<level and h.close.iloc[j]<h.open.iloc[j]:
-                sig[k]=-1;entryatr[k]=float(atr.iloc[j]);armed=0
-            if remaining<=0:armed=0
-        if not armed and sig[k]==0 and np.isfinite(atr.iloc[j]) and atr.iloc[j]>0:
-            if bool(bull.iloc[j]):
-                armed=1;remaining=wait;level=float(high.iloc[j]);a=float(atr.iloc[j])
-            elif bool(bear.iloc[j]):
-                armed=-1;remaining=wait;level=float(low.iloc[j]);a=float(atr.iloc[j])
-        if j>=trail:
-            # trailing stop based on completed hours, never intrabar
-            tl[k]=float(h.low.iloc[j-trail+1:j+1].min())
-            th[k]=float(h.high.iloc[j-trail+1:j+1].max())
-    return sig,entryatr,tl,th
+    bull=((h.close>high)&(h.close>ema)&(ema>ema.shift(24))&(h.volume>vol)).to_numpy(np.bool_)
+    bear=((h.close<low)&(h.close<ema)&(ema<ema.shift(24))&(h.volume>vol)).to_numpy(np.bool_)
+    return signal_loop(len(d),h.open.to_numpy(float),h.high.to_numpy(float),
+        h.low.to_numpy(float),h.close.to_numpy(float),
+        high.to_numpy(float),low.to_numpy(float),atr.to_numpy(float),
+        bull,bear,wait,tol,trail)
 
 @njit(cache=True)
 def run(t,o,hi,lo,cl,sig,atr,tl,th,fr,months,stopmul):
