@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T16:56:10Z",
+  "last_updated_utc": "2026-11-18T17:30:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -361,6 +361,26 @@
         "max_month_end_drawdown_pct": 12.7467103
       },
       "verdict": "ETH 12/22 high-PF months superficially reaches monthly count, but 22-month net negative, aggregate PF <1 and only 25 trades; BTC also net negative. NOT a verified profitable candidate, NOT worth checking or alerting."
+    },
+    {
+      "id": "freqtrade-triple-supertrend-source-audit-20261118",
+      "source_repo": "https://github.com/freqtrade/freqtrade-strategies",
+      "source_path": "user_data/strategies/Supertrend.py",
+      "source_sha": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "source_blob_sha": "757b15214c0088b38973b3eb0d6bd56bfcfbf56c",
+      "status": "SOURCE_AUDITED_NOT_BACKTESTED",
+      "strategy": "1H long-only triple Supertrend confirmation: (period,multiplier) (8,4),(9,7),(8,1) for entries and (16,1),(18,3),(18,6) for exits, as configured in buy_params/sell_params; requires volume>0. Freqtrade ROI table 8.7% immediate, 5.8% after 372m, 2.9% after 861m, zero after 2221m; stop -26.5%, trailing 5% with 14.4% offset.",
+      "source_audit_findings": [
+        "Source explicitly warns its technical.indicators.supertrend implementation is unvalidated; independent indicator parity test required before scoring.",
+        "Freqtrade strategy is long-only (enter_long/exit_long), not short-enabled; do not fabricate short side.",
+        "Buy/sell params differ from IntParameter declared defaults; explicitly apply source buy_params and sell_params, not defaults.",
+        "populate_indicators loops across parameter ranges, potentially expensive; only fixed chosen combinations should be computed in an independent replay, with parity test.",
+        "ROI, stop and trailing are percent-based and portable to BTC/ETH; must reproduce Freqtrade ROI/trailing order and next-bar causality with 1m stop-first fills.",
+        "199 1H startup candles must precede evaluated period; authentic 2024 history is needed for full January 2025 IST month.",
+        "Not yet executed on either market; no profit factor, return or alert may be inferred."
+      ],
+      "next_step": "Build a fixed-parameter causal 1H indicator replay and 1m exit execution with verified technical.indicators Supertrend parity; backtest BOTH assets and reconcile monthly account equity including funding, January coverage and MTM.",
+      "notification_eligible": false
     }
   ]
 }
