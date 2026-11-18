@@ -23,7 +23,7 @@ def run(bopen,bclose,eopen,eclose,mc,idx,z,mean,std,entryz,stopz,hold):
         gap=stopz*sd
         leg_notional=min(eq,eq*.005/gap)
         if leg_notional<=0:break
-        eb=eopen[k];ee=eopen[k]
+        eb=bopen[k];ee=eopen[k]
         if eb<=0 or ee<=0:continue
         # Entry BTC 5 points and ETH 0.02%, both adverse to trade direction
         bside=-side
@@ -50,6 +50,8 @@ def run(bopen,bclose,eopen,eclose,mc,idx,z,mean,std,entryz,stopz,hold):
         costs=leg_notional*FEE*(1.+bexit/bentry+1.+eexit/eentry)
         pnl=bp+ep-costs
         eq+=pnl
+        if eq<=0: # Flag insolvency; never fabricate returns beyond -100% or continue trading
+            eq=0.
         out[n,0]=k;out[n,1]=j;out[n,2]=side;out[n,3]=leg_notional
         out[n,4]=bp;out[n,5]=ep;out[n,6]=costs;out[n,7]=pnl
         out[n,8]=eq;out[n,9]=zi;out[n,10]=sd
@@ -69,7 +71,7 @@ def monthly(ledger,monthcodes,config):
         q=ledger[months==code];x=q[:,7] if len(q) else np.zeros(0)
         after=float(q[-1,8]) if len(q) else eq
         rows.append(dict(config=config,month=m,monthly_pf=pf(x),
-            net_return_pct=(after/eq-1)*100 if eq>0 else -100.,
+            net_return_pct=(after/eq-1)*100 if eq>0 else 0.,
             net_usd=float(x.sum()),trades=len(x),wins=int((x>0).sum()),losses=int((x<0).sum()),
             equity_start_usd=eq,equity_end_usd=after))
         eq=after
