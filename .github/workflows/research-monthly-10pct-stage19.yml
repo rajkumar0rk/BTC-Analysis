@@ -1,0 +1,56 @@
+name: Research BTC Stage19 net 10pct monthly with multiple trades
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_monthly_10pct_stage19.py
+      - .github/workflows/research-monthly-10pct-stage19.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-stage19-monthly-10pct
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Replay multi-trade BTC 5m patterns and account-level monthly returns
+        run: python scripts/research_monthly_10pct_stage19.py
+      - name: Upload complete trade and entry ledgers
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-stage19-monthly-10pct-ledgers
+          path: |
+            analysis/institutional_discovery_stage19_monthly_10pct/trades.csv.gz
+            analysis/institutional_discovery_stage19_monthly_10pct/entries.csv.gz
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit monthly account results and report
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage19_monthly_10pct/RESEARCH_REPORT.md
+          git add analysis/institutional_discovery_stage19_monthly_10pct/config_comparison.csv
+          git add analysis/institutional_discovery_stage19_monthly_10pct/monthly_net_account_returns.csv
+          git add analysis/institutional_discovery_stage19_monthly_10pct/selected_monthly.csv
+          git add analysis/institutional_discovery_stage19_monthly_10pct/top_2025_ranked.csv
+          git add analysis/institutional_discovery_stage19_monthly_10pct/quality.json
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save Stage19 10pct monthly net-after-cost account study"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
