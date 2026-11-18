@@ -135,7 +135,7 @@ def main():
     for sym in ("BTCUSD","ETHUSD"):
         d=load(sym);t=d.time.to_numpy(np.int64);fr,q=funding(sym,t)
         mid=np.searchsorted(stamps,t,side="right")-1
-        if mid.min()<0 or mid.max()>22:raise ValueError("out-of-range IST month")
+        if mid.min()<0 or mid.max()>22:raise ValueError(f"out-of-range IST month {mid.min()}..{mid.max()}, first/last {pd.to_datetime(t[0],unit='s',utc=True)}..{pd.to_datetime(t[-1],unit='s',utc=True)}, bounds {stamps[0]}..{stamps[-1]}, labels {len(labels)}")
         quality.append(dict(symbol=sym,minutes=len(t),first=str(d.index[0]),last=str(d.index[-1]),**q))
         for look in (72,168):
             for wait in (6,12):
