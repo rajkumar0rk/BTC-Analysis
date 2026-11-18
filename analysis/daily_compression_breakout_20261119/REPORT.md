@@ -1,0 +1,53 @@
+# Independent compression-breakout daily net study
+
+symbol  year  lookback_min  quiet_width_max  reward_risk  stop_fraction  hold_max_min  days  trades  profitable_days  losing_days  no_trade_days  profitable_calendar_days_pct  win_rate_traded_pct  profit_factor  net_return_pct  net_profit_usd  mean_net_calendar_day_usd  median_net_calendar_day_usd  mean_losing_day_usd  worst_day_usd  max_losing_day_streak  max_dayclose_drawdown_pct  fees_usd  funding_proxy_usd  passes_2025_minimum
+BTCUSD  2025           120           0.0025          1.0          0.005            30   365     108                9           99            257                         2.466                8.333         0.0633        -15.8995        -158.995                    -0.4356                          0.0              -1.7146        -5.8023                      6                   -15.8995  117.1283             0.5412                False
+BTCUSD  2026           120           0.0025          1.0          0.005            30   321      85                6           79            236                         1.869                7.059         0.0460        -12.8558        -108.118                    -0.3368                          0.0              -1.4345        -4.0636                      4                   -12.9642   78.9598             0.2376                False
+ETHUSD  2025           120           0.0025          1.5          0.005            90   365      12                6            6            353                         1.644               50.000         0.4655         -1.3738         -13.738                    -0.0376                          0.0              -4.2838        -6.3875                      1                    -1.5814   14.1044             0.2980                False
+ETHUSD  2026           120           0.0025          1.5          0.005            90   321      45                5           40            276                         1.558               11.111         0.1445         -9.0149         -88.910                    -0.2770                          0.0              -2.5981        -6.2395                      2                    -9.0149   50.0375             0.4729                False
+
+{
+  "hypothesis": "1m close beyond previous low-volatility rolling price range; enter following 1m open",
+  "distinct_from": [
+    "VWAP exhaustion",
+    "wick rejection",
+    "1m BTC ETH cross-market lead lag",
+    "BTC ETH paired ratio reversion"
+  ],
+  "tested_models_per_symbol": 108,
+  "archive": [
+    {
+      "symbol": "BTCUSD",
+      "minutes": 987840,
+      "files": 23,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00",
+      "missing_minutes": 0
+    },
+    {
+      "symbol": "ETHUSD",
+      "minutes": 987840,
+      "files": 23,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00",
+      "missing_minutes": 0
+    }
+  ],
+  "train": "2025",
+  "check": "2026 through November 17, research-exposed not pristine holdout",
+  "costs": {
+    "taker_fee_including_GST_per_side": 0.00059,
+    "adverse_slippage_per_side": 0.0002,
+    "funding_debit_per_8h_crossing": 0.0001
+  },
+  "sizing": "0.5% equity nominal stop risk, max 2x notional, at most one trade per UTC day",
+  "assumptions": [
+    "No liquidation engine or exact margin/contract sizing",
+    "No depth/impact or real bid/ask",
+    "Funding is pessimistic fixed debit proxy, not actual settlement",
+    "Stops prioritized over targets on ambiguous OHLC",
+    "2026 is not pristine forward data",
+    "No guaranteed daily profit"
+  ],
+  "selection": "2025 PF>1 and net positive and >=50 trades; rank by profitable calendar days, then net return. If none, rank highest 2025 net return."
+}

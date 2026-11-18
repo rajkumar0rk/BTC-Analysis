@@ -1,0 +1,45 @@
+{
+  "hypothesis": "1m close beyond previous low-volatility rolling price range; enter following 1m open",
+  "distinct_from": [
+    "VWAP exhaustion",
+    "wick rejection",
+    "1m BTC ETH cross-market lead lag",
+    "BTC ETH paired ratio reversion"
+  ],
+  "tested_models_per_symbol": 108,
+  "archive": [
+    {
+      "symbol": "BTCUSD",
+      "minutes": 987840,
+      "files": 23,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00",
+      "missing_minutes": 0
+    },
+    {
+      "symbol": "ETHUSD",
+      "minutes": 987840,
+      "files": 23,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00",
+      "missing_minutes": 0
+    }
+  ],
+  "train": "2025",
+  "check": "2026 through November 17, research-exposed not pristine holdout",
+  "costs": {
+    "taker_fee_including_GST_per_side": 0.00059,
+    "adverse_slippage_per_side": 0.0002,
+    "funding_debit_per_8h_crossing": 0.0001
+  },
+  "sizing": "0.5% equity nominal stop risk, max 2x notional, at most one trade per UTC day",
+  "assumptions": [
+    "No liquidation engine or exact margin/contract sizing",
+    "No depth/impact or real bid/ask",
+    "Funding is pessimistic fixed debit proxy, not actual settlement",
+    "Stops prioritized over targets on ambiguous OHLC",
+    "2026 is not pristine forward data",
+    "No guaranteed daily profit"
+  ],
+  "selection": "2025 PF>1 and net positive and >=50 trades; rank by profitable calendar days, then net return. If none, rank highest 2025 net return."
+}
