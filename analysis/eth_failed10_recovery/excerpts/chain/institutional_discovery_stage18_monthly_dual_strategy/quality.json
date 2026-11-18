@@ -1,0 +1,134 @@
+{
+  "analysis": "Stage18 monthly diversification between quiet-volatility range pullback and daily breakout",
+  "stage15_source_run": 44120459865,
+  "stage17_source_run": 44128535269,
+  "reference_baselines": [
+    "Stage14 original",
+    "Stage14 monthly +3R profit lock"
+  ],
+  "monthly_span": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10",
+    "2026-11"
+  ],
+  "candidate_combinations": 105,
+  "selection_only_on": "2025 monthly positive count, then losing count and 2025 return",
+  "original_2025_qualified_count": 0,
+  "original_2025_gate_met": false,
+  "unqualified_fallback_selected_for_audit_only": true,
+  "selected": {
+    "name": "quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct",
+    "stage15": "quiet_1h_weekly_3R",
+    "stage17": "1D_channel_55_ema50_agrees_trail_3atr",
+    "swing_weight": 0.75,
+    "positive_months_2025": 3,
+    "losing_months_2025": 4,
+    "no_exposure_months_2025": 5,
+    "active_months_2025": 7,
+    "return_2025_pct": 1.6714,
+    "positive_months_2026": 7,
+    "losing_months_2026": 4,
+    "no_exposure_months_2026": 0,
+    "active_months_2026": 11,
+    "return_2026_pct": 0.2122,
+    "max_month_end_drawdown_pct": 1.0927,
+    "months_with_positive_return": 10,
+    "months_with_nonpositive_return": 13,
+    "perfect_every_month": false
+  },
+  "retrospective_any_all_months_winners": 0,
+  "stage15_original_checks": {
+    "quiet_1h_weekly_3R": {
+      "trades": 69,
+      "original_entry_month_sum_R": -7.7834,
+      "actual_exit_month_sum_R": -7.7835
+    },
+    "quiet_1h_no_gate": {
+      "trades": 69,
+      "original_entry_month_sum_R": -7.7834,
+      "actual_exit_month_sum_R": -7.7835
+    },
+    "quiet_1h_daily2_weekly3": {
+      "trades": 69,
+      "original_entry_month_sum_R": -7.7834,
+      "actual_exit_month_sum_R": -7.7835
+    },
+    "risk_700": {
+      "trades": 72,
+      "original_entry_month_sum_R": -8.2177,
+      "actual_exit_month_sum_R": -8.2177
+    },
+    "risk_700_weekly3": {
+      "trades": 71,
+      "original_entry_month_sum_R": -10.8566,
+      "actual_exit_month_sum_R": -10.8566
+    },
+    "baseline_weekly3": {
+      "trades": 88,
+      "original_entry_month_sum_R": -7.7818,
+      "actual_exit_month_sum_R": -7.7818
+    },
+    "baseline_no_gate": {
+      "trades": 90,
+      "original_entry_month_sum_R": -5.6065,
+      "actual_exit_month_sum_R": -5.6065
+    }
+  },
+  "stage17_original_checks": {
+    "1D_channel_20_ema50_agrees_trail_3atr": {
+      "months": 23,
+      "last_nav": 103.81765
+    },
+    "1D_channel_20_ema50_agrees_trail_4atr": {
+      "months": 23,
+      "last_nav": 103.99958
+    },
+    "1D_channel_20_no_trend_filter_trail_3atr": {
+      "months": 23,
+      "last_nav": 102.95714
+    },
+    "1D_channel_20_no_trend_filter_trail_4atr": {
+      "months": 23,
+      "last_nav": 102.94836
+    },
+    "1D_channel_55_ema50_agrees_trail_3atr": {
+      "months": 23,
+      "last_nav": 103.86838
+    }
+  },
+  "cost_model": "both component backtests already include standard taker fees, GST, slippage",
+  "position_model": "two separate independently traded component portfolios; blend monthly NAV returns with monthly rebalancing",
+  "risk_fraction_assumed_per_strategy": 0.005,
+  "caveats": [
+    "2026 has been researched repeatedly before, so not a pristine unseen holdout",
+    "Independent portfolios can hold positions simultaneously; needs capital and margin for both",
+    "Stage15 swing-independent trade ledger is compounded on EXIT IST month, Stage17 marks active exposure at IST month end",
+    "Blended NAV assumes monthly rebalancing and exact fractional risk sizing, without cross margin constraints or transaction costs of rebalancing",
+    "The Stage15 input uses historical Stage14-derived condition and weekly loss gate; selection is exploratory",
+    "Portfolio trading fees/GST/slippage are taken from underlying simulations, not separately charged",
+    "Historical 2026-10-31 missing, November 2026 partial",
+    "Historical data reused; rank selection among 105 candidates is susceptible to multiple comparison bias",
+    "Never interpret a profitable historical month as guaranteed future monthly profit",
+    "No real order-book slippage, funding payments, liquidation or margin modeled"
+  ]
+}

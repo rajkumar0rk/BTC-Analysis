@@ -1,0 +1,24 @@
+name,stage15,stage17,swing_weight,month_ist,range_component_pct,swing_component_pct,portfolio_pct,traded_or_held,status
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-01,0.0,0.0,0.0,0,No exposure
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-02,2.000775,0.0,0.500194,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-03,0.0,0.0,0.0,0,No exposure
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-04,-0.87426,0.0,-0.218565,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-05,-0.37712,1.2335,0.830845,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-06,-0.657719,-0.5069,-0.544605,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-07,1.720961,1.5537,1.595515,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-08,0.0,0.0,0.0,0,No exposure
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-09,-1.693039,0.0,-0.42326,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-10,0.0,0.0,0.0,0,No exposure
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-11,0.0,0.0,0.0,0,No exposure
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2025-12,-0.250566,0.0,-0.062641,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-01,0.63921,0.5385,0.563678,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-02,-0.380323,0.6101,0.362494,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-03,0.55539,0.0,0.138847,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-04,-0.950771,-0.36,-0.507693,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-05,0.201669,0.0861,0.114992,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-06,1.364393,0.0354,0.367648,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-07,-2.013185,0.0,-0.503296,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-08,-3.176733,0.8362,-0.167033,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-09,0.0,-0.5321,-0.399075,1,Loss
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-10,0.0,0.0528,0.0396,1,Profit
+quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct,quiet_1h_weekly_3R,1D_channel_55_ema50_agrees_trail_3atr,0.75,2026-11,0.0,0.2781,0.208575,1,Profit

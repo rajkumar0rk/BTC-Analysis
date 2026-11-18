@@ -1,0 +1,39 @@
+{
+  "candles": 987840,
+  "months": 23,
+  "source_missing_minutes": 0,
+  "original_pattern_families": [
+    "sweep_reclaim_12h",
+    "failed_break_12h",
+    "compression_expansion_12h",
+    "strong_momentum_6h",
+    "ema20_pullback_confirm",
+    "overextension_reversal",
+    "inside_bar_breakout"
+  ],
+  "regimes": [
+    "all",
+    "4h_adx_le20",
+    "4h_adx_ge25",
+    "4h_efficiency_ge30",
+    "4h_atr_ratio_le1"
+  ],
+  "source_event_candidates": 3122,
+  "distinct_models": 140,
+  "simulated_trade_rows": 33189,
+  "all_positive_23": 0,
+  "useful_2025_models": 0,
+  "costs": "standard taker 0.05% each leg +18% GST +5 BTC points adverse slippage each side",
+  "hypothetical_risk_fraction": 0.005,
+  "strategy_selection": "select best candidates using 2025 only, report 2026 despite prior research exposure",
+  "caveats": [
+    "All historical 2026 data was used previously; not pristine forward holdout",
+    "Multiple hypothesis testing across entry families and risk parameters",
+    "Missing 1m source day 2026-10-31; simulations censor entries near source gaps",
+    "1m OHLC stop-first; unmodeled funding, spread, impact and liquidation",
+    "Months with no trade are not counted as profitable",
+    "Account percentage is a hypothetical constant-risk sizing model",
+    "Each configuration is exclusive-position standalone; do not sum overlapping models",
+    "No daily/weekly guard; no guaranteed monthly return"
+  ]
+}

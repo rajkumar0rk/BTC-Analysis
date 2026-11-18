@@ -1,0 +1,131 @@
+{
+  "part": "chain",
+  "source": "ETHUSD Delta historical, normalized with predeclared Jan2025 anchor",
+  "target_months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10"
+  ],
+  "partial_november_for_diagnostics": true,
+  "btc_first_open": 93548.5,
+  "eth_first_open": 3336.55,
+  "native_eth_point_value_for_btc_200": 7.13330518394202,
+  "scripts": [
+    {
+      "script": "research_monthly_regime_stage14.py",
+      "arguments": [],
+      "original_source_sha256": "6ad007acbc3cae5640296323a6acec3aa4c634ea8ed6ff0a9f25064dd75b28ce",
+      "translated_sha256": "d6a5bfe0eebe71b11944ea7156dca62510d0b8d62a4bf50d6b43570329423068",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "20       3.0           240         423                   7                 5 -12700.24         270                   0                11 -31836.35\n       S13_pullback_near_half_atr         4h_efficiency30_adx25       3.0           240          64                   6                 5  10663.27          79                   2                 9 -13064.32\n          S11_06_inside_bar_break      4h_low_atr_then_5m_burst       2.0           240         127                   6                 5   2931.31          69                   3                 8  -4959.43\n               S13_pullback_touch                   all_entries       3.0           480         124                   6                 6  -2423.66         126                   4                 7 -12254.34\n        S11_02_sweep_then_confirm              4h_ranging_adx18       3.0           480         160                   6                 6  -2649.06          87                   1                 9  -9585.81\n    S11_05_market_structure_shift    4h_adx25_directional_drift       2.0           480          61                   6                 6  -6844.06          52                   5                 6    370.74\n    S11_05_market_structure_shift    4h_adx25_directional_drift       2.0           240          62                   6                 6  -7138.68          52                   5                 6   -840.85\n    S11_05_market_structure_shift         1h_volume_burst_adx20       2.0           240         100                   6                 6  -9020.10          95                   2                 9 -17513.95\n     S11_04_trend_pullback_engulf 4h_channel_break_in_direction       2.0           240         170                   6                 6 -12318.42          77                   3                 8  -4054.69\n     S11_04_trend_pullback_engulf 4h_channel_break_in_direction       2.0           480         169                   6                 6 -14500.68          77                   3                 8  -3525.66\n           S11_03_breakout_retest                      4h_adx25       3.0           240         460                   6                 6 -44245.27         263                   0                11 -29334.80\n           S11_03_breakout_retest                      4h_adx25       3.0           480         445                   6                 6 -51714.68         257                   2                 9 -30239.74\n       S13_pullback_near_half_atr                      4h_adx25       3.0           480         112                   5                 7  10160.76         126                   3                 8 -12366.81\nPASSED\nEmpty DataFrame\nColumns: [family, regime, target_R, max_hold_min, year2025_n, profit_months_2025, loss_months_2025, no_trade_months_2025, active_months_2025, net_2025, year2026_n, profit_months_2026, loss_months_2026, no_trade_months_2026, active_months_2026, net_2026, positive_three_periods, minimum_sample, passes_research_monthly_gate]\nIndex: []\n",
+      "stderr_tail": "",
+      "duration_s": 7.54,
+      "was_previous_failure": false
+    },
+    {
+      "script": "research_swing_donchian_stage17.py",
+      "arguments": [],
+      "original_source_sha256": "9dbbfb4382ae7348da7fc62b450725952ef0b1c3674308308c53b46ac0ac05a1",
+      "translated_sha256": "f1e5354e1dae7073defbfab14eb0825aeb2b82fe72400f587dba199def93d2e3",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "       1           -0.4964          99.50357   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2025-02           208        3                1            0.8786         100.37782 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2025-03           208        4                1           -0.8530          99.52158   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2025-04           208        4                1           -1.6374          97.89201   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2025-05           208        3                1            2.1776         100.02373 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2025-06           208        5                1           -1.6700          98.35329   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2025-07           208        3                1            4.6925         102.96855 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2025-08           208        4                1            0.2267         103.20196 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2025-09           208        3                1            0.2886         103.49985 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2025-10           208        4                1            1.9406         105.50837 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2025-11           208        2                1            1.1257         106.69610 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2025-12           208        6                1           -3.0399         103.45264   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2026-01           208        5                1            2.3796         105.91439 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2026-02           208        4                1           -0.3890         105.50235   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2026-03           208        4                1           -1.0898         104.35258   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2026-04           208        6                1           -1.1456         103.15709   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2026-05           208        8                1           -2.8274         100.24048   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2026-06           208        3                1            2.9031         103.15053 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2026-07           208        3                1            0.1305         103.28514 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2026-08           208        4                1           11.7463         115.41737 Profit\n   4H_channel_24_ema50_agrees_trail_4atr   2026-09           208        4                1           -1.3317         113.88032   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2026-10           208        6                1           -1.9242         111.68906   Loss\n   4H_channel_24_ema50_agrees_trail_4atr   2026-11           208        2                1            1.8955         113.80616 Profit\n",
+      "stderr_tail": "",
+      "duration_s": 2.2,
+      "was_previous_failure": false
+    },
+    {
+      "script": "research_new_1h_patterns_stage19.py",
+      "arguments": [],
+      "original_source_sha256": "4b1306058383a15c5c081344a2f9f05d6ae5d3c798f6627c371f24126c837eec",
+      "translated_sha256": "0f1bc8225c4b1caee7e568517ead8d4b1f39a437d444b6e6f793167904580cd8",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "                   2                   8                     1           -4.6538            False        False\n     ema20_pullback_confirm__4h_adx_le20__2R__480min ema20_pullback_confirm        4h_adx_le20       2.0       480     137                       7                   4                     1            3.2933                       2                   8                     1           -9.3687            False        False\n    strong_momentum_6h__4h_atr_ratio_le1__3R__240min     strong_momentum_6h   4h_atr_ratio_le1       3.0       240     138                       7                   5                     0            2.4406                       5                   6                     0           -1.2853            False        False\n           failed_break_12h__4h_adx_ge25__2R__240min       failed_break_12h        4h_adx_ge25       2.0       240     136                       7                   5                     0            1.3421                       1                  10                     0           -9.7183            False        False\n    failed_break_12h__4h_efficiency_ge30__2R__480min       failed_break_12h 4h_efficiency_ge30       2.0       480     158                       7                   5                     0            0.6430                       3                   8                     0           -8.1803            False        False\n    strong_momentum_6h__4h_atr_ratio_le1__2R__240min     strong_momentum_6h   4h_atr_ratio_le1       2.0       240     139                       7                   5                     0            0.1747                       5                   6                     0           -1.9313            False        False\n             ema20_pullback_confirm__all__2R__240min ema20_pullback_confirm                all       2.0       240     352                       7                   5                     0           -1.4664                       2                   9                     0          -14.3363            False        False\n        inside_bar_breakout__4h_adx_ge25__2R__480min    inside_bar_breakout        4h_adx_ge25       2.0       480     321                       7                   5                     0          -11.6666                       1                  10                     0          -21.8940            False        False\n     ema20_pullback_confirm__4h_adx_le20__3R__480min ema20_pullback_confirm        4h_adx_le20       3.0       480     136                       6                   5                     1            5.8420                       2                   8                     1          -11.4652            False        False\nema20_pullback_confirm__4h_atr_ratio_le1__2R__240min ema20_pullback_confirm   4h_atr_ratio_le1       2.0       240     230                       6                   6                     0            4.0409                       4                   7                     0          -10.0342            False        False\n",
+      "stderr_tail": "",
+      "duration_s": 2.65,
+      "was_previous_failure": false
+    },
+    {
+      "script": "research_july_drawdown_stage15.py",
+      "arguments": [
+        "--original-artifact",
+        "/home/runner/work/BTC-Analysis/BTC-Analysis/analysis/eth_normalized_execution_results/institutional_discovery_stage14_monthly_regimes"
+      ],
+      "original_source_sha256": "966467a3287a61812acd69ac6afc186dcefbb1361b185ee81dad2b54ae7c7a8a",
+      "translated_sha256": "42d57610ab0d8643b0aefda5398e5ffe675fe45570002cfe100b10b1e8bf673b",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "-4.989                     4                   5                   9       23         3.340       15        -8.329            5       2885.06      4.6894                False           8.329        False                     0                  30\n     4h_atr_ratio_le_1                weekly_minus_3R      69     31       2.019                     3                   4                   7                  -2.671                                 2     38      -4.989                     4                   5                   9       23         3.340       15        -8.329            5       2885.06      4.6894                False           8.329        False                     0                  30\n1h_volume_ratio_le_1p2                 daily_minus_2R      69     34      -0.222                     2                   5                   7                  -3.664                                 1     35      -7.561                     4                   4                   8       21         2.922       14       -10.484            5       2082.84      3.4418                False          13.565        False                     0                  30\n1h_volume_ratio_le_1p2 daily_minus_2R_weekly_minus_3R      69     34      -0.222                     2                   5                   7                  -3.664                                 1     35      -7.561                     4                   4                   8       21         2.922       14       -10.484            5       2082.84      3.4418                False          13.565        False                     0                  30\n1h_volume_ratio_le_1p2                   no_loss_gate      69     34      -0.222                     2                   5                   7                  -3.664                                 1     35      -7.561                     4                   4                   8       21         2.922       14       -10.484            5       2082.84      3.4418                False          13.565        False                     0                  30\n1h_volume_ratio_le_1p2                weekly_minus_3R      69     34      -0.222                     2                   5                   7                  -3.664                                 1     35      -7.561                     4                   4                   8       21         2.922       14       -10.484            5       2082.84      3.4418                False          13.565        False                     0                  30\n             unchanged                 daily_minus_2R      90     40      -0.981                     2                   5                   7                  -4.519                                 1     50      -4.626                     4                   5                   9       28         6.897       22       -11.523            6       2181.55      3.5384                False          11.523        False                     0                  43\n",
+      "stderr_tail": "",
+      "duration_s": 1.6,
+      "was_previous_failure": false
+    },
+    {
+      "script": "research_monthly_portfolio_stage18.py",
+      "arguments": [
+        "--stage15-ledger",
+        "/home/runner/work/BTC-Analysis/BTC-Analysis/analysis/eth_normalized_execution_results/institutional_discovery_stage15_july_loss_controls/variant_trade_ledger.csv.gz"
+      ],
+      "original_source_sha256": "6347811671561c0174457ae16d96e2b728f802130c8528124a2504274f1d3482",
+      "translated_sha256": "90ce3c779a4fb27b40a67da4c5308b30e5dab03adda62d7ac7656511b462be2b",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "                   0                  11           0.6874                      1.1030                            9                              14                False\n       risk_700_weekly3 + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct        risk_700_weekly3 1D_channel_55_ema50_agrees_trail_3atr          0.75                     3                   4                        5                   7           1.1448                     6                   5                        0                  11           0.3687                      1.4160                            9                              14                False\n     quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_50pct      quiet_1h_weekly_3R 1D_channel_55_ema50_agrees_trail_3atr          0.50                     3                   4                        5                   7           1.0547                     7                   4                        0                  11          -1.1206                      2.4254                           10                              13                False\n       quiet_1h_no_gate + 1D_channel_55_ema50_agrees_trail_3atr + swing_50pct        quiet_1h_no_gate 1D_channel_55_ema50_agrees_trail_3atr          0.50                     3                   4                        5                   7           1.0547                     7                   4                        0                  11          -1.1206                      2.4254                           10                              13                False\nquiet_1h_daily2_weekly3 + 1D_channel_55_ema50_agrees_trail_3atr + swing_50pct quiet_1h_daily2_weekly3 1D_channel_55_ema50_agrees_trail_3atr          0.50                     3                   4                        5                   7           1.0547                     7                   4                        0                  11          -1.1206                      2.4254                           10                              13                False\n       baseline_weekly3 + 1D_channel_55_ema50_agrees_trail_3atr + swing_50pct        baseline_weekly3 1D_channel_55_ema50_agrees_trail_3atr          0.50                     3                   4                        5                   7           0.8604                     6                   5                        0                  11          -0.9244                      3.1715                            9                              14                False\n       baseline_no_gate + 1D_channel_55_ema50_agrees_trail_3atr + swing_50pct        baseline_no_gate 1D_channel_55_ema50_agrees_trail_3atr          0.50                     3                   4                        5                   7           0.8604                     6                   5                        0                  11          -0.4007                      2.6596                            9                              14                False\n",
+      "stderr_tail": "",
+      "duration_s": 0.39,
+      "was_previous_failure": true
+    },
+    {
+      "script": "research_three_sleeve_stage20.py",
+      "arguments": [],
+      "original_source_sha256": "058394e64fce67cd4fc627a84da48eab41a0a43dc5964b5fd9ca23220a12bbc2",
+      "translated_sha256": "021d0196261ee520473ff83a24fa8ec9f7e84cc70f42a118cea1212fd63f8d3a",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "n + auxiliary 20% overextension_reversal__4h_atr_ratio_le1__3R__480min                0.20               0.6000          0.2000                8            4          0          2.27237                4            7          0         -4.11531                     4.54288           False\noverextension_reversal__4h_atr_ratio_le1__3R__480min + auxiliary 15% overextension_reversal__4h_atr_ratio_le1__3R__480min                0.15               0.6375          0.2125                8            4          0          1.71742                4            7          0         -3.66007                     4.32576           False\nema20_pullback_confirm__4h_atr_ratio_le1__3R__240min + auxiliary 20% ema20_pullback_confirm__4h_atr_ratio_le1__3R__240min                0.20               0.6000          0.2000                8            4          0          1.66389                3            8          0         -4.39658                     5.20243           False\nema20_pullback_confirm__4h_atr_ratio_le1__3R__240min + auxiliary 15% ema20_pullback_confirm__4h_atr_ratio_le1__3R__240min                0.15               0.6375          0.2125                8            4          0          1.26271                4            7          0         -3.87540                     4.82303           False\noverextension_reversal__4h_atr_ratio_le1__3R__480min + auxiliary 10% overextension_reversal__4h_atr_ratio_le1__3R__480min                0.10               0.6750          0.2250                8            4          0          1.16392                4            7          0         -3.20554                     4.25458           False\nema20_pullback_confirm__4h_atr_ratio_le1__3R__240min + auxiliary 10% ema20_pullback_confirm__4h_atr_ratio_le1__3R__240min                0.10               0.6750          0.2250                8            4          0          0.86188                4            7          0         -3.35202                     4.44245           False\n             ema20_pullback_confirm__all__3R__240min + auxiliary 20%              ema20_pullback_confirm__all__3R__240min                0.20               0.6000          0.2000                8            4          0          0.68991                2            9          0         -5.71047                     6.77320           False\n             ema20_pullback_confirm__all__3R__240min + auxiliary 15%              ema20_pullback_confirm__all__3R__240min                0.15               0.6375          0.2125                8            4          0          0.53403                4            7          0         -4.86701                     6.00709           False\n             ema20_pullback_confirm__all__3R__240min + auxiliary 10%              ema20_pullback_confirm__all__3R__240min                0.10               0.6750          0.2250                8            4          0          0.37729                4            7          0         -4.01724                     5.23687           False\n",
+      "stderr_tail": "",
+      "duration_s": 0.31,
+      "was_previous_failure": false
+    },
+    {
+      "script": "research_trade_counts_stage22.py",
+      "arguments": [
+        "--stage15",
+        "/home/runner/work/BTC-Analysis/BTC-Analysis/analysis/eth_normalized_execution_results/institutional_discovery_stage15_july_loss_controls/variant_trade_ledger.csv.gz",
+        "--stage17",
+        "/home/runner/work/BTC-Analysis/BTC-Analysis/analysis/eth_normalized_execution_results/institutional_discovery_stage17_swing_breakout/trade_ledger.csv.gz",
+        "--stage19",
+        "/home/runner/work/BTC-Analysis/BTC-Analysis/analysis/eth_normalized_execution_results/institutional_discovery_stage19_new_1h_patterns/trade_ledger.csv.gz"
+      ],
+      "original_source_sha256": "17e80759273e84424ce1a356068f4aaba711383f2fc20845b273a5a8cc143dfd",
+      "translated_sha256": "b7a53ab5943cc70da2a8e65b48111ddc78f05f739f752fa826d12abda15e7648",
+      "status": "success",
+      "returncode": 0,
+      "stdout_tail": "           -0.705614           -0.139951\n  2025-07                              19               9             10            0            1.727396            1.048397\n  2025-08                              12               5              7            0            0.000000            0.020200\n  2025-09                              20               8             12            0           -1.238954           -1.289243\n  2025-10                              14               6              8            0           -0.238525            0.028680\n  2025-11                              15               8              7            0            0.000000            0.366700\n  2025-12                              14               8              6            0           -0.314399            0.481421\n  2026-01                              18               7             11            0            0.723883            0.241766\n  2026-02                              20               9             11            0           -0.202843            0.244666\n  2026-03                              24               4             20            0            0.289942           -1.470146\n  2026-04                              20              10             10            0           -0.694104           -0.247763\n  2026-05                              18               9              9            0            0.283927            0.222102\n  2026-06                              13               8              5            0            1.032144            0.918495\n  2026-07                              23              10             13            0           -1.488014           -1.373791\n  2026-08                              19               8             11            0           -2.173499           -1.511359\n  2026-09                              18               7             11            0           -0.133025           -0.404100\n  2026-10                              19               9             10            0            0.013200            0.576960\n  2026-11                              10               3              7            0            0.069525           -0.433020\nANNUAL\nstrategy year  observed_months  profitable_months  losing_months  neutral_months  total_trades  winning_trades  losing_trades  flat_trades  compounded_return_pct\n stage18 2025               12                  3              5               4            41              15             26            0                 0.0613\n stage20 2025               12                  9              3               0           184              88             96            0                 1.6260\n stage18 2026               11                  6              5               0            45              20             25            0                -2.2986\n stage20 2026               11                  5              6               0           202              84            118            0                -3.2238\n",
+      "stderr_tail": "",
+      "duration_s": 0.42,
+      "was_previous_failure": true
+    }
+  ]
+}
