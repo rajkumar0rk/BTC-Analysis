@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T11:57:00Z",
+  "last_updated_utc": "2026-11-18T13:00:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -132,6 +132,25 @@
       },
       "verification": "1m checksummed BTC/ETH 22 UTC monthly partitions; 22 IST calendar month-end marked equity returns; no funding and incomplete January 2025 IST coverage; no claims of verified profitability",
       "next_action": "Reject EMA50/100 15m 1% TP/SL candidate; find distinct external rule set, not minor hindsight retuning"
+    },
+    {
+      "id": "freqtrade-trendfollowing-ema20-obv-20261118",
+      "source_repo": "https://github.com/freqtrade/freqtrade-strategies",
+      "source_commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "source_path": "user_data/strategies/futures/TrendFollowingStrategy.py",
+      "working_branch": "feature/github-external-volpersistence-22m-20261118",
+      "script": "scripts/replay_freqtrade_trendfollowing_pair.py",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44309185993",
+      "status": "RUNNING",
+      "source_rules": "5m EMA20 crossover + OBV directional confirmation, long/short",
+      "replay_adaptations": "2 ATR14 stop, 1% equity risk, 2x max notional, one position, opposite EMA/OBV exit; source original ROI/trailing not exactly reproduced",
+      "warnings": [
+        "Missing Dec 2024 UTC evening for January 2025 IST",
+        "Funding and L1 depth not modeled",
+        "5m entry-bar stops may be missed",
+        "2026 not pristine OOS"
+      ],
+      "notification": "NONE_UNTIL_FINISHED_VERIFIED"
     }
   ]
 }
