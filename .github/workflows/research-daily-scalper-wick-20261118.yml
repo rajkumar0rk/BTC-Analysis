@@ -1,0 +1,40 @@
+name: Independent 1m wick micro-reversal daily scalping BTC ETH
+on:
+  push:
+    branches: [research/daily-scalper-wick-20261118]
+    paths:
+      - .github/workflows/research-daily-scalper-wick-20261118.yml
+      - scripts/research_daily_scalper_wick_20261118.py
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install numpy pandas
+      - name: Replay 2025 and 2026 BTC ETH causal 1m wick setups
+        run: python -u scripts/research_daily_scalper_wick_20261118.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daily-wick-scalper-20261118
+          path: analysis/daily_scalper_wick_20261118/
+          if-no-files-found: error
+      - name: Commit isolated result evidence
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/daily_scalper_wick_20261118/summary.csv
+          git add analysis/daily_scalper_wick_20261118/selected.csv
+          git add analysis/daily_scalper_wick_20261118/quality.json
+          git add analysis/daily_scalper_wick_20261118/REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive 1m daily scalper results"
+            git push origin HEAD:research/daily-scalper-wick-20261118
+          fi
