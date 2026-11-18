@@ -1,0 +1,50 @@
+name: Independent BTC raw-candle monthly 10 percent research (Stage25)
+on:
+  push:
+    branches: [research/stage25-monthly10]
+    paths:
+      - scripts/research_independent_hourly_trend_stage25.py
+      - .github/workflows/research-independent-monthly10-stage25.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-btc-monthly10-stage25
+  cancel-in-progress: false
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/stage25-monthly10
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Run independent strategy search on original 1m raw BTCUSD candles
+        run: python scripts/research_independent_hourly_trend_stage25.py
+      - name: Store fresh Stage25 output
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-independent-monthly10-stage25
+          path: analysis/independent_stage25_hourly_trend/
+      - name: Commit Stage25 results on research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/independent_stage25_hourly_trend/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive independent Stage25 results"
+            for attempt in 1 2 3 4 5; do
+              git fetch origin research/stage25-monthly10
+              git rebase origin/research/stage25-monthly10
+              if git push origin HEAD:research/stage25-monthly10; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
