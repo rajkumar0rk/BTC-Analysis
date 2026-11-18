@@ -1,0 +1,26 @@
+name: Stage24 two-hour failed-auction research
+on:
+  push:
+    branches: [research/stage24-failed-auction-20261118]
+    paths:
+      - 'scripts/research_two_hour_failed_auction_stage24.py'
+      - '.github/workflows/stage24-failed-auction.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas numba tabulate
+      - run: python scripts/research_two_hour_failed_auction_stage24.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage24-results
+          path: analysis/stage24_failed_auction/
