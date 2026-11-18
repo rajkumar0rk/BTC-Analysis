@@ -184,6 +184,25 @@ def main():
       dict(path=str(p.relative_to(ROOT)),bytes=p.stat().st_size) for p in sorted(OUTPUT.rglob("*"))
       if p.is_file() and (p.suffix in (".json",".md",".csv") or p.name.endswith(".csv.gz"))
     ],indent=2)+"\n")
+
+    # Save compact ETH-only reports, never any old BTC outputs. Large
+    # per-signal ledgers remain reproducible from these scripts and the
+    # checked historical market data; don't commit gigabytes to Git.
+    import shutil
+    for p in sorted(OUTPUT.rglob("*")):
+        if not p.is_file() or p.stat().st_size>350_000:continue
+        if not (p.suffix in (".json",".md") or p.name in
+            ("monthly_results.csv","month_by_month.csv","selected_monthly_results.csv",
+             "monthly_blended_returns.csv","selected_month_by_month.csv",
+             "monthly_inside_bar_2R_IST.csv","monthly_trade_win_loss_audit.csv",
+             "monthly_consistency.csv","period_results.csv","strategy_comparison.csv",
+             "selected_monthly_returns.csv","config_comparison.csv",
+             "trade_summary.csv","all_scenarios.csv","monthly_mark_to_market.csv")):
+            continue
+        dest=AUDIT/"excerpts"/args.part/p.relative_to(OUTPUT)
+        dest.parent.mkdir(parents=True,exist_ok=True)
+        shutil.copyfile(p,dest)
+
     print("ETH_FAILED10_RECOVERY",args.part,json.dumps(stats),flush=True)
     # Don't hide unsuccessful sub-scripts under a green GitHub workflow.
     if stats["still_failed"] or stats["dependencies_failed"]:sys.exit(1)
