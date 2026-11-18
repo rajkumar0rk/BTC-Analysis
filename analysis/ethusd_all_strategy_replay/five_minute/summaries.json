@@ -1,0 +1,30 @@
+[
+  {
+    "folder": "institutional_discovery_stage19_monthly_10pct",
+    "model": "compression_break:hour_align:atr1p5:2.0:240:5.0:5.0",
+    "positive_months_2025": 5,
+    "positive_months_2026": 1,
+    "net_2025_pct": -65.6094,
+    "net_2026_pct": -86.7737,
+    "total_closed_trades": 557,
+    "wins": null,
+    "losses": null,
+    "models_with_full_22_months": 1440,
+    "any_22_positive_historical": 0,
+    "selected_by": "2025 only: profitable months, then 2025 compounded return"
+  },
+  {
+    "folder": "institutional_discovery_stage20_inverse_direction",
+    "model": "compression_break:original:large_atr:atr3:1.5:120:2.0:5.0:offer_whatif",
+    "positive_months_2025": 6,
+    "positive_months_2026": 2,
+    "net_2025_pct": 3.1176,
+    "net_2026_pct": -13.8523,
+    "total_closed_trades": 45,
+    "wins": null,
+    "losses": null,
+    "models_with_full_22_months": 15120,
+    "any_22_positive_historical": 0,
+    "selected_by": "2025 only: profitable months, then 2025 compounded return"
+  }
+]

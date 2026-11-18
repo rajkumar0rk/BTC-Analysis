@@ -1,0 +1,16 @@
+[
+  {
+    "folder": "institutional_discovery_stage24_failed_auction",
+    "model": "1.5:2.0:720",
+    "positive_months_2025": 5,
+    "positive_months_2026": 2,
+    "net_2025_pct": -1.9996,
+    "net_2026_pct": -16.9274,
+    "total_closed_trades": 285,
+    "wins": 111,
+    "losses": 174,
+    "models_with_full_22_months": 8,
+    "any_22_positive_historical": 0,
+    "selected_by": "2025 only: profitable months, then 2025 compounded return"
+  }
+]

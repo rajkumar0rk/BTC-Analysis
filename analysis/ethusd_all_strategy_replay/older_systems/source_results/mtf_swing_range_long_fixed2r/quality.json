@@ -1,0 +1,10 @@
+{
+  "rows_1m": 987840,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-17 23:59:00+00:00",
+  "all_trades_across_overlapping_scenarios": 524421,
+  "combinations": 720,
+  "fee_each_side_including_gst": 0.00059,
+  "slippage_points_per_side": 5.0,
+  "mode": "LONG BTCUSD futures, next-minute proxy fills, no real L1, no true independent holdout"
+}

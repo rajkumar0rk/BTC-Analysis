@@ -1,0 +1,80 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m compressed API candles",
+  "months": 23,
+  "partitions": [
+    "2025-01.csv.gz",
+    "2025-02.csv.gz",
+    "2025-03.csv.gz",
+    "2025-04.csv.gz",
+    "2025-05.csv.gz",
+    "2025-06.csv.gz",
+    "2025-07.csv.gz",
+    "2025-08.csv.gz",
+    "2025-09.csv.gz",
+    "2025-10.csv.gz",
+    "2025-11.csv.gz",
+    "2025-12.csv.gz",
+    "2026-01.csv.gz",
+    "2026-02.csv.gz",
+    "2026-03.csv.gz",
+    "2026-04.csv.gz",
+    "2026-05.csv.gz",
+    "2026-06.csv.gz",
+    "2026-07.csv.gz",
+    "2026-08.csv.gz",
+    "2026-09.csv.gz",
+    "2026-10.csv.gz",
+    "2026-11.csv.gz"
+  ],
+  "observed_candles": 987840,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-17 23:59:00+00:00",
+  "expected_dense_candles": 987840,
+  "missing_minutes": 0,
+  "continuous_segments": 1,
+  "gaps": [],
+  "study": "IST hour/weekday and preceding completed 5m volume/volatility",
+  "indicator_timing": "entry minute OPEN; all features from earlier completed minutes",
+  "eligible_candidates": 986015,
+  "filter_count": 277,
+  "filtered_rate_rows": 4432,
+  "replayed_filter_count": 68,
+  "simulated_trade_rows": 6404808,
+  "summary_rows": 4352,
+  "standard_positive_groups": 4,
+  "scalper_whatif_positive_groups": 17,
+  "zero_loss_standard_groups": 0,
+  "period_usable_counts": {
+    "2025_train": 524441,
+    "2026_H1_validation": 260203,
+    "2026_H2_seen_recheck": 176950,
+    "2026_Nov_recent_exploratory": 24421
+  },
+  "historical_splits": [
+    "2025_train",
+    "2026_H1_validation",
+    "2026_H2_seen_recheck",
+    "2026_Nov_recent_exploratory"
+  ],
+  "future_horizons_minutes": [
+    30,
+    60
+  ],
+  "stops_tested_points": [
+    100,
+    200
+  ],
+  "target_points_gross": 200,
+  "fee_standard_per_side": 0.00059,
+  "slippage_points_per_side": 5.0,
+  "note": "All 2026 data have been inspected before; 2025 selection does not create a pristine holdout",
+  "limitations": [
+    "No intraminute tick path or actual order book; adverse stop-first within 1m",
+    "No verified real order eligibility for historical Scalper Offer",
+    "No market impact, bid/ask, liquidation or margin/funding cashflows",
+    "Multiple-hypothesis search over day and time combinations",
+    "Overlap in all-candle labels means strongly dependent observations",
+    "Trade summaries are per-condition standalone, not combined portfolio",
+    "No zero-loss or profitability guarantee"
+  ]
+}

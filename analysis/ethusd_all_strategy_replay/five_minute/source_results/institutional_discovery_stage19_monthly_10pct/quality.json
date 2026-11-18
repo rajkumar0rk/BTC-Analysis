@@ -1,0 +1,77 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m historic candles",
+  "observed_minute_candles": 987840,
+  "missing_minutes": 0,
+  "event_rows": 88802,
+  "trade_rows": 314711,
+  "pattern_families": [
+    "range_breakout",
+    "sweep_reversal",
+    "rsi2_reclaim",
+    "ema20_pullback",
+    "compression_break",
+    "trend_engulf"
+  ],
+  "signal_models": 96,
+  "risk_settings_percent": [
+    0.5,
+    1.0,
+    2.0,
+    3.0,
+    5.0
+  ],
+  "leverage_caps": [
+    5.0,
+    10.0,
+    20.0
+  ],
+  "account_scenarios": 1440,
+  "exact_10pct_every_complete_month": 0,
+  "selected_2025_only": {
+    "pattern": "compression_break",
+    "trend_filter": "hour_align",
+    "stop_mode": "atr1p5",
+    "reward_R": 3.0,
+    "hold_min": 240,
+    "target_trade_risk_pct": 3.0,
+    "max_notional_leverage": 5.0,
+    "trades": 562,
+    "trades_2025": 263,
+    "trades_2026": 285,
+    "months_10pct_2025": 3,
+    "months_10pct_2026": 0,
+    "months_positive_2025": 4,
+    "months_positive_2026": 1,
+    "months_negative_2025": 8,
+    "months_negative_2026": 9,
+    "worst_month_2025_pct": -23.806,
+    "worst_month_2026_pct": -39.74,
+    "nav_return_2025_pct": -62.561,
+    "nav_return_2026_pct": -86.31,
+    "max_trade_equity_drawdown_pct": 95.678,
+    "observed_max_gross_leverage": 5.0,
+    "months_all_10pct": false
+  },
+  "tested_months": "2025 January-December, 2026 January-October; 2026 Nov partial only",
+  "risk_model": "fractional BTC sizing; capital PNL netR*min(risk_pct, max_leverage*stopDistance/entryPrice)",
+  "costs": {
+    "taker_fee_each_side_pct": 0.05,
+    "fee_GST_pct": 18,
+    "slip_BTCpoints_each_side": 5
+  },
+  "important_limitations": [
+    "All historical months have been examined during prior research; NOT a blind OOS test",
+    "No guarantee every future month will gain >=10%; target is extremely aggressive",
+    "Real contracts have discrete lot sizes, minimum margin, exchange risk limits and liquidation",
+    "No funding, actual bid-ask spread, market impact or forced liquidation modeled",
+    "1m OHLC stop-first, adverse gap stops, trades enter only AFTER 5m completion",
+    "One position open at a time per independent setting, no fixed trade/day limit",
+    "Trade risk 3% or 5% can produce large drawdowns and is not recommended",
+    "Maximum leverage cap is an assumption, not confirmation actual position can open",
+    "2026-10-31 entire UTC day missing, November 2026 ends on 16th",
+    "Realized PNL is counted in the actual IST EXIT month",
+    "No-trade months count as misses of the 10% target",
+    "Every scenario's monthly return is AFTER modeled taker/GST/slippage costs",
+    "Equity drawdown sampled on each trade close; OPEN position drawdowns may be worse"
+  ]
+}

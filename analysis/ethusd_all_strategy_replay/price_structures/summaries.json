@@ -1,0 +1,72 @@
+[
+  {
+    "folder": "institutional_discovery_stage17_swing_breakout",
+    "model": "4H_channel_24_ema50_agrees_trail_3atr",
+    "positive_months_2025": 7,
+    "positive_months_2026": 3,
+    "net_2025_pct": 6.0958,
+    "net_2026_pct": 5.4983,
+    "total_closed_trades": null,
+    "wins": null,
+    "losses": null,
+    "models_with_full_22_months": 16,
+    "any_22_positive_historical": 0,
+    "selected_by": "2025 only: profitable months, then 2025 compounded return"
+  },
+  {
+    "folder": "institutional_discovery_stage19_new_1h_patterns",
+    "model": "failed_break_12h__4h_atr_ratio_le1__3R__480min",
+    "positive_months_2025": 8,
+    "positive_months_2026": 3,
+    "net_2025_pct": 11.7437,
+    "net_2026_pct": -14.8507,
+    "total_closed_trades": 174,
+    "wins": null,
+    "losses": null,
+    "models_with_full_22_months": 140,
+    "any_22_positive_historical": 0,
+    "selected_by": "2025 only: profitable months, then 2025 compounded return"
+  },
+  {
+    "folder": "institutional_discovery_stage18_monthly_dual_strategy",
+    "model": "quiet_1h_weekly_3R + 1D_channel_55_ema50_agrees_trail_3atr + swing_75pct",
+    "positive_months_2025": 3,
+    "positive_months_2026": 6,
+    "net_2025_pct": 1.6714,
+    "net_2026_pct": 0.0036,
+    "total_closed_trades": null,
+    "wins": null,
+    "losses": null,
+    "models_with_full_22_months": 105,
+    "any_22_positive_historical": 0,
+    "selected_by": "2025 only: profitable months, then 2025 compounded return"
+  },
+  {
+    "folder": "institutional_discovery_stage20_three_sleeve",
+    "model": "overextension_reversal__4h_atr_ratio_le1__2R__480min + auxiliary 20%",
+    "positive_months_2025": 9,
+    "positive_months_2026": 5,
+    "net_2025_pct": 1.626,
+    "net_2026_pct": -2.8132,
+    "total_closed_trades": null,
+    "wins": null,
+    "losses": null,
+    "models_with_full_22_months": 1,
+    "any_22_positive_historical": 0,
+    "selected_by": "2025 only: profitable months, then 2025 compounded return"
+  },
+  {
+    "folder": "institutional_discovery_stage16_monthly_regime_switch",
+    "model": "risk_limited_regime_switch:month_profit_lock_plus3R",
+    "positive_months_2025": 6,
+    "positive_months_2026": 5,
+    "net_2025_pct": -0.7268,
+    "net_2026_pct": -1.9621,
+    "total_closed_trades": 177,
+    "wins": null,
+    "losses": null,
+    "models_with_full_22_months": 24,
+    "any_22_positive_historical": 0,
+    "selected_by": "2025 only: profitable months, then 2025 compounded return"
+  }
+]

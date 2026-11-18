@@ -1,0 +1,62 @@
+{
+  "source_run": 44118024590,
+  "source_artifact": "btc-stage14-monthly-regime-trades",
+  "dataset_observed_minutes": 987840,
+  "source_missing_minutes": 0,
+  "original_selected_entry_candidates": 134,
+  "original_reconciliation": {
+    "original_trades": 91,
+    "largest_individual_net_difference_pts": 0.0,
+    "months_reconciled": 23,
+    "july_2025_net_pts": 2181.55,
+    "july_2025_trades": 6
+  },
+  "july_2025_original": {
+    "trades": 6,
+    "winners": 4,
+    "losing_or_flat": 2,
+    "net_pts": 2181.55,
+    "net_R": 3.538
+  },
+  "standalone_scenarios": 75,
+  "scenarios_passing_monthly_gate": 0,
+  "filters": [
+    "unchanged",
+    "adx_le_15",
+    "adx_le_12",
+    "4h_efficiency_le_20pct",
+    "4h_atr_ratio_le_1",
+    "1h_volume_ratio_le_1p2",
+    "1h_volume_ratio_ge_1p2",
+    "breakout_volume_ge_1p2",
+    "breakout_volume_ge_1p5",
+    "risk_le_700",
+    "risk_le_500",
+    "adx_le_15_and_breakout_volume_ge_1p2",
+    "adx_le_15_and_atr_ratio_le_1",
+    "long_only",
+    "short_only"
+  ],
+  "safeguards": [
+    "no_loss_gate",
+    "daily_minus_1R",
+    "daily_minus_2R",
+    "weekly_minus_3R",
+    "daily_minus_2R_weekly_minus_3R"
+  ],
+  "validation": "The exact untouched Stage14 entry/exit timestamps and net PnL were matched before testing new filters",
+  "caveats": [
+    "July 2025 is a known bad outcome; all July improvements are retrospective",
+    "No filter uses calendar month label (including July) to trigger entries",
+    "Daily/weekly safeguards use realized net R from *closed* trades only",
+    "A daily/weekly cap prevents subsequent entries; cannot limit stop gap losses",
+    "Each filtered scenario replays from all eligible signals, not from baseline winners",
+    "Risk normalized R represents constant per-trade risk concept, not actual account PnL",
+    "Prices are 1m OHLC, stop-first, slippage 5 points per side, standard taker fees and GST",
+    "Source 1m has one missing day 2026-10-31, 2026-11 partial",
+    "Funding, quote spread, market impact and liquidation not modeled",
+    "All 2026 historical windows already exposed; no truly independent forward verification",
+    "15 filters times five safeguards creates multiple-testing risk",
+    "Zero-trade months are not counted as profitable"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "candles": 987840,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-17 23:59:00+00:00",
+  "missing_minutes": 0,
+  "event_patterns": 17,
+  "eligible_directional_events": 30309,
+  "simulated_trades": 235744,
+  "report_rows": 2160,
+  "robust_positive_patterns": 0,
+  "standard_positive_cells": 18,
+  "standard_zero_loss_cells": 8,
+  "model": [
+    "gross200",
+    "net200"
+  ],
+  "stop_points": [
+    100,
+    200
+  ],
+  "horizons_min": [
+    30,
+    60
+  ],
+  "fee_per_side": 0.00059,
+  "slippage_per_side_pts": 5.0,
+  "old_archive_studies": "ALL 2026 windows have already been researched; none untouched",
+  "limitations": [
+    "1m OHLC stop-first on same-bar ambiguity; tick fills unobserved",
+    "Historical order book/spread, impact, funding, liquidation and margin not modeled",
+    "Candle volume directional sign is a proxy, NOT real taker/order flow",
+    "Positive cells from many variants may be random; no multiple-test adjustment",
+    "Gross200 can be much less than 200 NET after fees",
+    "5m completed candles enter at immediate following 1m OPEN only",
+    "Multiple event models overlap, do NOT sum into a portfolio",
+    "No stop guarantees no loss; overnight gaps may exceed stops",
+    "Always need fresh forward research before live trading"
+  ]
+}

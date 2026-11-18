@@ -1,0 +1,53 @@
+{
+  "instrument": "ETHUSD",
+  "completed_months": "2025-01 through 2026-10",
+  "price_scaling": "fixed BTC/ETH ratio at 2025-01-01 00:00 UTC",
+  "fees": "0.05% taker each side and 18% GST; 5 virtual points per side",
+  "suites": [
+    {
+      "suite": "five_minute",
+      "attempted": 2,
+      "completed": 2,
+      "skipped_or_failed": 0,
+      "monthly_summaries": 2
+    },
+    {
+      "suite": "high_frequency",
+      "attempted": 5,
+      "completed": 4,
+      "skipped_or_failed": 1,
+      "monthly_summaries": 0
+    },
+    {
+      "suite": "older_systems",
+      "attempted": 11,
+      "completed": 11,
+      "skipped_or_failed": 0,
+      "monthly_summaries": 0
+    },
+    {
+      "suite": "other_systems",
+      "attempted": 6,
+      "completed": 2,
+      "skipped_or_failed": 4,
+      "monthly_summaries": 1
+    },
+    {
+      "suite": "price_structures",
+      "attempted": 11,
+      "completed": 10,
+      "skipped_or_failed": 1,
+      "monthly_summaries": 5
+    },
+    {
+      "suite": "time_day",
+      "attempted": 6,
+      "completed": 6,
+      "skipped_or_failed": 0,
+      "monthly_summaries": 0
+    }
+  ],
+  "total_attempted": 41,
+  "total_completed": 35,
+  "caveat": "No funding or actual spread/market impact modeled. Failed engines are not counted as backtests."
+}

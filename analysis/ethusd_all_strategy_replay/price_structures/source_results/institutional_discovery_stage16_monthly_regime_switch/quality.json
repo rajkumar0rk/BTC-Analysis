@@ -1,0 +1,45 @@
+{
+  "source": "Original Stage14 GitHub Actions artifact + source Delta BTC 1m candles",
+  "source_run": 44118024590,
+  "stage14_reconciliation": {
+    "original_trade_count": 91,
+    "maximum_net_points_drift": 0.0
+  },
+  "original_events": 24469,
+  "observed_candles": 987840,
+  "missing_minutes": 0,
+  "tested_profiles": [
+    "stage14_unchanged",
+    "range_pullback_plus_trend_breakout",
+    "range_sweep_plus_trend_compression",
+    "range_pullback_plus_trend_pullback",
+    "risk_limited_regime_switch",
+    "full_three_regime_switch",
+    "rolling_90day_selector",
+    "rolling_180day_selector"
+  ],
+  "tested_guards": [
+    "no_guard",
+    "month_stop_minus3R",
+    "month_profit_lock_plus3R"
+  ],
+  "strategy_count": 24,
+  "total_replayed_trade_rows": 8309,
+  "monthly_consistency_passes": 0,
+  "risk_per_trade_fraction": 0.005,
+  "equity_model": "each trade net R multiplied by 0.5% starting equity risk, compounded on exit",
+  "monthly_allocation": "actual exit timestamp Asia/Kolkata",
+  "rolling_selector": "min 8 closed shadow results from prior 90/180 days; mean net R >=0.15",
+  "severe_limitations": [
+    "No historical 2026 month is an untouched test; all exposed by earlier stages",
+    "Selection of specific market-regime portfolios is exploratory and may overfit",
+    "Rolling shadow results become usable only after completion, but shadow trades can overlap",
+    "Equity model assumes exact fractional risk sizing without margin limits or contract rounding",
+    "No liquidation, capital/margin/funding cashflows or actual bid-ask depth modeled",
+    "One source gap on 2026-10-31; November 2026 is partial",
+    "A risk cap or monthly lock cannot guarantee profit every month",
+    "Any no-trade months count separately, never as profitable",
+    "1m OHLC with stop-first fills, historical slippage assumed 5 price points per side",
+    "Standard Delta BTC taker fees plus GST included through Stage11 net R"
+  ]
+}

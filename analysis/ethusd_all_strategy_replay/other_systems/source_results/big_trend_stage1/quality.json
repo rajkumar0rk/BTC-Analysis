@@ -1,0 +1,15 @@
+{
+  "minute_rows": 987840,
+  "five_minute_rows": 197568,
+  "first": "2025-01-01 00:00:00+00:00",
+  "last": "2026-11-17 23:59:00+00:00",
+  "configurations_per_period": 256,
+  "configuration_period_rows": 768,
+  "scenario_trade_records": 12216,
+  "data_source": "Original Delta India BTCUSD 1m OHLCV archive",
+  "roundtrip_futures_taker_rate_including_gst": 0.00118,
+  "slippage_each_side": 5.0,
+  "max_exposure_minutes": 240,
+  "broker_l1_not_available": true,
+  "prior_recheck_already_seen": true
+}

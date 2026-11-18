@@ -1,0 +1,24 @@
+pattern,trend_filter,stop_mode,reward_R,hold_min,target_trade_risk_pct,max_notional_leverage,month_ist,trades,net_account_return_pct,status
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-01,23,-23.8057,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-02,12,0.969,Profit <10%
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-03,12,-12.0327,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-04,22,-10.05,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-05,29,22.6089,>=10%
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-06,16,-12.5501,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-07,30,-11.2081,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-08,23,17.4493,>=10%
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-09,18,-21.8688,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-10,22,16.4432,>=10%
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-11,26,-23.176,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2025-12,30,-21.3037,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-01,38,-39.7404,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-02,27,-17.9593,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-03,23,-14.2808,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-04,27,-5.9521,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-05,29,-19.757,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-06,30,-31.2673,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-07,28,6.8379,Profit <10%
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-08,32,-20.9882,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-09,26,-10.7342,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-10,25,-17.3511,Loss
+compression_break,hour_align,atr1p5,3.0,240,3.0,5.0,2026-11,14,-12.3366,Loss

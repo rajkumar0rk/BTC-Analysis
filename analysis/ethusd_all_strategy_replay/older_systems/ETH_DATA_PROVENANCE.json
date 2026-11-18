@@ -1,0 +1,26 @@
+{
+  "original_symbol": "ETHUSD",
+  "source_branch": "main",
+  "source_manifest": "data/delta_india/ETHUSD/1m/manifest.json",
+  "normalized_virtual_symbol": "BTCUSD sandbox alias (ETH prices scaled)",
+  "reference_utc": "2025-01-01T00:00:00Z",
+  "reference_eth_open_usd": 3336.55,
+  "reference_btc_open_usd": 93548.5,
+  "fixed_multiplier": 28.03749381846518,
+  "virtual_5_point_slippage_as_actual_eth_usd": 0.1783326295985505,
+  "virtual_200_point_stop_as_actual_eth_usd": 7.13330518394202,
+  "total_eth_1m_rows": 987840,
+  "utc_first": 1735689600,
+  "utc_last": 1794959940,
+  "fee_model": "0.05% taker each side, 18% GST on fees",
+  "monthly_target": "2025-01 through 2026-10 IST, excluding partial November",
+  "limitations": [
+    "Fixed ex-ante price normalization preserves BTC-coded absolute point thresholds in virtual units rather than forcing them on unscaled ETH prices",
+    "Individual model labels may still print BTCUSD; data used is ETHUSD",
+    "ETH order-book spreads, actual funding, maker fills, contract step sizes, liquidation and market impact not provided",
+    "Fixed 5 virtual point adverse slippage is a proxy, not measured actual ETH execution",
+    "Models may have hard-coded BTC-specific volume or OI assumptions; record these as limitations",
+    "No on-chain or spot/perp cross-market hedging is inferred",
+    "No guarantee of future profitability"
+  ]
+}

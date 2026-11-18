@@ -1,0 +1,49 @@
+{
+  "archive_candles": 987840,
+  "source_gap_minutes": 0,
+  "date_range": [
+    "2025-01-01 00:00:00+00:00",
+    "2026-11-17 23:59:00+00:00"
+  ],
+  "events": 1171,
+  "trades_across_models": 5439,
+  "strategy_variants": 16,
+  "standard_positive_cells": 16,
+  "monthly_gate_passes": 0,
+  "skipped_candidates": {
+    "source_gap": 0,
+    "risk": 259,
+    "period_boundary": 0
+  },
+  "rules": {
+    "trend": "4H close>EMA20>EMA50 and EMA20 rising over three completed bars (inverse SHORT)",
+    "pullback": "Prior fully completed 1H candle touches 1H EMA20, closes back on trend side; alternate within half ATR",
+    "trigger": "Later complete 15M candle close beyond previous four 15M candle highs/lows; body>=40%, close in last 25% of range",
+    "volume": "Breakout 15M volume>=1.2x prior 20 bars optional",
+    "entry": "Immediate next 1M OPEN after 15M candle close",
+    "stop": "Beyond 1H pullback and recent five 15M candle extreme plus max(10 points, 0.1x ATR15)",
+    "stop_risk_points": [
+      150.0,
+      1600.0
+    ],
+    "reward_R": [
+      2.0,
+      3.0
+    ],
+    "max_hold_minutes": [
+      240,
+      480
+    ]
+  },
+  "caveats": [
+    "All tested historical periods already used in previous research, not a pristine out-of-sample test",
+    "2026-10-31 is missing from source; 2026-11 ends Nov 16",
+    "Fees 0.05% taker/side, 18% GST, adverse 5 BTC points slippage per side; included in standard net",
+    "Scalper Offer closing fee waiver is hypothetical and not assumed for standard PnL",
+    "Funding, order-book spreads, margin, liquidation and impact not modeled",
+    "Stops resolved first when OHLC bar touches stop and target; gap stop can fill worse",
+    "All months with zero trades included; no guarantee of monthly profitability",
+    "Aggregate BTC price points are not account profit or capital returns",
+    "One open trade at a time within a model, LONG and SHORT mutually exclusive"
+  ]
+}

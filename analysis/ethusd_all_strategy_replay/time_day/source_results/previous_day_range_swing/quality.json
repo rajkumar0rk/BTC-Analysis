@@ -1,0 +1,14 @@
+{
+  "one_minute_rows": 987840,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-17 23:59:00+00:00",
+  "daily_bars": 686,
+  "scenarios": 3456,
+  "scenario_trade_records": 120129,
+  "nominal_roundtrip_fee_rate_including_gst": 0.00118,
+  "adverse_slippage_points_each_side": 5.0,
+  "swing_center_two_left_two_right": true,
+  "day_boundary": "UTC",
+  "l1_bid_ask_unavailable": true,
+  "seen_recheck_not_independent": true
+}
