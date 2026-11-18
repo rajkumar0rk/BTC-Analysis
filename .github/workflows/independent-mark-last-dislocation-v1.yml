@@ -1,0 +1,45 @@
+name: Independent BTC ETH native mark last dislocation audit
+on:
+  push:
+    branches: [research/independent-mark-last-dislocation-20261118-v1]
+    paths:
+      - scripts/independent_mark_last_dislocation_v1.py
+      - .github/workflows/independent-mark-last-dislocation-v1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-mark-last-dislocation-v1
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/independent-mark-last-dislocation-20261118-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba tabulate
+      - name: Replay both markets with full 1m native mark and trade OHLC
+        run: python scripts/independent_mark_last_dislocation_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-mark-last-dislocation-v1
+          path: analysis/independent_mark_last_dislocation_v1/
+          retention-days: 45
+      - name: Commit only independent research results
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/independent_mark_last_dislocation_v1/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: archive native mark last BTC ETH monthly PF audit'
+            git fetch origin research/independent-mark-last-dislocation-20261118-v1
+            git rebase origin/research/independent-mark-last-dislocation-20261118-v1
+            git push origin HEAD:research/independent-mark-last-dislocation-20261118-v1
+          fi
