@@ -167,7 +167,7 @@ def main():
         active=np.flatnonzero(w>1e-6)
         return [dict(strategy=names[j],family=kinds[j],
             weight_pct=round(float(w[j]*100),3),
-            2025_component_return_pct=round(
+            component_return_2025_pct=round(
                 float(100*(np.prod(1+X[:12,j]/100)-1)),3))
             for j in active]
     records=[]
