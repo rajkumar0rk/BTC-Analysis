@@ -105,3 +105,5 @@ def main():
  "## Assumptions\n\n"+json.dumps(meta,indent=2)+"\n")
  print("DONE",len(allrows),flush=True)
 if __name__=="__main__":main()
+
+# Workflow trigger: isolated research validation
