@@ -1,0 +1,5 @@
+key,train_positive,recheck_positive,train_ge10,recheck_ge10,train_total_pct,worst_month_pct,total_trades,all_22_positive,all_22_ge10
+revert_vr0.6_stop2.5,3,1,0,0,-65.1518176884222,-16.21347297433272,408,False,False
+persist_vr1.4_stop2.5,1,4,0,0,-46.31332019506085,-14.970981349762036,276,False,False
+persist_vr1.2_stop2.5,1,3,1,1,-94.03389173075004,-21.543987544304365,786,False,False
+revert_vr0.8_stop2.5,0,1,0,0,-290.1200390257927,-44.26924883856709,2285,False,False
