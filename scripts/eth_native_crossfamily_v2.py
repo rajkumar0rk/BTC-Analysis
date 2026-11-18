@@ -81,8 +81,8 @@ def aggregate(f,rule):
         up=delta.clip(lower=0).ewm(alpha=1/w,adjust=False).mean()
         dn=(-delta.clip(upper=0)).ewm(alpha=1/w,adjust=False).mean()
         rs=up/dn.replace(0,np.nan)
-        x[f"rsi{w}"]=(100-100/(1+rs)).fillna(
-            np.where(up>0,100.,50.))
+        x[f"rsi{w}"]=(100-100/(1+rs)).where(rs.notna(),
+            pd.Series(np.where(up>0,100.,50.),index=x.index))
     x["vr"]=x.volume/x.volume.shift(1).rolling(20).mean().replace(0,np.nan)
     x["rng"]=x.high-x.low
     x["body"]=(x.close-x.open).abs()/x.rng.replace(0,np.nan)
