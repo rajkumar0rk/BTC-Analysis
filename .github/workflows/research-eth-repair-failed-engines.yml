@@ -1,0 +1,114 @@
+name: ETHUSD repair and rerun six failed strategy engines
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_eth_repair_failed_engines.py
+      - .github/workflows/research-eth-repair-failed-engines.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ethusd-failed-engine-repair-only
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [high_frequency, institutional, portfolio]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install ETH research dependencies including sklearn
+        run: python -m pip install pandas numpy scipy numba scikit-learn tabulate
+      - name: Rerun only failed ETH engines and required prerequisites
+        run: |
+          python scripts/research_eth_repair_failed_engines.py \
+            --suite ${{ matrix.suite }} \
+            --per-script-timeout-seconds 1800
+      - name: Upload repair evidence even if an engine remains unsuccessful
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ethusd-repaired-${{ matrix.suite }}
+          path: analysis/ethusd_failed_engine_repairs/${{ matrix.suite }}/
+          retention-days: 30
+          if-no-files-found: warn
+
+  archive:
+    needs: replay
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ethusd-repaired-*
+          path: analysis/ethusd_failed_engine_repairs/
+      - name: Consolidate original and newly repaired engine counts
+        run: |
+          python - <<'PY'
+          import pathlib,json,shutil
+          root=pathlib.Path('analysis/ethusd_failed_engine_repairs')
+          summaries=[]
+          for f in sorted(root.glob('ethusd-repaired-*/RUN_REPORT.json')):
+            data=json.loads(f.read_text())
+            suite=data['suite']
+            dst=root/suite
+            if dst.exists():shutil.rmtree(dst)
+            f.parent.rename(dst)
+            summaries.append(dict(suite=suite,attempted=data['original_failures_rerun'],
+                completed=data['repaired_success_count'],
+                remaining=data['original_failures_rerun']-data['repaired_success_count'],
+                status=data['status'],stage18=data['stage18_qualification']))
+          if not summaries:raise SystemExit('No repair artifacts produced')
+          repaired=sum(z['completed'] for z in summaries)
+          attempted=sum(z['attempted'] for z in summaries)
+          initial=35
+          result=dict(instrument='ETHUSD',initial_completed_engines=initial,
+            failed_in_initial_review=6,failed_rerun_attempted=attempted,
+            repaired_engines=repaired,remaining_engine_failures=6-repaired,
+            completed_engines_now=initial+repaired,
+            total_original_engines=41,
+            all_41_engines_completed=bool(repaired==6 and attempted==6),
+            stage18_caveat='No candidate passed 2025 qualification; diagnostic fallback reported as unqualified',
+            prices='ETH price normalized by a fixed historical ratio for legacy BTC rules; not unscaled native ETH dollar points',
+            source='Genuine Delta India ETH 1m OHLCV and MARK:ETHUSD, OI:ETHUSD, FUNDING:ETHUSD',
+            no_legacy_BTC_source_edited=True,
+            jobs=summaries)
+          (root/'INDEX.json').write_text(json.dumps(result,indent=2)+'\n')
+          (root/'INDEX.md').write_text('# ETHUSD failed backtest engine repair\n\n'
+            f"Initial engines completed: {initial}/41.\n\n"
+            f"Previously failed engines repaired: {repaired}/6.\n\n"
+            f"**Completed engines: {initial+repaired}/41.**\n\n"
+            '| Suite | Previously failed | Repair completed | Still failed |\n'
+            '|---|---:|---:|---:|\n'
+            +''.join(f"| {x['suite']} | {x['attempted']} | {x['completed']} | {x['remaining']} |\n" for x in summaries)
+            +'\nAll BTC source scripts preserved. ETH institutional market data is real. '
+              'Legacy virtual-point conversion is NOT native ETH ATR trading. '
+              'Stage18 model with no eligible 2025 candidates is labelled unqualified, '
+              'even when the diagnostic backtest completes.\n')
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Commit only isolated repair results
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ethusd_failed_engine_repairs/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive ETH 6 failed-engine repairs and evidence"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
