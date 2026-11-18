@@ -1,0 +1,19 @@
+{
+  "exchange": "Delta Exchange India",
+  "symbol": "ETHUSD perpetual",
+  "source_month_files": 23,
+  "native_1m_candles": 987840,
+  "derived_5m_candles": 197568,
+  "zero_volume_minutes": 1887,
+  "signal_events": 21152,
+  "exit_replays": 126798,
+  "setup_count": 13,
+  "eligible_rules": 1818,
+  "two_period_positive_rules": 2,
+  "two_period_lower_positive_rules": 0,
+  "train": "2025",
+  "validation": "2026-01 through 2026-06",
+  "holdout": "2026-07-01 through 2026-10-17",
+  "fees": "0.05% per side taker + 18% GST on fee; $5 slippage each side",
+  "selection": "Training and validation only, never final holdout"
+}

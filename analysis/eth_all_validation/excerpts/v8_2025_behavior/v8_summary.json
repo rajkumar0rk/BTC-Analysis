@@ -1,0 +1,627 @@
+{
+  "period": "2025-03-01 to 2025-12-31, no 2026 candles",
+  "source": "Delta India ETHUSD 1min futures OHLCV",
+  "leg_confirmation_reversal_points": 1000.0,
+  "risk_barrier_points": 1000.0,
+  "opportunity_rows": 14594,
+  "trend_leg_counts": {
+    "2000": 1,
+    "5000": 0
+  },
+  "cohort_signal_quality": {
+    "Mar-Aug_2025": {
+      "all_days": {
+        "baseline_all_hours": {
+          "opportunities": 8832,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "momentum6": {
+          "opportunities": 7,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "day4h_alignment": {
+          "opportunities": 2000,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 302,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "range_volume_impulse": {
+          "opportunities": 284,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_breakout": {
+          "opportunities": 93,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_pullback": {
+          "opportunities": 115,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_impulse": {
+          "opportunities": 69,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        }
+      },
+      "weekdays_IST": {
+        "baseline_all_hours": {
+          "opportunities": 6250,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "momentum6": {
+          "opportunities": 5,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "day4h_alignment": {
+          "opportunities": 1516,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 232,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "range_volume_impulse": {
+          "opportunities": 247,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_breakout": {
+          "opportunities": 72,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_pullback": {
+          "opportunities": 85,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_impulse": {
+          "opportunities": 57,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        }
+      }
+    },
+    "Sep-Dec_2025": {
+      "all_days": {
+        "baseline_all_hours": {
+          "opportunities": 5762,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "momentum6": {
+          "opportunities": 5,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "day4h_alignment": {
+          "opportunities": 1145,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 197,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "range_volume_impulse": {
+          "opportunities": 240,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_breakout": {
+          "opportunities": 49,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_pullback": {
+          "opportunities": 61,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_impulse": {
+          "opportunities": 51,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        }
+      },
+      "weekdays_IST": {
+        "baseline_all_hours": {
+          "opportunities": 4130,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "momentum6": {
+          "opportunities": 2,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "day4h_alignment": {
+          "opportunities": 824,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 159,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "range_volume_impulse": {
+          "opportunities": 204,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_breakout": {
+          "opportunities": 43,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_pullback": {
+          "opportunities": 37,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_impulse": {
+          "opportunities": 46,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        }
+      }
+    },
+    "All_Mar_Dec": {
+      "all_days": {
+        "baseline_all_hours": {
+          "opportunities": 14594,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "momentum6": {
+          "opportunities": 12,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "day4h_alignment": {
+          "opportunities": 3145,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 499,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "range_volume_impulse": {
+          "opportunities": 524,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_breakout": {
+          "opportunities": 142,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_pullback": {
+          "opportunities": 176,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_impulse": {
+          "opportunities": 120,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        }
+      },
+      "weekdays_IST": {
+        "baseline_all_hours": {
+          "opportunities": 10380,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "momentum6": {
+          "opportunities": 7,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "day4h_alignment": {
+          "opportunities": 2340,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "accepted_12h_breakout": {
+          "opportunities": 391,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "range_volume_impulse": {
+          "opportunities": 451,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_breakout": {
+          "opportunities": 115,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_pullback": {
+          "opportunities": 122,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        },
+        "trend_and_impulse": {
+          "opportunities": 103,
+          "hit2000_24h": 0,
+          "rate2000_24h_pct": 0.0,
+          "hit2000_48h": 0,
+          "rate2000_48h_pct": 0.0,
+          "hit5000_24h": 0,
+          "rate5000_24h_pct": 0.0,
+          "hit5000_48h": 0,
+          "rate5000_48h_pct": 0.0
+        }
+      }
+    }
+  },
+  "early_leg_coverage": {
+    "2000": {
+      "legs": 1,
+      "conditions": {
+        "momentum6": {
+          "detected_early": 0,
+          "pct": 0.0
+        },
+        "day4h_alignment": {
+          "detected_early": 1,
+          "pct": 100.0
+        },
+        "accepted_12h_breakout": {
+          "detected_early": 1,
+          "pct": 100.0
+        },
+        "range_volume_impulse": {
+          "detected_early": 1,
+          "pct": 100.0
+        },
+        "trend_and_breakout": {
+          "detected_early": 0,
+          "pct": 0.0
+        },
+        "trend_and_pullback": {
+          "detected_early": 1,
+          "pct": 100.0
+        },
+        "trend_and_impulse": {
+          "detected_early": 0,
+          "pct": 0.0
+        }
+      }
+    },
+    "5000": {
+      "legs": 0,
+      "conditions": {
+        "momentum6": {
+          "detected_early": 0,
+          "pct": null
+        },
+        "day4h_alignment": {
+          "detected_early": 0,
+          "pct": null
+        },
+        "accepted_12h_breakout": {
+          "detected_early": 0,
+          "pct": null
+        },
+        "range_volume_impulse": {
+          "detected_early": 0,
+          "pct": null
+        },
+        "trend_and_breakout": {
+          "detected_early": 0,
+          "pct": null
+        },
+        "trend_and_pullback": {
+          "detected_early": 0,
+          "pct": null
+        },
+        "trend_and_impulse": {
+          "detected_early": 0,
+          "pct": null
+        }
+      }
+    }
+  }
+}

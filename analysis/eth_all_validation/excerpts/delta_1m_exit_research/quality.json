@@ -1,0 +1,13 @@
+{
+  "months": 23,
+  "bars": 987840,
+  "start": "2025-01-01 00:00:00+00:00",
+  "end": "2026-11-17 23:59:00+00:00",
+  "zero_volume": 1887,
+  "entry_events": 2344,
+  "exit_simulations": 23440,
+  "holdout_start": "2026-07-01",
+  "taker_fee": 0.0005,
+  "gst_on_fee": 0.18,
+  "slippage_points_per_side": 5.0
+}

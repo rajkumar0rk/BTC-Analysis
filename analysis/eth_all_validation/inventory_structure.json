@@ -1,0 +1,138 @@
+[
+  {
+    "path": "analysis/eth_all_original_rules/big_trend_stage1/RESEARCH_REPORT.md",
+    "bytes": 321608
+  },
+  {
+    "path": "analysis/eth_all_original_rules/big_trend_stage1/all_scenarios.csv",
+    "bytes": 92098
+  },
+  {
+    "path": "analysis/eth_all_original_rules/big_trend_stage1/quality.json",
+    "bytes": 499
+  },
+  {
+    "path": "analysis/eth_all_original_rules/big_trend_stage1/signal_exclusions.csv",
+    "bytes": 20153
+  },
+  {
+    "path": "analysis/eth_all_original_rules/big_trend_stage1/trade_ledger.csv.gz",
+    "bytes": 269023
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_fixed3r/RESEARCH_REPORT.md",
+    "bytes": 207723
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_fixed3r/all_combinations.csv",
+    "bytes": 80503
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_fixed3r/quality.json",
+    "bytes": 363
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_fixed3r/trade_ledger.csv.gz",
+    "bytes": 7407070
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_long/RESEARCH_REPORT.md",
+    "bytes": 88885
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_long/all_combinations.csv",
+    "bytes": 32212
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_long/quality.json",
+    "bytes": 361
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_long/trade_ledger.csv.gz",
+    "bytes": 37183
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_long_fixed2r/RESEARCH_REPORT.md",
+    "bytes": 207722
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_long_fixed2r/all_combinations.csv",
+    "bytes": 80329
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_long_fixed2r/quality.json",
+    "bytes": 363
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_long_fixed2r/trade_ledger.csv.gz",
+    "bytes": 7406826
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_short_fixed2r/RESEARCH_REPORT.md",
+    "bytes": 208550
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_short_fixed2r/all_combinations.csv",
+    "bytes": 80819
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_short_fixed2r/quality.json",
+    "bytes": 364
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_short_fixed2r/trade_ledger.csv.gz",
+    "bytes": 7397198
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_short_fixed3r/RESEARCH_REPORT.md",
+    "bytes": 208551
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_short_fixed3r/all_combinations.csv",
+    "bytes": 81005
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_short_fixed3r/quality.json",
+    "bytes": 364
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_swing_range_short_fixed3r/trade_ledger.csv.gz",
+    "bytes": 7395474
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_uptrend_short_fixed3r/RESEARCH_REPORT.md",
+    "bytes": 207747
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_uptrend_short_fixed3r/all_combinations.csv",
+    "bytes": 80609
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_uptrend_short_fixed3r/quality.json",
+    "bytes": 377
+  },
+  {
+    "path": "analysis/eth_all_original_rules/mtf_uptrend_short_fixed3r/trade_ledger.csv.gz",
+    "bytes": 7865300
+  },
+  {
+    "path": "analysis/eth_all_original_rules/previous_day_range_swing/RESEARCH_REPORT.md",
+    "bytes": 850085
+  },
+  {
+    "path": "analysis/eth_all_original_rules/previous_day_range_swing/all_scenarios.csv",
+    "bytes": 332774
+  },
+  {
+    "path": "analysis/eth_all_original_rules/previous_day_range_swing/quality.json",
+    "bytes": 437
+  },
+  {
+    "path": "analysis/eth_all_original_rules/previous_day_range_swing/signal_exclusions.csv",
+    "bytes": 65421
+  },
+  {
+    "path": "analysis/eth_all_original_rules/previous_day_range_swing/trade_ledger.csv.gz",
+    "bytes": 1869315
+  }
+]

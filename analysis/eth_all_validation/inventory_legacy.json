@@ -1,0 +1,122 @@
+[
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_5m_15m/RESEARCH_REPORT.md",
+    "bytes": 9160
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_5m_15m/all_weekday_time_slots.csv",
+    "bytes": 1442006
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_5m_15m/new_candle_sequences.csv",
+    "bytes": 1839
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_5m_15m/quality.json",
+    "bytes": 340
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_5m_15m/session_clock_events.csv",
+    "bytes": 11564
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_5m_15m/session_event_summary.csv",
+    "bytes": 2168
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_5m_15m/session_event_trades.csv",
+    "bytes": 257717
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_exit_research/RESEARCH_REPORT.md",
+    "bytes": 10923
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_exit_research/entries.csv",
+    "bytes": 131049
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_exit_research/exit_comparison.csv",
+    "bytes": 10724
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_exit_research/quality.json",
+    "bytes": 304
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_exit_research/trades.csv",
+    "bytes": 2589570
+  },
+  {
+    "path": "analysis/eth_all_original_rules/delta_1m_exit_research/training_selected_exits_holdout.csv",
+    "bytes": 2260
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_1_2025/V7_1_RESEARCH_REPORT.md",
+    "bytes": 2441
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_1_2025/V7_1_retest_exclusive_trades.csv",
+    "bytes": 4955
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_1_2025/V7_control_exclusive_trades.csv",
+    "bytes": 12887
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_1_2025/v7_1_event_ledger.csv",
+    "bytes": 62111
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_1_2025/v7_1_summary.json",
+    "bytes": 1334
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_2_2025/V7_2_RESEARCH_REPORT.md",
+    "bytes": 2722
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_2_2025/v7_2_signals.csv",
+    "bytes": 18965
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_2_2025/v7_2_summary.json",
+    "bytes": 2263
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v7_2_2025/v7_2_trades.csv",
+    "bytes": 24869
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v8_1_2025_exits/V8_1_RESEARCH_REPORT.md",
+    "bytes": 3951
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v8_1_2025_exits/v8_1_entry_signals.csv",
+    "bytes": 67011
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v8_1_2025_exits/v8_1_summary.json",
+    "bytes": 21087
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v8_1_2025_exits/v8_1_trade_ledger.csv",
+    "bytes": 137879
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v8_2025_behavior/V8_RESEARCH_REPORT.md",
+    "bytes": 4281
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v8_2025_behavior/v8_confirmed_legs.csv",
+    "bytes": 231
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v8_2025_behavior/v8_hourly_opportunities.csv",
+    "bytes": 2260611
+  },
+  {
+    "path": "analysis/eth_all_original_rules/v8_2025_behavior/v8_summary.json",
+    "bytes": 17659
+  }
+]

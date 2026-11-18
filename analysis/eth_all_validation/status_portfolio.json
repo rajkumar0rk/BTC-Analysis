@@ -1,0 +1,92 @@
+{
+  "group": "portfolio",
+  "source": {
+    "source": "https://api.india.delta.exchange/v2/history/candles",
+    "symbol": "ETHUSD",
+    "periods": [
+      "2025-01.csv.gz",
+      "2025-02.csv.gz",
+      "2025-03.csv.gz",
+      "2025-04.csv.gz",
+      "2025-05.csv.gz",
+      "2025-06.csv.gz",
+      "2025-07.csv.gz",
+      "2025-08.csv.gz",
+      "2025-09.csv.gz",
+      "2025-10.csv.gz",
+      "2025-11.csv.gz",
+      "2025-12.csv.gz",
+      "2026-01.csv.gz",
+      "2026-02.csv.gz",
+      "2026-03.csv.gz",
+      "2026-04.csv.gz",
+      "2026-05.csv.gz",
+      "2026-06.csv.gz",
+      "2026-07.csv.gz",
+      "2026-08.csv.gz",
+      "2026-09.csv.gz",
+      "2026-10.csv.gz"
+    ],
+    "total_utc_minutes": 963360,
+    "first_IST_month_unavailable_hours": 5.5,
+    "source_manifest_time": "2026-11-18T09:05:23.568502+00:00"
+  },
+  "runs": [
+    {
+      "script": "research_monthly_portfolio_stage18.py",
+      "source_sha256": "6347811671561c0174457ae16d96e2b728f802130c8528124a2504274f1d3482",
+      "port_sha256": "11acc3c796ef066c4abe33bfdba452e5822b856ce0a8735b042c782ba00f2b62",
+      "modifications": "text-only BTCUSD->ETHUSD/BTCUSDT->ETHUSDT and isolation of all analysis/* paths",
+      "costs_in_original_model": "unchanged; must inspect individual report",
+      "point_thresholds": "unchanged numeric BTC values; not volatility-normalized to ETH",
+      "run_time_seconds": 0.22,
+      "status": "failed",
+      "return_code": 2,
+      "stdout_tail": "",
+      "stderr_tail": "usage: research_monthly_portfolio_stage18.py [-h] --stage15-ledger\n                                             STAGE15_LEDGER\nresearch_monthly_portfolio_stage18.py: error: the following arguments are required: --stage15-ledger\n",
+      "output_dir_count_after": 0
+    },
+    {
+      "script": "research_three_sleeve_stage20.py",
+      "source_sha256": "058394e64fce67cd4fc627a84da48eab41a0a43dc5964b5fd9ca23220a12bbc2",
+      "port_sha256": "83ad67b6803110d17caaf50edcd91874a54beac8212105db49d8a355192fc64f",
+      "modifications": "text-only BTCUSD->ETHUSD/BTCUSDT->ETHUSDT and isolation of all analysis/* paths",
+      "costs_in_original_model": "unchanged; must inspect individual report",
+      "point_thresholds": "unchanged numeric BTC values; not volatility-normalized to ETH",
+      "run_time_seconds": 0.22,
+      "status": "failed",
+      "return_code": 1,
+      "stdout_tail": "",
+      "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/eth_scripts_j7fed6ou/research_three_sleeve_stage20.py\", line 170, in <module>\n    main()\n  File \"/tmp/eth_scripts_j7fed6ou/research_three_sleeve_stage20.py\", line 59, in main\n    base,patterns=read()\n                  ^^^^^^\n  File \"/tmp/eth_scripts_j7fed6ou/research_three_sleeve_stage20.py\", line 30, in read\n    a=pd.read_csv(STAGE18/\"monthly_blended_returns.csv\")\n      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1866, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 423, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2721, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2988, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/common.py\", line 954, in get_handle\n    handle = open(handle, ioargs.mode)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'analysis/eth_all_original_rules/institutional_discovery_stage18_monthly_dual_strategy/monthly_blended_returns.csv'\n",
+      "output_dir_count_after": 1
+    },
+    {
+      "script": "research_monthly_fixed_weight_stage21.py",
+      "source_sha256": "f062cdacb28a0f44d9013040e345b48e39e85914d4cf8fdb9528401d4fccd417",
+      "port_sha256": "fab182efd191ef6eed2ea5d1e48eaaa2b300d66c3f33ac3b1350fd9aeeefa798",
+      "modifications": "text-only BTCUSD->ETHUSD/BTCUSDT->ETHUSDT and isolation of all analysis/* paths",
+      "costs_in_original_model": "unchanged; must inspect individual report",
+      "point_thresholds": "unchanged numeric BTC values; not volatility-normalized to ETH",
+      "run_time_seconds": 0.53,
+      "status": "failed",
+      "return_code": 1,
+      "stdout_tail": "",
+      "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/eth_scripts_j7fed6ou/research_monthly_fixed_weight_stage21.py\", line 296, in <module>\n    main()\n  File \"/tmp/eth_scripts_j7fed6ou/research_monthly_fixed_weight_stage21.py\", line 141, in main\n    names,kinds,X=load_monthly_series()\n                  ^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/eth_scripts_j7fed6ou/research_monthly_fixed_weight_stage21.py\", line 35, in load_monthly_series\n    raw=pd.read_csv(STAGE18)\n        ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1866, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 423, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2721, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2988, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/common.py\", line 954, in get_handle\n    handle = open(handle, ioargs.mode)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'analysis/eth_all_original_rules/institutional_discovery_stage18_monthly_dual_strategy/monthly_blended_returns.csv'\n",
+      "output_dir_count_after": 2
+    },
+    {
+      "script": "research_wide_monthly_stage23.py",
+      "source_sha256": "af696fcaf44e8984d3fe0123640267ceea622bd2213f8c171a42796e33638582",
+      "port_sha256": "f8046d7c6adf80b09b3f5de3cb1a93dbd0d7850e753837b948d12526dec2b60c",
+      "modifications": "text-only BTCUSD->ETHUSD/BTCUSDT->ETHUSDT and isolation of all analysis/* paths",
+      "costs_in_original_model": "unchanged; must inspect individual report",
+      "point_thresholds": "unchanged numeric BTC values; not volatility-normalized to ETH",
+      "run_time_seconds": 0.43,
+      "status": "failed",
+      "return_code": 1,
+      "stdout_tail": "",
+      "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/eth_scripts_j7fed6ou/research_wide_monthly_stage23.py\", line 294, in <module>\n    main()\n  File \"/tmp/eth_scripts_j7fed6ou/research_wide_monthly_stage23.py\", line 163, in main\n    models,counts=make_model_pool()\n                  ^^^^^^^^^^^^^^^^^\n  File \"/tmp/eth_scripts_j7fed6ou/research_wide_monthly_stage23.py\", line 55, in make_model_pool\n    s18=pd.read_csv(S18F)\n        ^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 1866, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 423, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2721, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2988, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/common.py\", line 954, in get_handle\n    handle = open(handle, ioargs.mode)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'analysis/eth_all_original_rules/institutional_discovery_stage18_monthly_dual_strategy/monthly_blended_returns.csv'\n",
+      "output_dir_count_after": 3
+    }
+  ]
+}

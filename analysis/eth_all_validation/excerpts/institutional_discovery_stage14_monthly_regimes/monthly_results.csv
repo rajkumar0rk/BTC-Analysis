@@ -1,0 +1,645 @@
+family,regime,target_R,max_hold_min,month_ist,trades,net_pts,status
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-02,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-08,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-10,3,181.03,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-11,3,216.44,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2025-12,1,57.25,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-02,1,-16.28,Loss
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,240,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-02,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-08,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-10,3,377.25,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-11,3,188.83,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2025-12,1,33.03,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-02,1,39.2,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,2.0,480,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-02,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-08,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-10,3,181.03,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-11,3,216.44,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2025-12,1,57.25,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-02,1,-16.28,Loss
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,240,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-02,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-08,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-10,3,601.98,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-11,3,56.35,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2025-12,1,33.03,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-02,1,39.2,Profit
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,1h_volume_burst_adx20,3.0,480,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-02,2,-69.22,Loss
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-08,1,23.38,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-10,1,192.31,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-11,3,216.44,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2025-12,1,57.25,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-02,1,-16.28,Loss
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,240,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-02,2,-147.12,Loss
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-08,1,172.89,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-10,1,434.56,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-11,3,188.83,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2025-12,1,33.03,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-02,1,39.2,Profit
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,2.0,480,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-02,2,-69.22,Loss
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-08,1,23.38,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-10,1,192.31,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-11,3,216.44,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2025-12,1,57.25,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-02,1,-16.28,Loss
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,240,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-02,2,-147.12,Loss
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-08,1,172.89,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-10,1,659.29,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-11,3,56.35,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2025-12,1,33.03,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-02,1,39.2,Profit
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,4h_adx25,3.0,480,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-02,2,-69.22,Loss
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-10,1,192.31,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-11,2,188.21,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2025-12,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-02,1,-16.28,Loss
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,240,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-02,2,-147.12,Loss
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-10,1,434.56,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-11,2,278.62,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2025-12,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-02,1,39.2,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,2.0,480,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-02,2,-69.22,Loss
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-10,1,192.31,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-11,2,188.21,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2025-12,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-02,1,-16.28,Loss
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,240,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-02,2,-147.12,Loss
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-10,1,659.29,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-11,2,146.14,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2025-12,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-02,1,39.2,Profit
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,4h_efficiency30_adx25,3.0,480,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-02,2,-69.22,Loss
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-08,1,23.38,Profit
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-10,3,181.03,Profit
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-11,3,216.44,Profit
+S13_pullback_near_half_atr,all_entries,2.0,240,2025-12,2,104.28,Profit
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-02,1,-16.28,Loss
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,240,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-02,2,-147.12,Loss
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-08,1,172.89,Profit
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-10,3,377.25,Profit
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-11,3,188.83,Profit
+S13_pullback_near_half_atr,all_entries,2.0,480,2025-12,2,49.68,Profit
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-02,1,39.2,Profit
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,2.0,480,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-02,2,-69.22,Loss
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-08,1,23.38,Profit
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-10,3,181.03,Profit
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-11,3,216.44,Profit
+S13_pullback_near_half_atr,all_entries,3.0,240,2025-12,2,104.28,Profit
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-02,1,-16.28,Loss
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,240,2026-11,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-01,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-02,2,-147.12,Loss
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-03,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-04,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-05,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-06,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-07,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-08,1,172.89,Profit
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-09,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-10,3,601.98,Profit
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-11,3,56.35,Profit
+S13_pullback_near_half_atr,all_entries,3.0,480,2025-12,2,49.68,Profit
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-01,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-02,1,39.2,Profit
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-03,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-04,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-05,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-06,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-07,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-08,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-09,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-10,0,0.0,No trades
+S13_pullback_near_half_atr,all_entries,3.0,480,2026-11,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-01,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-02,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-03,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-04,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-05,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-06,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-07,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-08,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-09,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-10,2,216.88,Profit
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-11,2,231.06,Profit
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2025-12,1,57.25,Profit
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-01,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-02,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-03,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-04,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-05,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-06,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-07,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-08,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-09,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-10,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,240,2026-11,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-01,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-02,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-03,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-04,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-05,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-06,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-07,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-08,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-09,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-10,2,432.85,Profit
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-11,2,218.06,Profit
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2025-12,1,33.03,Profit
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-01,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-02,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-03,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-04,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-05,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-06,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-07,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-08,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-09,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-10,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,2.0,480,2026-11,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-01,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-02,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-03,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-04,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-05,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-06,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-07,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-08,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-09,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-10,2,216.88,Profit
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-11,2,231.06,Profit
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2025-12,1,57.25,Profit
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-01,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-02,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-03,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-04,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-05,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-06,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-07,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-08,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-09,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-10,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,240,2026-11,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-01,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-02,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-03,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-04,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-05,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-06,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-07,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-08,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-09,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-10,2,657.59,Profit
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-11,2,85.58,Profit
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2025-12,1,33.03,Profit
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-01,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-02,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-03,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-04,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-05,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-06,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-07,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-08,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-09,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-10,0,0.0,No trades
+S13_pullback_touch,1h_volume_burst_adx20,3.0,480,2026-11,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2025-01,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2025-02,1,-97.61,Loss
+S13_pullback_touch,4h_adx25,2.0,240,2025-03,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2025-04,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2025-05,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2025-06,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2025-07,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2025-08,1,23.38,Profit
+S13_pullback_touch,4h_adx25,2.0,240,2025-09,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2025-10,1,192.31,Profit
+S13_pullback_touch,4h_adx25,2.0,240,2025-11,2,231.06,Profit
+S13_pullback_touch,4h_adx25,2.0,240,2025-12,1,57.25,Profit
+S13_pullback_touch,4h_adx25,2.0,240,2026-01,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-02,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-03,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-04,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-05,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-06,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-07,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-08,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-09,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-10,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,240,2026-11,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2025-01,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2025-02,1,-160.05,Loss
+S13_pullback_touch,4h_adx25,2.0,480,2025-03,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2025-04,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2025-05,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2025-06,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2025-07,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2025-08,1,172.89,Profit
+S13_pullback_touch,4h_adx25,2.0,480,2025-09,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2025-10,1,434.56,Profit
+S13_pullback_touch,4h_adx25,2.0,480,2025-11,2,218.06,Profit
+S13_pullback_touch,4h_adx25,2.0,480,2025-12,1,33.03,Profit
+S13_pullback_touch,4h_adx25,2.0,480,2026-01,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-02,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-03,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-04,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-05,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-06,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-07,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-08,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-09,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-10,0,0.0,No trades
+S13_pullback_touch,4h_adx25,2.0,480,2026-11,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2025-01,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2025-02,1,-97.61,Loss
+S13_pullback_touch,4h_adx25,3.0,240,2025-03,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2025-04,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2025-05,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2025-06,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2025-07,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2025-08,1,23.38,Profit
+S13_pullback_touch,4h_adx25,3.0,240,2025-09,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2025-10,1,192.31,Profit
+S13_pullback_touch,4h_adx25,3.0,240,2025-11,2,231.06,Profit
+S13_pullback_touch,4h_adx25,3.0,240,2025-12,1,57.25,Profit
+S13_pullback_touch,4h_adx25,3.0,240,2026-01,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-02,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-03,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-04,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-05,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-06,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-07,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-08,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-09,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-10,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,240,2026-11,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2025-01,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2025-02,1,-160.05,Loss
+S13_pullback_touch,4h_adx25,3.0,480,2025-03,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2025-04,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2025-05,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2025-06,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2025-07,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2025-08,1,172.89,Profit
+S13_pullback_touch,4h_adx25,3.0,480,2025-09,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2025-10,1,659.29,Profit
+S13_pullback_touch,4h_adx25,3.0,480,2025-11,2,85.58,Profit
+S13_pullback_touch,4h_adx25,3.0,480,2025-12,1,33.03,Profit
+S13_pullback_touch,4h_adx25,3.0,480,2026-01,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-02,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-03,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-04,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-05,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-06,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-07,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-08,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-09,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-10,0,0.0,No trades
+S13_pullback_touch,4h_adx25,3.0,480,2026-11,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2025-01,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2025-02,1,-97.61,Loss
+S13_pullback_touch,all_entries,2.0,240,2025-03,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2025-04,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2025-05,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2025-06,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2025-07,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2025-08,1,23.38,Profit
+S13_pullback_touch,all_entries,2.0,240,2025-09,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2025-10,2,216.88,Profit
+S13_pullback_touch,all_entries,2.0,240,2025-11,2,231.06,Profit
+S13_pullback_touch,all_entries,2.0,240,2025-12,2,104.28,Profit
+S13_pullback_touch,all_entries,2.0,240,2026-01,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-02,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-03,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-04,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-05,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-06,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-07,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-08,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-09,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-10,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,240,2026-11,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2025-01,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2025-02,1,-160.05,Loss
+S13_pullback_touch,all_entries,2.0,480,2025-03,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2025-04,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2025-05,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2025-06,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2025-07,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2025-08,1,172.89,Profit
+S13_pullback_touch,all_entries,2.0,480,2025-09,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2025-10,2,432.85,Profit
+S13_pullback_touch,all_entries,2.0,480,2025-11,2,218.06,Profit
+S13_pullback_touch,all_entries,2.0,480,2025-12,2,49.68,Profit
+S13_pullback_touch,all_entries,2.0,480,2026-01,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-02,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-03,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-04,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-05,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-06,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-07,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-08,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-09,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-10,0,0.0,No trades
+S13_pullback_touch,all_entries,2.0,480,2026-11,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2025-01,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2025-02,1,-97.61,Loss
+S13_pullback_touch,all_entries,3.0,240,2025-03,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2025-04,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2025-05,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2025-06,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2025-07,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2025-08,1,23.38,Profit
+S13_pullback_touch,all_entries,3.0,240,2025-09,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2025-10,2,216.88,Profit
+S13_pullback_touch,all_entries,3.0,240,2025-11,2,231.06,Profit
+S13_pullback_touch,all_entries,3.0,240,2025-12,2,104.28,Profit
+S13_pullback_touch,all_entries,3.0,240,2026-01,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-02,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-03,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-04,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-05,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-06,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-07,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-08,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-09,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-10,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,240,2026-11,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2025-01,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2025-02,1,-160.05,Loss
+S13_pullback_touch,all_entries,3.0,480,2025-03,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2025-04,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2025-05,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2025-06,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2025-07,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2025-08,1,172.89,Profit
+S13_pullback_touch,all_entries,3.0,480,2025-09,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2025-10,2,657.59,Profit
+S13_pullback_touch,all_entries,3.0,480,2025-11,2,85.58,Profit
+S13_pullback_touch,all_entries,3.0,480,2025-12,2,49.68,Profit
+S13_pullback_touch,all_entries,3.0,480,2026-01,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-02,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-03,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-04,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-05,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-06,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-07,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-08,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-09,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-10,0,0.0,No trades
+S13_pullback_touch,all_entries,3.0,480,2026-11,0,0.0,No trades

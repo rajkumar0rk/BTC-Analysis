@@ -1,0 +1,59 @@
+{
+  "source": "Delta Exchange India ETHUSD 1m futures",
+  "observed_1min_candles": 987840,
+  "observed_until_utc": "2026-11-17 23:59:00+00:00",
+  "missing_1min_candles": 0,
+  "raw_structure_events": 33596,
+  "mtf_and_risk_eligible_events": 6,
+  "simulated_trade_rows": 40,
+  "standalone_model_summary_rows": 72,
+  "pattern_families": [
+    "01_sweep_rejection",
+    "04_trend_pullback_engulf",
+    "06_inside_bar_break",
+    "08_compression_breakout"
+  ],
+  "environment_filters": [
+    "all_eligible",
+    "4h_slope_agrees",
+    "1h_4h_slope_agrees",
+    "4h_trend_1h_pullback",
+    "dual_trend_plus_5m_activity",
+    "1h_regime_expansion",
+    "1h_quiet_then_5m_expansion",
+    "1h_directional_high_volume",
+    "1h_break_6bar_channel",
+    "4h_break_6bar_channel",
+    "aligned_trend_plus_5m_compression_break",
+    "1h_trend_5m_vol_acceleration"
+  ],
+  "risk_points_range": [
+    150.0,
+    1200.0
+  ],
+  "target_R": [
+    2.0,
+    3.0
+  ],
+  "holding_minutes": [
+    120,
+    240
+  ],
+  "repeated_positive_models": 0,
+  "positive_standard_cells": 16,
+  "actual_2026_holdout": false,
+  "methodological_caveats": [
+    "Unchanged Stage 11 structural 5m entry rules; only known-in-advance MTF market-state filters are added",
+    "Completed 1H/4H candles, aligned to exact next-minute OPEN; prior 16 complete bars required to avoid stale gap joins",
+    "1H/4H structures, volume, slopes computed from historical completed candles only",
+    "No time-of-day filter; entries can occur any day/hour",
+    "Stops beyond confirmed setup levels, 2R/3R targets, <=4h holds",
+    "Stop-first 1m OHLC tie; worse fill on stop gaps",
+    "Separate strategy simulation per entry pattern/environment/R/hold; trades across models overlap",
+    "0.05% taker each side, 18% GST, 5-point adverse slippage per side",
+    "Fee-offer sensitivity is conditional, not verified from historical executions",
+    "No tick order book or realized bid/ask spread, market impact, margin, liquidation or funding cashflows",
+    "Every 2026 period already investigated, not pristine independent validation",
+    "Many comparisons cause selection bias; cannot guarantee positive expected results or no losses"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "source": "Delta Exchange India existing ETHUSD 1m, mark 1m, OI 5m, funding 1h",
+  "prior_stage2_quality": {
+    "futures_1m": 987840,
+    "mark_1m": 987840,
+    "OI_5m": 197568,
+    "funding_1h": 16464,
+    "available_hourly_events": 16283,
+    "first": "2025-01-08 12:00:00+00:00",
+    "last": "2026-11-17 22:00:00+00:00",
+    "oi_changes_pct_p01_p50_p99": [
+      -16.926,
+      0.359,
+      14.877
+    ],
+    "hourly_range_points_p01_p50_p99": [
+      3.85,
+      19.55,
+      107.29
+    ],
+    "funding_distinct_values": 818,
+    "funding_fraction_exact_point01": 0.603,
+    "futures_total_before_alignment": 987840,
+    "futures_matched_with_mark": 987840,
+    "futures_excluded_newer_or_unmatched": 0
+  },
+  "hourly_signal_count": 2875,
+  "replayed_rows_including_cost_scenarios": 9748,
+  "missed": {
+    "incomplete_hour": 0,
+    "no_retest_reclaim": 1859,
+    "invalid_structure_risk": 1009
+  },
+  "thresholds": {
+    "hourly_range_ratio": 2,
+    "retest_depth_prior_48h_median_fraction": 0.25,
+    "retest_window_minutes": 30,
+    "retest_then_reclaim_different_5m_blocks": true,
+    "entry": "next 1m open following completed 5m confirmation",
+    "structure_stop": "observed retracement swing plus 10pts buffer",
+    "structure_risk_range_pts": [
+      100,
+      650
+    ],
+    "structure_target_R": 1.5,
+    "fixed_target_stop_pts": [
+      500,
+      350
+    ],
+    "standard_side_taker_fee_plus_gst": 0.00059,
+    "slippage_points_per_side": 5.0,
+    "scalper_counterfactual": "zero close fee only if modeled exit <=30m"
+  },
+  "caveats": [
+    "All periods studied previously; 2026 H2 is not independent out of sample",
+    "Scalper sensitivity is COUNTERFACTUAL in older periods; offer eligibility must be checked on actual fills",
+    "No historical order-book spread/depth, impact or intraminute tick path",
+    "Funding cashflows not reconstructed for holds crossing funding events",
+    "1m OHLC stop-first; gap stop worse-of-open-or-stop",
+    "OHLC excursions can overstate achievable favorable movement",
+    "Overlapping parent strategies and fee scenarios are not independent portfolios",
+    "Day-block confidence intervals exploratory, not multiplicity adjusted",
+    "No live or independent forward performance established",
+    "BTC price-point-equivalent returns, not actual account USD"
+  ]
+}

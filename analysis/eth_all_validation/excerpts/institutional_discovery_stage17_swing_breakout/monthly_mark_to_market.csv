@@ -1,0 +1,369 @@
+model,month_ist,signals_seen,entries,market_exposure,month_return_pct,month_end_equity,status
+4H_channel_24_no_trend_filter_trail_3atr,2025-01,222,2,1,-0.3032,99.69678,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2025-02,222,4,1,0.1342,99.83059,Profit
+4H_channel_24_no_trend_filter_trail_3atr,2025-03,222,2,1,-0.4392,99.39212,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2025-04,222,1,1,-0.5556,98.83994,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2025-05,222,4,1,-1.3875,97.46858,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2025-06,222,4,1,-1.5477,95.96007,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2025-07,222,2,1,1.7672,97.65584,Profit
+4H_channel_24_no_trend_filter_trail_3atr,2025-08,222,4,1,1.0544,98.68548,Profit
+4H_channel_24_no_trend_filter_trail_3atr,2025-09,222,3,1,-0.2755,98.41365,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2025-10,222,4,1,2.1687,100.54795,Profit
+4H_channel_24_no_trend_filter_trail_3atr,2025-11,222,3,1,1.149,101.70329,Profit
+4H_channel_24_no_trend_filter_trail_3atr,2025-12,222,5,1,-1.7496,99.92387,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2026-01,222,3,1,1.2095,101.13242,Profit
+4H_channel_24_no_trend_filter_trail_3atr,2026-02,222,1,1,0.3832,101.51998,Profit
+4H_channel_24_no_trend_filter_trail_3atr,2026-03,222,1,1,-0.547,100.96469,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2026-04,222,0,0,0.0,100.96469,No exposure
+4H_channel_24_no_trend_filter_trail_3atr,2026-05,222,0,0,0.0,100.96469,No exposure
+4H_channel_24_no_trend_filter_trail_3atr,2026-06,222,1,1,-0.1873,100.77557,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2026-07,222,0,0,0.0,100.77557,No exposure
+4H_channel_24_no_trend_filter_trail_3atr,2026-08,222,1,1,-0.5437,100.22769,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2026-09,222,0,0,0.0,100.22769,No exposure
+4H_channel_24_no_trend_filter_trail_3atr,2026-10,222,1,1,-0.5617,99.66475,Loss
+4H_channel_24_no_trend_filter_trail_3atr,2026-11,222,1,1,-0.3142,99.35158,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2025-01,222,2,1,-0.5809,99.41914,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2025-02,222,3,1,0.6067,100.0223,Profit
+4H_channel_24_no_trend_filter_trail_4atr,2025-03,222,2,1,-0.8731,99.14905,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2025-04,222,1,1,-0.5556,98.59822,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2025-05,222,4,1,-1.6503,96.97108,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2025-06,222,4,1,-1.7052,95.31755,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2025-07,222,2,1,1.2005,96.4618,Profit
+4H_channel_24_no_trend_filter_trail_4atr,2025-08,222,4,1,0.1127,96.5705,Profit
+4H_channel_24_no_trend_filter_trail_4atr,2025-09,222,3,1,-0.6793,95.91454,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2025-10,222,3,1,3.0051,98.79687,Profit
+4H_channel_24_no_trend_filter_trail_4atr,2025-11,222,2,1,1.2892,100.0706,Profit
+4H_channel_24_no_trend_filter_trail_4atr,2025-12,222,4,1,-1.9398,98.12946,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2026-01,222,3,1,1.0432,99.15317,Profit
+4H_channel_24_no_trend_filter_trail_4atr,2026-02,222,0,1,1.7043,100.84308,Profit
+4H_channel_24_no_trend_filter_trail_4atr,2026-03,222,1,1,-0.547,100.2915,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2026-04,222,0,0,0.0,100.2915,No exposure
+4H_channel_24_no_trend_filter_trail_4atr,2026-05,222,0,0,0.0,100.2915,No exposure
+4H_channel_24_no_trend_filter_trail_4atr,2026-06,222,1,1,-0.2521,100.03866,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2026-07,222,0,0,0.0,100.03866,No exposure
+4H_channel_24_no_trend_filter_trail_4atr,2026-08,222,1,1,-0.5437,99.49479,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2026-09,222,0,0,0.0,99.49479,No exposure
+4H_channel_24_no_trend_filter_trail_4atr,2026-10,222,1,1,-0.5617,98.93597,Loss
+4H_channel_24_no_trend_filter_trail_4atr,2026-11,222,1,1,-0.3142,98.62509,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2025-01,208,2,1,-0.3032,99.69678,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2025-02,208,3,1,0.5585,100.25363,Profit
+4H_channel_24_ema50_agrees_trail_3atr,2025-03,208,1,1,0.1023,100.35623,Profit
+4H_channel_24_ema50_agrees_trail_3atr,2025-04,208,1,1,-0.5556,99.79869,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2025-05,208,3,1,-0.8354,98.965,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2025-06,208,4,1,-1.5477,97.43332,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2025-07,208,2,1,1.7672,99.15513,Profit
+4H_channel_24_ema50_agrees_trail_3atr,2025-08,208,4,1,0.8346,99.98271,Profit
+4H_channel_24_ema50_agrees_trail_3atr,2025-09,208,3,1,-0.5094,99.4734,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2025-10,208,5,1,0.8856,100.35438,Profit
+4H_channel_24_ema50_agrees_trail_3atr,2025-11,208,2,1,1.4634,101.82292,Profit
+4H_channel_24_ema50_agrees_trail_3atr,2025-12,208,4,1,-1.4069,100.39035,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2026-01,208,2,1,1.7762,102.17346,Profit
+4H_channel_24_ema50_agrees_trail_3atr,2026-02,208,1,1,0.3832,102.565,Profit
+4H_channel_24_ema50_agrees_trail_3atr,2026-03,208,1,1,-0.547,102.004,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2026-04,208,0,0,0.0,102.004,No exposure
+4H_channel_24_ema50_agrees_trail_3atr,2026-05,208,0,0,0.0,102.004,No exposure
+4H_channel_24_ema50_agrees_trail_3atr,2026-06,208,1,1,-0.1873,101.81293,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2026-07,208,0,0,0.0,101.81293,No exposure
+4H_channel_24_ema50_agrees_trail_3atr,2026-08,208,1,1,-0.5437,101.25941,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2026-09,208,0,0,0.0,101.25941,No exposure
+4H_channel_24_ema50_agrees_trail_3atr,2026-10,208,1,1,-0.5617,100.69068,Loss
+4H_channel_24_ema50_agrees_trail_3atr,2026-11,208,1,1,-0.3142,100.37428,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2025-01,208,2,1,-0.5809,99.41914,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2025-02,208,3,1,0.7741,100.18872,Profit
+4H_channel_24_ema50_agrees_trail_4atr,2025-03,208,1,1,-0.3339,99.85422,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2025-04,208,1,1,-0.5556,99.29947,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2025-05,208,3,1,-1.0997,98.20752,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2025-06,208,4,1,-1.7052,96.53291,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2025-07,208,2,1,1.2005,97.69175,Profit
+4H_channel_24_ema50_agrees_trail_4atr,2025-08,208,4,1,0.1192,97.80823,Profit
+4H_channel_24_ema50_agrees_trail_4atr,2025-09,208,3,1,-0.9123,96.91596,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2025-10,208,4,1,1.804,98.66435,Profit
+4H_channel_24_ema50_agrees_trail_4atr,2025-11,208,2,1,1.0661,99.71621,Profit
+4H_channel_24_ema50_agrees_trail_4atr,2025-12,208,4,1,-2.1562,97.56617,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2026-01,208,2,1,1.609,99.136,Profit
+4H_channel_24_ema50_agrees_trail_4atr,2026-02,208,0,1,1.7043,100.82562,Profit
+4H_channel_24_ema50_agrees_trail_4atr,2026-03,208,1,1,-0.547,100.27413,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2026-04,208,0,0,0.0,100.27413,No exposure
+4H_channel_24_ema50_agrees_trail_4atr,2026-05,208,0,0,0.0,100.27413,No exposure
+4H_channel_24_ema50_agrees_trail_4atr,2026-06,208,1,1,-0.2521,100.02134,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2026-07,208,0,0,0.0,100.02134,No exposure
+4H_channel_24_ema50_agrees_trail_4atr,2026-08,208,1,1,-0.5437,99.47756,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2026-09,208,0,0,0.0,99.47756,No exposure
+4H_channel_24_ema50_agrees_trail_4atr,2026-10,208,1,1,-0.5617,98.91883,Loss
+4H_channel_24_ema50_agrees_trail_4atr,2026-11,208,1,1,-0.3142,98.60801,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-01,140,1,1,-0.5606,99.43944,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-02,140,2,1,1.6141,101.04445,Profit
+4H_channel_55_no_trend_filter_trail_3atr,2025-03,140,1,1,-0.8355,100.2002,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-04,140,1,1,-0.5556,99.64353,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-05,140,2,1,-0.3584,99.28642,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-06,140,3,1,-1.5038,97.79335,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-07,140,2,1,1.915,99.66611,Profit
+4H_channel_55_no_trend_filter_trail_3atr,2025-08,140,4,1,0.3678,100.03267,Profit
+4H_channel_55_no_trend_filter_trail_3atr,2025-09,140,2,1,-0.384,99.64853,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-10,140,3,1,-0.2488,99.40058,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-11,140,3,1,-0.5713,98.83275,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2025-12,140,4,1,-1.8893,96.96547,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2026-01,140,3,1,1.4422,98.36391,Profit
+4H_channel_55_no_trend_filter_trail_3atr,2026-02,140,0,1,0.9433,99.29182,Profit
+4H_channel_55_no_trend_filter_trail_3atr,2026-03,140,1,1,-0.547,98.74872,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2026-04,140,0,0,0.0,98.74872,No exposure
+4H_channel_55_no_trend_filter_trail_3atr,2026-05,140,0,0,0.0,98.74872,No exposure
+4H_channel_55_no_trend_filter_trail_3atr,2026-06,140,1,1,-0.1873,98.56375,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2026-07,140,0,0,0.0,98.56375,No exposure
+4H_channel_55_no_trend_filter_trail_3atr,2026-08,140,1,1,-0.5437,98.0279,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2026-09,140,0,0,0.0,98.0279,No exposure
+4H_channel_55_no_trend_filter_trail_3atr,2026-10,140,1,1,-0.5617,97.47731,Loss
+4H_channel_55_no_trend_filter_trail_3atr,2026-11,140,1,1,-0.3142,97.17102,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-01,140,1,1,-0.5606,99.43944,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-02,140,2,1,1.8851,101.31398,Profit
+4H_channel_55_no_trend_filter_trail_4atr,2025-03,140,1,1,-1.2235,100.07437,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-04,140,1,1,-0.5556,99.5184,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-05,140,2,1,-0.558,98.96312,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-06,140,3,1,-1.6613,97.319,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-07,140,2,1,1.6412,98.9162,Profit
+4H_channel_55_no_trend_filter_trail_4atr,2025-08,140,4,1,-0.0632,98.85368,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-09,140,2,1,-0.7547,98.10764,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-10,140,3,1,-0.7679,97.35425,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-11,140,3,1,-1.0306,96.35088,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2025-12,140,4,1,-2.1125,94.31547,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2026-01,140,3,1,1.1542,95.40406,Profit
+4H_channel_55_no_trend_filter_trail_4atr,2026-02,140,0,1,1.7043,97.03008,Profit
+4H_channel_55_no_trend_filter_trail_4atr,2026-03,140,1,1,-0.547,96.49935,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2026-04,140,0,0,0.0,96.49935,No exposure
+4H_channel_55_no_trend_filter_trail_4atr,2026-05,140,0,0,0.0,96.49935,No exposure
+4H_channel_55_no_trend_filter_trail_4atr,2026-06,140,1,1,-0.2521,96.25607,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2026-07,140,0,0,0.0,96.25607,No exposure
+4H_channel_55_no_trend_filter_trail_4atr,2026-08,140,1,1,-0.5437,95.73277,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2026-09,140,0,0,0.0,95.73277,No exposure
+4H_channel_55_no_trend_filter_trail_4atr,2026-10,140,1,1,-0.5617,95.19508,Loss
+4H_channel_55_no_trend_filter_trail_4atr,2026-11,140,1,1,-0.3142,94.89595,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-01,139,1,1,-0.5606,99.43944,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-02,139,2,1,1.6141,101.04445,Profit
+4H_channel_55_ema50_agrees_trail_3atr,2025-03,139,1,1,-0.8355,100.2002,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-04,139,1,1,-0.5556,99.64353,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-05,139,2,1,-0.3584,99.28642,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-06,139,3,1,-1.5038,97.79335,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-07,139,2,1,1.915,99.66611,Profit
+4H_channel_55_ema50_agrees_trail_3atr,2025-08,139,4,1,0.3678,100.03267,Profit
+4H_channel_55_ema50_agrees_trail_3atr,2025-09,139,2,1,-0.384,99.64853,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-10,139,3,1,-0.2488,99.40058,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-11,139,3,1,-0.5713,98.83275,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2025-12,139,4,1,-1.8893,96.96547,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2026-01,139,3,1,1.4422,98.36391,Profit
+4H_channel_55_ema50_agrees_trail_3atr,2026-02,139,0,1,0.9433,99.29182,Profit
+4H_channel_55_ema50_agrees_trail_3atr,2026-03,139,1,1,-0.547,98.74872,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2026-04,139,0,0,0.0,98.74872,No exposure
+4H_channel_55_ema50_agrees_trail_3atr,2026-05,139,0,0,0.0,98.74872,No exposure
+4H_channel_55_ema50_agrees_trail_3atr,2026-06,139,1,1,-0.1873,98.56375,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2026-07,139,0,0,0.0,98.56375,No exposure
+4H_channel_55_ema50_agrees_trail_3atr,2026-08,139,1,1,-0.5437,98.0279,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2026-09,139,0,0,0.0,98.0279,No exposure
+4H_channel_55_ema50_agrees_trail_3atr,2026-10,139,1,1,-0.5617,97.47731,Loss
+4H_channel_55_ema50_agrees_trail_3atr,2026-11,139,1,1,-0.3142,97.17102,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-01,139,1,1,-0.5606,99.43944,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-02,139,2,1,1.8851,101.31398,Profit
+4H_channel_55_ema50_agrees_trail_4atr,2025-03,139,1,1,-1.2235,100.07437,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-04,139,1,1,-0.5556,99.5184,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-05,139,2,1,-0.558,98.96312,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-06,139,3,1,-1.6613,97.319,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-07,139,2,1,1.6412,98.9162,Profit
+4H_channel_55_ema50_agrees_trail_4atr,2025-08,139,4,1,-0.0632,98.85368,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-09,139,2,1,-0.7547,98.10764,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-10,139,3,1,-0.7679,97.35425,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-11,139,3,1,-1.0306,96.35088,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2025-12,139,4,1,-2.1125,94.31547,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2026-01,139,3,1,1.1542,95.40406,Profit
+4H_channel_55_ema50_agrees_trail_4atr,2026-02,139,0,1,1.7043,97.03008,Profit
+4H_channel_55_ema50_agrees_trail_4atr,2026-03,139,1,1,-0.547,96.49935,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2026-04,139,0,0,0.0,96.49935,No exposure
+4H_channel_55_ema50_agrees_trail_4atr,2026-05,139,0,0,0.0,96.49935,No exposure
+4H_channel_55_ema50_agrees_trail_4atr,2026-06,139,1,1,-0.2521,96.25607,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2026-07,139,0,0,0.0,96.25607,No exposure
+4H_channel_55_ema50_agrees_trail_4atr,2026-08,139,1,1,-0.5437,95.73277,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2026-09,139,0,0,0.0,95.73277,No exposure
+4H_channel_55_ema50_agrees_trail_4atr,2026-10,139,1,1,-0.5617,95.19508,Loss
+4H_channel_55_ema50_agrees_trail_4atr,2026-11,139,1,1,-0.3142,94.89595,Loss
+1D_channel_20_no_trend_filter_trail_3atr,2025-01,40,0,0,0.0,100.0,No exposure
+1D_channel_20_no_trend_filter_trail_3atr,2025-02,40,0,0,0.0,100.0,No exposure
+1D_channel_20_no_trend_filter_trail_3atr,2025-03,40,0,0,0.0,100.0,No exposure
+1D_channel_20_no_trend_filter_trail_3atr,2025-04,40,0,0,0.0,100.0,No exposure
+1D_channel_20_no_trend_filter_trail_3atr,2025-05,40,1,1,1.2073,101.20734,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2025-06,40,2,1,-0.8845,100.31214,Loss
+1D_channel_20_no_trend_filter_trail_3atr,2025-07,40,2,1,1.5783,101.89537,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2025-08,40,2,1,-0.6405,101.24273,Loss
+1D_channel_20_no_trend_filter_trail_3atr,2025-09,40,1,1,-0.0854,101.15626,Loss
+1D_channel_20_no_trend_filter_trail_3atr,2025-10,40,2,1,-1.1005,100.04307,Loss
+1D_channel_20_no_trend_filter_trail_3atr,2025-11,40,2,1,0.5268,100.57013,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2025-12,40,1,1,-0.6244,99.94221,Loss
+1D_channel_20_no_trend_filter_trail_3atr,2026-01,40,2,1,0.9307,100.87234,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2026-02,40,1,1,0.1677,101.04147,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2026-03,40,1,1,-0.527,100.50903,Loss
+1D_channel_20_no_trend_filter_trail_3atr,2026-04,40,1,1,0.0522,100.56145,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2026-05,40,1,1,0.4978,101.062,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2026-06,40,1,1,0.0036,101.06562,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2026-07,40,1,1,0.0563,101.12256,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2026-08,40,1,1,0.7986,101.93014,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2026-09,40,1,1,-0.5541,101.36531,Loss
+1D_channel_20_no_trend_filter_trail_3atr,2026-10,40,1,1,0.0256,101.39122,Profit
+1D_channel_20_no_trend_filter_trail_3atr,2026-11,40,1,1,0.2531,101.64785,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2025-01,40,0,0,0.0,100.0,No exposure
+1D_channel_20_no_trend_filter_trail_4atr,2025-02,40,0,0,0.0,100.0,No exposure
+1D_channel_20_no_trend_filter_trail_4atr,2025-03,40,0,0,0.0,100.0,No exposure
+1D_channel_20_no_trend_filter_trail_4atr,2025-04,40,0,0,0.0,100.0,No exposure
+1D_channel_20_no_trend_filter_trail_4atr,2025-05,40,1,1,1.2073,101.20734,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2025-06,40,2,1,-0.8845,100.31214,Loss
+1D_channel_20_no_trend_filter_trail_4atr,2025-07,40,2,1,1.5783,101.89537,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2025-08,40,2,1,0.3755,102.27799,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2025-09,40,1,1,-0.0854,102.19064,Loss
+1D_channel_20_no_trend_filter_trail_4atr,2025-10,40,2,1,-1.2819,100.88063,Loss
+1D_channel_20_no_trend_filter_trail_4atr,2025-11,40,2,1,0.5268,101.41211,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2025-12,40,1,1,-0.6244,100.77894,Loss
+1D_channel_20_no_trend_filter_trail_4atr,2026-01,40,2,1,0.9307,101.71685,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2026-02,40,1,1,0.1677,101.88739,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2026-03,40,1,1,-0.527,101.3505,Loss
+1D_channel_20_no_trend_filter_trail_4atr,2026-04,40,1,1,0.0522,101.40335,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2026-05,40,1,1,0.4978,101.90809,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2026-06,40,1,1,0.1789,102.0904,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2026-07,40,1,1,0.0563,102.14792,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2026-08,40,1,1,0.7986,102.96368,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2026-09,40,1,1,-0.5541,102.39313,Loss
+1D_channel_20_no_trend_filter_trail_4atr,2026-10,40,1,1,0.0256,102.4193,Profit
+1D_channel_20_no_trend_filter_trail_4atr,2026-11,40,1,1,0.2531,102.67853,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2025-01,37,0,0,0.0,100.0,No exposure
+1D_channel_20_ema50_agrees_trail_3atr,2025-02,37,0,0,0.0,100.0,No exposure
+1D_channel_20_ema50_agrees_trail_3atr,2025-03,37,0,0,0.0,100.0,No exposure
+1D_channel_20_ema50_agrees_trail_3atr,2025-04,37,0,0,0.0,100.0,No exposure
+1D_channel_20_ema50_agrees_trail_3atr,2025-05,37,1,1,1.2073,101.20734,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2025-06,37,2,1,-0.8845,100.31214,Loss
+1D_channel_20_ema50_agrees_trail_3atr,2025-07,37,2,1,1.5783,101.89537,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2025-08,37,2,1,-0.6405,101.24273,Loss
+1D_channel_20_ema50_agrees_trail_3atr,2025-09,37,1,1,-0.7137,100.52014,Loss
+1D_channel_20_ema50_agrees_trail_3atr,2025-10,37,2,1,-0.6552,99.86153,Loss
+1D_channel_20_ema50_agrees_trail_3atr,2025-11,37,2,1,0.5268,100.38764,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2025-12,37,0,1,-0.105,100.28227,Loss
+1D_channel_20_ema50_agrees_trail_3atr,2026-01,37,2,1,0.9307,101.21557,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2026-02,37,1,1,0.1677,101.38527,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2026-03,37,0,0,0.0,101.38527,No exposure
+1D_channel_20_ema50_agrees_trail_3atr,2026-04,37,1,1,0.0522,101.43814,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2026-05,37,1,1,0.4978,101.94305,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2026-06,37,1,1,0.0036,101.94671,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2026-07,37,1,1,0.0563,102.00415,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2026-08,37,1,1,0.7986,102.81876,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2026-09,37,1,1,-0.5541,102.24902,Loss
+1D_channel_20_ema50_agrees_trail_3atr,2026-10,37,1,1,0.0256,102.27515,Profit
+1D_channel_20_ema50_agrees_trail_3atr,2026-11,37,1,1,0.2531,102.53401,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2025-01,37,0,0,0.0,100.0,No exposure
+1D_channel_20_ema50_agrees_trail_4atr,2025-02,37,0,0,0.0,100.0,No exposure
+1D_channel_20_ema50_agrees_trail_4atr,2025-03,37,0,0,0.0,100.0,No exposure
+1D_channel_20_ema50_agrees_trail_4atr,2025-04,37,0,0,0.0,100.0,No exposure
+1D_channel_20_ema50_agrees_trail_4atr,2025-05,37,1,1,1.2073,101.20734,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2025-06,37,2,1,-0.8845,100.31214,Loss
+1D_channel_20_ema50_agrees_trail_4atr,2025-07,37,2,1,1.5783,101.89537,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2025-08,37,2,1,0.3755,102.27799,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2025-09,37,1,1,-0.7137,101.54801,Loss
+1D_channel_20_ema50_agrees_trail_4atr,2025-10,37,2,1,-0.6552,100.88267,Loss
+1D_channel_20_ema50_agrees_trail_4atr,2025-11,37,2,1,0.5268,101.41416,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2025-12,37,0,1,-0.105,101.30772,Loss
+1D_channel_20_ema50_agrees_trail_4atr,2026-01,37,2,1,0.9307,102.25055,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2026-02,37,1,1,0.1677,102.42199,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2026-03,37,0,0,0.0,102.42199,No exposure
+1D_channel_20_ema50_agrees_trail_4atr,2026-04,37,1,1,0.0522,102.4754,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2026-05,37,1,1,0.4978,102.98548,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2026-06,37,1,1,0.1789,103.16971,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2026-07,37,1,1,0.0563,103.22784,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2026-08,37,1,1,0.7986,104.05223,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2026-09,37,1,1,-0.5541,103.47564,Loss
+1D_channel_20_ema50_agrees_trail_4atr,2026-10,37,1,1,0.0256,103.50209,Profit
+1D_channel_20_ema50_agrees_trail_4atr,2026-11,37,1,1,0.2531,103.76406,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2025-01,25,0,0,0.0,100.0,No exposure
+1D_channel_55_no_trend_filter_trail_3atr,2025-02,25,0,0,0.0,100.0,No exposure
+1D_channel_55_no_trend_filter_trail_3atr,2025-03,25,0,0,0.0,100.0,No exposure
+1D_channel_55_no_trend_filter_trail_3atr,2025-04,25,0,0,0.0,100.0,No exposure
+1D_channel_55_no_trend_filter_trail_3atr,2025-05,25,1,1,1.2073,101.20734,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2025-06,25,1,1,-0.5256,100.67538,Loss
+1D_channel_55_no_trend_filter_trail_3atr,2025-07,25,2,1,1.3871,102.07188,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2025-08,25,2,1,-0.6405,101.41812,Loss
+1D_channel_55_no_trend_filter_trail_3atr,2025-09,25,0,1,-0.194,101.22136,Loss
+1D_channel_55_no_trend_filter_trail_3atr,2025-10,25,1,1,-0.1336,101.08616,Loss
+1D_channel_55_no_trend_filter_trail_3atr,2025-11,25,2,1,-0.0497,101.03587,Loss
+1D_channel_55_no_trend_filter_trail_3atr,2025-12,25,0,1,-0.105,100.92983,Loss
+1D_channel_55_no_trend_filter_trail_3atr,2026-01,25,1,1,0.5215,101.45621,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2026-02,25,0,1,0.6102,102.07534,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2026-03,25,0,0,0.0,102.07534,No exposure
+1D_channel_55_no_trend_filter_trail_3atr,2026-04,25,1,1,-0.381,101.68646,Loss
+1D_channel_55_no_trend_filter_trail_3atr,2026-05,25,0,1,0.0861,101.77405,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2026-06,25,1,1,0.0036,101.77771,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2026-07,25,0,0,0.0,101.77771,No exposure
+1D_channel_55_no_trend_filter_trail_3atr,2026-08,25,1,1,0.7986,102.59051,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2026-09,25,1,1,-0.5541,102.02203,Loss
+1D_channel_55_no_trend_filter_trail_3atr,2026-10,25,1,1,0.0256,102.0481,Profit
+1D_channel_55_no_trend_filter_trail_3atr,2026-11,25,1,1,0.2531,102.30639,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2025-01,25,0,0,0.0,100.0,No exposure
+1D_channel_55_no_trend_filter_trail_4atr,2025-02,25,0,0,0.0,100.0,No exposure
+1D_channel_55_no_trend_filter_trail_4atr,2025-03,25,0,0,0.0,100.0,No exposure
+1D_channel_55_no_trend_filter_trail_4atr,2025-04,25,0,0,0.0,100.0,No exposure
+1D_channel_55_no_trend_filter_trail_4atr,2025-05,25,1,1,1.2073,101.20734,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2025-06,25,1,1,-0.5256,100.67538,Loss
+1D_channel_55_no_trend_filter_trail_4atr,2025-07,25,2,1,1.3871,102.07188,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2025-08,25,2,1,0.3755,102.45517,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2025-09,25,0,1,-0.194,102.25641,Loss
+1D_channel_55_no_trend_filter_trail_4atr,2025-10,25,1,1,-0.1336,102.11982,Loss
+1D_channel_55_no_trend_filter_trail_4atr,2025-11,25,2,1,-0.0497,102.06902,Loss
+1D_channel_55_no_trend_filter_trail_4atr,2025-12,25,0,1,-0.105,101.96189,Loss
+1D_channel_55_no_trend_filter_trail_4atr,2026-01,25,1,1,0.5215,102.49366,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2026-02,25,0,1,0.6102,103.11911,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2026-03,25,0,0,0.0,103.11911,No exposure
+1D_channel_55_no_trend_filter_trail_4atr,2026-04,25,1,1,-0.381,102.72626,Loss
+1D_channel_55_no_trend_filter_trail_4atr,2026-05,25,0,1,0.0861,102.81475,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2026-06,25,1,1,0.1789,102.99868,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2026-07,25,0,0,0.0,102.99868,No exposure
+1D_channel_55_no_trend_filter_trail_4atr,2026-08,25,1,1,0.7986,103.82124,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2026-09,25,1,1,-0.5541,103.24593,Loss
+1D_channel_55_no_trend_filter_trail_4atr,2026-10,25,1,1,0.0256,103.27232,Profit
+1D_channel_55_no_trend_filter_trail_4atr,2026-11,25,1,1,0.2531,103.53371,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2025-01,25,0,0,0.0,100.0,No exposure
+1D_channel_55_ema50_agrees_trail_3atr,2025-02,25,0,0,0.0,100.0,No exposure
+1D_channel_55_ema50_agrees_trail_3atr,2025-03,25,0,0,0.0,100.0,No exposure
+1D_channel_55_ema50_agrees_trail_3atr,2025-04,25,0,0,0.0,100.0,No exposure
+1D_channel_55_ema50_agrees_trail_3atr,2025-05,25,1,1,1.2073,101.20734,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2025-06,25,1,1,-0.5256,100.67538,Loss
+1D_channel_55_ema50_agrees_trail_3atr,2025-07,25,2,1,1.3871,102.07188,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2025-08,25,2,1,-0.6405,101.41812,Loss
+1D_channel_55_ema50_agrees_trail_3atr,2025-09,25,0,1,-0.194,101.22136,Loss
+1D_channel_55_ema50_agrees_trail_3atr,2025-10,25,1,1,-0.1336,101.08616,Loss
+1D_channel_55_ema50_agrees_trail_3atr,2025-11,25,2,1,-0.0497,101.03587,Loss
+1D_channel_55_ema50_agrees_trail_3atr,2025-12,25,0,1,-0.105,100.92983,Loss
+1D_channel_55_ema50_agrees_trail_3atr,2026-01,25,1,1,0.5215,101.45621,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2026-02,25,0,1,0.6102,102.07534,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2026-03,25,0,0,0.0,102.07534,No exposure
+1D_channel_55_ema50_agrees_trail_3atr,2026-04,25,1,1,-0.381,101.68646,Loss
+1D_channel_55_ema50_agrees_trail_3atr,2026-05,25,0,1,0.0861,101.77405,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2026-06,25,1,1,0.0036,101.77771,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2026-07,25,0,0,0.0,101.77771,No exposure
+1D_channel_55_ema50_agrees_trail_3atr,2026-08,25,1,1,0.7986,102.59051,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2026-09,25,1,1,-0.5541,102.02203,Loss
+1D_channel_55_ema50_agrees_trail_3atr,2026-10,25,1,1,0.0256,102.0481,Profit
+1D_channel_55_ema50_agrees_trail_3atr,2026-11,25,1,1,0.2531,102.30639,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2025-01,25,0,0,0.0,100.0,No exposure
+1D_channel_55_ema50_agrees_trail_4atr,2025-02,25,0,0,0.0,100.0,No exposure
+1D_channel_55_ema50_agrees_trail_4atr,2025-03,25,0,0,0.0,100.0,No exposure
+1D_channel_55_ema50_agrees_trail_4atr,2025-04,25,0,0,0.0,100.0,No exposure
+1D_channel_55_ema50_agrees_trail_4atr,2025-05,25,1,1,1.2073,101.20734,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2025-06,25,1,1,-0.5256,100.67538,Loss
+1D_channel_55_ema50_agrees_trail_4atr,2025-07,25,2,1,1.3871,102.07188,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2025-08,25,2,1,0.3755,102.45517,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2025-09,25,0,1,-0.194,102.25641,Loss
+1D_channel_55_ema50_agrees_trail_4atr,2025-10,25,1,1,-0.1336,102.11982,Loss
+1D_channel_55_ema50_agrees_trail_4atr,2025-11,25,2,1,-0.0497,102.06902,Loss
+1D_channel_55_ema50_agrees_trail_4atr,2025-12,25,0,1,-0.105,101.96189,Loss
+1D_channel_55_ema50_agrees_trail_4atr,2026-01,25,1,1,0.5215,102.49366,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2026-02,25,0,1,0.6102,103.11911,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2026-03,25,0,0,0.0,103.11911,No exposure
+1D_channel_55_ema50_agrees_trail_4atr,2026-04,25,1,1,-0.381,102.72626,Loss
+1D_channel_55_ema50_agrees_trail_4atr,2026-05,25,0,1,0.0861,102.81475,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2026-06,25,1,1,0.1789,102.99868,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2026-07,25,0,0,0.0,102.99868,No exposure
+1D_channel_55_ema50_agrees_trail_4atr,2026-08,25,1,1,0.7986,103.82124,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2026-09,25,1,1,-0.5541,103.24593,Loss
+1D_channel_55_ema50_agrees_trail_4atr,2026-10,25,1,1,0.0256,103.27232,Profit
+1D_channel_55_ema50_agrees_trail_4atr,2026-11,25,1,1,0.2531,103.53371,Profit

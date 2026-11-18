@@ -1,0 +1,91 @@
+{
+  "dataset": "Delta India ETHUSD futures 2025 1m",
+  "period": "March through December 2025",
+  "signal_count": 232,
+  "variants": {
+    "breakout__ema": {
+      "trades": 36,
+      "wins": 8,
+      "win_rate_pct": 22.22,
+      "net_points": 101.86,
+      "profitable_months": 3,
+      "captured_1000plus": 0,
+      "avg_duration_hours": 51.8,
+      "monthly_net_points": {
+        "2025-03": -163.56,
+        "2025-04": -78.6,
+        "2025-05": -378.88,
+        "2025-06": -93.03,
+        "2025-07": 692.17,
+        "2025-08": 755.53,
+        "2025-09": -139.46,
+        "2025-10": -488.29,
+        "2025-11": 263.67,
+        "2025-12": -267.69
+      }
+    },
+    "breakout__structure": {
+      "trades": 23,
+      "wins": 7,
+      "win_rate_pct": 30.43,
+      "net_points": 901.66,
+      "profitable_months": 4,
+      "captured_1000plus": 1,
+      "avg_duration_hours": 112.8,
+      "monthly_net_points": {
+        "2025-03": 73.23,
+        "2025-04": -84.99,
+        "2025-05": -278.97,
+        "2025-06": -67.74,
+        "2025-07": 903.58,
+        "2025-08": 366.58,
+        "2025-09": -139.46,
+        "2025-10": -751.9,
+        "2025-11": 1056.24,
+        "2025-12": -174.91
+      }
+    },
+    "pullback__ema": {
+      "trades": 45,
+      "wins": 9,
+      "win_rate_pct": 20.0,
+      "net_points": -346.65,
+      "profitable_months": 2,
+      "captured_1000plus": 0,
+      "avg_duration_hours": 38.9,
+      "monthly_net_points": {
+        "2025-03": -19.5,
+        "2025-04": -124.63,
+        "2025-05": -260.23,
+        "2025-06": -161.01,
+        "2025-07": 721.49,
+        "2025-08": 468.8,
+        "2025-09": -175.95,
+        "2025-10": -121.53,
+        "2025-11": -273.69,
+        "2025-12": -400.4
+      }
+    },
+    "pullback__structure": {
+      "trades": 30,
+      "wins": 9,
+      "win_rate_pct": 30.0,
+      "net_points": 10.44,
+      "profitable_months": 4,
+      "captured_1000plus": 0,
+      "avg_duration_hours": 98.7,
+      "monthly_net_points": {
+        "2025-03": 38.31,
+        "2025-04": -245.35,
+        "2025-05": -59.35,
+        "2025-06": -209.3,
+        "2025-07": 787.99,
+        "2025-08": 6.48,
+        "2025-09": -250.41,
+        "2025-10": -281.81,
+        "2025-11": 797.03,
+        "2025-12": -573.15
+      }
+    }
+  }
+}

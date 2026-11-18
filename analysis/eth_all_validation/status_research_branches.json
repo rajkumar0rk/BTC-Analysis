@@ -1,0 +1,64 @@
+{
+  "group": "research_branches",
+  "source": {
+    "source": "https://api.india.delta.exchange/v2/history/candles",
+    "symbol": "ETHUSD",
+    "periods": [
+      "2025-01.csv.gz",
+      "2025-02.csv.gz",
+      "2025-03.csv.gz",
+      "2025-04.csv.gz",
+      "2025-05.csv.gz",
+      "2025-06.csv.gz",
+      "2025-07.csv.gz",
+      "2025-08.csv.gz",
+      "2025-09.csv.gz",
+      "2025-10.csv.gz",
+      "2025-11.csv.gz",
+      "2025-12.csv.gz",
+      "2026-01.csv.gz",
+      "2026-02.csv.gz",
+      "2026-03.csv.gz",
+      "2026-04.csv.gz",
+      "2026-05.csv.gz",
+      "2026-06.csv.gz",
+      "2026-07.csv.gz",
+      "2026-08.csv.gz",
+      "2026-09.csv.gz",
+      "2026-10.csv.gz"
+    ],
+    "total_utc_minutes": 963360,
+    "first_IST_month_unavailable_hours": 5.5,
+    "source_manifest_time": "2026-11-18T09:05:23.568502+00:00"
+  },
+  "runs": [
+    {
+      "script": "eth_transfer_stage24.py",
+      "source_sha256": "1a0af6b53133d1c36f5036e668a007787632ab2db6d16d5010ba6ec8515aa78c",
+      "port_sha256": "4a2dd5ae8b594d03cba643f1025f97ec66ec49884d481478273088943bba8c96",
+      "modifications": "text-only BTCUSD->ETHUSD/BTCUSDT->ETHUSDT and isolation of all analysis/* paths",
+      "costs_in_original_model": "unchanged; must inspect individual report",
+      "point_thresholds": "unchanged numeric BTC values; not volatility-normalized to ETH",
+      "run_time_seconds": 1.88,
+      "status": "success",
+      "return_code": 0,
+      "stdout_tail": "STAGE24_RESULTS {\"account_models\": 288, \"signals\": 7, \"trading_replays\": 48, \"all_22_months_over_10\": 0, \"selected\": {\"pattern\": \"breakout\", \"lookback\": 8, \"hour_align\": false, \"stop_atr\": 2.5, \"exit_policy\": \"fixed_3R\", \"max_hold_minutes\": 240, \"risk_pct\": 2.0, \"max_leverage\": 3.0, \"trades_total\": 2, \"wins\": 2, \"losses\": 0, \"2025_months_ge10\": 0, \"2026_months_ge10\": 0, \"2025_positive\": 2, \"2026_positive\": 0, \"worst_2025_pct\": 0.0, \"worst_2026_pct\": 0.0, \"net_2025_pct\": 6.25958, \"net_2026_pct\": 0.0, \"max_trade_close_drawdown_pct\": 0.0}}\nMONTHLY\nmonth_ist  return_pct  trades  wins  losses  flat\n  2025-01    0.000000       0     0       0     0\n  2025-02    5.830096       1     1       0     0\n  2025-03    0.000000       0     0       0     0\n  2025-04    0.000000       0     0       0     0\n  2025-05    0.000000       0     0       0     0\n  2025-06    0.000000       0     0       0     0\n  2025-07    0.000000       0     0       0     0\n  2025-08    0.405824       1     1       0     0\n  2025-09    0.000000       0     0       0     0\n  2025-10    0.000000       0     0       0     0\n  2025-11    0.000000       0     0       0     0\n  2025-12    0.000000       0     0       0     0\n  2026-01    0.000000       0     0       0     0\n  2026-02    0.000000       0     0       0     0\n  2026-03    0.000000       0     0       0     0\n  2026-04    0.000000       0     0       0     0\n  2026-05    0.000000       0     0       0     0\n  2026-06    0.000000       0     0       0     0\n  2026-07    0.000000       0     0       0     0\n  2026-08    0.000000       0     0       0     0\n  2026-09    0.000000       0     0       0     0\n  2026-10    0.000000       0     0       0     0\n",
+      "stderr_tail": "",
+      "output_dir_count_after": 1
+    },
+    {
+      "script": "eth_transfer_stage25.py",
+      "source_sha256": "605d27ee8250f71b32b477b5b3869121551e4f69b534f6f7ece156f4a210563f",
+      "port_sha256": "05a4a9b41b4756287e71d3955b31237da94878358a20f79548916208ade1afe1",
+      "modifications": "text-only BTCUSD->ETHUSD/BTCUSDT->ETHUSDT and isolation of all analysis/* paths",
+      "costs_in_original_model": "unchanged; must inspect individual report",
+      "point_thresholds": "unchanged numeric BTC values; not volatility-normalized to ETH",
+      "run_time_seconds": 1.59,
+      "status": "success",
+      "return_code": 0,
+      "stdout_tail": "STAGE24_RESULTS {\"account_models\": 360, \"signals\": 5, \"trading_replays\": 40, \"all_22_months_over_10\": 0, \"selected\": {\"pattern\": \"donchian_break\", \"lookback\": 12, \"hour_align\": false, \"stop_atr\": 2.5, \"exit_policy\": \"fixed_2R\", \"max_hold_minutes\": 720, \"risk_pct\": 2.0, \"max_leverage\": 3.0, \"trades_total\": 1, \"wins\": 1, \"losses\": 0, \"2025_months_ge10\": 0, \"2026_months_ge10\": 0, \"2025_positive\": 1, \"2026_positive\": 0, \"worst_2025_pct\": 0.0, \"worst_2026_pct\": 0.0, \"net_2025_pct\": 0.65328, \"net_2026_pct\": 0.0, \"max_trade_close_drawdown_pct\": 0.0}}\nMONTHLY\nmonth_ist  return_pct  trades  wins  losses  flat\n  2025-01    0.000000       0     0       0     0\n  2025-02    0.653279       1     1       0     0\n  2025-03    0.000000       0     0       0     0\n  2025-04    0.000000       0     0       0     0\n  2025-05    0.000000       0     0       0     0\n  2025-06    0.000000       0     0       0     0\n  2025-07    0.000000       0     0       0     0\n  2025-08    0.000000       0     0       0     0\n  2025-09    0.000000       0     0       0     0\n  2025-10    0.000000       0     0       0     0\n  2025-11    0.000000       0     0       0     0\n  2025-12    0.000000       0     0       0     0\n  2026-01    0.000000       0     0       0     0\n  2026-02    0.000000       0     0       0     0\n  2026-03    0.000000       0     0       0     0\n  2026-04    0.000000       0     0       0     0\n  2026-05    0.000000       0     0       0     0\n  2026-06    0.000000       0     0       0     0\n  2026-07    0.000000       0     0       0     0\n  2026-08    0.000000       0     0       0     0\n  2026-09    0.000000       0     0       0     0\n  2026-10    0.000000       0     0       0     0\n",
+      "stderr_tail": "",
+      "output_dir_count_after": 2
+    }
+  ]
+}

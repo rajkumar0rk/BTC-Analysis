@@ -1,0 +1,426 @@
+{
+  "instrument": "ETHUSD Delta Exchange India perpetual futures",
+  "scope": "Source-based ETH translation of prior BTC-Analysis strategies, original rules kept unchanged",
+  "source_history": "Main branch ETHUSD 1m compressed Delta public API 2025-01 through 2026-10",
+  "all_groups_reported": [
+    "institutional",
+    "intraday",
+    "later",
+    "legacy",
+    "portfolio",
+    "research_branches",
+    "signals",
+    "structure"
+  ],
+  "strategy_scripts_attempted": 50,
+  "completed_successfully": 39,
+  "not_completed": 11,
+  "statuses": [
+    {
+      "script": "research_selective_big_moves.py",
+      "group": "institutional",
+      "status": "success",
+      "run_time_seconds": 5.6,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_shic9vm1/research_selective_big_moves.py:88: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  session=(ny.dayofweek<5)&(tod>=540)&(tod<960)\n/tmp/eth_scripts_shic9vm1/research_selective_big_moves.py:89: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  open_window=(ny.dayofweek<5)&(tod>=570)&(tod<720)\n"
+    },
+    {
+      "script": "research_behavioral_discovery.py",
+      "group": "institutional",
+      "status": "success",
+      "run_time_seconds": 2.7,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_shic9vm1/research_behavioral_discovery.py:74: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  h[\"ny_weekday\"]=ny.dayofweek.astype(int)\n"
+    },
+    {
+      "script": "research_adaptive_anytime_entries_stage9.py",
+      "group": "institutional",
+      "status": "success",
+      "run_time_seconds": 7.22,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_directional_acceptance.py",
+      "group": "institutional",
+      "status": "success",
+      "run_time_seconds": 2.63,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_retest_reclaim_stage4.py",
+      "group": "institutional",
+      "status": "success",
+      "run_time_seconds": 2.6,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_volatility_scaled_exits_stage5.py",
+      "group": "institutional",
+      "status": "success",
+      "run_time_seconds": 3.67,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "analyze_institutional_regimes.py",
+      "group": "institutional",
+      "status": "success",
+      "run_time_seconds": 13.5,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_intraday_spread.py",
+      "group": "institutional",
+      "status": "success",
+      "run_time_seconds": 14.21,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_daily_200_500_points.py",
+      "group": "intraday",
+      "status": "success",
+      "run_time_seconds": 5.99,
+      "error": null,
+      "stderr_tail": ": DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  a[\"weekday\"]=local.dayofweek<5\n/tmp/eth_scripts_0zrtjhkd/research_daily_200_500_points.py:54: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  mask=(loc.dayofweek<5)&(loc.hour==9)&(loc.minute==30)\n/tmp/eth_scripts_0zrtjhkd/research_daily_200_500_points.py:63: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  for t,r in b5[(z.dayofweek<5)&(z.hour==9)&(z.minute==30)&m5].iterrows():\n/tmp/eth_scripts_0zrtjhkd/research_daily_200_500_points.py:70: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  for t,r in b15[(z.dayofweek<5)&(z.hour==9)&(z.minute==30)&m15].iterrows():\n/tmp/eth_scripts_0zrtjhkd/research_daily_200_500_points.py:79: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  cand=b5[(z.dayofweek<5)&(z.hour>=9)&(z.hour<16)]\n"
+    },
+    {
+      "script": "research_one_trade_every_day_200.py",
+      "group": "intraday",
+      "status": "success",
+      "run_time_seconds": 21.21,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_every_candle_200.py",
+      "group": "intraday",
+      "status": "success",
+      "run_time_seconds": 40.87,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_0zrtjhkd/research_every_candle_200.py:381: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  n_weekday=np.asarray(ny.dayofweek,dtype=np.int8)\n"
+    },
+    {
+      "script": "research_anytime_volume_volatility_patterns.py",
+      "group": "intraday",
+      "status": "success",
+      "run_time_seconds": 9.25,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_time_day_volume_200.py",
+      "group": "intraday",
+      "status": "success",
+      "run_time_seconds": 86.58,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_0zrtjhkd/research_time_day_volume_200.py:55: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  weekday = np.asarray(india.dayofweek, dtype=np.int8)\n"
+    },
+    {
+      "script": "research_price_action_time_day.py",
+      "group": "intraday",
+      "status": "success",
+      "run_time_seconds": 21.34,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_0zrtjhkd/research_price_action_time_day.py:58: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  b[\"dow\"] = ny.dayofweek\n"
+    },
+    {
+      "script": "research_time_day_strategies.py",
+      "group": "intraday",
+      "status": "success",
+      "run_time_seconds": 68.89,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_0zrtjhkd/research_time_day_strategies.py:60: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  weekday=ny.dayofweek\n/tmp/eth_scripts_0zrtjhkd/research_time_day_strategies.py:258: UserWarning: Boolean Series key will be reindexed to match DataFrame index.\n  selected_stop=after[after.target_points==0][after.stop_points==500]\n"
+    },
+    {
+      "script": "research_swing_donchian_stage17.py",
+      "group": "later",
+      "status": "success",
+      "run_time_seconds": 2.78,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_new_1h_patterns_stage19.py",
+      "group": "later",
+      "status": "failed",
+      "run_time_seconds": 2.26,
+      "error": null,
+      "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/eth_scripts_4qrf77ub/research_new_1h_patterns_stage19.py\", line 308, in <module>\n    main()\n  File \"/tmp/eth_scripts_4qrf77ub/research_new_1h_patterns_stage19.py\", line 247, in main\n    months,results=summarize(trades,nmodels)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/eth_scripts_4qrf77ub/research_new_1h_patterns_stage19.py\", line 239, in summarize\n    raise AssertionError(\"Some new model has 0 trades\")\nAssertionError: Some new model has 0 trades\n"
+    },
+    {
+      "script": "research_monthly_10pct_stage19.py",
+      "group": "later",
+      "status": "success",
+      "run_time_seconds": 6.88,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_signal_inversion_stage20.py",
+      "group": "later",
+      "status": "failed",
+      "run_time_seconds": 13.06,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_4qrf77ub/research_signal_inversion_stage20.py:43: RuntimeWarning: divide by zero encountered in divide\n  raw[\"relative_atr\"]=raw.atr5.to_numpy(float)/(\nTraceback (most recent call last):\n  File \"/tmp/eth_scripts_4qrf77ub/research_signal_inversion_stage20.py\", line 300, in <module>\n    main()\n  File \"/tmp/eth_scripts_4qrf77ub/research_signal_inversion_stage20.py\", line 216, in main\n    accounts,months=rank_account(tr)\n                    ^^^^^^^^^^^^^^^^\n  File \"/tmp/eth_scripts_4qrf77ub/research_signal_inversion_stage20.py\", line 208, in rank_account\n    if not annual:raise RuntimeError(\"No account models\")\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: No account models\n"
+    },
+    {
+      "script": "research_stage24_failed_auction.py",
+      "group": "later",
+      "status": "success",
+      "run_time_seconds": 1.31,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_failed_auction_stage24.py",
+      "group": "later",
+      "status": "success",
+      "run_time_seconds": 1.41,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_trade_counts_stage22.py",
+      "group": "later",
+      "status": "failed",
+      "run_time_seconds": 0.24,
+      "error": null,
+      "stderr_tail": "usage: research_trade_counts_stage22.py [-h] --stage15 STAGE15 --stage17\n                                        STAGE17 --stage19 STAGE19\nresearch_trade_counts_stage22.py: error: the following arguments are required: --stage15, --stage17, --stage19\n"
+    },
+    {
+      "script": "research_v7_1_retest_2025.py",
+      "group": "legacy",
+      "status": "success",
+      "run_time_seconds": 14.65,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_v7_2_daily_4h_2025.py",
+      "group": "legacy",
+      "status": "success",
+      "run_time_seconds": 1.05,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_v8_1_2025_exits.py",
+      "group": "legacy",
+      "status": "success",
+      "run_time_seconds": 0.89,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_v8_2025_big_moves.py",
+      "group": "legacy",
+      "status": "success",
+      "run_time_seconds": 1.92,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "analyze_1m_exit_methods.py",
+      "group": "legacy",
+      "status": "success",
+      "run_time_seconds": 2.96,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_ccjgfxx_/analyze_1m_exit_methods.py:56: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  session=(ny.dayofweek<5)&(clock>=570)&(clock<720)\n"
+    },
+    {
+      "script": "analyze_delta_mtf_institutional.py",
+      "group": "legacy",
+      "status": "success",
+      "run_time_seconds": 4.38,
+      "error": null,
+      "stderr_tail": "h_scripts_ccjgfxx_/analyze_delta_mtf_institutional.py:73: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  ticks=f[(ny.dayofweek<5)&(ny.hour==9)&(ny.minute==30)]\n/tmp/eth_scripts_ccjgfxx_/analyze_delta_mtf_institutional.py:97: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  for t,b in f[(ny.dayofweek<5)&(ny.hour==9)&(ny.minute==30)].iterrows():\n/tmp/eth_scripts_ccjgfxx_/analyze_delta_mtf_institutional.py:38: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  a[\"dow\"]=local.dayofweek\n/tmp/eth_scripts_ccjgfxx_/analyze_delta_mtf_institutional.py:38: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  a[\"dow\"]=local.dayofweek\n/tmp/eth_scripts_ccjgfxx_/analyze_delta_mtf_institutional.py:38: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  a[\"dow\"]=local.dayofweek\n"
+    },
+    {
+      "script": "research_july_drawdown_stage15.py",
+      "group": "legacy",
+      "status": "failed",
+      "run_time_seconds": 0.38,
+      "error": null,
+      "stderr_tail": "usage: research_july_drawdown_stage15.py [-h] --original-artifact\n                                         ORIGINAL_ARTIFACT\nresearch_july_drawdown_stage15.py: error: the following arguments are required: --original-artifact\n"
+    },
+    {
+      "script": "research_monthly_portfolio_stage18.py",
+      "group": "portfolio",
+      "status": "failed",
+      "run_time_seconds": 0.22,
+      "error": null,
+      "stderr_tail": "usage: research_monthly_portfolio_stage18.py [-h] --stage15-ledger\n                                             STAGE15_LEDGER\nresearch_monthly_portfolio_stage18.py: error: the following arguments are required: --stage15-ledger\n"
+    },
+    {
+      "script": "research_three_sleeve_stage20.py",
+      "group": "portfolio",
+      "status": "failed",
+      "run_time_seconds": 0.22,
+      "error": null,
+      "stderr_tail": "site-packages/pandas/io/parsers/readers.py\", line 1866, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 423, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2721, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2988, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/common.py\", line 954, in get_handle\n    handle = open(handle, ioargs.mode)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'analysis/eth_all_original_rules/institutional_discovery_stage18_monthly_dual_strategy/monthly_blended_returns.csv'\n"
+    },
+    {
+      "script": "research_monthly_fixed_weight_stage21.py",
+      "group": "portfolio",
+      "status": "failed",
+      "run_time_seconds": 0.53,
+      "error": null,
+      "stderr_tail": "site-packages/pandas/io/parsers/readers.py\", line 1866, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 423, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2721, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2988, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/common.py\", line 954, in get_handle\n    handle = open(handle, ioargs.mode)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'analysis/eth_all_original_rules/institutional_discovery_stage18_monthly_dual_strategy/monthly_blended_returns.csv'\n"
+    },
+    {
+      "script": "research_wide_monthly_stage23.py",
+      "group": "portfolio",
+      "status": "failed",
+      "run_time_seconds": 0.43,
+      "error": null,
+      "stderr_tail": "site-packages/pandas/io/parsers/readers.py\", line 1866, in read_csv\n    return _read(filepath_or_buffer, kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 423, in _read\n    parser = TextFileReader(filepath_or_buffer, **kwds)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2721, in __init__\n    self._engine = self._make_engine(f, self.engine)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/parsers/readers.py\", line 2988, in _make_engine\n    self.handles = get_handle(\n                   ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/io/common.py\", line 954, in get_handle\n    handle = open(handle, ioargs.mode)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'analysis/eth_all_original_rules/institutional_discovery_stage18_monthly_dual_strategy/monthly_blended_returns.csv'\n"
+    },
+    {
+      "script": "eth_transfer_stage24.py",
+      "group": "research_branches",
+      "status": "success",
+      "run_time_seconds": 1.88,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "eth_transfer_stage25.py",
+      "group": "research_branches",
+      "status": "success",
+      "run_time_seconds": 1.59,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_dynamic_exit_stage10.py",
+      "group": "signals",
+      "status": "success",
+      "run_time_seconds": 3.05,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_structure_rr_stage11.py",
+      "group": "signals",
+      "status": "failed",
+      "run_time_seconds": 3.61,
+      "error": null,
+      "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/eth_scripts_j6tbopv8/research_structure_rr_stage11.py\", line 380, in <module>\n    main()\n  File \"/tmp/eth_scripts_j6tbopv8/research_structure_rr_stage11.py\", line 288, in main\n    good=robust[robust.consistent_positive]\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/core/generic.py\", line 6434, in __getattr__\n    return object.__getattribute__(self, name)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'DataFrame' object has no attribute 'consistent_positive'\n"
+    },
+    {
+      "script": "research_pretrend_market_state_stage12.py",
+      "group": "signals",
+      "status": "success",
+      "run_time_seconds": 3.44,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_stage12_monthly.py",
+      "group": "signals",
+      "status": "failed",
+      "run_time_seconds": 0.23,
+      "error": null,
+      "stderr_tail": "usage: research_stage12_monthly.py [-h] --ledger LEDGER\nresearch_stage12_monthly.py: error: the following arguments are required: --ledger\n"
+    },
+    {
+      "script": "research_trend_pullback_breakout_stage13.py",
+      "group": "signals",
+      "status": "success",
+      "run_time_seconds": 1.42,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_monthly_regime_stage14.py",
+      "group": "signals",
+      "status": "success",
+      "run_time_seconds": 3.69,
+      "error": null,
+      "stderr_tail": ""
+    },
+    {
+      "script": "research_monthly_regime_switch_stage16.py",
+      "group": "signals",
+      "status": "failed",
+      "run_time_seconds": 0.35,
+      "error": null,
+      "stderr_tail": "usage: research_monthly_regime_switch_stage16.py [-h] --original-artifact\n                                                 ORIGINAL_ARTIFACT\nresearch_monthly_regime_switch_stage16.py: error: the following arguments are required: --original-artifact\n"
+    },
+    {
+      "script": "research_big_trend_stage1.py",
+      "group": "structure",
+      "status": "success",
+      "run_time_seconds": 5.82,
+      "error": null,
+      "stderr_tail": "/tmp/eth_scripts_beo1_f3y/research_big_trend_stage1.py:34: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return np.asarray((x.dayofweek<5)&(m>=start)&(m<end))\n/tmp/eth_scripts_beo1_f3y/research_big_trend_stage1.py:34: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return np.asarray((x.dayofweek<5)&(m>=start)&(m<end))\n/tmp/eth_scripts_beo1_f3y/research_big_trend_stage1.py:34: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return np.asarray((x.dayofweek<5)&(m>=start)&(m<end))\n"
+    },
+    {
+      "script": "research_previous_day_range_swing.py",
+      "group": "structure",
+      "status": "success",
+      "run_time_seconds": 40.8,
+      "error": null,
+      "stderr_tail": "moved in a future version. Use DatetimeIndex.day_of_week instead.\n  return np.asarray((x.dayofweek<5)&(minute>=start)&(minute<end))\n/tmp/eth_scripts_beo1_f3y/research_previous_day_range_swing.py:27: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return np.asarray((x.dayofweek<5)&(minute>=start)&(minute<end))\n/tmp/eth_scripts_beo1_f3y/research_previous_day_range_swing.py:27: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return np.asarray((x.dayofweek<5)&(minute>=start)&(minute<end))\n/tmp/eth_scripts_beo1_f3y/research_previous_day_range_swing.py:27: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return np.asarray((x.dayofweek<5)&(minute>=start)&(minute<end))\n/tmp/eth_scripts_beo1_f3y/research_previous_day_range_swing.py:27: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return np.asarray((x.dayofweek<5)&(minute>=start)&(minute<end))\n"
+    },
+    {
+      "script": "research_mtf_swing_range_long.py",
+      "group": "structure",
+      "status": "success",
+      "run_time_seconds": 4.08,
+      "error": null,
+      "stderr_tail": "nge_long.py:36: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  \"WEEKDAYS_ALL\":np.asarray(idx.dayofweek<5),\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_long.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_long.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_long.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_long.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n"
+    },
+    {
+      "script": "research_mtf_swing_range_fixed3r.py",
+      "group": "structure",
+      "status": "success",
+      "run_time_seconds": 40.96,
+      "error": null,
+      "stderr_tail": "36: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  \"WEEKDAYS_ALL\":np.asarray(idx.dayofweek<5),\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n"
+    },
+    {
+      "script": "research_mtf_swing_range_long_fixed2r.py",
+      "group": "structure",
+      "status": "success",
+      "run_time_seconds": 40.67,
+      "error": null,
+      "stderr_tail": "DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  \"WEEKDAYS_ALL\":np.asarray(idx.dayofweek<5),\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_long_fixed2r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_long_fixed2r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_long_fixed2r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_long_fixed2r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n"
+    },
+    {
+      "script": "research_mtf_swing_range_short_fixed2r.py",
+      "group": "structure",
+      "status": "success",
+      "run_time_seconds": 40.84,
+      "error": null,
+      "stderr_tail": "timeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  \"WEEKDAYS_ALL\":np.asarray(idx.dayofweek<5),\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_short_fixed2r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_short_fixed2r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_short_fixed2r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_short_fixed2r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n"
+    },
+    {
+      "script": "research_mtf_swing_range_short_fixed3r.py",
+      "group": "structure",
+      "status": "success",
+      "run_time_seconds": 40.84,
+      "error": null,
+      "stderr_tail": "timeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  \"WEEKDAYS_ALL\":np.asarray(idx.dayofweek<5),\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_short_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_short_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_short_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_swing_range_short_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n"
+    },
+    {
+      "script": "research_mtf_uptrend_short_fixed3r.py",
+      "group": "structure",
+      "status": "success",
+      "run_time_seconds": 44.4,
+      "error": null,
+      "stderr_tail": "as4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  \"WEEKDAYS_ALL\":np.asarray(idx.dayofweek<5),\n/tmp/eth_scripts_beo1_f3y/research_mtf_uptrend_short_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_uptrend_short_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_uptrend_short_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n/tmp/eth_scripts_beo1_f3y/research_mtf_uptrend_short_fixed3r.py:33: Pandas4Warning: DatetimeIndex.dayofweek is deprecated and will be removed in a future version. Use DatetimeIndex.day_of_week instead.\n  return (x.dayofweek<5)&(minute>=start)&(minute<end)\n"
+    }
+  ],
+  "important": "Completed script execution is not equivalent to positive 22/22 monthly returns. Many existing scripts are descriptive market studies, account portfolio dependencies, or BTC point-target models with nontransferable absolute thresholds.",
+  "fees": "Original code fee, GST and slippage constants unchanged. Exact ETH execution costs may differ. Full bid/ask, funding, impact, lot/margin are not assured.",
+  "source_transfer": "Only textual BTCUSD->ETHUSD market path and isolated analysis output remapping; original trade signal and numeric thresholds unchanged; no BTC result files consulted.",
+  "recheck": "Full UTC Jan25-Oct26 1m data complete, but Jan 2025 first 5.5 IST hours absent and 2026 history previously analyzed. In-sample historical results do not guarantee returns.",
+  "btc_stage26_crossmarket": "A separate completed ETH audit exists on research/eth-stage26-crossmarket; not counted among main research scripts.",
+  "nov25_status": "November 2026 incomplete; excluded from 22-month profitability gate."
+}

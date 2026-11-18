@@ -1,0 +1,94 @@
+[
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage17_swing_breakout/RESEARCH_REPORT.md",
+    "bytes": 20854
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage17_swing_breakout/model_comparison.csv",
+    "bytes": 2303
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage17_swing_breakout/monthly_mark_to_market.csv",
+    "bytes": 28818
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage17_swing_breakout/quality.json",
+    "bytes": 1758
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage17_swing_breakout/trade_ledger.csv.gz",
+    "bytes": 5266
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage19_monthly_10pct/RESEARCH_REPORT.md",
+    "bytes": 14722
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage19_monthly_10pct/config_comparison.csv",
+    "bytes": 127523
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage19_monthly_10pct/entries.csv.gz",
+    "bytes": 763976
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage19_monthly_10pct/monthly_net_account_returns.csv",
+    "bytes": 1775051
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage19_monthly_10pct/quality.json",
+    "bytes": 2693
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage19_monthly_10pct/selected_monthly.csv",
+    "bytes": 1767
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage19_monthly_10pct/top_2025_ranked.csv",
+    "bytes": 3742
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage19_monthly_10pct/trades.csv.gz",
+    "bytes": 2699181
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage24_failed_auction/2025_only_ranking.csv",
+    "bytes": 481
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage24_failed_auction/RESEARCH_REPORT.md",
+    "bytes": 7298
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage24_failed_auction/all_monthly.csv",
+    "bytes": 6940
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage24_failed_auction/original_trade_ledger.csv.gz",
+    "bytes": 49518
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage24_failed_auction/quality.json",
+    "bytes": 2387
+  },
+  {
+    "path": "analysis/eth_all_original_rules/institutional_discovery_stage24_failed_auction/selected_22_months.csv",
+    "bytes": 951
+  },
+  {
+    "path": "analysis/eth_all_original_rules/stage24_failed_auction/monthly.csv",
+    "bytes": 8440
+  },
+  {
+    "path": "analysis/eth_all_original_rules/stage24_failed_auction/result.json",
+    "bytes": 652
+  },
+  {
+    "path": "analysis/eth_all_original_rules/stage24_failed_auction/selected_monthly.csv",
+    "bytes": 1100
+  },
+  {
+    "path": "analysis/eth_all_original_rules/stage24_failed_auction/trade_ledger.csv.gz",
+    "bytes": 80357
+  }
+]

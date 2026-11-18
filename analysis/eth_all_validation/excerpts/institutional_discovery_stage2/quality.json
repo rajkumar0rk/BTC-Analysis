@@ -1,0 +1,40 @@
+{
+  "futures_1m": 987840,
+  "mark_1m": 987840,
+  "OI_5m": 197568,
+  "funding_1h": 16464,
+  "available_hourly_events": 16283,
+  "first": "2025-01-08 12:00:00+00:00",
+  "last": "2026-11-17 22:00:00+00:00",
+  "oi_changes_pct_p01_p50_p99": [
+    -16.926,
+    0.359,
+    14.877
+  ],
+  "hourly_range_points_p01_p50_p99": [
+    3.85,
+    19.55,
+    107.29
+  ],
+  "funding_distinct_values": 818,
+  "funding_fraction_exact_point01": 0.603,
+  "total_predeclared_conditions": 34,
+  "eligible_metric_tests": 145,
+  "candidate_regimes": [
+    "after_OI_fall_and_range_expand",
+    "after_hourly_range_expansion_2x",
+    "after_price_down_and_OI_fall",
+    "after_OI_rise_and_range_expand",
+    "after_OI_fall_zm1p5",
+    "after_hourly_range_expansion_1p5",
+    "after_big_down_hour",
+    "after_range_expansion_and_volume"
+  ],
+  "notes": [
+    "Hourly next-period outcomes do not overlap",
+    "Clock-matched means by NY next-hour and weekend/weekday",
+    "The chronological holdout was previously seen by other studies; independent new forward data remains needed",
+    "These are price-point ranges, NOT executable trade profits",
+    "Gross future high-low is NOT a profitable tradable strategy"
+  ]
+}

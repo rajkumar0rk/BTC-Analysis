@@ -1,0 +1,21 @@
+{
+  "selected_parameters": {
+    "mult": 1.5,
+    "rr": 3.0,
+    "hold": 720
+  },
+  "positive_months": 6,
+  "required_months": 22,
+  "trade_close_drawdown_pct": 15.1842863212582,
+  "selected_trade_count": 383,
+  "source_missing_minutes": 0,
+  "october_31_2026_source_gap_unresolved": true,
+  "november_excluded": true,
+  "limitations": [
+    "No funding or actual order-book spread/impact",
+    "October 31 missing: cannot certify October complete",
+    "2026 already research-exposed, not blind holdout",
+    "Intratrade drawdown may exceed trade-close drawdown",
+    "Assumes fractional sizing and 5x leverage, not validated exchange minimums"
+  ]
+}
