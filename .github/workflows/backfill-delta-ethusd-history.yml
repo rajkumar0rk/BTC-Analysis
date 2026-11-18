@@ -1,0 +1,89 @@
+name: Backfill Delta India ETHUSD backtest history
+on:
+  push:
+    branches:
+      - feature/ethusd-backtest-data-20261118
+    paths:
+      - .github/workflows/backfill-delta-ethusd-history.yml
+      - scripts/sync_delta_ethusd_1m.py
+      - scripts/collect_delta_ethusd_institutional_data.py
+      - scripts/verify_delta_ethusd_history.py
+  workflow_dispatch:
+    inputs:
+      through:
+        description: "Final UTC day inclusive (blank = previous complete UTC day)"
+        required: false
+        default: ""
+permissions:
+  contents: write
+concurrency:
+  group: ethusd-history-isolated-branch
+  cancel-in-progress: false
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout isolated branch (never main)
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check Python source syntax
+        run: |
+          python -m py_compile scripts/sync_delta_ethusd_1m.py
+          python -m py_compile scripts/collect_delta_ethusd_institutional_data.py
+          python -m py_compile scripts/verify_delta_ethusd_history.py
+      - name: Download Delta ETHUSD perpetual 1m OHLCV by month
+        env:
+          THROUGH: ${{ inputs.through || '' }}
+        run: |
+          if [ -n "$THROUGH" ]; then
+            python scripts/sync_delta_ethusd_1m.py --start 2025-01-01 --through "$THROUGH"
+          else
+            python scripts/sync_delta_ethusd_1m.py --start 2025-01-01
+          fi
+      - name: Save only ETH price archives to isolated branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/delta_india/ETHUSD/1m/
+          if ! git diff --cached --quiet; then
+            git commit -m "data(ethusd): archive monthly Delta ETHUSD 1m candles"
+            git push origin HEAD:feature/ethusd-backtest-data-20261118
+          fi
+      - name: Download Delta ETHUSD mark 1m, OI 5m, funding 1h
+        env:
+          THROUGH: ${{ inputs.through || '' }}
+        run: |
+          if [ -n "$THROUGH" ]; then
+            UNTIL="$(date -u -d "$THROUGH + 1 day" +%F)"
+            python scripts/collect_delta_ethusd_institutional_data.py backfill --end-exclusive "$UNTIL"
+          else
+            python scripts/collect_delta_ethusd_institutional_data.py backfill
+          fi
+      - name: Save only ETH supplemental history to isolated branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/delta_india/ETHUSD/institutional/history/ data/delta_india/ETHUSD/institutional/history_manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(ethusd): archive mark, OI and funding-rate observations"
+            git push origin HEAD:feature/ethusd-backtest-data-20261118
+          fi
+      - name: Audit candle coverage, chronology and SHA-256
+        run: python scripts/verify_delta_ethusd_history.py
+      - name: Publish data-quality manifests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ethusd-history-quality-manifests
+          path: |
+            data/delta_india/ETHUSD/1m/manifest.json
+            data/delta_india/ETHUSD/institutional/history_manifest.json
+            reports/ethusd_data_quality/summary.json
+          if-no-files-found: warn
+          retention-days: 30
