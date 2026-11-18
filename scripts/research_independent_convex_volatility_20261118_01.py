@@ -127,10 +127,10 @@ def main():
         x=load(sym);s,a,info=signals(x);rates=funding(sym)
         z,m,t=run(sym,x,s,a,rates);ss.append(z);mm+=m;tt+=t
         quality.append(dict(symbol=sym,rows=len(x),missing_minutes=int((x.time.iloc[-1]-x.time.iloc[0])//60+1-len(x)),funding_rows=len(rates),**info))
-        print(json.dumps(z),flush=True)
+        print(json.dumps(z,default=lambda o: o.item() if hasattr(o,"item") else str(o)),flush=True)
     pd.DataFrame(ss).to_csv(OUT/"summary.csv",index=False)
     pd.DataFrame(mm).to_csv(OUT/"monthly.csv",index=False)
     pd.DataFrame(tt).to_csv(OUT/"trades.csv",index=False)
-    (OUT/"quality.json").write_text(json.dumps(dict(data=quality,settings=dict(risk_per_trade=.005,fee_per_fill=.00059,slippage_per_fill=.0002,funding_proxy="previous hour Delta FUNDING, assumed 0.01% debit if missing",start="2025-01-01",end_exclusive="2026-11-18",warning="2025 is research exposed; 2026 is NOT an untouched holdout; margin/liquidation not simulated; signal 4h EMA uses last completed 4h close")),indent=2))
+    (OUT/"quality.json").write_text(json.dumps(dict(data=quality,settings=dict(risk_per_trade=.005,fee_per_fill=.00059,slippage_per_fill=.0002,funding_proxy="previous hour Delta FUNDING, assumed 0.01% debit if missing",start="2025-01-01",end_exclusive="2026-11-18",warning="2025 is research exposed; 2026 is NOT an untouched holdout; margin/liquidation not simulated; signal 4h EMA uses last completed 4h close")),indent=2,default=lambda o: o.item() if hasattr(o,"item") else str(o)))
     print("COMPLETE",flush=True)
 if __name__=="__main__":main()
