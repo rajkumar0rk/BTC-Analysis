@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "symbol": "BTCUSD",
+      "files": 23,
+      "bars": 987840,
+      "missing_minutes": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    },
+    {
+      "symbol": "ETHUSD",
+      "files": 23,
+      "bars": 987840,
+      "missing_minutes": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    }
+  ],
+  "hypothesis": "Cross-asset BTC/ETH leader move and lagging follower continuation",
+  "model_count": 144,
+  "fee_per_side": 0.00059,
+  "slippage_per_side": 0.0002,
+  "funding_8h_debit": 0.0001,
+  "selection": "2025 >=30 trades, positive net return, PF>1 then maximum calendar profit-day rate. No eligible model: best net return is diagnostic failure.",
+  "limitations": [
+    "No actual L1 quotes, depth or contract lot validation",
+    "Funding is assumed debit not actual cashflow",
+    "No exchange liquidation simulation; max 2x notional",
+    "2026 research exposed, not a pristine holdout",
+    "Daily zero trade counts as not profitable",
+    "Minute OHLC uses pessimistic stop-first ordering; spread proxy only"
+  ]
+}

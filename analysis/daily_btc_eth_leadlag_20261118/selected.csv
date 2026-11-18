@@ -1,0 +1,5 @@
+symbol,year,leader,leader_move,follower_fraction,stop,target,hold_min,trades,days,profitable_days,losing_days,no_trade_days,profitable_calendar_day_pct,profit_factor,net_return_pct,net_usd,daily_mean_usd,daily_median_usd,mean_losing_day_usd,worst_day_usd,max_losing_streak,max_dayclose_drawdown_pct,fees_usd,funding_debit_usd,2025_criteria_pass
+BTCUSD,2025,ETHUSD,0.008,0.15,0.005,0.007,30,88,365,34,54,277,9.315,0.5786,-7.6594,-76.5939,-0.2098,0.0,-3.3661,-6.4301,3,-9.4509,99.5263,0.1938,False
+BTCUSD,2026,ETHUSD,0.008,0.15,0.005,0.007,30,16,321,9,7,305,2.804,1.4888,1.5045,13.8924,0.0433,0.0,-4.0599,-5.9332,2,-1.2711,17.4464,0.0,False
+ETHUSD,2025,BTCUSD,0.005,0.35,0.003,0.007,30,34,365,16,18,331,4.384,1.1511,1.8987,18.9869,0.052,0.0,-6.9807,-7.3592,2,-2.6938,66.1512,0.0,True
+ETHUSD,2026,BTCUSD,0.005,0.35,0.003,0.007,30,17,321,4,13,304,1.246,0.395,-5.6298,-57.3665,-0.1787,0.0,-7.2934,-7.4726,2,-6.0058,33.4089,0.0,True
