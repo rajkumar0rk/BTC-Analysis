@@ -40,7 +40,7 @@ jobs:
           git add analysis/failed_auction_reclaim_20261119/promising_exploratory_models.csv
           git add analysis/failed_auction_reclaim_20261119/candidate_concentration.csv
           git add analysis/failed_auction_reclaim_20261119/candidate_monthly_pf.csv
-          git add analysis/failed_auction_reclaim_20261119/candidate_trade_ledger.csv
+          if test -f analysis/failed_auction_reclaim_20261119/candidate_trade_ledger.csv; then git add analysis/failed_auction_reclaim_20261119/candidate_trade_ledger.csv; fi
           git add analysis/failed_auction_reclaim_20261119/quality.json
           git add analysis/failed_auction_reclaim_20261119/RESEARCH_REPORT.md
           if ! git diff --cached --quiet; then
