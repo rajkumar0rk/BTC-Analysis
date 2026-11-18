@@ -1,0 +1,74 @@
+name: Replay historical BTC strategy research on ETHUSD separately
+on:
+  push:
+    branches: [research/eth-all-historical-crosscheck]
+    paths:
+      - scripts/eth_all_prior_strategy_runner.py
+      - scripts/eth_all_reports_summary.py
+      - scripts/eth_transfer_stage24.py
+      - scripts/eth_transfer_stage25.py
+      - .github/workflows/eth-all-historical-crosscheck.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-all-crossmarket-research
+  cancel-in-progress: false
+jobs:
+  backtest:
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [structure, intraday, signals, later, institutional, legacy, portfolio, research_branches]
+    runs-on: ubuntu-latest
+    timeout-minutes: 160
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eth-all-historical-crosscheck
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas scipy numba tabulate scikit-learn
+      - name: Execute original BTC strategy rules using genuine ETHUSD data
+        run: python scripts/eth_all_prior_strategy_runner.py --group "${{ matrix.group }}" --per-script-timeout 840
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eth-crosscheck-${{ matrix.group }}
+          path: analysis/eth_all_validation/
+          if-no-files-found: warn
+          retention-days: 30
+  report:
+    if: always()
+    needs: [backtest]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eth-all-historical-crosscheck
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install minimal report dependencies
+        run: python -m pip install pandas
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: eth-crosscheck-*
+          path: analysis/eth_all_validation/
+          merge-multiple: true
+      - name: Combine per-script audit and coverage data
+        run: python scripts/eth_all_reports_summary.py
+      - name: Commit ETH-only reports; never change BTC historical outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_all_validation/
+          if ! git diff --cached --quiet; then
+            git commit -m "research(ETH): archive original-rule portability suite audits"
+            git fetch origin research/eth-all-historical-crosscheck
+            git rebase origin/research/eth-all-historical-crosscheck
+            git push origin HEAD:research/eth-all-historical-crosscheck
+          fi
