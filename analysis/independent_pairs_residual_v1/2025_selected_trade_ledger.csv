@@ -1,0 +1,2 @@
+entry_utc,exit_utc,eth_direction,notional_per_leg_usd,btc_gross_pnl_usd,eth_gross_pnl_usd,total_fees_gst_usd,pair_net_pnl_usd,account_equity_usd,entry_z,entry_ratio_std
+2025-01-07 15:00:00+00:00,2025-01-07 15:00:00+00:00,1.0,229.58975942567557,-6200.630850817018,-0.11432679615677432,4.200136581416903,-6204.945314194591,-5204.945314194591,-1.560511544589139,0.014518649880864671
