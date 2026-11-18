@@ -1,4 +1,4 @@
-name: External HLHB 4h BTC ETH paired monthly replay
+name: External HLHB 4h BTC ETH paired monthly replay v2
 on:
   push:
     branches: [feature/github-external-volpersistence-22m-20261118]
