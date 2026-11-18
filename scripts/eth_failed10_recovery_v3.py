@@ -100,6 +100,47 @@ def patched_source(name,orig):
                     'stage17="Fresh ETH Stage17 source ledger"')
         s=s.replace('stage19="GH Actions 44234824670 Stage19 original full ledger"',
                     'stage19="Fresh ETH Stage19 source ledger"')
+    if name=="research_monthly_portfolio_stage18.py":
+        # ETH 2025 had no candidate satisfying BOTH >=9 active months and
+        # positive total 2025 profit; the original Stage18 code did train.iloc[0]
+        # and crashed. Keep all 105 candidate return series and model rules.
+        # Select a 2025-only fallback explicitly flagged as UNQUALIFIED.
+        anchor='    top=train.head(12)'
+        if anchor not in s:raise ValueError("Stage18 selection source changed")
+        s=s.replace(anchor,'''
+    original_2025_qualified_count=int(len(train))
+    if train.empty:
+        train=pairs[pairs.active_months_2025>=9].copy()
+        if train.empty:
+            train=pairs.copy()
+        # Crucially: tie-break uses 2025 only; no 2026 NAV/drawdown.
+        train=train.sort_values(
+            ["positive_months_2025","losing_months_2025","return_2025_pct"],
+            ascending=[False,True,False],kind="stable")
+    '''+anchor)
+        status='        selection_only_on="2025 monthly positive count, then losing count and 2025 return",'
+        if status not in s:raise ValueError("Stage18 meta source changed")
+        s=s.replace(status,status+'''
+        original_2025_qualified_count=original_2025_qualified_count,
+        original_2025_gate_met=bool(original_2025_qualified_count),
+        unqualified_fallback_selected_for_audit_only=not bool(original_2025_qualified_count),
+''')
+    if name=="research_trade_counts_stage22.py":
+        # Stage20's selected ETH model may differ from a hardcoded BTC
+        # momentum model and may use auxiliary weights 10%,15% or 20%.
+        # Audit its ACTUAL stored selection from independently generated ETH
+        # Stage20 metadata rather than assuming BTC's original 10% blend.
+        anchor='S19_MODEL="strong_momentum_6h__4h_adx_le20__3R__480min"'
+        if anchor not in s:raise ValueError("Stage22 source model anchor changed")
+        s=s.replace(anchor,'''S20_ETH_SELECTED=json.loads((BASE20/"quality.json").read_text())["selected"]
+S19_MODEL=str(S20_ETH_SELECTED["stage19_model"])
+S20_AUX_WEIGHT=float(S20_ETH_SELECTED["new_pattern_weight"])''')
+        formula='expected20=.9*expected18+.1*h_r'
+        if formula not in s:raise ValueError("Stage22 fixed BTC weighting anchor missing")
+        s=s.replace(formula,
+            'expected20=(1.-S20_AUX_WEIGHT)*expected18+S20_AUX_WEIGHT*h_r')
+        anchor='stage20_definition="67.5% quiet-volume / 22.5% Daily20 Donchian / 10% 1H strong momentum breakout",'
+        s=s.replace(anchor,'stage20_definition=f"Blend {(1-S20_AUX_WEIGHT):.0%} Stage18 baseline / {S20_AUX_WEIGHT:.0%} Stage19 selected model: {S19_MODEL}",')
     return s
 
 def prepare_sources(temp):
