@@ -1,0 +1,66 @@
+{
+  "study": "UTC-session anchored VWAP exhaustion two-candle reversal",
+  "parameters": {
+    "deviation": [
+      0.003,
+      0.005,
+      0.007
+    ],
+    "target": [
+      0.0035,
+      0.005,
+      0.0075
+    ],
+    "stop": [
+      0.003,
+      0.005
+    ],
+    "hold_minutes": [
+      90,
+      180
+    ],
+    "volume_ratio": [
+      1.0,
+      1.25
+    ],
+    "models_per_symbol": 72
+  },
+  "entry": "Completed 5-minute candle opposite prior candle, close beyond session VWAP deviation; next 1-minute open",
+  "exit": "Fixed percentage target or stop, stop first when ambiguous; time cap; no overnight trades",
+  "sizing": "Risk 0.5% of equity to nominal stop, notional capped at 2x account equity, at most one trade per UTC day",
+  "fee": "0.05% taker per entry and exit plus 18% GST, 2bp per-side adverse fill slippage",
+  "funding": "Assumed 1bp debit per funding boundary crossed; not actual settled cashflow",
+  "caveats": [
+    "Not every day has a signal; no forced trades",
+    "2026 previously viewed, not a genuine forward holdout",
+    "No order book, spread model, exact intraminute sequence or exchange lot constraints",
+    "Liquidation and margin risk not simulated",
+    "Per-day drawdown uses day-close NAV, not intraday high water",
+    "2026 November only partial through 17 November UTC"
+  ],
+  "data": [
+    {
+      "symbol": "BTCUSD",
+      "rows": 987840,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00",
+      "source_files": 23,
+      "missing_minutes": 0,
+      "closed_5m_bars": 197568,
+      "base_signal_count": 8337,
+      "calendar_days": 686
+    },
+    {
+      "symbol": "ETHUSD",
+      "rows": 987840,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00",
+      "source_files": 23,
+      "missing_minutes": 0,
+      "closed_5m_bars": 197568,
+      "base_signal_count": 10599,
+      "calendar_days": 686
+    }
+  ],
+  "selection": "2025 positive return+PF>1 and >=30 trades; rank highest calendar profit-day frequency; test 2026 unchanged"
+}
