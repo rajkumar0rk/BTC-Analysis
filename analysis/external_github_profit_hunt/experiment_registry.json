@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T17:30:00Z",
+  "last_updated_utc": "2026-11-18T18:29:45Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -381,6 +381,33 @@
       ],
       "next_step": "Build a fixed-parameter causal 1H indicator replay and 1m exit execution with verified technical.indicators Supertrend parity; backtest BOTH assets and reconcile monthly account equity including funding, January coverage and MTM.",
       "notification_eligible": false
+    },
+    {
+      "id": "maksat-mtf-breakout-source-audit-20261118",
+      "source_repo": "https://github.com/MAKSAT-DEL/mtf-breakout-bot",
+      "source_commit": "9903df12cb3ed13a79a0646cea37f4b311c15bf6",
+      "source_path": "main.py",
+      "source_blob_sha": "0459984dc5a5a577117c930ac35a867ae36c3bea",
+      "status": "SOURCE_AUDITED_NOT_BACKTESTED",
+      "source_claims": "BTC 209 trades, 42.1% win rate, PF 1.46, CAGR 7.4%; author-reported only, NOT independently verified",
+      "strategy": "1H close > previous daily high +1.5% (short below low -1.5%), all three EMA50 1H/4H/1D aligned, ADX14 >=25, volume >=1.2x 20H volume, ATR14 3.5x initial stop, breakeven at +2ATR, 2ATR trailing, 1% equity initial stop risk",
+      "audit_findings": [
+        "4H and daily EMA50 are calculated using full period close via resample.last() then reindex/ffill at period start; this can leak future 4H/day close into earlier hourly signals.",
+        "Next-hour bar close is used to update trailing stop before next-hour low/high is checked, potentially retroactively filling a stop that did not exist at the time; same-bar high triggers breakeven before low is checked, path ambiguous.",
+        "ADX/volume filter is applied with continue even while in an open position; exit monitoring and equity_curve updates skip filtered bars.",
+        "Trades and equity curve ignore taker fees, GST, slippage, funding, spread, liquidation and unrealized MTM.",
+        "Quantity is sized by stop distance without cap on actual leverage or notional.",
+        "CAGR uses hardcoded starting capital 10000 and original author's BTC-only data; not evidence of Delta BTCUSD or ETHUSD 22-month performance."
+      ],
+      "required_corrections": [
+        "Build completed 1H/4H/1D resampling with no lookahead and next-hour execution; explicitly validate signal timestamps.",
+        "Check 1m stop-first OHLC sequence and update trailing only after eligible observed data; monitor open positions regardless of entry filters.",
+        "Apply same fixed percentage/ATR rules to BTCUSD and ETHUSD with realistic capped exposure and Delta costs, monthly IST MTM accounting.",
+        "Verify missing Dec 2024 18:30-23:59 UTC January warmup and actual funding before treating results as verified."
+      ],
+      "verdict": "RESEARCH LEAD ONLY; source backtest performance not credible until lookahead/stop logic repaired; no paired test or monthly results this iteration",
+      "notification_eligible": false,
+      "next_action": "Only replay a clearly documented corrected causal variant after source parity and full data validation; otherwise seek a cleaner pinned external strategy."
     }
   ]
 }
