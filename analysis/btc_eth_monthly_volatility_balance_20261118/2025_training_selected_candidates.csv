@@ -1,0 +1,13 @@
+selection_market,model,rationale,training_2025_net_return_pct,training_2025_positive_months
+BTCUSD,4h:trend_efficiency__SL2.5_RR2,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",2.656457105223353,7
+BTCUSD,4h:momentum_expansion__SL1.5_RR3,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",5.025294412902159,6
+BTCUSD,4h:momentum_expansion__SL1.5_RR2,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",0.817553149933592,6
+BTCUSD,4h:trend_efficiency__SL1.5_RR2,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",1.7282338436622968,5
+BTCUSD,4h:trend_efficiency__SL1.5_RR3,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",4.74263594360369,7
+BTCUSD,4h:rsi2_extreme_fade__SL2.5_RR3,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",2.793007353585031,7
+ETHUSD,1h:trend_efficiency__SL1.5_RR3,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",14.99477040481687,10
+ETHUSD,1h:trend_efficiency__SL1.5_RR2,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",17.303216354768345,11
+ETHUSD,1h:trend_efficiency__SL2.5_RR3,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",10.134104455843307,9
+ETHUSD,4h:engulfing_reversal__SL1.5_RR3,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",9.332838924398533,8
+ETHUSD,4h:engulfing_reversal__SL1.5_RR2,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",5.956181032458341,8
+ETHUSD,4h:engulfing_reversal__SL2.5_RR3,"Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",6.89728757697321,8
