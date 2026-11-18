@@ -91,8 +91,8 @@ def features(f,seg_start,seg_end):
     b["hour_bear"]=(hour.valid & (hour.close<hour.ema20)&
                     (hour.ema20<hour.ema50)).fillna(False).to_numpy(bool)
 
-    bull=(b.close>b.open)&(b.loc>=.65)&(b.body>=.40)
-    bear=(b.close<b.open)&(b.loc<=.35)&(b.body>=.40)
+    bull=(b.close>b.open)&(b["loc"]>=.65)&(b.body>=.40)
+    bear=(b.close<b.open)&(b["loc"]<=.35)&(b.body>=.40)
     signals={
        "range_breakout": (
            bull&(b.close>b.prev24H)&(b.vr>=1.15)&(b.rr>=1.2),
