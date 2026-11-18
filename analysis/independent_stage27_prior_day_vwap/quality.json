@@ -1,0 +1,28 @@
+{
+  "strategy": "prior_utc_day_vwap_hourly_reclaim",
+  "months": 22,
+  "positive_months": 5,
+  "months_ge10": 0,
+  "all_22_positive": false,
+  "all_22_ge10": false,
+  "total_trades": 618,
+  "wins": 228,
+  "losses": 390,
+  "win_rate_pct": 36.89320388349515,
+  "max_trade_close_drawdown_pct": -46.4295749085457,
+  "start_equity": 1000.0,
+  "end_equity": 541.716212259515,
+  "net_return_pct": -45.828378774048495,
+  "fee_with_gst_per_side": 0.00059,
+  "slippage_btc_points_per_side": 5.0,
+  "source": "Delta India BTCUSD 1m verified manifest 2025-01 to 2026-10",
+  "first_IST_month_missing_hours": 5.5,
+  "missing": [
+    "funding",
+    "bid_ask_spread",
+    "market_impact",
+    "lot_size",
+    "margin_liquidation"
+  ],
+  "not_pristine_out_of_sample": true
+}
