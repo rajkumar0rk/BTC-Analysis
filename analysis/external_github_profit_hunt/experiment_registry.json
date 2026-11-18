@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T21:10:00Z",
+  "last_updated_utc": "2026-11-18T21:45:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -445,6 +445,25 @@
       "verdict": "AUDIT_ONLY_NO_QUALIFIED_RESULT",
       "notification_eligible": false,
       "next_action": "Prefer simpler bounded-risk causal strategy for paired replay, or implement full Freqtrade indicator, protections and ROI parity before testing; resolve authentic January IST coverage and funding."
+    },
+    {
+      "id": "freqtrade-fadx-sma-1h-source-audit-20261119",
+      "source_repo": "https://github.com/freqtrade/freqtrade-strategies",
+      "source_commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "source_path": "user_data/strategies/futures/FAdxSmaStrategy.py",
+      "source_blob_sha": "3bb13caf079e8360a959c3ad4dd2b2507f3045c0",
+      "status": "SOURCE_AUDITED_NOT_BACKTESTED",
+      "rules": "1h ADX14 >30 and SMA12/SMA48 bullish crossover for long, bearish crossover for short; ADX14 <30 exits either side; configured 5% stop; ROI schedule 0min 5%, 30min 10%, 60min 7.5%; no trailing",
+      "audit_findings": [
+        "startup_candle_count=14 is insufficient for SMA48 and ADX warmup; must prewarm without lookahead",
+        "pos_exit_adx parameter declared but unused; exits compare pos_entry_adx",
+        "ROI schedule nonmonotonic and must reproduce Freqtrade semantics, not assume fixed TP",
+        "Signals must use completed 1h candles and next-bar fills",
+        "Source does not define Delta India funding, fees, GST, slippage, margin/liquidation or 1m stop execution"
+      ],
+      "verification": "No paired BTCUSD/ETHUSD run, no monthly PF or account returns; January 2025 IST history gap and actual funding remain unresolved",
+      "verdict": "UNTESTED_NO_NOTIFICATION",
+      "next_action": "Implement exact causal 1h indicator and ROI semantics with >=48-bar prewarm; then run paired BTC/ETH 1m execution with 22 IST month-end MTM and after-cost accounting; do not claim verified until history and funding resolved"
     }
   ]
 }
