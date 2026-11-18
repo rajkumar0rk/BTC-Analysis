@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent native MARK vs last-price dislocation replay, paired BTC/ETH, 2025-2026."""
+"""Independent native MARK vs last-price dislocation replay, paired BTC/ETH, 2025-2026.\nThis replay intentionally avoids month-end liquidation and uses month-end NAV.\n"""
 import sys, json, hashlib
 from pathlib import Path
 import numpy as np
