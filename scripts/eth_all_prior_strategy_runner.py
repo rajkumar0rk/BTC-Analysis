@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent ETHUSD portability suite for prior BTC-Analysis research scripts.
+"""Independent ETHUSD normalized index portability suite for prior BTC research.
 
 Original model code from main is cloned to a temporary module directory and
 ONLY source market paths and output paths are changed; entry logic, risk and
@@ -26,8 +26,8 @@ import pandas as pd
 
 ROOT=Path.cwd()
 SOURCE=ROOT/"scripts"
-RESULT_ROOT=Path("analysis/eth_all_original_rules")
-AUDIT=Path("analysis/eth_all_validation")
+RESULT_ROOT=Path("analysis/eth_normalized_execution_results")
+AUDIT=Path("analysis/eth_normalized_all_v2")
 GROUPS={
   "structure":[
     "research_big_trend_stage1.py",
@@ -103,7 +103,11 @@ def transform(t):
     # No change to trading logic, thresholds, exits, model selection or cost rates.
     # Textual substitutions intentionally make imported helper modules read ETH.
     z=t.replace("BTCUSDT","ETHUSDT").replace("BTCUSD","ETHUSD")
-    z=z.replace("analysis/","analysis/eth_all_original_rules/")
+    # Redirect all original ETH sources into causal Jan2025-anchored equivalent
+    # BTC price units, so an old 200 point strategy never uses 200 ETH points.
+    # No change to entry logic, absolute thresholds, or exit model.
+    z=z.replace("data/delta_india/ETHUSD", "data/eth_normalized_2025_anchor")
+    z=z.replace("analysis/","analysis/eth_normalized_execution_results/")
     if "data/delta_india/BTCUSD" in z:
         raise ValueError("BTC market source path remains after port")
     if re.search(r'(?<!eth_all_original_rules/)analysis/(?:institutional|delta|big_|mtf_|research)',z):
@@ -140,9 +144,9 @@ def call_script(file,workdir,timeout_s):
     entry={
         "script":file,"source_sha256":hashlib.sha256(orig.encode()).hexdigest(),
         "port_sha256":hashlib.sha256(rewritten.encode()).hexdigest(),
-        "modifications":"text-only BTCUSD->ETHUSD/BTCUSDT->ETHUSDT and isolation of all analysis/* paths",
+        "modifications":"BTCUSD source to 2025-reference CONSTANT normalized ETH index, isolated reports. Strategy rules unchanged",
         "costs_in_original_model":"unchanged; must inspect individual report",
-        "point_thresholds":"unchanged numeric BTC values; not volatility-normalized to ETH",
+        "point_thresholds":"Original BTC index thresholds now ETH pts = BTC index pts / constant Jan2025 BTC/ETH price ratio",
         "run_time_seconds":0,
         "status":"unknown",
     }
@@ -202,10 +206,22 @@ def save_small_reports():
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--group",required=True,choices=GROUPS)
-    ap.add_argument("--per-script-timeout",type=int,default=900)
+    ap.add_argument("--per-script-timeout",type=int,default=240)
     args=ap.parse_args()
     (ROOT/AUDIT).mkdir(parents=True,exist_ok=True)
     source_check=manifest_check()
+    from eth_btc_equivalent_data import prepare
+    normalized=prepare()
+    source_check["normalization"]={
+      "btc_open_reference":normalized["btc_first_open"],
+      "eth_open_reference":normalized["eth_first_open"],
+      "constant_index_scale":normalized["synthetic_multiplier_btc_index_per_eth_price_point"],
+      "eth_points_for_200_btc_index":normalized["equivalent_eth_price_points_per_200_btc_index_points"],
+      "eth_slippage_for_5_btc_index":normalized["equivalent_eth_slippage_price_points_per_5_index_points"],
+      "not_time_local":True
+    }
+    (ROOT/AUDIT/"NORMALIZATION.json").write_text(json.dumps(
+        {k:v for k,v in normalized.items() if k!="partitions"},indent=2)+"\n")
     group=GROUPS[args.group]
     results=[]
     with tempfile.TemporaryDirectory(prefix="eth_scripts_") as tmp:
