@@ -1,0 +1,15 @@
+# Fixed-hour prior-hour sign daily futures research
+
+symbol  year  entry_hour_utc direction volatility_regime  take_pct  stop_pct  max_hold_minutes  days  trades  profitable_days  losing_days  no_trade_days  positive_calendar_days_pct  net_profit_factor  net_return_pct  avg_daily_net_usd  median_daily_net_usd  avg_losing_day_usd  worst_day_usd  max_consecutive_losing_days  max_dayclose_drawdown_pct  fees_usd  funding_debit_usd  train_criteria_pass
+BTCUSD  2025              13      fade        range_high       0.6       0.6               120   365     150               80           70            215                      21.918             0.8250         -5.7990            -0.1589                   0.0             -4.7343        -6.2109                            3                    -9.1759  141.2991                0.0                False
+BTCUSD  2026              13      fade        range_high       0.6       0.6               120   321     169               69          100            152                      21.495             0.4439        -25.1941            -0.7393                   0.0             -4.2678        -5.8118                            4                   -25.3819  133.7163                0.0                False
+ETHUSD  2025              18      fade         range_low       0.6       0.6               120   365     117               68           49            248                      18.630             1.1234          2.5481             0.0698                   0.0             -4.2130        -6.2944                            3                    -4.8480  114.8776                0.0                 True
+ETHUSD  2026              18      fade         range_low       0.6       0.6               120   321     109               44           65            212                      13.707             0.5336         -9.5401            -0.3048                   0.0             -3.2270        -7.4606                            3                    -9.5401  104.9726                0.0                 True
+
+## Caveats
+
+- No verified spread/order book, liquidation engine, margin/lot sizes, or exact funding
+- 1m OHLC stop-first where ambiguous
+- No strategy can guarantee daily profits
+- 2026 is not a pristine holdout
+- 2026 ends Nov 17 UTC; includes no-trade calendar days

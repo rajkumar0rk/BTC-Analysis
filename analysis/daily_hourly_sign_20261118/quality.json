@@ -1,0 +1,32 @@
+{
+  "hypothesis": "fixed-hour prior completed hour sign persistence/fade conditioned on 48-hour range regime",
+  "novelty": "No candle-pattern breakout, VWAP, carry, cross-asset, wick or volume thresholds",
+  "data": [
+    {
+      "symbol": "BTCUSD",
+      "rows": 987840,
+      "source_months": 23,
+      "missing_minutes": 0
+    },
+    {
+      "symbol": "ETHUSD",
+      "rows": 987840,
+      "source_months": 23,
+      "missing_minutes": 0
+    }
+  ],
+  "models_per_asset": 1104,
+  "split": "2025 train, unchanged 2026 research-exposed historical check, not pristine OOS",
+  "fee_each_side_including_GST": 0.00059,
+  "adverse_slippage_each_side": 0.0002,
+  "funding_debit_per_8h_crossing": 0.0001,
+  "stop_risk_per_trade": 0.005,
+  "max_notional_leverage": 2.0,
+  "limitations": [
+    "No verified spread/order book, liquidation engine, margin/lot sizes, or exact funding",
+    "1m OHLC stop-first where ambiguous",
+    "No strategy can guarantee daily profits",
+    "2026 is not a pristine holdout",
+    "2026 ends Nov 17 UTC; includes no-trade calendar days"
+  ]
+}
