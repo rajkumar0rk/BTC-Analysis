@@ -1,0 +1,36 @@
+name: Independent hourly-sign daily net research
+on:
+  push:
+    branches: [research/daily-hourly-sign-autocorr-20261118]
+    paths:
+      - scripts/research_daily_hourly_sign_20261118.py
+      - .github/workflows/research-daily-hourly-sign-20261118.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy pandas
+      - run: python -u scripts/research_daily_hourly_sign_20261118.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hourly-sign-net-evidence
+          path: analysis/daily_hourly_sign_20261118/
+          if-no-files-found: error
+      - name: Commit evidence only on this branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/daily_hourly_sign_20261118/summary.csv analysis/daily_hourly_sign_20261118/selected.csv analysis/daily_hourly_sign_20261118/selected_monthly.csv analysis/daily_hourly_sign_20261118/quality.json analysis/daily_hourly_sign_20261118/REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: hourly sign daily net results"
+            git push origin HEAD:research/daily-hourly-sign-autocorr-20261118
+          fi
