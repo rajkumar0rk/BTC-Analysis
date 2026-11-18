@@ -1,0 +1,76 @@
+name: ETHUSD repair and rerun 10 blocked historical backtest scripts
+on:
+  push:
+    branches: [research/eth-failed10-recovery-v3]
+    paths:
+      - scripts/eth_failed10_recovery_v3.py
+      - scripts/eth_btc_equivalent_data.py
+      - scripts/eth_failed10_report.py
+      - .github/workflows/eth-retry-failed10-v3.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-failed10-recovery-v3
+  cancel-in-progress: false
+jobs:
+  retry:
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [chain, calendar]
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eth-failed10-recovery-v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install numpy pandas scipy numba tabulate scikit-learn
+      - name: Rerun failed scripts with fresh ETH historical dependency artifacts
+        run: python scripts/eth_failed10_recovery_v3.py --part "${{ matrix.part }}" --timeout 900
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eth-repair-${{ matrix.part }}
+          path: analysis/eth_failed10_recovery/
+          if-no-files-found: warn
+          retention-days: 30
+  report:
+    if: always()
+    needs: [retry]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eth-failed10-recovery-v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install report dependency
+        run: python -m pip install pandas
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: eth-repair-*
+          path: analysis/eth_failed10_recovery/
+          merge-multiple: true
+      - name: Verify all ten repaired scripts and create an auditable summary
+        run: python scripts/eth_failed10_report.py
+      - name: Persist recovery audit on isolated branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/eth_failed10_recovery/
+          if ! git diff --cached --quiet; then
+            git commit -m "research(ETH): archive repaired failed-script results"
+            for tries in 1 2 3; do
+              git fetch origin research/eth-failed10-recovery-v3
+              git rebase origin/research/eth-failed10-recovery-v3
+              if git push origin HEAD:research/eth-failed10-recovery-v3; then exit 0; fi
+            done
+            exit 1
+          fi
