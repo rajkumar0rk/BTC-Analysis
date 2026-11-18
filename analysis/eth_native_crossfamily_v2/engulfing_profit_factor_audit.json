@@ -1,0 +1,42 @@
+{
+  "study": "ETH native cross-family v2 original-code exact replay",
+  "instrument": "ETHUSD",
+  "results": [
+    {
+      "model": "4h:engulfing_reversal__SL1.5_RR3",
+      "profit_factor_after_costs": 1.2930112183978977,
+      "gross_profit_sum_winning_trades_usd": 709.8133811186868,
+      "gross_loss_abs_sum_losing_trades_usd": 548.9615024362893,
+      "net_pnl_total_usd": 160.85187868239763,
+      "total_trades": 190,
+      "win_trades": 78,
+      "losing_trades": 112,
+      "final_equity_usd": 1160.8518786823975,
+      "monthly_positive_2025": 9,
+      "monthly_positive_2026": 6,
+      "original_replay_fee_per_side": 0.0005,
+      "GST_on_exchange_fees": 0.18,
+      "ETH_slippage_points_per_side": 0.25,
+      "funding_and_actual_spread_included": false
+    },
+    {
+      "model": "4h:engulfing_reversal__SL2.5_RR2",
+      "profit_factor_after_costs": 1.3566871711982273,
+      "gross_profit_sum_winning_trades_usd": 414.2198353634167,
+      "gross_loss_abs_sum_losing_trades_usd": 305.3171314339011,
+      "net_pnl_total_usd": 108.90270392951555,
+      "total_trades": 166,
+      "win_trades": 82,
+      "losing_trades": 84,
+      "final_equity_usd": 1108.9027039295154,
+      "monthly_positive_2025": 8,
+      "monthly_positive_2026": 7,
+      "original_replay_fee_per_side": 0.0005,
+      "GST_on_exchange_fees": 0.18,
+      "ETH_slippage_points_per_side": 0.25,
+      "funding_and_actual_spread_included": false
+    }
+  ],
+  "formula": "Sum of positive net trade USD PnL divided by absolute sum of negative net trade USD PnL",
+  "limitation": "Fees+GST+nominal slippage included, real spread/funding/impact not included. Source data begins Jan1 2025 UTC, leaving 2025 Jan 1 00:00-05:29 IST absent."
+}
