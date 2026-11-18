@@ -1,0 +1,44 @@
+{
+  "hypothesis": "Calendar-fixed intraday drift around UTC funding boundary windows, conditional or unconditional direction",
+  "distinct_from": [
+    "VWAP exhaustion",
+    "wick reversals",
+    "cross-asset 1m lead lag",
+    "market neutral carry",
+    "4H cross asset confirmation"
+  ],
+  "source_quality": [
+    {
+      "symbol": "BTCUSD",
+      "rows": 987840,
+      "source_files": 23,
+      "missing_minutes": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    },
+    {
+      "symbol": "ETHUSD",
+      "rows": 987840,
+      "source_files": 23,
+      "missing_minutes": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    }
+  ],
+  "models_per_symbol": 448,
+  "cost_model": {
+    "fee_with_GST_each_side": 0.00059,
+    "adverse_slippage_each_side": 0.0002,
+    "funding_boundary_debit": 0.0001
+  },
+  "execution": "one position per UTC day, fixed minute OPEN, momentum from 15 previously completed minutes, stop-first intraminute, flat before day end",
+  "equity": "1000 USD starting, risk 0.5% nominal stop, 2x max notional",
+  "selection": "Only 2025: profitable PF>1; choose highest calendar profitable-day fraction, otherwise least negative net return. 2026 unchanged",
+  "caveats": [
+    "2026 historically exposed, not pristine out-of-sample",
+    "No guaranteed daily return",
+    "No order book, lot sizes, margin liquidation, actual funding settlements",
+    "Simplified 2bp per-side adverse slippage",
+    "Every calendar day has a trade even if edge absent"
+  ]
+}

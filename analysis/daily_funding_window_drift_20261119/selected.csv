@@ -1,0 +1,5 @@
+symbol,year,start_minute,mode,tp,sl,hold,days,trades,profitable_days,losing_days,no_trade_days,profitable_calendar_day_pct,profit_factor,net_return_pct,median_daily_net_usd,mean_daily_net_usd,worst_day_usd,max_losing_streak,max_dayclose_drawdown_pct,fees_usd,funding_proxy_debit_usd,avg_hold_min,train_positive
+BTCUSD,2025,840,contrarian,0.006,0.004,30,365,365,127,238,0,34.795,0.457,-42.3643,-1.3201,-1.1607,-6.7291,10,-42.3643,423.2976,0.0,23.35,False
+BTCUSD,2026,840,contrarian,0.006,0.004,30,321,321,91,230,0,28.349,0.2736,-53.3833,-1.0012,-0.9585,-3.8633,23,-53.7602,192.2335,0.0,23.19,False
+ETHUSD,2025,120,long,0.006,0.004,90,365,365,167,198,0,45.753,0.6763,-30.0267,-1.1379,-0.8226,-6.7451,7,-33.0161,429.6071,0.0,42.48,False
+ETHUSD,2026,120,long,0.006,0.004,90,321,321,97,224,0,30.218,0.3734,-51.4657,-1.5892,-1.1219,-4.7037,15,-51.7049,231.9659,0.0,51.64,False
