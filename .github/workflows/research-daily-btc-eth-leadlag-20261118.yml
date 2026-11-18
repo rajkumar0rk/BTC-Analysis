@@ -1,0 +1,37 @@
+name: Independent BTC ETH lead-lag daily profit research
+on:
+  push:
+    branches: [research/daily-btc-eth-leadlag-20261118]
+    paths:
+      - scripts/research_daily_btc_eth_leadlag_20261118.py
+      - .github/workflows/research-daily-btc-eth-leadlag-20261118.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install numpy pandas
+      - name: Replay BTC ETH leader lagging follower hypothesis
+        run: python -u scripts/research_daily_btc_eth_leadlag_20261118.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daily-leadlag-research
+          path: analysis/daily_btc_eth_leadlag_20261118/
+          if-no-files-found: error
+      - name: Commit result evidence to isolated branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/daily_btc_eth_leadlag_20261118/selected.csv analysis/daily_btc_eth_leadlag_20261118/selected_monthly.csv analysis/daily_btc_eth_leadlag_20261118/quality.json analysis/daily_btc_eth_leadlag_20261118/REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record lead-lag daily net results"
+            git push origin HEAD:research/daily-btc-eth-leadlag-20261118
+          fi
