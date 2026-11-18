@@ -1,0 +1,80 @@
+{
+  "hypothesis": "Kaufman efficiency ratio intraday trend vs fade",
+  "input": [
+    {
+      "symbol": "BTCUSD",
+      "rows": 987840,
+      "months": 23,
+      "first": 1735689600,
+      "last": 1794959940,
+      "missing_minutes": 0,
+      "signals_per_config": {
+        "(6, 0.35, 'trend')": 686,
+        "(6, 0.35, 'fade')": 686,
+        "(6, 0.5, 'trend')": 686,
+        "(6, 0.5, 'fade')": 686,
+        "(6, 0.65, 'trend')": 686,
+        "(6, 0.65, 'fade')": 686,
+        "(12, 0.35, 'trend')": 686,
+        "(12, 0.35, 'fade')": 686,
+        "(12, 0.5, 'trend')": 686,
+        "(12, 0.5, 'fade')": 686,
+        "(12, 0.65, 'trend')": 660,
+        "(12, 0.65, 'fade')": 660,
+        "(24, 0.35, 'trend')": 685,
+        "(24, 0.35, 'fade')": 685,
+        "(24, 0.5, 'trend')": 520,
+        "(24, 0.5, 'fade')": 520,
+        "(24, 0.65, 'trend')": 171,
+        "(24, 0.65, 'fade')": 171
+      }
+    },
+    {
+      "symbol": "ETHUSD",
+      "rows": 987840,
+      "months": 23,
+      "first": 1735689600,
+      "last": 1794959940,
+      "missing_minutes": 0,
+      "signals_per_config": {
+        "(6, 0.35, 'trend')": 686,
+        "(6, 0.35, 'fade')": 686,
+        "(6, 0.5, 'trend')": 686,
+        "(6, 0.5, 'fade')": 686,
+        "(6, 0.65, 'trend')": 686,
+        "(6, 0.65, 'fade')": 686,
+        "(12, 0.35, 'trend')": 686,
+        "(12, 0.35, 'fade')": 686,
+        "(12, 0.5, 'trend')": 686,
+        "(12, 0.5, 'fade')": 686,
+        "(12, 0.65, 'trend')": 657,
+        "(12, 0.65, 'fade')": 657,
+        "(24, 0.35, 'trend')": 682,
+        "(24, 0.35, 'fade')": 682,
+        "(24, 0.5, 'trend')": 533,
+        "(24, 0.5, 'fade')": 533,
+        "(24, 0.65, 'trend')": 172,
+        "(24, 0.65, 'fade')": 172
+      }
+    }
+  ],
+  "models_per_asset": 144,
+  "train_selection": "positive 2025 net, PF>1, >=50 trades then highest positive calendar day fraction; otherwise highest 2025 net",
+  "evaluation_check": "fixed params, research-exposed not untouched holdout",
+  "costs": {
+    "taker_fee_plus_GST_per_side": 0.00059,
+    "adverse_slippage_per_side": 0.0002,
+    "funding_debit_per_8h_boundary": 0.0001
+  },
+  "risk": {
+    "stop_risk_per_trade": 0.005,
+    "max_notional_leverage": 2.0,
+    "one_trade_per_UTC_day": true
+  },
+  "limitations": [
+    "No guaranteed daily net profit",
+    "1m intrabar ambiguous stop-first",
+    "No orderbook, real funding, precise lot/margin, or liquidation engine",
+    "2026 through Nov 17 UTC only"
+  ]
+}

@@ -1,0 +1,5 @@
+symbol,year,lookback_5m,efficiency_threshold,mode,tp,sl,hold_minutes,days,trades,profitable_days,losing_days,no_trade_days,profitable_calendar_day_pct,win_rate_traded_pct,net_return_pct,net_profit_usd,mean_calendar_day_net_usd,median_calendar_day_net_usd,worst_day_usd,max_losing_day_streak,profit_factor,max_dayclose_drawdown_pct,fees_usd,funding_proxy_usd,passes_2025_selection
+BTCUSD,2025,24,0.65,trend,0.006,0.005,180,365,90,38,52,275,10.411,42.222,-9.8184,-98.184,-0.269,0.0,-6.6535,3,0.6226,-14.1386,103.354,1.465,False
+BTCUSD,2026,24,0.65,trend,0.006,0.005,180,321,81,32,49,240,9.969,39.506,-10.1566,-91.594,-0.2853,0.0,-5.7573,2,0.5531,-10.2292,81.054,1.262,False
+ETHUSD,2025,24,0.65,trend,0.003,0.005,180,365,94,57,37,271,15.616,60.638,-13.2714,-132.714,-0.3636,0.0,-6.4419,3,0.3965,-14.2025,104.795,0.29,False
+ETHUSD,2026,24,0.65,trend,0.003,0.005,180,321,78,41,37,243,12.773,52.564,-14.466,-125.462,-0.3908,0.0,-5.5458,2,0.2953,-15.0188,73.457,0.631,False
