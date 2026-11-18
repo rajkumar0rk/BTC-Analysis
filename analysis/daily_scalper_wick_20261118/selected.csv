@@ -1,0 +1,5 @@
+symbol,year,pattern,session,tp,sl,hold_min,cost,net_return_pct,trades,profitable_days,losing_days,no_trade_days,profitable_calendar_days_pct,win_rate_traded_pct,profit_factor,fees_usd,funding_debit_usd,max_dayclose_drawdown_pct,passes_2025_minimum
+BTCUSD,2025,sweep,utc_12_20,0.0025,0.0045,30,offer_counterfactual,-21.2838,299,136,163,66,37.26,45.485,0.5031,177.212,0.681,-22.031,False
+BTCUSD,2026,sweep,utc_12_20,0.0025,0.0045,30,offer_counterfactual,-26.5447,276,117,159,45,36.449,42.391,0.3714,122.537,0.208,-26.707,False
+ETHUSD,2025,confirm,utc_00_08,0.0025,0.0045,15,offer_counterfactual,-21.3103,295,141,154,70,38.63,47.797,0.4716,170.796,0.38,-21.587,False
+ETHUSD,2026,confirm,utc_00_08,0.0025,0.0045,15,offer_counterfactual,-32.0322,296,94,202,25,29.283,31.757,0.2543,127.635,0.211,-32.032,False
