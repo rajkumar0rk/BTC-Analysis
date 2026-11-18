@@ -133,6 +133,13 @@ PATCHES = {
         ('good=robust[robust.consistent_positive]',
          'good=robust.loc[robust["consistent_positive"]] if "consistent_positive" in robust else robust.iloc[0:0]'),
     ],
+    "research_pretrend_market_state_stage12.py": [
+        ('MIN_RISK=150.0', 'MIN_RISK=6.0'),
+        ('MAX_RISK=1200.0', 'MAX_RISK=48.0'),
+    ],
+    "research_trend_pullback_breakout_stage13.py": [
+        ('MIN_RISK,MAX_RISK=150.0,1600.0', 'MIN_RISK,MAX_RISK=6.0,64.0'),
+    ],
     "research_monthly_regime_stage14.py": [
         ('MIN_RISK=150.', 'MIN_RISK=6.'),
         ('MAX_RISK=1200.', 'MAX_RISK=48.'),
@@ -210,6 +217,46 @@ def annotate_reports(work: Path, newer: set[str], script: str) -> None:
 
 
 def main() -> None:
+    global ORDER, TARGET_FAILED, DEPENDS, GROUP
+    if os.environ.get("ETH_RETRY_REMAINING_ONLY") == "1":
+        GROUP = "remaining_retry"
+        TARGET_FAILED = [
+            "research_stage12_monthly.py",
+            "research_july_drawdown_stage15.py",
+            "research_monthly_regime_switch_stage16.py",
+            "research_monthly_portfolio_stage18.py",
+            "research_three_sleeve_stage20.py",
+            "research_monthly_fixed_weight_stage21.py",
+            "research_trade_counts_stage22.py",
+            "research_wide_monthly_stage23.py",
+        ]
+        DEPENDS = [
+            "research_pretrend_market_state_stage12.py",
+            "research_trend_pullback_breakout_stage13.py",
+            "research_monthly_regime_stage14.py",
+            "research_swing_donchian_stage17.py",
+            "research_new_1h_patterns_stage19.py",
+            "research_monthly_10pct_stage19.py",
+            "research_signal_inversion_stage20.py",
+        ]
+        ORDER = [
+            "research_pretrend_market_state_stage12.py",
+            "research_stage12_monthly.py",
+            "research_trend_pullback_breakout_stage13.py",
+            "research_monthly_regime_stage14.py",
+            "research_july_drawdown_stage15.py",
+            "research_monthly_regime_switch_stage16.py",
+            "research_swing_donchian_stage17.py",
+            "research_monthly_portfolio_stage18.py",
+            "research_new_1h_patterns_stage19.py",
+            "research_monthly_10pct_stage19.py",
+            "research_signal_inversion_stage20.py",
+            "research_three_sleeve_stage20.py",
+            "research_monthly_fixed_weight_stage21.py",
+            "research_trade_counts_stage22.py",
+            "research_wide_monthly_stage23.py",
+        ]
+        assert set(ORDER) == set(TARGET_FAILED) | set(DEPENDS)
     groupdir,work=original.setup(GROUP)
     scripts=work/"scripts"
     (groupdir/"logs").mkdir(parents=True,exist_ok=True)
@@ -258,6 +305,8 @@ def main() -> None:
         new=current-previous
         if label=="completed" and not new:
             label="no_new_output"
+        if label=="failed" and name=="research_stage12_monthly.py" and "No exact strategy trades in artifact" in stderr.read_text(errors="replace"):
+            label="no_eligible_signals"
         if label!="completed":
             details=stderr.read_text(errors="replace")[-1500:]
         else:
