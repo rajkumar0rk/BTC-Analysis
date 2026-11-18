@@ -125,6 +125,14 @@ def flatten(symbol,model,ledger,months):
     monthly=pd.DataFrame(months)
     jan_dec=monthly.iloc[:12]
     jan_oct=monthly.iloc[12:]
+    def yearly_pf(d):
+        gain=float(d.winning_net_pnl_usd.sum())
+        loss=float(d.losing_net_pnl_abs_usd.sum())
+        if gain==0 and loss==0:return None
+        if loss==0:return "infinite"
+        return gain/loss
+    pf_2025=yearly_pf(jan_dec)
+    pf_2026=yearly_pf(jan_oct)
     year2025=(jan_dec.iloc[-1].equity_end_usd/INITIAL_EQUITY-1)*100
     year2026=(jan_oct.iloc[-1].equity_end_usd/jan_oct.iloc[0].equity_start_usd-1)*100
     equity_curve=np.r_[INITIAL_EQUITY,ledger[:,7]] if len(ledger) else np.array([INITIAL_EQUITY])
@@ -135,6 +143,7 @@ def flatten(symbol,model,ledger,months):
        total_positive_trade_pnl_usd=gain,total_losing_trade_pnl_abs_usd=loss,
        total_net_pnl_usd=float(vals.sum()),net_return_pct=float((equity_curve[-1]/INITIAL_EQUITY-1)*100),
        net_return_2025_pct=float(year2025),net_return_2026_pct=float(year2026),
+       profit_factor_2025=pf_2025,profit_factor_2026=pf_2026,
        trades=len(vals),wins=int((vals>0).sum()),losses=int((vals<0).sum()),
        win_rate_pct=float(100*(vals>0).sum()/len(vals)) if len(vals) else 0.,
        positive_months=int((monthly.net_return_pct>0).sum()),
@@ -226,12 +235,12 @@ def main():
         t=t.assign(train_score=(
             t.strong_months_2025*3+t.positive_months_2025*1.0+
             np.minimum(t.net_return_2025_pct,100)/10+
-            t.profit_factor.map(lambda x:min(float(x),4) if x is not None else 0)))
+            t.profit_factor_2025.map(lambda x:(4. if x=="infinite" else min(float(x),4)) if x is not None else 0)))
         top=t.sort_values("train_score",ascending=False).head(6)
         for _,q in top.iterrows():
             selected_models.add(q.model)
             review.append(dict(selection_market=symbol,model=q.model,
-                rationale="Ranked using 2025 account return and monthly strength (plus descriptive all-sample PF); 2026 not pristine OOS",
+                rationale="Ranked using 2025 net return, 2025 profit factor and monthly strength ONLY; 2026 not pristine OOS",
                 training_2025_net_return_pct=q.net_return_2025_pct,
                 training_2025_positive_months=int(q.positive_months_2025)))
     pd.DataFrame(review).to_csv(OUT/"2025_training_selected_candidates.csv",index=False)
@@ -270,7 +279,7 @@ def main():
         previous_scripts_modified=False,novelty="Paired BTC vs ETH monthly profit factors of existing 52 causal model families; not novel original family")
     (OUT/"quality.json").write_text(json.dumps(quality,indent=2)+"\n")
     top=models[(models.trades>=50)&(models.net_return_pct>0)].copy()
-    top=top.sort_values(["profit_factor","net_return_pct"],ascending=[False,False])
+    top=top.assign(pf_sort=top.profit_factor.map(lambda x:float("inf") if x=="infinite" else (float(x) if x is not None else -1))).sort_values(["pf_sort","net_return_pct"],ascending=[False,False]).drop(columns="pf_sort")
     top.head(30).to_csv(OUT/"exploratory_profitable_top30.csv",index=False)
     print("PAIRED_PF_DONE",json.dumps(dict(
         models_per_market=len(common),
