@@ -1,0 +1,24 @@
+{
+  "source": "Delta Exchange India original BTCUSD 1m",
+  "input_months": 22,
+  "source_minutes": 963360,
+  "october_2026_complete": true,
+  "selected_using": "2025 only, ranking positive months then sum of monthly net returns",
+  "chosen": "impact5_stop2.5",
+  "all_22_positive": false,
+  "all_22_ge10": false,
+  "total_trades": 728,
+  "wins": 290,
+  "losses": 438,
+  "max_trade_close_drawdown_pct": -72.89842541505459,
+  "fee_per_side_with_gst": 0.00059,
+  "slippage_points_per_side": 5.0,
+  "missing": [
+    "funding",
+    "actual bid/ask spread",
+    "actual order-book market impact",
+    "lot size/margin/liquidation"
+  ],
+  "first_IST_month_missing_hours": 5.5,
+  "warning": "2026 history was seen in previous studies; not pristine forward validation"
+}
