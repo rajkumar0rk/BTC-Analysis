@@ -7,7 +7,7 @@
   "timestamp_unit": "unix_seconds_utc",
   "timestamp_label": "as_returned_by_API",
   "requested_through_utc": "2026-11-16",
-  "generated_at_utc": "2026-11-17T10:58:10.588910+00:00",
+  "generated_at_utc": "2026-11-18T05:33:06.280458+00:00",
   "note": "Missing candles are reported but never fabricated; OHLCV is not bid/ask/order book.",
   "partitions": [
     {
@@ -204,9 +204,9 @@
       "utc_start": "2026-10-01T00:00:00+00:00",
       "utc_end_exclusive": "2026-11-01T00:00:00+00:00",
       "expected_minutes": 44640,
-      "observed_candles": 43200,
-      "missing_minutes": 1440,
-      "sha256_gzip": "a4b9fc0f947573d21b53f23c2fc693375c41c55f8042625e7681124e167e1c11"
+      "observed_candles": 44640,
+      "missing_minutes": 0,
+      "sha256_gzip": "118135c40c1ef97a325c85a6aace8ebe45de88cb723a4da624b4a4f5b31043e6"
     },
     {
       "file": "2026-11.csv.gz",
@@ -217,5 +217,6 @@
       "missing_minutes": 0,
       "sha256_gzip": "1d5a55582f4503c3bfe1c340ff4c234ce1f631021deb5422a0e45d7a47f3577e"
     }
-  ]
+  ],
+  "oct31_repair": "2026-10-31T00:00Z to 2026-11-01T00:00Z recovered from genuine Delta Exchange India API on isolated research branch"
 }
