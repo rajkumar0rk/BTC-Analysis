@@ -40,7 +40,7 @@ jobs:
           git add analysis/efficiency_shock_trend_20261118_2331/promising_exploratory_models.csv
           git add analysis/efficiency_shock_trend_20261118_2331/candidate_concentration.csv
           git add analysis/efficiency_shock_trend_20261118_2331/candidate_monthly_pf.csv
-          git add analysis/efficiency_shock_trend_20261118_2331/candidate_trade_ledger.csv
+          if [ -f analysis/efficiency_shock_trend_20261118_2331/candidate_trade_ledger.csv ]; then git add analysis/efficiency_shock_trend_20261118_2331/candidate_trade_ledger.csv; fi
           git add analysis/efficiency_shock_trend_20261118_2331/quality.json
           git add analysis/efficiency_shock_trend_20261118_2331/RESEARCH_REPORT.md
           if ! git diff --cached --quiet; then
