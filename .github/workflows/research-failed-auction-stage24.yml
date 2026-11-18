@@ -1,0 +1,42 @@
+name: Research BTC Stage24 two-hour failed auction 22 months
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_failed_auction_stage24.py
+      - .github/workflows/research-failed-auction-stage24.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-stage24-failed-auction
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Run causal Stage24 22-month research
+        run: python scripts/research_failed_auction_stage24.py
+      - name: Commit isolated research evidence
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage24_failed_auction/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive Stage24 22-month evidence"
+            for attempt in 1 2 3 4 5 6; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
