@@ -1,0 +1,49 @@
+name: Independent failed-auction reclaim asymmetric BTC ETH research
+on:
+  push:
+    branches: [research/failed-auction-reclaim-20261118]
+    paths:
+      - scripts/research_failed_auction_reclaim_20261118.py
+      - .github/workflows/research-failed-auction-20261118.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-failed-auction-20261118
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install numpy pandas numba tabulate
+      - name: Replay independent BTC ETH research
+        run: python -u scripts/research_failed_auction_reclaim_20261118.py
+      - name: Upload complete result evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: independent-failed-auction-20261118
+          path: analysis/failed_auction_reclaim_20261118/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Commit compact results isolated branch ONLY
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/failed_auction_reclaim_20261118/model_comparison.csv
+          git add analysis/failed_auction_reclaim_20261118/qualifying_models.csv
+          git add analysis/failed_auction_reclaim_20261118/promising_exploratory_models.csv
+          git add analysis/failed_auction_reclaim_20261118/candidate_concentration.csv
+          git add analysis/failed_auction_reclaim_20261118/candidate_monthly_pf.csv
+          git add analysis/failed_auction_reclaim_20261118/candidate_trade_ledger.csv
+          git add analysis/failed_auction_reclaim_20261118/quality.json
+          git add analysis/failed_auction_reclaim_20261118/RESEARCH_REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: store independent asymmetric strategy test summary"
+            git push origin HEAD:research/failed-auction-reclaim-20261118
+          fi
