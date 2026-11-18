@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T11:56:00Z",
+  "last_updated_utc": "2026-11-18T11:57:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -99,13 +99,39 @@
       "script": "scripts/replay_erfaniaa_ema_crossover_paired.py",
       "workflow": ".github/workflows/external-ema-paired-monthly.yml",
       "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44299021669",
-      "execution": "in_progress_pending_verification",
+      "execution": "completed_successfully",
       "caveats": [
         "First IST month lacks Dec 2024 UTC evening",
         "Actual funding settlements missing",
         "Depth and liquidation not modeled",
         "2026 is not pristine out-of-sample"
-      ]
+      ],
+      "verdict": "REJECTED_NOT_WORTH_CHECKING",
+      "action_artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44299021669/artifacts/14424893586",
+      "BTCUSD": {
+        "trades": 434,
+        "profitable_months": 6,
+        "losing_months": 16,
+        "high_pf_months": 1,
+        "overall_pf": 0.5827226153611493,
+        "modeled_22m_return_pct": -66.94390877469189,
+        "year_2025_net_pct": -53.038768306313266,
+        "year_2026_ytd_net_pct": -29.609829143914823,
+        "max_month_end_drawdown_pct": 66.94390877469189
+      },
+      "ETHUSD": {
+        "trades": 519,
+        "profitable_months": 5,
+        "losing_months": 17,
+        "high_pf_months": 1,
+        "overall_pf": 0.7935720016449974,
+        "modeled_22m_return_pct": -45.72358110193434,
+        "year_2025_net_pct": -33.57206672491516,
+        "year_2026_ytd_net_pct": -18.292778019599854,
+        "max_month_end_drawdown_pct": 47.105462482649564
+      },
+      "verification": "1m checksummed BTC/ETH 22 UTC monthly partitions; 22 IST calendar month-end marked equity returns; no funding and incomplete January 2025 IST coverage; no claims of verified profitability",
+      "next_action": "Reject EMA50/100 15m 1% TP/SL candidate; find distinct external rule set, not minor hindsight retuning"
     }
   ]
 }
