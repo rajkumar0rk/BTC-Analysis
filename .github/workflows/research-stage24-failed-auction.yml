@@ -1,0 +1,33 @@
+name: Stage24 Independent Failed Auction Research
+on:
+  push:
+    branches: [research/stage24-failed-auction-20261118]
+    paths:
+      - scripts/research_failed_auction_stage24.py
+      - .github/workflows/research-stage24-failed-auction.yml
+  workflow_dispatch:
+jobs:
+  stage24:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install research dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Verify archived data
+        run: |
+          test -d data/delta_india/BTCUSD/1m
+          ls data/delta_india/BTCUSD/1m/20*.csv.gz | wc -l
+      - name: Replay Stage24
+        run: PYTHONPATH=scripts python scripts/research_failed_auction_stage24.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stage24-failed-auction
+          path: analysis/stage24_failed_auction/
+          if-no-files-found: warn
