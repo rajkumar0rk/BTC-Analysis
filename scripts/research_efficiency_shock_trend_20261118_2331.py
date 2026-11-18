@@ -252,7 +252,8 @@ def main():
         (summ.avg_win_loss_ratio>=5)&(summ.biggest_winner_R>=10)&
         (summ.profit_factor>=1.5)&(summ.return_2025_pct>0)&
         (summ.return_2026_pct>0)&(summ.max_drawdown_pct>-30)].copy()
-    selected=selected[(selected.return_2025_pct>500)&(selected.return_2026_pct>0)]\n    selected.to_csv(OUT/"qualifying_models.csv",index=False)
+    selected=selected[(selected.return_2025_pct>500)&(selected.return_2026_pct>0)]
+    selected.to_csv(OUT/"qualifying_models.csv",index=False)
     # Exploratory asymmetric candidates have a lower PF threshold than confirmed models.
     # Report them transparently but NEVER call them validated without untouched holdout.
     candidate=summ[(summ.trades>=60)&(summ.win_rate_pct<=40)&
