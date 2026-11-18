@@ -1,0 +1,38 @@
+name: Stage27 BTC variance ratio independent backtest
+on:
+  push:
+    branches: [research/independent-stage27-variance-ratio]
+    paths:
+      - 'scripts/research_stage27_variance_ratio.py'
+      - '.github/workflows/research-stage27-variance-ratio.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: stage27-variance-ratio
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/independent-stage27-variance-ratio
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install numpy pandas tabulate
+      - name: Run independent 1m backtest
+        run: python scripts/research_stage27_variance_ratio.py
+      - name: Save isolated audit files
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/independent_stage27_variance_ratio/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save stage27 independent monthly ledger and audit"
+            git push origin HEAD:research/independent-stage27-variance-ratio
+          fi
