@@ -1,0 +1,13 @@
+model,source,allocation_pct,gross_trades_2025,gross_trades_2026
+PRESERVED_STAGE18,stage18,25.0,0,0
+SWING:1D_channel_55_ema50_agrees_trail_3atr,stage17,15.0,6,7
+HOURLY:compression_expansion_12h__4h_adx_le20__2R__480min,stage19_hourly,15.0,14,3
+FIVE_MIN_INVERT:compression_break:reverse:large_atr:struct3:1.5:120:0.5:5.0,stage20_inverse_5m,8.9474,36,27
+STAGE14:stage14_unchanged:no_guard,stage16,8.39208,63,28
+HOURLY:compression_expansion_12h__4h_efficiency_ge30__3R__240min,stage19_hourly,7.6141,11,18
+SWING:1D_channel_55_ema50_agrees_trail_4atr,stage17,6.27558,6,7
+HOURLY:compression_expansion_12h__4h_efficiency_ge30__2R__480min,stage19_hourly,5.88558,11,18
+FIVE_MIN_INVERT:compression_break:original:large_atr:atr1p5:4.0:120:0.5:5.0,stage20_inverse_5m,4.83824,38,22
+HOURLY:failed_break_12h__4h_adx_ge25__3R__240min,stage19_hourly,2.67367,106,99
+HOURLY:strong_momentum_6h__4h_adx_le20__2R__480min,stage19_hourly,0.26601,66,53
+SWING:1D_channel_20_ema50_agrees_trail_4atr,stage17,0.10735,10,10
