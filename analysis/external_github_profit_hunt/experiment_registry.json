@@ -1,7 +1,7 @@
 {
   "goal": "At least one asset BTCUSD or ETHUSD with strictly positive net account return in all 22 completed IST months January 2025 through October 2026",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T10:42:00Z",
+  "last_updated_utc": "2026-11-18T10:49:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -55,7 +55,38 @@
         "2026 is research-exposed",
         "Not eligible for 22/22 even if naive month counter passes"
       ],
-      "next_action": "Search and test a different source strategy; do not repeat this strategy or claim 22/22 on the basis of upstream performance claims."
+      "next_action": "Search and test a different source strategy; do not repeat this strategy or claim 22/22 on the basis of upstream performance claims.",
+      "high_pf_recheck": {
+        "date_utc": "2026-11-18",
+        "criterion": "overall after-cost PF >=1.5, 22-month positive compounded modeled return, >=12 completed months with PF>=1.5 and positive modeled return, with actual funding and month-end MTM needed for verified alerts",
+        "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44288699026",
+        "script": "scripts/score_external_volpersistence_pf.py",
+        "artifact_id": 14419368220,
+        "result": "REJECTED_UNDER_CURRENT_HIGH_PF_THRESHOLD",
+        "BTCUSD": {
+          "profitable_months": 12,
+          "losing_months": 9,
+          "no_trade_months": 1,
+          "high_pf_months": 9,
+          "aggregate_pf": 1.070087,
+          "compounded_exit_booked_return_pct": 7.39118,
+          "completed_month_trades": 126,
+          "wins": 38,
+          "losses": 88
+        },
+        "ETHUSD": {
+          "profitable_months": 13,
+          "losing_months": 9,
+          "no_trade_months": 0,
+          "high_pf_months": 10,
+          "aggregate_pf": 1.393248,
+          "compounded_exit_booked_return_pct": 47.99922,
+          "completed_month_trades": 141,
+          "wins": 48,
+          "losses": 93
+        },
+        "quality": "Diagnostic only: January 2025 IST missing 2024-12-31 UTC evening; monthly return recognized on trade exit, not open position MTM; settled funding not modeled; 2026 not pristine OOS."
+      }
     }
   ]
 }
