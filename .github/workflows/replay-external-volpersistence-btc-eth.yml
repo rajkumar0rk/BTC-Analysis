@@ -1,0 +1,53 @@
+name: Isolated external GitHub candidate BTC ETH 22-month replay
+on:
+  push:
+    branches:
+      - feature/github-external-volpersistence-22m-20261118
+    paths:
+      - .github/workflows/replay-external-volpersistence-btc-eth.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: paired-external-volatility-persistence-20261118
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - name: Checkout BTC-Analysis fixed branch and Delta India market data
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout public MIT-licensed source, PINNED commit
+        uses: actions/checkout@v4
+        with:
+          repository: anaysharma1717-svg/Volatility-Persistence-Trading-Strategy
+          ref: 4987ed61c4fc7f6fc738d88a6eb844b08190a838
+          path: external_strategy
+          persist-credentials: false
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install strategy and research libraries
+        run: python -m pip install numpy pandas scipy pytz numba tabulate scikit-learn
+      - name: Verify syntax, source pin, and license
+        run: |
+          python -m py_compile scripts/replay_external_github_volpersistence.py
+          test -f external_strategy/LICENSE
+          test -f external_strategy/ny_fix/backtest.py
+          git -C external_strategy rev-parse HEAD
+          test "$(git -C external_strategy rev-parse HEAD)" = "4987ed61c4fc7f6fc738d88a6eb844b08190a838"
+      - name: Execute original GitHub rule on both BTCUSD and ETHUSD
+        run: python scripts/replay_external_github_volpersistence.py
+      - name: Publish audit and trade ledgers even if some tests fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-external-volpersistence-native-delta
+          path: |
+            analysis/github_external_volatility_persistence_20261118/*
+          retention-days: 30
+          if-no-files-found: warn
