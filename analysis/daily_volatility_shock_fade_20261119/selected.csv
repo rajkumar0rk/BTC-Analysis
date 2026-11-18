@@ -1,0 +1,5 @@
+symbol,year,mode,shock,compression,tp,sl,hold,days,trades,profitable_days,losing_days,no_trade_days,profitable_calendar_day_pct,net_return_pct,profit_factor,median_day_usd,mean_day_usd,worst_day_usd,max_losing_day_streak,max_dayclose_drawdown_pct,fees_usd,funding_debit_usd,passes_2025_minimum
+BTCUSD,2025,follow,3.0,0.7,0.008,0.005,30,365,133,29,104,232,7.945,-14.6265,0.3258,0.0,-0.4007,-6.3339,6,-14.7532,146.043,0.369,False
+BTCUSD,2026,follow,3.0,0.7,0.008,0.005,30,321,139,22,117,182,6.854,-21.3631,0.2285,0.0,-0.5682,-5.3835,5,-21.3631,125.874,0.544,False
+ETHUSD,2025,follow,3.0,0.7,0.005,0.005,90,365,95,43,52,270,11.781,-10.4182,0.566,0.0,-0.2854,-6.3903,2,-11.3496,105.928,0.847,False
+ETHUSD,2026,follow,3.0,0.7,0.005,0.005,90,321,118,38,80,203,11.838,-19.9323,0.3355,0.0,-0.5563,-5.6941,4,-20.2214,112.353,1.109,False

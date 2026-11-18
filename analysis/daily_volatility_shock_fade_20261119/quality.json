@@ -1,0 +1,124 @@
+{
+  "hypothesis": "5m realized-volatility shock after 60m compression; follow or fade direction",
+  "novel_vs": [
+    "VWAP exhaustion",
+    "wick reversal",
+    "1m cross-asset lead-lag",
+    "4h cross-market confirmation"
+  ],
+  "models_per_asset": 144,
+  "quality": [
+    {
+      "symbol": "BTCUSD",
+      "source_files": 23,
+      "rows": 987840,
+      "missing_minutes": 0,
+      "first": 1735689600,
+      "last": 1794959940,
+      "event_counts": [
+        {
+          "shock": 1.5,
+          "compression": 0.7,
+          "signals": 3893,
+          "days": 652
+        },
+        {
+          "shock": 1.5,
+          "compression": 1.0,
+          "signals": 13545,
+          "days": 686
+        },
+        {
+          "shock": 2.0,
+          "compression": 0.7,
+          "signals": 1773,
+          "days": 546
+        },
+        {
+          "shock": 2.0,
+          "compression": 1.0,
+          "signals": 5636,
+          "days": 685
+        },
+        {
+          "shock": 3.0,
+          "compression": 0.7,
+          "signals": 527,
+          "days": 272
+        },
+        {
+          "shock": 3.0,
+          "compression": 1.0,
+          "signals": 1481,
+          "days": 539
+        }
+      ]
+    },
+    {
+      "symbol": "ETHUSD",
+      "source_files": 23,
+      "rows": 987840,
+      "missing_minutes": 0,
+      "first": 1735689600,
+      "last": 1794959940,
+      "event_counts": [
+        {
+          "shock": 1.5,
+          "compression": 0.7,
+          "signals": 3189,
+          "days": 613
+        },
+        {
+          "shock": 1.5,
+          "compression": 1.0,
+          "signals": 13834,
+          "days": 686
+        },
+        {
+          "shock": 2.0,
+          "compression": 0.7,
+          "signals": 1319,
+          "days": 511
+        },
+        {
+          "shock": 2.0,
+          "compression": 1.0,
+          "signals": 5544,
+          "days": 685
+        },
+        {
+          "shock": 3.0,
+          "compression": 0.7,
+          "signals": 295,
+          "days": 213
+        },
+        {
+          "shock": 3.0,
+          "compression": 1.0,
+          "signals": 1393,
+          "days": 549
+        }
+      ]
+    }
+  ],
+  "selection": "2025 net positive, PF>1 and >=50 trades, maximize profitable calendar days; otherwise highest 2025 net return. Replay fixed settings 2026.",
+  "split": "2025 training; 2026-01-01 through 2026-11-17 research-exposed historical check, not pristine holdout",
+  "costs": {
+    "taker_each_side_with_GST": 0.00059,
+    "slippage_each_side": 0.0002,
+    "funding_debit_per_8h_crossing": 0.0001
+  },
+  "sizing": {
+    "equity_start_usd": 1000.0,
+    "risk_per_stop": 0.005,
+    "notional_leverage_cap": 2.0
+  },
+  "limitations": [
+    "Funding debit is proxy not actual historical settlements",
+    "No orderbook, spread/market-impact depth, contract minimum size, liquidation or margin engine",
+    "1m OHLC stop-first, no intrabar ordering",
+    "No forced daily trades",
+    "2026 November partial",
+    "Historical strategy returns cannot guarantee daily income"
+  ]
+}
