@@ -1,0 +1,5 @@
+symbol,year,window,pressure_threshold,mode,target,stop,hold_min,calendar_days,trades,profitable_days,losing_days,no_trade_days,profitable_calendar_days_pct,profit_factor,net_return_pct,median_daily_net_usd,mean_daily_net_usd,worst_day_usd,max_losing_day_streak,max_dayclose_drawdown_pct,fees_usd,funding_debit_usd,passes_2025_minimum
+BTCUSD,2025,60,0.4,divergence,0.003,0.005,90,365,7,2,5,358,0.548,0.2966,-0.7677,0.0,-0.021,-6.3676,1,-0.8494,8.2534,0.0,False
+BTCUSD,2026,60,0.4,divergence,0.003,0.005,90,321,10,3,7,311,0.935,0.1655,-2.3894,0.0,-0.0739,-6.327,2,-2.7049,11.5031,0.0,False
+ETHUSD,2025,60,0.6,divergence,0.006,0.003,90,365,4,3,1,361,0.822,11.5687,1.761,0.0,0.0482,-1.6663,1,-0.1647,7.924,0.0,False
+ETHUSD,2026,60,0.6,divergence,0.006,0.003,90,321,0,0,0,321,0.0,,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0,False

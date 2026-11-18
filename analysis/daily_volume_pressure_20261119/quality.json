@@ -1,0 +1,37 @@
+{
+  "hypothesis": "Candle-direction signed volume pressure versus same-window price direction",
+  "novelty": "1-minute candle-volume pressure divergence/continuation, distinct from prior wick, VWAP, cross-asset and breakout tests",
+  "models_per_market": 144,
+  "data_quality": [
+    {
+      "symbol": "BTCUSD",
+      "rows": 987840,
+      "monthly_files": 23,
+      "missing_minutes": 0
+    },
+    {
+      "symbol": "ETHUSD",
+      "rows": 987840,
+      "monthly_files": 23,
+      "missing_minutes": 0
+    }
+  ],
+  "period": "2025-01-01 through 2026-11-17 UTC",
+  "selection": "2025 PF>1, net return>0, trades>=50 then highest positive calendar day fraction; otherwise best net 2025. 2026 unchanged.",
+  "costs": {
+    "taker_fee_plus_GST_per_side": 0.00059,
+    "adverse_slippage_per_side": 0.0002,
+    "conservative_funding_debit_per_8h_boundary": 0.0001
+  },
+  "risk": {
+    "stop_equity_risk": 0.005,
+    "leverage_cap": 2
+  },
+  "limitations": [
+    "Candle signed volume is not true taker aggressor volume or order-book imbalance",
+    "2026 was previously exposed in earlier research; not a pristine out-of-sample",
+    "No tick/lot, queue position, margin liquidation, real funding rate, depth or spread snapshots",
+    "Intraminute OHLC stops always precede targets; overnight not allowed",
+    "No strategy can guarantee daily profit"
+  ]
+}
