@@ -4,12 +4,12 @@ on:
     branches: [research/failed-auction-reclaim-20261119]
     paths:
       - scripts/research_failed_auction_reclaim_20261119.py
-      - .github/workflows/research-convex-compression-20261118.yml
+      - .github/workflows/research-failed-auction-reclaim-20261119.yml
   workflow_dispatch:
 permissions:
   contents: write
 concurrency:
-  group: independent-convex-compression-20261118
+  group: independent-failed-auction-reclaim-20261119
   cancel-in-progress: false
 jobs:
   research:
@@ -26,7 +26,7 @@ jobs:
       - name: Upload complete result evidence
         uses: actions/upload-artifact@v4
         with:
-          name: independent-convex-compression-20261118
+          name: independent-failed-auction-reclaim-20261119
           path: analysis/failed_auction_reclaim_20261119/
           if-no-files-found: error
           retention-days: 30
