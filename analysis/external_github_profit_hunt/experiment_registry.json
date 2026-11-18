@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T16:55:00Z",
+  "last_updated_utc": "2026-11-18T16:56:10Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -324,7 +324,7 @@
       "script": "scripts/replay_freqtrade_hlhb_4h_paired.py",
       "workflow": ".github/workflows/external-hlhb-paired.yml",
       "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44352807242",
-      "status": "RUNNING_PAIRED_BACKTEST_NOT_VERIFIED",
+      "status": "COMPLETED_DIAGNOSTIC_REJECTED_OVERALL_NET_NEGATIVE",
       "quality_caveats": [
         "January 2025 IST missing 2024-12-31 18:30-23:59 UTC",
         "No settled funding or order book liquidity",
@@ -332,7 +332,35 @@
         "No liquidation or margin constraints",
         "2026 research-exposed"
       ],
-      "next_action": "Read actual completed workflow run and 22-row paired monthly PF/return artifacts, reject or shortlist only after evidence"
+      "next_action": "Search new pinned strategy with positive net, more trades, stronger monthly consistency; fix missing Jan IST and funding for any contender.",
+      "action_artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44352807242/artifacts/14448523355",
+      "BTCUSD": {
+        "trades": 31,
+        "high_pf_months": 9,
+        "profitable_months": 10,
+        "losing_months": 9,
+        "no_trade_months": 3,
+        "aggregate_pf": 0.8107518076,
+        "median_monthly_net_pct": 0,
+        "net_2025_pct": 2.825234743,
+        "net_2026_ytd_pct": -9.177394081,
+        "net_22m_pct": -6.611442264,
+        "max_month_end_drawdown_pct": 12.52812437
+      },
+      "ETHUSD": {
+        "trades": 25,
+        "high_pf_months": 12,
+        "profitable_months": 12,
+        "losing_months": 6,
+        "no_trade_months": 5,
+        "aggregate_pf": 0.9883829542,
+        "median_monthly_net_pct": 0.577020077,
+        "net_2025_pct": -0.6424576215,
+        "net_2026_ytd_pct": 0.305161588,
+        "net_22m_pct": -0.3392565673,
+        "max_month_end_drawdown_pct": 12.7467103
+      },
+      "verdict": "ETH 12/22 high-PF months superficially reaches monthly count, but 22-month net negative, aggregate PF <1 and only 25 trades; BTC also net negative. NOT a verified profitable candidate, NOT worth checking or alerting."
     }
   ]
 }
