@@ -1,0 +1,36 @@
+name: Independent Daily Signed Volume Pressure Research
+on:
+  push:
+    branches: [research/daily-volume-pressure-20261119]
+    paths:
+      - scripts/research_daily_volume_pressure_20261119.py
+      - .github/workflows/research-daily-volume-pressure-20261119.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas
+      - run: python -u scripts/research_daily_volume_pressure_20261119.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daily-volume-pressure-20261119
+          path: analysis/daily_volume_pressure_20261119/
+          if-no-files-found: error
+      - name: Commit summary on isolated branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/daily_volume_pressure_20261119/summary.csv analysis/daily_volume_pressure_20261119/selected.csv analysis/daily_volume_pressure_20261119/selected_monthly.csv analysis/daily_volume_pressure_20261119/quality.json analysis/daily_volume_pressure_20261119/REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: signed volume pressure daily results"
+            git push origin HEAD:research/daily-volume-pressure-20261119
+          fi
