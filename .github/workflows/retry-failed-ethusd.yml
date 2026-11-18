@@ -1,0 +1,50 @@
+name: ETHUSD retry failed studies with audited ETH-only dependencies
+on:
+  push:
+    branches:
+      - feature/eth-replay-all-strategies-20261118
+    paths:
+      - .github/workflows/retry-failed-ethusd.yml
+      - scripts/retry_eth_failed_studies.py
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ethusd-failed-research-retry-20261118
+  cancel-in-progress: false
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas scipy numba tabulate pytz scikit-learn statsmodels
+      - name: Verify replay scripts
+        run: |
+          python -m py_compile scripts/run_eth_strategy_census.py
+          python -m py_compile scripts/retry_eth_failed_studies.py
+      - name: Retry previously failed ETHUSD studies with ETH-only prerequisites
+        run: python scripts/retry_eth_failed_studies.py
+      - name: Publish all pass and failure details, even when some scripts fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ethusd-failed-studies-retry
+          path: |
+            eth_strategy_replay/failed_retry/result_summary.json
+            eth_strategy_replay/failed_retry/results.csv
+            eth_strategy_replay/failed_retry/status.json
+            eth_strategy_replay/failed_retry/retry_patch_log.json
+            eth_strategy_replay/failed_retry/logs/*
+            eth_strategy_replay/failed_retry/workspace/analysis/**/*.md
+            eth_strategy_replay/failed_retry/workspace/analysis/**/*monthly*.csv
+            eth_strategy_replay/failed_retry/workspace/analysis/**/quality.json
+            eth_strategy_replay/failed_retry/workspace/analysis/**/strategy_summary.csv
+          retention-days: 30
+          if-no-files-found: warn
