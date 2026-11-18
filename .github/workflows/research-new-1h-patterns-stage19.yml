@@ -1,0 +1,55 @@
+name: Research BTC Stage19 new hourly patterns monthly consistency
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/research_new_1h_patterns_stage19.py
+      - .github/workflows/research-new-1h-patterns-stage19.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-stage19-hourly
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research requirements
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Run Stage19 new pattern backtests
+        run: python scripts/research_new_1h_patterns_stage19.py
+      - name: Save complete replay evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-stage19-hourly-pattern-ledger
+          path: |
+            analysis/institutional_discovery_stage19_new_1h_patterns/trade_ledger.csv.gz
+            analysis/institutional_discovery_stage19_new_1h_patterns/candidates.csv.gz
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit monthly performance and complete reports
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/institutional_discovery_stage19_new_1h_patterns/RESEARCH_REPORT.md
+          git add analysis/institutional_discovery_stage19_new_1h_patterns/quality.json
+          git add analysis/institutional_discovery_stage19_new_1h_patterns/monthly_results.csv
+          git add analysis/institutional_discovery_stage19_new_1h_patterns/all_model_summary.csv
+          git add analysis/institutional_discovery_stage19_new_1h_patterns/top_2025_ranked_models.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: preserve Stage19 monthly 1H pattern findings"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
