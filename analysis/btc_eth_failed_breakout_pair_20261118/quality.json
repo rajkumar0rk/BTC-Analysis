@@ -1,0 +1,26 @@
+{
+  "selected_model": "two_hour_failed_breakout__SL1.5_RR2_H720",
+  "criteria": "2025-only combined market ranking: number of positive months, then combined net account return, then minimum PF",
+  "models_per_market": 8,
+  "months": 22,
+  "markets": [
+    "BTCUSD",
+    "ETHUSD"
+  ],
+  "signals": "Two completed 1h bars: breakout of previous 12h range, then close back inside; reverse at next 1m open",
+  "entry_timing": "1h bars right-labelled; entry at next 1m OPEN after B completed",
+  "stop_first_gap_aware": true,
+  "risk_fraction": 0.005,
+  "max_notional_leverage": 3.0,
+  "fee_per_side_with_GST": 0.00059,
+  "btc_slippage_points_per_side": 5.0,
+  "eth_slippage_fraction_per_side": 0.0002,
+  "data": "Native manifest-hash verified original 1m BTCUSD and ETHUSD",
+  "incomplete": "Jan 2025 IST first 5.5h absent because data begins Jan1 UTC; Nov2026 excluded",
+  "caveats": [
+    "2026 previously examined; not independent OOS",
+    "No actual spread, funding, market impact, margin, liquidation or discrete lot sizes",
+    "Trade-close drawdown underestimates intratrade drawdown",
+    "Historical backtests are not forward profitability proof"
+  ]
+}
