@@ -1,0 +1,78 @@
+name: ETHUSD isolated replay of existing BTC strategy studies
+on:
+  push:
+    branches:
+      - feature/eth-replay-all-strategies-20261118
+    paths:
+      - .github/workflows/replay-all-strategies-ethusd.yml
+      - scripts/run_eth_strategy_census.py
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ethusd-replay-studies-20261118
+  cancel-in-progress: false
+jobs:
+  replay:
+    name: ETHUSD ${{ matrix.group }} research
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [stage, independent]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original research dependencies
+        run: python -m pip install numpy pandas scipy numba tabulate pytz scikit-learn statsmodels
+      - name: Verify all ETHUSD source code adaptations and 22-month coverage
+        run: |
+          python -m py_compile scripts/run_eth_strategy_census.py
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0,"scripts")
+          import run_eth_strategy_census as b
+          q=b.manifest_quality()
+          assert q["complete_22_months"]==22
+          for p in sorted(Path("scripts").glob("*.py")):
+              if p.name=="run_eth_strategy_census.py": continue
+              b.rewrite(p.read_text(),p.name)
+          print("PREFLIGHT_OK",q)
+          PY
+      - name: Execute ETHUSD studies with ETH-sized price point parameters
+        run: python scripts/run_eth_strategy_census.py --group ${{ matrix.group }} --timeout 540
+      - name: Print study status
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for p in Path("eth_strategy_replay").glob("*/status.json"):
+              rows=json.loads(p.read_text())
+              print("GROUP",p.parent.name,"PASS",sum(x["status"]=="completed" for x in rows),"ALL",len(rows))
+              for r in rows: print(r["script"],r["status"],str(r.get("reason",""))[-180:])
+          PY
+      - name: Publish ETH-only study results, data quality and errors
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ethusd-replay-${{ matrix.group }}
+          path: |
+            eth_strategy_replay/${{ matrix.group }}/REPLAY_REPORT.md
+            eth_strategy_replay/${{ matrix.group }}/status.csv
+            eth_strategy_replay/${{ matrix.group }}/status.json
+            eth_strategy_replay/${{ matrix.group }}/dataset_quality.json
+            eth_strategy_replay/${{ matrix.group }}/patches.json
+            eth_strategy_replay/${{ matrix.group }}/logs/*.stderr.log
+            eth_strategy_replay/${{ matrix.group }}/workspace/analysis/**/RESEARCH_REPORT.md
+            eth_strategy_replay/${{ matrix.group }}/workspace/analysis/**/*monthly*.csv
+            eth_strategy_replay/${{ matrix.group }}/workspace/analysis/**/quality.json
+            eth_strategy_replay/${{ matrix.group }}/workspace/analysis/**/strategy_summary.csv
+          retention-days: 30
+          if-no-files-found: warn
