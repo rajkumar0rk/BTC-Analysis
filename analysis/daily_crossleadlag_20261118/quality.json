@@ -1,0 +1,312 @@
+{
+  "study": "1m BTC ETH other-asset impulse leading unfinished own-asset response",
+  "novelty": "Distinct from existing 4H confirmation and two-leg relative-value: 1m lead-lag, ONE asset directional, one trade per UTC day.",
+  "closest_prior": [
+    "research/independent-crossasset-confirmation-pf-20261118",
+    "research/independent-crossasset-dispersion-pf-20261118",
+    "research/independent-pairs-residual-20261118-v1"
+  ],
+  "splits": {
+    "train": "2025-01-01 through 2025-12-31 UTC",
+    "check": "2026-01-01 through 2026-11-17 UTC, previously research-exposed"
+  },
+  "costs": {
+    "taker_fee_with_GST_each_side": 0.00059,
+    "adverse_slippage_each_side": 0.0002,
+    "funding_debit_per_boundary": 0.0001
+  },
+  "sizing": {
+    "stop_risk_fraction": 0.005,
+    "notional_leverage_cap": 2.0
+  },
+  "caveats": [
+    "No guarantee of any positive daily net PnL",
+    "2026 already inspected by other prior research; not pristine OOS",
+    "No orderbook, true funding settlements, lot sizes, liquidation engine or precise queue priority",
+    "1m OHLC stop-first pessimistic when target and stop touch",
+    "Notional liquidity/slippage simplified; 1m BTC/ETH different volatility",
+    "2026 November incomplete"
+  ],
+  "model_count_per_asset": 144,
+  "input_quality": [
+    {
+      "symbol": "BTCUSD",
+      "minute_rows": 987840,
+      "first": "2025-01-01 00:00:00+00:00",
+      "last": "2026-11-17 23:59:00+00:00",
+      "source_months": 23,
+      "missing_minutes": 0
+    },
+    {
+      "symbol": "ETHUSD",
+      "minute_rows": 987840,
+      "first": "2025-01-01 00:00:00+00:00",
+      "last": "2026-11-17 23:59:00+00:00",
+      "source_months": 23,
+      "missing_minutes": 0
+    }
+  ],
+  "event_counts": [
+    {
+      "BTCUSD": [
+        {
+          "window": 3,
+          "threshold": 0.0015,
+          "gap": "flat",
+          "signals": 55191,
+          "days_with_signal": 684
+        },
+        {
+          "window": 3,
+          "threshold": 0.0015,
+          "gap": "aligned",
+          "signals": 83443,
+          "days_with_signal": 686
+        },
+        {
+          "window": 3,
+          "threshold": 0.003,
+          "gap": "flat",
+          "signals": 14894,
+          "days_with_signal": 640
+        },
+        {
+          "window": 3,
+          "threshold": 0.003,
+          "gap": "aligned",
+          "signals": 24253,
+          "days_with_signal": 661
+        },
+        {
+          "window": 3,
+          "threshold": 0.005,
+          "gap": "flat",
+          "signals": 4318,
+          "days_with_signal": 495
+        },
+        {
+          "window": 3,
+          "threshold": 0.005,
+          "gap": "aligned",
+          "signals": 7056,
+          "days_with_signal": 553
+        },
+        {
+          "window": 10,
+          "threshold": 0.0015,
+          "gap": "flat",
+          "signals": 111530,
+          "days_with_signal": 686
+        },
+        {
+          "window": 10,
+          "threshold": 0.0015,
+          "gap": "aligned",
+          "signals": 158171,
+          "days_with_signal": 686
+        },
+        {
+          "window": 10,
+          "threshold": 0.003,
+          "gap": "flat",
+          "signals": 46953,
+          "days_with_signal": 670
+        },
+        {
+          "window": 10,
+          "threshold": 0.003,
+          "gap": "aligned",
+          "signals": 72639,
+          "days_with_signal": 676
+        },
+        {
+          "window": 10,
+          "threshold": 0.005,
+          "gap": "flat",
+          "signals": 18046,
+          "days_with_signal": 606
+        },
+        {
+          "window": 10,
+          "threshold": 0.005,
+          "gap": "aligned",
+          "signals": 29230,
+          "days_with_signal": 641
+        },
+        {
+          "window": 30,
+          "threshold": 0.0015,
+          "gap": "flat",
+          "signals": 160472,
+          "days_with_signal": 686
+        },
+        {
+          "window": 30,
+          "threshold": 0.0015,
+          "gap": "aligned",
+          "signals": 213173,
+          "days_with_signal": 686
+        },
+        {
+          "window": 30,
+          "threshold": 0.003,
+          "gap": "flat",
+          "signals": 96515,
+          "days_with_signal": 676
+        },
+        {
+          "window": 30,
+          "threshold": 0.003,
+          "gap": "aligned",
+          "signals": 138864,
+          "days_with_signal": 682
+        },
+        {
+          "window": 30,
+          "threshold": 0.005,
+          "gap": "flat",
+          "signals": 50229,
+          "days_with_signal": 648
+        },
+        {
+          "window": 30,
+          "threshold": 0.005,
+          "gap": "aligned",
+          "signals": 76802,
+          "days_with_signal": 662
+        }
+      ]
+    },
+    {
+      "ETHUSD": [
+        {
+          "window": 3,
+          "threshold": 0.0015,
+          "gap": "flat",
+          "signals": 5535,
+          "days_with_signal": 559
+        },
+        {
+          "window": 3,
+          "threshold": 0.0015,
+          "gap": "aligned",
+          "signals": 10244,
+          "days_with_signal": 626
+        },
+        {
+          "window": 3,
+          "threshold": 0.003,
+          "gap": "flat",
+          "signals": 677,
+          "days_with_signal": 216
+        },
+        {
+          "window": 3,
+          "threshold": 0.003,
+          "gap": "aligned",
+          "signals": 1671,
+          "days_with_signal": 328
+        },
+        {
+          "window": 3,
+          "threshold": 0.005,
+          "gap": "flat",
+          "signals": 109,
+          "days_with_signal": 45
+        },
+        {
+          "window": 3,
+          "threshold": 0.005,
+          "gap": "aligned",
+          "signals": 344,
+          "days_with_signal": 117
+        },
+        {
+          "window": 10,
+          "threshold": 0.0015,
+          "gap": "flat",
+          "signals": 18708,
+          "days_with_signal": 652
+        },
+        {
+          "window": 10,
+          "threshold": 0.0015,
+          "gap": "aligned",
+          "signals": 28323,
+          "days_with_signal": 666
+        },
+        {
+          "window": 10,
+          "threshold": 0.003,
+          "gap": "flat",
+          "signals": 4036,
+          "days_with_signal": 442
+        },
+        {
+          "window": 10,
+          "threshold": 0.003,
+          "gap": "aligned",
+          "signals": 7804,
+          "days_with_signal": 533
+        },
+        {
+          "window": 10,
+          "threshold": 0.005,
+          "gap": "flat",
+          "signals": 761,
+          "days_with_signal": 177
+        },
+        {
+          "window": 10,
+          "threshold": 0.005,
+          "gap": "aligned",
+          "signals": 1932,
+          "days_with_signal": 308
+        },
+        {
+          "window": 30,
+          "threshold": 0.0015,
+          "gap": "flat",
+          "signals": 39257,
+          "days_with_signal": 674
+        },
+        {
+          "window": 30,
+          "threshold": 0.0015,
+          "gap": "aligned",
+          "signals": 51354,
+          "days_with_signal": 681
+        },
+        {
+          "window": 30,
+          "threshold": 0.003,
+          "gap": "flat",
+          "signals": 14106,
+          "days_with_signal": 581
+        },
+        {
+          "window": 30,
+          "threshold": 0.003,
+          "gap": "aligned",
+          "signals": 22497,
+          "days_with_signal": 623
+        },
+        {
+          "window": 30,
+          "threshold": 0.005,
+          "gap": "flat",
+          "signals": 4204,
+          "days_with_signal": 365
+        },
+        {
+          "window": 30,
+          "threshold": 0.005,
+          "gap": "aligned",
+          "signals": 8243,
+          "days_with_signal": 448
+        }
+      ]
+    }
+  ],
+  "selection": "2025 positive net PF>1 >=50 trades then highest positive calendar-day fraction; otherwise choose least-negative 2025; replay unchanged 2026"
+}
