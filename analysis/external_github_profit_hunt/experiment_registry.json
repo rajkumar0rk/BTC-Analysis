@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T13:00:00Z",
+  "last_updated_utc": "2026-11-18T13:01:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -141,7 +141,7 @@
       "working_branch": "feature/github-external-volpersistence-22m-20261118",
       "script": "scripts/replay_freqtrade_trendfollowing_pair.py",
       "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44309185993",
-      "status": "RUNNING",
+      "status": "COMPLETED_DIAGNOSTIC_REJECTED",
       "source_rules": "5m EMA20 crossover + OBV directional confirmation, long/short",
       "replay_adaptations": "2 ATR14 stop, 1% equity risk, 2x max notional, one position, opposite EMA/OBV exit; source original ROI/trailing not exactly reproduced",
       "warnings": [
@@ -150,7 +150,37 @@
         "5m entry-bar stops may be missed",
         "2026 not pristine OOS"
       ],
-      "notification": "NONE_UNTIL_FINISHED_VERIFIED"
+      "notification": "NONE_UNTIL_FINISHED_VERIFIED",
+      "BTCUSD": {
+        "months_high_pf": 0,
+        "positive_months": 8,
+        "negative_months": 14,
+        "median_monthly_return_pct": -4.06155,
+        "net_2025_pct": -18.1944,
+        "net_2026_jan_oct_pct": -67.9979,
+        "overall_net_pct": -73.8205,
+        "aggregate_pf": 0,
+        "max_drawdown_pct": 81.5637,
+        "trades": 134,
+        "wins": 0,
+        "losses": 134
+      },
+      "ETHUSD": {
+        "months_high_pf": 0,
+        "positive_months": 6,
+        "negative_months": 16,
+        "median_monthly_return_pct": -7.70056,
+        "net_2025_pct": -37.7232,
+        "net_2026_jan_oct_pct": -75.1238,
+        "overall_net_pct": -84.5079,
+        "aggregate_pf": 0.0279,
+        "max_drawdown_pct": 89.0656,
+        "trades": 181,
+        "wins": 1,
+        "losses": 180
+      },
+      "verdict": "Neither asset profitable, neither meets 12/22 high-PF months nor >500% 2025; DO NOT NOTIFY",
+      "quality_warning": "Near-zero winning trades suggest adapted exit logic and intrabar stop assumptions need review before interpreting precise losses; no funding, incomplete Jan IST, no L1 execution"
     }
   ]
 }
