@@ -1,0 +1,422 @@
+{
+  "monthly_target": "23 of 23 positive months, all after costs",
+  "observed_months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10",
+    "2026-11"
+  ],
+  "source_assets": 161,
+  "source_families": [
+    "stage18",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage19",
+    "stage16",
+    "stage16",
+    "stage16",
+    "stage16",
+    "stage16",
+    "stage16",
+    "stage16",
+    "stage16",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17",
+    "stage17"
+  ],
+  "train_only_configurations": 15,
+  "selected_using_2025_only": {
+    "name": "2025_train_anchor0.00_slots9",
+    "train_stats": {
+      "winners": 12,
+      "losers": 0,
+      "neutral": 0,
+      "min_month_pct": 0.0146,
+      "compounded_pct": 1.4092
+    },
+    "chronological_2026": {
+      "winners": 4,
+      "losers": 7,
+      "neutral": 0,
+      "min_month_pct": -0.7764,
+      "compounded_pct": 0.0656
+    },
+    "max_month_end_drawdown_pct": 0.9676,
+    "weights": [
+      {
+        "strategy": "Stage19 compression_expansion_12h__4h_atr_ratio_le1__2R__240min",
+        "family": "stage19",
+        "weight_pct": 8.738,
+        "component_return_2025_pct": -2.536
+      },
+      {
+        "strategy": "Stage19 ema20_pullback_confirm__4h_adx_le20__3R__240min",
+        "family": "stage19",
+        "weight_pct": 6.4,
+        "component_return_2025_pct": -4.229
+      },
+      {
+        "strategy": "Stage19 strong_momentum_6h__4h_atr_ratio_le1__2R__480min",
+        "family": "stage19",
+        "weight_pct": 7.801,
+        "component_return_2025_pct": -5.517
+      },
+      {
+        "strategy": "Stage19 strong_momentum_6h__4h_efficiency_ge30__3R__240min",
+        "family": "stage19",
+        "weight_pct": 2.074,
+        "component_return_2025_pct": -1.372
+      },
+      {
+        "strategy": "Stage16 stage14_unchanged : month_profit_lock_plus3R",
+        "family": "stage16",
+        "weight_pct": 21.564,
+        "component_return_2025_pct": 9.789
+      },
+      {
+        "strategy": "Stage17 1D_channel_55_ema50_agrees_trail_3atr",
+        "family": "stage17",
+        "weight_pct": 18.423,
+        "component_return_2025_pct": 0.602
+      },
+      {
+        "strategy": "Stage17 1D_channel_55_ema50_agrees_trail_4atr",
+        "family": "stage17",
+        "weight_pct": 35.0,
+        "component_return_2025_pct": 0.602
+      }
+    ]
+  },
+  "optimistic_2025_train_only_lp": {
+    "status": "feasible",
+    "train_2025": {
+      "winners": 12,
+      "losers": 0,
+      "neutral": 0,
+      "min_month_pct": 0.0351,
+      "compounded_pct": 0.817
+    },
+    "seen_2026": {
+      "winners": 4,
+      "losers": 7,
+      "neutral": 0,
+      "min_month_pct": -0.6551,
+      "compounded_pct": 0.5896
+    },
+    "floor_pct": 0.0351,
+    "max_month_end_dd": 0.7484,
+    "top_allocations": [
+      {
+        "strategy": "Stage19 compression_expansion_12h__4h_adx_ge25__2R__240min",
+        "family": "stage19",
+        "weight_pct": 18.22,
+        "component_return_2025_pct": -0.996
+      },
+      {
+        "strategy": "Stage19 ema20_pullback_confirm__4h_adx_le20__3R__240min",
+        "family": "stage19",
+        "weight_pct": 4.694,
+        "component_return_2025_pct": -4.229
+      },
+      {
+        "strategy": "Stage19 failed_break_12h__4h_adx_ge25__3R__480min",
+        "family": "stage19",
+        "weight_pct": 1.92,
+        "component_return_2025_pct": -3.186
+      },
+      {
+        "strategy": "Stage19 strong_momentum_6h__4h_adx_ge25__3R__240min",
+        "family": "stage19",
+        "weight_pct": 0.757,
+        "component_return_2025_pct": -1.918
+      },
+      {
+        "strategy": "Stage19 strong_momentum_6h__4h_atr_ratio_le1__2R__240min",
+        "family": "stage19",
+        "weight_pct": 1.482,
+        "component_return_2025_pct": -3.999
+      },
+      {
+        "strategy": "Stage19 strong_momentum_6h__4h_efficiency_ge30__2R__480min",
+        "family": "stage19",
+        "weight_pct": 3.696,
+        "component_return_2025_pct": -2.32
+      },
+      {
+        "strategy": "Stage16 stage14_unchanged : month_profit_lock_plus3R",
+        "family": "stage16",
+        "weight_pct": 7.145,
+        "component_return_2025_pct": 9.789
+      },
+      {
+        "strategy": "Stage16 stage14_unchanged : no_guard",
+        "family": "stage16",
+        "weight_pct": 6.456,
+        "component_return_2025_pct": 6.241
+      },
+      {
+        "strategy": "Stage17 1D_channel_55_ema50_agrees_trail_3atr",
+        "family": "stage17",
+        "weight_pct": 20.631,
+        "component_return_2025_pct": 0.602
+      },
+      {
+        "strategy": "Stage17 1D_channel_55_ema50_agrees_trail_4atr",
+        "family": "stage17",
+        "weight_pct": 35.0,
+        "component_return_2025_pct": 0.602
+      }
+    ]
+  },
+  "explicitly_noncausal_all_23_months_oracle": {
+    "status": "feasible",
+    "train_2025": {
+      "winners": 6,
+      "losers": 6,
+      "neutral": 0,
+      "min_month_pct": -0.1629,
+      "compounded_pct": 1.3307
+    },
+    "seen_2026": {
+      "winners": 4,
+      "losers": 7,
+      "neutral": 0,
+      "min_month_pct": -0.1629,
+      "compounded_pct": 1.1696
+    },
+    "floor_pct": -0.1629,
+    "max_month_end_dd": 0.597,
+    "top_allocations": [
+      {
+        "strategy": "Preserved Stage18 75/25",
+        "family": "stage18",
+        "weight_pct": 19.007,
+        "component_return_2025_pct": 4.262
+      },
+      {
+        "strategy": "Stage19 compression_expansion_12h__4h_adx_le20__2R__480min",
+        "family": "stage19",
+        "weight_pct": 21.258,
+        "component_return_2025_pct": -1.835
+      },
+      {
+        "strategy": "Stage19 failed_break_12h__4h_adx_ge25__3R__240min",
+        "family": "stage19",
+        "weight_pct": 5.868,
+        "component_return_2025_pct": -8.136
+      },
+      {
+        "strategy": "Stage19 strong_momentum_6h__4h_adx_ge25__2R__480min",
+        "family": "stage19",
+        "weight_pct": 1.136,
+        "component_return_2025_pct": -3.46
+      },
+      {
+        "strategy": "Stage19 strong_momentum_6h__4h_adx_le20__2R__480min",
+        "family": "stage19",
+        "weight_pct": 0.333,
+        "component_return_2025_pct": -4.117
+      },
+      {
+        "strategy": "Stage16 rolling_180day_selector : month_stop_minus3R",
+        "family": "stage16",
+        "weight_pct": 10.107,
+        "component_return_2025_pct": 1.337
+      },
+      {
+        "strategy": "Stage16 stage14_unchanged : no_guard",
+        "family": "stage16",
+        "weight_pct": 21.01,
+        "component_return_2025_pct": 6.241
+      },
+      {
+        "strategy": "Stage17 1D_channel_20_no_trend_filter_trail_3atr",
+        "family": "stage17",
+        "weight_pct": 5.309,
+        "component_return_2025_pct": -1.23
+      },
+      {
+        "strategy": "Stage17 1D_channel_55_ema50_agrees_trail_4atr",
+        "family": "stage17",
+        "weight_pct": 15.972,
+        "component_return_2025_pct": 0.602
+      }
+    ]
+  },
+  "costs": "source strategy backtests account for standard taker fees, 18% GST and adverse 5-point slippage per side",
+  "warnings": [
+    "This is a fixed-weight blend of independently traded strategy ledgers, not a live tradable unified execution engine",
+    "All underlying strategies and 2026 history have been inspected in previous research; not untouched forward data",
+    "No future month labels enter train-only selector; full-history oracle is explicitly NOT deployable",
+    "Fitting 2025 12 points with many models greatly overfits; sparse 4-8 sleeve selection is exploratory",
+    "Month-end equity can mask severe intramonth drawdown, stops and risk gaps",
+    "Spreads, funding payments, margin/contract step sizing, portfolio rebalance fees not modeled",
+    "2026 November has only first 16 days, Oct 31 source gap",
+    "No strategy can assure a positive month in future"
+  ]
+}

@@ -1,0 +1,10 @@
+strategy,family,weight_pct,component_return_2025_pct
+Preserved Stage18 75/25,stage18,19.007,4.262
+Stage19 compression_expansion_12h__4h_adx_le20__2R__480min,stage19,21.258,-1.835
+Stage19 failed_break_12h__4h_adx_ge25__3R__240min,stage19,5.868,-8.136
+Stage19 strong_momentum_6h__4h_adx_ge25__2R__480min,stage19,1.136,-3.46
+Stage19 strong_momentum_6h__4h_adx_le20__2R__480min,stage19,0.333,-4.117
+Stage16 rolling_180day_selector : month_stop_minus3R,stage16,10.107,1.337
+Stage16 stage14_unchanged : no_guard,stage16,21.01,6.241
+Stage17 1D_channel_20_no_trend_filter_trail_3atr,stage17,5.309,-1.23
+Stage17 1D_channel_55_ema50_agrees_trail_4atr,stage17,15.972,0.602

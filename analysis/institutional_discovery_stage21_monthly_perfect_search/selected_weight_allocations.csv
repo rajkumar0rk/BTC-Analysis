@@ -1,0 +1,8 @@
+strategy,family,weight_pct,component_return_2025_pct
+Stage19 compression_expansion_12h__4h_atr_ratio_le1__2R__240min,stage19,8.738,-2.536
+Stage19 ema20_pullback_confirm__4h_adx_le20__3R__240min,stage19,6.4,-4.229
+Stage19 strong_momentum_6h__4h_atr_ratio_le1__2R__480min,stage19,7.801,-5.517
+Stage19 strong_momentum_6h__4h_efficiency_ge30__3R__240min,stage19,2.074,-1.372
+Stage16 stage14_unchanged : month_profit_lock_plus3R,stage16,21.564,9.789
+Stage17 1D_channel_55_ema50_agrees_trail_3atr,stage17,18.423,0.602
+Stage17 1D_channel_55_ema50_agrees_trail_4atr,stage17,35.0,0.602
