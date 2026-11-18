@@ -1,0 +1,38 @@
+name: Matched BTC ETH monthly profit factor backtest
+on:
+  push:
+    branches: [research/btc-eth-pf-monthly-pair-20261118]
+    paths:
+      - scripts/research_btc_eth_profit_factor_pairs.py
+      - .github/workflows/research-btc-eth-profit-factor-pairs.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-eth-pf-paired-20261118
+  cancel-in-progress: false
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install calculation dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Backtest identical strategies on native BTC and ETH 1m data
+        run: python scripts/research_btc_eth_profit_factor_pairs.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: matched-btc-eth-pf-monthly-research
+          path: analysis/btc_eth_profit_factor_pairs_20261118/
+          retention-days: 30
+      - name: Archive reproducible results to isolated research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_eth_profit_factor_pairs_20261118/
+          git commit -m "research: archive BTC vs ETH paired profit-factor results"
+          git push origin HEAD:research/btc-eth-pf-monthly-pair-20261118
