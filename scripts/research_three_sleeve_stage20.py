@@ -111,7 +111,7 @@ def main():
         stage18_baseline_stats=base_report,
         stage19_distinct_model_count=int(patterns.model.nunique()),
         total_three_sleeve_variants=len(results),
-        2025_selection_method="2025 profitable month count, then losing months, then compounded return, then worst month-end drawdown",
+        selection_method_2025="2025 profitable month count, then losing months, then compounded return, then worst month-end drawdown",
         historical_perfect_monthly_count=int(results.all23_positive.sum()),
         selected=best.to_dict(),
         position_sizing="compounded monthly NAV weights 67.5/22.5/10 percent if 10% auxiliary",
