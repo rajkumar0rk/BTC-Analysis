@@ -1,0 +1,47 @@
+name: Paired open-source EMA crossover monthly PF
+on:
+  push:
+    branches: [feature/github-external-volpersistence-22m-20261118]
+    paths:
+      - .github/workflows/external-ema-paired-monthly.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: external-ema-paired-monthly-20261118
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Pin and verify external strategy source
+        uses: actions/checkout@v4
+        with:
+          repository: Erfaniaa/crypto-trading-strategy-backtester
+          ref: 044e8bb516177c8a6a1803e54b482dc4ed9446cb
+          path: external_ema_strategy
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas
+      - name: Verify source and replay script
+        run: |
+          test "$(git -C external_ema_strategy rev-parse HEAD)" = "044e8bb516177c8a6a1803e54b482dc4ed9446cb"
+          grep -q 'self.fast_ema > self.slow_ema' external_ema_strategy/backtester.py
+          grep -q 'MOVING_AVERAGE_SIZE = 50' external_ema_strategy/config.py
+          python -m py_compile scripts/replay_erfaniaa_ema_crossover_paired.py
+      - name: Backtest BTCUSD and ETHUSD 22 IST months with 1m intrabar stop
+        run: python scripts/replay_erfaniaa_ema_crossover_paired.py
+      - name: Upload paired results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-ema-crossover-monthly-pf-22m
+          path: analysis/external_github_profit_hunt/erfaniaa_ema50_100/*
+          retention-days: 30
+          if-no-files-found: warn
