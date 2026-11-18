@@ -3,7 +3,7 @@
   "configs": 36,
   "months": 22,
   "selected_by": "2025 positive-month count + capped 2025 return only",
-  "selected": "ratio_revert_L120_Z1.5_stop1.5_hold24h",
+  "selected": "ratio_revert_L240_Z2.5_stop1.5_hold48h",
   "cost_btc_slip_points_per_fill": 5,
   "cost_eth_slip_fraction_per_fill": 0.0002,
   "fee_per_side_including_gst": 0.00059,
