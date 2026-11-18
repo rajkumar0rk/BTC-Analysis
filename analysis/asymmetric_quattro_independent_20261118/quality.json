@@ -1,0 +1,58 @@
+{
+  "source": "Delta Exchange India one-minute OHLCV 2025-01 to 2026-11-17",
+  "method": "Independent from public Quattro strategy spec, LONG only",
+  "fee": "0.05% taker per fill plus 18% GST on fee",
+  "slippage": "2 basis points adverse on each fill (entry, add, exit)",
+  "funding": "Delta 1h FUNDING candle close at preceding hour is a proxy, not verified settlement",
+  "missing_funding": "Assume 0.01% CHARGE each missing 8-hour settlement; not actual known payment",
+  "margin": "20x notional cap only; margin eligibility/liquidation not reconstructed",
+  "caveats": [
+    "Daily EMA200 needs 200 complete days, so first 200 days are warmup",
+    "No genuine untouched holdout (all historical periods previously research exposed)",
+    "Long-only source code condition is close above daily EMA200; README mentions rising EMA and is inconsistent",
+    "Fees, GST, hypothetical slippage, and funding proxy included; not actual order book",
+    "For contradictory 1m stop/add OHLC ordering, pessimistic fill assumption used",
+    "At 1m data gap, unknown gap exposure exits at next observed open",
+    "Monthly net equity is IST mark-to-market including estimated close-out fee",
+    "Partial November 2026, no 2022-2024 archived Delta data",
+    "Pyramiding 4 x 2% initial nominal risk can produce large account drawdowns",
+    "Not automatically a tradable or safe strategy"
+  ],
+  "data": [
+    {
+      "symbol": "BTCUSD",
+      "candle_count": 987840,
+      "first": "2025-01-01 00:00:00+00:00",
+      "last": "2026-11-17 23:59:00+00:00",
+      "missing_minutes": 0,
+      "gap_count": 0,
+      "gap_samples": [],
+      "signal_count": 60,
+      "first_valid_daily_ema_utc": "2025-07-20 00:00:00+00:00",
+      "complete_4h_bars": 4116,
+      "missing_4h_bars": 0,
+      "daily_ema_history_requirement": "200 complete daily closes; first 200 days warmup",
+      "signal_rules": "completed 4h close > prior 20 high and > latest completed daily EMA200",
+      "exit_rules": "4h close < prior 10 low, filled next 4h open, or wick stop",
+      "funding_observations": 16464
+    },
+    {
+      "symbol": "ETHUSD",
+      "candle_count": 987840,
+      "first": "2025-01-01 00:00:00+00:00",
+      "last": "2026-11-17 23:59:00+00:00",
+      "missing_minutes": 0,
+      "gap_count": 0,
+      "gap_samples": [],
+      "signal_count": 56,
+      "first_valid_daily_ema_utc": "2025-07-20 00:00:00+00:00",
+      "complete_4h_bars": 4116,
+      "missing_4h_bars": 0,
+      "daily_ema_history_requirement": "200 complete daily closes; first 200 days warmup",
+      "signal_rules": "completed 4h close > prior 20 high and > latest completed daily EMA200",
+      "exit_rules": "4h close < prior 10 low, filled next 4h open, or wick stop",
+      "funding_observations": 16464
+    }
+  ],
+  "variant_count": 4
+}

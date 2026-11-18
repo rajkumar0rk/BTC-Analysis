@@ -1,0 +1,5 @@
+unit_risk,starting_equity,final_equity,net_return_pct,trades,win_rate_pct,profit_factor,average_win_usd,average_loss_usd,biggest_winner_R,max_mark_to_market_drawdown_pct,entry_fees_plus_exit_fees_usd,funding_proxy_usd,missing_funding_settlement_count,data_gap_exits,pessimistic_same_minute_exits,pyramid_units_distribution,positive_months,negative_months,flat_months,symbol
+0.005,1000.0,1012.9086,1.2909,21,23.81,1.085,32.9601,-9.4933,21.433,-10.157,16.176,12.077,0,0,0,"{4: 8, 2: 5, 1: 6, 3: 2}",3,5,15,BTCUSD
+0.02,1000.0,983.1826,-1.6817,21,23.81,0.9742,126.9406,-40.72,21.433,-32.577,66.958,47.009,0,0,0,"{4: 8, 2: 5, 1: 6, 3: 2}",3,5,15,BTCUSD
+0.005,1000.0,934.71,-6.529,20,20.0,0.5764,22.2139,-9.6341,11.234,-13.979,10.31,6.753,0,0,0,"{3: 2, 4: 11, 1: 5, 2: 2}",2,7,14,ETHUSD
+0.02,1000.0,739.2114,-26.0789,20,20.0,0.5533,80.756,-36.4883,11.234,-43.491,38.913,25.227,0,0,0,"{3: 2, 4: 11, 1: 5, 2: 2}",2,7,14,ETHUSD
