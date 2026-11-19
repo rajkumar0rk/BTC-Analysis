@@ -2,7 +2,7 @@ name: Validate authentic December 2024 BTC ETH indicator warmup
 on:
   push:
     branches: [feature/github-external-volpersistence-22m-20261118]
-    paths: [.github/workflows/external-2024-december-warmup.yml]
+    paths: [.github/workflows/external-2024-december-warmup.yml, scripts/fetch_external_2024_december_warmup.py]
   workflow_dispatch:
 permissions:
   contents: read
