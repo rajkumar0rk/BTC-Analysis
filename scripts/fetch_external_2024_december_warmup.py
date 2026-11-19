@@ -14,40 +14,51 @@ OUT.mkdir(parents=True,exist_ok=True)
 summary={}
 for sym in ("BTCUSD","ETHUSD"):
     bars={}
-    # Delta candles may impose result caps; request short 6-hour chunks.
-    for begin in range(START,END,6*3600):
-        stop=min(begin+6*3600,END)
+    # Delta history is capped/occasionally truncated: use 3h chunks and
+    # recursively bisect any incomplete response, never fabricate a candle.
+    def fetch_chunk(begin,stop):
         q=urllib.parse.urlencode(dict(symbol=sym,resolution="1m",start=begin,end=stop))
         url="https://api.india.delta.exchange/v2/history/candles?"+q
-        err=None
-        for attempt in range(5):
+        last_error=None
+        for attempt in range(4):
             try:
                 req=urllib.request.Request(url,headers={"User-Agent":"BTCAnalysis-Independent-Research/1.0","Accept":"application/json"})
                 with urllib.request.urlopen(req,timeout=30) as r: data=json.load(r)
-                if not data.get("success"):raise ValueError("Delta API returned non-success: "+str(data.get("error")))
+                if not data.get("success"):raise ValueError("Delta API non-success: "+str(data.get("error")))
                 result=data.get("result")
                 if not isinstance(result,list):raise ValueError("Malformed result")
-                seen=set()
-                for b in result:
-                    t=int(b["time"])
-                    if t<begin or t>=stop:continue
-                    if t in seen:raise ValueError("Duplicate candle within request")
-                    seen.add(t)
-                    if t in bars:raise ValueError("Duplicate candle across requests")
-                    item={k:float(b[k]) for k in ("open","high","low","close")}
-                    item["volume"]=float(b.get("volume",0))
+                local={}
+                for candle in result:
+                    t=int(candle["time"])
+                    if not begin<=t<stop:continue
+                    if t in local:raise ValueError("Duplicate timestamp")
+                    item={k:float(candle[k]) for k in ("open","high","low","close")}
+                    item["volume"]=float(candle.get("volume",0))
                     if not (0<item["low"]<=item["open"]<=item["high"] and item["low"]<=item["close"]<=item["high"] and item["volume"]>=0):
-                        raise ValueError("Invalid candle OHLCV")
-                    bars[t]=item
-                missing=set(range(begin,stop,60))-seen
-                if missing:raise ValueError(f"Missing {len(missing)} 1m candles in {begin}-{stop}")
+                        raise ValueError("Invalid OHLCV")
+                    local[t]=item
+                expected=set(range(begin,stop,60))
+                if set(local)==expected:
+                    for t,item in local.items():
+                        if t in bars:raise ValueError("Duplicate across chunks")
+                        bars[t]=item
+                    return
+                last_error=f"expected {len(expected)}, got {len(local)}, missing {len(expected-set(local))}"
+                # Truncation is not a missing-market-data assertion.
                 break
-            except Exception as e:
-                # Discard partial chunk on retry, to avoid silently retaining incomplete results.
-                for t in range(begin,stop,60):bars.pop(t,None)
-                err=repr(e)
-                if attempt==4:raise RuntimeError(f"{sym} {begin}-{stop} failed: {err}") from e
-                time.sleep(min(2**attempt,10))
+            except Exception as err:
+                last_error=repr(err)
+                if attempt<3:time.sleep(min(2**attempt,5))
+        if stop-begin<=60:
+            raise RuntimeError(f"Authentic 1m candle unavailable {sym} {begin}-{stop}: {last_error}")
+        middle=begin+((stop-begin)//120)*60
+        assert begin<middle<stop
+        print("SPLIT",sym,begin,stop,last_error,flush=True)
+        fetch_chunk(begin,middle)
+        fetch_chunk(middle,stop)
+    for begin in range(START,END,3*3600):
+        stop=min(begin+3*3600,END)
+        fetch_chunk(begin,stop)
         if (begin-START)%(24*3600)==0:
             print("PROGRESS",sym,datetime.fromtimestamp(begin,timezone.utc).isoformat(),len(bars),flush=True)
     expected=(END-START)//60
