@@ -66,7 +66,7 @@ def run(f,symbol,stress):
             side=side,entry_mid=ent,exit_mid=px,entry_fill=fill,exit_fill=exitfill,
             quantity=qty,leverage=qty*fill/start,start_equity=start,end_equity=eq,
             net_usd=pnl,reason=("stop","target","timeout")[why]))
-    return pd.DataFrame(records),dd
+    return pd.DataFrame(records,columns=['symbol','stress','entry_unix','exit_unix','side','entry_mid','exit_mid','entry_fill','exit_fill','quantity','leverage','start_equity','end_equity','net_usd','reason']),dd
 
 def report(g,symbol,stress,dd):
     g=g.copy()
