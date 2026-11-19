@@ -32,9 +32,9 @@ def spot(symbol):
             name=next(n for n in z.namelist() if n.endswith(".csv"))
             frame=pd.read_csv(io.BytesIO(z.read(name)),header=None)
         t=frame.iloc[:,0].astype("int64")
-        idx=pd.to_datetime(t,unit="us" if t.iloc[0]>10**14 else "ms",utc=True)
+        idx=pd.DatetimeIndex(pd.to_datetime(t,unit="us" if t.iloc[0]>10**14 else "ms",utc=True))
         if idx.has_duplicates:raise RuntimeError("DUPLICATE_SPOT_"+key)
-        parts.append(pd.Series(pd.to_numeric(frame.iloc[:,4]),index=idx))
+        parts.append(pd.Series(pd.to_numeric(frame.iloc[:,4]).to_numpy(),index=idx))
         provenance.append(dict(url=url,sha256=hashlib.sha256(raw).hexdigest(),rows=len(frame)))
     return pd.concat(parts).sort_index(),provenance
 def simulate(symbol):
