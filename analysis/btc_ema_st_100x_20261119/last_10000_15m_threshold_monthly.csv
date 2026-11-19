@@ -1,0 +1,5 @@
+month_ist,trades,ending_equity_usd,starting_equity_usd,net_usd,return_pct,liquidations,winning_trades,losing_trades,completed_month
+2026-08,37,45.4603,100.0,-54.5397,-54.54,1,24,13,True
+2026-09,39,44.2956,45.4603,-1.1648,-2.56,0,29,10,True
+2026-10,55,2.4602,44.2956,-41.8353,-94.45,0,37,18,True
+2026-11,24,0.8475,2.4602,-1.6127,-65.55,2,18,6,False
