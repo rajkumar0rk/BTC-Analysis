@@ -1,0 +1,28 @@
+name: Daily BTC-first close-location pressure falsification
+on:
+  push:
+    branches:
+      - research/daily-close-location-volume-imbalance-btcfirst-20261119-1435
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas
+      - run: python scripts/research_daily_close_location_pressure_20261119.py
+      - name: Upload immutable research results
+        uses: actions/upload-artifact@v4
+        with:
+          name: btcfirst-daily-close-location-pressure
+          path: analysis/daily_close_location_pressure_20261119/
+          if-no-files-found: error
