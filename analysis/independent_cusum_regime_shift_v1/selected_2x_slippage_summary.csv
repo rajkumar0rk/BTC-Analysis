@@ -1,0 +1,3 @@
+market,model,kappa,threshold,direction,slippage_multiplier,profit_factor,net_return_22m_pct,net_return_2025_pct,net_return_2026_jan_oct_pct,year2025_above_500pct,year2026_ytd_above_500pct,strong_pf1p5_return5_months,strong_pf1p5_return10_months,positive_months,trades,wins,losses,max_monthend_nav_drawdown_pct,worst_month_pct
+BTCUSD,cusum_k0.40_h3.5_cont_sensitivity_2x_slippage,0.4,3.5,continuation,2.0,0.8357620711801248,-19.835884071514553,-12.3071371332504,-8.585358821850964,False,False,0,0,8,449,178,271,-21.828154068185768,-7.159093302098663
+ETHUSD,cusum_k0.40_h3.5_cont_sensitivity_2x_slippage,0.4,3.5,continuation,2.0,1.051779687362073,7.581576531110734,19.301816334524368,-9.824024615476002,False,False,1,0,12,447,187,260,-13.309384647745903,-4.441705898418857
