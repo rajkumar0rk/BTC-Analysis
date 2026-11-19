@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-19T00:53:12Z",
+  "last_updated_utc": "2026-11-19T00:56:39Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -514,6 +514,56 @@
         "2026 research-exposed, not pristine OOS"
       ],
       "verdict": "Not worth checking. Neither asset profitable; 4/22 monthly PF>=1.5 positive-return months."
+    },
+    {
+      "id": "maksat-mtf-breakout-causal-paired-20261119",
+      "source_repo": "https://github.com/MAKSAT-DEL/mtf-breakout-bot",
+      "source_commit": "9903df12cb3ed13a79a0646cea37f4b311c15bf6",
+      "source_path": "main.py",
+      "branch": "feature/github-external-volpersistence-22m-20261118",
+      "script": "scripts/replay_external_maksat_mtf_paired.py",
+      "workflow": ".github/workflows/external-maksat-mtf-paired-20261119.yml",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44433001346",
+      "artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44433001346/artifacts/14486738811",
+      "status": "COMPLETED_DIAGNOSTIC_NOT_QUALIFIED",
+      "strategy": "1h+4h+1d EMA50 trend, prior daily high/low 1.5% breakout, ADX14>25 and 1.2x hourly volume, 3.5ATR stop, break even after 2ATR, 2ATR trailing, 1% equity risk, 1x cap, causal next-hour open and 1m stop-first",
+      "BTCUSD": {
+        "trades": 120,
+        "wins": 46,
+        "losses": 74,
+        "high_pf_months": 8,
+        "positive_months": 10,
+        "negative_months": 11,
+        "inactive_months": 1,
+        "aggregate_pf": 0.91490167,
+        "net_22m_pct": -2.48335052,
+        "net_2025_pct": 0.83128119,
+        "net_2026_ytd_pct": -3.28730497,
+        "max_month_end_drawdown_pct": 8.114182
+      },
+      "ETHUSD": {
+        "trades": 145,
+        "wins": 54,
+        "losses": 91,
+        "high_pf_months": 8,
+        "positive_months": 10,
+        "negative_months": 11,
+        "inactive_months": 1,
+        "aggregate_pf": 1.25071721,
+        "net_22m_pct": 9.26839129,
+        "net_2025_pct": 8.52136518,
+        "net_2026_ytd_pct": 0.68836778,
+        "max_month_end_drawdown_pct": 5.86062234
+      },
+      "quality": [
+        "22 UTC 1m Delta India monthly partitions SHA256 verified each asset",
+        "22 IST month-end marked equity and realized trade PF",
+        "January IST missing Dec31 2024 UTC evening, data backfill separately in progress",
+        "No actual funding, L1 spread/depth, liquidation or margin modeling",
+        "BTC 5 price points and ETH 2bps adverse per leg, 0.05% taker each side +18% GST",
+        "Source lookahead and retroactive trailing defects corrected; not original execution"
+      ],
+      "verdict": "Neither asset reaches 12/22 high-PF months. ETH has modest modeled overall profit but negative median monthly return and only 8 high-PF months; does not warrant worth-checking alert."
     }
   ]
 }
