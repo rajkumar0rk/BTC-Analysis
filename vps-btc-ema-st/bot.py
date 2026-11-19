@@ -412,6 +412,7 @@ class Bot:
             except Exception as ex:
                 self.emit("ERROR","tick_failed",error=str(ex))
                 if self.cfg.trading:
-                    self.db.set("halted","poll/reconciliation failure; check exchange and restart after inspection")
+                    if not self.db.get("halted"):
+                        self.db.set("halted","poll/reconciliation failure; check exchange and restart after inspection")
                     raise
             time.sleep(self.cfg.poll)
