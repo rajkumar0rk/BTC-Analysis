@@ -23,6 +23,25 @@ class Store:
               commission REAL NOT NULL, liquidation_charge REAL NOT NULL,
               fill_type TEXT NOT NULL, raw_json TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS paper_trades (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              closed_at_utc TEXT NOT NULL,
+              option_symbol TEXT NOT NULL,
+              asset TEXT NOT NULL,
+              side TEXT NOT NULL, contracts INTEGER NOT NULL,
+              gross_pnl_usd REAL NOT NULL,
+              commissions_usd REAL NOT NULL, gst_usd REAL NOT NULL,
+              net_pnl_usd REAL NOT NULL,
+              reason TEXT NOT NULL, trade_json TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS option_quote_samples (
+              product_id INTEGER NOT NULL,
+              minute_utc INTEGER NOT NULL,
+              bid REAL NOT NULL, ask REAL NOT NULL,
+              underlying_mark REAL NOT NULL,
+              quote_json TEXT NOT NULL,
+              PRIMARY KEY(product_id,minute_utc)
+            );
             CREATE TABLE IF NOT EXISTS intents (
               client_id TEXT PRIMARY KEY,action TEXT NOT NULL,
               status TEXT NOT NULL,created_at INTEGER NOT NULL,
@@ -72,4 +91,35 @@ class Store:
     def fills(self):
         return [dict(r) for r in self.db.execute(
             "SELECT * FROM exchange_fills ORDER BY created_at,fill_id").fetchall()]
+    def paper_transition(self,wallet,active,event,trade=None,stats=None):
+        """Atomic paper cash+inventory+closed-trade update (restart-safe)."""
+        with self.db:
+            for key,value in (("paper_wallet",wallet),("paper_position",active),
+                              ("paper_stats",stats)):
+                if key=="paper_stats" and stats is None:continue
+                self.db.execute("""INSERT INTO kv(key,value) VALUES(?,?)
+                  ON CONFLICT(key) DO UPDATE SET value=excluded.value""",
+                  (key,json.dumps(value,separators=(",",":"),default=str)))
+            self.db.execute("INSERT INTO events(level,kind,data_json) VALUES(?,?,?)",
+                 ("INFO",event["kind"],json.dumps(event,separators=(",",":"),default=str)))
+            if trade is not None:
+                self.db.execute("""INSERT INTO paper_trades
+                  (closed_at_utc,option_symbol,asset,side,contracts,gross_pnl_usd,
+                   commissions_usd,gst_usd,net_pnl_usd,reason,trade_json)
+                  VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
+                  (trade["closed_at_utc"],trade["symbol"],trade["asset"],trade["side"],
+                   trade["contracts"],trade["gross_pnl_usd"],
+                   trade["commissions_usd"],trade["gst_usd"],
+                   trade["net_pnl_usd"],trade["reason"],
+                   json.dumps(trade,separators=(",",":"),default=str)))
+    def paper_trades(self):
+        return [json.loads(r["trade_json"]) for r in self.db.execute(
+            "SELECT trade_json FROM paper_trades ORDER BY id").fetchall()]
+    def sample_quote(self,product_id,when,bid,ask,mark,quote):
+        with self.db:
+            self.db.execute("""INSERT OR IGNORE INTO option_quote_samples
+              (product_id,minute_utc,bid,ask,underlying_mark,quote_json)
+              VALUES(?,?,?,?,?,?)""",
+              (int(product_id),int(when//60)*60,float(bid),float(ask),float(mark),
+               json.dumps(quote,separators=(",",":"),default=str)))
     def close(self):self.db.close()
