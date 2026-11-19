@@ -116,6 +116,7 @@ def run_one(df,start,fill_mode):
                     xp=s['bankruptcy_price']
                 hold=(i-s['entry_i'])*15
                 fin=fee_net(s['qty'],s['entry_price'],xp,s['side'],hold,reason,fill_mode)
+                prior_balance=balance
                 balance=max(0.0, balance+fin['net_usd'])
                 peak=max(peak,balance)
                 maxdd=max(maxdd,1-balance/peak if peak>0 else 1)
@@ -128,6 +129,7 @@ def run_one(df,start,fill_mode):
                     holding_minutes=hold,initial_margin_usd=s['initial_margin'],
                     liquidation_trigger_price=s['liq_price'],
                     equity_before=s['equity_before'],equity_after=balance,
+                    realized_wallet_delta_usd=balance-prior_balance,
                     **fin))
                 state=None
         if state is None and np.isfinite(ema[i]) and np.isfinite(atr[i]) and np.isfinite(ar[i]) and np.isfinite(vr[i]):
@@ -176,21 +178,27 @@ def run_one(df,start,fill_mode):
         has_open_position=state is not None,
         last_date_utc=str(t[-1]),start_date_utc=str(t[start]),liquidation_fill_mode=fill_mode)
 
-def monthly(z):
-    if z.empty:return pd.DataFrame()
+def monthly(z, start_month, last_month):
+    """Closed-equity monthly P&L. Months after account exhaustion are kept as zeros."""
     rows=[]
-    for period,g in z.groupby('month_ist',sort=True):
-        begin=float(g.equity_before.iloc[0]);end=float(g.equity_after.iloc[-1])
-        profit=float(g.net_usd.sum())
-        rows.append(dict(month_ist=period,trades=len(g),
+    previous=INITIAL_EQUITY
+    groups={k:g for k,g in z.groupby('month_ist',sort=True)} if len(z) else {}
+    for period in pd.period_range(start_month,last_month,freq='M'):
+        key=str(period)
+        g=groups.get(key)
+        count=0 if g is None else len(g)
+        end=previous if count==0 else float(g.equity_after.iloc[-1])
+        profit=end-previous
+        rows.append(dict(month_ist=key,trades=count,
             ending_equity_usd=round(end,4),
-            starting_equity_usd=round(begin,4),
+            starting_equity_usd=round(previous,4),
             net_usd=round(profit,4),
-            return_pct=round(100*profit/begin,2) if begin>0 else None,
-            liquidations=int((g.reason=='liquidation').sum()),
-            winning_trades=int((g.net_usd>0).sum()),
-            losing_trades=int((g.net_usd<0).sum()),
-            completed_month=period<='2026-10'))
+            return_pct=round(100*profit/previous,2) if previous>0 else None,
+            liquidations=0 if count==0 else int((g.reason=='liquidation').sum()),
+            winning_trades=0 if count==0 else int((g.realized_wallet_delta_usd>0).sum()),
+            losing_trades=0 if count==0 else int((g.realized_wallet_delta_usd<0).sum()),
+            completed_month=key<='2026-10'))
+        previous=end
     return pd.DataFrame(rows)
 
 def main():
@@ -204,7 +212,7 @@ def main():
             key=f'{period}_{mode}'
             trades,info=run_one(x,start,mode)
             trades.to_csv(OUT/f'{key}_trades.csv.gz',index=False,compression='gzip')
-            month=monthly(trades)
+            month=monthly(trades, '2025-01' if start==0 else '2026-08','2026-11')
             month.to_csv(OUT/f'{key}_monthly.csv',index=False)
             result[key]=info
             print('\\n',key,json.dumps(info))
