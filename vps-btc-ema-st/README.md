@@ -74,6 +74,7 @@ At this stage, **no orders are placed**. The market feed is loaded from testnet,
 .venv/bin/python app.py backtest     # rerun saved research scenario from repo
 .venv/bin/python app.py run          # continuous bot loop (signals-only by default)
 .venv/bin/python app.py status       # local SQLite state, logs, pending and active orders
+.venv/bin/python app.py audit        # authenticate, sync actual fills and estimated net before funding
 .venv/bin/python app.py serve        # localhost dashboard
 ~~~
 
@@ -115,7 +116,7 @@ Important operational details:
 - It refuses to silently adopt manual positions or unknown orders. After an emergency/reconciliation error, new entries are halted. A native stop may remain active when the bot is offline.
 - The stop-liq risk guard is only an **approximate** filter, never a guarantee. Exchange liquidates by mark price and maintenance tiers; large gaps can bypass stop fills.
 - Daily account loss guard uses exchange wallet **net equity**, so use a **dedicated bot-only account**; unrelated deposits, withdrawals or positions can affect this metric. The $100 is a budgeting assumption, **not** a wallet ring-fence. Demo account equity may start with a different amount.
-- Restarts do not reset processed candles. The dashboard does not yet provide an **exchange-reconciled realized P&L and funding ledger**; verify reported fills and balance on Delta UI.
+- Restarts do not reset processed candles. The dashboard now shows authenticated exchange wallet equity and an **estimated realized P&L reconstructed from exchange fill IDs and actual reported commissions**, with 18% GST modeled. It does **not** reconcile funding, credits, actual GST settlement, or external account adjustments; verify real P&L against Delta's wallet, trades and funding UI.
 
 ## Background services (optional after manual smoke tests)
 
