@@ -61,8 +61,14 @@ def load_asset(symbol):
     oi=oi.close.astype(float)
     if not np.isfinite(oi).all() or (oi<=0).any():
         raise RuntimeError(f"{symbol} OI nonpositive/nonfinite: no safe shock signal")
-    if not (np.diff(oi.index.view("int64"))==300*10**9).all():
-        raise RuntimeError(f"{symbol} OI archive incomplete; refusing to forward-fill")
+    delta=np.diff(oi.index.view("int64"))
+    bad=int(np.count_nonzero(delta != 300*10**9))
+    if bad:
+        ix=np.flatnonzero(delta != 300*10**9)
+        print("WARN OI TIMESTAMPS",symbol,"irregular gaps",bad,
+            "examples",[(str(oi.index[k]),str(oi.index[k+1]),int(delta[k]//10**9))
+                        for k in ix[:5]],flush=True)
+    # Later align against full 5m clock with NaNs; never forward fill OI.
     funding=load_months(BASE/symbol/"institutional/history/funding_1h",["time","close"])
     funding=funding.drop_duplicates("time",keep="last")
     if not np.isfinite(funding.close).all():raise RuntimeError("invalid funding series")
@@ -74,7 +80,9 @@ def engineer(p,oi,fr):
     counts=p.close.resample("5min",label="left",closed="left").count()
     if not counts.eq(5).all():raise RuntimeError("5 minute bar incomplete")
     o=oi.reindex(b.index)
-    if o.isna().any():raise RuntimeError("Missing OI aligned to 5m data")
+    missing=int(o.isna().sum())
+    if missing>len(o)*0.05:raise RuntimeError(f"missing OI >5% ({missing}/{len(o)})")
+    # Missing OI -> NaN returns and NaN signals, no synthetic OI candles.
     # OI 1h delta; lower fifth percentile computed from PRIOR rolling 21d
     # with no less than 14d of fully observed historical changes.
     oi_ret=o/o.shift(12)-1.
@@ -115,7 +123,8 @@ def engineer(p,oi,fr):
         if v is None:v=np.nan;unknown+=1
         funding[k]=v
     return signal,sig_atr,funding,{
-        "complete_5m_oi_rows":len(o),"OI_1h_shock_observations":int(oi_shock.sum()),
+        "complete_5m_oi_rows":int(o.notna().sum()),"missing_5m_oi_rows":missing,
+        "OI_1h_shock_observations":int(oi_shock.sum()),
         "raw_event_count":int(event.sum()),"executable_event_count":int((signal!=0).sum()),
         "long_events":int((signal==1).sum()),"short_events":int((signal==-1).sum()),
         "funding_missing_8h_observations":unknown,
