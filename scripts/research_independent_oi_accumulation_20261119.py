@@ -27,13 +27,17 @@ def load(symbol):
         return x
     p=read(ROOT/symbol/"1m")
     o=read(ROOT/symbol/"institutional/history/open_interest_5m")
-    if p.index.to_series().diff().iloc[1:].ne(pd.Timedelta(minutes=1)).any():raise RuntimeError("missing 1m")
+    gaps=int(p.index.to_series().diff().iloc[1:].ne(pd.Timedelta(minutes=1)).sum())
+    print(f"{symbol}: price_rows={len(p)} OI_rows={len(o)} price_gaps={gaps} price_start={p.index.min()} OI_start={o.index.min()}",flush=True)
     h=p.resample("1h",label="left",closed="left").agg({"open":"first","high":"max","low":"min","close":"last"})
     count=p["close"].resample("1h").count()
     h=h[count==60].copy()
     oi=o["close"].astype(float).resample("1h").last().reindex(h.index)
     h["oi"]=oi
-    if h["oi"].isna().any():raise RuntimeError("missing OI hours")
+    missing=int(h["oi"].isna().sum())
+    print(f"{symbol}: complete_hours={len(h)} missing_OI_hours={missing}",flush=True)
+    h=h.dropna(subset=["oi"])
+    if len(h)<1000: raise RuntimeError(f"{symbol}: insufficient overlapping observations ({len(h)})")
     return h.astype(float)
 def backtest(h,c,reverse=False):
     n=len(h); look=c["lookback"]
