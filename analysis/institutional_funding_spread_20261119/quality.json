@@ -1,0 +1,154 @@
+{
+  "hypothesis": "Cashflow: selectively short higher-funding BTC/ETH perp, long lower-funding asset at same Delta venue",
+  "NOT_ARBITRAGE": true,
+  "economic_edge": "Funding dispersion must exceed fees *before* assuming beta-neutral pricing",
+  "predeclared_base": "Primary 72 completed hourly rate snapshots, 14d horizon, expected carry >= 2x two-leg roundtrip taker fee + 2bp/side slippage, 1x gross leverage, 2% equity loss guard, exit on funding-spread sign reversal",
+  "differential_rate_signal": "Prior 72 hourly FUNDING close observations at entry time; next-hour futures open",
+  "settlement_proxy": "Most recent fully closed FUNDING: 1h rate * prior hourly MARK close at assumed 00/08/16 UTC; NOT confirmed cash-settlement ledger",
+  "settlement_rate_units": "Source FUNDING rate values interpreted as percent; divide by 100",
+  "checks": {
+    "no_missing_hourly_data": true,
+    "no_imputed_records": true,
+    "years_2025_and_2026_not_pristine": true,
+    "source_complete_to": "2026-11-17 23:59 UTC"
+  },
+  "prior_overlap": "Existing institutional_carry_stage1 tested long Binance BTC spot/short Delta BTC perp fixed periods. This is distinct same-venue dynamic BTC/ETH relative-funding two-perp strategy, but cross-asset dispersion and correlated losses remain.",
+  "input_data": [
+    {
+      "symbol": "BTCUSD",
+      "series": "1m",
+      "source_files": 23,
+      "records": 987840,
+      "missing_intervals": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    },
+    {
+      "symbol": "BTCUSD",
+      "series": "institutional/history/mark_1m",
+      "source_files": 23,
+      "records": 987840,
+      "missing_intervals": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    },
+    {
+      "symbol": "BTCUSD",
+      "series": "institutional/history/funding_1h",
+      "source_files": 23,
+      "records": 16464,
+      "missing_intervals": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:00:00+00:00"
+    },
+    {
+      "symbol": "ETHUSD",
+      "series": "1m",
+      "source_files": 23,
+      "records": 987840,
+      "missing_intervals": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    },
+    {
+      "symbol": "ETHUSD",
+      "series": "institutional/history/mark_1m",
+      "source_files": 23,
+      "records": 987840,
+      "missing_intervals": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:59:00+00:00"
+    },
+    {
+      "symbol": "ETHUSD",
+      "series": "institutional/history/funding_1h",
+      "source_files": 23,
+      "records": 16464,
+      "missing_intervals": 0,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-11-17 23:00:00+00:00"
+    }
+  ],
+  "rate_quantiles": {
+    "BTCUSD": [
+      -0.08008859,
+      -0.00732527,
+      0.00569499,
+      0.01,
+      0.01,
+      0.01,
+      0.01
+    ],
+    "ETHUSD": [
+      -0.02503412,
+      -0.01040584,
+      0.00425293,
+      0.01,
+      0.01,
+      0.01,
+      0.01464992
+    ]
+  },
+  "scenario_costs": [
+    {
+      "scenario": "primary_2x_cost_taker",
+      "fee_model": 0.00059,
+      "slip_each_fill": 0.0002,
+      "entry_fees": 0.5900000000000001,
+      "exit_fees": 0.6102810959799628,
+      "funding_proxy_net": 1.8278155988484424,
+      "estimated_slippage_dollars": 0.40687566371946865,
+      "model_is_executable": false
+    },
+    {
+      "scenario": "diagnostic_1x_cost_taker",
+      "fee_model": 0.00059,
+      "slip_each_fill": 0.0002,
+      "entry_fees": 8.092008986289159,
+      "exit_fees": 8.425550334340878,
+      "funding_proxy_net": 13.47152865116289,
+      "estimated_slippage_dollars": 5.599178811936758,
+      "model_is_executable": false
+    },
+    {
+      "scenario": "diagnostic_no_cost_gate_taker",
+      "fee_model": 0.00059,
+      "slip_each_fill": 0.0002,
+      "entry_fees": 62.27930133714143,
+      "exit_fees": 62.004868119312036,
+      "funding_proxy_net": 22.371758696091803,
+      "estimated_slippage_dollars": 42.13023667364759,
+      "model_is_executable": false
+    },
+    {
+      "scenario": "stress_2x_cost_taker_5bp_slip",
+      "fee_model": 0.00059,
+      "slip_each_fill": 0.0005,
+      "entry_fees": 0.0,
+      "exit_fees": 0.0,
+      "funding_proxy_net": 0.0,
+      "estimated_slippage_dollars": 0.0,
+      "model_is_executable": false
+    },
+    {
+      "scenario": "optimistic_maker_envelope_UNVERIFIED",
+      "fee_model": 0.000236,
+      "slip_each_fill": 0.0,
+      "entry_fees": 7.032611396015922,
+      "exit_fees": 7.094636940395857,
+      "funding_proxy_net": 20.181928545809573,
+      "estimated_slippage_dollars": 0.0,
+      "model_is_executable": false
+    }
+  ],
+  "constraints": [
+    "No historical orderbook; fills at 1h OPEN with 2bp adverse slippage are only a proxy",
+    "Funding 1h close series does NOT establish actual settlement cashflows or transfer timing",
+    "Two crypto assets are imperfect hedge; BTC-ETH correlation and beta change",
+    "No exact exchange settlement/contract denominations, tick/lot, maker fill certainty, maintenance margin, liquidation model",
+    "1h entry/exit and risk stops can miss intrahour adverse excursion",
+    "Fees and slippage on both legs BOTH sides; stress 5bp each; all calendar days included",
+    "No independent forward data; 2026 previously research exposed",
+    "No model is qualified for live trade without verified reconciled settlement cashflows, margin and actual fill confirmation"
+  ]
+}
