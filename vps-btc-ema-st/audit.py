@@ -32,13 +32,14 @@ def sync_fills(exchange,store,product_id,halt_after_liq=True):
                 raise ValueError("Received fill for wrong instrument")
             if not all(k in row for k in ("id","price","size","side","created_at")):
                 raise ValueError("Missing critical fill fields")
-        n=store.add_fills(rows)
+        new_ids=set(store.add_fills(rows))
+        n=len(new_ids)
         inserted+=n
         # Check fill type even when repeated API pages contain duplicates;
         # stop only on liquidation fills after the first app start.
         if n and halt_after_liq:
             for row in rows:
-                if row.get("fill_type")=="liquidation":
+                if str(row["id"]) in new_ids and row.get("fill_type")=="liquidation":
                     created=row.get("created_at")
                     try:
                         occurred=datetime.fromisoformat(str(created).replace("Z","+00:00")).timestamp()*1e6
