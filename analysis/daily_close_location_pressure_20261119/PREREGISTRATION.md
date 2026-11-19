@@ -1,0 +1,7 @@
+# Pre-registration: directional close-location weighted turnover pressure
+
+## Economic rationale
+When a large fraction of 1-minute traded volume repeatedly closes near the same side of its high-low range, market orders may be persistently consuming liquidity. The signed close-location*volume statistic is an imperfect OHLCV proxy for aggressor imbalance, NOT actual signed trades. Hypothesis: extreme 60-minute one-sided pressure at 09:00 IST leads to 120-minute continuation after costs, rather than mean reversion.
+
+## Frozen BTC-first test
+Compute per-minute signed pressure (2*close-high-low)/(high-low) * volume, with zero for zero-range candles. At 09:00 IST use the 60 COMPLETE 1-minute candles ending at 08:59. If the ratio of signed pressure to total volume >=0.65, long; if <=-0.65, short; otherwise no trade. Enter at 09:00 1-minute OPEN (causal), max one trade/day, fixed 0.50% stop, 0.75% target, 120-minute exit. 25% equity notional allocation, one position, 0.158% total roundtrip taker/GST/slippage costs, 0.238% stress. Stop-first for both levels touched in one bar. Skip incomplete data. No optimization or retuning based on 2026 or ETH. Test BTC 2025 then frozen BTC 2026, then exact same ETH rules as secondary validation. Measure all IST calendar days and monthly outcomes; reject if insufficient observations or unstable cost-sensitive profits. No funding payment or executable order book reconstruction: results remain proxy-only. No trading.
