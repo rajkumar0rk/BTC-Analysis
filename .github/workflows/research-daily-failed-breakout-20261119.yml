@@ -1,0 +1,30 @@
+name: Daily failed breakout research
+on:
+  push:
+    branches: [research/daily-failed-breakout-20261119]
+    paths: ['scripts/research_daily_failed_breakout_20261119.py', '.github/workflows/research-daily-failed-breakout-20261119.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas
+      - run: python -u scripts/research_daily_failed_breakout_20261119.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: failed-breakout-research
+          path: analysis/daily_failed_breakout_20261119/
+      - name: Commit evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/daily_failed_breakout_20261119/
+          git commit -m "research: record failed breakout daily results" || true
+          git push origin HEAD:research/daily-failed-breakout-20261119
