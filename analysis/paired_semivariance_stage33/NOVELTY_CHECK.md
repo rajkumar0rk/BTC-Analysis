@@ -1,0 +1,11 @@
+# Stage33 novelty and preregistration — 2026-11-20
+
+Decision: PARTIAL OVERLAP — approved differential. Prior stages 25, 31 and 32 study hourly directional displacement/volume and impact-proxy reversal; Stage30 studies weekend liquidity. Stage14–23 contain price-action reversal families. This experiment instead tests **24-hour realized return semivariance imbalance** as a measure of asymmetric deleveraging/hedging pressure, not single-candle extremes, volume, session or trend filters. No claim of uniqueness beyond this measurable differential.
+
+Mechanism: market-wide one-sided risk transfer over a full UTC day may temporarily overshoot; mean reversion could follow when urgent risk transfer abates. Beneficiaries: liquidity providers able to absorb inventory. Falsifier: net BTC 2025 after-cost PF <=1, nonpositive NAV expectancy or destructive drawdown. Capacity limited by volatility and actual spread; order-book unavailable.
+
+Rules frozen before results: aggregate complete native 1m bars to hourly OHLC; calculate 24 completed hourly close-to-close log returns and their squared downside and upside semivariances. At 00:00 UTC only, long when downside share >=0.80 and 24h log return <=-0.02; short when downside share <=0.20 and return >=0.02. Next 1m open execution. One position, 1.5 x median prior 24 hourly true ranges stop, 1.5R target, 480-minute maximum hold; stop-first OHLC ambiguity. Risk 0.5% NAV, leverage cap 3x. Delta fee 0.05% per side + 18% GST, BTC slip 5 points per side, ETH 0.02% per side; worse cost stress. Frozen identical dimensionless rules for ETH, never ETH tuning.
+
+Discovery BTC 2025; temporal check BTC Jan-Oct 2026 (previously research exposed); ETH independent secondary check. No post-result tuning. 22 IST months Jan 2025–Oct 2026, including partial first IST month due to 2025-01-01 UTC source start. Need verify Oct 2026 repair, funding, lot minima, margin maintenance, actual spreads and source integrity. Missing authentic funding/order-book cannot be inferred.
+
+Closest references: scripts/research_paired_impact_reversal_stage32.py, analysis/paired_impact_reversal_stage32/DECISION_20261120.md, Stage31 shock-drift, codex/STRATEGY_NOVELTY_GATE.md. No modifications to earlier branches or studies.
