@@ -1,0 +1,35 @@
+name: Explain BTCUSD 100x losing months
+on:
+  push:
+    branches: ['research/btc-ema-st-screenshot-20261119']
+    paths:
+      - 'scripts/analyze_btc_ema_st_100x_losses.py'
+      - '.github/workflows/explain-btc-ema-st-100x-losses.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: explain-btc-ema-st-100x-losses
+  cancel-in-progress: false
+jobs:
+  attribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas
+      - name: Examine actual 100x losing trades and exit reasons
+        run: python scripts/analyze_btc_ema_st_100x_losses.py
+      - name: Commit attribution report to research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_ema_st_100x_20261119/recent_month_loss_attribution.json
+          if ! git diff --cached --quiet; then
+            git commit -m "research: explain why August-November 100x months lost"
+            git push origin HEAD:research/btc-ema-st-screenshot-20261119
+          fi
