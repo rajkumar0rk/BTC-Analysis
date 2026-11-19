@@ -1,0 +1,29 @@
+name: BTC-first daily volatility regime reproducible backtest
+on:
+  push:
+    branches:
+      - research/daily-volvol-execution-audit-20261119-v1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas numpy
+      - run: python analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/backtest.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-volatility-btcfirst-evidence
+          path: |
+            analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/*.csv
+            analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/provenance.json
+          if-no-files-found: warn
