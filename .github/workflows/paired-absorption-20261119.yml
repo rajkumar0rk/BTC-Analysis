@@ -37,5 +37,7 @@ jobs:
           git add analysis/paired_absorption_20261119/
           if ! git diff --cached --quiet; then
             git commit -m "research: save paired absorption ledgers and 22-month metrics"
+            git fetch origin research/paired-absorption-20261119
+            git rebase origin/research/paired-absorption-20261119
             git push origin HEAD:research/paired-absorption-20261119
           fi
