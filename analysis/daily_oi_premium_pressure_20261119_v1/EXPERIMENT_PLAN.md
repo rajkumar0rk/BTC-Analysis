@@ -1,0 +1,7 @@
+# OI / mark premium crowding fade — pre-registration
+
+Hypothesis: sharp increases in open interest alongside extreme mark-to-last premium reflect one-sided crowded leveraged positioning; once the pressure dissipates, the trade price mean-reverts. This is NOT an open-interest deleveraging study: it tests OI expansion combined with simultaneous mark premium, before the unwind.
+
+At each 5-minute historical OI observation, require OI growth >5% relative to 60 minutes prior, and |mark/last - 1| >=0.15% at that completed minute. Fade the premium at next 1-minute open, max one trade per UTC calendar day, only between 01:00 and 22:00 UTC. Fixed notional $1000 and starting equity $1000, no leverage, no averaging. Stop 0.4%, take profit 0.6%, time exit after 60 one-minute candles. Stop-first OHLC ambiguity. Fee + GST 0.118% roundtrip and slippage 0.04% roundtrip, stressed 0.198% all-in. No parameter search; compare unchanged 2025 and 2026.
+
+Failure conditions: missing authentic data, timestamp ambiguity, no robust positive net expectancy in both periods, low profitable-calendar-day frequency, or inability to verify execution/funding. This is a historical feasibility experiment, not a live strategy. If OI timestamps represent interval start rather than completed observations, the signal is not causal and all results are INCONCLUSIVE. A real spread/funding and margin replay is absent, so any positive result is not yet tradeable. Funding assumed zero over the 60-minute hold; must be verified. Distinct from prior OI deleveraging research.
