@@ -312,7 +312,7 @@ class Bot:
         if s:self.emit("INFO","signal",**s)
         if not s or not self.cfg.trading or self.is_halted():return
         if self.db.get("active") or self.db.get("pending") or self.db.get("exit_pending"):
-            self.emit("INFO","skip","reason"="already_busy")
+            self.emit("INFO","skip",reason="already_busy")
             return
         if position_size(self.exchange_position())!=0 or self.matching_orders():
             self.halt("Exchange not flat/clean at new entry candle")
