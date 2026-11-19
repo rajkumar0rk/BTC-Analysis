@@ -43,7 +43,10 @@ def backtest():
         raise SystemExit("Missing source script. Clone full research branch from repository.")
     print("RUNNING REPRODUCIBLE BACKTEST:",source)
     subprocess.run([sys.executable,str(source)],cwd=ROOT,check=True)
-    print("RESULT DIRECTORY:",ROOT/"analysis"/"btc_ema_st_fixed_10_margin_20261119")
+    guarded=ROOT/"scripts"/"replay_btc_ema_st_fixed_10_margin_guarded.py"
+    if not guarded.exists():raise SystemExit("Missing guarded comparison script")
+    subprocess.run([sys.executable,str(guarded)],cwd=ROOT,check=True)
+    print("RESULT DIRECTORIES:",ROOT/"analysis"/"btc_ema_st_fixed_10_margin_20261119",ROOT/"analysis"/"btc_ema_st_fixed_10_margin_guarded_20261119")
 
 def report(cfg):
     db=Store(cfg.state_dir)
