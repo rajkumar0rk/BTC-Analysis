@@ -1,0 +1,42 @@
+{
+  "study": "Independent impulse dislocation follow-through with asymmetric trailing",
+  "tested_period": "2025-01-01 to 2026-11-17 UTC",
+  "signal": "Completed 1H impulse >=1.5/2.0 ATR, high volume, extreme close, preceding six-hour direction same/opposite",
+  "stop": "ATR initial 1.25x/1.75x; chandelier trail 6x/10x from completed 1H highs/lows",
+  "sizing": "0.5% equity initial stop risk, one position maximum",
+  "cost": "0.05% taker each side plus 18% GST; 2bps adverse slip per execution",
+  "funding": "Delta 1h candles used as rate proxies; missing settlements charged 0.01%",
+  "missing_funding": "Positive rate charged for longs, paid to shorts where source available; 0.01% charge when absent",
+  "caveats": [
+    "Open source historical data already research-exposed; 2026 is not independent untouched holdout",
+    "Monthly NAV and unrealized liquidation fee at IST calendar boundary",
+    "1min bar OHLC cannot provide order book, spread, or exact intrabar order",
+    "The same-minute entry candle stop check deferred to next 1min open",
+    "True settled funding cashflows and liquidation margin not independently verified",
+    "2026 November partial; no 2022-2024 Delta history in repository",
+    "No qualifying model is NOT evidence all asymmetric strategies fail"
+  ],
+  "data": [
+    {
+      "symbol": "BTCUSD",
+      "n_candles": 987840,
+      "first": "2025-01-01 00:00:00+00:00",
+      "last": "2026-11-17 23:59:00+00:00",
+      "funding_rows": 16464,
+      "missing_settlement_observations": 1,
+      "variants": 32
+    },
+    {
+      "symbol": "ETHUSD",
+      "n_candles": 987840,
+      "first": "2025-01-01 00:00:00+00:00",
+      "last": "2026-11-17 23:59:00+00:00",
+      "funding_rows": 16464,
+      "missing_settlement_observations": 1,
+      "variants": 32
+    }
+  ],
+  "models": 64,
+  "passing_models": 0,
+  "promising_exploratory_models": 0
+}
