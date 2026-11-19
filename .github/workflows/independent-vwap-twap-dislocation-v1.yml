@@ -1,0 +1,45 @@
+name: Independent VWAP TWAP dislocation BTC first
+on:
+  push:
+    branches: [research/independent-vwap-twap-dislocation-20261119-v1]
+    paths:
+      - scripts/independent_vwap_twap_dislocation_v1.py
+      - .github/workflows/independent-vwap-twap-dislocation-v1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-vwap-twap-dislocation-v1
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/independent-vwap-twap-dislocation-20261119-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba tabulate
+      - name: Audit BTC first and ETH secondary
+        run: python scripts/independent_vwap_twap_dislocation_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-vwap-twap-dislocation-v1
+          path: analysis/independent_vwap_twap_dislocation_v1/
+          retention-days: 45
+      - name: Commit isolated research results
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/independent_vwap_twap_dislocation_v1/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: archive VWAP TWAP dislocation BTC-first audit'
+            git fetch origin research/independent-vwap-twap-dislocation-20261119-v1
+            git rebase origin/research/independent-vwap-twap-dislocation-20261119-v1
+            git push origin HEAD:research/independent-vwap-twap-dislocation-20261119-v1
+          fi
