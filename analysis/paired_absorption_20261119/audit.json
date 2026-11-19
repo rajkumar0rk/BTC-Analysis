@@ -1,0 +1,14 @@
+{
+  "BTCUSD": {
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "signal_count": 173,
+    "first_ist_month_missing_minutes": 330
+  },
+  "ETHUSD": {
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "signal_count": 102,
+    "first_ist_month_missing_minutes": 330
+  }
+}
