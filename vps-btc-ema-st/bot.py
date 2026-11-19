@@ -9,7 +9,7 @@ from pathlib import Path
 from delta import Delta,DeltaError
 from store import Store
 from audit import sync_fills,summarize_fills
-from signals import BAR_SECONDS,closed_bars,signal,indicators,quantize_stop,size_contracts,stop_safe
+from signals import BAR_SECONDS,closed_bars,signal,indicators,quantize_stop,size_contracts,trailing_points
 
 def oid(prefix):
     # <=32 chars and unique among open orders.
@@ -47,6 +47,7 @@ def target_stop_guard(entry,side,stop,leverage,product,buffer_pct):
 class Bot:
     def __init__(self,config):
         self.cfg=config
+        if config.market!="futures":raise ValueError("Bot is futures-only; use OptionsPaperBot for options")
         self.db=Store(config.state_dir)
         self.delta=Delta(config)
         self.product=None
@@ -68,7 +69,7 @@ class Bot:
         return bool(self.db.get("halted",""))
 
     def public_snapshot(self):
-        ticker=self.delta.ticker()
+        ticker=self.delta.ticker(self.cfg.symbol)
         price=float(ticker.get("close") or 0)
         mark=float(ticker.get("mark_price") or 0)
         stamp=float(ticker.get("timestamp") or 0)
@@ -86,7 +87,7 @@ class Bot:
         now=time.time()
         start=int((now-10)//BAR_SECONDS)*BAR_SECONDS-1000*BAR_SECONDS
         # Candle history usually timestamped by bar open; no live/partial bars.
-        raw=self.delta.candles(start,int(now)+1)
+        raw=self.delta.candles(start,int(now)+1,symbol=self.cfg.symbol)
         frame=closed_bars(raw,now)
         if len(frame)<100:raise ValueError("Insufficient history")
         self.db.set("last_market_bar",str(frame.index[-1]))
@@ -114,9 +115,9 @@ class Bot:
         return True,actual
 
     def configure_product(self):
-        p=self.delta.product()
-        if p.get("symbol")!="BTCUSD" or p.get("contract_type")!="perpetual_futures":
-            raise ValueError("Wrong exchange instrument; BTCUSD perpetual required")
+        p=self.delta.product(self.cfg.symbol)
+        if p.get("symbol")!=self.cfg.symbol or p.get("contract_type")!="perpetual_futures":
+            raise ValueError("Wrong exchange instrument; expected "+self.cfg.symbol+" perpetual")
         if p.get("state")!="live" or p.get("trading_status")!="operational":
             raise ValueError("Product is not currently operational")
         self.value=float(p["contract_value"])
@@ -124,13 +125,13 @@ class Bot:
         self.pid=int(p["id"])
         if not (0<self.value<1 and self.tick>0):raise ValueError("Invalid product specification")
         self.product=p
-        self.db.set("product",{"id":self.pid,"symbol":"BTCUSD","contract_value":self.value,
+        self.db.set("product",{"id":self.pid,"symbol":self.cfg.symbol,"contract_value":self.value,
                                "tick_size":self.tick,"mode":self.cfg.mode})
         if self.cfg.trading:
             pstate=self.exchange_position()
             size=position_size(pstate)
             if size and not (self.db.get("active") or self.db.get("pending")):
-                self.halt("Unexpected existing BTCUSD position: use dedicated account",size=size)
+                self.halt("Unexpected existing " + self.cfg.symbol + " position: use dedicated account",size=size)
             lev=self.delta.get_leverage(self.pid)
             current=float(lev.get("leverage",0))
             if current!=self.cfg.leverage:
@@ -178,7 +179,7 @@ class Bot:
                     self.halt("Unrecognized or unsafe stop order: manual inspection required",
                               stop_order_id=o.get("id"))
             else:
-                self.halt("Unexpected extra order for BTCUSD while bot owns position",
+                self.halt("Unexpected extra order for " + self.cfg.symbol + " while bot owns position",
                           order_id=o.get("id"))
         if len(protected)>1:
             self.halt("Multiple protective orders found; manual reconciliation needed",
@@ -239,10 +240,6 @@ class Bot:
             entry=float(ps.get("entry_price") or 0)
             if entry<=0:self.halt("Cannot read confirmed position entry price")
             stop=quantize_stop(entry-sign*pending["stop_distance"],self.tick,pending["side"])
-            if not target_stop_guard(entry,pending["side"],stop,self.cfg.leverage,
-                                      self.product,self.cfg.buffer_pct):
-                self.halt("Actual fill breached liquidation-stop buffer; manually close",
-                          entry_price=entry,stop=stop)
             active={"side":pending["side"],"size":size,"entry":entry,
                     "stop":stop,"initial_stop":stop,"best":entry,"trail_active":False,
                     "stop_id":None,"entry_oid":pending["client_id"],
@@ -282,11 +279,12 @@ class Bot:
         entry=float(active["entry"])
         best=float(active["best"])
         stop=float(active["stop"])
-        if (mark-entry)*side>=150:
+        activation,distance=trailing_points(self.cfg.asset,entry)
+        if (mark-entry)*side>=activation:
             active["trail_active"]=True
         if active["trail_active"]:
             best=max(best,mark) if side==1 else min(best,mark)
-            candidate=quantize_stop(best-side*50,self.tick,active["side"])
+            candidate=quantize_stop(best-side*distance,self.tick,active["side"])
             if (candidate>stop+self.tick if side==1 else candidate<stop-self.tick):
                 if (candidate>=mark if side==1 else candidate<=mark):
                     self.emergency_close(active,"trailing_stop_market_crossed")
@@ -323,7 +321,7 @@ class Bot:
                 if self.cfg.trading:
                     self.emergency_close(active,"opposite_supertrend_flip")
                 return
-        s=signal(frame)
+        s=signal(frame,asset=self.cfg.asset)
         self.db.set("latest_signal",s or {"bar_ts":bar_ts,"side":"none"})
         if s:self.emit("INFO","signal",**s)
         if not s or not self.cfg.trading or self.is_halted():return
@@ -350,11 +348,6 @@ class Bot:
         # Server stop triggers on MARK, so it must be on the safe side of mark now.
         if (s["side"]=="buy" and mark<=stop) or (s["side"]=="sell" and mark>=stop):
             self.emit("WARN","skip",reason="mark_price_already_crossed_protective_stop",mark=mark,stop=stop)
-            return
-        if not target_stop_guard(price,s["side"],stop,self.cfg.leverage,
-                                 self.product,self.cfg.buffer_pct):
-            self.emit("WARN","skip",reason="initial_stop_beyond_liquidation_buffer",
-                      stop=stop,price=price)
             return
         client_id=oid("e")
         # Attach exchange-native stop to the initial market order as early as possible.
@@ -393,7 +386,8 @@ class Bot:
         self.db.set("heartbeat",{"now":time.time(),"mode":self.cfg.mode,
                   "trading_enabled":self.cfg.trading,"halted":self.db.get("halted"),
                   "last":price,"mark":mark,
-                  "active":self.db.get("active")})
+                  "active":self.db.get("active"),"asset":self.cfg.asset,
+                  "market":self.cfg.market,"symbol":self.cfg.symbol})
 
     def loop(self):
         self.cfg.state_dir.mkdir(parents=True,exist_ok=True)
