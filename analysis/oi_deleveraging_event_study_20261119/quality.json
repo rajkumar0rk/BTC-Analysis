@@ -1,0 +1,61 @@
+{
+  "hypothesis": "Aggregate position deleveraging OI shock and one-hour momentum creates directional price follow-through",
+  "falsification": "exact same event set traded in opposite direction, same risk and fees",
+  "cost_stress": "exact same follow-through rule with slip increased 2 to 6bps each fill",
+  "past_data": "2025-01-01 through 2026-11-17, full BTC and ETH 1min plus OI 5m funding 1h",
+  "no_grid": "fixed event threshold 5th percentile of prior 21d OI 1h changes; price impulse >=1.5x previous 3d median",
+  "funding": "prior 1h candle as rate proxy in PERCENT units, charged at 00/08/16 UTC; absent settlement 0.01% charge",
+  "fee": "0.05% each taker fill + GST 18%, no maker rebate",
+  "capital": "1000 USD hypothetical fractional futures, 0.5% initial risk, <=8x notional cap",
+  "pass_count": 0,
+  "data": [
+    {
+      "symbol": "BTCUSD",
+      "min_utc": "2025-01-01 00:00:00+00:00",
+      "max_utc": "2026-11-17 23:59:00+00:00",
+      "candle_count": 987840,
+      "price_missing_minutes": 0,
+      "complete_5m_oi_rows": 197568,
+      "missing_5m_oi_rows": 0,
+      "OI_1h_shock_observations": 9645,
+      "raw_event_count": 1954,
+      "executable_event_count": 1954,
+      "long_events": 850,
+      "short_events": 1104,
+      "funding_missing_8h_observations": 1,
+      "OI_1h_delta_quantile": ".05 trailing 21 days shifted prior",
+      "price_impulse": "absolute 1h return >=1.5x prior three-day rolling median",
+      "entry": "next 5m open",
+      "exit": "1h ATR initial stop and 4x ATR wide trailing"
+    },
+    {
+      "symbol": "ETHUSD",
+      "min_utc": "2025-01-01 00:00:00+00:00",
+      "max_utc": "2026-11-17 23:59:00+00:00",
+      "candle_count": 987840,
+      "price_missing_minutes": 0,
+      "complete_5m_oi_rows": 197568,
+      "missing_5m_oi_rows": 0,
+      "OI_1h_shock_observations": 9768,
+      "raw_event_count": 2070,
+      "executable_event_count": 2070,
+      "long_events": 840,
+      "short_events": 1230,
+      "funding_missing_8h_observations": 1,
+      "OI_1h_delta_quantile": ".05 trailing 21 days shifted prior",
+      "price_impulse": "absolute 1h return >=1.5x prior three-day rolling median",
+      "entry": "next 5m open",
+      "exit": "1h ATR initial stop and 4x ATR wide trailing"
+    }
+  ],
+  "caveats": [
+    "OI fall does not uniquely prove liquidation; no real liquidation tape",
+    "Historical Delta funding candles proxy, not verified executed funding payments",
+    "1minute OHLC fill stop is pessimistic open-through-gap but not order-book execution",
+    "Pyramiding is deliberately NOT used; cannot manufacture +500% with leverage",
+    "2025 research-exposed; 2026 partial through November 17 and research-exposed",
+    "Market microstructure hypothesis requires a placebo and future-forward validation",
+    "EMA/ATR grid not used; 1h ATR used solely for risk management",
+    "This analysis does not provide live execution or a trading recommendation"
+  ]
+}
