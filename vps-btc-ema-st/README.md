@@ -12,7 +12,7 @@ Standalone folder inside **BTC-Analysis**. One BTCUSD strategy, one position, lo
 - ATR14×2 initial protective stop. Trailing activation +150 BTC points, fixed trailing distance 50 points. Exit on confirmed opposite Supertrend flip.
 - Research bankroll $100; fixed **up-to-$10** isolated margin per entry; 100× leverage (~$1,000 notional), rounded DOWN to integer BTCUSD contracts, one position.
 - Historical fee model: taker entry/exit 0.05%, GST 18%, and assumed 30-minute Scalper Offer; modeled liquidation costs. History assumes offer active throughout; this entitlement is **not verified**.
-- Forward/demo/live execution uses testnet/live Delta REST, actual market/mark price, order IDs, native reduce-only stops, and polling. **Forward entry safety guard** skips setups if 2ATR stop is beyond a conservative liquidation threshold buffer. This additional guard was NOT included in historical backtest and therefore signal counts/P&L are not directly comparable.
+- Forward/demo/live execution uses testnet/live Delta REST, actual market/mark price, order IDs, native reduce-only stops, and polling. **Forward entry safety guard** skips setups if 2ATR stop is beyond a conservative liquidation threshold buffer. We separately backtested this guarded variant: full history **-$5.38** with 8/22 completed profitable months and zero modeled liquidations, versus original **+$813.13** with 19/22 profitable months but 42 modeled liquidations. The dashboard compares both. The safer guarded strategy is **NOT historically profitable** under the assumptions. Do not trade it live on the basis of the unguarded profit.
 
 ## Prerequisites
 
@@ -82,9 +82,9 @@ At this stage, **no orders are placed**. The market feed is loaded from testnet,
 
 ### Backtest output and accuracy
 
-The backtest command invokes the **exact existing research script** \`../scripts/replay_btc_ema_st_fixed_10_margin.py\`. This avoids duplicating indicator/entry/exit math. The dashboard reads files in \`../analysis/btc_ema_st_fixed_10_margin_20261119/\`, including \`summary.json\`, four monthly CSVs and four compressed trade ledgers.
+The backtest command invokes **both original and risk-guarded research scripts**, starting with the **exact existing research script** \`../scripts/replay_btc_ema_st_fixed_10_margin.py\`. This avoids duplicating indicator/entry/exit math. The dashboard reads files in \`../analysis/btc_ema_st_fixed_10_margin_20261119/\`, including \`summary.json\`, four monthly CSVs and four compressed trade ledgers.
 
-Historical data: Jan 2025–Nov 18 2026; most recent full month October 2026. Stored full-history optimistic ending balance **$913.13** from hypothetical $100, 42 modeled liquidations, 19/22 profitable full months. This remains **research only**: old replay assumes 15m OHLC price path, 30-minute fee offer historically, 0 slippage, 0 funding, estimated maintenance/liquidation instead of actual mark history. The guarded bot will intentionally skip some original signals.
+Historical data: Jan 2025–Nov 18 2026; most recent full month October 2026. Stored original full-history optimistic ending balance **$913.13** from hypothetical $100, 42 modeled liquidations, 19/22 profitable full months. The conservative guarded strategy finished at **$94.62** with **0 modeled liquidations** and **14/22 losing completed months**. This remains **research only**: old replay assumes 15m OHLC price path, 30-minute fee offer historically, 0 slippage, 0 funding, estimated maintenance/liquidation instead of actual mark history. The guarded bot will intentionally skip some original signals.
 
 ### Dashboard access (no public port)
 
