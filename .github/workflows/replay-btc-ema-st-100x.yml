@@ -1,0 +1,45 @@
+name: BTCUSD EMA/ST 100x leverage liquidation backtest
+on:
+  push:
+    branches: ['research/btc-ema-st-screenshot-20261119']
+    paths:
+      - 'scripts/replay_btc_ema_st_100x.py'
+      - '.github/workflows/replay-btc-ema-st-100x.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-ema-st-100x-liquidation
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas
+      - name: Run isolated-margin 100x backtest with liquidation bounds
+        run: python scripts/replay_btc_ema_st_100x.py
+      - name: Upload full trade and monthly evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-ema-st-100x-backtest
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            analysis/btc_ema_st_100x_20261119/*_trades.csv.gz
+            analysis/btc_ema_st_100x_20261119/*_monthly.csv
+            analysis/btc_ema_st_100x_20261119/summary.json
+      - name: Commit 100x reports (research branch only)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_ema_st_100x_20261119
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record 100x BTC isolated liquidation and monthly returns"
+            git push origin HEAD:research/btc-ema-st-screenshot-20261119
+          fi
