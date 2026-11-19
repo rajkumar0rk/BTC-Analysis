@@ -167,15 +167,23 @@ class Bot:
     def protect(self,active):
         expected_side="sell" if active["side"]=="buy" else "buy"
         found=None
+        protected=[]
         for o in self.matching_orders():
             if o.get("side")==expected_side and o.get("stop_order_type")=="stop_loss_order":
                 if (o.get("reduce_only") is True and
                     o.get("stop_trigger_method")=="mark_price" and
                     int(o.get("size",0))>=abs(active["size"])):
-                    found=o
+                    protected.append(o)
                 else:
                     self.halt("Unrecognized or unsafe stop order: manual inspection required",
                               stop_order_id=o.get("id"))
+            else:
+                self.halt("Unexpected extra order for BTCUSD while bot owns position",
+                          order_id=o.get("id"))
+        if len(protected)>1:
+            self.halt("Multiple protective orders found; manual reconciliation needed",
+                      stop_ids=[o.get("id") for o in protected])
+        if protected:found=protected[0]
         if found:
             if abs(float(found.get("stop_price") or 0)-float(active["stop"]))>self.tick/2:
                 # If stop from entry bracket has different price, refuse guessing.
@@ -339,6 +347,10 @@ class Bot:
             return
         direction=1 if s["side"]=="buy" else -1
         stop=quantize_stop(price-direction*s["stop_distance_points"],self.tick,s["side"])
+        # Server stop triggers on MARK, so it must be on the safe side of mark now.
+        if (s["side"]=="buy" and mark<=stop) or (s["side"]=="sell" and mark>=stop):
+            self.emit("WARN","skip",reason="mark_price_already_crossed_protective_stop",mark=mark,stop=stop)
+            return
         if not target_stop_guard(price,s["side"],stop,self.cfg.leverage,
                                  self.product,self.cfg.buffer_pct):
             self.emit("WARN","skip",reason="initial_stop_beyond_liquidation_buffer",
