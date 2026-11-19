@@ -1,0 +1,3 @@
+market,model,share_threshold,mode,stopmult,rr,profit_factor,net_return_22m_pct,net_return_2025_pct,net_return_2026_jan_oct_pct,year2025_above_500pct,year2026_ytd_above_500pct,strong_pf1p5_return5_months,strong_pf1p5_return10_months,positive_months,trades,wins,losses,max_month_end_nav_drawdown_pct,worst_month_pct
+BTCUSD,hourly_volume_backload_share0.4_mode-1_SL1.5_RR2,0.4,-1,1.5,2.0,0.7705705294981314,-38.685930798075695,-18.928332235039147,-24.37053425410817,False,False,1,0,4,671,272,399,-39.20064077059613,-8.37234874303191
+ETHUSD,hourly_volume_backload_share0.4_mode-1_SL1.5_RR2,0.4,-1,1.5,2.0,0.6626583671384018,-47.73753551731391,-26.69451226995233,-28.70593170985223,False,False,0,0,3,617,231,386,-47.73753551731391,-6.37975025827735
