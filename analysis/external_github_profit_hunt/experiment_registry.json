@@ -564,6 +564,24 @@
         "Source lookahead and retroactive trailing defects corrected; not original execution"
       ],
       "verdict": "Neither asset reaches 12/22 high-PF months. ETH has modest modeled overall profit but negative median monthly return and only 8 high-PF months; does not warrant worth-checking alert."
+    },
+    {
+      "id": "freqtrade-volsystem-3h-causal-paired-20261119",
+      "source_repo": "https://github.com/freqtrade/freqtrade-strategies",
+      "source_commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "source_path": "user_data/strategies/futures/VolatilitySystem.py",
+      "branch": "feature/github-external-volpersistence-22m-20261118",
+      "script": "scripts/replay_external_volsystem_3h_paired.py",
+      "workflow": ".github/workflows/external-volsystem-3h-paired-20261119.yml",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44436606332",
+      "status": "RUNNING_NOT_YET_VERIFIED",
+      "deviations": [
+        "Causal completed 3h bars",
+        "3ATR stop added to bound source's unlimited loss",
+        "1x gross exposure, no source adds",
+        "Taker GST slippage, 1m stop-first",
+        "Historical January IST missing 330m not yet merged; actual funding absent"
+      ]
     }
   ],
   "data_integrity_updates": [
