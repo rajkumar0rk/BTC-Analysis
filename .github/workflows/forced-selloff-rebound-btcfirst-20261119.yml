@@ -1,0 +1,20 @@
+name: BTC-first forced-selloff rebound falsification
+on:
+  push:
+    branches:
+      - research/forced-selloff-rebound-btcfirst-20261119-1225
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas
+      - run: python scripts/forced_selloff_rebound_btcfirst_20261119.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: forced-selloff-rebound-evidence
+          path: analysis/forced_selloff_rebound_btcfirst_20261119/
