@@ -11,8 +11,13 @@ jobs:
   paired-backtest:
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    concurrency:
+      group: stage31-btc-first-shock-drift
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
+      - name: Record immutable source revision
+        run: git rev-parse HEAD
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
