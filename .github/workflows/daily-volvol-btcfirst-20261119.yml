@@ -18,7 +18,15 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install pandas numpy
-      - run: python analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/backtest.py
+      - name: Audit original compressed BTC and ETH minute archives
+        shell: bash
+        run: |
+          shopt -s nullglob
+          files=(data/delta_india/BTCUSD/1m/20??-??.csv.gz data/delta_india/ETHUSD/1m/20??-??.csv.gz)
+          if (( ${#files[@]} == 0 )); then echo "MISSING_ARCHIVE: no monthly Delta files"; exit 2; fi
+          python analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/audit_archive.py "${files[@]}" | tee analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/archive_audit.json
+      - name: Run frozen BTC-first then unchanged ETH backtest
+        run: python analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/backtest.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -26,4 +34,5 @@ jobs:
           path: |
             analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/*.csv
             analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/provenance.json
+            analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/archive_audit.json
           if-no-files-found: warn
