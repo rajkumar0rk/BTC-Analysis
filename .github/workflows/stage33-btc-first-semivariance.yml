@@ -1,0 +1,33 @@
+name: Stage33 BTC-first daily semivariance reversal
+on:
+  push:
+    branches: [research/btc-first-semivariance-stage33-20261120]
+    paths:
+      - scripts/research_paired_semivariance_stage33.py
+      - .github/workflows/stage33-btc-first-semivariance.yml
+permissions:
+  contents: read
+jobs:
+  paired-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print revision and run identity
+        run: |
+          git rev-parse HEAD
+          echo "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Execute frozen BTC-first paired research
+        run: PYTHONPATH=scripts python scripts/research_paired_semivariance_stage33.py
+      - name: Upload original trade NAV and monthly ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage33-original-ledgers
+          path: analysis/paired_semivariance_stage33/
+          if-no-files-found: warn
