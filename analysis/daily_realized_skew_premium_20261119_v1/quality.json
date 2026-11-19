@@ -1,0 +1,18 @@
+[
+  {
+    "symbol": "BTCUSD",
+    "archive_first": "2025-01-01 00:00:00+00:00",
+    "archive_last": "2026-11-17 23:59:00+00:00",
+    "bars": 987840,
+    "expected_minutes": 987840,
+    "missing_minutes": 0
+  },
+  {
+    "symbol": "ETHUSD",
+    "archive_first": "2025-01-01 00:00:00+00:00",
+    "archive_last": "2026-11-17 23:59:00+00:00",
+    "bars": 987840,
+    "expected_minutes": 987840,
+    "missing_minutes": 0
+  }
+]

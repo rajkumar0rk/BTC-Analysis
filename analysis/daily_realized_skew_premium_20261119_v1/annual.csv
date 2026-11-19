@@ -1,0 +1,5 @@
+symbol,year,days,profit_days,loss_days,no_trade_days,data_gap_days,trades,profit_calendar_pct,median_day_usd,mean_day_usd,worst_day_usd,net_usd,return_pct,pf,max_drawdown_pct,max_loss_day_streak,fees_gst_usd,slippage_usd,stress_net_usd
+BTCUSD,2025,364,34,71,259,0,105,9.34,0.0,-0.4141,-7.58,-150.7477,-15.075,0.5371,16.521,4,123.9,42.0,-192.7477
+BTCUSD,2026,321,46,82,193,0,128,14.33,0.0,-0.5918,-7.58,-189.9613,-18.996,0.487,20.752,4,151.04,51.2,-241.1613
+ETHUSD,2025,364,47,98,219,0,145,12.91,0.0,-0.9366,-7.58,-340.9101,-34.091,0.4576,34.642,4,171.1,58.0,-398.9101
+ETHUSD,2026,321,62,99,160,0,161,19.31,0.0,-0.7919,-7.58,-254.1989,-25.42,0.5326,26.904,4,189.98,64.4,-318.5989
