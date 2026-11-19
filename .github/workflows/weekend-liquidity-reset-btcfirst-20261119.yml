@@ -1,0 +1,20 @@
+name: Weekend liquidity reset BTC-first independent falsification
+on:
+  push:
+    branches:
+      - research/weekend-liquidity-reset-btcfirst-20261119-1124
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas
+      - run: python scripts/weekend_liquidity_reset_btcfirst_20261119.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: weekend-liquidity-reset-evidence
+          path: analysis/weekend_liquidity_reset_btcfirst_20261119/
