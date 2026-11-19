@@ -1,0 +1,3 @@
+market,model,signal_threshold,mode,stopmult,rr,profit_factor,net_return_22m_pct,net_return_2025_pct,net_return_2026_jan_oct_pct,year2025_above_500pct,year2026_ytd_above_500pct,strong_pf1p5_return5_months,strong_pf1p5_return10_months,positive_months,trades,wins,losses,max_month_end_nav_drawdown_pct,worst_month_pct
+BTCUSD,range_occupancy_0.45_mode-1_SL1.5_RR2,0.45,-1,1.5,2.0,0.7820698639343159,-15.859662930286579,-15.182932270877336,-0.7978708502049181,False,False,0,0,10,263,104,159,-23.08213491486091,-6.65609671322942
+ETHUSD,range_occupancy_0.45_mode-1_SL1.5_RR2,0.45,-1,1.5,2.0,0.7529340402088864,-20.278069630513183,-12.731564460867162,-8.64746242215151,False,False,0,0,9,290,102,188,-25.790837700032576,-4.901997900644872
