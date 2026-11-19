@@ -1,0 +1,27 @@
+name: Independent spot-led convexity BTC-first
+on:
+  push:
+    branches:
+      - research/spot-lead-lag-convex-btcfirst-20261119-2044
+    paths:
+      - scripts/research_independent_spot_lead_lag_20261119.py
+      - .github/workflows/independent-spot-lead-lag-20261119.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy
+      - run: python scripts/research_independent_spot_lead_lag_20261119.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: spot-lead-lag-btc-eth-evidence
+          path: analysis/independent_spot_lead_lag_20261119/
