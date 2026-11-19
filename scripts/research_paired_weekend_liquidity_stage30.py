@@ -115,5 +115,5 @@ def main():
        fee_per_side=.0005,GST=.18,BTC_slip_per_side=5,ETH_slip_fraction_per_side=.0002,
        limitations=["No actual funding cashflows","No historical order book/spread/impact","No contract minima or liquidation maintenance stress","2025 January first 330 IST minutes absent","2026 is not pristine out-of-sample","Single preset, no optimization"]),indent=2))
     (OUT/"RESEARCH_REPORT.md").write_text("# Stage30: Weekend liquidity-vacuum fair-value reversion (pre-registered)\n\n## Economic hypothesis\nWeekend liquidity thins order-book depth and can amplify short-term deviations from prior-day volume-weighted fair value; a completed 15-minute counter-move may mark temporary exhaustion. Falsified if after-cost monthly PF and account returns fail to persist, or stress costs destroy any advantage.\n\n## Base monthly ledger\n\n"+m[~m.stress][["month_ist","symbol","net_return_pct","profit_factor","trades","wins","losses"]].to_markdown(index=False)+"\n\n## 2025 full year and 2026 Jan-Oct YTD\n\n"+s.to_markdown(index=False)+"\n")
-    print("STAGE29_COMPLETE",s.to_json(orient="records"))
+    print("STAGE30_COMPLETE",s.to_json(orient="records"))
 if __name__=="__main__":main()
