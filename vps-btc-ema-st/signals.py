@@ -13,7 +13,8 @@ from replay_btc_ema_st_screenshot import indicators
 BAR_SECONDS=900
 def closed_bars(raw,now=None):
     now=time.time() if now is None else now
-    current_start=int(now//BAR_SECONDS)*BAR_SECONDS
+    # Give exchange historical feed 10 seconds to finalize closed candle.
+    current_start=int((now-10)//BAR_SECONDS)*BAR_SECONDS
     rows=[]
     for x in raw:
         epoch=int(x["time"])
