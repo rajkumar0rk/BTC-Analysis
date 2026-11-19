@@ -1,0 +1,21 @@
+name: BTC-first OI deleveraging resilience falsification
+on:
+  push:
+    branches:
+      - research/daily-oi-deleveraging-resilience-btcfirst-20261119-1241
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas
+      - run: python scripts/daily_oi_deleveraging_resilience_20261119.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-oi-deleveraging-resilience-evidence
+          path: analysis/daily_oi_deleveraging_resilience_20261119/
