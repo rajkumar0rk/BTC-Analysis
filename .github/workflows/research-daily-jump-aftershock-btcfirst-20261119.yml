@@ -1,0 +1,25 @@
+name: BTC-first jump aftershock daily net falsification
+on:
+  push:
+    branches:
+      - research/daily-jump-aftershock-btcfirst-20261119-1144
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas tabulate
+      - run: python scripts/research_daily_jump_aftershock_btcfirst_20261119.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-jump-aftershock-btcfirst-20261119
+          path: analysis/daily_jump_aftershock_btcfirst_20261119/
+          if-no-files-found: warn
