@@ -1,0 +1,27 @@
+name: External VolatilitySystem 3h paired monthly diagnostic
+on:
+  push:
+    branches: [feature/github-external-volpersistence-22m-20261118]
+    paths: [.github/workflows/external-volsystem-3h-paired-20261119.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy<3' pandas 'TA-Lib==0.6.8'
+      - run: python scripts/replay_external_volsystem_3h_paired.py
+      - name: Upload paired monthly and trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: volsystem-3h-btc-eth-monthly
+          path: analysis/external_github_profit_hunt/volatilitysystem_3h_paired/*
+          retention-days: 30
+          if-no-files-found: warn
