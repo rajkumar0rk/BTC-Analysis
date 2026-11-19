@@ -53,6 +53,7 @@ def run(symbol,reverse=False,stress=False):
         return price+side*max(5. if symbol=="BTCUSD" else 0.,price*sliprate)
     for i,t in enumerate(idx):
         contiguous=i>0 and t-idx[i-1]==pd.Timedelta(minutes=1)
+        closed_this_bar=False
         if pos is not None:
             side=pos["side"]; reason=None
             if not contiguous:
@@ -67,6 +68,7 @@ def run(symbol,reverse=False,stress=False):
                 pnl=nav-pos["before"]
                 trades.append(dict(entry_utc=str(pos["entry_time"]),exit_utc=str(idx[i-1] if not contiguous else t),side=side,entry=pos["entry"],exit=exitprice,qty=pos["qty"],risk_usd=pos["risk_usd"],net_pnl=pnl,net_R=pnl/pos["risk_usd"],reason=reason))
                 pos=None
+                closed_this_bar=True
             else:
                 favorable=hi[i] if side==1 else lo[i]
                 pos["best"]=max(pos["best"],favorable) if side==1 else min(pos["best"],favorable)
@@ -74,7 +76,7 @@ def run(symbol,reverse=False,stress=False):
                     newstop=pos["best"]-side*2*pos["riskpx"]
                     pos["stop"]=max(pos["stop"],newstop) if side==1 else min(pos["stop"],newstop)
         # Never enter on a bar where we just closed another position.
-        if pos is None and contiguous and t in sig:
+        if pos is None and not closed_this_bar and contiguous and t in sig:
             side=sig[t]*(-1 if reverse else 1)
             entry=adverse(o[i],side);riskpx=.0065*entry
             qty=min(nav*.0025/riskpx,nav*2/entry)
