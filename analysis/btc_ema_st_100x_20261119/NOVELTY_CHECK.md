@@ -1,0 +1,11 @@
+# Differential novelty check — 100x leverage stress test
+
+Decision: **PARTIAL OVERLAP — approved differential**. Reuse exactly the screenshot EMA20/Supertrend entry and existing fee-replay rules, changing only economic account sizing and adding margin liquidation checks.
+
+Previous experiment: `scripts/replay_btc_ema_st_screenshot.py` with `analysis/btc_ema_st_screenshot_20261119/` on this branch. It examined 1 contract (0.001 BTC) with no margin checks. Other overlapping research: `scripts/research_monthly_10pct_stage19.py` and `scripts/research_trend_pullback_breakout_stage13.py`.
+
+Here the user asks for the **same strategy at 100x leverage**, which is materially different economically but not a new alpha signal. Preserve signal TF=15m, monitoring TF=15m, fixed trailing 150 activation / 50 offset, ATR(14)*2 initial SL, EMA20 touch while ST(10,3) established, ATR14 >= trailing prior 20 mean, volume >= 1.5x trailing prior 20 mean, opposite confirmed ST flip exit. Long and short, one position. Source is Delta BTCUSD 1m partitions SHA256-validated and reconstructed 15m.
+
+Margin assumption: Delta India BTCUSD 100x isolated, auto-top-up OFF, min initial margin 1% of notional at selected leverage, maintenance 0.25% of notional, no scaling above USD100k because we cap each trade at USD100k. Lot increment 0.001 BTC. We reserve 1% notional as margin plus opening taker fee and GST from available equity before opening. No assumed loans deposited outside starting capital. Initial equity $100. Use full *available* equity each entry (compounded). Close notional 0.05% taker waived only on non-liquidated positions held <=30 minutes, GST 18%. Liquidation penalty is 0.05% of notional * 1.18, not waived. No live mark price, auto-topup, bid/ask, actual funding or slippage. For liquidations report two bounds: optimistic threshold-price fill and pessimistic bankruptcy-price fill. Only deterministic TradingView-style 15m OHLC path is available to order stop and liquidation, so outcomes are model-dependent.
+
+Report both 2025-01 through 2026-11-18 and the TradingView last-10000 15m bars with chronological account-equity compounding, per-month IST net returns, trade quantities, fees, liquidations and maximum equity drawdown. November 2026 is incomplete. All history is research-exposed; do not claim out-of-sample testing. Do not merge main.
