@@ -182,11 +182,15 @@ class Bot:
                 self.halt("Exchange stop price disagrees with bot state")
             active["stop_id"]=int(found["id"])
             self.db.set("active",active)
-            return
+            return True
         # If a stop existed earlier, its disappearance is an emergency.
         if active.get("stop_id"):
+            if time.time()-float(active.get("stop_sent_at",0))<12:
+                # Active-orders API can lag after an accepted stop.
+                # Do NOT place a duplicate stop or trail until verified.
+                return False
             self.emergency_close(active,"protective_stop_disappeared")
-            return
+            return False
         # Opening order included an attached bracket stop, but if none is visible,
         # place independent reduce-only mark stop immediately after position appears.
         stop_id=oid("s")
@@ -196,8 +200,10 @@ class Bot:
                  "reduce_only":True,"client_order_id":stop_id}
         order=self.place("protective_stop",payload)
         active["stop_id"]=int(order["id"])
+        active["stop_sent_at"]=time.time()
         self.db.set("active",active)
         self.emit("WARN","standalone_stop_created",order_id=order["id"])
+        return False
 
     def emergency_close(self,active,reason):
         if not self.cfg.trading:self.halt("Emergency close needed but trading disabled")
@@ -262,7 +268,8 @@ class Bot:
     def manage_stop(self,mark):
         active=self.db.get("active")
         if not active:return
-        self.protect(active)
+        if not self.protect(active):
+            return
         side=1 if active["side"]=="buy" else -1
         entry=float(active["entry"])
         best=float(active["best"])
