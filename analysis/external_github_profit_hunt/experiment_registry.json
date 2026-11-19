@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-18T21:45:00Z",
+  "last_updated_utc": "2026-11-19T00:53:12Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -464,6 +464,56 @@
       "verification": "No paired BTCUSD/ETHUSD run, no monthly PF or account returns; January 2025 IST history gap and actual funding remain unresolved",
       "verdict": "UNTESTED_NO_NOTIFICATION",
       "next_action": "Implement exact causal 1h indicator and ROI semantics with >=48-bar prewarm; then run paired BTC/ETH 1m execution with 22 IST month-end MTM and after-cost accounting; do not claim verified until history and funding resolved"
+    },
+    {
+      "id": "freqtrade-fadx-sma-1h-paired-20261119",
+      "source_repo": "https://github.com/freqtrade/freqtrade-strategies",
+      "source_commit": "f3340ce11f5bdf62f598522e64d1f5638eaa13f5",
+      "source_path": "user_data/strategies/futures/FAdxSmaStrategy.py",
+      "branch": "feature/github-external-volpersistence-22m-20261118",
+      "script": "scripts/replay_external_fadx_sma_paired.py",
+      "workflow": ".github/workflows/external-fadx-sma-paired-20261119.yml",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44432522557",
+      "artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44432522557/artifacts/14487203088",
+      "status": "COMPLETED_DIAGNOSTIC_REJECTED",
+      "strategy": "1h SMA12/48 cross ADX14>30 enter long or short, ADX<30 exit, ROI source 5% before 30m, 10% 30-59m, 7.5% after 60m, stop 5%; TA-Lib, causal next-hour open; 1x notional 1m stop-first",
+      "BTCUSD": {
+        "trades": 25,
+        "wins": 7,
+        "losses": 18,
+        "high_pf_months": 4,
+        "profitable_months": 4,
+        "losing_months": 11,
+        "inactive_months": 7,
+        "aggregate_pf": 0.1706554201,
+        "net_22m_pct": -21.65212619,
+        "net_2025_pct": -11.98397316,
+        "net_2026_ytd_pct": -10.984537,
+        "max_month_end_drawdown_pct": 22.633962
+      },
+      "ETHUSD": {
+        "trades": 28,
+        "wins": 8,
+        "losses": 20,
+        "high_pf_months": 4,
+        "profitable_months": 4,
+        "losing_months": 13,
+        "inactive_months": 5,
+        "aggregate_pf": 0.6194821555,
+        "net_22m_pct": -12.42311175,
+        "net_2025_pct": -11.9577528,
+        "net_2026_ytd_pct": -0.52856323,
+        "max_month_end_drawdown_pct": 12.42311175
+      },
+      "quality": [
+        "SHA256 checked 22 UTC monthly 1m partitions for both assets",
+        "22 IST monthly account MTM equities and exit-month realized after-cost PF",
+        "Missing Dec 31 2024 UTC evening; Jan 2025 IST not complete",
+        "0.05% taker each side + 18% GST; BTC 5 USD adverse price points, ETH 2bps per side",
+        "Settled funding, actual spreads, depth, liquidation constraints not modeled",
+        "2026 research-exposed, not pristine OOS"
+      ],
+      "verdict": "Not worth checking. Neither asset profitable; 4/22 monthly PF>=1.5 positive-return months."
     }
   ]
 }
