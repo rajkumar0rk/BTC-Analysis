@@ -1,0 +1,38 @@
+name: Stage30 repaired BTC-first paired research
+on:
+  push:
+    branches:
+      - research/paired-weekend-liquidity-stage30-20261119
+    paths:
+      - .github/workflows/stage30-repair-20261119.yml
+      - scripts/research_paired_weekend_liquidity_stage30.py
+      - scripts/research_paired_absorption_stage25.py
+permissions:
+  contents: write
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Execute native BTC and ETH one-minute research
+        run: python scripts/research_paired_weekend_liquidity_stage30.py
+      - name: Preserve original ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage30-repaired-ledgers
+          path: analysis/paired_weekend_liquidity_stage30/
+          if-no-files-found: warn
+      - name: Commit reproducible reports on isolated branch
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/paired_weekend_liquidity_stage30/
+          git diff --cached --quiet || (git commit -m 'Stage30 original BTC ETH monthly and trade ledgers' && git push)
