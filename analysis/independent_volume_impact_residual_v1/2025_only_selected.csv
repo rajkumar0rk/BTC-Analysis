@@ -1,0 +1,3 @@
+market,model,dislocation_threshold,mode,stopmult,rr,profit_factor,net_return_22m_pct,net_return_2025_pct,net_return_2026_jan_oct_pct,year2025_above_500pct,year2026_ytd_above_500pct,strong_pf1p5_return5_months,strong_pf1p5_return10_months,positive_months,trades,wins,losses,max_month_end_nav_drawdown_pct,worst_month_pct
+BTCUSD,volume_impact_residual_ratio2_mode-1_SL1.5_RR2,2.0,-1,1.5,2.0,0.784161003642573,-62.25461980130571,-32.31844203575718,-44.230922966289086,False,False,1,0,2,1354,542,812,-64.93484762155049,-11.38721525791464
+ETHUSD,volume_impact_residual_ratio2_mode-1_SL1.5_RR2,2.0,-1,1.5,2.0,0.7611672774681977,-63.528740813120066,-46.23898351968093,-32.16039878964825,False,False,0,0,3,1414,554,860,-63.528740813120066,-10.726946998128051
