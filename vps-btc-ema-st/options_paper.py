@@ -279,7 +279,7 @@ class OptionsPaperBot:
         p=self.db.get("paper_position")
         if not p:return
         if time.time()>=p["expiry_ts"]:
-            self.close("expiry")
+            self.close("expiry",mark)
             return
         if self.db.get("paper_exit_pending"):
             self.close(self.db.get("paper_exit_pending"),mark)
