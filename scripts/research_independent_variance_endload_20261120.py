@@ -21,14 +21,19 @@ def load(sym):
 def signals(x):
     # Group complete clock-hours; first minute's return uses its own open, never previous-hour close.
     h=x.index.floor("h"); pos=x.index.minute
-    r=np.log(x.close.to_numpy()/np.r_[x.open.iloc[0],x.close.to_numpy()[:-1]])
+    prev=np.r_[x.open.iloc[0],x.close.to_numpy()[:-1]]
+    # Do not attribute prior-hour or missing-minute price jumps to this hour.
+    contiguous=np.r_[False, (x.index[1:]-x.index[:-1])==pd.Timedelta(minutes=1)]
+    prev=np.where(contiguous & (pos.to_numpy()!=0),prev,x.open.to_numpy())
+    r=np.log(x.close.to_numpy()/prev)
     z=pd.DataFrame({"hour":h,"minute":pos,"rv":r*r,"close":x.close.to_numpy(),"open":x.open.to_numpy()},index=x.index)
     agg=z.groupby("hour").agg(count=("rv","size"),first=("open","first"),last=("close","last"))
     early=z[z.minute<45].groupby("hour").rv.sum()
     late=z[z.minute>=45].groupby("hour").rv.sum()
     startlate=z[z.minute==45].groupby("hour").open.first()
     agg["early"]=early;agg["late"]=late;agg["startlate"]=startlate
-    agg=agg[(agg["count"]==60)&(agg.early>0)&(agg.late>4*agg.early)&((agg["last"]/agg.startlate-1).abs()>.003)]
+    complete=z.groupby("hour").minute.nunique().eq(60)
+    agg=agg[complete.reindex(agg.index,fill_value=False)&(agg["count"]==60)&(agg.early>0)&(agg.late>4*agg.early)&((agg["last"]/agg.startlate-1).abs()>.003)]
     agg["side"]=np.sign(agg["last"]/agg.startlate-1).astype(int)
     # Signal only after hour complete. Position at next exact minute timestamp.
     return {t+pd.Timedelta(hours=1):int(s) for t,s in agg.side.items()}
