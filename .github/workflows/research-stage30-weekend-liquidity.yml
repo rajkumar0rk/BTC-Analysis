@@ -1,0 +1,38 @@
+name: Stage30 paired weekend liquidity fair-value reversion
+on:
+  push:
+    branches:
+      - research/paired-weekend-liquidity-stage30-20261119
+    paths:
+      - scripts/research_paired_weekend_liquidity_stage30.py
+      - .github/workflows/research-stage30-weekend-liquidity.yml
+permissions:
+  contents: write
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Paired native 1m BTC ETH backtest
+        run: python scripts/research_paired_weekend_liquidity_stage30.py
+      - name: Preserve full original evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage30-paired-weekend-liquidity
+          path: analysis/paired_weekend_liquidity_stage30/
+          if-no-files-found: warn
+      - name: Commit evidence on isolated branch
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/paired_weekend_liquidity_stage30/
+          git commit -m 'Archive Stage30 original monthly and trade ledgers' || true
+          git push
