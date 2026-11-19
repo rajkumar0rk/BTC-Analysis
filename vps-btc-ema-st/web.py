@@ -30,7 +30,10 @@ def status():
             events=db.latest_events(80))
     finally:db.close()
 
-RESULT_DIR=ROOT/"analysis"/"btc_ema_st_fixed_10_margin_20261119"
+RESULT_DIRS={
+    "original":ROOT/"analysis"/"btc_ema_st_fixed_10_margin_20261119",
+    "guarded":ROOT/"analysis"/"btc_ema_st_fixed_10_margin_guarded_20261119"
+}
 VALID_WINDOWS={
     "history":"all_history",
     "recent":"recent_last_10000_15m"
@@ -38,10 +41,11 @@ VALID_WINDOWS={
 VALID_FILLS={"threshold","bankruptcy"}
 
 @app.get("/api/backtest")
-def backtest(window:str="history",liquidation:str="threshold"):
-    if window not in VALID_WINDOWS or liquidation not in VALID_FILLS:
+def backtest(window:str="history",liquidation:str="threshold",rules:str="guarded"):
+    if window not in VALID_WINDOWS or liquidation not in VALID_FILLS or rules not in RESULT_DIRS:
         return {"error":"Invalid preset"}
     name=VALID_WINDOWS[window]+"_"+liquidation
+    RESULT_DIR=RESULT_DIRS[rules]
     path=RESULT_DIR/(name+"_monthly.csv")
     summary=RESULT_DIR/"summary.json"
     if not path.is_file() or not summary.is_file():
@@ -49,7 +53,7 @@ def backtest(window:str="history",liquidation:str="threshold"):
     with path.open(newline="") as f:
         months=list(csv.DictReader(f))
     data=json.loads(summary.read_text())
-    return dict(period=window,liquidation=liquidation,
+    return dict(period=window,liquidation=liquidation,rules=rules,
                 last_updated="Local historical model (not live P&L)",
                 statistics=data.get(name,{}),months=months,settings=data.get("settings",{}))
 
@@ -116,7 +120,7 @@ select{background:#192a3e;color:var(--text);border:1px solid var(--line);padding
 </section>
 <section id="backtest" class="hidden">
 <div class="top"><div><h1>Historical backtest</h1><p class="muted small">Fixed $10 isolated margin, 100× leverage, hypothetical $100 starting portfolio. Fees and GST modeled.</p></div>
-<div class="filters"><select id="window"><option value="history">All history · Jan 2025–Nov 2026</option><option value="recent">Recent · Aug–Nov 2026</option></select>
+<div class="filters"><select id="rules"><option value="guarded">Safer entries (guarded)</option><option value="original">Original backtest (unguarded)</option></select><select id="window"><option value="history">All history · Jan 2025–Nov 2026</option><option value="recent">Recent · Aug–Nov 2026</option></select>
 <select id="liq"><option value="threshold">Liquidation threshold fill</option><option value="bankruptcy">Bankruptcy-price stress fill</option></select></div></div>
 <div class="grid">
 <div class="card"><div class="metric-label">Ending portfolio</div><div class="metric" id="bt-end">—</div></div>
@@ -126,7 +130,7 @@ select{background:#192a3e;color:var(--text);border:1px solid var(--line);padding
 </div>
 <div class="card"><h2>Monthly net returns</h2><div class="chart" id="chart"></div>
 <div class="tablewrap"><table><thead><tr><th>Month</th><th>Trades</th><th>Liquidations</th><th>Net P&amp;L</th><th>Monthly return</th><th>Ending balance</th></tr></thead><tbody id="months"></tbody></table></div>
-<p class="muted small">Recent August and November are partial periods. The fee offer is assumed historically; slippage, spread, and realized funding are not included. Liquidation uses OHLC price proxies rather than actual exchange mark prices.</p></div>
+<p class="muted small">Recent August and November are partial periods. Guarded rules skip stop-losses estimated too close to liquidation; the original does not. The fee offer is assumed historically; slippage, spread, and realized funding are not included. Liquidation uses OHLC price proxies rather than actual exchange mark prices.</p></div>
 </section>
 <section id="activity" class="hidden"><h1>Bot activity</h1><p class="muted small">Persisted SQLite journal. Newest events first. Alerts remain visible until inspected.</p><div class="card activity" id="eventlist">No events yet</div></section>
 <section id="safety" class="hidden"><h1>Execution safety</h1>
@@ -186,7 +190,7 @@ async function refresh(){
  }catch(ex){cls("health","DASHBOARD ERROR","bad");setText("halt",String(ex))}
 }
 async function loadBacktest(){
- const url="/api/backtest?window="+encodeURIComponent($("window").value)+"&liquidation="+encodeURIComponent($("liq").value);
+ const url="/api/backtest?window="+encodeURIComponent($("window").value)+"&liquidation="+encodeURIComponent($("liq").value)+"&rules="+encodeURIComponent($("rules").value);
  try{const r=await fetch(url,{cache:"no-store"});const data=await r.json();if(data.error)throw Error(data.error);
  const st=data.statistics;setText("bt-end",money(st.ending_portfolio_usd));
  setText("bt-return",pct(st.total_return_pct));setText("bt-pf",val(st.net_profit_factor));
@@ -208,7 +212,7 @@ async function loadBacktest(){
  });
  }catch(ex){setText("bt-end","Unavailable");setText("bt-return",String(ex))}
 }
-$("window").addEventListener("change",loadBacktest);$("liq").addEventListener("change",loadBacktest);
+$("rules").addEventListener("change",loadBacktest);$("window").addEventListener("change",loadBacktest);$("liq").addEventListener("change",loadBacktest);
 refresh();loadBacktest();setInterval(refresh,4000);
 </script></body></html>"""
 
