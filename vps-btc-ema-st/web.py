@@ -23,6 +23,9 @@ def status():
             exchange_product=db.get("product"),ticker=db.get("ticker"),
             signal=db.get("latest_signal"),last_candle=db.get("last_market_bar"),
             daily=db.get("daily_snapshot"),
+            exchange_equity_usd=db.get("exchange_equity_usd"),
+            fill_attribution=db.get("fill_attribution"),
+            fills_synced_at=db.get("fills_synced_at"),
             alert_count=sum(1 for r in db.latest_events(100) if r["level"]=="ERROR"),
             events=db.latest_events(80))
     finally:db.close()
