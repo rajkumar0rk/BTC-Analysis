@@ -1,0 +1,3 @@
+market,model,signal_threshold,mode,stopmult,rr,profit_factor,net_return_22m_pct,net_return_2025_pct,net_return_2026_jan_oct_pct,year2025_above_500pct,year2026_ytd_above_500pct,strong_pf1p5_return5_months,strong_pf1p5_return10_months,positive_months,trades,wins,losses,max_month_end_nav_drawdown_pct,worst_month_pct
+BTCUSD,lagged_volume_response_0.45_mode+1_SL1.5_RR2,0.45,1,1.5,2.0,0.6679348133149352,-53.37254443746233,-33.31460797517853,-30.078456245436602,False,False,0,0,0,747,281,466,-53.37254443746233,-9.532441277357584
+ETHUSD,lagged_volume_response_0.45_mode+1_SL1.5_RR2,0.45,1,1.5,2.0,0.7976319060479681,-34.30690680609252,-18.431185123161985,-19.462979457163286,False,False,0,0,7,741,293,448,-34.30690680609252,-8.03389601854857
