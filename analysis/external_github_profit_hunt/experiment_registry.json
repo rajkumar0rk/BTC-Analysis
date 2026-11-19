@@ -627,6 +627,16 @@
       "BTCUSD_sha256_gzip": "c2cef14aa6993ccf9ac1c9d8a14735ae86bf10e6077bcce3e60001bf62f3bc4f",
       "ETHUSD_sha256_gzip": "a21f2df2d69d1c922f4d0110f529ac9e6f556ed394d4c8e588b4cb23b24e0faf",
       "note": "Both assets fully contiguous authentic candles checked, but prior paired tests did NOT load these. Must integrate and prewarm indicators on authentic earlier history before claiming fully complete first IST month."
+    },
+    {
+      "id": "full-december-2024-btc-eth-indicator-prewarm-20261119",
+      "status": "IN_PROGRESS_NOT_VERIFIED",
+      "workflow": ".github/workflows/external-2024-december-warmup.yml",
+      "script": "scripts/fetch_external_2024_december_warmup.py",
+      "run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44452930010",
+      "purpose": "Acquire and checksum complete authentic 2024-12 1m BTC and ETH data for causal EMA200 daily and other indicator warmup; fix missing Jan 2025 IST coverage without interpolation",
+      "expected_minutes_per_symbol": 44640,
+      "limitations": "Only data validation in this workflow; earlier backtests not yet rerun and funding still unmodeled; do not claim full January verified until workflow succeeds and replay actually uses data."
     }
   ]
 }
