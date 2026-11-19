@@ -1,0 +1,5 @@
+market,model,dislocation_threshold,mode,stopmult,rr,profit_factor,net_return_22m_pct,net_return_2025_pct,net_return_2026_jan_oct_pct,year2025_above_500pct,year2026_ytd_above_500pct,strong_pf1p5_return5_months,strong_pf1p5_return10_months,positive_months,trades,wins,losses,max_month_end_nav_drawdown_pct,worst_month_pct
+BTCUSD,volatility_release_ratio2_mode+1_SL1_RR10,2.0,1,1.0,10.0,0.7862130588177986,-13.850716714151778,-5.103877348441744,-9.21727792591367,False,False,0,0,8,137,35,102,-15.62800100732269,-4.878712062771173
+BTCUSD,volatility_release_ratio2_mode-1_SL1_RR10,2.0,-1,1.0,10.0,0.7727149629044617,-13.915801563496865,-12.913415935863737,-1.151021869103186,False,False,0,0,9,140,35,105,-16.23126245044212,-6.202780667533814
+ETHUSD,volatility_release_ratio2_mode+1_SL1_RR10,2.0,1,1.0,10.0,0.7218888417786928,-15.089220247221192,-13.177374836590051,-2.202012905084172,False,False,0,0,8,135,35,100,-15.089220247221192,-4.382427155859725
+ETHUSD,volatility_release_ratio2_mode-1_SL1_RR10,2.0,-1,1.0,10.0,0.7741120340235429,-12.831873445051977,-8.311456004625907,-4.930187833121369,False,False,1,0,9,143,37,106,-19.093500060114533,-5.701600309598631
