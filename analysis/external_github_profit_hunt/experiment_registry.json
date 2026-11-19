@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-19T00:56:39Z",
+  "last_updated_utc": "2026-11-19T00:57:41Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -564,6 +564,21 @@
         "Source lookahead and retroactive trailing defects corrected; not original execution"
       ],
       "verdict": "Neither asset reaches 12/22 high-PF months. ETH has modest modeled overall profit but negative median monthly return and only 8 high-PF months; does not warrant worth-checking alert."
+    }
+  ],
+  "data_integrity_updates": [
+    {
+      "id": "jan2025-ist-btc-eth-330m-authentic-delta-20261119",
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44433132624",
+      "artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44433132624/artifacts/14487038528",
+      "script": "scripts/fetch_missing_january_2025_delta_ist.py",
+      "status": "VALIDATED_SOURCE_DATA_NOT_YET_INTEGRATED_WITH_REPLAYS",
+      "period_utc": "2024-12-31T18:30:00Z to 2024-12-31T23:59:00Z",
+      "candles_each": 330,
+      "BTCUSD_sha256_gzip": "c2cef14aa6993ccf9ac1c9d8a14735ae86bf10e6077bcce3e60001bf62f3bc4f",
+      "ETHUSD_sha256_gzip": "a21f2df2d69d1c922f4d0110f529ac9e6f556ed394d4c8e588b4cb23b24e0faf",
+      "note": "Both assets fully contiguous authentic candles checked, but prior paired tests did NOT load these. Must integrate and prewarm indicators on authentic earlier history before claiming fully complete first IST month."
     }
   ]
 }
