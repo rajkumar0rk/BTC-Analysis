@@ -1,0 +1,45 @@
+name: Independent volume impact residual BTC first
+on:
+  push:
+    branches: [research/independent-volume-impact-residual-20261119-v1]
+    paths:
+      - scripts/independent_volume_impact_residual_v1.py
+      - .github/workflows/independent-volume-impact-residual-v1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-volume-impact-residual-v1
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/independent-volume-impact-residual-20261119-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba tabulate
+      - name: Audit BTC first and ETH secondary
+        run: python scripts/independent_volume_impact_residual_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-volume-impact-residual-v1
+          path: analysis/independent_volume_impact_residual_v1/
+          retention-days: 45
+      - name: Commit isolated research results
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/independent_volume_impact_residual_v1/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: archive volume impact residual BTC-first audit'
+            git fetch origin research/independent-volume-impact-residual-20261119-v1
+            git rebase origin/research/independent-volume-impact-residual-20261119-v1
+            git push origin HEAD:research/independent-volume-impact-residual-20261119-v1
+          fi
