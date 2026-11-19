@@ -1,0 +1,28 @@
+name: Verify missing January IST Delta candles
+on:
+  push:
+    branches: [feature/github-external-volpersistence-22m-20261118]
+    paths: [.github/workflows/verify-delta-january-2025-backfill.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas
+      - name: Authenticate continuity of missing January IST candles
+        run: python scripts/fetch_missing_january_2025_delta_ist.py
+      - name: Save source-validated backfill artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-authentic-missing-january-2025-ist
+          path: analysis/external_github_profit_hunt/january_2025_ist_backfill/*
+          retention-days: 30
+          if-no-files-found: warn
