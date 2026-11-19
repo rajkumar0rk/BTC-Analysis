@@ -87,7 +87,7 @@ def metrics(sym,model,asset,signal_threshold,mode,stopmult,rr):
     atr=tr.rolling(14,min_periods=14).mean()
     ret=np.log(b.close/prev)
     valid=(count==60)&signal.notna()&atr.notna()&(atr>0)&ret.notna()&(ret!=0)
-    ev=np.flatnonzero((valid&(persistence<=persistence_threshold)).to_numpy())
+    ev=np.flatnonzero((valid&(signal>=signal_threshold)).to_numpy())
     ix=asset.index.get_indexer(b.index[ev])
     keep=(ix>=0)&(ix<len(asset))
     ix=ix[keep];ev=ev[keep]
