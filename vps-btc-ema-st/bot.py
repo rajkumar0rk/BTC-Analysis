@@ -8,6 +8,7 @@ from datetime import datetime,timezone
 from pathlib import Path
 from delta import Delta,DeltaError
 from store import Store
+from audit import sync_fills,summarize_fills
 from signals import BAR_SECONDS,closed_bars,signal,indicators,quantize_stop,size_contracts,stop_safe
 
 def oid(prefix):
@@ -83,7 +84,7 @@ class Bot:
 
     def bar_snapshot(self):
         now=time.time()
-        start=int(now//BAR_SECONDS)*BAR_SECONDS-400*BAR_SECONDS
+        start=int((now-10)//BAR_SECONDS)*BAR_SECONDS-1000*BAR_SECONDS
         # Candle history usually timestamped by bar open; no live/partial bars.
         raw=self.delta.candles(start,int(now)+1)
         frame=closed_bars(raw,now)
@@ -356,9 +357,17 @@ class Bot:
         price,mark=self.public_snapshot()
         if self.cfg.trading:
             self.reconcile(mark)
+        if self.cfg.key and self.cfg.secret:
+            if time.time()-self.db.get("fills_last_poll",0)>60:
+                sync_fills(self.delta,self.db,self.pid,self.cfg.halt_on_liquidation)
+                self.db.set("fills_last_poll",time.time())
+                self.db.set("fill_attribution",summarize_fills(self.db.fills(),self.value))
+                self.db.set("exchange_equity_usd",wallet_equity(self.delta.wallet()))
+                if self.db.get("halted"):
+                    raise RuntimeError("Trading halted after exchange liquidation or fill audit")
         # Pull candles once per completed 15m bar, not 1m.
         last=self.db.get("processed_bar")
-        closed_ts=int(time.time()//BAR_SECONDS)*BAR_SECONDS-BAR_SECONDS
+        closed_ts=int((time.time()-10)//BAR_SECONDS)*BAR_SECONDS-BAR_SECONDS
         if last is None or closed_ts>last:
             frame=self.bar_snapshot()
             self.on_bar(frame,price,mark)
@@ -375,6 +384,8 @@ class Bot:
         if self.is_halted():raise RuntimeError("Halted state persisted; inspect and reset manually")
         if self.db.unresolved():
             self.halt("Unresolved order intents; manual reconciliation required")
+        if self.db.get("first_started_us") is None:
+            self.db.set("first_started_us",int(time.time()*1_000_000))
         self.configure_product()
         while True:
             try:self.tick_once()
