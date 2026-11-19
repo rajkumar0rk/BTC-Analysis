@@ -1,0 +1,36 @@
+{
+  "original_native_partition_sha256_verified_by_loader": true,
+  "sha256_manifest": {
+    "BTCUSD": "53bb09d9b406c0278d9d090012dfcf7c8099126b3b63f5f2a6996de6d7d7f1ec",
+    "ETHUSD": "3ebac667958a86a44e8b3fdd04e9b1614672d7d1b83ff95b1db951599f129f6a"
+  },
+  "months": 22,
+  "original_2025_ist_january_first_5h30m_missing": true,
+  "btc_repaired_october_checked_against_manifest": true,
+  "monthly_return": "mark to market account NAV at IST end of month; no month-end forced liquidation",
+  "monthly_profit_factor": "sum winning net-trade PnL / abs(sum losing net-trade PnL) for exits in month",
+  "full_year2025": "compounded sequential NAV Jan-Dec",
+  "year2026": "Jan-Oct YTD only",
+  "initial_equity_usd": 1000,
+  "one_position_at_time": true,
+  "risk_per_trade": 0.005,
+  "max_notional_leverage": 3,
+  "taker_fee_each_side": 0.0005,
+  "GST": 0.18,
+  "BTC_slip_points_each_side": 5,
+  "ETH_slip_fraction_each_side": 0.0002,
+  "sensitivity_double_slippage": true,
+  "stop_first_gap_aware_1m": true,
+  "no_new_entry_last_12h": true,
+  "lagged_48_hour_baseline": true,
+  "training": "single joint BTC+ETH 2025 selection, historically exposed 2026 fixed-parameter check",
+  "excluded_november_2026": true,
+  "omitted": [
+    "funding",
+    "real bid/ask spread",
+    "market impact",
+    "margin/liquidation",
+    "contract lots",
+    "live fills"
+  ]
+}

@@ -1,0 +1,9 @@
+model,strong5,strong10,positive,compounded_proxy
+cluster_x2.00_count3_cont,2,0,6,-34.90252343449847
+cluster_x2.50_count3_cont,0,0,9,-25.652938485469623
+cluster_x2.50_count4_cont,0,0,8,-10.239408371510573
+cluster_x2.50_count4_fade,0,0,6,-12.074509323650062
+cluster_x2.00_count4_cont,0,0,6,-29.339539021197425
+cluster_x2.50_count3_fade,0,0,6,-31.876299867648694
+cluster_x2.00_count4_fade,0,0,5,-26.81554525545672
+cluster_x2.00_count3_fade,0,0,3,-59.289666548122945

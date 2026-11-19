@@ -1,0 +1,3 @@
+market,model,extreme_multiplier,min_cluster_events,direction,slippage_multiplier,profit_factor,net_return_22m_pct,net_return_2025_pct,net_return_2026_jan_oct_pct,year2025_above_500pct,year2026_ytd_above_500pct,strong_pf1p5_return5_months,strong_pf1p5_return10_months,positive_months,trades,wins,losses,max_monthend_nav_drawdown_pct,worst_month_pct
+BTCUSD,cluster_x2.00_count3_cont,2.0,3.0,continuation,1.0,0.7832699424108955,-38.3358329753028,-26.88127704497315,-15.665694732353309,False,False,0,0,2,784,288,496,-38.3358329753028,-5.316515330943683
+ETHUSD,cluster_x2.00_count3_cont,2.0,3.0,continuation,1.0,0.8785150899441019,-25.397242350478912,-5.038374816682145,-21.439047082961316,False,False,2,0,7,789,304,485,-33.26266468407866,-7.021770079379641
