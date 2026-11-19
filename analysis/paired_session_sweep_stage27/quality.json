@@ -1,0 +1,307 @@
+{
+  "data": {
+    "BTCUSD": {
+      "symbol": "BTCUSD",
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-10-31 18:29:00+00:00",
+      "partition_SHA256": {
+        "2025-01.csv.gz": "5d0ebde1cc87acf5a099972ab26cd9e9e26d5964a2bc1b2a8e1fa17ca234bba0",
+        "2025-02.csv.gz": "0f50eed68eca54582d29104a32af94b66a0be4102ee7dd664dd139618303238d",
+        "2025-03.csv.gz": "04aca2d3944bbcc507f26d301d4ccee0dff06a8e8c56f929b4b31a5941ebaa69",
+        "2025-04.csv.gz": "5bd04594456dbde7943310201078cbf3169a9cb8a7cb6989d2f81b3ef6793b38",
+        "2025-05.csv.gz": "c9c670972b786ba16d6b8d8eb0acf15e6b1a517370b7ab090e1c0cc71b65df51",
+        "2025-06.csv.gz": "93956a2f915be5467f5dda779cd07b00d8f119db0d4b05b54000d52691cc8e78",
+        "2025-07.csv.gz": "11e969bb74b8f53c9ba208eb41e17b1ff4173a3bf2d5840dbe870f879e429c17",
+        "2025-08.csv.gz": "f5282ce351d5afab93b2397083e2aebe429dc80757deb2a03af8998f60e78db5",
+        "2025-09.csv.gz": "bbf4ad093093546242c69509fd6724cba2cdfa8636c7d3d191e2a313395cd2c9",
+        "2025-10.csv.gz": "641a837a6ee6ca45c57e2f00aeb645e98dfd4adee3361cf305a1d1198539285e",
+        "2025-11.csv.gz": "29ad16d3c65e386c23cdd523ae4fdc1c4f07f1db1a782b07c2d904e5f4e4a067",
+        "2025-12.csv.gz": "adc35407d4648dfc4a1bb64d1393a0fc69d2aa43914cce38e1ae8636f7b53f18",
+        "2026-01.csv.gz": "81bfe747c61384e1819889d7728bd1565adf2f37370320cb9b541e59259e5f6f",
+        "2026-02.csv.gz": "9f65468800bd92893d7aff4e1e6eb4079c8c9f92c5fc2166afe7b13817e3d2d0",
+        "2026-03.csv.gz": "2092dbd9ff56827ec98e52312d744b4a24b30e995323478d05ab0aed86392a51",
+        "2026-04.csv.gz": "ac949c3669ebe2e47eb2e59c98df6da60727a9fdf54274fd9df3a376c844ce36",
+        "2026-05.csv.gz": "6b66e854500a0edefebf0edb0c24cd218f4de009482e09980fe9041418a3dea8",
+        "2026-06.csv.gz": "b4e588d4ace8df0ca7a01d92ad2ccf39eba5a624d4c7eba3e658d330b90838e1",
+        "2026-07.csv.gz": "a41cf0ce175302dcf8da1ed629efb01fc9cbbbf83d2d8e4369cd3b1a9e7d8bd0",
+        "2026-08.csv.gz": "487592c47d21ff540ba574c11487eb7c1a62e7d498c930fe86e9efd19e9338e0",
+        "2026-09.csv.gz": "8625a04c80c029ef31abf39c66b0bdf58de38c06228178c5472a203301d071cb",
+        "2026-10.csv.gz": "118135c40c1ef97a325c85a6aace8ebe45de88cb723a4da624b4a4f5b31043e6",
+        "2026-11.csv.gz": "68cd70174cbfdb67433fa0d6886b8e03be85902dda3963cc8fdfb1e671802fa5"
+      },
+      "IST_months": {
+        "2025-01": {
+          "observed": 44310,
+          "expected": 44640,
+          "missing": 330
+        },
+        "2025-02": {
+          "observed": 40320,
+          "expected": 40320,
+          "missing": 0
+        },
+        "2025-03": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-04": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2025-05": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-06": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2025-07": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-08": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-09": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2025-10": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-11": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2025-12": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-01": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-02": {
+          "observed": 40320,
+          "expected": 40320,
+          "missing": 0
+        },
+        "2026-03": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-04": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2026-05": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-06": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2026-07": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-08": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-09": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2026-10": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        }
+      },
+      "initial_2025_IST_gap_minutes": 330,
+      "October_2026_UTC_archive_complete": true
+    },
+    "ETHUSD": {
+      "symbol": "ETHUSD",
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-10-31 18:29:00+00:00",
+      "partition_SHA256": {
+        "2025-01.csv.gz": "ec8b73a45e93258f11850cbb7b07913e26f1fdb623d7f9c18bbc637e219270cc",
+        "2025-02.csv.gz": "065233cc53e2ee19ce2c3f41c57e22d3b2dee9f91458b83b2072f4facadd4e1d",
+        "2025-03.csv.gz": "0d13ec3a042b2d2ce89763003876311f8f96bba1609f3edb6ff2b5480752f852",
+        "2025-04.csv.gz": "56bafdbbfd1968c15a3bd92157150141d3c97e13cf133541d6474106e308d9de",
+        "2025-05.csv.gz": "6034f38fa7ec4cc319af69bc9905cbb87a9aab796069d0a7d8c9cb8ae0cac855",
+        "2025-06.csv.gz": "6121275461d16465dd377c2337752e24bc4ca43190695ebda76c210e6c4907de",
+        "2025-07.csv.gz": "259616aad32315dce665ca47c0101c9e18b32352171c1a431de7ac31333dba8e",
+        "2025-08.csv.gz": "7f3605addb5e9d9c470d36d1f1adb42f6641f1b4ee1e94c60b63504837c264af",
+        "2025-09.csv.gz": "2bc385d896a639e4c45cf827bc6d8c8250bb0e77132bb3607ce8b04bc74d95ca",
+        "2025-10.csv.gz": "c9484143d69ce7bed794741753b5de56dca0415d842371e1c6f9068bb7b3ef18",
+        "2025-11.csv.gz": "e81025b5550c496463617158b046bb8a91d30cb3277614964eee844b5ab1c770",
+        "2025-12.csv.gz": "239546a1b57d78c4f6f046a7e425d38a7ea648e5a4923b0038ef639d10b713ef",
+        "2026-01.csv.gz": "949d680d39c19f554ab0d0eee5c90bd7b7e632051897651c8c7800db775e7a79",
+        "2026-02.csv.gz": "56734d2cbe9847e01d6441cb8e6a1d9266caa29849d96afe4a76bf46c461364b",
+        "2026-03.csv.gz": "1ede5a30ee76b051670c8e379dad6b409758ba7c4121bd066a6f70247ee145fd",
+        "2026-04.csv.gz": "fd1f0e4f5352bd55945c326e76d06692fc1f3e933e8e5ac85f769ac905df251c",
+        "2026-05.csv.gz": "e3ebe5d1731e84481692cbba5c10aaffc85a1b4cec9142bd9fcd498bd32151f9",
+        "2026-06.csv.gz": "40de88ecaa0125db6046d9306ecb4dbe8cdcb28993ae7adc49ee707ccc88b1db",
+        "2026-07.csv.gz": "fc47057f758b28b47062b162fe847825b9e1eb8219763f20372bcf5443076004",
+        "2026-08.csv.gz": "5e189c23f0ec164da952acc47189cd2d87491517e1128f7b3a0913ae087e84f0",
+        "2026-09.csv.gz": "610cad705b83daf22756fe4b7408078f0aadbcd24239bc6f0c46751b093198f4",
+        "2026-10.csv.gz": "246e8e1cbdae00a9832a69be3cc2a399fff764dec6822edbe867efae84db0d2b",
+        "2026-11.csv.gz": "2fa13ebf9d3219a5305f15ad982714c3ae3c2f96ae665ddd01157812dda05cf2"
+      },
+      "IST_months": {
+        "2025-01": {
+          "observed": 44310,
+          "expected": 44640,
+          "missing": 330
+        },
+        "2025-02": {
+          "observed": 40320,
+          "expected": 40320,
+          "missing": 0
+        },
+        "2025-03": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-04": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2025-05": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-06": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2025-07": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-08": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-09": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2025-10": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2025-11": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2025-12": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-01": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-02": {
+          "observed": 40320,
+          "expected": 40320,
+          "missing": 0
+        },
+        "2026-03": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-04": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2026-05": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-06": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2026-07": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-08": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        },
+        "2026-09": {
+          "observed": 43200,
+          "expected": 43200,
+          "missing": 0
+        },
+        "2026-10": {
+          "observed": 44640,
+          "expected": 44640,
+          "missing": 0
+        }
+      },
+      "initial_2025_IST_gap_minutes": 330,
+      "October_2026_UTC_archive_complete": true
+    }
+  },
+  "rule": "00:00-06:00 IST range, first 06:00-18:00 15m upper/lower wick sweep 0.1 ATR and close 0.1 ATR inside; enter next minute open fading sweep; stop 2 ATR; target 2R; timeout 12h; one position",
+  "risk_fraction": 0.005,
+  "leverage_cap": 3.0,
+  "fee_per_side": 0.0005,
+  "GST": 0.18,
+  "BTC_slip_per_side": 5,
+  "ETH_slip_fraction_per_side": 0.0002,
+  "limitations": [
+    "No actual funding cashflows",
+    "No historical order book/spread/impact",
+    "No contract minima or liquidation maintenance stress",
+    "2025 January first 330 IST minutes absent",
+    "2026 is not pristine out-of-sample",
+    "Single preset, no optimization"
+  ]
+}
