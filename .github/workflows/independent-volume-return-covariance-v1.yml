@@ -1,0 +1,45 @@
+name: Independent volume return covariance BTC first
+on:
+  push:
+    branches: [research/independent-volume-return-covariance-20261119-v1]
+    paths:
+      - scripts/independent_volume_return_covariance_v1.py
+      - .github/workflows/independent-volume-return-covariance-v1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-volume-return-covariance-v1
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/independent-volume-return-covariance-20261119-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba tabulate
+      - name: BTC discovery and frozen ETH validation
+        run: python scripts/independent_volume_return_covariance_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-volume-return-covariance-v1
+          path: analysis/independent_volume_return_covariance_v1/
+          retention-days: 45
+      - name: Commit isolated research results
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/independent_volume_return_covariance_v1/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: archive volume-return covariance paired audit'
+            git fetch origin research/independent-volume-return-covariance-20261119-v1
+            git rebase origin/research/independent-volume-return-covariance-20261119-v1
+            git push origin HEAD:research/independent-volume-return-covariance-20261119-v1
+          fi
