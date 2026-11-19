@@ -1,0 +1,3 @@
+market,model,total_net_pf,months_both_pf1p5_net10,months_both_pf1p5_net5,positive_months,negative_months,zero_months,year2025_full_net_pct,year2025_above500,year2026_jan_oct_net_pct,year2026_jan_oct_above500,net_return_22m_pct,max_sampled_equity_drawdown_pct,trades,wins,losses
+BTCUSD,B_fade,0.7119337216210669,1,1,3,19,0,-82.22599789896218,False,-72.49305141993239,False,-95.11091438144739,-96.19484160777638,1111,382,729
+ETHUSD,B_fade,0.7572798199056827,0,0,2,20,0,-71.62593206303937,False,-58.64914687034366,False,-88.26708084047851,-90.07052704547904,1067,367,700

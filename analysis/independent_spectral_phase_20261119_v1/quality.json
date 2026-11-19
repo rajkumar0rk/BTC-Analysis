@@ -1,0 +1,44 @@
+{
+  "source": "Original Delta India BTCUSD ETHUSD 1m original manifest hash verified per partition",
+  "source_sha256_file": "source_partition_sha256.csv",
+  "months": 22,
+  "calendar": "IST Jan2025 to Oct2026",
+  "missing_2025_Jan_IST_first_hours": 5.5,
+  "original_2026_Oct31_complete_both": true,
+  "November_2026_excluded": true,
+  "native_candles_per_market": {
+    "BTCUSD": 963360,
+    "ETHUSD": 963360
+  },
+  "timeframes": "30m completed spectral signals, next original 1m open and 1m stop-first replay",
+  "selection": "one identical config for BTC ETH selected using 2025 both-coin monthly scores; 2026 retrospective check only",
+  "initial_equity_usd_per_market": 1000.0,
+  "risk_per_stop_equity_pct": 1.0,
+  "max_leverage": 3.0,
+  "standard_taker_fee_each_side": 0.0005,
+  "fee_GST": 0.18,
+  "BTC_adverse_slippage_usd_points_each_side": 5.0,
+  "ETH_adverse_slippage_fraction_each_side": 0.0002,
+  "ETH_stress_slippage_fraction_each_side": 0.0004,
+  "months_NAV": "Month end mark-to-market using exit fee and slip estimate; positions persist",
+  "months_PF": "winning closed net-USD trade sums / abs(losing closed net-USD trade sums) by IST exit month",
+  "end_scope_note": "Open position at final October IST boundary marked in NAV, not forced flat; any November exit excluded from reported 22-month PF",
+  "sampled_drawdown_not_tick_path": true,
+  "costs_not_verified": [
+    "settled funding",
+    "bid/ask spread",
+    "market impact",
+    "margin/liquidation",
+    "lot-size constraints",
+    "actual execution latency"
+  ],
+  "historical_2026_not_pristine_OOS": true,
+  "previously_tested_comparators": [
+    "hourly autocorr",
+    "variance ratio",
+    "bipower variation",
+    "time-day volume",
+    "breakout/squeeze",
+    "return dispersion"
+  ]
+}

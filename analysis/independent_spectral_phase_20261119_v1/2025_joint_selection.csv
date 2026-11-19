@@ -1,0 +1,5 @@
+model,train_2025_strong5,train_2025_positive,train_2025_capped_month_sum
+B_fade,1,3,-254.84117444649453
+B_follow,0,10,-133.95322788973982
+A_fade,0,1,-375.89431764779323
+A_follow,0,1,-423.268283335437
