@@ -1,0 +1,49 @@
+name: Independent impulse dislocation follow-through asymmetric BTC ETH research
+on:
+  push:
+    branches: [research/impulse-dislocation-followthrough-20261119]
+    paths:
+      - scripts/research_impulse_dislocation_followthrough_20261119.py
+      - .github/workflows/research-impulse-dislocation-20261119.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-impulse-dislocation-20261119
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install numpy pandas numba tabulate
+      - name: Replay independent BTC ETH research
+        run: python -u scripts/research_impulse_dislocation_followthrough_20261119.py
+      - name: Upload complete result evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: independent-impulse-dislocation-20261119
+          path: analysis/impulse_dislocation_followthrough_20261119/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Commit compact results isolated branch ONLY
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/impulse_dislocation_followthrough_20261119/model_comparison.csv
+          git add analysis/impulse_dislocation_followthrough_20261119/qualifying_models.csv
+          git add analysis/impulse_dislocation_followthrough_20261119/promising_exploratory_models.csv
+          git add analysis/impulse_dislocation_followthrough_20261119/candidate_concentration.csv
+          git add analysis/impulse_dislocation_followthrough_20261119/candidate_monthly_pf.csv
+          git add analysis/impulse_dislocation_followthrough_20261119/candidate_trade_ledger.csv
+          git add analysis/impulse_dislocation_followthrough_20261119/quality.json
+          git add analysis/impulse_dislocation_followthrough_20261119/RESEARCH_REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: store independent asymmetric strategy test summary"
+            git push origin HEAD:research/impulse-dislocation-followthrough-20261119
+          fi
