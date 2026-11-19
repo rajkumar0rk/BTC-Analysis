@@ -1,7 +1,7 @@
 {
   "goal": "Primary: high MONTHLY after-cost PF and monthly equity returns in >=12/22 IST months on BTC or ETH; secondary: >500% verified 2025 full-year return; discretionary worth-checking research leads with robust paired evidence",
   "experiment_registry_version": 1,
-  "last_updated_utc": "2026-11-19T00:57:41Z",
+  "last_updated_utc": "2026-11-19T02:28:00Z",
   "experiments": [
     {
       "id": "external-volatility-persistence-ny-fix-20261118",
@@ -574,14 +574,44 @@
       "script": "scripts/replay_external_volsystem_3h_paired.py",
       "workflow": ".github/workflows/external-volsystem-3h-paired-20261119.yml",
       "action_run": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44436606332",
-      "status": "RUNNING_NOT_YET_VERIFIED",
+      "status": "COMPLETED_DIAGNOSTIC_REJECTED_MONTHLY",
       "deviations": [
         "Causal completed 3h bars",
         "3ATR stop added to bound source's unlimited loss",
         "1x gross exposure, no source adds",
         "Taker GST slippage, 1m stop-first",
         "Historical January IST missing 330m not yet merged; actual funding absent"
-      ]
+      ],
+      "artifact": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44436606332/artifacts/14488038563",
+      "BTCUSD": {
+        "trades": 68,
+        "wins": 24,
+        "losses": 44,
+        "high_pf_months": 7,
+        "positive_months": 13,
+        "negative_months": 9,
+        "net_22m_pct": 7.6380394429,
+        "net_2025_pct": 3.8750368415,
+        "net_2026_ytd_pct": 3.6226245649,
+        "aggregate_pf": 1.0373543837,
+        "max_month_end_dd_pct": 31.9920878357,
+        "median_monthly_net_pct": 2.4470874095
+      },
+      "ETHUSD": {
+        "trades": 67,
+        "wins": 21,
+        "losses": 46,
+        "high_pf_months": 6,
+        "positive_months": 10,
+        "negative_months": 12,
+        "net_22m_pct": 32.7892519174,
+        "net_2025_pct": 34.3885730605,
+        "net_2026_ytd_pct": -1.1900722708,
+        "aggregate_pf": 1.135781504,
+        "max_month_end_dd_pct": 31.0289269131,
+        "median_monthly_net_pct": -0.9437550092
+      },
+      "verdict": "Reject for monthly high PF and not worth checking: BTC 7/22, ETH 6/22 high PF positive months, ~31-32% month-end DD, 3ATR protective stop is research deviation, missing first Jan IST 330m and funding; positive 22m returns not enough."
     }
   ],
   "data_integrity_updates": [
