@@ -1,0 +1,45 @@
+name: Independent BTC ETH variance term structure audit
+on:
+  push:
+    branches: [research/independent-variance-term-structure-20261119-v1]
+    paths:
+      - scripts/independent_variance_term_structure_v1.py
+      - .github/workflows/independent-variance-term-structure-v1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-variance-term-structure-v1
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/independent-variance-term-structure-20261119-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba tabulate
+      - name: Replay original native BTC ETH 1m markets
+        run: python scripts/independent_variance_term_structure_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-variance-term-structure-v1
+          path: analysis/independent_variance_term_structure_v1/
+          retention-days: 45
+      - name: Commit isolated research results
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/independent_variance_term_structure_v1/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: archive variance term structure monthly audit'
+            git fetch origin research/independent-variance-term-structure-20261119-v1
+            git rebase origin/research/independent-variance-term-structure-20261119-v1
+            git push origin HEAD:research/independent-variance-term-structure-20261119-v1
+          fi
