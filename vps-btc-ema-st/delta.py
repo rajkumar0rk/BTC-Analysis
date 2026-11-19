@@ -29,7 +29,9 @@ class Delta:
             if r.status_code>=400:
                 raise DeltaError("HTTP "+str(r.status_code)+" "+r.text[:320])
             data=r.json()
-            if not isinstance(data,dict) or data.get("success") is not True:
+            if not isinstance(data,dict):
+                raise DeltaError("Malformed Delta API response (expected object)")
+            if data.get("success") is not True:
                 raise DeltaError("API rejected request: "+str(data.get("error",data))[:320])
             return data if envelope else data.get("result",data)
         except requests.RequestException as e:
