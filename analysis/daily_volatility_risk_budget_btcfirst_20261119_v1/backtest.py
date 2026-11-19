@@ -19,13 +19,13 @@ def load(sym):
  if x.index.has_duplicates or x.isna().any().any() or (x[["open","high","low","close"]]<=0).any().any() or (x.high<x[["open","close","low"]].max(axis=1)).any() or (x.low>x[["open","close","high"]].min(axis=1)).any():raise RuntimeError("INVALID_OHLC")
  return x,hashes
 def execute(sym,cost):
- x,hashes=load(sym);rows=[];trades=[]
+ x,hashes=load(sym);rows=[];trades=[];nav=1.0;peak=1.0
  dates=pd.date_range("2025-01-01","2026-11-17",freq="D",tz="UTC")
  for d in dates:
   status="no_trade";reason="filter";gross=net=0.;direction=0;cv=np.nan;rvprev=np.nan;entry=np.nan;exitp=np.nan
   prior=pd.date_range(d-pd.Timedelta(days=7),d-pd.Timedelta(minutes=1),freq="min")
   future=pd.date_range(d+pd.Timedelta(minutes=1),d+pd.Timedelta(hours=4),freq="min")
-  if not prior.isin(x.index).all() or not future.isin(x.index).all():
+  if not (len(x.loc[d-pd.Timedelta(days=7):d-pd.Timedelta(minutes=1)])==10080 and len(x.loc[d+pd.Timedelta(minutes=1):d+pd.Timedelta(hours=4)])==240):
    status="data_gap";reason="missing_window"
   else:
    p=x.loc[prior];f=x.loc[future]
@@ -45,10 +45,11 @@ def execute(sym,cost):
      if (b.high>=target if direction>0 else b.low<=target):
       exitp=target;reason="target";break
     # 25% notional of initial equity; no leverage, noncompounded
-    gross=.25*direction*(exitp/entry-1)*100;net=gross-.25*cost*100
+    gross=nav*.25*direction*(exitp/entry-1);net=gross-nav*.25*cost;nav+=net
     status="profit" if net>0 else "loss"
-    trades.append(dict(market=sym,date=str(d.date()),direction=direction,entry=entry,exit=exitp,exit_reason=reason,cv=cv,previous_rv=rvprev,gross_account_pct=gross,net_account_pct=net,cost_roundtrip_pct=cost*100))
-  rows.append(dict(market=sym,date=str(d.date()),year=d.year,month=d.strftime("%Y-%m"),status=status,reason=reason,net_account_pct=net,gross_account_pct=gross,direction=direction,cv=cv,previous_rv=rvprev))
+    trades.append(dict(market=sym,date=str(d.date()),entry_utc=(d+pd.Timedelta(minutes=1)).isoformat(),direction=direction,entry=entry,exit=exitp,exit_reason=reason,cv=cv,previous_rv=rvprev,gross_pnl=gross,net_pnl=net,cost_roundtrip_pct=cost*100))
+  peak=max(peak,nav)
+  rows.append(dict(market=sym,date=str(d.date()),year=d.year,month=d.strftime("%Y-%m"),status=status,reason=reason,net_pnl=net,gross_pnl=gross,nav_end=nav,drawdown_pct=100*(peak-nav)/peak,direction=direction,cv=cv,previous_rv=rvprev))
  return pd.DataFrame(rows),pd.DataFrame(trades),hashes
 def main():
  all_d=[];all_t=[];monthly=[];annual=[];provenance=[]
@@ -58,11 +59,12 @@ def main():
    all_d.append(d);all_t.append(t)
    if scenario=="base":provenance.append({"market":sym,"files":h})
    for (year,month),g in d.groupby(["year","month"]):
-    wins=g.loc[g.net_account_pct>0,"net_account_pct"].sum();loss=-g.loc[g.net_account_pct<0,"net_account_pct"].sum()
-    monthly.append(dict(market=sym,scenario=scenario,year=year,month=month,net_account_pct=g.net_account_pct.sum(),pf=wins/loss if loss else None,profit_days=int((g.status=="profit").sum()),loss_days=int((g.status=="loss").sum()),no_trade_days=int((g.status=="no_trade").sum()),data_gap_days=int((g.status=="data_gap").sum())))
+    closed=t.loc[t.date.str[:7]==g.date.iloc[0][:7]] if not t.empty else pd.DataFrame()
+    wins=closed.loc[closed.net_pnl>0,"net_pnl"].sum() if not closed.empty else 0;loss=-closed.loc[closed.net_pnl<0,"net_pnl"].sum() if not closed.empty else 0
+    monthly.append(dict(market=sym,scenario=scenario,year=year,month=month,net_account_pct=100*(g.nav_end.iloc[-1]/(g.nav_end.iloc[0]-g.net_pnl.iloc[0])-1),pf=wins/loss if loss else ("Infinity" if wins else None),profit_days=int((g.status=="profit").sum()),loss_days=int((g.status=="loss").sum()),no_trade_days=int((g.status=="no_trade").sum()),data_gap_days=int((g.status=="data_gap").sum())))
    for year,g in d.groupby("year"):
-    v=g.net_account_pct.to_numpy();curve=np.r_[0,v.cumsum()];wins=v[v>0].sum();loss=-v[v<0].sum()
-    annual.append(dict(market=sym,scenario=scenario,year=year,net_account_pct=v.sum(),pf=wins/loss if loss else None,trades=int(g.status.isin(["profit","loss"]).sum()),profitable_days=int((g.status=="profit").sum()),losing_days=int((g.status=="loss").sum()),no_trade_days=int((g.status=="no_trade").sum()),data_gap_days=int((g.status=="data_gap").sum()),max_daily_equity_drawdown_pct=float((np.maximum.accumulate(curve)-curve).max()),mean_day_pct=v.mean(),median_day_pct=np.median(v),worst_day_pct=v.min()))
+    v=g.net_pnl.to_numpy();curve=g.nav_end.to_numpy();closed=t.loc[t.date.str[:4]==str(year)] if not t.empty else pd.DataFrame();wins=closed.loc[closed.net_pnl>0,"net_pnl"].sum() if not closed.empty else 0;loss=-closed.loc[closed.net_pnl<0,"net_pnl"].sum() if not closed.empty else 0
+    annual.append(dict(market=sym,scenario=scenario,year=year,net_account_pct=100*(g.nav_end.iloc[-1]/(g.nav_end.iloc[0]-g.net_pnl.iloc[0])-1),pf=wins/loss if loss else ("Infinity" if wins else None),trades=int(g.status.isin(["profit","loss"]).sum()),profitable_days=int((g.status=="profit").sum()),losing_days=int((g.status=="loss").sum()),no_trade_days=int((g.status=="no_trade").sum()),data_gap_days=int((g.status=="data_gap").sum()),max_daily_equity_drawdown_pct=float(g.drawdown_pct.max()),mean_day_pct=v.mean(),median_day_pct=np.median(v),worst_day_pct=v.min()))
  pd.concat(all_d).to_csv(OUT/"daily.csv",index=False)
  pd.concat(all_t).to_csv(OUT/"trades.csv",index=False)
  pd.DataFrame(monthly).to_csv(OUT/"monthly.csv",index=False)
