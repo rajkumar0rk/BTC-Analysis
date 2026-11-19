@@ -1,0 +1,26 @@
+name: BTC-first weekend inventory-unwind research 20261119
+on:
+  push:
+    branches:
+      - research/daily-weekend-liquidity-reversal-btcfirst-20261119-v1
+    paths:
+      - scripts/research_daily_weekend_inventory_20261119.py
+      - .github/workflows/daily-weekend-inventory-20261119.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy
+      - run: python scripts/research_daily_weekend_inventory_20261119.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daily-weekend-inventory-btcfirst-results
+          path: analysis/daily_weekend_inventory_20261119/
