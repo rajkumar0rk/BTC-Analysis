@@ -9,7 +9,7 @@ class Delta:
     def __init__(self,config):
         self.conf=config
         self.session=requests.Session()
-        self.session.headers.update({"Accept":"application/json","User-Agent":"btc-ema-st-vps/1.0"})
+        self.session.headers.update({"Accept":"application/json","User-Agent":"ema-st-btc-eth-vps/2.0"})
     def request(self,method,path,params=None,body=None,auth=False,envelope=False):
         query=("?"+urlencode(list(params.items()))) if params else ""
         payload=json.dumps(body,ensure_ascii=False,separators=(",",":")) if body is not None else ""
@@ -43,6 +43,18 @@ class Delta:
     def candles(self,start,end,symbol="BTCUSD",resolution="15m"):
         return self.request("GET","/v2/history/candles",
                             {"resolution":resolution,"symbol":symbol,"start":int(start),"end":int(end)})
+    def option_chain(self,asset):
+        if asset not in ("BTC","ETH"):raise ValueError("Unsupported underlying")
+        result=self.request("GET","/v2/tickers",
+             {"contract_types":"call_options,put_options",
+              "underlying_asset_symbols":asset})
+        if not isinstance(result,list):
+            raise DeltaError("Option chain endpoint did not return ticker list")
+        return result
+    def option_product(self,symbol):
+        if not (symbol.startswith("C-") or symbol.startswith("P-")):
+            raise ValueError("Invalid option symbol")
+        return self.product(symbol)
     def position(self,product_id):
         return self.request("GET","/v2/positions",{"product_id":int(product_id)},auth=True)
     def wallet(self):
