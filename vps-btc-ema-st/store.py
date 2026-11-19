@@ -55,7 +55,7 @@ class Store:
         rows=self.db.execute("SELECT * FROM events ORDER BY id DESC LIMIT ?",(min(300,int(limit)),)).fetchall()
         return [dict(time_utc=r["time_utc"],level=r["level"],kind=r["kind"],data=json.loads(r["data_json"])) for r in rows]
     def add_fills(self,records):
-        count=0
+        inserted_ids=[]
         with self.db:
             for row in records:
                 meta=row.get("meta_data") or {}
@@ -67,8 +67,8 @@ class Store:
                     float(row["size"]),float(row["price"]),float(row.get("commission") or 0),
                     liquidation,str(row.get("fill_type") or ""),
                     json.dumps(row,separators=(",",":"),default=str)))
-                count+=max(0,cur.rowcount)
-        return count
+                if cur.rowcount:inserted_ids.append(str(row["id"]))
+        return inserted_ids
     def fills(self):
         return [dict(r) for r in self.db.execute(
             "SELECT * FROM exchange_fills ORDER BY created_at,fill_id").fetchall()]
