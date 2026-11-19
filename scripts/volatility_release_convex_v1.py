@@ -159,14 +159,14 @@ def main():
       months_nav="Mark-to-market at IST calendar month boundary, open trades retained; monthly PF based on exits",
       missing_first_ist_2025_hours=5.5,excluded_november_2026=True,
       unmodeled=["funding","real order-book spread","market impact","margin/liquidation","lot constraints","live fills"],
-      caveat="VWAP-TWAP dislocation is observable, but does not prove institutional flow or aggressive side; 2026 research-exposed")
+      caveat="Range-release signal is not evidence of forced institutional execution; 2026 historical data are research-exposed")
     (OUT/"quality.json").write_text(json.dumps(quality,indent=2)+"\n")
-    report=["# Native intrahour VWAP-TWAP dislocation paired BTC/ETH audit","",
-      "Predeclared absolute difference between hourly volume-weighted typical price and equal-time typical price >=0.08/0.16 of completed hourly ATR; enter next 1m open with either same-hour direction or opposite, 1m stop-first ATR exits.",
+    report=["# BTC-first volatility compression and exceptional range release","",
+      "Predeclared 1h range >=2x preceding 168h median, with preceding 6h median <=75% of same baseline. Enter next 1m open in release direction or inverted placebo. Stop 1x completed ATR, fixed 10R target, max 12h hold; stop-first intrabar ordering.",
       "Same rule on both native instruments. No month-end liquidation. BTC-only 2025 parameter selection; identical frozen rules evaluated on ETH; 2026 historical validation.","",
       "## Complete summary","",summary.to_markdown(index=False),"",
       "## Monthly results","",months.to_markdown(index=False),"",
       "## Execution limitations","",json.dumps(quality,indent=2)]
     (OUT/"RESEARCH_REPORT.md").write_text("\n".join(report)+"\n")
-    print("VWAP_TWAP_DISLOCATION_AUDIT_COMPLETE",summary.to_json(orient="records"),flush=True)
+    print("VOLATILITY_RELEASE_AUDIT_COMPLETE",summary.to_json(orient="records"),flush=True)
 if __name__=="__main__":main()
