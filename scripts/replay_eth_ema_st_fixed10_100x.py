@@ -4,7 +4,7 @@
 Reuse identical 15m historical signal and trailing replay functions from
 the preceding BTC-Analysis research branch. Fixed *margin*, NOT fixed notional:
 a $10 margin budget at 100x gives <= $1000 ETHUSD notional, quantized down
-to 0.001 BTC lots. Fee charges are in addition to this margin budget.
+to 0.01 ETH lots. Fee charges are in addition to this margin budget.
 
 No extra capital is automatically allocated to the isolated position. On a
 liquidation the isolated loss is capped at the margin posted, except for the
@@ -16,11 +16,14 @@ is an illustrative scenario, not an accurate historical liquidation replay.
 from pathlib import Path
 import math
 import json
+import hashlib
 import numpy as np
 import pandas as pd
 from replay_btc_ema_st_screenshot import indicators
 from replay_btc_ema_st_100x import fee_net
 
+ROOT=Path(__file__).resolve().parent.parent
+DATA=ROOT/'data/delta_india/ETHUSD/1m'
 OUT=Path("analysis/eth_ema_st_fixed10_100x_20261120")
 OUT.mkdir(parents=True, exist_ok=True)
 STARTING_EQUITY_USD=100.0
@@ -45,8 +48,8 @@ PARAMS={
   "fixed_isolated_margin_budget_usd_per_trade": PER_TRADE_MARGIN_BUDGET_USD,
   "maximum_position_notional_usd": PER_TRADE_MARGIN_BUDGET_USD*SELECTED_LEVERAGE,
   "leverage":SELECTED_LEVERAGE,
-  "lot_size_btc":LOT_ETH,
-  "btc_usd_tick_size":0.5,
+  "lot_size_eth":LOT_ETH,
+  "eth_usd_tick_size":0.05,
   "maintenance_margin_rate_assumed":MAINTENANCE_FRACTION,
   "scalper_fee_waiver_window_minutes_assumed":SCALPER_WINDOW_MINUTES,
   "taker_fee_pct_each_side":0.05,
@@ -71,6 +74,7 @@ PARAMS={
 
 def load_eth():
  m=json.loads((DATA/'manifest.json').read_text())
+ assert m.get('symbol')=='ETHUSD' and m.get('resolution')=='1m'
  frames=[];n=0
  for p in m['partitions']:
   path=DATA/p['file']
