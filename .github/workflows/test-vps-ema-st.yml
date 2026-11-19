@@ -1,0 +1,40 @@
+name: BTC EMA ST VPS app offline validation
+on:
+  push:
+    branches: ['feature/vps-ema-st-demo-live-app']
+    paths:
+      - 'vps-btc-ema-st/**'
+      - '.github/workflows/test-vps-ema-st.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install mini app dependencies
+        run: python -m pip install -r vps-btc-ema-st/requirements.txt
+      - name: Compile Python modules
+        run: python -m compileall -q vps-btc-ema-st
+      - name: Offline risk, API signing, storage and guard tests
+        working-directory: vps-btc-ema-st
+        run: python -m pytest -q tests/
+      - name: Verify existing reproducible 100 USD portfolio / 10 USD margin historical artifacts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("analysis/btc_ema_st_fixed_10_margin_20261119/summary.json")
+          assert p.exists(),f"Research outputs not committed to current branch: {p}"
+          a=json.loads(p.read_text())
+          assert a["settings"]["portfolio_initial_equity_usd"]==100
+          assert a["settings"]["fixed_isolated_margin_budget_usd_per_trade"]==10
+          assert a["settings"]["leverage"]==100
+          assert a["all_history_threshold"]["completed_trades"]>=900
+          print("Verified saved research outputs")
+          PY
