@@ -1,0 +1,51 @@
+"""One SQLite writer (bot) and multiple read-only dashboard connections."""
+import json,sqlite3,time
+from pathlib import Path
+
+class Store:
+    def __init__(self,directory):
+        Path(directory).mkdir(parents=True,exist_ok=True)
+        self.path=Path(directory)/"bot.sqlite3"
+        self.db=sqlite3.connect(self.path,timeout=15)
+        self.db.row_factory=sqlite3.Row
+        self.db.execute("PRAGMA journal_mode=WAL")
+        self.db.execute("PRAGMA busy_timeout=10000")
+        self.db.executescript("""
+            CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY,value TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS events (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              time_utc TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+              level TEXT NOT NULL,kind TEXT NOT NULL,data_json TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS intents (
+              client_id TEXT PRIMARY KEY,action TEXT NOT NULL,
+              status TEXT NOT NULL,created_at INTEGER NOT NULL,
+              payload_json TEXT NOT NULL
+            );
+        """)
+        self.db.commit()
+    def get(self,key,default=None):
+        row=self.db.execute("SELECT value FROM kv WHERE key=?",(key,)).fetchone()
+        return json.loads(row["value"]) if row else default
+    def set(self,key,value):
+        with self.db:
+            self.db.execute("INSERT INTO kv VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                            (key,json.dumps(value,separators=(",",":"),default=str)))
+    def event(self,level,kind,**data):
+        with self.db:
+            self.db.execute("INSERT INTO events(level,kind,data_json) VALUES(?,?,?)",
+                            (level,kind,json.dumps(data,separators=(",",":"),default=str)))
+    def intent(self,oid,action,payload):
+        with self.db:
+            self.db.execute("INSERT INTO intents VALUES (?,?,?,?,?)",
+                            (oid,action,"submitted_or_unknown",int(time.time()),json.dumps(payload)))
+    def intent_status(self,oid,status):
+        with self.db:
+            self.db.execute("UPDATE intents SET status=? WHERE client_id=?",(status,oid))
+    def unresolved(self):
+        return [dict(row) for row in self.db.execute(
+            "SELECT * FROM intents WHERE status='submitted_or_unknown' ORDER BY created_at DESC").fetchall()]
+    def latest_events(self,limit=100):
+        rows=self.db.execute("SELECT * FROM events ORDER BY id DESC LIMIT ?",(min(300,int(limit)),)).fetchall()
+        return [dict(time_utc=r["time_utc"],level=r["level"],kind=r["kind"],data=json.loads(r["data_json"])) for r in rows]
+    def close(self):self.db.close()
