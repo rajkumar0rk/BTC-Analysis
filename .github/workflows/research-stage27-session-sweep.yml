@@ -1,0 +1,38 @@
+name: stage27 paired Asian liquidity sweep
+on:
+  push:
+    branches:
+      - research/paired-session-sweep-stage27-20261119
+    paths:
+      - scripts/research_paired_session_sweep_stage27.py
+      - .github/workflows/research-stage27-session-sweep.yml
+permissions:
+  contents: write
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Native paired session sweep test
+        run: python scripts/research_paired_session_sweep_stage27.py
+      - name: Preserve original evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage27-paired-session-sweep
+          path: analysis/paired_session_sweep_stage27/
+          if-no-files-found: warn
+      - name: Commit isolated evidence
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/paired_session_sweep_stage27/
+          git commit -m 'Preserve Stage27 native paired backtest ledgers and monthly evidence' || true
+          git push
