@@ -3,7 +3,7 @@
 Usage: python analysis/daily_volatility_risk_budget_btcfirst_20261119_v1/audit_archive.py BTC.csv ETH.csv
 This is a data eligibility check, NOT a profitable-strategy backtest.
 """
-import csv, hashlib, json, sys
+import csv, gzip, hashlib, json, sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -22,7 +22,7 @@ def audit(path):
     p=Path(path); digest=hashlib.sha256(); seen=set(); days=Counter(); gaps=0; duplicates=0; reversed_rows=0; invalid=0; prev=None; n=0
     with p.open("rb") as f:
         for chunk in iter(lambda:f.read(1024*1024),b""): digest.update(chunk)
-    with p.open(newline="") as f:
+    with (gzip.open(p,"rt",newline="") if p.suffix==".gz" else p.open(newline="")) as f:
         reader=csv.DictReader(f)
         names={k.lower().strip():k for k in (reader.fieldnames or [])}
         tcol=next((names[x] for x in ("timestamp","time","datetime","start","open_time","unix") if x in names),None)
