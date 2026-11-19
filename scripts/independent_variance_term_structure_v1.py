@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Independent paired historical test; no live orders.
 """Native BTC/ETH short-vs-long realized volatility term structure, audited 22 IST months."""
 import sys, json, hashlib
 from pathlib import Path
