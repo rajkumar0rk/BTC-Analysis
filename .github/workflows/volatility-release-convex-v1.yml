@@ -1,0 +1,42 @@
+name: Independent BTC-first volatility release convexity
+on:
+  push:
+    branches: [research/volatility-release-convex-btcfirst-20261119-1405]
+    paths:
+      - scripts/volatility_release_convex_v1.py
+      - .github/workflows/volatility-release-convex-v1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/volatility-release-convex-btcfirst-20261119-1405
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba tabulate
+      - name: BTC selection and frozen ETH validation
+        run: python scripts/volatility_release_convex_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: volatility-release-convex-v1
+          path: analysis/volatility_release_convex_v1/
+          retention-days: 45
+      - name: Archive isolated evidence
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/volatility_release_convex_v1/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: archive BTC-first volatility-release evidence'
+            git fetch origin research/volatility-release-convex-btcfirst-20261119-1405
+            git rebase origin/research/volatility-release-convex-btcfirst-20261119-1405
+            git push origin HEAD:research/volatility-release-convex-btcfirst-20261119-1405
+          fi
