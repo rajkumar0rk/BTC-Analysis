@@ -250,7 +250,7 @@ def monthly(z,first,last):
             "fees_and_gst_usd":round(float((
                  g.entry_fee_usd+g.entry_gst_usd+g.exit_fee_usd+g.exit_gst_usd+
                  g.liquidation_penalty_usd+g.liquidation_penalty_gst_usd).sum()),4) if trades else 0,
-            "complete_month":key<="2026-10"
+            "complete_month":(key<="2026-10" and (first!="2026-08" or key>="2026-09"))
         })
         previous=end
     return pd.DataFrame(rows)
