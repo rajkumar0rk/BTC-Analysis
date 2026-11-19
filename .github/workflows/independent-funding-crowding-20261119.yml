@@ -1,0 +1,26 @@
+name: Independent funding crowding falsification 20261119
+on:
+  push:
+    branches:
+      - research/funding-crowding-convex-20261119-0950
+    paths:
+      - '.github/workflows/independent-funding-crowding-20261119.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas numpy
+      - run: python scripts/independent_funding_crowding_20261119.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-funding-crowding-results
+          path: analysis/independent_funding_crowding_20261119/
