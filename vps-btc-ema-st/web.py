@@ -93,6 +93,12 @@ select{background:#192a3e;color:var(--text);border:1px solid var(--line);padding
 <div class="card"><div class="metric-label">Margin per trade</div><div class="metric" id="margin">$10</div><div class="small muted">Fixed isolated budget</div></div>
 <div class="card"><div class="metric-label">Selected leverage</div><div class="metric" id="leverage">100×</div><div class="small muted">Only if orders enabled</div></div>
 </div>
+<div class="grid">
+<div class="card"><div class="metric-label">Exchange wallet equity</div><div class="metric" id="wallet-equity">—</div><div class="small muted">Authenticated Delta balance</div></div>
+<div class="card"><div class="metric-label">Estimated realized net from fills</div><div class="metric" id="fill-net">—</div><div class="small muted">After reported fee + assumed GST, before funding</div></div>
+<div class="card"><div class="metric-label">Verified exchange fills</div><div class="metric" id="fill-count">—</div><div class="small muted" id="fill-updated">Waiting for keys / sync</div></div>
+<div class="card"><div class="metric-label">Exchange liquidation fills</div><div class="metric" id="fill-liquidations">—</div><div class="small muted">From authenticated fill types</div></div>
+</div>
 <div class="split"><div class="card"><h2>Bot status</h2>
 <div class="line"><span class="muted">Trading status</span><strong id="trading-state">—</strong></div>
 <div class="line"><span class="muted">Latest completed candle</span><strong id="candle">—</strong></div>
@@ -156,6 +162,11 @@ async function refresh(){
  cls("orders",s.trading?"ORDERS ENABLED":"READ-ONLY",s.trading?"warn":"good");
  setText("lastprice",money(s.ticker&&s.ticker.last,1));setText("markprice",money(s.ticker&&s.ticker.mark,1));
  setText("margin",money(s.margin));setText("leverage",val(s.leverage)+"×");setText("budget",money(s.portfolio_budget));
+ const f=s.fill_attribution;setText("wallet-equity",money(s.exchange_equity_usd));
+ setText("fill-net",f?money(f.estimated_net_before_funding_usd):"—");
+ setText("fill-count",f?val(f.fills):"—");
+ setText("fill-liquidations",f?val(f.liquidation_fills):"—");
+ setText("fill-updated",s.fills_synced_at?"Synced "+s.fills_synced_at:"Waiting for keys / sync");
  setText("trading-state",s.halted?"HALTED":s.trading?"ENABLED":"SIGNAL ONLY");
  setText("candle",val(s.last_candle));setText("signal",s.signal?s.signal.side.toUpperCase():"—");
  setText("heartbeat",s.heartbeat_age_seconds==null?"—":s.heartbeat_age_seconds+" seconds");
