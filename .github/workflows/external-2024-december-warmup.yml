@@ -1,0 +1,28 @@
+name: Validate authentic December 2024 BTC ETH indicator warmup
+on:
+  push:
+    branches: [feature/github-external-volpersistence-22m-20261118]
+    paths: [.github/workflows/external-2024-december-warmup.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  delta-authentic-prewarm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas
+      - name: Download and validate complete 2024 December 1m candles
+        run: python scripts/fetch_external_2024_december_warmup.py
+      - name: Save source-verified BTC ETH data and manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: delta-btc-eth-authentic-december-2024-prewarm
+          path: analysis/external_github_profit_hunt/december_2024_warmup/*
+          retention-days: 30
+          if-no-files-found: warn
