@@ -1,0 +1,47 @@
+name: ETHUSD EMA-ST $100 wallet $10 margin 100x historical replay
+on:
+  push:
+    branches: ['research/eth-ema-st-fixed10-100x-20261120']
+    paths:
+      - 'scripts/replay_eth_ema_st_fixed10_100x.py'
+      - '.github/workflows/replay-eth-ema-st-fixed10-100x.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-ema-st-fixed10-100x
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas
+      - name: Compile ETH replay and run
+        run: |
+          python -m py_compile scripts/replay_eth_ema_st_fixed10_100x.py
+          python scripts/replay_eth_ema_st_fixed10_100x.py
+      - name: Upload ETH monthly and trade results
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-ema-st-100x-fixed10-results
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            analysis/eth_ema_st_fixed10_100x_20261120/*.json
+            analysis/eth_ema_st_fixed10_100x_20261120/*.csv
+            analysis/eth_ema_st_fixed10_100x_20261120/*.csv.gz
+      - name: Record reproducible results on ETH research branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_ema_st_fixed10_100x_20261120
+          if ! git diff --cached --quiet; then
+            git commit -m "research(eth): record full and recent EMA/ST fee/guard scenarios"
+            git push origin HEAD:research/eth-ema-st-fixed10-100x-20261120
+          fi
