@@ -1,0 +1,36 @@
+name: Independent OI premium crowding fade 20261119
+on:
+  push:
+    branches:
+      - research/daily-oi-premium-pressure-20261119-v1
+    paths:
+      - '.github/workflows/daily-oi-premium-pressure-20261119-v1.yml'
+      - 'scripts/research_daily_oi_premium_pressure_20261119_v1.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas tabulate
+      - run: python scripts/research_daily_oi_premium_pressure_20261119_v1.py
+      - name: Commit isolated research evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/daily_oi_premium_pressure_20261119_v1/
+          git diff --cached --quiet || (git commit -m "Record OI premium pressure research results" && git push)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: oi-premium-pressure-evidence
+          path: analysis/daily_oi_premium_pressure_20261119_v1/
+          if-no-files-found: ignore
