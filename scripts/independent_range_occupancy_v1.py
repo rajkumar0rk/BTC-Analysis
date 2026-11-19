@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Independent paired historical test; no live orders. Source validator vendored. Push-triggered workflow.
+# Independent paired historical test; no live orders. Source validator vendored.
+# Workflow push trigger: standalone experiment, BTC-only discovery. Push-triggered workflow.
 """Native BTC/ETH lagged-volume-response, audited 22 IST months."""
 import sys, json, hashlib
 from pathlib import Path
