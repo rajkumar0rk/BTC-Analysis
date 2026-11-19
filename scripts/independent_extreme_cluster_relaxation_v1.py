@@ -177,8 +177,8 @@ def main():
     selected=summary[summary.model==chosen].copy()
     sensitivity_rows=[];sensitivity_months=[]
     for sym in ("BTCUSD","ETHUSD"):
-        kap=float(selected[selected.market==sym].iloc[0].kappa)
-        threshold=float(selected[selected.market==sym].iloc[0].threshold)
+        kap=float(selected[selected.market==sym].iloc[0].extreme_multiplier)
+        threshold=float(selected[selected.market==sym].iloc[0].min_cluster_events)
         side=1 if str(selected[selected.market==sym].iloc[0].direction)=="continuation" else -1
         asset=assets[sym];b,atr=event_details[sym]
         ev,dr=signals(b,kap,threshold)
@@ -207,8 +207,8 @@ def main():
         excluded_november_2026=True,
         omitted=["funding","real bid/ask spread","market impact","margin/liquidation","contract lots","live fills"])
     (OUT/"quality.json").write_text(json.dumps(quality,indent=2)+"\n")
-    report=["# Independent CLUSTER directional drift-change paired BTC ETH audit","",
-        "PARTIAL OVERLAP differential: 1H mean-adjusted one-sided cumulative normalized-return excursions, continuation/fade at next 1m open, 1m stop-first 1.5 ATR SL, 2.5R TP, 12h maximum hold.",
+    report=["# Independent clustered extreme-arrival relaxation paired BTC ETH audit","",
+        "PARTIAL OVERLAP differential: hourly extreme-arrival density followed by first quiet hour, continuation/fade at next 1m open, 1m stop-first 1.5 ATR SL, 2.5R TP, 12h maximum hold.",
         "Same 8 variants on BTC and ETH; 2025-only joint selection and 2026 fixed historical check.",
         "All USD PnL and account monthly NAV include modeled taker fees, GST and adverse slippage.",
         "Monthly profit factor is exit-month net-trade PF; monthly return is account month-end marked NAV including open position; they differ around boundaries.",
