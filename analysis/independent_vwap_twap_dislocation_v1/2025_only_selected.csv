@@ -1,0 +1,3 @@
+market,model,dislocation_threshold,mode,stopmult,rr,profit_factor,net_return_22m_pct,net_return_2025_pct,net_return_2026_jan_oct_pct,year2025_above_500pct,year2026_ytd_above_500pct,strong_pf1p5_return5_months,strong_pf1p5_return10_months,positive_months,trades,wins,losses,max_month_end_nav_drawdown_pct,worst_month_pct
+BTCUSD,vwap_twap_dislocation_share0.16_mode+1_SL1.5_RR2,0.16,1,1.5,2.0,0.7547824335495702,-58.36998971758736,-39.450164465614144,-31.246699656564335,False,False,0,0,4,1039,390,649,-59.02527098466652,-11.450204793203966
+ETHUSD,vwap_twap_dislocation_share0.16_mode+1_SL1.5_RR2,0.16,1,1.5,2.0,0.8713872347330854,-36.452118021902635,-9.932901765770563,-29.44384439605895,False,False,1,0,9,1017,387,630,-38.775416400686126,-10.420577411970589
