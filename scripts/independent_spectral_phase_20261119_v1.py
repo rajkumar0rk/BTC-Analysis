@@ -238,11 +238,20 @@ def summarized(symbol, model, ledger, monthly, f):
     strong5 = int(((pf>=1.5)&(ret>=5)).sum())
     strong10 = int(((pf>=1.5)&(ret>=10)).sum())
     nav = np.r_[INITIAL_EQUITY, monthly.nav_end_usd.to_numpy(float)]
-    ledgerpath = ledger[:,8] if len(ledger) else np.empty(0)
-    sampled = np.r_[nav, ledgerpath]
-    sampleddd = float(100.*np.min(sampled/np.maximum.accumulate(sampled)-1.))
     idx = f.index.tz_convert("Asia/Kolkata")
     codes = np.asarray(idx.year*100 + idx.month, dtype=np.int32)
+    # Chronological snapshots: month start -> intramonth trade exits -> month-end NAV.
+    # Never concatenate all month NAVs before all trades: that scrambles chronology.
+    eix = ledger[:,1].astype(np.int64) if len(ledger) else np.empty(0,np.int64)
+    sampled_list = []
+    for month_row in monthly.itertuples(index=False):
+        mc = int(month_row.month.replace("-", ""))
+        sampled_list.append(float(month_row.nav_start_usd))
+        if len(ledger):
+            sampled_list.extend(ledger[codes[eix] == mc,8].tolist())
+        sampled_list.append(float(month_row.nav_end_usd))
+    sampled = np.asarray(sampled_list)
+    sampleddd = float(100.*np.min(sampled/np.maximum.accumulate(sampled)-1.))
     in_scope = ledger[codes[ledger[:,1].astype(np.int64)]<=202610] if len(ledger) else np.empty((0,15))
     gains = float(in_scope[in_scope[:,6]>0,6].sum()) if len(in_scope) else 0.
     losses = float(-in_scope[in_scope[:,6]<0,6].sum()) if len(in_scope) else 0.
@@ -324,8 +333,14 @@ def main():
         capped=float(months25.net_return_pct.clip(-20,20).sum())
         ranking.append(dict(model=model, train_2025_strong5=strong,
                             train_2025_positive=pos, train_2025_capped_month_sum=capped))
-    rank=pd.DataFrame(ranking).sort_values(
-        ["train_2025_strong5","train_2025_positive","train_2025_capped_month_sum"],
+    # A single exceptional month must not beat far more repeatable positive months.
+    # Reward several strong months, but penalize inconsistent 2025 monthly performance.
+    rank=pd.DataFrame(ranking)
+    rank["train_2025_consistency_score"] = (
+        4.0*rank.train_2025_strong5 + rank.train_2025_positive +
+        0.01*rank.train_2025_capped_month_sum)
+    rank=rank.sort_values(
+        ["train_2025_consistency_score","train_2025_positive","train_2025_capped_month_sum"],
         ascending=False, kind="stable")
     rank.to_csv(OUT/"2025_joint_selection.csv", index=False)
     chosen=str(rank.iloc[0].model)
