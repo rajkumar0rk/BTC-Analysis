@@ -1,0 +1,41 @@
+name: Stage32 BTC-first impact reversal paired research
+on:
+  push:
+    branches: [research/btc-first-impact-reversal-stage32-20261120]
+    paths:
+      - scripts/research_paired_impact_reversal_stage32.py
+      - .github/workflows/stage32-btc-first-impact-reversal.yml
+permissions:
+  contents: write
+jobs:
+  paired-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print source revision and run
+        run: |
+          git rev-parse HEAD
+          echo "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Run BTC-first and frozen ETH validation
+        run: PYTHONPATH=scripts python scripts/research_paired_impact_reversal_stage32.py
+      - name: Upload original ledgers regardless of final commit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage32-original-ledgers
+          path: analysis/paired_impact_reversal_stage32/
+          if-no-files-found: warn
+      - name: Persist original results on isolated branch
+        if: success()
+        continue-on-error: true
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add analysis/paired_impact_reversal_stage32/
+          git diff --cached --quiet || (git commit -m "Stage32 paired original trade and monthly ledgers" && git push)
