@@ -255,7 +255,7 @@ def replay(df,start,liq_fill,guarded=False,offer=True):
                 liq=(ep-margin/qty)/(1-MAINTENANCE_FRACTION) if side==1 else (
                      ep+margin/qty)/(1+MAINTENANCE_FRACTION)
                 bankruptcy=ep-side*margin/qty
-                slpts=max(0.5,round(2*atr[i]/0.5)*0.5)
+                slpts=max(ETH_TICK,round(2*atr[i]/ETH_TICK)*ETH_TICK)
                 max_notional=max(max_notional,notional)
                 min_notional=min(min_notional,notional)
                 position=dict(
