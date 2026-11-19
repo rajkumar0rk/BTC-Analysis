@@ -1,0 +1,31 @@
+{
+  "study": "UTC session opening-range FALSE breakout fade",
+  "novelty": "Unlike opening-range continuation, this waits for a completed 5m sweep and CLOSE back inside the range, then fades it.",
+  "parameters_per_symbol": 48,
+  "data_quality": [
+    {
+      "symbol": "BTCUSD",
+      "minute_rows": 987840,
+      "source_files": 23,
+      "missing_minutes": 0
+    },
+    {
+      "symbol": "ETHUSD",
+      "minute_rows": 987840,
+      "source_files": 23,
+      "missing_minutes": 0
+    }
+  ],
+  "costs": {
+    "taker_with_GST_per_side": 0.00059,
+    "slippage_per_side": 0.0002,
+    "assumed_funding_debit_per_8h": 0.0001
+  },
+  "selection": "2025 >=50 trades, PF>1, net>0; highest calendar positive days; 2026 unchanged",
+  "caveats": [
+    "2026 already research-exposed, not independent forward validation",
+    "No exact funding, orderbook, tick-size, lot-size, exchange margin or liquidation replay",
+    "Stop-first ambiguity; one trade max per UTC day; 2026 November partial",
+    "Cannot promise daily profit"
+  ]
+}

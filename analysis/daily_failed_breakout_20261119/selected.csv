@@ -1,0 +1,5 @@
+symbol,year,reference_minutes,sweep_fraction,target_fraction,stop_fraction,hold_minutes,trades,profitable_days,losing_days,no_trade_days,calendar_days,positive_calendar_day_pct,profit_factor,net_return_pct,max_dayclose_drawdown_pct,max_consecutive_losing_days,worst_day_usd,avg_day_usd,median_day_usd,fees_usd,funding_debit_usd,train_pass
+BTCUSD,2025,60,0.0005,0.005,0.006,180,328,141,187,37,365,38.63,0.4512,-34.6088,-34.8052,7,-6.146,-0.9482,-0.1319,252.9242,1.3315,False
+BTCUSD,2026,60,0.0005,0.005,0.006,180,280,121,159,41,321,37.695,0.5013,-25.9855,-26.7324,7,-4.0054,-0.5294,0.0,154.1526,1.0127,False
+ETHUSD,2025,60,0.0005,0.005,0.006,180,341,178,163,24,365,48.767,0.6142,-27.8689,-28.9252,9,-6.231,-0.7635,0.0,283.7394,0.7529,False
+ETHUSD,2026,60,0.0005,0.005,0.006,180,303,132,171,18,321,41.121,0.4711,-34.0632,-34.0632,9,-4.4212,-0.7654,-0.4204,173.9347,0.642,False
