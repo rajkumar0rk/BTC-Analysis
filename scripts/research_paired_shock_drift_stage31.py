@@ -67,18 +67,41 @@ def run(f,symbol,stress):
             net_usd=pnl,reason=("stop","target","timeout")[why]))
     return pd.DataFrame(records,columns=['symbol','stress','entry_unix','exit_unix','side','entry_mid','exit_mid','entry_fill','exit_fill','quantity','leverage','start_equity','end_equity','net_usd','reason']),dd
 
-def report(g,symbol,stress,dd):
+def month_end_nav(g, f, month, symbol, stress):
+    """After-cost mark-to-market NAV at IST month end, without using future prices."""
+    boundary=int((pd.Period(month,freq="M")+1).start_time.tz_localize("Asia/Kolkata").timestamp())-1
+    unix=f.time.to_numpy(np.int64)
+    i=int(np.searchsorted(unix,boundary,side="right"))-1
+    if i<0: return INIT
+    if boundary-int(unix[i])>60:
+        raise ValueError(f"Missing month-end mark {month}: last bar {int(unix[i])}")
+    mark=float(f.close.iloc[i])
+    done=g[g.exit_unix<=boundary]
+    nav=INIT+float(done.net_usd.sum())
+    active=g[(g.entry_unix<=boundary)&(g.exit_unix>boundary)]
+    if len(active)>1: raise AssertionError("Overlapping positions")
+    for p in active.itertuples():
+        slip=(10. if stress else 5.) if symbol=="BTCUSD" else mark*(.00035 if stress else .0002)
+        exit_mark=mark-p.side*slip
+        nav+=p.quantity*(p.side*(exit_mark-p.entry_fill)-FEE*(p.entry_fill+exit_mark))
+    return nav
+
+def report(g,symbol,stress,dd,f):
     g=g.copy()
     if len(g):g["month_ist"]=pd.to_datetime(g.exit_unix,unit="s",utc=True).dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")
     else:g["month_ist"]=pd.Series(dtype=str)
     eq=INIT;rows=[]
     for month in MONTHS:
-        t=g[g.month_ist==month];start=eq;pnl=float(t.net_usd.sum());eq+=pnl
+        t=g[g.month_ist==month];start=eq
+        eq=month_end_nav(g,f,month,symbol,stress)
+        pnl=eq-start
         rows.append(dict(symbol=symbol,stress=stress,month_ist=month,trades=len(t),
             wins=int((t.net_usd>0).sum()),losses=int((t.net_usd<0).sum()),
             profit_factor=profit_factor(t.net_usd),net_return_pct=100*pnl/start,
             net_pnl_usd=pnl,start_equity=start,end_equity=eq))
-    if len(g) and not np.isclose(eq,g.iloc[-1].end_equity):raise AssertionError("Equity mismatch")
+    if len(g) and int(g.exit_unix.max())<=int(f.time.iloc[-1]) and not np.isclose(
+        eq,INIT+g.net_usd.sum(),rtol=1e-7,atol=1e-5):
+        raise AssertionError("Final NAV vs realized ledger mismatch")
     m=pd.DataFrame(rows)
     t25=g[g.month_ist.str.startswith("2025-")];t26=g[g.month_ist.str.startswith("2026-")]
     strong=(m.trades>=3)&(m.profit_factor>=1.5)
@@ -103,7 +126,7 @@ def main():
         f,q=load_native(symbol);quality[symbol]=q
         for stress in (False,True):
             trades,dd=run(f,symbol,stress)
-            m,s=report(trades,symbol,stress,dd)
+            m,s=report(trades,symbol,stress,dd,f)
             months.append(m);summaries.append(s);ledgers.append(trades)
     m=pd.concat(months,ignore_index=True);s=pd.DataFrame(summaries)
     t=pd.concat(ledgers,ignore_index=True)
