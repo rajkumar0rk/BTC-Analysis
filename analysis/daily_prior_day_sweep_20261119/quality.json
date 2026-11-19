@@ -1,0 +1,39 @@
+{
+  "hypothesis": "Previous UTC day high/low acceptance breakout versus liquidity sweep reclaim; one trade per day",
+  "models_per_symbol": 162,
+  "source": [
+    {
+      "symbol": "BTCUSD",
+      "minutes": 987840,
+      "months": 23,
+      "missing_minutes": 0,
+      "start": 1735689600,
+      "end_exclusive": 1794960000
+    },
+    {
+      "symbol": "ETHUSD",
+      "minutes": 987840,
+      "months": 23,
+      "missing_minutes": 0,
+      "start": 1735689600,
+      "end_exclusive": 1794960000
+    }
+  ],
+  "assumptions": {
+    "taker_fee_each_side_including_GST": 0.00059,
+    "adverse_slippage_each_side": 0.0002,
+    "funding_debit_per_8h_boundary": 0.0001,
+    "stop_risk_fraction": 0.005,
+    "max_notional_leverage": 2.0,
+    "intraminute_ambiguity": "stop-first"
+  },
+  "caveats": [
+    "2026 is research-exposed, not pristine forward validation",
+    "Funding proxy, no actual funding rates",
+    "No order book or precise margin/liquidation model",
+    "No exchange lot-size or tick-size rounding",
+    "Calendar days with no trade are NOT counted as profitable",
+    "No guarantee of positive daily profit"
+  ],
+  "selection": "Only 2025 selects settings; 2026 settings fixed unchanged"
+}
