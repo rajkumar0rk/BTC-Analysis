@@ -68,7 +68,11 @@ def metrics(sym,model,asset,dislocation_threshold,mode,stopmult,rr):
     # Hypothesis: compression followed by exceptional one-hour range release.
     # Historical rolling thresholds exclude the current completed hour.
     # Signal computed at hourly close, executed at next minute open.
-    hourly_range=(b.high-b.low)/b.close.shift(1)
+    count=asset["close"].resample("1h",label="right",closed="left").count()
+    prev_close=b.close.shift(1)
+    true_range=pd.concat([(b.high-b.low),(b.high-prev_close).abs(),(b.low-prev_close).abs()],axis=1).max(axis=1)
+    atr=true_range.rolling(14,min_periods=14).mean()
+    hourly_range=(b.high-b.low)/prev_close
     baseline=hourly_range.rolling(168,min_periods=168).median().shift(1)
     preceding_quiet=hourly_range.shift(1).rolling(6,min_periods=6).median()
     expansion=hourly_range/baseline.replace(0,np.nan)
