@@ -1,0 +1,5 @@
+exit_month_ist,trades,net_wins,net_losses,net_win_rate_pct,profit_factor_net,gross_points,net_points,net_usd_1_contract,entry_fees_usd,exit_fees_usd,gst_usd,eligible_scalper_trades,max_closed_equity_drawdown_usd,average_net_points_per_trade,complete_month
+2026-08,37.0,24.0,13.0,64.86,1.8958,4282.5,2742.04,2.742,1.305,0.0,0.235,37.0,0.636,74.11,True
+2026-09,39.0,29.0,10.0,74.36,2.0946,5933.0,4074.36,4.074,1.575,0.0,0.284,39.0,0.992,104.47,True
+2026-10,55.0,37.0,18.0,67.27,1.312,4714.0,2032.48,2.032,2.272,0.0,0.409,55.0,1.899,36.95,True
+2026-11,24.0,18.0,6.0,75.0,1.6108,2553.0,1511.79,1.512,0.882,0.0,0.159,24.0,1.655,62.99,False
