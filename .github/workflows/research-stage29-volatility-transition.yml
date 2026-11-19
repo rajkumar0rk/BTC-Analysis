@@ -1,0 +1,38 @@
+name: Stage29 paired volatility regime transition
+on:
+  push:
+    branches:
+      - research/paired-volatility-transition-stage29-20261119
+    paths:
+      - scripts/research_paired_volatility_transition_stage29.py
+      - .github/workflows/research-stage29-volatility-transition.yml
+permissions:
+  contents: write
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Paired native 1m BTC ETH backtest
+        run: python scripts/research_paired_volatility_transition_stage29.py
+      - name: Preserve full original evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage29-paired-volatility-transition
+          path: analysis/paired_volatility_transition_stage29/
+          if-no-files-found: warn
+      - name: Commit evidence on isolated branch
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/paired_volatility_transition_stage29/
+          git commit -m 'Archive Stage29 original monthly and trade ledgers' || true
+          git push
