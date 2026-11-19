@@ -1,0 +1,5 @@
+symbol,model,signals,trades,wins,losses,win_rate_pct,profit_factor,avg_win_loss_ratio,biggest_winner_R,winners_over_10R,net_return_pct,max_drawdown_pct,fees_usd,funding_proxy_usd,return_2025_pct,return_2026_pct,profit_months,loss_months,active_months
+ETHUSD,weeklybox8h_vol1_ema0_init1.75atr_trail10atr,96,88,16,72,18.182,1.4359,6.4616,31.136,3,17.494,-10.542,35.152,2.504,3.65,13.357,8,15,23
+ETHUSD,weeklybox8h_vol1.3_ema0_init1.75atr_trail10atr,96,86,18,68,20.93,1.6587,6.2664,31.136,3,25.562,-10.026,35.526,5.304,5.938,18.525,10,13,23
+ETHUSD,weeklybox12h_vol1_ema0_init1.75atr_trail10atr,96,88,16,72,18.182,1.4367,6.465,31.136,3,17.515,-10.553,34.971,2.5,3.641,13.388,8,15,23
+ETHUSD,weeklybox12h_vol1.3_ema0_init1.75atr_trail10atr,96,86,18,68,20.93,1.6606,6.2734,31.136,3,25.609,-10.026,35.335,5.105,5.938,18.569,10,13,23

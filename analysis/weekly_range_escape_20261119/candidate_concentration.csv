@@ -1,0 +1,5 @@
+symbol,model,trades,max_consecutive_losses,biggest_profit_usd,top1_fraction_of_positive_pnl,top3_fraction_of_positive_pnl,net_after_removing_largest_winner_usd,average_positive_trade_usd,average_negative_trade_usd
+ETHUSD,weeklybox8h_vol1_ema0_init1.75atr_trail10atr,88,14,161.3488,0.28,0.5951,13.5924,36.017,-5.574
+ETHUSD,weeklybox8h_vol1.3_ema0_init1.75atr_trail10atr,86,12,173.6272,0.2697,0.5536,81.9975,35.7596,-5.7066
+ETHUSD,weeklybox12h_vol1_ema0_init1.75atr_trail10atr,88,14,161.3465,0.28,0.5951,13.8081,36.0175,-5.5712
+ETHUSD,weeklybox12h_vol1.3_ema0_init1.75atr_trail10atr,86,12,173.6691,0.2698,0.5536,82.425,35.7646,-5.701
