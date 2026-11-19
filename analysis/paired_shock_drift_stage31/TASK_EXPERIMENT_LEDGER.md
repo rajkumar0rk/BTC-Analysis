@@ -10,3 +10,9 @@
 - Next action: inspect GitHub Actions branch run and its logs, fix errors on this branch, confirm complete original ledgers and 22-month BTC/ETH summaries; reject or retain using BTC evidence only.
 - Modeled fee 0.05% each side +18% GST, BTC 5 points slip each side, ETH 0.02% each side, cost stress; real funding, spread/depth/impact, contract minimums and liquidation maintenance not modeled.
 - Scope: other automations and live trading untouched; main untouched.
+
+## 2026-11-19 Stage31 — FAILED SETUP DIAGNOSED / REPAIRED
+- Actual push-triggered run: https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44534258208, job 135595390515, FAILED at actions/setup-python@v5 before dependency install or backtest.
+- Exact error: `No file ... matched to [**/requirements.txt or **/pyproject.toml]`; caused by `cache: pip` without a dependency manifest. No trades or results were produced; artifact uploader found no files.
+- Repaired ONLY Stage31 isolated workflow by removing `cache: pip`, preserving Python 3.11, dependency installation, original strategy and cost rules. Repair commit: `0efe6a08ae93d7d02149144b4badb879c6e32975`.
+- The workflow is restricted to pushes modifying its YAML or Stage31 script. GitHub accepted repair push. A new run ID and successful completion were not yet confirmed at this check; re-query branch-scoped Actions runs, inspect job/logs, then reconcile original ledgers before any new hypothesis. Status: REPAIR / RETEST, not a verified backtest.
