@@ -32,7 +32,7 @@ def closed_bars(raw,now=None):
     df["dt"]=pd.to_datetime(df.pop("time"),unit="s",utc=True)
     df=df.set_index("dt")
     return df
-def signal(frame):
+def signal(frame,asset="BTC"):
     f=indicators(frame)
     x=f.iloc[-1]
     prior=f.iloc[-2]
@@ -46,9 +46,11 @@ def signal(frame):
     elif direction==int(prior["dir"])==1 and x.high>=x.ema and x.close<x.ema:
         side="sell"
     else:return None
+    tick=0.5 if asset=="BTC" else 0.05 if asset=="ETH" else None
+    if tick is None:raise ValueError("Unknown asset")
     return {"bar_ts":int(frame.index[-1].timestamp()),"side":side,
             "signal_close":float(x.close),"atr14":float(x.atr14),
-            "stop_distance_points":round(float(2*x.atr14)*2)/2,
+            "stop_distance_points":max(tick,round(float(2*x.atr14)/tick)*tick),
             "atr_ratio":float(x.atr_ratio),"volume_ratio":float(x.volume_ratio)}
 def quantize_stop(price,tick,side):
     # For long stop round up (closer); short stop round down (closer).
@@ -57,6 +59,16 @@ def quantize_stop(price,tick,side):
 def size_contracts(price,contract_value,trade_margin,leverage):
     if min(price,contract_value,trade_margin,leverage)<=0:raise ValueError("Bad size inputs")
     return max(0,math.floor(trade_margin*leverage/(price*contract_value)+1e-10))
+def trailing_points(asset,entry):
+    """BTC unchanged at 150/50; ETH uses frozen BTC-relative 150/50 at $80k reference."""
+    if asset=="BTC":return 150.0,50.0
+    if asset=="ETH":
+        if entry<=0:raise ValueError("entry must be >0")
+        tick=0.05
+        return (max(tick,round(entry*(150/80000)/tick)*tick),
+                max(tick,round(entry*(50/80000)/tick)*tick))
+    raise ValueError("Unknown asset")
+
 def stop_safe(entry,stop,side,leverage,maintenance_fraction,buffer_fraction):
     # Conservative proxy, NOT actual exchange mark-price liquidation formula.
     im=1/leverage
