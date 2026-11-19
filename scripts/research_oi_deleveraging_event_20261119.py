@@ -61,12 +61,14 @@ def load_asset(symbol):
     oi=oi.close.astype(float)
     if not np.isfinite(oi).all() or (oi<=0).any():
         raise RuntimeError(f"{symbol} OI nonpositive/nonfinite: no safe shock signal")
-    delta=np.diff(oi.index.view("int64"))
-    bad=int(np.count_nonzero(delta != 300*10**9))
+    # Pandas 3 may store DatetimeIndex in seconds, not nanoseconds.
+    # Explicit conversion avoids false data-gap flags from .view("int64").
+    delta=np.diff(oi.index.as_unit("s").asi8)
+    bad=int(np.count_nonzero(delta != 300))
     if bad:
         ix=np.flatnonzero(delta != 300*10**9)
         print("WARN OI TIMESTAMPS",symbol,"irregular gaps",bad,
-            "examples",[(str(oi.index[k]),str(oi.index[k+1]),int(delta[k]//10**9))
+            "examples",[(str(oi.index[k]),str(oi.index[k+1]),int(delta[k]))
                         for k in ix[:5]],flush=True)
     # Later align against full 5m clock with NaNs; never forward fill OI.
     funding=load_months(BASE/symbol/"institutional/history/funding_1h",["time","close"])
