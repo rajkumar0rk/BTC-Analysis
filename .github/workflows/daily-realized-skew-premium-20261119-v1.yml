@@ -1,0 +1,32 @@
+name: Daily independent realized skew premium 20261119 v1
+on:
+  push:
+    branches:
+      - research/daily-realized-skew-premium-20261119-v1
+    paths:
+      - scripts/research_daily_realized_skew_20261119_v1.py
+      - .github/workflows/daily-realized-skew-premium-20261119-v1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - name: Replay genuine Delta BTC and ETH 1m archives
+        run: python scripts/research_daily_realized_skew_20261119_v1.py
+      - name: Commit immutable study output to isolated branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/daily_realized_skew_premium_20261119_v1
+          if ! git diff --cached --quiet; then
+            git commit -m "research: publish skew premium daily ledger and costs"
+            git push origin HEAD:research/daily-realized-skew-premium-20261119-v1
+          fi
