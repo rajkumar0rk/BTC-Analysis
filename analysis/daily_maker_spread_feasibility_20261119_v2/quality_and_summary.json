@@ -1,0 +1,161 @@
+{
+  "hypothesis": "passive market making may earn spread; first test whether gross full spread even covers both maker fees + GST",
+  "status": "FEASIBILITY_ONLY_NOT_EXECUTABLE_BACKTEST",
+  "symbol": "BTCUSD",
+  "source": "Delta India public REST L2 snapshots; NOT a historical continuous L2 stream",
+  "observations": 132,
+  "observed_days": 32,
+  "first": "2026-10-18T16:12:51.347742Z",
+  "last": "2026-11-18T21:51:12.434774Z",
+  "median_spread_bps": 0.06406295061391795,
+  "p90_spread_bps": 0.07588318542435775,
+  "fee_roundtrip_bps": 4.72,
+  "median_ideal_net_bps": -4.655937049386082,
+  "pct_snapshots_positive_ideal_net": 0.0,
+  "unusable": {},
+  "source_sha256": [
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-18.jsonl.gz",
+      "sha256": "6d988bd55529ccea52e2a258d21372d16c5f3c988d44cac2c6bd13d9ef463755"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-19.jsonl.gz",
+      "sha256": "3482a98985856998ea193915f0806d94ddd36ee152db7ebb5667a1e4beb30433"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-20.jsonl.gz",
+      "sha256": "14a72bffe880d163c950e1c20d7f7e9d53078018defbbee52ce57ac83e5cfc51"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-21.jsonl.gz",
+      "sha256": "b0a58a130e3eb1124e809dd565ca5e2b22e529d6fa961efb802f52c2d74d9868"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-22.jsonl.gz",
+      "sha256": "3673209a3996ba15b089b37594cc491a916de98dcbe98347ddd829d525166ff1"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-23.jsonl.gz",
+      "sha256": "535b096bf20b346629bf56322f082d340e8758679b7f35c73311486ffda162d5"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-24.jsonl.gz",
+      "sha256": "0d7a60cb1c1d3d9249062fb7c0cef8b11a6ae6a6849d3df2a535ac63051b6725"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-25.jsonl.gz",
+      "sha256": "34ac9bfb453b68096ba6b7d81f89e80d908116d5a017a4930c08ab506cfccd7f"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-26.jsonl.gz",
+      "sha256": "1571b1a9597d9df81252fbb6a92a5a2835753d158970b7bd695ef785ee984b38"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-27.jsonl.gz",
+      "sha256": "9efdfbe74345a87ed2158a3c99b6347b0b544cb1336b78a4f7d2c21d7623ccff"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-28.jsonl.gz",
+      "sha256": "529e8e19b208cd2cf52c2979bc9e5733ba324989d8c353cf80c7befd0f248e71"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-29.jsonl.gz",
+      "sha256": "2255b6d0599bfeb524efacd6a20566e2735f745d70b9a315b5821eedec94f8f3"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-30.jsonl.gz",
+      "sha256": "5aa7eb93771a02aab42b750c03315d3fb61039dae6ecd148c48f2347fae1db34"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-10-31.jsonl.gz",
+      "sha256": "96c7c23544362f711b4c5ab8dda0ae9c2cfdffec10a7b5be7721b8acc589b12d"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-01.jsonl.gz",
+      "sha256": "d4d7c1d5683004effda3fd001e788249e790b9651a2b09070562969ef097625b"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-02.jsonl.gz",
+      "sha256": "9fb0e3ad4e698c1cf05fbd780b5d284f4205929414ddaa5c144df53db0e26dad"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-03.jsonl.gz",
+      "sha256": "3936fad687d3fda440d67a1749ecf16ea79fdf08c05dd41581c7657a9c5244af"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-04.jsonl.gz",
+      "sha256": "27c165f95b08e4f13fe238e28910b59e532a61751f0d9f3c9714be271b771af8"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-05.jsonl.gz",
+      "sha256": "7b662cd3dcf715b8727ac6a0ad98db3c2d285f109efda2daa3c87eace9fc84ff"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-06.jsonl.gz",
+      "sha256": "f9b8ffaf97f41c4fa989b4f50ed87c05ae504280fccd5a9b8674d4b698a9748b"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-07.jsonl.gz",
+      "sha256": "e52a254a0910933beabc7cbd443190ed6fd12e283b5f9f46786acf87f0395aef"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-08.jsonl.gz",
+      "sha256": "028e09b32836e20efbca0551d188b2038631582d79101e26da2bb9a1399f6298"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-09.jsonl.gz",
+      "sha256": "da439d1d4a290199958bd1df0256216ddc9a7a6c5b24f2a9d9855e00190af3d0"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-10.jsonl.gz",
+      "sha256": "808b9a43b312bf0b977c0a74f8fae516b48a5a904243d1b043f69d330ba6257d"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-11.jsonl.gz",
+      "sha256": "8177b1e1151cc43c417b0f87d9dadb6c613f43c7a1dc19089168941aa8c071ec"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-12.jsonl.gz",
+      "sha256": "3206cbb7af45fdb52d5d376f42cdaef10d5949a72f3cdf9687cc1e91f0e35857"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-13.jsonl.gz",
+      "sha256": "129e86d0e477ee65d9637d74dca4baff9a7eb1a5795ee3acda2117d574f6daae"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-14.jsonl.gz",
+      "sha256": "38be6a43773c16dba1c2b0f32a81edaf9d86706a5d7c46c9ba185b81f7bd6c1d"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-15.jsonl.gz",
+      "sha256": "0a2eb2bcc8b17e10e7176324fe04cba53f8b2ccb8e1e3c5f6a101b6f3b51aa07"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-16.jsonl.gz",
+      "sha256": "6d1b698428ac7a9160bbdecf13863f9ec2cd27e5027c05c813cac30bb51e1a8a"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-17.jsonl.gz",
+      "sha256": "7a8971c11da57d1eeb3342feba45c8a6ed06b23b878cf18ea3a005519f714e0c"
+    },
+    {
+      "path": "data/delta_india/BTCUSD/institutional/live_snapshots/2026-11-18.jsonl.gz",
+      "sha256": "9e1dc69421d9c19c57d91d554181fa81870daa14fed85e1a5aad87599d48bbaf"
+    }
+  ],
+  "unavailable": [
+    "true queue position",
+    "actual passive fills",
+    "trade sequence between snapshots",
+    "adverse selection and future markout at seconds",
+    "order cancellation latency",
+    "portfolio margin/liquidation reconstruction",
+    "complete ETH L2 history"
+  ],
+  "calendar_day_net_returns": "NOT COMPUTABLE from sparse snapshots; do not invent positive/negative/no-trade counts",
+  "2025_2026_annual_returns": "NOT COMPUTABLE",
+  "monthly_net_returns": "NOT COMPUTABLE",
+  "funding": "Not applicable to unfilled quote study",
+  "slippage": "No filled orders; zero slippage is only an optimistic theoretical upper bound",
+  "interpretation": "Even a positive ideal quote-capture bound is NOT an executable strategy; no user notification."
+}
