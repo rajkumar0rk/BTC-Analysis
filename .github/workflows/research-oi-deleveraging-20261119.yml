@@ -1,0 +1,54 @@
+name: Institutional OI deleveraging hypothesis and falsification
+on:
+  push:
+    branches:
+      - research/oi-deleveraging-event-study-20261119
+    paths:
+      - scripts/research_oi_deleveraging_event_20261119.py
+      - .github/workflows/research-oi-deleveraging-20261119.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: oi-deleveraging-independent-20261119
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install numerical packages
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Replay fixed institutional hypothesis and placebo
+        run: python -u scripts/research_oi_deleveraging_event_20261119.py
+      - name: Save full reproducible trade evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: independent-oi-deleveraging-20261119
+          path: analysis/oi_deleveraging_event_study_20261119/
+          if-no-files-found: error
+          retention-days: 30
+      - name: Commit compact result to isolated research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/oi_deleveraging_event_study_20261119/summary.csv
+          git add analysis/oi_deleveraging_event_study_20261119/monthly_ist.csv
+          git add analysis/oi_deleveraging_event_study_20261119/quality.json
+          git add analysis/oi_deleveraging_event_study_20261119/RESEARCH_REPORT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "research: retain OI shock follow-through versus fade evidence"
+            for attempt in 1 2 3 4 5; do
+              git fetch origin research/oi-deleveraging-event-study-20261119
+              git rebase origin/research/oi-deleveraging-event-study-20261119
+              if git push origin HEAD:research/oi-deleveraging-event-study-20261119; then exit 0; fi
+              sleep 3
+            done
+            exit 1
+          fi
