@@ -1,0 +1,27 @@
+name: BTC-first OI absorption release 20261119 isolated
+on:
+  push:
+    branches:
+      - research/daily-oi-absorption-release-20261119-v1
+    paths:
+      - '.github/workflows/daily-oi-absorption-release-20261119-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas tabulate
+      - run: python scripts/research_daily_oi_absorption_release_20261119_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-oi-absorption-release-evidence
+          path: analysis/daily_oi_absorption_release_20261119_v1/
+          if-no-files-found: error
