@@ -1,0 +1,29 @@
+name: Independent MAKSAT MTF BTC ETH paired diagnostic
+on:
+  push:
+    branches: [feature/github-external-volpersistence-22m-20261118]
+    paths: [.github/workflows/external-maksat-mtf-paired-20261119.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy<3' pandas 'TA-Lib==0.6.8'
+      - run: python -m py_compile scripts/replay_external_maksat_mtf_paired.py
+      - name: Backtest BTCUSD and ETHUSD 22 monthly reports
+        run: python scripts/replay_external_maksat_mtf_paired.py
+      - name: Upload paired monthly and trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maksat-mtf-btc-eth-monthly-diagnostic
+          path: analysis/external_github_profit_hunt/maksat_mtf_breakout_paired/*
+          retention-days: 30
+          if-no-files-found: warn
