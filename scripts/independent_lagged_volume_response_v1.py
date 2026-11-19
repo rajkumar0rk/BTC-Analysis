@@ -134,7 +134,7 @@ def metrics(sym,model,asset,signal_threshold,mode,stopmult,rr):
     totalloss=float(-led[led[:,6]<0,6].sum()) if len(led) else 0.
     pf=totalgain/totalloss if totalloss>0 else None
     eq=np.array(equitypath)
-    row=dict(market=sym,model=model,persistence_threshold=persistence_threshold,mode=mode,stopmult=stopmult,rr=rr,
+    row=dict(market=sym,model=model,signal_threshold=signal_threshold,mode=mode,stopmult=stopmult,rr=rr,
       profit_factor=pf,net_return_22m_pct=100*(eq[-1]/eq[0]-1),
       net_return_2025_pct=100*(eq[12]/eq[0]-1),net_return_2026_jan_oct_pct=100*(eq[-1]/eq[12]-1),
       year2025_above_500pct=bool(eq[12]>6*eq[0]),year2026_ytd_above_500pct=bool(eq[-1]>6*eq[12]),
@@ -150,10 +150,10 @@ def main():
     # Discovery only on BTC 2025. ETH is never used to select candidates.
     btc=load("BTCUSD")
     print("VALIDATED BTCUSD",len(btc),flush=True)
-    for persistence_threshold in (0.65,0.80):
+    for signal_threshold in (0.35,0.45):
         for mode in (1,-1):
-            model=f"lagged_volume_response_{persistence_threshold:g}_mode{mode:+d}_SL1.5_RR2"
-            row,mon,tdf=metrics("BTCUSD",model,btc,persistence_threshold,mode,1.5,2.)
+            model=f"lagged_volume_response_{signal_threshold:g}_mode{mode:+d}_SL1.5_RR2"
+            row,mon,tdf=metrics("BTCUSD",model,btc,signal_threshold,mode,1.5,2.)
             summaries.append(row);monthly.extend(mon)
             if not tdf.empty:trades.append(tdf)
             print("BTC_DISCOVERY",model,row["trades"],row["net_return_2025_pct"],flush=True)
@@ -162,7 +162,7 @@ def main():
     eth=load("ETHUSD")
     print("VALIDATED ETHUSD",len(eth),flush=True)
     model=chosen["model"]
-    row,mon,tdf=metrics("ETHUSD",model,eth,float(chosen["persistence_threshold"]),int(chosen["mode"]),1.5,2.)
+    row,mon,tdf=metrics("ETHUSD",model,eth,float(chosen["signal_threshold"]),int(chosen["mode"]),1.5,2.)
     summaries.append(row);monthly.extend(mon)
     if not tdf.empty:trades.append(tdf)
     summary=pd.DataFrame(summaries);months=pd.DataFrame(monthly)
@@ -180,7 +180,7 @@ def main():
       months_nav="Mark-to-market at IST calendar month boundary, open trades retained; monthly PF based on exits",
       missing_first_ist_2025_hours=5.5,excluded_november_2026=True,
       unmodeled=["funding","real order-book spread","market impact","margin/liquidation","lot constraints","live fills"],
-      caveat="Sign-run persistence is observable, but does not prove institutional flow or aggressive side; 2026 research-exposed")
+      caveat="Lagged volume response is observable, but does not prove institutional flow or aggressive side; 2026 research-exposed")
     (OUT/"quality.json").write_text(json.dumps(quality,indent=2)+"\n")
     report=["# Native lagged volume-response paired BTC/ETH audit","",
       "Predeclared completed-hour volume-frontloading x delayed-return-share >=0.35 or 0.45; next 1m open continuation/reversal; stop-first 1m ATR exits.",
