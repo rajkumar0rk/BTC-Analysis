@@ -5,6 +5,7 @@ from pathlib import Path
 from config import Config,ROOT
 from delta import Delta
 from store import Store
+from audit import sync_fills,summarize_fills
 from signals import closed_bars
 from bot import Bot,position_size
 
@@ -86,13 +87,23 @@ def reset(cfg,confirmation):
 
 def main():
     parser=argparse.ArgumentParser(description="BTCUSD EMA20/Supertrend research/demo runner")
-    parser.add_argument("command",choices=["doctor","run","once","serve","backtest","status","reconcile","reset-halt"])
+    parser.add_argument("command",choices=["doctor","run","once","serve","backtest","status","audit","reconcile","reset-halt"])
     parser.add_argument("--confirm",default="")
     args=parser.parse_args()
     cfg=Config.read(require_keys=False)
     if args.command=="doctor":doctor(cfg)
     elif args.command=="backtest":backtest()
     elif args.command=="status":report(cfg)
+    elif args.command=="audit":
+        if not(cfg.key and cfg.secret):raise SystemExit("Configure selected environment API keys to audit fills")
+        d=Delta(cfg);p=d.product()
+        db=Store(cfg.state_dir)
+        try:
+            n=sync_fills(d,db,int(p["id"]),cfg.halt_on_liquidation)
+            result=summarize_fills(db.fills(),float(p["contract_value"]))
+            db.set("fill_attribution",result)
+            print(json.dumps({"new_fills":n,"attribution":result},indent=2))
+        finally:db.close()
     elif args.command=="reconcile":reconcile(cfg)
     elif args.command=="reset-halt":reset(cfg,args.confirm)
     elif args.command=="serve":
