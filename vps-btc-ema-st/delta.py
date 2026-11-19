@@ -10,7 +10,7 @@ class Delta:
         self.conf=config
         self.session=requests.Session()
         self.session.headers.update({"Accept":"application/json","User-Agent":"btc-ema-st-vps/1.0"})
-    def request(self,method,path,params=None,body=None,auth=False):
+    def request(self,method,path,params=None,body=None,auth=False,envelope=False):
         query=("?"+urlencode(list(params.items()))) if params else ""
         payload=json.dumps(body,ensure_ascii=False,separators=(",",":")) if body is not None else ""
         hdr={}
@@ -31,7 +31,7 @@ class Delta:
             data=r.json()
             if not isinstance(data,dict) or data.get("success") is not True:
                 raise DeltaError("API rejected request: "+str(data.get("error",data))[:320])
-            return data.get("result",data)
+            return data if envelope else data.get("result",data)
         except requests.RequestException as e:
             raise DeltaError("Transport outcome unclear: "+str(e)) from e
     def product(self,symbol="BTCUSD"):
@@ -67,3 +67,8 @@ class Delta:
     def fills(self,product_id,start_microsecond):
         return self.request("GET","/v2/fills",params={"product_ids":int(product_id),
                               "start_time":int(start_microsecond),"page_size":50},auth=True)
+
+    def fills_page(self,product_id,start_us,cursor=None):
+        params={"product_ids":int(product_id),"start_time":int(start_us),"page_size":50}
+        if cursor:params["after"]=cursor
+        return self.request("GET","/v2/fills",params=params,auth=True,envelope=True)
