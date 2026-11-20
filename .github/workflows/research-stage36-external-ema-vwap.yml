@@ -1,0 +1,37 @@
+name: BTC-first Stage36 external EMA VWAP zero-slip screen
+on:
+  push:
+    branches:
+      - research/btc-first-external-ema-vwap-stage36-20261120
+    paths:
+      - 'scripts/research_paired_external_ema_vwap_stage36.py'
+      - '.github/workflows/research-stage36-external-ema-vwap.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          lfs: true
+      - name: Run identity
+        run: |
+          mkdir -p analysis/paired_external_ema_vwap_stage36
+          printf 'run_id=%s\nsource_sha=%s\nrun_url=%s\n' "$GITHUB_RUN_ID" "$GITHUB_SHA" "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > analysis/paired_external_ema_vwap_stage36/run_identity.txt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas pyarrow tabulate numba
+      - name: BTC zero-slippage screening with two-sided commission and GST
+        run: python scripts/research_paired_external_ema_vwap_stage36.py
+      - name: Preserve raw screening ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage36-btc-zero-slip-screen
+          path: analysis/paired_external_ema_vwap_stage36/
+          if-no-files-found: warn
