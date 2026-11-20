@@ -1,0 +1,13 @@
+# External source replication — verified prerequisites (2026-11-20 17:12 IST)
+
+Status: IN PROGRESS, NOT BACKTESTED. This is a source/data verification record, not a successful experiment.
+
+Upstream pinned commit: https://github.com/pooriag/crypto-strategy-backtest/commit/fd210a38e4786b31acd06bc081dca9d79ecd3ff4 (author pooriag; repository README declares MIT code; Coin Metrics source data CC BY-NC 4.0; reproduce logic rather than copying licensed market data). Read pinned `src/cryptobt/signals.py` and `src/cryptobt/backtest.py` directly.
+
+Exact original families: daily close time-series momentum, target long 1 when close[t]/close[t-lookback]-1 > 0, otherwise flat 0, default lookback 60 days; or daily SMA fast 20 above slow 100, long otherwise flat. Optional short mode exists but published study is long-only. Decisions use completed daily close, `held=target.shift(1)`; upstream earns next daily close-to-close return, charges turnover. Published grid momentum lookbacks 7,14,21,30,45,60,90,120,180,270,365 and SMA fast 5,10,20,50 vs slow 30,50,100,150,200, fast<slow. Optional trailing 30-day realized vol target 40% annualized, cap 1x, 10% no-trade band. Published backtest is *spot* reference prices, not futures fills; avoid claiming identical execution. For a first external rule-for-rule replication use fixed default 60-day long-only TSMOM, with no vol targeting, no optimization and no shorting. Do not retroactively select based on 2026 or ETH.
+
+Verified native repo files exist: `data/delta_india/BTCUSD/1m/2025-01.csv.gz` through `2026-10.csv.gz` (22 UTC-named files) and `manifest.json`. Directory existence does NOT prove complete IST Jan 1 2025, especially UTC 2024-12-31 18:30–23:59, nor Oct 2026 integrity. Need parse actual files in runner and fail closed on gaps/duplicates/invalid OHLC and incomplete IST month boundaries. Never invent missing candles.
+
+First-stage run requirements: native BTC 2025 daily completed IST bars, 0 price-point slippage on both fill sides; modeled Delta futures taker commission 0.05% each side and 18% GST on commission. Report gross, fee, GST, no-slippage net, raw trades, dated NAV, PF, sample size, month-by-month NAV/PF, drawdown. Historical funding UNMODELED, spread, impact, margin/rounding not validated. Screen PASS is only WORTH STRESS TESTING; if credible, freeze rules and stress 0.5 and 5 BTC points per side. Preserve no-lookahead. Do not call upstream spot return accounting an exact futures execution replay.
+
+This check successfully resolved the upstream SHA, exact signal rules, and native data location that the previous ledger called unknown. No native test or workflow was launched in this check; implementation/execution remains outstanding. No main or live changes.
