@@ -213,7 +213,8 @@ def precheck(side,mo,mh,ml,stop):
     if side==-1 and mh>=stop:return float(stop),"native_stop"
     return None,None
 
-def backtest(asset,minute,mark,events,product,observation,external,waiver):
+def backtest(asset,minute,mark,events,product,observation,external,waiver,fill_proxy='mark_trigger'):
+    assert fill_proxy in ('mark_trigger','traded_minute_close','traded_minute_worst','traded_minute_best')
     assert observation in ("close","extreme")
     assert len(minute)==len(mark)==1440
     assert np.array_equal(minute.time.to_numpy(),mark.time.to_numpy())
@@ -221,6 +222,8 @@ def backtest(asset,minute,mark,events,product,observation,external,waiver):
     idx=minute.index
     op=minute.open.to_numpy(dtype=float)
     close=minute.close.to_numpy(dtype=float)
+    trade_hi=minute.high.to_numpy(dtype=float)
+    trade_lo=minute.low.to_numpy(dtype=float)
     mo=mark.open.to_numpy(dtype=float)
     mh=mark.high.to_numpy(dtype=float)
     ml=mark.low.to_numpy(dtype=float)
@@ -302,8 +305,17 @@ def backtest(asset,minute,mark,events,product,observation,external,waiver):
         if pos is not None and reason is not None:
             p=pos
             side=p["side"]
-            # Proxy fills at mark-trigger; exact bid/ask and delay unavailable.
-            exit_px=float(fill)
+            # MARK triggers the native stop, but the stop converts to MARKET
+            # execution against traded prices. No historical tick-level book
+            # exists. These are DIFFERENT proxy scenarios, not verified fills.
+            if reason == "supertrend_flip" or fill_proxy == "mark_trigger":
+                exit_px=float(fill)
+            elif fill_proxy == "traded_minute_close":
+                exit_px=float(close[j])
+            elif fill_proxy == "traded_minute_worst":
+                exit_px=float(trade_lo[j] if side==1 else trade_hi[j])
+            else:
+                exit_px=float(trade_hi[j] if side==1 else trade_lo[j])
             minutes=j-p["entry_j"]
             gross=(exit_px-p["entry"])*side*p["qty"]
             entry_fee=p["entry"]*p["qty"]*TAKER_FEE
@@ -361,7 +373,7 @@ def backtest(asset,minute,mark,events,product,observation,external,waiver):
     wins=sum(row["net_usd"] for row in trades if row["net_usd"]>0)
     losses=-sum(row["net_usd"] for row in trades if row["net_usd"]<0)
     result=dict(
-        asset=asset,day_ist="2026-11-20",
+        asset=asset,day_ist="2026-11-20",fill_proxy=fill_proxy,
         method=f"1h signal / 1m Demo MARK {observation} observations, +1m decision delay",
         account="hypothetical standalone 100USD Portfolio Margin account",
         other_instruments_assumed=bool(external),
@@ -409,6 +421,7 @@ def main():
         execution="1m mark OHLC existing stop touches; mark CLOSE trailing updates next minute; optimistic favorable extreme sensitivity separate",
         stop="1h 2xATR14 initial stop, optional synthetic single-position PM preliq only if no other instruments",
         fee="0.05% taker entry/exit plus 18% GST; unverified 27min waived exit hypothesis",
+        fill_proxy_sensitivity="MARK stop is a trigger, not an executable price; test traded-minute close and best/worst traded-minute range with unknown latency",
         exclusions=["tick-by-tick 3s sampling","historical bid/ask","historical actual account portfolio equity and other positions",
                     "real Delta account liquidation","funding","actual order rejects/stop-edit latency"],
         dataset={},scenario={}
@@ -433,10 +446,13 @@ def main():
             for sampling in ("close","extreme"):
                 for offer in (False,True):
                     label=f"{asset.lower()}_{'shared' if external else 'single'}_{sampling}_{'offer' if offer else 'nooffer'}"
-                    table,stats=backtest(asset,trade,mark,ev,product,sampling,external,offer)
-                    table.to_csv(OUT/f"{label}_trades.csv",index=False)
-                    meta["scenario"][label]=stats
-                    print("DEMO_1H_PM_RESULT",label,json.dumps(stats),flush=True)
+                    for fill_proxy in ("mark_trigger","traded_minute_close","traded_minute_worst","traded_minute_best"):
+                        suffix = "" if fill_proxy=="mark_trigger" else "_"+fill_proxy
+                        name=label+suffix
+                        table,stats=backtest(asset,trade,mark,ev,product,sampling,external,offer,fill_proxy=fill_proxy)
+                        table.to_csv(OUT/f"{name}_trades.csv",index=False)
+                        meta["scenario"][name]=stats
+                        print("DEMO_1H_PM_RESULT",name,json.dumps(stats),flush=True)
     (OUT/"summary.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
     print("SUCCESS_DEMO_1H_PM_NOV20",OUT,flush=True)
 
