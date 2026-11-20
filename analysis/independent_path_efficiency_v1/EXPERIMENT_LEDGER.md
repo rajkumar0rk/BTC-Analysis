@@ -1,0 +1,7 @@
+# Independent monthly high-PF schedule ledger — path efficiency
+
+2026-11-20 11:11 IST — NEW STUDY, EXECUTION UNVERIFIED.
+
+Prior variance-timing run 44664160577 job 136049282983 verified completed/success, BTC after-cost PF 0.779 and 2025 -9.22%, rejected. This study is independent and does not reuse its losing signal. Branch research/independent-path-efficiency-20261120-v1; novelty b9a54bed0879f66fe62a89ac1b3998b863dffcf2; source fd05858c11457a0f617088067aa8c93d6af51081; workflow 0934a86dc2d8d9426d00fa4d12d8351c3e01e898. A branch-scoped push workflow was committed. GitHub connector fetch_commit_workflow_runs is PR-event-only, therefore cannot establish whether a push-triggered workflow launched. Direct public Actions API retrieval failed. No run ID, job ID, ledgers or backtest outcome verified yet. DO NOT call this a completed backtest.
+
+NEXT EXACT CHECK: use Actions run listing for branch research/independent-path-efficiency-20261120-v1 (including push event), inspect actual run/job/steps, diagnose trigger failure if absent; retrieve paired artifacts and verify 2025 selection, 2026 BTC, frozen ETH, 22 IST monthly NAV and PF, data hashes, fees, stop-first logic and funding/margin limitations. If workflow was not launched because workflows must be registered on default branch, use an allowed branch-only trigger mechanism; never modify main without authorization. The source is adapted from the previous study's tested ledger engine; execution/model audit is not independently complete. Keep source and ledger isolated. No live activity.
