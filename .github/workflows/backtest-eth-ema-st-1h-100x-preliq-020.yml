@@ -1,0 +1,62 @@
+name: ETHUSD 1h 100x pre-liquidation buffer comparison
+on:
+  push:
+    branches: [research/eth-ema-st-1h-100x-preliq-020-20261120]
+    paths:
+      - scripts/backtest_eth_ema_st_1h_100x_preliq_020_20261120.py
+      - .github/workflows/backtest-eth-ema-st-1h-100x-preliq-020.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-ema-st-1h-100x-preliq-020
+  cancel-in-progress: false
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Validate no syntax errors
+        run: |
+          python -m py_compile scripts/backtest_eth_ema_st_1h_27min_20261120.py
+          python -m py_compile scripts/backtest_eth_ema_st_1h_100x_20261120.py
+          python -m py_compile scripts/backtest_eth_ema_st_1h_100x_preliq_020_20261120.py
+      - name: Replay exact previous 100x strategy then add only $0.20 preliq stop
+        run: python scripts/backtest_eth_ema_st_1h_100x_preliq_020_20261120.py
+      - name: Write comparison summary
+        if: success()
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          j=json.loads(Path("analysis/eth_ema_st_1h_100x_preliq_020_20261120/comparison.json").read_text())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as o:
+              o.write("## ETHUSD EMA/ST, 1h, 100x isolated, pre-liquidation stop +$0.20\n\n")
+              o.write("| Model | Net USD | Return on $100 | PF | Trades | Liquidations | Pre-liq exits | Positive months |\n|---|---:|---:|---:|---:|---:|---:|---:|\n")
+              for name, key in [("Baseline without preliq","baseline_100x_without_preliq"),("With $0.20 preliq","protected_100x_with_preliq")]:
+                  s=j[key]
+                  o.write(f"| {name} | {s['net_profit_usd']:+,.2f} | {s['total_return_on_initial_balance_pct']:+.2f}% | {s['profit_factor']} | {s['trades']} | {s['modeled_liquidations']} | {s.get('pre_liquidation_stop_exits','-')} | {s['profitable_months']}/22 |\n")
+              o.write("\nPre-liquidation is an exit protection (NOT an entry filter). No live trading; simulated OHLC stop fills and modeled liquidation; funding/spread/slippage excluded.\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: eth-ema-st-1h-100x-preliq-020-replay
+          path: analysis/eth_ema_st_1h_100x_preliq_020_20261120/
+          if-no-files-found: error
+      - name: Commit results only to research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_ema_st_1h_100x_preliq_020_20261120/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record ETH 100x preliq stop comparison"
+            git push origin HEAD:research/eth-ema-st-1h-100x-preliq-020-20261120
+          fi
