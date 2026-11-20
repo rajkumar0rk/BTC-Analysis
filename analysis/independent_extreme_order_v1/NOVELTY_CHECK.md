@@ -1,0 +1,6 @@
+# NOVELTY_CHECK — hourly extreme-order traversal
+Decision: NEW, conditional on the branch's read-only novelty record.
+Signal: first minute attaining the completed hourly high versus first minute attaining hourly low. Separation >=15 or >=30 minutes. Enter next 1m open following the high-last/low-last traversal or reverse it. 14h ATR stop *1.5, reward 2R, max hold 720 minutes; stop-first on ambiguous 1m bar; 0.5% equity risk, 3x notional cap. BTC 2025 chooses among four predeclared configurations. Freeze for BTC 2026 and ETH. All prices dimensionless except market-specific execution slippage.
+Closest studies: scripts/independent_range_occupancy_v1.py (extreme *occupancy*, not temporal order), scripts/independent_lagged_volume_response_v1.py (volume timing rather than high/low order), independent-stage27-variance-ratio (serial return variance rather than extrema sequence).
+Economic falsifier: if directional hourly traversal does not persist/revert enough to cover both-side taker fees, GST, adverse slippage and bounded stops, reject. No market maker, flow or order-book inference.
+Data: original SHA-checked Delta India 1m partitions. Missing first 5.5 IST hours Jan 2025; funding, spreads, impact, margin/liquidation, lot sizes unmodeled. 2026 is research-exposed. Monthly results cannot claim full 22-month coverage if native manifest fails validation.
