@@ -1,0 +1,89 @@
+name: BTC ETH Portfolio Margin risk scenario backtest
+on:
+  push:
+    branches: ['research/btc-eth-portfolio-margin-20261120']
+    paths:
+      - 'scripts/replay_btc_eth_portfolio_margin.py'
+      - '.github/workflows/replay-portfolio-btc-eth.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-eth-portfolio-margin-research
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical packages
+        run: python -m pip install numpy pandas
+      - name: Validate risk-scenario formula and script syntax
+        run: |
+          python -m py_compile scripts/replay_btc_eth_portfolio_margin.py
+          python - <<'PY'
+          import sys
+          sys.path.insert(0,"scripts")
+          from replay_btc_eth_portfolio_margin import portfolio_risk_margin,portfolio_liquidation
+          for shock in (0.01,0.02,0.03):
+              assert abs(portfolio_risk_margin(80000,0.0125,shock)-1000*shock)<1e-8
+              long=portfolio_liquidation(80000,0.0125,1,99.41,shock)
+              short=portfolio_liquidation(80000,0.0125,-1,99.41,shock)
+              assert long<80000<short
+              assert abs(99.41+0.0125*(long-80000)-0.8*shock*0.0125*long)<1e-8
+              assert abs(99.41+0.0125*(80000-short)-0.8*shock*0.0125*short)<1e-8
+          print("Portfolio risk scenario math checked")
+          PY
+      - name: Historical BTC ETH futures-only Portfolio Margin replay
+        run: |
+          python scripts/replay_btc_eth_portfolio_margin.py > /tmp/portfolio_backtest.log
+          grep 'PORTFOLIO_MARGIN_RISK_SCENARIO_REPLAY_SUCCESS' /tmp/portfolio_backtest.log
+          grep '^RESULT' /tmp/portfolio_backtest.log
+          grep '^MONTHS' /tmp/portfolio_backtest.log
+      - name: Verify no invented individual liquidation price or unsafe margin sizing
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("analysis/btc_eth_portfolio_margin_20261120/summary.json")
+          j=json.loads(p.read_text())
+          s=j["settings"]
+          assert s["portfolio_position_liquidation_price"] is None
+          assert not s["uses_preliq_one_point_stop"]
+          assert s["max_per_trade_portfolio_initial_margin_usd"]==10.0
+          for a in ("BTC","ETH"):
+              for k,v in j[a].items():
+                  if not (isinstance(v,dict) and k.startswith(("history_","recent10k_"))):continue
+                  assert v["initial_wallet_usd"]==100
+                  assert v["largest_initial_margin_usd"]<=10.001
+                  assert v["closed_trades"]>0
+                  assert 0<=v["max_closed_equity_drawdown_pct"]<=100
+                  assert 0<=v["max_intrabar_equity_drawdown_pct"]<=100
+                  assert v["ending_wallet_usd"]>=0
+                  assert v["completed_months"]==22 if k.startswith("history_") else v["completed_months"]<=3
+          print("Risk caps, outcomes and limitations verified")
+          PY
+      - name: Upload complete research reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-portfolio-margin-futures-only
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            analysis/btc_eth_portfolio_margin_20261120/*.json
+            analysis/btc_eth_portfolio_margin_20261120/*.csv
+            analysis/btc_eth_portfolio_margin_20261120/*.csv.gz
+      - name: Save research artifacts on feature research branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_eth_portfolio_margin_20261120
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record BTC ETH portfolio margin risk scenarios and monthly drawdowns"
+            git pull --rebase origin research/btc-eth-portfolio-margin-20261120
+            git push origin HEAD:research/btc-eth-portfolio-margin-20261120
+          fi
