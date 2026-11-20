@@ -103,7 +103,7 @@ Open http://127.0.0.1:8765 on your own computer. Never expose port 8765 publicly
 
 1. Create Delta **India testnet** API keys, trading-only without withdrawal permissions, ideally IP allowlisted; set DELTA_DEMO_API_KEY and DELTA_DEMO_API_SECRET in common .env.
 2. Manually set BTCUSD/ETHUSD **isolated** margin, **100× leverage**, and disable auto-add margin in the exchange UI. Confirm there are no existing manual positions or orders on that product.
-3. Set ISOLATED_MARGIN_CONFIRMED=true in common .env.
+3. Set ISOLATED_MARGIN_CONFIRMED=true in common .env. **Before switching paper futures to exchange orders, set STATE_DIR=./state/demo/BTC_futures_exchange in lane-env/BTC_futures.env** (or ETH_futures_exchange for ETH). A persistent identity check refuses to use a paper DB for exchange orders, use a demo DB for live orders, or use BTC's DB for ETH. The comparison dashboard has a separate **Delta exchange** panel for these dedicated order-state directories. If you later enable live, use STATE_DIR=./state/live/BTC_futures_exchange (or corresponding ETH).
 4. Edit ONLY the futures lane you want to activate (e.g. lane-env/BTC_futures.env): set TRADING_ENABLED=true. Keep the options lane files at false; options write attempts are rejected at startup.
 5. Stop the specific service, run a manual doctor using the same ASSET/MARKET/MODE/TRADING_ENABLED environment, then restart it. Monitor order entry, actual fill price/quantity, exchange-native stop and trailing updates and venue fees.
 6. Starting a futures bot does not adopt unknown exchange positions; stopping it **does not flatten an existing position**. Check the exchange UI and manage outstanding native stops on any restart/disconnect.
@@ -145,3 +145,17 @@ Official API reference: https://docs.delta.exchange/ ; India fee details: https:
 By default, MODE=demo and TRADING_ENABLED=false, both BTC/ETH futures now paper-trade at actual bid/ask quotes (no orders) as do their corresponding CALL/PUT options. Each paper lane has its own starting $100 portfolio. On the comparison dashboard the **Matched forward trades** table joins closed futures and option trades by their exact underlying 15-minute entry signal timestamp, and shows their NET return difference after modeled fees/GST. It also reports total paper trades and all closed net across each lane, to make option-skipped entries visible. Futures 100× liquidation is only an approximate mark-price maintenance proxy and options quote execution is hypothetical; neither is an exchange-confirmed fill.
 
 With FUTURES_PAPER_ENABLED=false and TRADING_ENABLED=false a futures lane is signals-only (no virtual or real trades). With TRADING_ENABLED=true it routes Delta testnet/live futures orders, and any previous paper record in the same state path should be archived or isolated before changing mode. Never compare an exchange order ledger with paper quote fills as if they had identical execution certainty.
+
+## Mandatory separate state on paper -> exchange / demo -> live
+
+The trading ledger now saves immutable identity (asset, market, environment, execution type). To turn on real demo futures orders after running futures paper, edit the relevant lane-env file:
+
+~~~dotenv
+MODE=demo
+ASSET=BTC
+MARKET=futures
+TRADING_ENABLED=true
+STATE_DIR=./state/demo/BTC_futures_exchange
+~~~
+
+For ETH use ./state/demo/ETH_futures_exchange. For live BTC/ETH use ./state/live/BTC_futures_exchange or ./state/live/ETH_futures_exchange, with the correct live keys and acknowledgement. Do not delete or overwrite the existing paper files: they continue to provide the side-by-side paper comparison. The dashboard separately displays exchange account state when those conventional exchange-specific directories exist. If the exchange returns unexpected order IDs or partial fills, manually inspect and reconcile before any restart.
