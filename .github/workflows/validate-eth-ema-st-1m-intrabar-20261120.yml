@@ -1,0 +1,63 @@
+name: ETHUSD EMA ST 1h signals 1m execution validation
+on:
+  push:
+    branches: [research/eth-ema-st-1h-27min-20261120]
+    paths:
+      - scripts/backtest_eth_ema_st_1h_1m_intrabar_validation_20261120.py
+      - .github/workflows/validate-eth-ema-st-1m-intrabar-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-ema-st-intrabar-validation-20261120
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install pandas numpy tabulate
+      - name: Check syntax
+        run: |
+          python -m py_compile scripts/backtest_eth_ema_st_1h_27min_20261120.py
+          python -m py_compile scripts/backtest_eth_ema_st_1h_1m_intrabar_validation_20261120.py
+      - name: Run 1-minute stop execution with 27-minute fee timing
+        run: python scripts/backtest_eth_ema_st_1h_1m_intrabar_validation_20261120.py
+      - name: Summarize
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads(Path('analysis/eth_tv_ema_st_1h_27min_20261120/intrabar_1m_validation.json').read_text())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## 1h ETH signals with 1m stop-monitoring execution sensitivity\n\n")
+              f.write("| Setup | Cost case | Trades | Net USD | PF | Positive months | Eligible |\n|---|---|---:|---:|---:|---:|---:|\n")
+              for name,cs in d["cases"].items():
+                  for label,v in cs.items():
+                      f.write(f"| {name} | {label} | {v['trades']} | {v['net_profit_usd']:+.4f} | {v['profit_factor']} | {v['profitable_months']}/22 | {v['scalp_eligible']} |\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: eth-ema-st-one-minute-execution-validation
+          path: |
+            analysis/eth_tv_ema_st_1h_27min_20261120/intrabar_1m_validation.json
+            analysis/eth_tv_ema_st_1h_27min_20261120/INTRABAR_VALIDATION.md
+            analysis/eth_tv_ema_st_1h_27min_20261120/monthly_1minute_execution_*.csv
+            analysis/eth_tv_ema_st_1h_27min_20261120/trades_1minute_execution_*.csv.gz
+          if-no-files-found: error
+      - name: Save 1m sensitivity to branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_tv_ema_st_1h_27min_20261120/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save ETH 1m stop-monitoring sensitivity"
+            git push origin HEAD:research/eth-ema-st-1h-27min-20261120
+          fi
