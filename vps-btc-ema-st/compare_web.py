@@ -64,6 +64,30 @@ def read_lane(cfg,asset,market):
         return base
     finally:db.close()
 
+def exchange_lane(cfg,asset):
+    """Optional separate authenticated-futures directory, never reused paper state."""
+    directory=lane_state(asset,"futures",cfg.mode).parent/(asset+"_futures_exchange")
+    if not (directory/"bot.sqlite3").is_file():return None
+    db=Store(directory)
+    try:
+        hb=db.get("heartbeat",{})
+        age=time.time()-float(hb.get("now") or 0)
+        return {"asset":asset,"execution":"real_exchange_orders_if_enabled",
+                "mode":cfg.mode,"health":"connected" if age<20 else "offline",
+                "trading_enabled":bool(hb.get("trading_enabled")),
+                "active_position":db.get("active"),
+                "pending":db.get("pending"),"halted":db.get("halted"),
+                "account_equity_usd":db.get("exchange_equity_usd"),
+                "estimated_fill_pnl":db.get("fill_attribution")}
+    finally:db.close()
+
+@app.get("/api/exchange-lanes")
+def exchange_lanes():
+    cfg=Config.read()
+    return {"mode":cfg.mode,
+            "exchange_lanes":[r for r in (exchange_lane(cfg,a) for a in ("BTC","ETH")) if r],
+            "note":"Exchange account figures are not directly comparable to paper fills; these lanes use separate state."}
+
 @app.get("/api/compare")
 def compare():
     cfg=Config.read()
@@ -222,6 +246,10 @@ footer{margin-top:20px;color:var(--mut);font-size:11px}
 </div>
 <div class="tablewrap"><table><thead><tr><th>Signal UTC</th><th>Side</th><th>Option contract</th><th>Futures net</th><th>Option net</th><th>Difference</th></tr></thead><tbody id="paired-rows"></tbody></table></div>
 <p class="label" id="paired-note"></p></div>
+<div class="card panel"><h2>Optional Delta exchange demo/live futures</h2>
+<p class="label">Actual exchange order lanes use separate dedicated SQLite state, for example state/demo/BTC_futures_exchange. These are NOT part of the four paper portfolios.</p>
+<div class="grid2" id="exchange-cards"><div class="label">No exchange-order lanes started</div></div>
+</div>
 <div class="grid2">
 <div class="card"><h2>Historical futures (model)</h2>
 <div class="kv"><span>BTCUSD original · $100 →</span><b id="btc-hist">—</b></div>
@@ -343,6 +371,26 @@ async function loadPaired(){
  });
  }catch(e){txt("paired-count","Unavailable");txt("paired-note",String(e))}
 }
+async function loadExchange(){
+ try{
+ const data=await api("/api/exchange-lanes");
+ const root=$("exchange-cards");root.replaceChildren();
+ if(!data.exchange_lanes.length){
+   root.append(el("span","No authenticated futures-order lanes are running yet.","label"));return;
+ }
+ data.exchange_lanes.forEach(s=>{
+  const card=el("div","","card");
+  card.append(el("h3",s.asset+"USD futures exchange · "+s.health));
+  card.append(line("Order writes",s.trading_enabled?"Enabled":"Off"));
+  card.append(line("Exchange equity",usd(s.account_equity_usd)));
+  card.append(line("Net before funding (estimated)",s.estimated_fill_pnl?
+    usd(s.estimated_fill_pnl.estimated_net_before_funding_usd):"—"));
+  card.append(line("Position",s.active_position?JSON.stringify(s.active_position):"None"));
+  if(s.halted)card.append(el("div",String(s.halted),"bad"));
+  root.append(card);
+ });
+ }catch(e){$("exchange-cards").textContent="Exchange lane status unavailable: "+e}
+}
 async function loadHistory(){
  const q=new URLSearchParams({asset:$("hist-asset").value,window:$("hist-range").value,
  offer:$("hist-offer").value,liquidation:$("hist-liq").value});
@@ -388,8 +436,8 @@ async function loadPaper(){
 ["hist-asset","hist-range","hist-offer","hist-liq"].forEach(x=>$(x).addEventListener("change",loadHistory));
 $("paper-asset").addEventListener("change",loadPaper);
 $("paired-asset").addEventListener("change",loadPaired);
-refresh();loadHistory();loadPaper();loadPaired();
-setInterval(refresh,5000);setInterval(loadPaper,15000);setInterval(loadPaired,15000);
+refresh();loadHistory();loadPaper();loadPaired();loadExchange();
+setInterval(refresh,5000);setInterval(loadPaper,15000);setInterval(loadPaired,15000);setInterval(loadExchange,15000);
 </script></body></html>"""
 
 @app.get("/",response_class=HTMLResponse)
