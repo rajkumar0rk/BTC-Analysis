@@ -1,0 +1,80 @@
+name: Validate BTC 15M EMA20 Supertrend original 828USD with 1M execution
+on:
+  push:
+    branches: [research/btc-15m-ema-st-1m-execution-20261120]
+    paths:
+      - scripts/replay_btc_ema_st_15m_signals_1m_execution_20261120.py
+      - .github/workflows/replay-btc-ema-st-15m-entry-1m-exit-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-15m-signal-1m-execution-20261120
+  cancel-in-progress: false
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas
+      - name: Syntax and no trading access checks
+        run: |
+          set -Eeuo pipefail
+          python -m py_compile scripts/replay_btc_ema_st_15m_signals_1m_execution_20261120.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path("scripts/replay_btc_ema_st_15m_signals_1m_execution_20261120.py").read_text()
+          for banned in ("place_order(", "cancel_order(", "requests.post(", "systemctl", "os.system("):
+              assert banned not in s,banned
+          assert "old_preliq.replay" in s and "old_model.path_exit" in s
+          assert "old_signals.indicators" in s and "j%15==0" in s
+          PY
+      - name: Reproduce original +828USD and replay full 1M exits
+        run: |
+          set -Eeuo pipefail
+          python -u scripts/replay_btc_ema_st_15m_signals_1m_execution_20261120.py
+      - name: Verify complete 22-month research and 1M outcomes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path("analysis/btc_ema_st_15m_entry_1m_exit_20261120/summary.json")
+          j=json.loads(path.read_text())
+          assert j["status"]=="completed" and j["instrument"]=="BTCUSD"
+          b=j["comparison"]["original_15m_ohlc"]
+          assert abs(b["net_usd"]-828.4954)<.0002
+          assert b["trades"]==1000 and b["positive_complete_months"]==19
+          assert set(j["comparison"]["one_minute"])=={"assumed_30m_offer","no_offer"}
+          for name,r in j["comparison"]["one_minute"].items():
+              assert r["completed_months"]==22 and len(r["monthly"])==23
+              assert r["trades"]>0 and r["profit_factor"] is not None
+              print("VERIFIED_1M",name,"net_usd",r["net_usd"],"pf",r["profit_factor"],
+                 "trades",r["trades"],"positive_months",r["positive_complete_months"],
+                 "skipped_wallet",r["skipped_wallet"],flush=True)
+          PY
+      - name: Export detailed results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-BTC-15M-EMA-ST-1M-ATR-trailing-validation
+          path: analysis/btc_ema_st_15m_entry_1m_exit_20261120/
+          if-no-files-found: warn
+          retention-days: 60
+      - name: Commit research results (independent branch only)
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/btc_ema_st_15m_entry_1m_exit_20261120/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: save 15M original versus 1M stop/trailing BTC validation'
+            git push origin HEAD:research/btc-15m-ema-st-1m-execution-20261120
+          fi
+      - name: Publish report
+        if: success()
+        run: cat analysis/btc_ema_st_15m_entry_1m_exit_20261120/RESEARCH_REPORT.md >> "$GITHUB_STEP_SUMMARY"
