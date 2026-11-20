@@ -1,0 +1,637 @@
+{
+  "date_ist": "2026-11-20",
+  "timezone": "Asia/Kolkata",
+  "repo_profile": "ema20_st_1h_100_50",
+  "source_base_url": "https://cdn-ind.testnet.deltaex.org",
+  "actual_vps_profile_verified_this_run": false,
+  "historical_3_second_feed": false,
+  "actual_exchange_order_fills_verified": false,
+  "entry_logic": "1h EMA20 pullback + ST (10,3) stable direction, no ATR/volume entry gate",
+  "entry_delay_assumption": "+1 minute after hourly close for 10s finalized candle rule",
+  "trailing_100_50": "BTC 100/50, ETH proportional to entry/80000 with tick rounding",
+  "portfolio": "PM 1pct shock, initial equity hypothetical $100, $10 sizing target, 100x maximum notional ceiling; not isolated margin",
+  "execution": "1m mark OHLC existing stop touches; mark CLOSE trailing updates next minute; optimistic favorable extreme sensitivity separate",
+  "stop": "1h 2xATR14 initial stop, optional synthetic single-position PM preliq only if no other instruments",
+  "fee": "0.05% taker entry/exit plus 18% GST; unverified 27min waived exit hypothesis",
+  "exclusions": [
+    "tick-by-tick 3s sampling",
+    "historical bid/ask",
+    "historical actual account portfolio equity and other positions",
+    "real Delta account liquidation",
+    "funding",
+    "actual order rejects/stop-edit latency"
+  ],
+  "dataset": {
+    "BTC": {
+      "product": {
+        "product_id": 84,
+        "symbol": "BTCUSD",
+        "value": 0.001,
+        "tick": 0.1,
+        "maintenance_margin": "0.25",
+        "state": "live",
+        "trading_status": "operational"
+      },
+      "hourly_bars": 1219,
+      "trade_minutes": 1440,
+      "mark_minutes": 1440,
+      "first_hour_utc": "2026-10-01 00:00:00+00:00",
+      "last_hour_utc": "2026-11-20 18:00:00+00:00",
+      "mark_start_utc": "2026-11-19 18:30:00+00:00",
+      "mark_end_utc": "2026-11-20 18:29:00+00:00",
+      "candidate_signals": [
+        {
+          "signal_at_utc": "2026-11-20 11:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 11:01:00+00:00",
+          "action_ist": "2026-11-20 16:31:00+05:30",
+          "side": "short",
+          "signal_close": 62028.0,
+          "signal_bar_utc": "2026-11-20 10:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        },
+        {
+          "signal_at_utc": "2026-11-20 15:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 15:01:00+00:00",
+          "action_ist": "2026-11-20 20:31:00+05:30",
+          "side": "short",
+          "signal_close": 61738.5,
+          "signal_bar_utc": "2026-11-20 14:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        },
+        {
+          "signal_at_utc": "2026-11-20 16:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 16:01:00+00:00",
+          "action_ist": "2026-11-20 21:31:00+05:30",
+          "side": "short",
+          "signal_close": 59457.5,
+          "signal_bar_utc": "2026-11-20 15:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        }
+      ]
+    },
+    "ETH": {
+      "product": {
+        "product_id": 1699,
+        "symbol": "ETHUSD",
+        "value": 0.01,
+        "tick": 0.05,
+        "maintenance_margin": "0.5",
+        "state": "live",
+        "trading_status": "operational"
+      },
+      "hourly_bars": 1219,
+      "trade_minutes": 1440,
+      "mark_minutes": 1440,
+      "first_hour_utc": "2026-10-01 00:00:00+00:00",
+      "last_hour_utc": "2026-11-20 18:00:00+00:00",
+      "mark_start_utc": "2026-11-19 18:30:00+00:00",
+      "mark_end_utc": "2026-11-20 18:29:00+00:00",
+      "candidate_signals": [
+        {
+          "signal_at_utc": "2026-11-20 09:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 09:01:00+00:00",
+          "action_ist": "2026-11-20 14:31:00+05:30",
+          "side": "short",
+          "signal_close": 1750.45,
+          "signal_bar_utc": "2026-11-20 08:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        },
+        {
+          "signal_at_utc": "2026-11-20 11:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 11:01:00+00:00",
+          "action_ist": "2026-11-20 16:31:00+05:30",
+          "side": "short",
+          "signal_close": 1755.4,
+          "signal_bar_utc": "2026-11-20 10:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        },
+        {
+          "signal_at_utc": "2026-11-20 12:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 12:01:00+00:00",
+          "action_ist": "2026-11-20 17:31:00+05:30",
+          "side": "short",
+          "signal_close": 1748.2,
+          "signal_bar_utc": "2026-11-20 11:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        },
+        {
+          "signal_at_utc": "2026-11-20 14:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 14:01:00+00:00",
+          "action_ist": "2026-11-20 19:31:00+05:30",
+          "side": "short",
+          "signal_close": 1754.0,
+          "signal_bar_utc": "2026-11-20 13:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        },
+        {
+          "signal_at_utc": "2026-11-20 15:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 15:01:00+00:00",
+          "action_ist": "2026-11-20 20:31:00+05:30",
+          "side": "short",
+          "signal_close": 1742.55,
+          "signal_bar_utc": "2026-11-20 14:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        },
+        {
+          "signal_at_utc": "2026-11-20 16:00:00+00:00",
+          "earliest_simulated_action_utc": "2026-11-20 16:01:00+00:00",
+          "action_ist": "2026-11-20 21:31:00+05:30",
+          "side": "short",
+          "signal_close": 1653.05,
+          "signal_bar_utc": "2026-11-20 15:00:00+00:00",
+          "volume_gate": "DISABLED_1H_PROFILE"
+        }
+      ]
+    }
+  },
+  "scenario": {
+    "btc_single_close_nooffer": {
+      "asset": "BTC",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK close observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": false,
+      "preliq_model": "SYNTHETIC_PM_ONLY",
+      "scalper_waiver_hypothetical": false,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 105.407,
+      "net_realized_usd": 5.407,
+      "closed_trades": 2,
+      "open_at_end": null,
+      "attempts_when_flat": 3,
+      "skipped": [
+        {
+          "ist": "2026-11-20 21:31:00+05:30",
+          "side": -1,
+          "price": 59318.5,
+          "reason": "skip_price_moved_gt_0.2pct"
+        }
+      ],
+      "wins": 2,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 7.7408,
+        "entry_fee": 0.9908,
+        "exit_fee": 0.9869,
+        "gst": 0.356
+      }
+    },
+    "btc_single_close_offer": {
+      "asset": "BTC",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK close observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": false,
+      "preliq_model": "SYNTHETIC_PM_ONLY",
+      "scalper_waiver_hypothetical": true,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 106.5716,
+      "net_realized_usd": 6.5716,
+      "closed_trades": 2,
+      "open_at_end": null,
+      "attempts_when_flat": 3,
+      "skipped": [
+        {
+          "ist": "2026-11-20 21:31:00+05:30",
+          "side": -1,
+          "price": 59318.5,
+          "reason": "skip_price_moved_gt_0.2pct"
+        }
+      ],
+      "wins": 2,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 7.7408,
+        "entry_fee": 0.9908,
+        "exit_fee": 0.0,
+        "gst": 0.1784
+      }
+    },
+    "btc_single_extreme_nooffer": {
+      "asset": "BTC",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK extreme observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": false,
+      "preliq_model": "SYNTHETIC_PM_ONLY",
+      "scalper_waiver_hypothetical": false,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 102.8759,
+      "net_realized_usd": 2.8759,
+      "closed_trades": 2,
+      "open_at_end": null,
+      "attempts_when_flat": 3,
+      "skipped": [
+        {
+          "ist": "2026-11-20 21:31:00+05:30",
+          "side": -1,
+          "price": 59318.5,
+          "reason": "skip_price_moved_gt_0.2pct"
+        }
+      ],
+      "wins": 2,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 5.2112,
+        "entry_fee": 0.9908,
+        "exit_fee": 0.9882,
+        "gst": 0.3562
+      }
+    },
+    "btc_single_extreme_offer": {
+      "asset": "BTC",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK extreme observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": false,
+      "preliq_model": "SYNTHETIC_PM_ONLY",
+      "scalper_waiver_hypothetical": true,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 104.042,
+      "net_realized_usd": 4.042,
+      "closed_trades": 2,
+      "open_at_end": null,
+      "attempts_when_flat": 3,
+      "skipped": [
+        {
+          "ist": "2026-11-20 21:31:00+05:30",
+          "side": -1,
+          "price": 59318.5,
+          "reason": "skip_price_moved_gt_0.2pct"
+        }
+      ],
+      "wins": 2,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 5.2112,
+        "entry_fee": 0.9908,
+        "exit_fee": 0.0,
+        "gst": 0.1784
+      }
+    },
+    "btc_shared_close_nooffer": {
+      "asset": "BTC",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK close observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": true,
+      "preliq_model": "DISABLED_EXTERNAL_EXPOSURE",
+      "scalper_waiver_hypothetical": false,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 105.407,
+      "net_realized_usd": 5.407,
+      "closed_trades": 2,
+      "open_at_end": null,
+      "attempts_when_flat": 3,
+      "skipped": [
+        {
+          "ist": "2026-11-20 21:31:00+05:30",
+          "side": -1,
+          "price": 59318.5,
+          "reason": "skip_price_moved_gt_0.2pct"
+        }
+      ],
+      "wins": 2,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 7.7408,
+        "entry_fee": 0.9908,
+        "exit_fee": 0.9869,
+        "gst": 0.356
+      }
+    },
+    "btc_shared_close_offer": {
+      "asset": "BTC",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK close observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": true,
+      "preliq_model": "DISABLED_EXTERNAL_EXPOSURE",
+      "scalper_waiver_hypothetical": true,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 106.5716,
+      "net_realized_usd": 6.5716,
+      "closed_trades": 2,
+      "open_at_end": null,
+      "attempts_when_flat": 3,
+      "skipped": [
+        {
+          "ist": "2026-11-20 21:31:00+05:30",
+          "side": -1,
+          "price": 59318.5,
+          "reason": "skip_price_moved_gt_0.2pct"
+        }
+      ],
+      "wins": 2,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 7.7408,
+        "entry_fee": 0.9908,
+        "exit_fee": 0.0,
+        "gst": 0.1784
+      }
+    },
+    "btc_shared_extreme_nooffer": {
+      "asset": "BTC",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK extreme observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": true,
+      "preliq_model": "DISABLED_EXTERNAL_EXPOSURE",
+      "scalper_waiver_hypothetical": false,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 102.8759,
+      "net_realized_usd": 2.8759,
+      "closed_trades": 2,
+      "open_at_end": null,
+      "attempts_when_flat": 3,
+      "skipped": [
+        {
+          "ist": "2026-11-20 21:31:00+05:30",
+          "side": -1,
+          "price": 59318.5,
+          "reason": "skip_price_moved_gt_0.2pct"
+        }
+      ],
+      "wins": 2,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 5.2112,
+        "entry_fee": 0.9908,
+        "exit_fee": 0.9882,
+        "gst": 0.3562
+      }
+    },
+    "btc_shared_extreme_offer": {
+      "asset": "BTC",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK extreme observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": true,
+      "preliq_model": "DISABLED_EXTERNAL_EXPOSURE",
+      "scalper_waiver_hypothetical": true,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 104.042,
+      "net_realized_usd": 4.042,
+      "closed_trades": 2,
+      "open_at_end": null,
+      "attempts_when_flat": 3,
+      "skipped": [
+        {
+          "ist": "2026-11-20 21:31:00+05:30",
+          "side": -1,
+          "price": 59318.5,
+          "reason": "skip_price_moved_gt_0.2pct"
+        }
+      ],
+      "wins": 2,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 5.2112,
+        "entry_fee": 0.9908,
+        "exit_fee": 0.0,
+        "gst": 0.1784
+      }
+    },
+    "eth_single_close_nooffer": {
+      "asset": "ETH",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK close observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": false,
+      "preliq_model": "SYNTHETIC_PM_ONLY",
+      "scalper_waiver_hypothetical": false,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 107.8158,
+      "net_realized_usd": 7.8158,
+      "closed_trades": 6,
+      "open_at_end": null,
+      "attempts_when_flat": 6,
+      "skipped": [],
+      "wins": 5,
+      "losses": 1,
+      "win_rate_pct": 83.33,
+      "pf": 89.917,
+      "max_closed_equity_drawdown_pct": 0.08,
+      "totals": {
+        "gross": 14.82,
+        "entry_fee": 2.9716,
+        "exit_fee": 2.9641,
+        "gst": 1.0684
+      }
+    },
+    "eth_single_close_offer": {
+      "asset": "ETH",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK close observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": false,
+      "preliq_model": "SYNTHETIC_PM_ONLY",
+      "scalper_waiver_hypothetical": true,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 111.3135,
+      "net_realized_usd": 11.3135,
+      "closed_trades": 6,
+      "open_at_end": null,
+      "attempts_when_flat": 6,
+      "skipped": [],
+      "wins": 6,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 14.82,
+        "entry_fee": 2.9716,
+        "exit_fee": 0.0,
+        "gst": 0.5349
+      }
+    },
+    "eth_single_extreme_nooffer": {
+      "asset": "ETH",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK extreme observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": false,
+      "preliq_model": "SYNTHETIC_PM_ONLY",
+      "scalper_waiver_hypothetical": false,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 105.2281,
+      "net_realized_usd": 5.2281,
+      "closed_trades": 6,
+      "open_at_end": null,
+      "attempts_when_flat": 6,
+      "skipped": [],
+      "wins": 6,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 12.2338,
+        "entry_fee": 2.9716,
+        "exit_fee": 2.9655,
+        "gst": 1.0686
+      }
+    },
+    "eth_single_extreme_offer": {
+      "asset": "ETH",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK extreme observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": false,
+      "preliq_model": "SYNTHETIC_PM_ONLY",
+      "scalper_waiver_hypothetical": true,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 108.7274,
+      "net_realized_usd": 8.7274,
+      "closed_trades": 6,
+      "open_at_end": null,
+      "attempts_when_flat": 6,
+      "skipped": [],
+      "wins": 6,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 12.2338,
+        "entry_fee": 2.9716,
+        "exit_fee": 0.0,
+        "gst": 0.5349
+      }
+    },
+    "eth_shared_close_nooffer": {
+      "asset": "ETH",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK close observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": true,
+      "preliq_model": "DISABLED_EXTERNAL_EXPOSURE",
+      "scalper_waiver_hypothetical": false,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 107.8158,
+      "net_realized_usd": 7.8158,
+      "closed_trades": 6,
+      "open_at_end": null,
+      "attempts_when_flat": 6,
+      "skipped": [],
+      "wins": 5,
+      "losses": 1,
+      "win_rate_pct": 83.33,
+      "pf": 89.917,
+      "max_closed_equity_drawdown_pct": 0.08,
+      "totals": {
+        "gross": 14.82,
+        "entry_fee": 2.9716,
+        "exit_fee": 2.9641,
+        "gst": 1.0684
+      }
+    },
+    "eth_shared_close_offer": {
+      "asset": "ETH",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK close observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": true,
+      "preliq_model": "DISABLED_EXTERNAL_EXPOSURE",
+      "scalper_waiver_hypothetical": true,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 111.3135,
+      "net_realized_usd": 11.3135,
+      "closed_trades": 6,
+      "open_at_end": null,
+      "attempts_when_flat": 6,
+      "skipped": [],
+      "wins": 6,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 14.82,
+        "entry_fee": 2.9716,
+        "exit_fee": 0.0,
+        "gst": 0.5349
+      }
+    },
+    "eth_shared_extreme_nooffer": {
+      "asset": "ETH",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK extreme observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": true,
+      "preliq_model": "DISABLED_EXTERNAL_EXPOSURE",
+      "scalper_waiver_hypothetical": false,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 105.2281,
+      "net_realized_usd": 5.2281,
+      "closed_trades": 6,
+      "open_at_end": null,
+      "attempts_when_flat": 6,
+      "skipped": [],
+      "wins": 6,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 12.2338,
+        "entry_fee": 2.9716,
+        "exit_fee": 2.9655,
+        "gst": 1.0686
+      }
+    },
+    "eth_shared_extreme_offer": {
+      "asset": "ETH",
+      "day_ist": "2026-11-20",
+      "method": "1h signal / 1m Demo MARK extreme observations, +1m decision delay",
+      "account": "hypothetical standalone 100USD Portfolio Margin account",
+      "other_instruments_assumed": true,
+      "preliq_model": "DISABLED_EXTERNAL_EXPOSURE",
+      "scalper_waiver_hypothetical": true,
+      "starting_usd": 100.0,
+      "ending_realized_usd": 108.7274,
+      "net_realized_usd": 8.7274,
+      "closed_trades": 6,
+      "open_at_end": null,
+      "attempts_when_flat": 6,
+      "skipped": [],
+      "wins": 6,
+      "losses": 0,
+      "win_rate_pct": 100.0,
+      "pf": null,
+      "max_closed_equity_drawdown_pct": 0.0,
+      "totals": {
+        "gross": 12.2338,
+        "entry_fee": 2.9716,
+        "exit_fee": 0.0,
+        "gst": 0.5349
+      }
+    }
+  }
+}
