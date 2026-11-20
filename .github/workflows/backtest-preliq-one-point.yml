@@ -1,0 +1,76 @@
+name: BTC and ETH EMA ST preliquidation 1-point fee-impact replay
+on:
+  push:
+    branches: ['feature/vps-preliquidation-stops-20261120']
+    paths:
+      - 'scripts/replay_btc_ema_st_preliq_one_point.py'
+      - 'scripts/replay_eth_ema_st_preliq_one_point.py'
+      - '.github/workflows/backtest-preliq-one-point.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: preliq-one-point-research
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research numerical dependencies
+        run: python -m pip install numpy pandas
+      - name: Compile and run BTC and ETH one-point stop replay
+        run: |
+          python -m py_compile scripts/replay_btc_ema_st_preliq_one_point.py scripts/replay_eth_ema_st_preliq_one_point.py
+          python scripts/replay_btc_ema_st_preliq_one_point.py
+          python scripts/replay_eth_ema_st_preliq_one_point.py
+      - name: Save verifiable comparative summaries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          original_btc=json.loads(Path("analysis/btc_ema_st_fixed_10_margin_20261119/summary.json").read_text())
+          original_eth=json.loads(Path("analysis/eth_ema_st_fixed10_100x_20261120/summary.json").read_text())
+          btc=json.loads(Path("analysis/btc_ema_st_preliq_one_point_20261120/summary.json").read_text())
+          eth=json.loads(Path("analysis/eth_ema_st_preliq_one_point_20261120/summary.json").read_text())
+          def pick(a,key):
+            z=a[key]
+            return {k:z[k] for k in ("ending_portfolio_usd","net_profit_usd","net_profit_factor","completed_trades","assumed_liquidations","max_closed_equity_drawdown_pct","profitable_completed_months","losing_completed_months","liq_penalties_usd") if k in z}
+          report={
+           "limitations":"STOP AT EXACT 1 USD BEFORE LIQ fills from estimated 15m OHLC path; NOT exchange mark price; no slippage/stop trigger latency; therefore cannot claim real liquidation prevention or fee savings.",
+           "BTC":{"original":pick(original_btc,"all_history_threshold"),"preliq_one_point":pick(btc,"all_history_threshold")},
+           "ETH":{"original":pick(original_eth,"all_history_original_offer_threshold"),
+                  "preliq_one_point":pick(eth,"all_history_original_offer_threshold")}
+          }
+          path=Path("analysis/preliquidation_ema_st_one_point_20261120/comparison.json")
+          path.write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Archive for users
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-preliq-one-point-comparison
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            analysis/preliquidation_ema_st_one_point_20261120/*.json
+            analysis/btc_ema_st_preliq_one_point_20261120/*.json
+            analysis/btc_ema_st_preliq_one_point_20261120/*.csv
+            analysis/btc_ema_st_preliq_one_point_20261120/*.csv.gz
+            analysis/eth_ema_st_preliq_one_point_20261120/*.json
+            analysis/eth_ema_st_preliq_one_point_20261120/*.csv
+            analysis/eth_ema_st_preliq_one_point_20261120/*.csv.gz
+      - name: Commit scenario results on current feature branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/preliquidation_ema_st_one_point_20261120 analysis/btc_ema_st_preliq_one_point_20261120 analysis/eth_ema_st_preliq_one_point_20261120
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record historical BTC ETH 1-point preliq fee sensitivity"
+            git pull --rebase origin feature/vps-preliquidation-stops-20261120
+            git push origin HEAD:feature/vps-preliquidation-stops-20261120
+          fi
