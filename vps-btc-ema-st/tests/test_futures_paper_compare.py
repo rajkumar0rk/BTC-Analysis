@@ -57,7 +57,11 @@ def test_futures_unguarded_paper_position_liquidates_before_atr_stop(tmp_path):
     bot.open_paper(s,80000,80000)
     p=bot.db.get("paper_position")
     assert p is not None
-    assert p["initial_stop"]<p["liq_proxy"]  # guard OFF
+    # Entry guard stays OFF even though original ATR stop is beyond liquidation.
+    # The NEW emergency exit, not entry rejection, is above the liq threshold.
+    assert p["strategy_atr_stop"]<p["liq_proxy"]
+    assert p["preliq_stop"]>p["liq_proxy"]
+    assert p["stop"]==p["preliq_stop"]
     bot.quote=quote(79000,79002)
     bot.manage_paper(79000)
     assert bot.db.get("paper_position") is None
