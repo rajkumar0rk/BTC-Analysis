@@ -42,7 +42,9 @@ def guarded_stop_or_liquidation(a,z,p):
     preliq=rounded_preliq(liq,side)
     stop=max(native,preliq) if side==1 else min(native,preliq)
     # A preliq stop must be an exit barrier in the adverse direction.
-    assert (stop<entry if side==1 else stop>entry),(entry,liq,stop)
+    # The existing trailing stop can correctly move into profit.
+    # Only the pre-liquidation guard itself must lie on the adverse side.
+    assert (preliq<entry if side==1 else preliq>entry),(entry,liq,preliq)
 
     # Original logic treats a price opening beyond the liquidation barrier as
     # liquidation. Keep this behavior: gap-through protection cannot be guaranteed.
