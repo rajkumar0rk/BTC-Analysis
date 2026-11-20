@@ -40,8 +40,8 @@ def read_rows(path):
                 raise ValueError(f'invalid OHLC at {dt}')
             yield dt,cl
 def main():
-    files=sorted(BASE.glob('2025-*.csv.gz'))
-    if len(files)!=12:raise RuntimeError(f'expected 12 2025 source files, found {len(files)}')
+    files=sorted(p for p in BASE.glob('*.csv.gz') if p.name[:4] in ('2024','2025'))
+    if not files:raise RuntimeError('no authentic 2024/2025 source files')
     rawhash={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
     prices={}
     for p in files:
@@ -57,18 +57,21 @@ def main():
     start=datetime(2024,12,31,18,30,tzinfo=timezone.utc)
     end=datetime(2025,12,31,18,29,tzinfo=timezone.utc)
     if times[0]>start or times[-1]<end:
-        raise RuntimeError(f'INCOMPLETE_IST_COVERAGE required {start}..{end}; available {times[0]}..{times[-1]}. Need authentic 2024-12-31 and 2026-01 boundary candles.')
+        raise RuntimeError(f'INCOMPLETE_IST_COVERAGE required {start}..{end}; available {times[0]}..{times[-1]}. Need authentic pre-2025 candles; 2025-12-31 UTC already covers IST year-end.')
     daily={}
     for t in times:
         day=t.astimezone(IST).date()
         daily[day]=prices[t]
+    all_days=sorted(daily)
     days=sorted(d for d in daily if d.year==2025)
+    if len([d for d in all_days if d<days[0]])<60:raise RuntimeError('MISSING_60_COMPLETED_IST_DAILY_WARMUP: obtain authentic pre-2025 candles')
     if len(days)!=365:raise RuntimeError(f'incomplete 2025 IST daily coverage: {len(days)} days')
     # Signal at completed IST close; fill at following daily close-to-close return,
     # upstream shift(1) convention. No intrabar execution claim.
     nav=1.0; position=0; entry_nav=0; trades=[]; equity=[]; gross_total=fees_total=gst_total=0.0
     for i,day in enumerate(days):
-        target=int(i>=60 and daily[day]>daily[days[i-60]])
+        history_index=all_days.index(day)
+        target=int(daily[day]>daily[all_days[history_index-60]])
         if i:
             ret=daily[day]/daily[days[i-1]]-1
             gross=nav*position*ret
@@ -79,7 +82,7 @@ def main():
             fees_total+=fee;gst_total+=gst
             nav-=fee+gst
             if position:trades.append({'exit_day':str(day),'entry_day':str(entry_day),'net_pnl_nav_units':nav-entry_nav})
-            if target:entry_day=day;entry_nav=nav
+            if target:entry_day=day;entry_nav=nav+fee+gst
             position=target
         equity.append({'date_ist':str(day),'nav':nav,'position_after_close':position})
     # Mark-to-market final open position; no fictitious closing fill.
@@ -102,7 +105,7 @@ def main():
             if not rows:return
             w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
     write('trades.csv',trades);write('equity.csv',equity);write('monthly.csv',monthly)
-    result={'source':'pooriag/crypto-strategy-backtest@fd210a38','market':'Delta India BTCUSD','year':2025,'zero_slippage':True,'commission_rate_each_side':0.0005,'gst_on_commission':0.18,'funding':'UNMODELED','gross_nav_units':gross_total,'commission_nav_units':fees_total,'gst_nav_units':gst_total,'ending_nav':nav,'net_return_pct':(nav-1)*100,'closed_trades':len(trades),'open_position':position,'max_drawdown_pct':dd*100,'source_sha256':rawhash,'note':'60-day warmup from within 2025; first 60 days flat; not original full-history warmup; screening only'}
+    result={'source':'pooriag/crypto-strategy-backtest@fd210a38','market':'Delta India BTCUSD','year':2025,'zero_slippage':True,'commission_rate_each_side':0.0005,'gst_on_commission':0.18,'funding':'UNMODELED','gross_nav_units':gross_total,'commission_nav_units':fees_total,'gst_nav_units':gst_total,'ending_nav':nav,'net_return_pct':(nav-1)*100,'closed_trades':len(trades),'open_position':position,'max_drawdown_pct':dd*100,'source_sha256':rawhash,'note':'Requires 60 authentic completed pre-2025 IST daily bars; trade net PnL includes both entry and exit commissions/GST; screening only'}
     (OUT/'summary.json').write_text(json.dumps(result,indent=2))
     print(json.dumps(result,indent=2))
 if __name__=='__main__':main()
