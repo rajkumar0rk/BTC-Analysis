@@ -295,8 +295,8 @@ def main():
     # screenshot: full historical offer with a 27-minute qualifying window, no funding/slippage
     exact=costs(all_tr,SCREENSHOT_SCALP_MIN)
     realistic=costs(all_tr,REALISTIC_SCALP_MIN)
-    # 0.5 USD price points adverse on each fill, as optional sensitivity ONLY
-    stressed=costs(all_tr,REALISTIC_SCALP_MIN,slippage_points=0.5)
+    # 0.5 USD price points adverse on each fill, with 27-minute window
+    stressed=costs(all_tr,SCREENSHOT_SCALP_MIN,slippage_points=0.5)
     m=month_results(exact)
     mr=month_results(realistic)
     ms=month_results(stressed)
