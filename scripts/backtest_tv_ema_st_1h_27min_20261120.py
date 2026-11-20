@@ -217,7 +217,7 @@ def replay(b, direction, atr14, long, short):
     tr=pd.DataFrame(records)
     return tr,signals,open_pos
 
-def costs(tr,scalp_window,slippage_points=0.0):
+def costs(tr,scalp_window,slippage_points=0.0,optimistic_first_hour=False):
     z=tr.copy()
     if z.empty:return z
     dirs=np.where(z.direction=="LONG",1,-1)
@@ -228,6 +228,14 @@ def costs(tr,scalp_window,slippage_points=0.0):
     # Source Pine: 100000 minute window & assumes the offer is active for
     # the entire history, not just after joined date.
     eligible=(held>=0)&(held<=scalp_window)
+    if optimistic_first_hour:
+        # For any intrabar stop on the first hour, exit timestamp is only
+        # constrained to somewhere inside that 60-minute candle.
+        # An exit within 27 minutes is POSSIBLE but not confirmed.
+        # Treat every such ambiguous exit as qualifying to get an upper
+        # bound on 27m-fee-waiver profitability without inventing timestamps.
+        early_possible=np.isclose(held,60.0)&(z.exit_reason.to_numpy()!="supertrend_flip_close")
+        eligible=eligible|early_possible
     entry_fee=ep*QTY_BTC*TAKER_FEE
     exit_fee=np.where(eligible,0.0,xp*QTY_BTC*TAKER_FEE)
     fee=entry_fee+exit_fee
@@ -297,6 +305,8 @@ def main():
     realistic=costs(all_tr,REALISTIC_SCALP_MIN)
     # 0.5 USD price points adverse on each fill, with 27-minute window
     stressed=costs(all_tr,SCREENSHOT_SCALP_MIN,slippage_points=0.5)
+    optimistic=costs(all_tr,SCREENSHOT_SCALP_MIN,optimistic_first_hour=True)
+    m_opt=month_results(optimistic)
     m=month_results(exact)
     mr=month_results(realistic)
     ms=month_results(stressed)
@@ -316,6 +326,7 @@ def main():
     m.to_csv(OUT/"monthly_screenshot_offer.csv",index=False)
     mr.to_csv(OUT/"monthly_unlimited_offer.csv",index=False)
     ms.to_csv(OUT/"monthly_27min_offer_plus_0p5pt_slippage.csv",index=False)
+    m_opt.to_csv(OUT/"monthly_27min_optimistic_fee_bound.csv",index=False)
     recent_m.to_csv(OUT/"recent_10000_bars_monthly_screenshot.csv",index=False)
     recent_m30.to_csv(OUT/"recent_10000_bars_monthly_unlimited.csv",index=False)
     result=dict(
@@ -349,6 +360,7 @@ def main():
         note="First and last calendar months are partial in this rolling 10000-bar sample."),
       scenarios={
         "screenshot_27_min_offer_zero_slip":metrics(exact,m),
+        "optimistic_27min_first_hour_fee_bound":metrics(optimistic,m_opt),
         "unlimited_100000_min_offer_zero_slip":metrics(realistic,mr),
         "screenshot_27_min_offer_0p5point_adverse_each_side":metrics(stressed,ms)},
       caveats=[
@@ -362,13 +374,14 @@ def main():
         "One TradingView fixed contract=0.001 BTC; no leverage, margin, portfolio compounding or account sizing applied.",
         "Returns scored by UTC exit calendar month to provide 22 truly complete months Jan 2025-Oct 2026.",
         "Entry timestamp is signal candle close. Intrabar exits timestamped at bar close as conservative upper bound for fee-window eligibility.",
+        "27-minute window CANNOT be exactly checked against 1h OHLC. The optimistic scenario counts every first-hour intrabar stop as fee-waived; actual result under the same modeled trade list lies between conservative and optimistic figures.",
         "Uses assumed 0.5 BTCUSD price tick for rounded initial ATR stops."] )
     (OUT/"summary.json").write_text(json.dumps(result,indent=2)+"\n")
     report=["# BTCUSD EMA20 / Supertrend (1h) screenshot-parameter replay",
             "",f"Dataset: {qual['raw_1m_rows']:,} authenticated Delta India 1-minute candle rows, 22 months.",
             "Reference: saved Pine v6 BTCUSD EMA / ST | ATR & Volume Min Max + Net.",
             "", "**Screenshot cost assumption:** Taker 0.05% opening, closing waived for <=27 minutes, GST 18%, 0 funding, 0 slippage.",
-            "**Other scenario:** a 100000-minute hypothetical qualifying window; third scenario applies $0.5 adverse price slippage on both sides with the 27-minute offer.",
+            "**Additional fee scenario:** upper bound grants the 27-minute waiver to every first-hour intrabar stop (qualification unknown). A hypothetical 100000-minute offer is also reported; 0.5-point slippage is a separate stress test.",
             "", "| Scenario | Trades | Net USD (1x0.001 BTC) | PF | Positive months /22 |",
             "|---|---:|---:|---:|---:|"]
     for name,d in result["scenarios"].items():
