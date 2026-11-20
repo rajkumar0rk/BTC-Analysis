@@ -4,14 +4,14 @@ Source: verified raw Delta India one-minute files Jan 2025-Oct 2026.
 
 | Asset | Trailing | Fee policy | Net USD | PF | Trades | Positive months | Liquidations |
 |---|---|---|---:|---:|---:|---:|---:|
-| BTC | old | no offer | -92.67 | 0.3573 | 132 | 0/22 | 0 |
-| BTC | old | assumed offer | -92.58 | 0.6088 | 226 | 0/22 | 0 |
-| BTC | new | no offer | -91.38 | 0.2514 | 182 | 0/22 | 0 |
-| BTC | new | assumed offer | -91.03 | 0.5636 | 530 | 1/22 | 0 |
-| ETH | old | no offer | -92.88 | 0.5477 | 154 | 0/22 | 0 |
-| ETH | old | assumed offer | -95.99 | 0.7556 | 322 | 0/22 | 0 |
-| ETH | new | no offer | -90.11 | 0.5619 | 259 | 0/22 | 0 |
-| ETH | new | assumed offer | -93.17 | 0.7271 | 428 | 2/22 | 0 |
+| BTC | old | no offer | -96.62 | 0.2276 | 75 | 0/22 | 0 |
+| BTC | old | assumed offer | -97.56 | 0.5982 | 221 | 0/22 | 0 |
+| BTC | new | no offer | -91.32 | 0.0885 | 108 | 0/22 | 0 |
+| BTC | new | assumed offer | -93.00 | 0.5035 | 402 | 0/22 | 0 |
+| ETH | old | no offer | -92.05 | 0.3663 | 104 | 0/22 | 0 |
+| ETH | old | assumed offer | -90.97 | 0.6362 | 172 | 0/22 | 0 |
+| ETH | new | no offer | -90.80 | 0.3592 | 158 | 0/22 | 0 |
+| ETH | new | assumed offer | -91.81 | 0.6912 | 367 | 1/22 | 0 |
 
 See summary.json and per-asset trade/monthly CSVs.
 
