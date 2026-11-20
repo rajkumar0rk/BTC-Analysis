@@ -9,6 +9,7 @@ from datetime import datetime,timezone
 from bot import Bot
 from signals import BAR_SECONDS,signal,indicators,quantize_stop,size_contracts,trailing_points
 from options_paper import good_quote,paper_stats
+from preliq import pre_liq_buffer,pre_liq_stop,effective_stop,estimate_liquidation,stop_crossed
 
 class FuturesPaperBot(Bot):
     def __init__(self,cfg):
@@ -56,8 +57,19 @@ class FuturesPaperBot(Bot):
         sign=1 if side=="buy" else -1
         stop=quantize_stop(fill-sign*s["stop_distance_points"],self.tick,side)
         maint=float(self.product.get("maintenance_margin",.25))/100
-        liq=((fill-margin/qty)/(1-maint) if sign==1 else
-             (fill+margin/qty)/(1+maint))
+        liq=estimate_liquidation(fill,side,self.cfg.leverage,
+                                 float(self.product.get("maintenance_margin",.25)))
+        pre_stop=None
+        buff=None
+        if getattr(self.cfg,"preliq_enabled",True):
+            buff=pre_liq_buffer(self.cfg.asset,fill,self.tick,
+                     getattr(self.cfg,"preliq_btc_points",1),
+                     getattr(self.cfg,"preliq_reference_btc_price",80000))
+            pre_stop=pre_liq_stop(side,liq,buff,self.tick)
+            try:stop=effective_stop(side,stop,pre_stop,fill)
+            except ValueError:
+                # Do not filter entry: immediate near-entry emergency stop instead.
+                stop=quantize_stop(fill-sign*self.tick,self.tick,side)
         activation,distance=trailing_points(self.cfg.asset,fill)
         position={
             "asset":self.cfg.asset,"symbol":self.cfg.symbol,
@@ -65,14 +77,18 @@ class FuturesPaperBot(Bot):
             "entry":fill,"notional_usd":notional,"margin_usd":margin,
             "entry_fee_gst_usd":fee,"entry_time":time.time(),
             "signal_bar_ts":s["bar_ts"],
-            "initial_stop":stop,"stop":stop,"best":fill,
+            "initial_stop":stop,"strategy_atr_stop":quantize_stop(
+                fill-sign*s["stop_distance_points"],self.tick,side),
+            "preliq_stop":pre_stop,"preliq_buffer":buff,
+            "stop":stop,"best":fill,
             "activation_points":activation,"distance_points":distance,
             "liq_proxy":liq,"trail_active":False}
         self.db.paper_transition(balance-fee,position,{
             "kind":"futures_paper_entry","symbol":self.cfg.symbol,"side":side,
             "contracts":contracts,"fill_at_ask_or_bid":fill,
             "entry_fee_gst_usd":fee,"margin_usd":margin,
-            "liq_proxy":liq,"stop":stop})
+            "liq_proxy":liq,"preliq_stop":pre_stop,
+            "preliq_buffer":buff,"stop":stop})
         d["entries"]+=1;self.db.set("paper_day",d)
 
     def close_paper(self,reason,mark):
@@ -106,6 +122,7 @@ class FuturesPaperBot(Bot):
             "gst_usd":(p["entry_fee_gst_usd"]+fee+liq_penalty)*.18/1.18,
             "assumed_scalper_offer":eligible,"reason":reason,
             "margin_usd":p["margin_usd"],"liq_proxy":p["liq_proxy"],
+            "preliq_stop":p.get("preliq_stop"),"preliq_buffer":p.get("preliq_buffer"),
             "underlying_exit_mark":mark}
         stats=paper_stats(self.db.paper_trades()+[trade],self.cfg.portfolio)
         # If the entire account was exhausted, wallet loss is capped in this paper ledger.
@@ -129,8 +146,13 @@ class FuturesPaperBot(Bot):
             next_stop=p["best"]-sign*p["distance_points"]
             p["stop"]=max(next_stop,p["stop"]) if sign==1 else min(next_stop,p["stop"])
         self.db.set("paper_position",p)
-        if (mark<=p["stop"] if sign==1 else mark>=p["stop"]):
-            self.close_paper("underlying_trail" if p["trail_active"] else "underlying_atr",mark)
+        if stop_crossed(p["side"],mark,p["stop"]):
+            at_preliq=(p.get("preliq_stop") is not None and (
+                p["stop"]<=p["preliq_stop"]+self.tick/2 if sign==1 else
+                p["stop"]>=p["preliq_stop"]-self.tick/2))
+            cause=("pre_liquidation_stop" if at_preliq else
+                   "underlying_trail" if p["trail_active"] else "underlying_atr")
+            self.close_paper(cause,mark)
 
     def on_bar(self,frame,last,mark):
         bar_ts=int(frame.index[-1].timestamp())
