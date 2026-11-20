@@ -5,6 +5,7 @@ on:
       - research/btc-monthly-net-return-20261120
     paths:
       - scripts/research_btc_monthly_net_profit_20261120.py
+      - scripts/research_frozen_btc_eth_48h_monthly_20261120.py
       - .github/workflows/research-btc-monthly-net-profit-20261120.yml
   workflow_dispatch:
 permissions:
@@ -24,11 +25,17 @@ jobs:
         run: |
           python -m py_compile scripts/research_btc_monthly_net_profit_20261120.py
           PYTHONPATH=scripts python scripts/research_btc_monthly_net_profit_20261120.py
+      - name: Frozen BTC 2025-selected strategy unchanged on ETH 1m and BTC/ETH mix
+        run: |
+          python -m py_compile scripts/research_frozen_btc_eth_48h_monthly_20261120.py
+          PYTHONPATH=scripts python scripts/research_frozen_btc_eth_48h_monthly_20261120.py
       - name: Preserve all 22 months, actual trade ledgers and costs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: btc-monthly-net-return-research-evidence
-          path: analysis/btc_monthly_net_returns_20261120/
+          path: |
+            analysis/btc_monthly_net_returns_20261120/
+            analysis/btc_eth_frozen_48h_breakout_20261120/
           if-no-files-found: warn
           retention-days: 30
