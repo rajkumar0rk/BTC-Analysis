@@ -1,0 +1,17 @@
+name,shock_span,scalper_offer,adverse_price_cost_per_side_usd,adverse_funding_rate_per_8h,net_profit_usd,profit_factor,profitable_months,losing_months,max_drawdown_pct,trades,liquidations,modeled_funding_debit_usd
+baseline_1pct_offer,0.01,True,0.0,0.0,1840.4477,2.152,22,0,19.47,1000,0,0.0
+cost025_1pct_offer,0.01,True,0.25,0.0,1604.7717,1.939,20,2,20.946,996,0,0.0
+cost050_1pct_offer,0.01,True,0.5,0.0,1376.234,1.7506,18,4,21.875,996,0,0.0
+cost100_1pct_offer,0.01,True,1.0,0.0,962.2695,1.4709,16,6,27.879,992,0,0.0
+cost200_1pct_offer,0.01,True,2.0,0.0,9.5164,1.0037,11,11,87.244,987,0,0.0
+cost400_1pct_offer,0.01,True,4.0,0.0,-94.5627,0.5394,0,2,94.69,49,0,0.0
+cost050fund1bp_1pct_offer,0.01,True,0.5,0.0001,1367.1516,1.7442,18,4,21.936,996,0,9.0824
+cost100fund1bp_1pct_offer,0.01,True,1.0,0.0001,952.6666,1.4652,16,6,28.118,992,0,9.6029
+cost200fund1bp_1pct_offer,0.01,True,2.0,0.0001,-0.7474,0.9997,11,11,88.726,987,0,10.2639
+cost050_1pct_nooffer,0.01,False,0.5,0.0,979.6854,1.5195,17,5,25.301,996,0,0.0
+cost100_1pct_nooffer,0.01,False,1.0,0.0,579.151,1.2748,15,7,39.258,992,0,0.0
+cost100fund1bp_1pct_nooffer,0.01,False,1.0,0.0001,569.5481,1.2697,15,7,39.545,992,0,9.6029
+cost050fund1bp_2pct_offer,0.02,True,0.5,0.0001,671.446,1.7401,18,4,13.676,996,0,4.4805
+cost100fund1bp_2pct_offer,0.02,True,1.0,0.0001,467.2238,1.4621,16,6,16.902,992,0,4.7393
+cost050fund1bp_3pct_offer,0.03,True,0.5,0.0001,443.005,1.7423,18,4,10.009,996,0,2.9484
+cost100fund1bp_3pct_offer,0.03,True,1.0,0.0001,308.4459,1.4636,16,6,12.475,992,0,3.1184
