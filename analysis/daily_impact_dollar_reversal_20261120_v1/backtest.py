@@ -67,12 +67,65 @@ def run(symbol,stress=False):
     if len(t):t.to_csv(OUT/(symbol+("_stress" if stress else "")+"_trades.csv"),index=False)
     else:pd.DataFrame(columns=["entry_utc","exit_utc","net_pnl"]).to_csv(OUT/(symbol+("_stress" if stress else "")+"_trades.csv"),index=False)
     (OUT/(symbol+("_stress" if stress else "")+"_gaps.json")).write_text(json.dumps(events,indent=2))
-    return dict(market=symbol,stress=stress,trades=len(t),net_nav_unmarked=nav,source=meta,signal_count=len(signals),data_gap_signals=len(events),status="INCONCLUSIVE_UNMARKED_DAILY_NAV_AND_FUNDING")
+    daily_stats=daily_nav_ist(x,t,symbol,stress)\n    return dict(market=symbol,stress=stress,trades=len(t),net_nav_closed=nav,source=meta,signal_count=len(signals),data_gap_signals=len(events),daily=daily_stats,status="INCONCLUSIVE_EXECUTION_FUNDING_AND_DATA_COVERAGE")
+
+def daily_nav_ist(x, trades, symbol, stress):
+    """Conservative daily mark: reserve estimated liquidation costs for open trades."""
+    t = trades.sort_values("entry_utc") if len(trades) else trades
+    records = []
+    start_day = pd.Timestamp("2025-01-01", tz="Asia/Kolkata")
+    end_day = pd.Timestamp("2026-11-01", tz="Asia/Kolkata")
+    prior_nav = 1.0
+    for day in pd.date_range(start_day, end_day, freq="D", inclusive="left"):
+        boundary = (day + pd.Timedelta(days=1)).tz_convert("UTC")
+        cutoff = boundary - pd.Timedelta(minutes=1)
+        completed = t[t.exit_utc_dt < boundary] if len(t) else t
+        nav = float(completed.nav_after.iloc[-1]) if len(completed) else 1.0
+        active = t[(t.entry_utc_dt < boundary) & (t.exit_utc_dt >= boundary)] if len(t) else t
+        state = "COVERED"
+        if cutoff not in x.index:
+            state = "DATA_GAP"
+            nav = float("nan")
+        elif len(active):
+            a = active.iloc[-1]
+            px = float(x.loc[cutoff, "close"])
+            slip = (5.0 / px if symbol == "BTCUSD" else .0002) * (2 if stress else 1)
+            exit_est = px * (1 - int(a.direction) * slip)
+            notional = float(a.nav_before) * .1
+            gross = notional * int(a.direction) * (exit_est / float(a.entry_fill) - 1)
+            fees = notional * .0005 * 1.18 * (1 + exit_est / float(a.entry_fill))
+            nav = float(a.nav_before) + gross - fees
+        # Do not assign a daily return when the prior boundary was unavailable.
+        ret = (nav / prior_nav - 1) if state == "COVERED" and pd.notna(prior_nav) else float("nan")
+        records.append(dict(date_ist=str(day.date()), nav=nav, daily_return=ret, status=state))
+        prior_nav = nav
+    daily = pd.DataFrame(records)
+    suffix = "_stress" if stress else ""
+    daily.to_csv(OUT / (symbol + suffix + "_daily_nav.csv"), index=False)
+    d = daily.copy()
+    d["month_ist"] = d.date_ist.str.slice(0, 7)
+    monthly = []
+    for month, z in d.groupby("month_ist", sort=True):
+        valid = z[z.status == "COVERED"]
+        returns = valid.daily_return.dropna()
+        monthly.append(dict(month_ist=month, positive_days=int((returns>0).sum()),
+                            negative_days=int((returns<0).sum()),
+                            flat_days=int((returns==0).sum()),
+                            data_gap_days=int((z.status=="DATA_GAP").sum()),
+                            nav_return_pct=float((1+returns).prod()*100-100) if len(returns)==len(z) else None,
+                            coverage_complete=bool(len(returns)==len(z))))
+    pd.DataFrame(monthly).to_csv(OUT/(symbol+suffix+"_monthly_nav.csv"), index=False)
+    return dict(positive_days=int((daily.daily_return>0).sum()),
+                negative_days=int((daily.daily_return<0).sum()),
+                flat_days=int((daily.daily_return==0).sum()),
+                gap_or_unmeasured_days=int(daily.daily_return.isna().sum()),
+                monthly_complete=int(sum(m["coverage_complete"] for m in monthly)))
+
 def main():
     out=[]
     for symbol in ["BTCUSD","ETHUSD"]:
         for stress in [False,True]:out.append(run(symbol,stress))
     (OUT/"summary.json").write_text(json.dumps(out,indent=2))
     print(json.dumps([{k:v for k,v in o.items() if k!="source"} for o in out],indent=2))
-    print("INCONCLUSIVE: daily mark-to-market, funding, executable spread and lot/tick validation still required")
+    print("INCONCLUSIVE: funding, executable spread, volume units, data coverage and lot/tick validation still required")
 if __name__=="__main__":main()
