@@ -1,0 +1,45 @@
+name: Independent hourly extreme order BTC first
+on:
+  push:
+    branches: [research/independent-extreme-order-20261120-v1]
+    paths:
+      - scripts/independent_extreme_order_v1.py
+      - .github/workflows/independent-extreme-order-v1.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: independent-extreme-order-v1
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/independent-extreme-order-20261120-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba tabulate
+      - name: BTC 2025 discovery and frozen BTC ETH audit
+        run: python scripts/independent_extreme_order_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-extreme-order-v1
+          path: analysis/independent_extreme_order_v1/
+          retention-days: 45
+      - name: Commit isolated results
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/independent_extreme_order_v1/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: archive extreme order paired audit'
+            git fetch origin research/independent-extreme-order-20261120-v1
+            git rebase origin/research/independent-extreme-order-20261120-v1
+            git push origin HEAD:research/independent-extreme-order-20261120-v1
+          fi
