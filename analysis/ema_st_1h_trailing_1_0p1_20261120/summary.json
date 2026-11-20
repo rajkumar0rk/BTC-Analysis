@@ -1,0 +1,1579 @@
+{
+  "status": "completed",
+  "scored_completed_months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10"
+  ],
+  "description": "Only trailing activation 100->1 price point and distance 50->0.1 price point; compare old with new using identical 1minute execution, isolated 100x and costs.",
+  "strategy": {
+    "timeframe": "1h",
+    "ema": 20,
+    "supertrend_atr": 10,
+    "supertrend_factor": 3,
+    "entry": "confirmed supertrend and EMA20 touch/pullback close",
+    "initial_stop": "2x ATR(14)",
+    "start_wallet": 100,
+    "per_trade_margin_budget": 10,
+    "leverage": 100,
+    "margin_mode": "isolated research proxy",
+    "pre_liquidation_buffer": {
+      "BTC": 1.0,
+      "ETH": 0.2
+    },
+    "taker_fee_rate_each_side": 0.0005,
+    "gst_rate": 0.18,
+    "scalper_assumed_minutes": 27,
+    "master_volume_volatility_filter": "off",
+    "model": "1h closed entry signal, 1m historical OHLC barrier replay",
+    "trailing_old": "BTC literal 100/50, ETH BTC-equivalent percent-scaled 100/50",
+    "trailing_new_input": "activation 1, distance 0.1 literal price points",
+    "trailing_new_executable": {
+      "BTC": {
+        "activation": 1.0,
+        "distance": 0.5
+      },
+      "ETH": {
+        "activation": 1.0,
+        "distance": 0.1
+      }
+    },
+    "price_tick_assumed": {
+      "BTC": 0.5,
+      "ETH": 0.05
+    }
+  },
+  "assets": {
+    "BTC": {
+      "source": {
+        "source_url": "https://api.india.delta.exchange/v2/history/candles",
+        "raw_1m_rows": 963360,
+        "complete_1h_rows": 16056,
+        "source_partitions": 22,
+        "sha256_verified": true,
+        "missing_1m_candles": 0,
+        "first_utc": "2025-01-01T00:00:00Z",
+        "last_utc": "2026-10-31T23:59:00Z",
+        "scored_months_utc": [
+          "2025-01",
+          "2025-02",
+          "2025-03",
+          "2025-04",
+          "2025-05",
+          "2025-06",
+          "2025-07",
+          "2025-08",
+          "2025-09",
+          "2025-10",
+          "2025-11",
+          "2025-12",
+          "2026-01",
+          "2026-02",
+          "2026-03",
+          "2026-04",
+          "2026-05",
+          "2026-06",
+          "2026-07",
+          "2026-08",
+          "2026-09",
+          "2026-10"
+        ]
+      },
+      "raw_source": "https://api.india.delta.exchange/v2/history/candles",
+      "results": {
+        "old_no_offer": {
+          "asset": "BTC",
+          "trailing_variant": "old",
+          "offer_assumed": false,
+          "balance_initial_usd": 100.0,
+          "balance_final_usd": 7.3346,
+          "realized_net_usd": -92.6654,
+          "completed_trades": 132,
+          "win_rate_pct": 40.91,
+          "profit_factor": 0.3573,
+          "profitable_months": 0,
+          "losing_months": 2,
+          "flat_months": 20,
+          "total_fees_gst": 149.2123,
+          "liquidations": 0,
+          "assumed_scalper_eligible": 0,
+          "max_closed_drawdown_pct": 92.93,
+          "signals_reached_while_flat": 2407,
+          "rejected_due_to_wallet": 2275,
+          "rejected_no_contract": 0,
+          "has_open_trade_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": -53.2598,
+              "trades": 81,
+              "wins": 32,
+              "losses": 49
+            },
+            {
+              "month": "2025-02",
+              "net_usd": -39.4056,
+              "trades": 51,
+              "wins": 22,
+              "losses": 29
+            },
+            {
+              "month": "2025-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "old_assumed_offer": {
+          "asset": "BTC",
+          "trailing_variant": "old",
+          "offer_assumed": true,
+          "balance_initial_usd": 100.0,
+          "balance_final_usd": 7.4206,
+          "realized_net_usd": -92.5794,
+          "completed_trades": 226,
+          "win_rate_pct": 69.47,
+          "profit_factor": 0.6088,
+          "profitable_months": 0,
+          "losing_months": 3,
+          "flat_months": 19,
+          "total_fees_gst": 168.9896,
+          "liquidations": 0,
+          "assumed_scalper_eligible": 153,
+          "max_closed_drawdown_pct": 93.36,
+          "signals_reached_while_flat": 2398,
+          "rejected_due_to_wallet": 2172,
+          "rejected_no_contract": 0,
+          "has_open_trade_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": -20.7384,
+              "trades": 81,
+              "wins": 58,
+              "losses": 23
+            },
+            {
+              "month": "2025-02",
+              "net_usd": -30.6462,
+              "trades": 93,
+              "wins": 63,
+              "losses": 30
+            },
+            {
+              "month": "2025-03",
+              "net_usd": -41.1948,
+              "trades": 52,
+              "wins": 36,
+              "losses": 16
+            },
+            {
+              "month": "2025-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "new_no_offer": {
+          "asset": "BTC",
+          "trailing_variant": "new",
+          "offer_assumed": false,
+          "balance_initial_usd": 100.0,
+          "balance_final_usd": 8.6194,
+          "realized_net_usd": -91.3806,
+          "completed_trades": 182,
+          "win_rate_pct": 17.58,
+          "profit_factor": 0.2514,
+          "profitable_months": 0,
+          "losing_months": 4,
+          "flat_months": 18,
+          "total_fees_gst": 205.1668,
+          "liquidations": 0,
+          "assumed_scalper_eligible": 0,
+          "max_closed_drawdown_pct": 91.38,
+          "signals_reached_while_flat": 2435,
+          "rejected_due_to_wallet": 2253,
+          "rejected_no_contract": 0,
+          "has_open_trade_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": -51.2592,
+              "trades": 99,
+              "wins": 15,
+              "losses": 84
+            },
+            {
+              "month": "2025-02",
+              "net_usd": -38.7436,
+              "trades": 59,
+              "wins": 9,
+              "losses": 50
+            },
+            {
+              "month": "2025-03",
+              "net_usd": -0.4192,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15
+            },
+            {
+              "month": "2025-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-05",
+              "net_usd": -0.9587,
+              "trades": 1,
+              "wins": 0,
+              "losses": 1
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "new_assumed_offer": {
+          "asset": "BTC",
+          "trailing_variant": "new",
+          "offer_assumed": true,
+          "balance_initial_usd": 100.0,
+          "balance_final_usd": 8.9727,
+          "realized_net_usd": -91.0273,
+          "completed_trades": 530,
+          "win_rate_pct": 28.3,
+          "profit_factor": 0.5636,
+          "profitable_months": 1,
+          "losing_months": 6,
+          "flat_months": 15,
+          "total_fees_gst": 310.1578,
+          "liquidations": 0,
+          "assumed_scalper_eligible": 508,
+          "max_closed_drawdown_pct": 91.58,
+          "signals_reached_while_flat": 2431,
+          "rejected_due_to_wallet": 1901,
+          "rejected_no_contract": 0,
+          "has_open_trade_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": 4.1565,
+              "trades": 99,
+              "wins": 27,
+              "losses": 72
+            },
+            {
+              "month": "2025-02",
+              "net_usd": -22.515,
+              "trades": 109,
+              "wins": 31,
+              "losses": 78
+            },
+            {
+              "month": "2025-03",
+              "net_usd": -35.3007,
+              "trades": 114,
+              "wins": 37,
+              "losses": 77
+            },
+            {
+              "month": "2025-04",
+              "net_usd": -13.5897,
+              "trades": 108,
+              "wins": 32,
+              "losses": 76
+            },
+            {
+              "month": "2025-05",
+              "net_usd": -22.7905,
+              "trades": 98,
+              "wins": 23,
+              "losses": 75
+            },
+            {
+              "month": "2025-06",
+              "net_usd": -0.5486,
+              "trades": 1,
+              "wins": 0,
+              "losses": 1
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": -0.4394,
+              "trades": 1,
+              "wins": 0,
+              "losses": 1
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        }
+      }
+    },
+    "ETH": {
+      "source": {
+        "source_url": "https://api.india.delta.exchange/v2/history/candles",
+        "raw_1m_rows": 963360,
+        "complete_1h_rows": 16056,
+        "source_partitions": 22,
+        "sha256_verified": true,
+        "missing_1m_candles": 0,
+        "first_utc": "2025-01-01T00:00:00Z",
+        "last_utc": "2026-10-31T23:59:00Z",
+        "scored_months_utc": [
+          "2025-01",
+          "2025-02",
+          "2025-03",
+          "2025-04",
+          "2025-05",
+          "2025-06",
+          "2025-07",
+          "2025-08",
+          "2025-09",
+          "2025-10",
+          "2025-11",
+          "2025-12",
+          "2026-01",
+          "2026-02",
+          "2026-03",
+          "2026-04",
+          "2026-05",
+          "2026-06",
+          "2026-07",
+          "2026-08",
+          "2026-09",
+          "2026-10"
+        ]
+      },
+      "raw_source": "https://api.india.delta.exchange/v2/history/candles",
+      "results": {
+        "old_no_offer": {
+          "asset": "ETH",
+          "trailing_variant": "old",
+          "offer_assumed": false,
+          "balance_initial_usd": 100.0,
+          "balance_final_usd": 7.1233,
+          "realized_net_usd": -92.8767,
+          "completed_trades": 154,
+          "win_rate_pct": 47.4,
+          "profit_factor": 0.5477,
+          "profitable_months": 0,
+          "losing_months": 2,
+          "flat_months": 20,
+          "total_fees_gst": 178.9063,
+          "liquidations": 0,
+          "assumed_scalper_eligible": 0,
+          "max_closed_drawdown_pct": 93.04,
+          "signals_reached_while_flat": 2477,
+          "rejected_due_to_wallet": 2323,
+          "rejected_no_contract": 0,
+          "has_open_trade_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": -48.6299,
+              "trades": 96,
+              "wins": 40,
+              "losses": 56
+            },
+            {
+              "month": "2025-02",
+              "net_usd": -44.2468,
+              "trades": 58,
+              "wins": 33,
+              "losses": 25
+            },
+            {
+              "month": "2025-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "old_assumed_offer": {
+          "asset": "ETH",
+          "trailing_variant": "old",
+          "offer_assumed": true,
+          "balance_initial_usd": 100.0,
+          "balance_final_usd": 4.0117,
+          "realized_net_usd": -95.9883,
+          "completed_trades": 322,
+          "win_rate_pct": 80.43,
+          "profit_factor": 0.7556,
+          "profitable_months": 0,
+          "losing_months": 4,
+          "flat_months": 18,
+          "total_fees_gst": 221.3841,
+          "liquidations": 0,
+          "assumed_scalper_eligible": 264,
+          "max_closed_drawdown_pct": 97.0,
+          "signals_reached_while_flat": 2471,
+          "rejected_due_to_wallet": 2149,
+          "rejected_no_contract": 0,
+          "has_open_trade_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": -2.3233,
+              "trades": 96,
+              "wins": 79,
+              "losses": 17
+            },
+            {
+              "month": "2025-02",
+              "net_usd": -12.7781,
+              "trades": 83,
+              "wins": 68,
+              "losses": 15
+            },
+            {
+              "month": "2025-03",
+              "net_usd": -59.4309,
+              "trades": 118,
+              "wins": 92,
+              "losses": 26
+            },
+            {
+              "month": "2025-04",
+              "net_usd": -21.4561,
+              "trades": 25,
+              "wins": 20,
+              "losses": 5
+            },
+            {
+              "month": "2025-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "new_no_offer": {
+          "asset": "ETH",
+          "trailing_variant": "new",
+          "offer_assumed": false,
+          "balance_initial_usd": 100.0,
+          "balance_final_usd": 9.8876,
+          "realized_net_usd": -90.1124,
+          "completed_trades": 259,
+          "win_rate_pct": 28.96,
+          "profit_factor": 0.5619,
+          "profitable_months": 0,
+          "losing_months": 3,
+          "flat_months": 19,
+          "total_fees_gst": 301.4067,
+          "liquidations": 0,
+          "assumed_scalper_eligible": 0,
+          "max_closed_drawdown_pct": 90.11,
+          "signals_reached_while_flat": 2483,
+          "rejected_due_to_wallet": 2224,
+          "rejected_no_contract": 0,
+          "has_open_trade_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": -19.1219,
+              "trades": 102,
+              "wins": 26,
+              "losses": 76
+            },
+            {
+              "month": "2025-02",
+              "net_usd": -28.6289,
+              "trades": 85,
+              "wins": 29,
+              "losses": 56
+            },
+            {
+              "month": "2025-03",
+              "net_usd": -42.3616,
+              "trades": 72,
+              "wins": 20,
+              "losses": 52
+            },
+            {
+              "month": "2025-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        },
+        "new_assumed_offer": {
+          "asset": "ETH",
+          "trailing_variant": "new",
+          "offer_assumed": true,
+          "balance_initial_usd": 100.0,
+          "balance_final_usd": 6.8295,
+          "realized_net_usd": -93.1705,
+          "completed_trades": 428,
+          "win_rate_pct": 67.52,
+          "profit_factor": 0.7271,
+          "profitable_months": 2,
+          "losing_months": 3,
+          "flat_months": 17,
+          "total_fees_gst": 274.6401,
+          "liquidations": 0,
+          "assumed_scalper_eligible": 385,
+          "max_closed_drawdown_pct": 96.13,
+          "signals_reached_while_flat": 2474,
+          "rejected_due_to_wallet": 2046,
+          "rejected_no_contract": 0,
+          "has_open_trade_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": 38.8413,
+              "trades": 102,
+              "wins": 58,
+              "losses": 44
+            },
+            {
+              "month": "2025-02",
+              "net_usd": 19.7769,
+              "trades": 85,
+              "wins": 61,
+              "losses": 24
+            },
+            {
+              "month": "2025-03",
+              "net_usd": -6.276,
+              "trades": 119,
+              "wins": 88,
+              "losses": 31
+            },
+            {
+              "month": "2025-04",
+              "net_usd": -106.9735,
+              "trades": 100,
+              "wins": 69,
+              "losses": 31
+            },
+            {
+              "month": "2025-05",
+              "net_usd": -38.5392,
+              "trades": 22,
+              "wins": 13,
+              "losses": 9
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0,
+              "losses": 0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "caveats": [
+    "BTC 0.1 point is below assumed 0.5 venue tick, so distance 0.5 is used in executable simulation. A hypothetical 0.1 BTC stop is not submitted.",
+    "1m OHLC cannot establish exact order fill, spread, intraminute path, stop latency or mark-price liquidation.",
+    "Fee model 0.05% taker per side and 18% GST; alternative scenario assumes 27m Scalper offer on every eligible historical trade; entitlement not verified.",
+    "Synthetic isolated 100x liquidation/preliq proxy is not current shared Delta Demo Portfolio Margin.",
+    "No funding, spread, latency, slippage or options premium are modeled.",
+    "Trade entry on next 1m OPEN after fully closed 1h signal; matching historical data spans Jan 2025-Oct 2026; excludes Nov partial month.",
+    "Changing trailing by such tiny amounts produces near-zero gross winners relative to fees; this is not evidence of an investable strategy.",
+    "All changes research branch only; running VPS bots have not been modified."
+  ]
+}
