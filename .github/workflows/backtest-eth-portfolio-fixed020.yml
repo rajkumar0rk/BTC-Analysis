@@ -1,0 +1,88 @@
+name: ETH portfolio-margin synthetic fixed $0.20 stop replay
+on:
+  push:
+    branches: ['research/eth-portfolio-preliq-fixed020-20261120']
+    paths:
+      - 'scripts/replay_eth_portfolio_preliq_fixed_0p20.py'
+      - '.github/workflows/backtest-eth-portfolio-fixed020.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-portfolio-fixed020-replay
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas
+      - name: Run ETH 1%/2%/3% synthetic portfolio liquidation stop scenarios
+        run: |
+          python -m py_compile scripts/replay_eth_portfolio_preliq_fixed_0p20.py
+          python scripts/replay_eth_portfolio_preliq_fixed_0p20.py > /tmp/eth-portfolio-020.log
+          tail -20 /tmp/eth-portfolio-020.log
+      - name: Compare replay to original portfolio-margin monthly records
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import pandas as pd
+          original=Path('analysis/btc_eth_portfolio_margin_20261120')
+          changed=Path('analysis/eth_portfolio_preliq_fixed_0p20_20261120')
+          before=json.loads((original/'summary.json').read_text())['ETH']
+          after=json.loads((changed/'summary.json').read_text())['ETH']
+          keys=('net_profit_usd','ending_wallet_usd','net_profit_factor','closed_trades',
+                'winners','losers','simulated_liquidations','max_closed_equity_drawdown_pct',
+                'max_intrabar_equity_drawdown_pct','profitable_completed_months',
+                'losing_completed_months','completed_months')
+          out={'input':'ETH futures EMA20 + Supertrend, portfolio margin stress model; fixed $0.20 inside synthetic account maintenance boundary',
+               'liquidation_threshold':'NOT actual exchange/PM liquidation; hypothetical mark-price proxy',
+               'results':{}}
+          for period in ('history','recent10k'):
+            for scenario in ('shock1pct_offer','shock1pct_nooffer',
+                             'shock2pct_offer','shock3pct_offer','shock1pct_bankruptcy'):
+              k=period+'_'+scenario
+              prev=before[k];new=after[k]
+              b=pd.read_csv(original/f'eth_{k}_monthly.csv')
+              a=pd.read_csv(changed/f'eth_{k}_monthly.csv')
+              assert a.month_ist.equals(b.month_ist)
+              month=pd.DataFrame({'month_ist':a.month_ist,
+                'complete_month':a.complete_month,
+                'before_profit_usd':b.net_pnl_usd,
+                'after_profit_usd':a.net_pnl_usd,
+                'change_usd':(a.net_pnl_usd-b.net_pnl_usd).round(4),
+                'before_return_pct':b.monthly_return_pct,
+                'after_return_pct':a.monthly_return_pct})
+              month.to_csv(changed/f'eth_{k}_comparison_monthly.csv',index=False)
+              out['results'][k]={'previous':{x:prev.get(x) for x in keys},
+                                 'fixed_020':{x:new.get(x) for x in keys},
+                                 'modeled_threshold_available_entries':new.get('modeled_liq_boundary_available_entries'),
+                                 'entries_where_preliq_tighter_than_ATR':new.get('effective_preliq_entries')}
+          (changed/'comparison.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out['results']['history_shock1pct_offer'],indent=2))
+          PY
+      - name: Upload complete comparison artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-portfolio-fixed020-synthetic-stop-comparison
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            analysis/eth_portfolio_preliq_fixed_0p20_20261120/*.json
+            analysis/eth_portfolio_preliq_fixed_0p20_20261120/*.csv
+            analysis/eth_portfolio_preliq_fixed_0p20_20261120/*.csv.gz
+      - name: Commit results to research branch only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_portfolio_preliq_fixed_0p20_20261120/
+          if ! git diff --cached --quiet; then
+            git commit -m "research(ETH): save portfolio fixed 0.20 monthly scenario results"
+            git push origin HEAD:research/eth-portfolio-preliq-fixed020-20261120
+          fi
