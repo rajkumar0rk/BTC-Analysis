@@ -22,7 +22,7 @@ jobs:
           python-version: '3.12'
       - name: Install numerical research dependencies
         run: python -m pip install numpy pandas
-      - name: Recalculate 16 full-history ETH portfolio sensitivity scenarios
+      - name: Recalculate 20 full-history ETH portfolio sensitivity scenarios
         run: |
           python -m py_compile scripts/replay_eth_portfolio_execution_stress.py
           python scripts/replay_eth_portfolio_execution_stress.py
@@ -34,13 +34,13 @@ jobs:
           p=Path('analysis/eth_portfolio_execution_stress_20261120/summary.json')
           z=json.loads(p.read_text())
           assert z['settings']['portfolio_maintenance_fraction']==0.75
-          assert len(z['scenarios'])==16
+          assert len(z['scenarios'])==20
           for name,s in z['scenarios'].items():
               assert s['completed_months']==22,(name,s['completed_months'])
               assert s['profitable_completed_months']+s['losing_completed_months']+s['flat_completed_months']==22
               assert s['modeled_execution_adverse_price_usd_per_side']>=0
               assert s['largest_initial_margin_usd']<=10.0001
-          print("PASSED: all 16 scenarios, 22 completed months, <= $10 margin requirement")
+          print("PASSED: all 20 scenarios, 22 completed months, <= $10 margin requirement")
           PY
       - name: Save independent analysis artifact
         uses: actions/upload-artifact@v4
