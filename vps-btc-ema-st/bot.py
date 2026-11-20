@@ -45,6 +45,10 @@ class Bot:
         self.cfg=config
         if getattr(config,"market","futures")!="futures":raise ValueError("Bot is futures-only; use OptionsPaperBot for options")
         self.db=Store(config.state_dir)
+        if getattr(config,"asset",None) and getattr(config,"mode",None):
+            execution=("futures_exchange" if config.trading else
+                       "futures_paper" if getattr(config,"futures_paper",False) else "futures_signals")
+            self.db.claim_lane(config.asset,"futures",config.mode,execution)
         self.delta=Delta(config)
         self.product=None
         self.pid=None
