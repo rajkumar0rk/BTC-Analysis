@@ -54,7 +54,8 @@
     "bar_processing": "one full 1H OHLC bar per iteration",
     "fill_model": "OHLC-inferred path, high-first if open closer to high, otherwise low-first; stop fill at modeled barrier",
     "timestamp": "1H bar end when intrabar stop is simulated; actual intrabar time UNKNOWN",
-    "uncertainty_tests": "adverse-first and favorable-first extreme ordering",
+    "uncertainty_tests": "adverse-first and favorable-first extreme ordering, plus true candle-close-only decision",
+    "close_only_rule": "Trigger stops and trailing activation only from completed 1H close, with synthetic intrabar liquidation risk preserved",
     "same_hour_trail_possible": true,
     "last_hourly_signal_used": "prior fully completed 1H bar"
   },
@@ -604,6 +605,163 @@
               "wins": 78
             }
           ]
+        },
+        "close_only": {
+          "asset": "BTC",
+          "exit_monitoring": "one_hour_OHLC",
+          "bar_path_model": "close_only",
+          "offer_assumed": false,
+          "initial_wallet_usd": 100.0,
+          "final_cash_usd": 2.2302,
+          "net_usd": -97.7698,
+          "trade_count": 57,
+          "win_rate_pct": 33.33,
+          "profit_factor": 0.4838,
+          "winning_months": 0,
+          "losing_months": 1,
+          "flat_months": 21,
+          "total_fees_gst_usd": 63.694,
+          "modeled_liquidations": 18,
+          "assumed_fee_waivers": 0,
+          "max_closed_drawdown_pct": 98.25,
+          "entry_signals_when_flat": 2402,
+          "skipped_insufficient_wallet": 2345,
+          "skipped_no_contract": 0,
+          "open_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": -97.7698,
+              "trades": 57,
+              "wins": 19
+            },
+            {
+              "month": "2025-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            }
+          ]
         }
       },
       "difference_1h_minus_1m_usd": 4389.5011
@@ -1136,6 +1294,163 @@
               "wins": 76
             }
           ]
+        },
+        "close_only": {
+          "asset": "ETH",
+          "exit_monitoring": "one_hour_OHLC",
+          "bar_path_model": "close_only",
+          "offer_assumed": false,
+          "initial_wallet_usd": 100.0,
+          "final_cash_usd": 3.2476,
+          "net_usd": -96.7524,
+          "trade_count": 189,
+          "win_rate_pct": 34.39,
+          "profit_factor": 0.8908,
+          "winning_months": 0,
+          "losing_months": 3,
+          "flat_months": 19,
+          "total_fees_gst_usd": 220.0026,
+          "modeled_liquidations": 96,
+          "assumed_fee_waivers": 0,
+          "max_closed_drawdown_pct": 98.25,
+          "entry_signals_when_flat": 2402,
+          "skipped_insufficient_wallet": 2213,
+          "skipped_no_contract": 0,
+          "open_at_end": false,
+          "monthly": [
+            {
+              "month": "2025-01",
+              "net_usd": -5.2118,
+              "trades": 70,
+              "wins": 29
+            },
+            {
+              "month": "2025-02",
+              "net_usd": -12.4478,
+              "trades": 62,
+              "wins": 21
+            },
+            {
+              "month": "2025-03",
+              "net_usd": -79.0928,
+              "trades": 57,
+              "wins": 15
+            },
+            {
+              "month": "2025-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-11",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2025-12",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-01",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-02",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-03",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-04",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-05",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-06",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-07",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-08",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-09",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            },
+            {
+              "month": "2026-10",
+              "net_usd": 0.0,
+              "trades": 0,
+              "wins": 0
+            }
+          ]
         }
       },
       "difference_1h_minus_1m_usd": 6863.8934
@@ -1144,6 +1459,7 @@
   "caveats": [
     "This changes time resolution, not whether prices crossed a stop intrabar. No real 1H candle reveals high-vs-low chronology.",
     "An hourly inferred-path model may be dramatically optimistic versus the prior one-minute replay. Treat intrabar-path cases as sensitivity bounds, not confirmed fills.",
+    "Close-only exits are filled at the 1H close optimistically and may be later than a broker fill; exchange liquidation can still happen intrabar.",
     "Underlying hourly OHLC cannot establish Delta mark-price liquidation, spreads, stop order latency or tick-size price fills.",
     "Conservative no-offer results use all fees; assumed 27-minute Scalper discount almost never qualifies on 1H bar-end times and does not prove eligibility.",
     "Synthetic 100x isolated margin/preliq proxy differs from actual shared Demo Portfolio Margin; entry fee is charged before trade close.",
