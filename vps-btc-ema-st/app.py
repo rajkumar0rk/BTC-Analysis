@@ -43,7 +43,7 @@ def doctor(cfg):
         print("PRIVATE ACCOUNT ENDPOINTS SKIPPED (NO CREDENTIALS)")
     print("DOCTOR PASSED (READ-ONLY ENDPOINTS). NO EXECUTION VERIFIED.")
 
-def backtest(asset):
+def backtest(asset,preliq=False):
     asset=asset.upper()
     if asset=="BTC":
         src=ROOT/"scripts"/"replay_btc_ema_st_fixed_10_margin.py"
@@ -53,6 +53,13 @@ def backtest(asset):
         out=ROOT/"analysis"/"eth_ema_st_fixed10_100x_20261120"
     else:
         raise ValueError("Only BTC/ETH supported")
+    if preliq:
+        if asset=="BTC":
+            src=ROOT/"scripts"/"replay_btc_ema_st_preliq_one_point.py"
+            out=ROOT/"analysis"/"btc_ema_st_preliq_one_point_20261120"
+        else:
+            src=ROOT/"scripts"/"replay_eth_ema_st_preliq_one_point.py"
+            out=ROOT/"analysis"/"eth_ema_st_preliq_one_point_20261120"
     if not src.exists():
         raise RuntimeError("Missing verified research script: "+str(src))
     print("RUNNING FUTURES BACKTEST",asset,src,flush=True)
@@ -122,10 +129,11 @@ def main():
     p.add_argument("--asset",choices=["BTC","ETH"],default=None,
                    help="Futures historical backtest asset (independent of ASSET env)")
     p.add_argument("--confirm",default="")
+    p.add_argument("--preliq",action="store_true",help="Run NEW 1-point pre-liquidation futures simulation instead of original")
     args=p.parse_args()
     cfg=Config.read()
     if args.command=="doctor":doctor(cfg)
-    elif args.command=="backtest":backtest(args.asset or cfg.asset)
+    elif args.command=="backtest":backtest(args.asset or cfg.asset,preliq=args.preliq)
     elif args.command=="status":status(cfg)
     elif args.command=="reconcile":reconcile(cfg)
     elif args.command=="reset-halt":reset(cfg,args.confirm)
