@@ -1,0 +1,326 @@
+{
+  "input": "ETH futures EMA20 + Supertrend, portfolio margin stress model; fixed $0.20 inside synthetic account maintenance boundary",
+  "liquidation_threshold": "NOT actual exchange/PM liquidation; hypothetical mark-price proxy",
+  "results": {
+    "history_shock1pct_offer": {
+      "previous": {
+        "net_profit_usd": 1840.4477,
+        "ending_wallet_usd": 1940.4477,
+        "net_profit_factor": 2.152,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 19.47,
+        "max_intrabar_equity_drawdown_pct": 20.255,
+        "profitable_completed_months": 22,
+        "losing_completed_months": 0,
+        "completed_months": 22
+      },
+      "fixed_020": {
+        "net_profit_usd": 1840.4477,
+        "ending_wallet_usd": 1940.4477,
+        "net_profit_factor": 2.152,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 19.47,
+        "max_intrabar_equity_drawdown_pct": 20.255,
+        "profitable_completed_months": 22,
+        "losing_completed_months": 0,
+        "completed_months": 22
+      },
+      "modeled_threshold_available_entries": 705,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "history_shock1pct_nooffer": {
+      "previous": {
+        "net_profit_usd": 1424.6509,
+        "ending_wallet_usd": 1524.6509,
+        "net_profit_factor": 1.8671,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 22.197,
+        "max_intrabar_equity_drawdown_pct": 23.299,
+        "profitable_completed_months": 19,
+        "losing_completed_months": 3,
+        "completed_months": 22
+      },
+      "fixed_020": {
+        "net_profit_usd": 1424.6509,
+        "ending_wallet_usd": 1524.6509,
+        "net_profit_factor": 1.8671,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 22.197,
+        "max_intrabar_equity_drawdown_pct": 23.299,
+        "profitable_completed_months": 19,
+        "losing_completed_months": 3,
+        "completed_months": 22
+      },
+      "modeled_threshold_available_entries": 737,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "history_shock2pct_offer": {
+      "previous": {
+        "net_profit_usd": 905.1826,
+        "ending_wallet_usd": 1005.1826,
+        "net_profit_factor": 2.1475,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 12.546,
+        "max_intrabar_equity_drawdown_pct": 13.072,
+        "profitable_completed_months": 22,
+        "losing_completed_months": 0,
+        "completed_months": 22
+      },
+      "fixed_020": {
+        "net_profit_usd": 905.1826,
+        "ending_wallet_usd": 1005.1826,
+        "net_profit_factor": 2.1475,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 12.546,
+        "max_intrabar_equity_drawdown_pct": 13.072,
+        "profitable_completed_months": 22,
+        "losing_completed_months": 0,
+        "completed_months": 22
+      },
+      "modeled_threshold_available_entries": 661,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "history_shock3pct_offer": {
+      "previous": {
+        "net_profit_usd": 596.8456,
+        "ending_wallet_usd": 696.8456,
+        "net_profit_factor": 2.1501,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 9.326,
+        "max_intrabar_equity_drawdown_pct": 9.727,
+        "profitable_completed_months": 22,
+        "losing_completed_months": 0,
+        "completed_months": 22
+      },
+      "fixed_020": {
+        "net_profit_usd": 596.8456,
+        "ending_wallet_usd": 696.8456,
+        "net_profit_factor": 2.1501,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 9.326,
+        "max_intrabar_equity_drawdown_pct": 9.727,
+        "profitable_completed_months": 22,
+        "losing_completed_months": 0,
+        "completed_months": 22
+      },
+      "modeled_threshold_available_entries": 649,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "history_shock1pct_bankruptcy": {
+      "previous": {
+        "net_profit_usd": 1840.4477,
+        "ending_wallet_usd": 1940.4477,
+        "net_profit_factor": 2.152,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 19.47,
+        "max_intrabar_equity_drawdown_pct": 20.255,
+        "profitable_completed_months": 22,
+        "losing_completed_months": 0,
+        "completed_months": 22
+      },
+      "fixed_020": {
+        "net_profit_usd": 1840.4477,
+        "ending_wallet_usd": 1940.4477,
+        "net_profit_factor": 2.152,
+        "closed_trades": 1000,
+        "winners": 816,
+        "losers": 184,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 19.47,
+        "max_intrabar_equity_drawdown_pct": 20.255,
+        "profitable_completed_months": 22,
+        "losing_completed_months": 0,
+        "completed_months": 22
+      },
+      "modeled_threshold_available_entries": 705,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "recent10k_shock1pct_offer": {
+      "previous": {
+        "net_profit_usd": 179.1673,
+        "ending_wallet_usd": 279.1673,
+        "net_profit_factor": 1.7968,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 15.036,
+        "max_intrabar_equity_drawdown_pct": 18.0,
+        "profitable_completed_months": 2,
+        "losing_completed_months": 0,
+        "completed_months": 2
+      },
+      "fixed_020": {
+        "net_profit_usd": 179.1673,
+        "ending_wallet_usd": 279.1673,
+        "net_profit_factor": 1.7968,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 15.036,
+        "max_intrabar_equity_drawdown_pct": 18.0,
+        "profitable_completed_months": 2,
+        "losing_completed_months": 0,
+        "completed_months": 2
+      },
+      "modeled_threshold_available_entries": 155,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "recent10k_shock1pct_nooffer": {
+      "previous": {
+        "net_profit_usd": 128.5164,
+        "ending_wallet_usd": 228.5164,
+        "net_profit_factor": 1.5557,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 21.651,
+        "max_intrabar_equity_drawdown_pct": 24.057,
+        "profitable_completed_months": 1,
+        "losing_completed_months": 1,
+        "completed_months": 2
+      },
+      "fixed_020": {
+        "net_profit_usd": 128.5164,
+        "ending_wallet_usd": 228.5164,
+        "net_profit_factor": 1.5557,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 21.651,
+        "max_intrabar_equity_drawdown_pct": 24.057,
+        "profitable_completed_months": 1,
+        "losing_completed_months": 1,
+        "completed_months": 2
+      },
+      "modeled_threshold_available_entries": 155,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "recent10k_shock2pct_offer": {
+      "previous": {
+        "net_profit_usd": 87.361,
+        "ending_wallet_usd": 187.361,
+        "net_profit_factor": 1.7833,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 10.612,
+        "max_intrabar_equity_drawdown_pct": 11.827,
+        "profitable_completed_months": 2,
+        "losing_completed_months": 0,
+        "completed_months": 2
+      },
+      "fixed_020": {
+        "net_profit_usd": 87.361,
+        "ending_wallet_usd": 187.361,
+        "net_profit_factor": 1.7833,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 10.612,
+        "max_intrabar_equity_drawdown_pct": 11.827,
+        "profitable_completed_months": 2,
+        "losing_completed_months": 0,
+        "completed_months": 2
+      },
+      "modeled_threshold_available_entries": 155,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "recent10k_shock3pct_offer": {
+      "previous": {
+        "net_profit_usd": 58.2891,
+        "ending_wallet_usd": 158.2891,
+        "net_profit_factor": 1.7917,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 8.297,
+        "max_intrabar_equity_drawdown_pct": 9.065,
+        "profitable_completed_months": 2,
+        "losing_completed_months": 0,
+        "completed_months": 2
+      },
+      "fixed_020": {
+        "net_profit_usd": 58.2891,
+        "ending_wallet_usd": 158.2891,
+        "net_profit_factor": 1.7917,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 8.297,
+        "max_intrabar_equity_drawdown_pct": 9.065,
+        "profitable_completed_months": 2,
+        "losing_completed_months": 0,
+        "completed_months": 2
+      },
+      "modeled_threshold_available_entries": 155,
+      "entries_where_preliq_tighter_than_ATR": 0
+    },
+    "recent10k_shock1pct_bankruptcy": {
+      "previous": {
+        "net_profit_usd": 179.1673,
+        "ending_wallet_usd": 279.1673,
+        "net_profit_factor": 1.7968,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 15.036,
+        "max_intrabar_equity_drawdown_pct": 18.0,
+        "profitable_completed_months": 2,
+        "losing_completed_months": 0,
+        "completed_months": 2
+      },
+      "fixed_020": {
+        "net_profit_usd": 179.1673,
+        "ending_wallet_usd": 279.1673,
+        "net_profit_factor": 1.7968,
+        "closed_trades": 155,
+        "winners": 122,
+        "losers": 33,
+        "simulated_liquidations": 0,
+        "max_closed_equity_drawdown_pct": 15.036,
+        "max_intrabar_equity_drawdown_pct": 18.0,
+        "profitable_completed_months": 2,
+        "losing_completed_months": 0,
+        "completed_months": 2
+      },
+      "modeled_threshold_available_entries": 155,
+      "entries_where_preliq_tighter_than_ATR": 0
+    }
+  }
+}

@@ -1,0 +1,5 @@
+month_ist,complete_month,before_profit_usd,after_profit_usd,change_usd,before_return_pct,after_return_pct
+2026-08,False,30.5637,30.5637,0.0,30.56,30.56
+2026-09,True,80.5262,80.5262,0.0,61.68,61.68
+2026-10,True,-9.0157,-9.0157,0.0,-4.27,-4.27
+2026-11,False,26.4421,26.4421,0.0,13.09,13.09
