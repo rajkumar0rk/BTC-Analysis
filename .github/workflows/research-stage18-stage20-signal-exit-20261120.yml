@@ -6,6 +6,7 @@ on:
     paths:
       - scripts/research_stage18_stage20_signal_exit_improvement_20261120.py
       - scripts/research_stage18_stage20_trailing_20261120.py
+      - scripts/research_stage18_stage20_trailing_distance_20261120.py
       - .github/workflows/research-stage18-stage20-signal-exit-20261120.yml
   workflow_dispatch:
 permissions:
@@ -41,6 +42,12 @@ jobs:
         run: |
           python -m py_compile scripts/research_stage18_stage20_trailing_20261120.py
           PYTHONPATH=scripts python scripts/research_stage18_stage20_trailing_20261120.py
+      - name: Test genuine 1m trailing stop versus configurable trailing distances
+        env:
+          STAGE14_EVENTS: ${{ runner.temp }}/stage14-events/event_states.csv.gz
+        run: |
+          python -m py_compile scripts/research_stage18_stage20_trailing_distance_20261120.py
+          PYTHONPATH=scripts python scripts/research_stage18_stage20_trailing_distance_20261120.py
       - name: Save audited trade ledgers, monthly models and logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -49,5 +56,6 @@ jobs:
           path: |
             analysis/stage18_stage20_signal_exit_improvement_20261120/
             analysis/stage18_stage20_trailing_exits_20261120/
+            analysis/stage18_stage20_trailing_distance_20261120/
           if-no-files-found: warn
           retention-days: 30
