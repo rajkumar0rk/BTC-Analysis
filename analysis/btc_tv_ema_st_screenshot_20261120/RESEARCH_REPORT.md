@@ -43,7 +43,7 @@ Reference: saved Pine v6 BTCUSD EMA / ST | ATR & Volume Min Max + Net.
 
 - Independent reconstruction of the saved Pine v6 logic; NOT a TradingView tester export.
 - OHLC inferred path approximates native TradingView strategy.exit trail; same-bar execution, rounding, and fills can differ from TV.
-- Original Pine calc_bars_count=10000 may restrict accessible history on some TradingView charts; 22-month full replay here uses all source bars.
+- Original Pine calc_bars_count=10000 may restrict accessible history on some TradingView charts; a separate recent 10000-bar window is included alongside full 22-month replay.
 - Exact screenshot's 100000-min qualifying window and all-history offer are assumptions, NOT verified Delta promotion terms.
 - Entry and exit are TAKER per screenshot; exit fee waived only if offer eligible in model.
 - No actual bid/ask spread, order-book impact, trading latency, realized slippage, or margin liquidation.
