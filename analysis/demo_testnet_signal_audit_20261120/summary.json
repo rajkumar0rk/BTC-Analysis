@@ -1,0 +1,30 @@
+{
+  "date_ist": "2026-11-20",
+  "source_warning": "Production and Delta Demo testnet candles may differ; public signals are not executed trades",
+  "results": {
+    "demo_testnet_btc_15m": {
+      "error": "ValueError: unknown url type: 'demo_testnet/v2/history/candles?symbol=BTCUSD&resolution=15m&start=1794441600&end=1795199399'"
+    },
+    "demo_testnet_btc_1h": {
+      "error": "ValueError: unknown url type: 'demo_testnet/v2/history/candles?symbol=BTCUSD&resolution=1h&start=1794441600&end=1795199399'"
+    },
+    "demo_testnet_eth_15m": {
+      "error": "ValueError: unknown url type: 'demo_testnet/v2/history/candles?symbol=ETHUSD&resolution=15m&start=1794441600&end=1795199399'"
+    },
+    "demo_testnet_eth_1h": {
+      "error": "ValueError: unknown url type: 'demo_testnet/v2/history/candles?symbol=ETHUSD&resolution=1h&start=1794441600&end=1795199399'"
+    },
+    "production_btc_15m": {
+      "error": "ValueError: unknown url type: 'production/v2/history/candles?symbol=BTCUSD&resolution=15m&start=1794441600&end=1795199399'"
+    },
+    "production_btc_1h": {
+      "error": "ValueError: unknown url type: 'production/v2/history/candles?symbol=BTCUSD&resolution=1h&start=1794441600&end=1795199399'"
+    },
+    "production_eth_15m": {
+      "error": "ValueError: unknown url type: 'production/v2/history/candles?symbol=ETHUSD&resolution=15m&start=1794441600&end=1795199399'"
+    },
+    "production_eth_1h": {
+      "error": "ValueError: unknown url type: 'production/v2/history/candles?symbol=ETHUSD&resolution=1h&start=1794441600&end=1795199399'"
+    }
+  }
+}
