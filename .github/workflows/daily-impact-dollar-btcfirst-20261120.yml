@@ -1,0 +1,34 @@
+name: Daily BTC-first impact-per-dollar reversal audit
+on:
+  push:
+    branches:
+      - research/daily-impact-per-dollar-reversal-20261120-v1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas numpy
+      - name: Execute original BTC-first and frozen ETH tests
+        run: python analysis/daily_impact_dollar_reversal_20261120_v1/backtest.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: impact-per-dollar-original-trades
+          path: analysis/daily_impact_dollar_reversal_20261120_v1/*_trades.csv
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: impact-per-dollar-summary
+          path: |
+            analysis/daily_impact_dollar_reversal_20261120_v1/summary.json
+            analysis/daily_impact_dollar_reversal_20261120_v1/*_gaps.json
+          if-no-files-found: warn
