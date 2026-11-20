@@ -1,0 +1,33 @@
+name: Daily BTC-first path efficiency continuation
+on:
+  push:
+    branches:
+      - research/daily-path-efficiency-continuation-20261120-v1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas numpy
+      - name: Validate Python syntax
+        run: python -m py_compile analysis/daily_path_efficiency_continuation_20261120_v1/backtest.py
+      - name: Execute BTC-first and frozen ETH replay
+        run: python analysis/daily_path_efficiency_continuation_20261120_v1/backtest.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-path-efficiency-ledgers
+          path: |
+            analysis/daily_path_efficiency_continuation_20261120_v1/summary.json
+            analysis/daily_path_efficiency_continuation_20261120_v1/*_trades.csv
+            analysis/daily_path_efficiency_continuation_20261120_v1/*_gaps.json
+            analysis/daily_path_efficiency_continuation_20261120_v1/*_daily_nav.csv
+            analysis/daily_path_efficiency_continuation_20261120_v1/*_monthly_nav.csv
+          if-no-files-found: warn
