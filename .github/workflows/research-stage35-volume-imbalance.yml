@@ -1,0 +1,37 @@
+name: BTC-first Stage35 signed-volume absorption
+on:
+  push:
+    branches:
+      - research/btc-first-volume-imbalance-stage35-20261120
+    paths:
+      - 'scripts/research_paired_volume_imbalance_stage35.py'
+      - '.github/workflows/research-stage35-volume-imbalance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          lfs: true
+      - name: Run identity
+        run: |
+          mkdir -p analysis/paired_volume_imbalance_stage35
+          printf 'run_id=%s\nsource_sha=%s\nrun_url=%s\n' "$GITHUB_RUN_ID" "$GITHUB_SHA" "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > analysis/paired_volume_imbalance_stage35/run_identity.txt
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas pyarrow tabulate
+      - name: Execute original BTC and frozen ETH
+        run: python scripts/research_paired_volume_imbalance_stage35.py
+      - name: Preserve original evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage35-original-ledgers
+          path: analysis/paired_volume_imbalance_stage35/
+          if-no-files-found: warn
