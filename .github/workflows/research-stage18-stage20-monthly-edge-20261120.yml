@@ -1,0 +1,44 @@
+name: BTC Stage18 Stage20 causal monthly consistency improvement
+on:
+  push:
+    branches:
+      - research/stage18-stage20-monthly-consistency-20261120-v1
+    paths:
+      - scripts/research_stage18_stage20_monthly_edge_20261120.py
+      - .github/workflows/research-stage18-stage20-monthly-edge-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual-btc-trade-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install historical research dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Fetch original Stage14 entry-event states, not retrospectively selected trades
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/stage14-events"
+          gh run download 44118024590 -n btc-stage14-monthly-regime-trades -D "$RUNNER_TEMP/stage14-events" --repo "$GITHUB_REPOSITORY"
+          test -s "$RUNNER_TEMP/stage14-events/event_states.csv.gz"
+      - name: Replay pre-entry filters and stops on genuine BTC 1m history
+        env:
+          STAGE14_EVENTS: ${{ runner.temp }}/stage14-events/event_states.csv.gz
+        run: |
+          python -m py_compile scripts/research_stage18_stage20_monthly_edge_20261120.py
+          PYTHONPATH=scripts python scripts/research_stage18_stage20_monthly_edge_20261120.py
+      - name: Save every tested trade, all 22 monthly returns and quality audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-stage18-stage20-monthly-entry-exit-improvement
+          path: analysis/stage18_stage20_monthly_consistency_20261120/
+          retention-days: 30
+          if-no-files-found: warn
