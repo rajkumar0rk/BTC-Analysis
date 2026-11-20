@@ -5,6 +5,7 @@ on:
       - research/stage18-stage20-monthly-consistency-20261120-v1
     paths:
       - scripts/research_stage18_stage20_monthly_edge_20261120.py
+      - scripts/research_stage18_stage20_daily_swing_trail_20261120.py
       - .github/workflows/research-stage18-stage20-monthly-edge-20261120.yml
   workflow_dispatch:
 permissions:
@@ -34,11 +35,19 @@ jobs:
         run: |
           python -m py_compile scripts/research_stage18_stage20_monthly_edge_20261120.py
           PYTHONPATH=scripts python scripts/research_stage18_stage20_monthly_edge_20261120.py
+      - name: Re-execute native BTC 1m daily swing ATR trailing distances
+        env:
+          STAGE14_EVENTS: ${{ runner.temp }}/stage14-events/event_states.csv.gz
+        run: |
+          python -m py_compile scripts/research_stage18_stage20_daily_swing_trail_20261120.py
+          PYTHONPATH=scripts python scripts/research_stage18_stage20_daily_swing_trail_20261120.py
       - name: Save every tested trade, all 22 monthly returns and quality audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: btc-stage18-stage20-monthly-entry-exit-improvement
-          path: analysis/stage18_stage20_monthly_consistency_20261120/
+          path: |
+            analysis/stage18_stage20_monthly_consistency_20261120/
+            analysis/stage18_stage20_daily_swing_trailing_20261120/
           retention-days: 30
           if-no-files-found: warn
