@@ -1,0 +1,26 @@
+name: Daily external Keltner BTC 2025 zero slip screen
+on:
+  push:
+    branches:
+      - research/daily-external-keltner-bounce-screen-20261120-v1
+permissions:
+  contents: read
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas numpy
+      - run: python -m py_compile analysis/daily_external_keltner_bounce_20261120_v1/screen.py
+      - name: Execute genuine BTC 2025 zero slippage commission and GST screen
+        run: python analysis/daily_external_keltner_bounce_20261120_v1/screen.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-external-keltner-btc2025-screen
+          path: analysis/daily_external_keltner_bounce_20261120_v1/BTC2025_*
+          if-no-files-found: warn
