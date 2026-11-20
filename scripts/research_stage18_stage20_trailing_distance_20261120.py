@@ -145,6 +145,11 @@ def main():
             for family in ("Stage18","Stage20"):
                 nav=prior.portfolio(res,archived["d55"],None) if family=="Stage18" else prior.portfolio(res,archived["d20"],archived["hourly"])
                 p=prior.returns(nav)
+                # TRAIN DD MUST be calculated only using Jan-Dec 2025. Never
+                # use full 22-month DD when selecting the training winner.
+                train_equity=np.cumprod(1.+np.asarray(nav[:12],dtype=float)/100.)
+                train_peak=np.maximum.accumulate(np.r_[1.,train_equity])[1:]
+                train_2025_dd_pct=100.*float(np.max(1.-train_equity/train_peak))
                 full.append(dict(family=family,variant=name,mode=mode,
                     trail_activation_R=activation,trailing_distance=distance,
                     reward_cap_R=rr,hold_cap_minutes=hold,
@@ -152,6 +157,7 @@ def main():
                     core_trades=res["trades"],core_2025_trades=res["trades_2025"],
                     core_pf_netR=res["pf_net_R"],core_2025_pf_netR=res["pf_2025_net_R"],
                     core_avg_netR=res["mean_net_R_per_trade"],
+                    train_2025_monthend_dd_pct=train_2025_dd_pct,
                     core_2025_net_pct=res["net_2025"],
                     core_2026_net_pct=res["net_2026JanOct"],
                     **p))
@@ -173,14 +179,14 @@ def main():
                          (frame.extra_adverse_slip_bps_each_side==2)&
                          (frame.core_2025_trades>=25)&
                          (frame.net_2025_pct>0)].copy()
-        candidates["selection_BTC2025"]=candidates.net_2025_pct-.75*candidates.max_month_end_dd_pct
+        candidates["selection_BTC2025"]=candidates.net_2025_pct-.75*candidates.train_2025_monthend_dd_pct
         candidates=candidates.sort_values(["selection_BTC2025","core_2025_trades"],
                                           ascending=[False,False],kind="stable")
         pick=str(candidates.iloc[0].variant) if len(candidates) else "original_3R"
         selected[family]=pick
         print("TRAIN_2025_RANKED",family,candidates[[
             "variant","selection_BTC2025","net_2025_pct","core_2025_trades",
-            "max_month_end_dd_pct"]].head(12).to_json(orient="records"))
+            "train_2025_monthend_dd_pct"]].head(12).to_json(orient="records"))
         print("BASELINE_RECONCILED",family,round(diff,8))
         print("BTC2025_SELECTED",family,pick)
         # Print core original, 5R, frozen winner and highest BTC-2025 trailing
