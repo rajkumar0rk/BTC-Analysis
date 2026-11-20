@@ -58,7 +58,7 @@ PARAMS={
   "historical_liquidation_mark_price_available":False,
 }
 
-def replay(df,start,liq_fill):
+def replay(df,start,liq_fill,external_entry_side=None):
     arr=df.reset_index()
     op=arr.open.to_numpy(dtype=float)
     hi=arr.high.to_numpy(dtype=float)
@@ -70,6 +70,8 @@ def replay(df,start,liq_fill):
     ar=arr.atr_ratio.to_numpy(dtype=float)
     vr=arr.volume_ratio.to_numpy(dtype=float)
     times=arr.dt.to_numpy()
+    if external_entry_side is not None and len(external_entry_side)!=len(arr):
+        raise ValueError('External BTC entry signals must align with BTC bars')
     wallet=STARTING_EQUITY_USD
     peak=STARTING_EQUITY_USD
     max_dd_pct=0.0
@@ -153,7 +155,11 @@ def replay(df,start,liq_fill):
         if position is None and (np.isfinite(ema[i]) and np.isfinite(atr[i])
                                and np.isfinite(ar[i]) and np.isfinite(vr[i])):
             side=0
-            if ar[i]>=1.0 and vr[i]>=1.5:
+            if external_entry_side is not None:
+                side=int(external_entry_side[i])
+                if side not in (-1,0,1):
+                    raise ValueError('External entry side must be -1, 0 or +1')
+            elif ar[i]>=1.0 and vr[i]>=1.5:
                 if dr[i]==-1 and dr[i-1]==-1 and lo[i]<=ema[i] and cl[i]>ema[i]:
                     side=1
                 elif dr[i]==1 and dr[i-1]==1 and hi[i]>=ema[i] and cl[i]<ema[i]:
