@@ -60,16 +60,16 @@ def run(symbol,reverse=False,stress=False):
         if pos is not None:
             side=pos["side"]; reason=None
             if not contiguous:
-                exitprice=adverse(cl[i-1],-side);reason="gap_last_observed_close"
+                exitprice=adverse(o[i],-side);reason="gap_next_observed_open"
             elif (side==1 and lo[i]<=pos["stop"]) or (side==-1 and hi[i]>=pos["stop"]):
                 # Stop-first, even if same minute could improve trailing.
-                exitprice=adverse(pos["stop"],-side);reason="stop"
+                exitprice=adverse(min(pos["stop"],o[i]) if side==1 else max(pos["stop"],o[i]),-side);reason="stop_or_gap_through"
             elif (t-pos["entry_time"])>=pd.Timedelta(hours=48):
-                exitprice=adverse(cl[i],-side);reason="timeout_close"
+                exitprice=adverse(o[i],-side);reason="timeout_next_open"
             if reason:
                 nav+=side*pos["qty"]*(exitprice-pos["entry"])-pos["qty"]*exitprice*FEE
                 pnl=nav-pos["before"]
-                trades.append(dict(entry_utc=str(pos["entry_time"]),exit_utc=str(idx[i-1] if not contiguous else t),side=side,entry=pos["entry"],exit=exitprice,qty=pos["qty"],risk_usd=pos["risk_usd"],net_pnl=pnl,net_R=pnl/pos["risk_usd"],reason=reason))
+                trades.append(dict(entry_utc=str(pos["entry_time"]),exit_utc=str(t),side=side,entry=pos["entry"],exit=exitprice,qty=pos["qty"],risk_usd=pos["risk_usd"],net_pnl=pnl,net_R=pnl/pos["risk_usd"],reason=reason))
                 pos=None
                 closed_this_bar=True
             else:
