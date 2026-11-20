@@ -1,0 +1,44 @@
+name: VPS BTC ETH futures vs options quote-paper checks
+on:
+  push:
+    branches: ['feature/vps-btc-eth-futures-options-comparison']
+    paths:
+      - 'vps-btc-ema-st/**'
+      - '.github/workflows/test-vps-multi-asset-options.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -r vps-btc-ema-st/requirements.txt
+      - name: Compile app
+        run: python -m compileall -q vps-btc-ema-st
+      - name: Static shell validation
+        run: |
+          bash -n vps-btc-ema-st/scripts/install_systemd.sh
+          bash -n vps-btc-ema-st/scripts/install_systemd_multi.sh
+      - name: Exercise full offline test suite
+        working-directory: vps-btc-ema-st
+        run: python -m pytest tests/ -q
+      - name: Validate existing research prices are NOT invented
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          btc=json.loads(Path("analysis/btc_ema_st_fixed_10_margin_20261119/summary.json").read_text())
+          eth=json.loads(Path("analysis/eth_ema_st_fixed10_100x_20261120/summary.json").read_text())
+          assert btc["settings"]["portfolio_initial_equity_usd"]==100
+          assert eth["settings"]["portfolio_initial_equity_usd"]==100
+          assert btc["all_history_threshold"]["assumed_liquidations"]>0
+          assert eth["all_history_original_offer_threshold"]["assumed_liquidations"]>0
+          assert not Path("data/delta_india/BTCUSD/options_historical_bbo.csv").exists()
+          print("Historical FUTURES verified; no historical option backtest claimed")
+          PY
