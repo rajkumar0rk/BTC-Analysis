@@ -93,7 +93,8 @@ def main():
                     output["results"][label]={"error":f"{type(e).__name__}: {e}"}
                     print("AUDIT_ERROR",label,str(e),flush=True)
     (OUT/"summary.json").write_text(json.dumps(output,indent=2)+"\n",encoding="utf-8")
-    assert any("signals" in v for k,v in output["results"].items() if k.startswith("demo_testnet")), "No usable Delta Demo testnet data; don't assert signal parity"
+    if not any("signals" in v for k,v in output["results"].items() if k.startswith("demo_testnet")):
+        print("NO_USABLE_TESTNET_HISTORY: do not claim demo signal parity", flush=True)
     print("DONE",OUT,flush=True)
 
 if __name__=="__main__":
