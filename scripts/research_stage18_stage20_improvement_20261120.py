@@ -207,5 +207,25 @@ def main():
                    "caveats":caveats,"modeled_cost_stress_pct_per_calendar_month":STRESS_PCT,
                    "source_trade_level_PF":"UNAVAILABLE_CANNOT_INFER_FROM_MONTHLY_NAV",
                    "execution_model":"SOURCE_MONTHLY_PORTFOLIO_REPLAY"},indent=2)+"\n")
+    # Print frozen train/check and stress scenarios for reproducible log inspection.
+    for family in BASIS:
+        chosen=selection[family]["chosen_on_BTC2025"]
+        for symbol in ("BTCUSD","ETHUSD"):
+            for name in ("original",chosen):
+                if name=="original" and chosen=="original":
+                    options=("original",)
+                else:options=(name,)
+                for label in options:
+                    for stress in (0.0,0.10,0.25):
+                        vals=[r for r in summaries if r["family"]==family and r["market"]==symbol and r["variant"]==label and r["cost_buffer_pct_per_month"]==stress]
+                        if len(vals)!=1:raise AssertionError("Duplicate summary")
+                        v=vals[0]
+                        print("SELECTED_AUDIT "+json.dumps({"family":family,"market":symbol,"variant":label,
+                             "stress_month_pct":stress,"net_2025":v["net_2025_pct"],
+                             "net_2026_JanOct":v["net_2026_JanOct_pct"],
+                             "net_22_month":v["net_22_month_pct"],
+                             "positive_months":v["positive_months"],"losing_months":v["losing_months"],
+                             "flat_months":v["flat_months"],
+                             "max_month_end_dd":v["max_month_end_drawdown_pct"]},sort_keys=True))
     print("STAGE18_STAGE20_IMPROVEMENT_COMPLETE "+json.dumps(decisions,sort_keys=True))
 if __name__=="__main__":main()
