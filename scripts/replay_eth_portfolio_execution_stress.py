@@ -422,6 +422,10 @@ def main():
     # Executions use fixed adverse half-spread+slippage for each filled side.
     scenarios=[
       ("baseline_1pct_offer",.01,True,0.0,0.0),
+      ("cost005_1pct_offer",.01,True,.05,0.0),
+      ("cost010_1pct_offer",.01,True,.10,0.0),
+      ("cost015_1pct_offer",.01,True,.15,0.0),
+      ("cost020_1pct_offer",.01,True,.20,0.0),
       ("cost025_1pct_offer",.01,True,.25,0.0),
       ("cost050_1pct_offer",.01,True,.50,0.0),
       ("cost100_1pct_offer",.01,True,1.00,0.0),
