@@ -1,0 +1,5 @@
+month_ist,opening_wallet_usd,net_pnl_usd,monthly_return_pct,ending_wallet_usd,monthly_max_closed_drawdown_pct,closed_trades,winning_trades,losing_trades,liquidations,complete_month
+2026-08,100.0,13.0028,13.0,113.0028,12.44,37,24,13,0,False
+2026-09,113.0028,24.465,21.65,137.4678,11.45,39,29,10,0,True
+2026-10,137.4678,-5.3585,-3.9,132.1092,24.52,55,37,18,0,True
+2026-11,132.1092,3.0476,2.31,135.1568,16.43,24,18,6,0,False
