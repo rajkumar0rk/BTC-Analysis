@@ -1,0 +1,44 @@
+name: Backtest ETH EMA20 ST using synchronized BTC confirmation
+on:
+  push:
+    branches:
+      - research/eth-ema-st-btc-confirm-20261120
+    paths:
+      - scripts/replay_eth_ema_st_btc_confirmed.py
+      - scripts/replay_eth_ema_st_fixed10_100x.py
+      - .github/workflows/replay-eth-ema-st-btc-confirmed.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-ema-st-btc-confirmation-20261120
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas
+      - name: Run ETH futures BTC confirmation replay
+        run: python scripts/replay_eth_ema_st_btc_confirmed.py
+      - name: Upload complete report and trade ledgers
+        uses: actions/upload-artifact@v4
+        with:
+          name: eth-ema-st-btc-confirm-20261120
+          retention-days: 30
+          if-no-files-found: error
+          path: analysis/eth_ema_st_btc_confirm_20261120/
+      - name: Commit results only to research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_ema_st_btc_confirm_20261120
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist ETH BTC-confirmation futures replay results"
+            git push origin HEAD:research/eth-ema-st-btc-confirm-20261120
+          fi
