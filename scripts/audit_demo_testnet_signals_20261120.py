@@ -24,7 +24,7 @@ DAY_START=pd.Timestamp("2026-11-20 00:00",tz=TZ)
 DAY_END=pd.Timestamp("2026-11-21 00:00",tz=TZ)
 
 def fetch(base,symbol,res):
-    u=base+"/v2/history/candles?"+urllib.parse.urlencode(
+    u=BASES[base]+"/v2/history/candles?"+urllib.parse.urlencode(
         {"symbol":symbol,"resolution":res,"start":START,"end":END-1})
     request=urllib.request.Request(u,headers={"Accept":"application/json","User-Agent":"BTC-Analysis-testnet-signal-audit"})
     with urllib.request.urlopen(request,timeout=45) as response:
