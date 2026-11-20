@@ -1,0 +1,44 @@
+name: New independent BTC 1H edge — actual 1m backtest
+on:
+  push:
+    branches:
+      - research/stage18-stage20-independent-hourly-edge-20261120-v1
+    paths:
+      - scripts/research_new_independent_1h_edge_20261120.py
+      - .github/workflows/research-independent-1h-edge-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  test-independent-signal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install historical research dependencies
+        run: pip install numpy pandas numba
+      - name: Retrieve frozen original Stage18 Stage20 baselines
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/stage18-base"
+          gh run download 44652343750 -n btc-guard-free-stages18-20-complete -D "$RUNNER_TEMP/stage18-base" --repo "$GITHUB_REPOSITORY"
+          find "$RUNNER_TEMP/stage18-base" -name all_months.csv | grep -q .
+      - name: Backtest new 1H strategy on actual BTC 1m candles
+        env:
+          STAGE18_BASELINE_DIR: ${{ runner.temp }}/stage18-base
+        run: |
+          python -m py_compile scripts/research_new_independent_1h_edge_20261120.py
+          PYTHONPATH=scripts python scripts/research_new_independent_1h_edge_20261120.py
+      - name: Upload all trade ledgers and complete monthly results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: new-independent-btc-hourly-1m-edge
+          path: analysis/stage18_stage20_independent_hourly_edge_20261120/
+          if-no-files-found: warn
+          retention-days: 30
