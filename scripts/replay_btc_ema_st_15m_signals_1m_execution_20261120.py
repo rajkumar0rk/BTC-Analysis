@@ -82,7 +82,7 @@ def replay_one_minute(raw,bars,offer):
     op=raw.open.to_numpy(float);hi=raw.high.to_numpy(float)
     lo=raw.low.to_numpy(float);cl=raw.close.to_numpy(float)
     b=bars.reset_index()
-    bt=(b.dt.astype("int64")//1_000_000_000).to_numpy(np.int64)
+    bt=np.asarray(pd.DatetimeIndex(b.dt).as_unit("s").asi8,dtype=np.int64)
     assert len(b)*15==len(raw)
     assert bt[0]==t[0] and np.array_equal(bt,t[::15])
     em=b.ema.to_numpy(float);atr=b.atr14.to_numpy(float)
