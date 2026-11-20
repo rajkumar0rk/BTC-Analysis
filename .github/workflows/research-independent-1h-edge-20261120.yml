@@ -5,6 +5,7 @@ on:
       - research/stage18-stage20-independent-hourly-edge-20261120-v1
     paths:
       - scripts/research_new_independent_1h_edge_20261120.py
+      - scripts/research_new_independent_1h_exit_stress_20261120.py
       - .github/workflows/research-independent-1h-edge-20261120.yml
   workflow_dispatch:
 permissions:
@@ -34,11 +35,17 @@ jobs:
         run: |
           python -m py_compile scripts/research_new_independent_1h_edge_20261120.py
           PYTHONPATH=scripts python scripts/research_new_independent_1h_edge_20261120.py
+      - name: Recheck 1m trade-engine parity and test exit changes with worse-fill costs
+        run: |
+          python -m py_compile scripts/research_new_independent_1h_exit_stress_20261120.py
+          PYTHONPATH=scripts python scripts/research_new_independent_1h_exit_stress_20261120.py
       - name: Upload all trade ledgers and complete monthly results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: new-independent-btc-hourly-1m-edge
-          path: analysis/stage18_stage20_independent_hourly_edge_20261120/
+          path: |
+            analysis/stage18_stage20_independent_hourly_edge_20261120/
+            analysis/independent_48h_breakout_exit_cost_stress_20261120/
           if-no-files-found: warn
           retention-days: 30
