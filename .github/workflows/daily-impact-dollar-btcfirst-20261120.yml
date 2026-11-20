@@ -31,4 +31,6 @@ jobs:
           path: |
             analysis/daily_impact_dollar_reversal_20261120_v1/summary.json
             analysis/daily_impact_dollar_reversal_20261120_v1/*_gaps.json
+            analysis/daily_impact_dollar_reversal_20261120_v1/*_daily_nav.csv
+            analysis/daily_impact_dollar_reversal_20261120_v1/*_monthly_nav.csv
           if-no-files-found: warn
