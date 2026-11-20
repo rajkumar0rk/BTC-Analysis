@@ -20,6 +20,10 @@ RESEARCH={
   "BTC":ROOT/"analysis"/"btc_ema_st_fixed_10_margin_20261119",
   "ETH":ROOT/"analysis"/"eth_ema_st_fixed10_100x_20261120",
 }
+PRELIQ_RESEARCH={
+  "BTC":ROOT/"analysis"/"btc_ema_st_preliq_one_point_20261120",
+  "ETH":ROOT/"analysis"/"eth_ema_st_preliq_one_point_20261120",
+}
 
 def read_lane(cfg,asset,market):
     directory=(cfg.state_dir if asset==cfg.asset and market==cfg.market
@@ -100,17 +104,17 @@ def compare():
       "warning":"Paper option quotes are not real fills. Historical futures replay uses OHLC, not true mark-price/intrabar execution."}
 
 @app.get("/api/historical")
-def historical(asset:str="BTC",window:str="history",offer:str="offer",liquidation:str="threshold"):
+def historical(asset:str="BTC",window:str="history",offer:str="offer",liquidation:str="threshold",risk:str="original"):
     asset=asset.upper()
     if asset not in ASSETS or window not in ("history","recent") or offer not in (
-        "offer","nooffer") or liquidation not in ("threshold","bankruptcy"):
+        "offer","nooffer") or liquidation not in ("threshold","bankruptcy") or risk not in ("original","preliq"):
         raise HTTPException(400,"Invalid comparison filters")
     if asset=="BTC" and offer=="nooffer":
         return {"available":False,"reason":"BTC original historical run has no no-offer replay; use ETH no-offer sensitivity or rerun BTC fee model."}
     prefix="all_history" if window=="history" else "recent_last_10000_15m"
     key=(prefix+"_"+liquidation if asset=="BTC" else
          prefix+"_original_"+offer+"_"+liquidation)
-    directory=RESEARCH[asset]
+    directory=(PRELIQ_RESEARCH if risk=="preliq" else RESEARCH)[asset]
     summary=directory/"summary.json"
     monthly=directory/(key+"_monthly.csv")
     if not summary.exists() or not monthly.exists():
@@ -120,11 +124,11 @@ def historical(asset:str="BTC",window:str="history",offer:str="offer",liquidatio
     stat=data.get(key)
     if not isinstance(stat,dict):
         raise HTTPException(500,"Saved research scenario has unexpected schema")
-    return {"available":True,"asset":asset,"market":"futures_backtest",
+    return {"available":True,"asset":asset,"market":"futures_backtest","risk_model":risk,
             "window":window,"offer":offer,"liquidation":liquidation,
             "statistics":stat,"months":months,"settings":data.get("settings"),
             "dates_note":"BTC through 2026-11-18; ETH through 2026-11-17; November partial.",
-            "cost_note":"Fees and GST modeled; actual historical Scalper Offer enrollment NOT proven; no funding, spread, slippage or real mark-price liquidation."}
+            "cost_note":"Fees/GST modeled; historic offer unverified; no funding/spread/mark history, or realistic stop slippage/latency. One-point emergency stop is especially optimistic when risk=preliq."}
 
 @app.get("/api/paired-forward")
 def paired_forward(asset:str="BTC"):
@@ -254,7 +258,7 @@ footer{margin-top:20px;color:var(--mut);font-size:11px}
 <div class="card"><h2>Historical futures (model)</h2>
 <div class="kv"><span>BTCUSD original · $100 →</span><b id="btc-hist">—</b></div>
 <div class="kv"><span>ETHUSD original · $100 →</span><b id="eth-hist">—</b></div>
-<p class="label">Historical 100× isolated futures, $10 margin, modeled fee offer, liquidation and synthetic 15m OHLC execution. These are not forward comparison profits.</p>
+<p class="label">Historical 100× isolated futures, $10 margin, modeled fee offer, liquidation and synthetic 15m OHLC execution. See Futures backtests tab for original vs new one-point stop. These are not forward comparison profits.</p>
 </div><div class="card"><h2>Options forward test</h2>
 <div class="kv"><span>BTC CALL/PUT paper net</span><b id="btc-paper">—</b></div>
 <div class="kv"><span>ETH CALL/PUT paper net</span><b id="eth-paper">—</b></div>
@@ -266,6 +270,7 @@ footer{margin-top:20px;color:var(--mut);font-size:11px}
 <div class="selects"><select id="hist-asset"><option value="BTC">BTCUSD futures</option><option value="ETH">ETHUSD futures</option></select>
 <select id="hist-range"><option value="history">Full history</option><option value="recent">Latest 10,000 15m bars (fresh $100)</option></select>
 <select id="hist-offer"><option value="offer">Assumed Scalper Offer</option><option value="nooffer">Without offer (ETH only)</option></select>
+<select id="hist-risk"><option value="preliq">NEW: pre-liquidation stop ($1 BTC)</option><option value="original">Original: no pre-liquidation stop</option></select>
 <select id="hist-liq"><option value="threshold">Estimated liquidation threshold</option><option value="bankruptcy">Bankruptcy-price stress fill</option></select></div>
 <div class="cards">
 <div class="card"><div class="kicker">Ending wallet</div><div class="metric" id="hist-end">—</div></div>
@@ -402,7 +407,7 @@ async function loadExchange(){
 }
 async function loadHistory(){
  const q=new URLSearchParams({asset:$("hist-asset").value,window:$("hist-range").value,
- offer:$("hist-offer").value,liquidation:$("hist-liq").value});
+ offer:$("hist-offer").value,liquidation:$("hist-liq").value,risk:$("hist-risk").value});
  try{const d=await api("/api/historical?"+q);
  if(!d.available)throw Error(d.reason);
  const s=d.statistics;txt("hist-end",usd(s.ending_portfolio_usd));
@@ -442,7 +447,7 @@ async function loadPaper(){
  });
  }catch(e){txt("paper-net",String(e))}
 }
-["hist-asset","hist-range","hist-offer","hist-liq"].forEach(x=>$(x).addEventListener("change",loadHistory));
+["hist-asset","hist-range","hist-offer","hist-liq","hist-risk"].forEach(x=>$(x).addEventListener("change",loadHistory));
 $("paper-asset").addEventListener("change",loadPaper);
 $("paired-asset").addEventListener("change",loadPaired);
 refresh();loadHistory();loadPaper();loadPaired();loadExchange();
