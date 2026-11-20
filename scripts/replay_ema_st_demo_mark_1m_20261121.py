@@ -128,7 +128,7 @@ def trigger_old_stop(side, mark_open, mark_high, mark_low, stop, liq, flip):
     return None, None
 
 
-def evaluate(asset, minute, mark, bars, sampling, offer, slip):
+def evaluate(asset, minute, mark, bars, sampling, offer, slip, entry_start=None, entry_end=None):
     assert sampling in ("close", "extreme")
     tick = .5 if asset == "BTC" else .05
     lot = .001 if asset == "BTC" else .01
@@ -158,7 +158,9 @@ def evaluate(asset, minute, mark, bars, sampling, offer, slip):
             mark_exit, reason = trigger_old_stop(
                 p["side"], mo[j], mh[j], ml[j], p["stop"], p["liq"], flip[j] == p["side"])
 
-        if not prior and decision[j]:
+        if (not prior and decision[j] and
+            (entry_start is None or idx[j] >= entry_start) and
+            (entry_end is None or idx[j] < entry_end)):
             n_signal += 1
             side = int(decision[j])
             entry = float(op[j] + side*slip)
@@ -313,6 +315,26 @@ def evaluate(asset, minute, mark, bars, sampling, offer, slip):
         "position_open_at_data_end":position is not None,
         "last_execution_minute_utc":str(idx[-1]),
     }
+    if position is not None:
+        p = position
+        last_price = float(minute.close.iloc[-1])
+        open_gross = (last_price-p['entry'])*p['side']*p['qty']
+        estimated_close_fee = last_price*p['qty']*FEE
+        estimated_entry_fee = p['entry']*p['qty']*FEE
+        summary['open_at_end'] = {
+            'entry_time_utc': str(idx[p['entry_j']]),
+            'entry_price': p['entry'],
+            'side': 'long' if p['side'] == 1 else 'short',
+            'quantity': p['qty'],
+            'last_trade_close': last_price,
+            'last_mark_close': float(mark['close'].iloc[-1]),
+            'current_stop': p['stop'],
+            'gross_unrealized_usd': round(open_gross,4),
+            'hypothetical_net_if_closed_usd': round(open_gross-(estimated_entry_fee+estimated_close_fee)*(1+GST),4),
+            'note': 'Hypothetical closing value only; this trade remains OPEN at IST day end',
+        }
+    else:
+        summary['open_at_end'] = None
     return t,m,summary
 
 
