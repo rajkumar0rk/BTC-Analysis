@@ -10,3 +10,10 @@ Direct authenticated GitHub API GET /repos/rajkumar0rk/BTC-Analysis/actions/runs
 Potential data blocker: genuine files are named by UTC month; 2025-01 begins at UTC midnight, so IST 2025-01-01 00:00–05:29 may require 2024-12-31 candles. Screen explicitly fails closed if 2025 IST calendar boundaries are missing; it must not silently fill candles. Existing script also requires valid contiguous 1m timestamps. If failed, obtain authentic boundary candles and rerun; do not fake.
 
 Cost stage: zero slippage both sides, 0.05% commission per turnover side, 18% GST on commission. Historical funding UNMODELED; spread, market impact, margin, contract rounding unverified. Stage-2 0.5/5 BTC price-point slippage is prohibited until credible positive screen. No live orders.
+
+
+## 2026-11-20 18:56 IST — actual workflow failure verified
+- GitHub Actions run https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44735120702 is COMPLETED/FAILURE on this branch. Job `screen` failed at step `Native BTC 2025 screen (fail closed on data gaps)`; checkout/setup succeeded and artifact-preservation step succeeded. Thus workflow trigger is confirmed, but NO valid backtest result or profitability evidence exists.
+- Script inspected: scripts/highpf_external_tsmom_screen_v1.py explicitly requires 12 UTC-2025 monthly files, continuous one-minute timestamps and the 2024-12-31 18:30 UTC IST boundary; its own comment notes the boundary missing from 2025-only data. The exact thrown exception has NOT been recovered from job logs; missing boundary is a likely cause, not confirmed root cause.
+- Next action: retrieve failed step log or preserved artifact; repair with genuine preceding UTC-month data, and add genuine 2024 history for 60-day momentum warmup if available. Re-run same pinned original candidate before any stage-2 slippage or ETH/2026 claims. No invented bars. Source rule/execution parity also needs auditing (daily signal/close timing and trade PnL accounting).
+- Decision: BLOCKED/INCONCLUSIVE, not REJECTED and not FOUND. Funding, spread, order-book impact and margin remain UNMODELED/UNVERIFIED. No other schedule or live account touched.
