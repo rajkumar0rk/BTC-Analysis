@@ -4,14 +4,14 @@ Four independent research lanes in the same BTC-Analysis repository folder:
 
 | Lane | Execution | Per-trade allocation |
 | --- | --- | --- |
-| BTCUSD futures | Delta demo exchange orders if enabled; live gated | Up to $10 isolated margin × 100 leverage |
-| ETHUSD futures | Delta demo exchange orders if enabled; live gated | Up to $10 isolated margin × 100 leverage |
+| BTCUSD futures | Forward futures paper by default; Delta demo exchange orders if enabled, live gated | Up to $10 isolated margin × 100 leverage |
+| ETHUSD futures | Forward futures paper by default; Delta demo exchange orders if enabled, live gated | Up to $10 isolated margin × 100 leverage |
 | BTC CALL/PUT options | **Forward paper only** using actual testnet/live option bid/ask | Up to $10 total premium including entry fees/GST |
 | ETH CALL/PUT options | **Forward paper only** using actual testnet/live option bid/ask | Up to $10 total premium including entry fees/GST |
 
 Options do **not** use futures leverage. Long CALL for bullish underlying, long PUT for bearish underlying. No option selling-to-open, no actual option orders.
 
-**Important:** We have complete underlying futures candles and verified BTC/ETH historical futures backtests, but **NO historical contract-specific option bid/ask prices**, strikes, expiries or settlement data. Historical option P&L is unavailable and is never fabricated. The comparison dashboard instead shows historical futures models separately from subsequently collected **forward options paper trades**. The first fair like-for-like period is one in which all relevant lanes have collected actual data.
+**Important:** We have complete underlying futures candles and verified BTC/ETH historical futures backtests, but **NO historical contract-specific option bid/ask prices**, strikes, expiries or settlement data. Historical option P&L is unavailable and is never fabricated. The comparison dashboard instead shows historical futures models separately from subsequently collected **forward options paper trades**. The four forward paper lanes use separate $100 simulated wallets from the first run; the dashboard also pairs trades by **the same underlying 15m signal candle** so skipped option entries do not contaminate matched-trade comparisons. The first fair like-for-like period is one in which all relevant lanes have collected actual data.
 
 ## The same underlying strategy
 
@@ -85,9 +85,9 @@ journalctl -u ema-st@ETH_options -n 60 --no-pager
 
 The installer creates four editable files in lane-env/ (BTC_futures.env, ETH_futures.env, BTC_options.env, ETH_options.env), each initially MODE=demo and TRADING_ENABLED=false. Per-lane environment variables override the common .env (which contains credentials and budgets).
 
-Futures with order writes disabled **only emit signals**; they do not record pretend forward fills. Options paper positions persist in each lane's SQLite database and retain their cash balance across restarts. Quote samples during active positions are stored (one per minute per product) for future auditing, not as a complete historical option-chain reconstruction. A file lock prevents duplicate processes for the same lane.
+Futures with order writes disabled now run **quote-based forward PAPER trading by default** (FUTURES_PAPER_ENABLED=true), with 100x isolated-margin risk, modeled mark-price liquidation, conservative fresh entry ask / exit bid and modeled fees/GST. They do not submit orders and they do not invent historical results. To run signals-only instead set FUTURES_PAPER_ENABLED=false. Options paper positions persist in each lane's SQLite database and retain their cash balance across restarts. Quote samples during active positions are stored (one per minute per product) for future auditing, not as a complete historical option-chain reconstruction. A file lock prevents duplicate processes for the same lane.
 
-Futures lane positions and daily-loss controls do not enforce a **combined account exposure limit** across BTC and ETH. If both use the same Delta login, their margin/fees hit the same real wallet. Prefer separate demo accounts for a true isolated $100-per-strategy comparison or explicitly plan aggregate risk before enabling both futures lanes.
+When TRADING_ENABLED=true, futures lane positions and daily-loss controls do not enforce a **combined account exposure limit** across BTC and ETH. If both use the same Delta login, their margin/fees hit the same real wallet. Prefer separate demo accounts for a true isolated $100-per-strategy comparison or explicitly plan aggregate risk before enabling both futures lanes.
 
 ### Dashboard access
 
@@ -139,3 +139,9 @@ ASSET=BTC MARKET=futures .venv/bin/python app.py reset-halt --confirm I_VERIFIED
 - State includes sensitive trading information; keep .env, lane-env and SQLite protected. Synchronize VPS clock with NTP.
 
 Official API reference: https://docs.delta.exchange/ ; India fee details: https://www.delta.exchange/fees . Offline CI: .github/workflows/test-vps-multi-asset-options.yml.
+
+## Matched forward futures-vs-options paper comparison
+
+By default, MODE=demo and TRADING_ENABLED=false, both BTC/ETH futures now paper-trade at actual bid/ask quotes (no orders) as do their corresponding CALL/PUT options. Each paper lane has its own starting $100 portfolio. On the comparison dashboard the **Matched forward trades** table joins closed futures and option trades by their exact underlying 15-minute entry signal timestamp, and shows their NET return difference after modeled fees/GST. It also reports total paper trades and all closed net across each lane, to make option-skipped entries visible. Futures 100× liquidation is only an approximate mark-price maintenance proxy and options quote execution is hypothetical; neither is an exchange-confirmed fill.
+
+With FUTURES_PAPER_ENABLED=false and TRADING_ENABLED=false a futures lane is signals-only (no virtual or real trades). With TRADING_ENABLED=true it routes Delta testnet/live futures orders, and any previous paper record in the same state path should be archived or isolated before changing mode. Never compare an exchange order ledger with paper quote fills as if they had identical execution certainty.
