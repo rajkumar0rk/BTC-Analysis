@@ -1,0 +1,53 @@
+name: BTCUSD TradingView EMA/ST exact screenshot replay - Nov 20
+on:
+  push:
+    branches:
+      - research/btc-tv-ema-st-screenshot-20261120
+    paths:
+      - scripts/backtest_tv_ema_st_screenshot_20261120.py
+      - .github/workflows/backtest-tv-ema-st-screenshot-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-tv-ema-st-screenshot-20261120
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install replay requirements
+        run: python -m pip install pandas numpy tabulate
+      - name: Verify syntax
+        run: python -m py_compile scripts/backtest_tv_ema_st_screenshot_20261120.py
+      - name: Verify SHA256 of 22 months and run screenshot settings
+        run: python scripts/backtest_tv_ema_st_screenshot_20261120.py
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: btc-tv-ema-st-screenshot-full-trades
+          path: |
+            analysis/btc_tv_ema_st_screenshot_20261120/trades_screenshot_offer.csv.gz
+            analysis/btc_tv_ema_st_screenshot_20261120/monthly_screenshot_offer.csv
+            analysis/btc_tv_ema_st_screenshot_20261120/monthly_30min_offer.csv
+            analysis/btc_tv_ema_st_screenshot_20261120/monthly_30min_offer_plus_0p5pt_slippage.csv
+          if-no-files-found: error
+      - name: Commit research report to dedicated branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_tv_ema_st_screenshot_20261120/summary.json \
+                  analysis/btc_tv_ema_st_screenshot_20261120/RESEARCH_REPORT.md \
+                  analysis/btc_tv_ema_st_screenshot_20261120/monthly_screenshot_offer.csv \
+                  analysis/btc_tv_ema_st_screenshot_20261120/monthly_30min_offer.csv \
+                  analysis/btc_tv_ema_st_screenshot_20261120/monthly_30min_offer_plus_0p5pt_slippage.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save BTCUSD screenshot EMA/ST 22-month monthly result"
+            git push origin HEAD:research/btc-tv-ema-st-screenshot-20261120
+          fi
