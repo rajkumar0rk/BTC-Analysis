@@ -1,174 +1,141 @@
-# BTCUSD EMA20 + Supertrend — VPS mini app
+# BTC & ETH Futures vs Options — EMA20 + Supertrend VPS app
 
-Standalone folder inside **BTC-Analysis**. One BTCUSD strategy, one position, local read-only dashboard, historical backtest view, and Delta India **demo/testnet** exchange execution adapter. Live mode is explicitly locked until manual approval.
+Four independent research lanes in the same BTC-Analysis repository folder:
 
-> **Warning:** This is a carefully guarded **research / forward-demo MVP**, not a production-certified execution engine. Backtest profits are not live expectations. This build has **NOT** placed or verified an order against your Delta account. Do not switch to real trading until demo fills/stops and liquidation behavior have been checked independently.
+| Lane | Execution | Per-trade allocation |
+| --- | --- | --- |
+| BTCUSD futures | Delta demo exchange orders if enabled; live gated | Up to $10 isolated margin × 100 leverage |
+| ETHUSD futures | Delta demo exchange orders if enabled; live gated | Up to $10 isolated margin × 100 leverage |
+| BTC CALL/PUT options | **Forward paper only** using actual testnet/live option bid/ask | Up to $10 total premium including entry fees/GST |
+| ETH CALL/PUT options | **Forward paper only** using actual testnet/live option bid/ask | Up to $10 total premium including entry fees/GST |
 
-## Strategy implemented
+Options do **not** use futures leverage. Long CALL for bullish underlying, long PUT for bearish underlying. No option selling-to-open, no actual option orders.
 
-- 15m completed candle only. Supertrend ATR10 factor3 must already be bullish for a long / bearish for a short; do not enter on flip alone.
-- LONG: candle low touches EMA20, closes above EMA20. SHORT reverse.
-- ATR14 must be at least its prior-20-candle mean; volume at least 1.5× prior-20-candle mean.
-- ATR14×2 initial protective stop. Trailing activation +150 BTC points, fixed trailing distance 50 points. Exit on confirmed opposite Supertrend flip.
-- Research bankroll $100; fixed **up-to-$10** isolated margin per entry; 100× leverage (~$1,000 notional), rounded DOWN to integer BTCUSD contracts, one position.
-- Historical fee model: taker entry/exit 0.05%, GST 18%, and assumed 30-minute Scalper Offer; modeled liquidation costs. History assumes offer active throughout; this entitlement is **not verified**.
-- Forward/demo/live execution uses testnet/live Delta REST, actual market/mark price, order IDs, native reduce-only stops, and polling. **Forward entry safety guard** skips setups if 2ATR stop is beyond a conservative liquidation threshold buffer. We separately backtested this guarded variant: full history **-$5.38** with 8/22 completed profitable months and zero modeled liquidations, versus original **+$813.13** with 19/22 profitable months but 42 modeled liquidations. The dashboard compares both. The safer guarded strategy is **NOT historically profitable** under the assumptions. Do not trade it live on the basis of the unguarded profit.
+**Important:** We have complete underlying futures candles and verified BTC/ETH historical futures backtests, but **NO historical contract-specific option bid/ask prices**, strikes, expiries or settlement data. Historical option P&L is unavailable and is never fabricated. The comparison dashboard instead shows historical futures models separately from subsequently collected **forward options paper trades**. The first fair like-for-like period is one in which all relevant lanes have collected actual data.
 
-## Prerequisites
+## The same underlying strategy
 
-Oracle Ubuntu VPS (even ~1 GB RAM), Python 3.10+ (prefer 3.12), Git, SSH access, a Delta **India** demo/testnet API account/key. The historical backtest reuses verified BTCUSD 1m data and scripts from the same repository branch.
+Use a closed 15-minute bar and unchanged indicators from the repo's historical BTC strategy:
 
-**Hosts:** Delta India demo \`https://cdn-ind.testnet.deltaex.org\`; India live \`https://api.india.delta.exchange\`. Environment host is hardcoded by MODE so credentials cannot accidentally be used with the wrong exchange. Product ID, contract value and tick size are fetched from API.
+- Supertrend (ATR10 factor3) is already bullish/bearish (not a fresh trend-flip entry).
+- EMA20 wick pullback touch and favorable candle close.
+- Volume >= 1.5× prior 20 volume average, ATR14 >= prior 20 ATR14 average.
+- 2×ATR14 initial stop based on underlying entry price. Supertrend opposite flip exits.
+- Trailing: BTC activation 150 price points, trailing distance 50; ETH activation 0.1875% of ETH entry, trailing distance 0.0625%, frozen per position and rounded to exchange tick. ETH uses the same percentage rescaling as its earlier cross-asset backtest.
+- **Futures liquidation entry guard: OFF**, as explicitly requested. This exposes the risk that liquidation at 100× occurs *before* the ATR stop. Native futures protective stops and risk journaling remain.
+- Long options: filter fresh near-ATM (<=2% distance) tradable contract with expiry 36h–14d from now, spread <=10%, adequate bid/ask depth, real product contract size and official settlement metadata. Entry at fresh ASK, exit at fresh BID when the underlying stop/trailing/flip triggers. Maximum total buy debit (premium + assumed taker fee + 18% GST) $10. If an exit quote cannot be validated, the paper exit stays pending and no fake trade is created. At expiry a real settlement reference is needed, not guessed.
 
-## Install on VPS
+Options fee estimate: 0.01% of underlying notional capped at 3.5% of option premium **per side**, plus assumed 18% GST. The exchange's actual charged fees/credits and historical offer eligibility are not independently verified. Bid/ask paper results may still differ materially from real fills.
 
-Connect to VPS through SSH, then:
+## Ubuntu / Oracle VPS installation
+
+In an SSH session (Python 3.10+ supported; Python 3.12 recommended):
 
 ~~~bash
-sudo apt-get update
-sudo apt-get install -y git python3 python3-venv python3-pip
-git clone --depth 1 --branch feature/vps-ema-st-demo-live-app https://github.com/rajkumar0rk/BTC-Analysis.git
+sudo apt update
+sudo apt install -y git python3 python3-venv python3-pip
+git clone --depth 1 --branch feature/vps-btc-eth-futures-options-comparison https://github.com/rajkumar0rk/BTC-Analysis.git
 cd BTC-Analysis/vps-btc-ema-st
 python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip
 .venv/bin/python -m pip install -r requirements.txt
 cp .env.example .env
 chmod 600 .env
-mkdir -p state
-chmod 700 state
+umask 077
 nano .env
-~~~
-
-If the repo is private, use your own GitHub SSH key or a token with read access; **do not paste credentials into chat**. Ensure sufficient disk for repository historical data.
-
-## .env settings: safe initial demo configuration
-
-Copy \`.env.example\` and keep these settings initially:
-
-~~~dotenv
-MODE=demo
-TRADING_ENABLED=false
-DELTA_DEMO_API_KEY=
-DELTA_DEMO_API_SECRET=
-PORTFOLIO_BUDGET_USD=100
-MARGIN_PER_TRADE_USD=10
-LEVERAGE=100
-ISOLATED_MARGIN_CONFIRMED=false
-DAILY_LOSS_LIMIT_USD=10
-MAX_TRADES_PER_DAY=10
-HALT_AFTER_LIQUIDATION=true
-MIN_LIQUIDATION_BUFFER_PCT=0.25
-POLL_SECONDS=3
-DASHBOARD_HOST=127.0.0.1
-DASHBOARD_PORT=8765
-STATE_DIR=./state
-~~~
-
-At this stage, **no orders are placed**. The market feed is loaded from testnet, and candidate entries are recorded in SQLite.
-
-### Commands
-
-~~~bash
 .venv/bin/python -m pytest -q tests/
-.venv/bin/python app.py doctor       # public API check; private read-only if keys set
-.venv/bin/python app.py backtest     # rerun saved research scenario from repo
-.venv/bin/python app.py run          # continuous bot loop (signals-only by default)
-.venv/bin/python app.py status       # local SQLite state, logs, pending and active orders
-.venv/bin/python app.py audit        # authenticate, sync actual fills and estimated net before funding
-.venv/bin/python app.py serve        # localhost dashboard
 ~~~
 
-**The first complete bar on startup is warm-up only** so it cannot enter a delayed, historical signal.
+Initially leave MODE=demo, TRADING_ENABLED=false, no API keys. The app reads only public historical and market data (and opens no option orders in any mode). STATE_DIR should be blank to automatically isolate states under state/demo/BTC_futures, state/demo/ETH_futures, state/demo/BTC_options and state/demo/ETH_options.
 
-### Backtest output and accuracy
-
-The backtest command invokes **both original and risk-guarded research scripts**, starting with the **exact existing research script** \`../scripts/replay_btc_ema_st_fixed_10_margin.py\`. This avoids duplicating indicator/entry/exit math. The dashboard reads files in \`../analysis/btc_ema_st_fixed_10_margin_20261119/\`, including \`summary.json\`, four monthly CSVs and four compressed trade ledgers.
-
-Historical data: Jan 2025–Nov 18 2026; most recent full month October 2026. Stored original full-history optimistic ending balance **$913.13** from hypothetical $100, 42 modeled liquidations, 19/22 profitable full months. The conservative guarded strategy finished at **$94.62** with **0 modeled liquidations** and **14/22 losing completed months**. This remains **research only**: old replay assumes 15m OHLC price path, 30-minute fee offer historically, 0 slippage, 0 funding, estimated maintenance/liquidation instead of actual mark history. The guarded bot will intentionally skip some original signals.
-
-### Dashboard access (no public port)
-
-Run \`app.py serve\` on VPS. On your **own computer**, keep an SSH tunnel open:
+### Read-only API checks
 
 ~~~bash
-ssh -L 8765:127.0.0.1:8765 ubuntu@YOUR_ORACLE_VPS_IP
+ASSET=BTC MARKET=futures .venv/bin/python app.py doctor
+ASSET=ETH MARKET=futures .venv/bin/python app.py doctor
+ASSET=BTC MARKET=options .venv/bin/python app.py doctor
+ASSET=ETH MARKET=options .venv/bin/python app.py doctor
 ~~~
 
-Open \`http://127.0.0.1:8765\` in your local browser. Views: Overview / Backtest / Activity / Safety. Web API is **read-only**, never accepts trading commands or credentials. Never open inbound port 8765 on Oracle/Ubuntu firewalls.
+Doctor never submits any orders. The testnet option chain may be illiquid or unavailable; that is a real limitation, not a reason to fabricate prices. If no valid quote meets bid/ask, DTE and spread limits, that option entry is skipped.
 
-## Enable *demo/testnet* orders (only after doctor succeeds)
-
-1. Make a **dedicated Delta India testnet** account/API key with trading permission and **no withdrawal permission**. Testnet may differ from the exchange's UI demo feature. Confirm the account/host is the intended environment.
-2. In Delta testnet UI, configure **BTCUSD isolated margin**, 100× leverage, and disable automatic margin additions/top-ups. No existing BTCUSD positions/open orders. The bot cannot remotely verify isolated mode; this is a **mandatory manual check**.
-3. Add keys to \`.env\`:
-   - \`DELTA_DEMO_API_KEY=...\`
-   - \`DELTA_DEMO_API_SECRET=...\`
-   - \`ISOLATED_MARGIN_CONFIRMED=true\`
-   - \`TRADING_ENABLED=true\`
-   - Keep \`MODE=demo\`.
-4. Run \`app.py doctor\` again; inspect wallet, product metadata, real-time position (must be flat), existing open orders and leverage.
-5. Start \`app.py run\`; watch logs and verify orders on Delta testnet. The runner places entries only after a fresh completed 15m bar, and attaches a mark-triggered stop; it also verifies/reconciles reduce-only protective stops.
-6. **Manually verify the first demo fill**: entry size, side, price, bracket/stop order, reduce-only flag, mark trigger, exchange charges, cancellation/restart behavior, close/flip, final position. If any difference: stop bot and investigate. **Do not assume this adapter is production-ready** merely because unit tests pass.
-
-Important operational details:
-- The runner signs authenticated requests with HMAC-SHA256, current Unix time, canonical exact query/path/body. Synchronize Ubuntu time with NTP (\`timedatectl\`).
-- It saves client IDs/order intents **before** sending orders. For an ambiguous timeout it queries the **same client order ID**, and will NOT blindly retry unknown writes.
-- It refuses to silently adopt manual positions or unknown orders. After an emergency/reconciliation error, new entries are halted. A native stop may remain active when the bot is offline.
-- The stop-liq risk guard is only an **approximate** filter, never a guarantee. Exchange liquidates by mark price and maintenance tiers; large gaps can bypass stop fills.
-- Daily account loss guard uses exchange wallet **net equity**, so use a **dedicated bot-only account**; unrelated deposits, withdrawals or positions can affect this metric. The $100 is a budgeting assumption, **not** a wallet ring-fence. Demo account equity may start with a different amount.
-- Restarts do not reset processed candles. The dashboard now shows authenticated exchange wallet equity and an **estimated realized P&L reconstructed from exchange fill IDs and actual reported commissions**, with 18% GST modeled. It does **not** reconcile funding, credits, actual GST settlement, or external account adjustments; verify real P&L against Delta's wallet, trades and funding UI.
-
-## Background services (optional after manual smoke tests)
+### Historical futures backtests (guard OFF)
 
 ~~~bash
-bash scripts/install_systemd.sh
-sudo systemctl start btc-ema-st-dashboard
-sudo systemctl start btc-ema-st-bot
-sudo systemctl status btc-ema-st-bot --no-pager
-journalctl -u btc-ema-st-bot -f
+.venv/bin/python app.py backtest --asset BTC
+.venv/bin/python app.py backtest --asset ETH
 ~~~
 
-The bot service intentionally has **Restart=no** on failure; blindly auto-restarting uncertain trading state is dangerous. The dashboard service can restart automatically.
+They use verified Delta India 1m underlying history aggregated to 15m and their existing scripts. Replaying both is optional; the output files are already present on this branch. On a 1GB RAM VPS, historical jobs may require swap. **There is no historical options backtest**, because the inputs for it are not available.
 
-Pause new signals with \`sudo systemctl stop btc-ema-st-bot\`. **Stopping the service does NOT close a position or remove an exchange stop.** Always inspect positions manually after shutdown.
+Research-only simulated benchmark: BTC original $100 to $913.13, 42 modeled liquidations; ETH original $100 to $1,964.68, 113 modeled liquidations. Both assumed a historical Scalper Offer that was not verified; neither includes slippage, spread, funding or actual historical mark-price liquidation. Do not interpret those returns as what demo/live must achieve.
 
-For a persisted halt, inspect orders/positions/fills on Delta, then:
+## Four separately isolated long-running services
 
 ~~~bash
-.venv/bin/python app.py status
-.venv/bin/python app.py reconcile
-.venv/bin/python app.py reset-halt --confirm I_VERIFIED_EXCHANGE_POSITIONS_ORDERS_AND_STOPS
+bash scripts/install_systemd_multi.sh
+sudo systemctl start ema-st-dashboard
+sudo systemctl start ema-st@BTC_futures
+sudo systemctl start ema-st@ETH_futures
+sudo systemctl start ema-st@BTC_options
+sudo systemctl start ema-st@ETH_options
+sudo systemctl status ema-st@BTC_options --no-pager
+journalctl -u ema-st@ETH_options -n 60 --no-pager
 ~~~
 
-If unknown order intents remain, reset is refused. Never delete state to bypass it.
+The installer creates four editable files in lane-env/ (BTC_futures.env, ETH_futures.env, BTC_options.env, ETH_options.env), each initially MODE=demo and TRADING_ENABLED=false. Per-lane environment variables override the common .env (which contains credentials and budgets).
 
-## Later: live mode (real-money path; NOT validated)
+Futures with order writes disabled **only emit signals**; they do not record pretend forward fills. Options paper positions persist in each lane's SQLite database and retain their cash balance across restarts. Quote samples during active positions are stored (one per minute per product) for future auditing, not as a complete historical option-chain reconstruction. A file lock prevents duplicate processes for the same lane.
 
-**Do not enable real-money execution until several weeks of demo observations, robust fill/stop parity checks, liquidation guard verification, and independent code review.**
+Futures lane positions and daily-loss controls do not enforce a **combined account exposure limit** across BTC and ETH. If both use the same Delta login, their margin/fees hit the same real wallet. Prefer separate demo accounts for a true isolated $100-per-strategy comparison or explicitly plan aggregate risk before enabling both futures lanes.
 
-Stop demo bot. **Use separate keys and a dedicated real account** with permission to trade BTCUSD, IP-allowlisted to your VPS. Confirm there is no demo position requiring management. Create an independent state directory to avoid mixing demo and real orders.
+### Dashboard access
 
-In \`.env\`, after manual real-account isolated-mode confirmation:
+The dashboard binds only to VPS localhost 127.0.0.1:8765. On your own computer, create:
 
-~~~dotenv
-MODE=live
-TRADING_ENABLED=true
-DELTA_LIVE_API_KEY=YOUR_OWN_NEW_LIVE_KEY
-DELTA_LIVE_API_SECRET=YOUR_OWN_NEW_LIVE_SECRET
-ISOLATED_MARGIN_CONFIRMED=true
-LIVE_TRADING_ACK=I_ACCEPT_REAL_BTCUSD_TRADES
-STATE_DIR=./state-live
+~~~bash
+ssh -L 8765:127.0.0.1:8765 ubuntu@YOUR_VPS_IP
 ~~~
 
-Run **doctor first**, then start bot manually and supervise the first execution. **The live integration has not been end-to-end tested against your account**; treat enabling it as a separate verification milestone, not a simple profit-producing toggle.
+Open http://127.0.0.1:8765 on your own computer. Never expose port 8765 publicly. Tabs show four-lane status, separate monthly BTC/ETH FUTURES backtests, forward BTC/ETH OPTIONS paper trades and strategy/safety differences. No dashboard endpoints can place orders.
 
-## Limitations worth knowing before deployment
+## Enabling FUTURES testnet orders after signals-only checks
 
-- Exact TradingView parity has not been demonstrated. Backtest trail uses artificial 15m OHLC intrabar path; forward trail uses periodic mark-price snapshots, and native stop-market orders execute by exchange matching/mark triggers.
-- Actual Scalper Offer entitlement, fee credit, GST and funding are account-dependent. Research fee assumptions may not hold live.
-- The API's product metadata does not, by itself, prove isolated margin selection; user must configure/check isolated manually.
-- Current app does not use authenticated fill/position websockets, exchange wallet transaction reconciliation, precision slippage simulation or 24/7 out-of-band alerts. These are important before real money.
-- Real orders can fill partially, be rejected, be rate-limited or experience stale feeds. Fail-closed behavior may require manual intervention.
-- This branch is separate from \`main\` and was created without accessing or deploying to your VPS. You must run the setup commands yourself.
+1. Create Delta **India testnet** API keys, trading-only without withdrawal permissions, ideally IP allowlisted; set DELTA_DEMO_API_KEY and DELTA_DEMO_API_SECRET in common .env.
+2. Manually set BTCUSD/ETHUSD **isolated** margin, **100× leverage**, and disable auto-add margin in the exchange UI. Confirm there are no existing manual positions or orders on that product.
+3. Set ISOLATED_MARGIN_CONFIRMED=true in common .env.
+4. Edit ONLY the futures lane you want to activate (e.g. lane-env/BTC_futures.env): set TRADING_ENABLED=true. Keep the options lane files at false; options write attempts are rejected at startup.
+5. Stop the specific service, run a manual doctor using the same ASSET/MARKET/MODE/TRADING_ENABLED environment, then restart it. Monitor order entry, actual fill price/quantity, exchange-native stop and trailing updates and venue fees.
+6. Starting a futures bot does not adopt unknown exchange positions; stopping it **does not flatten an existing position**. Check the exchange UI and manage outstanding native stops on any restart/disconnect.
+7. The order-writing bot intentionally does NOT auto-restart after uncertain order outcomes. Inspect, reconcile and only clear persistent halt after confirming exchange positions and order history.
 
-Official references: [Delta API docs](https://docs.delta.exchange/), [India API guide](https://www.delta.exchange/algo/delta-exchange-apis), and [Delta Python REST SDK](https://github.com/delta-exchange/python-rest-client).
+~~~bash
+ASSET=BTC MARKET=futures TRADING_ENABLED=true .venv/bin/python app.py doctor
+sudo systemctl restart ema-st@BTC_futures
+ASSET=BTC MARKET=futures .venv/bin/python app.py status
+ASSET=BTC MARKET=futures .venv/bin/python app.py reconcile
+~~~
+
+If a real/demo exchange order intent remains unresolved, do not delete state or issue duplicate orders. For manual halt reset:
+
+~~~bash
+ASSET=BTC MARKET=futures .venv/bin/python app.py reset-halt --confirm I_VERIFIED_EXCHANGE_POSITIONS_ORDERS_AND_STOPS
+~~~
+
+## Later LIVE deployment
+
+**FUTURES ONLY** has a gated live route, not validated against your account. First run demo for an extended period and independently audit fills, liquidation mark triggers, funding, fees, GST, slippage and stop placement. Use a dedicated real account, separate live keys, and separate state path per mode. For a given futures lane set MODE=live and TRADING_ENABLED=true, with DELTA_LIVE_API_KEY/SECRET in common .env, manual isolated confirmation and LIVE_TRADING_ACK=I_ACCEPT_REAL_BTCUSD_TRADES (or I_ACCEPT_REAL_ETHUSD_TRADES for ETH). This explicit acknowledgement prevents accidental order writes without permission.
+
+**OPTIONS remain paper-only in both demo and live modes.** Setting TRADING_ENABLED=true on an option lane raises an error. To support actual options orders, a new order/fill reconciliation and underlying-triggered stop/expiry architecture must be independently tested; the code does not pretend this is implemented.
+
+## Limitations
+
+- Historical futures synthetic 15m OHLC trails and liquidations cannot exactly reproduce live intrabar price paths. Exchange mark-price liquidation, funding, spread, slippage and offer history are missing.
+- Options close on underlying signals, not when option premium changes by the same percentage as futures. Theta/IV, strike/expiry choice and spread make option P&L very different.
+- Paper bid/ask outcomes are **simulated**, even when the quotes are real. Top-of-book quotes can change and may not fill at the assumed price.
+- Stale/missing option exit bids remain unresolved, not booked at invented prices. Expired positions require settlement records; zero/intrinsic settlement is never guessed.
+- Only whole valid contracts are selected; if $10 including fees cannot cover one contract, the entry is skipped.
+- No verified full account-level multi-lane risk cap, no authenticated fill websocket or exchange funding/credits reconciliation; the app is a research MVP, not a production-grade trading platform.
+- State includes sensitive trading information; keep .env, lane-env and SQLite protected. Synchronize VPS clock with NTP.
+
+Official API reference: https://docs.delta.exchange/ ; India fee details: https://www.delta.exchange/fees . Offline CI: .github/workflows/test-vps-multi-asset-options.yml.
