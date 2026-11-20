@@ -5,6 +5,7 @@ on:
       - research/btc-first-external-ema-vwap-stage36-20261120
     paths:
       - 'scripts/research_paired_external_ema_vwap_stage36.py'
+      - 'scripts/research_paired_absorption_stage25.py'
       - '.github/workflows/research-stage36-external-ema-vwap.yml'
   workflow_dispatch:
 permissions:
