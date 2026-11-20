@@ -64,6 +64,7 @@ class FuturesPaperBot(Bot):
             "side":side,"size":sign*contracts,"contracts":contracts,"qty":qty,
             "entry":fill,"notional_usd":notional,"margin_usd":margin,
             "entry_fee_gst_usd":fee,"entry_time":time.time(),
+            "signal_bar_ts":s["bar_ts"],
             "initial_stop":stop,"stop":stop,"best":fill,
             "activation_points":activation,"distance_points":distance,
             "liq_proxy":liq,"trail_active":False}
@@ -99,6 +100,7 @@ class FuturesPaperBot(Bot):
             "entry_time_utc":datetime.fromtimestamp(p["entry_time"],timezone.utc).isoformat(),
             "side":p["side"],"contracts":p["contracts"],"qty":p["qty"],
             "entry_price":p["entry"],"exit_price":fill,
+            "signal_bar_ts":p["signal_bar_ts"],
             "gross_pnl_usd":gross,"net_pnl_usd":net,
             "commissions_usd":(p["entry_fee_gst_usd"]+fee+liq_penalty)/1.18,
             "gst_usd":(p["entry_fee_gst_usd"]+fee+liq_penalty)*.18/1.18,
