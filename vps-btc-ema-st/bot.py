@@ -40,10 +40,6 @@ def wallet_equity(payload):
             return float(m["net_equity"])
     raise ValueError("Wallet net_equity absent; cannot enforce daily drawdown")
 
-def target_stop_guard(entry,side,stop,leverage,product,buffer_pct):
-    maintenance=float(product.get("maintenance_margin","0.25"))/100
-    return stop_safe(entry,stop,side,leverage,maintenance,buffer_pct/100)
-
 class Bot:
     def __init__(self,config):
         self.cfg=config
