@@ -125,10 +125,8 @@ def replay(asset,minute,bar,direction,atr,long,short,variant,offer):
         i=index_lookup.get(t)
         if i is not None:
             if pos is not None and i>0:
-                flip=(pos["side"]==1 and direction[i-1]==1 and direction[i-2]==-1
-                      if i>=2 else False) or (
-                      pos["side"]==-1 and direction[i-1]==-1 and direction[i-2]==1
-                      if i>=2 else False)
+                flip=(pos["side"]==1 and direction[i]==1 and direction[i-1]==-1) or (
+                      pos["side"]==-1 and direction[i]==-1 and direction[i-1]==1)
                 if flip:
                     fill=float(opens[j])
                     reason="supertrend_flip"
@@ -141,9 +139,10 @@ def replay(asset,minute,bar,direction,atr,long,short,variant,offer):
                 events.append(record)
                 pos=None
                 peak=max(peak,wallet);dd=max(dd,(peak-wallet)/peak*100)
-        # Signals are generated from previously COMPLETED 1H candle i-1.
+        # 1H bars use label='right': bar[i] closes at timestamp t, so it is
+        # the most recently COMPLETED candle at the next 1m open t.
         if pos is None and not closed_this_minute and i is not None and i>=1:
-            signal_i=i-1
+            signal_i=i
             if long[signal_i] or short[signal_i]:
                 entries_reached+=1
                 side=1 if long[signal_i] else -1
