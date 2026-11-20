@@ -110,6 +110,7 @@ class OptionsPaperBot:
             raise ValueError("OptionsPaperBot requires MARKET=options and TRADING_ENABLED=false")
         self.cfg=config
         self.db=Store(config.state_dir)
+        self.db.claim_lane(config.asset,"options",config.mode,"options_paper")
         self.api=Delta(config)
         if self.db.get("paper_wallet") is None:
             # Atomic baseline persisted. Never reinitialize a previous wallet.
