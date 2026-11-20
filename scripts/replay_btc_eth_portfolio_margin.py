@@ -58,9 +58,16 @@ def portfolio_risk_margin(mark_price, qty, shock_span):
     if not(mark_price>0 and qty>0 and 0<shock_span<=.10):
         raise ValueError("Invalid portfolio risk scenario")
     notional=mark_price*qty
-    shock_fractions=(0.0,.33,.50,.67,1.0)
-    standard=[notional*shock_span*abs(f) for f in shock_fractions for iv in range(3)]
-    extreme=[notional*3*shock_span/3 for _ in (-1,1)]
+    price_shocks=(-1.0,-.67,-.50,-.33,0.0,.33,.50,.67,1.0)
+    iv_states=("down","unchanged","up")
+    # A long future has -PnL under negative price shocks; a short future
+    # faces the reverse. Since price shocks are symmetric, the worst-case
+    # loss is identical for both sides. IV has no effect on plain futures.
+    standard=[max(0.,-notional*shock_span*shock)
+              for shock in price_shocks for iv in iv_states]   # 27
+    extreme=[max(0.,-notional*shock_span*(3*shock)/3)
+             for shock in (-1.0,1.0)]                         # 2
+    assert len(standard)+len(extreme)==29
     risk_margin=max(standard+extreme)
     floor_margin=FUTURES_MARGIN_FLOOR*notional
     return max(risk_margin,floor_margin)
