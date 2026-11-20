@@ -43,7 +43,7 @@ def wallet_equity(payload):
 class Bot:
     def __init__(self,config):
         self.cfg=config
-        if config.market!="futures":raise ValueError("Bot is futures-only; use OptionsPaperBot for options")
+        if getattr(config,"market","futures")!="futures":raise ValueError("Bot is futures-only; use OptionsPaperBot for options")
         self.db=Store(config.state_dir)
         self.delta=Delta(config)
         self.product=None
