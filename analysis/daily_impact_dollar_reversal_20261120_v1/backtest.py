@@ -67,11 +67,16 @@ def run(symbol,stress=False):
     if len(t):t.to_csv(OUT/(symbol+("_stress" if stress else "")+"_trades.csv"),index=False)
     else:pd.DataFrame(columns=["entry_utc","exit_utc","net_pnl"]).to_csv(OUT/(symbol+("_stress" if stress else "")+"_trades.csv"),index=False)
     (OUT/(symbol+("_stress" if stress else "")+"_gaps.json")).write_text(json.dumps(events,indent=2))
-    daily_stats=daily_nav_ist(x,t,symbol,stress)\n    return dict(market=symbol,stress=stress,trades=len(t),net_nav_closed=nav,source=meta,signal_count=len(signals),data_gap_signals=len(events),daily=daily_stats,status="INCONCLUSIVE_EXECUTION_FUNDING_AND_DATA_COVERAGE")
+    daily_stats=daily_nav_ist(x,t,symbol,stress)
+    return dict(market=symbol,stress=stress,trades=len(t),net_nav_closed=nav,source=meta,signal_count=len(signals),data_gap_signals=len(events),daily=daily_stats,status="INCONCLUSIVE_EXECUTION_FUNDING_AND_DATA_COVERAGE")
 
 def daily_nav_ist(x, trades, symbol, stress):
     """Conservative daily mark: reserve estimated liquidation costs for open trades."""
-    t = trades.sort_values("entry_utc") if len(trades) else trades
+    t = trades.copy()
+    if len(t):
+        t["entry_utc_dt"] = pd.to_datetime(t.entry_utc, utc=True)
+        t["exit_utc_dt"] = pd.to_datetime(t.exit_utc, utc=True)
+        t = t.sort_values("entry_utc_dt")
     records = []
     start_day = pd.Timestamp("2025-01-01", tz="Asia/Kolkata")
     end_day = pd.Timestamp("2026-11-01", tz="Asia/Kolkata")
