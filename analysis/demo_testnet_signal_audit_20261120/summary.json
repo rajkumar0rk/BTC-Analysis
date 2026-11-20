@@ -3,28 +3,436 @@
   "source_warning": "Production and Delta Demo testnet candles may differ; public signals are not executed trades",
   "results": {
     "demo_testnet_btc_15m": {
-      "error": "ValueError: unknown url type: 'demo_testnet/v2/history/candles?symbol=BTCUSD&resolution=15m&start=1794441600&end=1795199399'"
+      "source": "https://cdn-ind.testnet.deltaex.org",
+      "instrument": "BTCUSD",
+      "resolution": "15m",
+      "first_utc": "2026-11-12 00:00:00+00:00",
+      "last_utc": "2026-11-20 18:15:00+00:00",
+      "first_close": 73619.8,
+      "last_close": 58998.0,
+      "signal_count_on_20nov_ist": 6,
+      "signals": [
+        {
+          "entry_ist": "2026-11-20T07:30:00+05:30",
+          "side": "sell",
+          "signal_close": 61552.0,
+          "signal_ema20": 62094.097,
+          "atr_ratio": 1.079,
+          "volume_ratio": 4.429
+        },
+        {
+          "entry_ist": "2026-11-20T08:45:00+05:30",
+          "side": "sell",
+          "signal_close": 61936.5,
+          "signal_ema20": 61975.024,
+          "atr_ratio": 1.241,
+          "volume_ratio": 2.413
+        },
+        {
+          "entry_ist": "2026-11-20T09:45:00+05:30",
+          "side": "sell",
+          "signal_close": 61809.5,
+          "signal_ema20": 61991.502,
+          "atr_ratio": 1.124,
+          "volume_ratio": 1.938
+        },
+        {
+          "entry_ist": "2026-11-20T17:45:00+05:30",
+          "side": "sell",
+          "signal_close": 61397.0,
+          "signal_ema20": 61793.035,
+          "atr_ratio": 1.008,
+          "volume_ratio": 3.956
+        },
+        {
+          "entry_ist": "2026-11-20T20:15:00+05:30",
+          "side": "sell",
+          "signal_close": 61488.5,
+          "signal_ema20": 61723.146,
+          "atr_ratio": 1.162,
+          "volume_ratio": 1.775
+        },
+        {
+          "entry_ist": "2026-11-20T20:45:00+05:30",
+          "side": "sell",
+          "signal_close": 60882.0,
+          "signal_ema20": 61644.36,
+          "atr_ratio": 1.37,
+          "volume_ratio": 2.827
+        }
+      ],
+      "caveat": "Signals only: ignores actual VPS mode/config, previous position, API failures, order/paper status, or exchange account fills."
     },
     "demo_testnet_btc_1h": {
-      "error": "ValueError: unknown url type: 'demo_testnet/v2/history/candles?symbol=BTCUSD&resolution=1h&start=1794441600&end=1795199399'"
+      "source": "https://cdn-ind.testnet.deltaex.org",
+      "instrument": "BTCUSD",
+      "resolution": "1h",
+      "first_utc": "2026-11-12 00:00:00+00:00",
+      "last_utc": "2026-11-20 17:00:00+00:00",
+      "first_close": 73539.2,
+      "last_close": 59152.5,
+      "signal_count_on_20nov_ist": 3,
+      "signals": [
+        {
+          "entry_ist": "2026-11-20T16:30:00+05:30",
+          "side": "sell",
+          "signal_close": 62028.0,
+          "signal_ema20": 62187.083,
+          "atr_ratio": 0.999,
+          "volume_ratio": 1.643
+        },
+        {
+          "entry_ist": "2026-11-20T20:30:00+05:30",
+          "side": "sell",
+          "signal_close": 61738.5,
+          "signal_ema20": 62037.42,
+          "atr_ratio": 0.991,
+          "volume_ratio": 2.289
+        },
+        {
+          "entry_ist": "2026-11-20T21:30:00+05:30",
+          "side": "sell",
+          "signal_close": 59457.5,
+          "signal_ema20": 61791.713,
+          "atr_ratio": 1.21,
+          "volume_ratio": 5.028
+        }
+      ],
+      "caveat": "Signals only: ignores actual VPS mode/config, previous position, API failures, order/paper status, or exchange account fills."
     },
     "demo_testnet_eth_15m": {
-      "error": "ValueError: unknown url type: 'demo_testnet/v2/history/candles?symbol=ETHUSD&resolution=15m&start=1794441600&end=1795199399'"
+      "source": "https://cdn-ind.testnet.deltaex.org",
+      "instrument": "ETHUSD",
+      "resolution": "15m",
+      "first_utc": "2026-11-12 00:00:00+00:00",
+      "last_utc": "2026-11-20 18:15:00+00:00",
+      "first_close": 2066.6,
+      "last_close": 1633.5,
+      "signal_count_on_20nov_ist": 6,
+      "signals": [
+        {
+          "entry_ist": "2026-11-20T07:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1734.95,
+          "signal_ema20": 1756.422,
+          "atr_ratio": 1.101,
+          "volume_ratio": 3.823
+        },
+        {
+          "entry_ist": "2026-11-20T08:45:00+05:30",
+          "side": "sell",
+          "signal_close": 1739.45,
+          "signal_ema20": 1749.156,
+          "atr_ratio": 1.26,
+          "volume_ratio": 2.762
+        },
+        {
+          "entry_ist": "2026-11-20T09:00:00+05:30",
+          "side": "sell",
+          "signal_close": 1743.7,
+          "signal_ema20": 1748.636,
+          "atr_ratio": 1.242,
+          "volume_ratio": 2.34
+        },
+        {
+          "entry_ist": "2026-11-20T20:15:00+05:30",
+          "side": "sell",
+          "signal_close": 1734.3,
+          "signal_ema20": 1744.796,
+          "atr_ratio": 1.226,
+          "volume_ratio": 1.906
+        },
+        {
+          "entry_ist": "2026-11-20T20:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1742.55,
+          "signal_ema20": 1744.582,
+          "atr_ratio": 1.293,
+          "volume_ratio": 2.212
+        },
+        {
+          "entry_ist": "2026-11-20T20:45:00+05:30",
+          "side": "sell",
+          "signal_close": 1714.45,
+          "signal_ema20": 1741.712,
+          "atr_ratio": 1.449,
+          "volume_ratio": 2.344
+        }
+      ],
+      "caveat": "Signals only: ignores actual VPS mode/config, previous position, API failures, order/paper status, or exchange account fills."
     },
     "demo_testnet_eth_1h": {
-      "error": "ValueError: unknown url type: 'demo_testnet/v2/history/candles?symbol=ETHUSD&resolution=1h&start=1794441600&end=1795199399'"
+      "source": "https://cdn-ind.testnet.deltaex.org",
+      "instrument": "ETHUSD",
+      "resolution": "1h",
+      "first_utc": "2026-11-12 00:00:00+00:00",
+      "last_utc": "2026-11-20 17:00:00+00:00",
+      "first_close": 2066.6,
+      "last_close": 1630.6,
+      "signal_count_on_20nov_ist": 6,
+      "signals": [
+        {
+          "entry_ist": "2026-11-20T14:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1750.45,
+          "signal_ema20": 1757.948,
+          "atr_ratio": 1.033,
+          "volume_ratio": 0.945
+        },
+        {
+          "entry_ist": "2026-11-20T16:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1755.4,
+          "signal_ema20": 1756.715,
+          "atr_ratio": 0.971,
+          "volume_ratio": 1.388
+        },
+        {
+          "entry_ist": "2026-11-20T17:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1748.2,
+          "signal_ema20": 1755.904,
+          "atr_ratio": 0.935,
+          "volume_ratio": 0.797
+        },
+        {
+          "entry_ist": "2026-11-20T19:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1754.0,
+          "signal_ema20": 1754.231,
+          "atr_ratio": 0.981,
+          "volume_ratio": 2.092
+        },
+        {
+          "entry_ist": "2026-11-20T20:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1742.55,
+          "signal_ema20": 1753.119,
+          "atr_ratio": 1.034,
+          "volume_ratio": 2.618
+        },
+        {
+          "entry_ist": "2026-11-20T21:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1653.05,
+          "signal_ema20": 1743.589,
+          "atr_ratio": 1.302,
+          "volume_ratio": 5.096
+        }
+      ],
+      "caveat": "Signals only: ignores actual VPS mode/config, previous position, API failures, order/paper status, or exchange account fills."
     },
     "production_btc_15m": {
-      "error": "ValueError: unknown url type: 'production/v2/history/candles?symbol=BTCUSD&resolution=15m&start=1794441600&end=1795199399'"
+      "source": "https://api.india.delta.exchange",
+      "instrument": "BTCUSD",
+      "resolution": "15m",
+      "first_utc": "2026-11-12 00:00:00+00:00",
+      "last_utc": "2026-11-20 18:15:00+00:00",
+      "first_close": 73849.0,
+      "last_close": 58978.5,
+      "signal_count_on_20nov_ist": 5,
+      "signals": [
+        {
+          "entry_ist": "2026-11-20T07:30:00+05:30",
+          "side": "sell",
+          "signal_close": 61552.5,
+          "signal_ema20": 62088.196,
+          "atr_ratio": 1.074,
+          "volume_ratio": 3.15
+        },
+        {
+          "entry_ist": "2026-11-20T08:45:00+05:30",
+          "side": "sell",
+          "signal_close": 61934.5,
+          "signal_ema20": 61970.647,
+          "atr_ratio": 1.229,
+          "volume_ratio": 2.025
+        },
+        {
+          "entry_ist": "2026-11-20T17:45:00+05:30",
+          "side": "sell",
+          "signal_close": 61389.5,
+          "signal_ema20": 61789.375,
+          "atr_ratio": 1.01,
+          "volume_ratio": 3.593
+        },
+        {
+          "entry_ist": "2026-11-20T20:15:00+05:30",
+          "side": "sell",
+          "signal_close": 61443.0,
+          "signal_ema20": 61714.715,
+          "atr_ratio": 1.172,
+          "volume_ratio": 2.88
+        },
+        {
+          "entry_ist": "2026-11-20T20:45:00+05:30",
+          "side": "sell",
+          "signal_close": 60894.5,
+          "signal_ema20": 61639.381,
+          "atr_ratio": 1.386,
+          "volume_ratio": 3.11
+        }
+      ],
+      "caveat": "Signals only: ignores actual VPS mode/config, previous position, API failures, order/paper status, or exchange account fills."
     },
     "production_btc_1h": {
-      "error": "ValueError: unknown url type: 'production/v2/history/candles?symbol=BTCUSD&resolution=1h&start=1794441600&end=1795199399'"
+      "source": "https://api.india.delta.exchange",
+      "instrument": "BTCUSD",
+      "resolution": "1h",
+      "first_utc": "2026-11-12 00:00:00+00:00",
+      "last_utc": "2026-11-20 17:00:00+00:00",
+      "first_close": 74050.5,
+      "last_close": 59139.5,
+      "signal_count_on_20nov_ist": 3,
+      "signals": [
+        {
+          "entry_ist": "2026-11-20T16:30:00+05:30",
+          "side": "sell",
+          "signal_close": 62025.5,
+          "signal_ema20": 62182.055,
+          "atr_ratio": 0.999,
+          "volume_ratio": 0.852
+        },
+        {
+          "entry_ist": "2026-11-20T20:30:00+05:30",
+          "side": "sell",
+          "signal_close": 61747.0,
+          "signal_ema20": 62033.967,
+          "atr_ratio": 0.994,
+          "volume_ratio": 2.178
+        },
+        {
+          "entry_ist": "2026-11-20T21:30:00+05:30",
+          "side": "sell",
+          "signal_close": 59446.0,
+          "signal_ema20": 61787.494,
+          "atr_ratio": 1.214,
+          "volume_ratio": 5.464
+        }
+      ],
+      "caveat": "Signals only: ignores actual VPS mode/config, previous position, API failures, order/paper status, or exchange account fills."
     },
     "production_eth_15m": {
-      "error": "ValueError: unknown url type: 'production/v2/history/candles?symbol=ETHUSD&resolution=15m&start=1794441600&end=1795199399'"
+      "source": "https://api.india.delta.exchange",
+      "instrument": "ETHUSD",
+      "resolution": "15m",
+      "first_utc": "2026-11-12 00:00:00+00:00",
+      "last_utc": "2026-11-20 18:15:00+00:00",
+      "first_close": 2052.05,
+      "last_close": 1632.35,
+      "signal_count_on_20nov_ist": 6,
+      "signals": [
+        {
+          "entry_ist": "2026-11-20T07:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1735.05,
+          "signal_ema20": 1756.28,
+          "atr_ratio": 1.117,
+          "volume_ratio": 5.009
+        },
+        {
+          "entry_ist": "2026-11-20T08:45:00+05:30",
+          "side": "sell",
+          "signal_close": 1738.25,
+          "signal_ema20": 1749.037,
+          "atr_ratio": 1.235,
+          "volume_ratio": 2.42
+        },
+        {
+          "entry_ist": "2026-11-20T17:45:00+05:30",
+          "side": "sell",
+          "signal_close": 1733.0,
+          "signal_ema20": 1747.771,
+          "atr_ratio": 1.024,
+          "volume_ratio": 4.083
+        },
+        {
+          "entry_ist": "2026-11-20T20:15:00+05:30",
+          "side": "sell",
+          "signal_close": 1733.3,
+          "signal_ema20": 1744.708,
+          "atr_ratio": 1.227,
+          "volume_ratio": 2.633
+        },
+        {
+          "entry_ist": "2026-11-20T20:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1742.6,
+          "signal_ema20": 1744.507,
+          "atr_ratio": 1.291,
+          "volume_ratio": 2.84
+        },
+        {
+          "entry_ist": "2026-11-20T20:45:00+05:30",
+          "side": "sell",
+          "signal_close": 1715.2,
+          "signal_ema20": 1741.716,
+          "atr_ratio": 1.444,
+          "volume_ratio": 2.795
+        }
+      ],
+      "caveat": "Signals only: ignores actual VPS mode/config, previous position, API failures, order/paper status, or exchange account fills."
     },
     "production_eth_1h": {
-      "error": "ValueError: unknown url type: 'production/v2/history/candles?symbol=ETHUSD&resolution=1h&start=1794441600&end=1795199399'"
+      "source": "https://api.india.delta.exchange",
+      "instrument": "ETHUSD",
+      "resolution": "1h",
+      "first_utc": "2026-11-12 00:00:00+00:00",
+      "last_utc": "2026-11-20 17:00:00+00:00",
+      "first_close": 2061.55,
+      "last_close": 1630.3,
+      "signal_count_on_20nov_ist": 6,
+      "signals": [
+        {
+          "entry_ist": "2026-11-20T14:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1750.7,
+          "signal_ema20": 1757.977,
+          "atr_ratio": 1.037,
+          "volume_ratio": 0.674
+        },
+        {
+          "entry_ist": "2026-11-20T16:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1756.0,
+          "signal_ema20": 1756.705,
+          "atr_ratio": 0.973,
+          "volume_ratio": 0.763
+        },
+        {
+          "entry_ist": "2026-11-20T17:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1748.25,
+          "signal_ema20": 1755.9,
+          "atr_ratio": 0.936,
+          "volume_ratio": 0.676
+        },
+        {
+          "entry_ist": "2026-11-20T19:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1753.85,
+          "signal_ema20": 1754.21,
+          "atr_ratio": 0.98,
+          "volume_ratio": 1.696
+        },
+        {
+          "entry_ist": "2026-11-20T20:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1742.6,
+          "signal_ema20": 1753.104,
+          "atr_ratio": 1.033,
+          "volume_ratio": 2.5
+        },
+        {
+          "entry_ist": "2026-11-20T21:30:00+05:30",
+          "side": "sell",
+          "signal_close": 1654.4,
+          "signal_ema20": 1743.704,
+          "atr_ratio": 1.297,
+          "volume_ratio": 5.886
+        }
+      ],
+      "caveat": "Signals only: ignores actual VPS mode/config, previous position, API failures, order/paper status, or exchange account fills."
     }
   }
 }
