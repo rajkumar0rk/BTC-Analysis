@@ -47,7 +47,7 @@ jobs:
           assert j["preserved_settings"]["trailing_activation_literal_points"]==1
           assert j["preserved_settings"]["trailing_distance_requested_literal_points"]==.1
           for asset,a in j["assets"].items():
-              assert set(a["hourly_results"])=={"inferred","adverse_first","favorable_first"}
+              assert set(a["hourly_results"])=={"inferred","adverse_first","favorable_first","close_only"}
               for mode,r in a["hourly_results"].items():
                   assert len(r["monthly"])==22 and r["exit_monitoring"]=="one_hour_OHLC"
                   print("RESULT",asset,mode,"net",r["net_usd"],"pf",r["profit_factor"],"trades",r["trade_count"],
@@ -68,7 +68,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add analysis/ema_st_1h_all_stops_hourly_1_0p1_20261120/
           if ! git diff --cached --quiet; then
-            git commit -m 'research: archive one-hour-only ATR/trailing 1/0.1 results'
+            git commit -m 'research: archive one-hour-only ATR/trailing 1/0.1 results with candle-close-only sensitivity'
             git push origin HEAD:research/ema-st-1h-stop-trail-hourly-20261120
           fi
       - name: Summarize results
