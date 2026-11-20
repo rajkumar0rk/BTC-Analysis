@@ -1,0 +1,33 @@
+name: Stage34 BTC-first serial dependence
+on:
+  push:
+    branches: [research/btc-first-serial-dependence-stage34-20261120]
+    paths:
+      - scripts/research_paired_serial_dependence_stage34.py
+      - .github/workflows/stage34-btc-first-serial-dependence.yml
+permissions:
+  contents: read
+jobs:
+  paired-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Print revision and run identity
+        run: |
+          git rev-parse HEAD
+          echo "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Execute frozen BTC-first paired research
+        run: PYTHONPATH=scripts python scripts/research_paired_serial_dependence_stage34.py
+      - name: Upload original trade NAV and monthly ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage34-original-ledgers
+          path: analysis/paired_serial_dependence_stage34/
+          if-no-files-found: warn
