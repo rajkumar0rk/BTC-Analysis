@@ -1,0 +1,29 @@
+name: Stage18 and Stage20 controlled BTC-first portfolio improvement
+on:
+  push:
+    branches:
+      - research/stage18-stage20-controlled-improvement-20261120-v1
+    paths:
+      - scripts/research_stage18_stage20_improvement_20261120.py
+      - .github/workflows/research-stage18-stage20-improvement-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  paired-portfolio-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check script syntax
+        run: python -m py_compile scripts/research_stage18_stage20_improvement_20261120.py
+      - name: Run preserved-baseline BTC selection and frozen ETH checks
+        run: python scripts/research_stage18_stage20_improvement_20261120.py
+      - name: Upload full 22-month BTC/ETH comparison and audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage18-stage20-controlled-improvement-evidence
+          path: analysis/stage18_stage20_improvement_20261120/
+          if-no-files-found: warn
+          retention-days: 30
