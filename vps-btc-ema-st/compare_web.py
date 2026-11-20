@@ -27,30 +27,32 @@ def read_lane(cfg,asset,market):
     path=directory/"bot.sqlite3"
     if not path.is_file():
         return {"asset":asset,"market":market,"state":"not_started",
-                "execution":"options_paper" if market=="options" else "futures_exchange"}
+                "execution":"quote_paper_not_started"}
     db=Store(directory)
     try:
         hb=db.get("heartbeat",{})
         age=round(time.time()-float(hb["now"]),1) if hb.get("now") else None
         good=age is not None and age<20
+        is_paper=market=="options" or bool(hb.get("paper")) or (
+            db.get("paper_wallet") is not None and not hb.get("trading_enabled",False))
         base={"asset":asset,"market":market,"state":"connected" if good else "offline",
               "mode":cfg.mode,"heartbeat_age_seconds":age,
               "halted":db.get("halted"),
               "market_mark":(db.get("ticker") or {}).get("mark"),
               "latest_signal":db.get("latest_signal"),
               "last_candle":db.get("last_market_bar"),
-              "open_position":db.get("paper_position") if market=="options" else db.get("active"),
+              "open_position":db.get("paper_position") if is_paper else db.get("active"),
               "events":db.latest_events(12)}
-        if market=="options":
+        if is_paper:
             stats=db.get("paper_stats") or {"trades":0,"starting_balance_usd":cfg.portfolio,
                          "closed_equity_usd":cfg.portfolio,"net_profit_usd":0,
                          "profit_factor":None,"max_closed_equity_drawdown_pct":0}
-            base.update(execution="quote_based_paper",
-                        margin_mode="option_premium_paid_not_leveraged",
+            base.update(execution="quote_based_options_paper" if market=="options" else "quote_based_futures_paper",
+                        margin_mode="option_premium_paid_not_leveraged" if market=="options" else "futures_100x_isolated_model",
                         portfolio_closed_equity=stats.get("closed_equity_usd"),
                         paper_cash=db.get("paper_wallet"),
                         paper_bid_equity=db.get("paper_equity_bid_estimate"),
-                        fee_model="0.01% of underlying notional capped at 3.5% premium per leg, plus assumed GST",
+                        fee_model=("0.01% of underlying notional capped at 3.5% premium per leg, plus assumed GST" if market=="options" else "0.05% taker entry and conditional 30min exit waiver; assumed GST and maintenance, zero modeled funding"),
                         statistics=stats,paper_exit_pending=db.get("paper_exit_pending"),
                         trades=db.paper_trades()[-10:])
         else:
@@ -99,6 +101,47 @@ def historical(asset:str="BTC",window:str="history",offer:str="offer",liquidatio
             "statistics":stat,"months":months,"settings":data.get("settings"),
             "dates_note":"BTC through 2026-11-18; ETH through 2026-11-17; November partial.",
             "cost_note":"Fees and GST modeled; actual historical Scalper Offer enrollment NOT proven; no funding, spread, slippage or real mark-price liquidation."}
+
+@app.get("/api/paired-forward")
+def paired_forward(asset:str="BTC"):
+    """Matched underlying signal IDs only; missed options signals remain excluded."""
+    asset=asset.upper()
+    if asset not in ASSETS:raise HTTPException(400,"Invalid asset")
+    cfg=Config.read()
+    lanes={}
+    for market in ("futures","options"):
+        directory=(cfg.state_dir if asset==cfg.asset and market==cfg.market else
+                   lane_state(asset,market,cfg.mode))
+        if not (directory/"bot.sqlite3").is_file():
+            lanes[market]=[];continue
+        db=Store(directory)
+        try:lanes[market]=db.paper_trades()
+        finally:db.close()
+    def mapping(market):
+        return {str(x["signal_bar_ts"]):x for x in lanes[market]
+                if x.get("signal_bar_ts") is not None}
+    futures=mapping("futures");options=mapping("options")
+    matched=sorted(set(futures)&set(options),key=int)
+    pairs=[]
+    for bar in matched:
+        f=futures[bar];o=options[bar]
+        if f.get("side")!=o.get("side"):continue
+        pairs.append({"signal_bar_utc":datetime.fromtimestamp(int(bar),
+                     tz=ZoneInfo("UTC")).isoformat(),"side":f.get("side"),
+                     "option_symbol":o.get("symbol"),
+                     "futures_pnl_usd":round(float(f["net_pnl_usd"]),4),
+                     "option_pnl_usd":round(float(o["net_pnl_usd"]),4),
+                     "difference_option_minus_futures_usd":round(
+                         float(o["net_pnl_usd"])-float(f["net_pnl_usd"]),4)})
+    return {"asset":asset,"mode":cfg.mode,"matched_trades":len(pairs),
+            "futures_total_closed_paper_trades":len(lanes["futures"]),
+            "options_total_closed_paper_trades":len(lanes["options"]),
+            "futures_total_paper_net_usd":round(sum(float(x["net_pnl_usd"]) for x in lanes["futures"]),4),
+            "options_total_paper_net_usd":round(sum(float(x["net_pnl_usd"]) for x in lanes["options"]),4),
+            "matched_futures_net_usd":round(sum(x["futures_pnl_usd"] for x in pairs),4),
+            "matched_options_net_usd":round(sum(x["option_pnl_usd"] for x in pairs),4),
+            "pairs":pairs,
+            "note":"Only positions opened on the SAME underlying 15-minute signal candle are paired. Unmatched/skipped entries excluded. Futures modeled 100x isolated liquidation, options modeled bid/ask premium; all results paper-only."}
 
 @app.get("/api/paper-trades")
 def paper_trades(asset:str="BTC"):
@@ -168,6 +211,17 @@ footer{margin-top:20px;color:var(--mut);font-size:11px}
 <h1>Four strategy lanes</h1><p class="lead">Each asset and market has its own state, trade records and hypothetical $100 comparison baseline.</p>
 <div class="cards" id="lanes"></div>
 <div class="note">Historical options profit is intentionally not displayed: the archive contains underlying futures candles, not dated option contract bid/ask, expiry and strike quotes. Options are evaluated from real-time forward quotes, not fabricated historical premiums.</div>
+<div class="card panel"><h2>Matched forward trades — same underlying signal</h2>
+<p class="label">Both markets open on the same 15-minute signal. Options may skip illiquid contracts, so also compare total independent trades.</p>
+<div class="selects"><select id="paired-asset"><option value="BTC">BTC: futures vs CALL/PUT</option><option value="ETH">ETH: futures vs CALL/PUT</option></select></div>
+<div class="cards">
+<div class="card"><div class="kicker">Matched trades</div><div class="metric" id="paired-count">—</div></div>
+<div class="card"><div class="kicker">Matched futures net</div><div class="metric" id="paired-futures">—</div></div>
+<div class="card"><div class="kicker">Matched options net</div><div class="metric" id="paired-options">—</div></div>
+<div class="card"><div class="kicker">Option minus futures</div><div class="metric" id="paired-difference">—</div></div>
+</div>
+<div class="tablewrap"><table><thead><tr><th>Signal UTC</th><th>Side</th><th>Option contract</th><th>Futures net</th><th>Option net</th><th>Difference</th></tr></thead><tbody id="paired-rows"></tbody></table></div>
+<p class="label" id="paired-note"></p></div>
 <div class="grid2">
 <div class="card"><h2>Historical futures (model)</h2>
 <div class="kv"><span>BTCUSD original · $100 →</span><b id="btc-hist">—</b></div>
@@ -252,10 +306,11 @@ async function refresh(){
   card.append(el("div",lane.state.replaceAll("_"," ").toUpperCase(),status+" metric"));
   card.append(line("Execution",lane.execution||"—"));
   card.append(line("Open position",lane.open_position?lane.open_position.symbol||lane.asset+"USD":"None / unconfirmed"));
-  card.append(line("Forward net",lane.market==="options"
+  const paper=String(lane.execution||"").includes("paper");
+  card.append(line("Forward net",paper
      ?usd((lane.statistics||{}).net_profit_usd)
      :lane.statistics?usd(lane.statistics.estimated_net_before_funding_usd)+" est.":"—"));
-  card.append(line("Closed trades",lane.market==="options"
+  card.append(line("Closed trades",paper
      ?String((lane.statistics||{}).trades||0)
      :lane.statistics?String(lane.statistics.fills)+" fills":"—"));
   if(lane.market==="options" && lane.open_position)card.append(el("p","Premium at risk; option may expire worthless.","label gold"));
@@ -265,6 +320,28 @@ async function refresh(){
   if(lane.asset==="ETH"&&lane.market==="options")txt("eth-paper",usd((lane.statistics||{}).net_profit_usd));
  }
  }catch(err){txt("mode","DASHBOARD ERROR: "+err)}
+}
+async function loadPaired(){
+ try{
+ const d=await api("/api/paired-forward?asset="+encodeURIComponent($("paired-asset").value));
+ txt("paired-count",d.matched_trades);
+ txt("paired-futures",usd(d.matched_futures_net_usd));
+ txt("paired-options",usd(d.matched_options_net_usd));
+ txt("paired-difference",usd(d.matched_options_net_usd-d.matched_futures_net_usd));
+ txt("paired-note","Total closed futures paper trades "+d.futures_total_closed_paper_trades+
+     ", options paper trades "+d.options_total_closed_paper_trades+
+     ". Total independent futures net "+usd(d.futures_total_paper_net_usd)+
+     "; options net "+usd(d.options_total_paper_net_usd)+". "+d.note);
+ const body=$("paired-rows");body.replaceChildren();
+ d.pairs.slice(-65).reverse().forEach(x=>{
+ const tr=el("tr","");
+ [x.signal_bar_utc.slice(0,19),x.side,x.option_symbol,
+ usd(x.futures_pnl_usd,3),usd(x.option_pnl_usd,3),
+ usd(x.difference_option_minus_futures_usd,3)].forEach((v,i)=>
+ tr.append(el("td",v,i===5?(x.difference_option_minus_futures_usd>=0?"good":"bad"):"")));
+ body.append(tr);
+ });
+ }catch(e){txt("paired-count","Unavailable");txt("paired-note",String(e))}
 }
 async function loadHistory(){
  const q=new URLSearchParams({asset:$("hist-asset").value,window:$("hist-range").value,
@@ -310,7 +387,9 @@ async function loadPaper(){
 }
 ["hist-asset","hist-range","hist-offer","hist-liq"].forEach(x=>$(x).addEventListener("change",loadHistory));
 $("paper-asset").addEventListener("change",loadPaper);
-refresh();loadHistory();loadPaper();setInterval(refresh,5000);setInterval(loadPaper,15000);
+$("paired-asset").addEventListener("change",loadPaired);
+refresh();loadHistory();loadPaper();loadPaired();
+setInterval(refresh,5000);setInterval(loadPaper,15000);setInterval(loadPaired,15000);
 </script></body></html>"""
 
 @app.get("/",response_class=HTMLResponse)
