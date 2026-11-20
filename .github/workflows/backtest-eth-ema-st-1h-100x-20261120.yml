@@ -1,0 +1,59 @@
+name: ETHUSD 1h EMA ST 100x isolated backtest
+on:
+  push:
+    branches: [research/eth-ema-st-1h-100x-20261120]
+    paths:
+      - scripts/backtest_eth_ema_st_1h_100x_20261120.py
+      - .github/workflows/backtest-eth-ema-st-1h-100x-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eth-ema-st-1h-100x-20261120
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install requirements
+        run: python -m pip install numpy pandas tabulate
+      - name: Validate strategy syntax
+        run: |
+          python -m py_compile scripts/backtest_eth_ema_st_1h_27min_20261120.py
+          python -m py_compile scripts/backtest_eth_ema_st_1h_100x_20261120.py
+      - name: Run ETH 1h, 100x isolated backtest with exact ETH scaled 100/50
+        run: python scripts/backtest_eth_ema_st_1h_100x_20261120.py
+      - name: Summarize results
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads(Path("analysis/eth_ema_st_1h_100x_20261120/summary.json").read_text())
+          r=d["results"]
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("## ETHUSD 1h EMA/ST with 100x isolated margin\n\n")
+              f.write(f"Start ${r['starting_balance_usd']:,.2f}; end ${r['ending_balance_usd']:,.2f}; net ${r['net_profit_usd']:+,.2f}; ROI {r['total_return_on_initial_balance_pct']:+.2f}%\n\n")
+              f.write(f"PF {r['profit_factor']}; win rate {r['win_rate_pct']}%; liquidations {r['modeled_liquidations']}; months positive {r['profitable_months']}/22.\n\n")
+              f.write("Fees and GST modeled; no funding/spread/slippage; liquidation proxy from OHLC, not mark-price; 27-min eligibility unverified.\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: eth-ema-st-1h-100x-isolated-backtest
+          path: analysis/eth_ema_st_1h_100x_20261120/
+          if-no-files-found: error
+      - name: Save isolated research outputs to dedicated branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/eth_ema_st_1h_100x_20261120/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record ETH 1h 100x isolated results"
+            git push origin HEAD:research/eth-ema-st-1h-100x-20261120
+          fi
