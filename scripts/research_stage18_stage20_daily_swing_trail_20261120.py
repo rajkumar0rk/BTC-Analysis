@@ -166,7 +166,7 @@ def main():
     pd.DataFrame(trade_records).to_csv(OUT/"all_native_stage17_swing_trades.csv.gz",compression="gzip",index=False)
     (OUT/"selected_on_BTC2025.json").write_text(json.dumps(chosen,indent=2)+"\n")
     (OUT/"limitations.json").write_text(json.dumps(dict(
-      1m_source_quality=quality,
+      source_1m_quality=quality,
       study="Actual BTC 1m replays of original Stage15 trades and Stage17 swing trade engine; Stage20 hourly sleeve remains archived monthly",
       change="Stage17 3xATR original trailing-stop spacing to alternative ATR distances; actual stop touch on 1m high/low; 14-day holding cap unchanged.",
       selection="Only BTC 2025 and reference 5R primary; add 2bp/side stress only to primary core; no 2026 selection or retuning",
