@@ -153,7 +153,10 @@ def replay(b, direction, atr14, long, short):
     hi=b.high.to_numpy(float)
     lo=b.low.to_numpy(float)
     cl=b.close.to_numpy(float)
-    ns=np.array(b.index.asi8,np.int64)
+    # Pandas 3 may store tz-aware DatetimeIndex with microsecond resolution.
+    # Normalize explicitly to nanoseconds before timestamp arithmetic.
+    ns=np.array(b.index.as_unit('ns').asi8,np.int64)
+    assert ns[0]>=1_735_000_000_000_000_000, 'Timestamp unit mismatch'
     records=[]
     pos=None
     signals={"long":int(long.sum()),"short":int(short.sum())}
@@ -285,6 +288,9 @@ def main():
     all_tr,signals,open_pos=replay(b,direct,atr14,lg,sh)
     assert len(all_tr)>0,"No trades found, verify engine"
     assert all_tr.exit_ns.is_monotonic_increasing
+    assert (all_tr.holding_minutes>=15).all(), "Impossible sub-bar holding time; timestamp unit corrupted"
+    assert all_tr.exit_utc.str.startswith(("2025-","2026-")).all(), "Invalid timestamp unit"
+    assert all_tr.entry_utc.str.startswith(("2025-","2026-")).all(), "Invalid entry date"
     assert not all_tr.duplicated(["entry_ns","direction"]).any()
     # screenshot: full historical offer, huge qualifying window, no funding/slippage
     exact=costs(all_tr,SCREENSHOT_SCALP_MIN)
