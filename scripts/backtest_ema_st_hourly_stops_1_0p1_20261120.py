@@ -57,6 +57,32 @@ def walk_with_path(pos,o,h,l,c,mode):
                         "trailing_stop" if pos["trail_active"] else "atr_or_preliq_stop")
     return None,None
 
+def walk_close_only(pos,o,h,l,c):
+    """Only completed 1H CLOSE can activate or cross a protective stop.
+
+    Real isolated liquidation may still occur intrabar. This is a *risk
+    sensitivity*, not a broker emulator or safe live stop design.
+    Uses next evaluated closing price for stop exits, never hour high/low
+    to infer trailing profits. Does not activate and stop on same close.
+    """
+    side=pos["side"]
+    liq=pos["liq"]
+    # Even a candle-close-only software stop cannot defer exchange liquidation.
+    if (side==1 and l<=liq) or (side==-1 and h>=liq):
+        return float(liq),"liquidation"
+    stop=pos["stop"] # stop from prior completed bar, not future candle extrema
+    if (side==1 and c<=stop) or (side==-1 and c>=stop):
+        return float(c),("trailing_stop_close" if pos["trail_active"]
+                         else "atr_or_preliq_stop_close")
+    gain=(c-pos["entry"])*side
+    if gain>=pos["activation"]-1e-9:
+        pos["trail_active"]=True
+    if pos["trail_active"]:
+        pos["best"]=max(pos["best"],c) if side==1 else min(pos["best"],c)
+        proposed=pos["best"]-side*pos["distance"]
+        pos["stop"]=max(pos["stop"],proposed) if side==1 else min(pos["stop"],proposed)
+    return None,None
+
 def replay_hourly(asset,b,direction,atr,long,short,mode="inferred",offer=False):
     op=b.open.to_numpy(float);hi=b.high.to_numpy(float)
     lo=b.low.to_numpy(float);cl=b.close.to_numpy(float)
@@ -114,8 +140,12 @@ def replay_hourly(asset,b,direction,atr,long,short,mode="inferred",offer=False):
                         wallet-=fee
         if pos is not None:
             # One OHLC stop/trailing evaluation for this entire hour.
-            fill,reason=walk_with_path(pos,float(op[i]),float(hi[i]),
-                                      float(lo[i]),float(cl[i]),mode)
+            if mode=="close_only":
+                fill,reason=walk_close_only(pos,float(op[i]),float(hi[i]),
+                                            float(lo[i]),float(cl[i]))
+            else:
+                fill,reason=walk_with_path(pos,float(op[i]),float(hi[i]),
+                                          float(lo[i]),float(cl[i]),mode)
             if fill is not None:
                 # At 1H resolution the intrabar exit timestamp is unknowable.
                 # Use the hour-END as conservative hold-time upper bound.
@@ -173,6 +203,16 @@ def test_synthetic_paths():
         assert fill is not None
         outcome.append((path,fill,reason))
     assert outcome[0][1]!=outcome[1][1],outcome
+    # Completed-close trailing cannot activate on high alone, and must
+    # never retroactively exit at that high minus 0.1/0.5.
+    pos=copy.deepcopy(p)
+    price,reason=walk_close_only(pos,100.,105.,96.,100.5)
+    assert price is None and not pos["trail_active"]
+    price,reason=walk_close_only(pos,100.,105.,96.,101.5)
+    assert price is None and pos["trail_active"]
+    assert pos["stop"]>=101.4
+    price,reason=walk_close_only(pos,101.5,103.,100.,101.3)
+    assert reason=="trailing_stop_close" and price==101.3
     return outcome
 
 def main():
@@ -209,13 +249,15 @@ def main():
             "bar_processing":"one full 1H OHLC bar per iteration",
             "fill_model":"OHLC-inferred path, high-first if open closer to high, otherwise low-first; stop fill at modeled barrier",
             "timestamp":"1H bar end when intrabar stop is simulated; actual intrabar time UNKNOWN",
-            "uncertainty_tests":"adverse-first and favorable-first extreme ordering",
+            "uncertainty_tests":"adverse-first and favorable-first extreme ordering, plus true candle-close-only decision",
+            "close_only_rule":"Trigger stops and trailing activation only from completed 1H close, with synthetic intrabar liquidation risk preserved",
             "same_hour_trail_possible":True,
             "last_hourly_signal_used":"prior fully completed 1H bar"},
         synthetic_path_test=paths,assets={},
         caveats=[
             "This changes time resolution, not whether prices crossed a stop intrabar. No real 1H candle reveals high-vs-low chronology.",
             "An hourly inferred-path model may be dramatically optimistic versus the prior one-minute replay. Treat intrabar-path cases as sensitivity bounds, not confirmed fills.",
+            "Close-only exits are filled at the 1H close optimistically and may be later than a broker fill; exchange liquidation can still happen intrabar.",
             "Underlying hourly OHLC cannot establish Delta mark-price liquidation, spreads, stop order latency or tick-size price fills.",
             "Conservative no-offer results use all fees; assumed 27-minute Scalper discount almost never qualifies on 1H bar-end times and does not prove eligibility.",
             "Synthetic 100x isolated margin/preliq proxy differs from actual shared Demo Portfolio Margin; entry fee is charged before trade close.",
@@ -227,7 +269,7 @@ def main():
         assert len(bars)==16056
         direction,atr,long,short=mod.features(bars)
         scenarios={}
-        for mode in ("inferred","adverse_first","favorable_first"):
+        for mode in ("inferred","adverse_first","favorable_first","close_only"):
             print("TEST_1H",asset,mode,flush=True)
             stats,trades=replay_hourly(asset,bars,direction,atr,long,short,mode,offer=False)
             scenarios[mode]=stats
