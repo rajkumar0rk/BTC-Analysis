@@ -1,0 +1,44 @@
+name: Stage18-20 genuine BTC 1m entry-exit improvement
+on:
+  push:
+    branches:
+      - research/stage18-stage20-signal-exit-improvement-20261120
+    paths:
+      - scripts/research_stage18_stage20_signal_exit_improvement_20261120.py
+      - .github/workflows/research-stage18-stage20-signal-exit-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  btc-native-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing research dependencies
+        run: pip install numpy pandas numba tabulate
+      - name: Retrieve original Stage14 entry-event archive from verified historical Actions run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/stage14-events"
+          gh run download 44118024590 -n btc-stage14-monthly-regime-trades -D "$RUNNER_TEMP/stage14-events" --repo "$GITHUB_REPOSITORY"
+          test -s "$RUNNER_TEMP/stage14-events/event_states.csv.gz"
+      - name: Execute actual 1m trade-entry-filter and TP/hold variations on BTC
+        env:
+          STAGE14_EVENTS: ${{ runner.temp }}/stage14-events/event_states.csv.gz
+        run: |
+          python -m py_compile scripts/research_stage18_stage20_signal_exit_improvement_20261120.py
+          PYTHONPATH=scripts python scripts/research_stage18_stage20_signal_exit_improvement_20261120.py
+      - name: Save audited trade ledgers, monthly models and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: actual-stage18-stage20-btc-entry-exit-replays
+          path: analysis/stage18_stage20_signal_exit_improvement_20261120/
+          if-no-files-found: warn
+          retention-days: 30
