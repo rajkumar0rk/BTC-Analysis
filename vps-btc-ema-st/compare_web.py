@@ -304,6 +304,7 @@ footer{margin-top:20px;color:var(--mut);font-size:11px}
 <div class="kv"><span>Futures</span><b>$10 isolated margin, 100×</b></div>
 <div class="kv"><span>Options</span><b>Buy CALL/PUT, ≤$10 total debit</b></div>
 <div class="kv"><span>Initial liquidation-entry guard</span><b class="gold">OFF (per request)</b></div>
+<div class="kv"><span>Pre-liquidation emergency exit</span><b>ON; BTC $1 / ETH entry-relative tick</b></div>
 <div class="kv"><span>Futures demo/live</span><b>Authenticated orders, locked by config</b></div>
 <div class="kv"><span>Options demo/live</span><b>Paper only, no order writes</b></div>
 <p class="label">Removing the liquidation guard allows positions whose 2×ATR stop lies beyond the estimated 100× liquidation barrier. The exchange may liquidate before your stop executes; no guarantee of $10 loss cap during exceptional execution.</p>
@@ -334,6 +335,14 @@ async function refresh(){
   card.append(el("div",lane.state.replaceAll("_"," ").toUpperCase(),status+" metric"));
   card.append(line("Execution",lane.execution||"—"));
   card.append(line("Open position",lane.open_position?lane.open_position.symbol||lane.asset+"USD":"None / unconfirmed"));
+  if(lane.market==="futures" && lane.open_position){
+    const p=lane.open_position;
+    card.append(line("Liquidation",p.exchange_liquidation_price!=null?
+        usd(p.exchange_liquidation_price,2):
+        p.liq_proxy!=null?usd(p.liq_proxy,2)+" model":"—"));
+    card.append(line("Pre-liq stop",p.preliq_stop!=null?usd(p.preliq_stop,2):"—"));
+    card.append(line("Active stop",p.stop!=null?usd(p.stop,2):"—"));
+  }
   const paper=String(lane.execution||"").includes("paper");
   card.append(line("Forward net",paper
      ?usd((lane.statistics||{}).net_profit_usd)
