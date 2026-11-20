@@ -1,0 +1,15 @@
+name: Stage37 source-semantics preflight (NOT backtest)
+on:
+  push:
+    branches:
+      - research/btc-first-external-rsi-bb-stage37-20261120
+    paths:
+      - 'analysis/paired_external_rsi_bb_stage37/**'
+      - '.github/workflows/research-stage37-source-preflight.yml'
+jobs:
+  source-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify original strategy contract (no trading/backtest)
+        run: python -m unittest discover -s analysis/paired_external_rsi_bb_stage37 -p 'test_*.py' -v
