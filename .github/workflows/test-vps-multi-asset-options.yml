@@ -1,7 +1,7 @@
 name: VPS BTC ETH futures vs options quote-paper checks
 on:
   push:
-    branches: ['feature/vps-btc-eth-futures-options-comparison']
+    branches: ['feature/vps-btc-eth-futures-options-comparison', 'feature/vps-preliquidation-stops-20261120']
     paths:
       - 'vps-btc-ema-st/**'
       - '.github/workflows/test-vps-multi-asset-options.yml'
