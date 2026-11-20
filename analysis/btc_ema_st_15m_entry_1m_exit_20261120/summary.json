@@ -1,0 +1,516 @@
+{
+  "status": "completed",
+  "instrument": "BTCUSD",
+  "history": {
+    "source": "https://api.india.delta.exchange/v2/history/candles",
+    "minute_bars": 989280,
+    "first_minute_utc": "2025-01-01 00:00:00+00:00",
+    "last_minute_utc": "2026-11-18 23:59:00+00:00",
+    "full_complete_months": "Jan 2025-Oct 2026",
+    "partial_nov_2026_included_in_total": true
+  },
+  "comparison": {
+    "original_15m_ohlc": {
+      "net_usd": 828.4954,
+      "trades": 1000,
+      "profit_factor": 1.6139,
+      "positive_complete_months": 19,
+      "liquidations": 0
+    },
+    "one_minute": {
+      "assumed_30m_offer": {
+        "initial_cash_usd": 100.0,
+        "final_cash_usd": 8.5421,
+        "net_usd": -91.4579,
+        "trades": 415,
+        "win_rate_pct": 74.46,
+        "profit_factor": 0.8113,
+        "positive_complete_months": 2,
+        "negative_complete_months": 7,
+        "flat_complete_months": 13,
+        "completed_months": 22,
+        "max_closed_drawdown_pct": 93.59,
+        "exits_liquidation": 0,
+        "preliq_stop_touch_exits": 16,
+        "supertrend_flip_exits": 12,
+        "assumed_fee_waivers": 295,
+        "skipped_wallet": 642,
+        "skipped_lots": 0,
+        "eligible_signals_when_flat": 1057,
+        "open_position_at_cutoff": false,
+        "fees_gst_usd": 299.7924,
+        "monthly": [
+          {
+            "month": "2025-01",
+            "complete": true,
+            "net_usd": -7.9108,
+            "trades": 63,
+            "wins": 49,
+            "losses": 14,
+            "ending_cash_usd": 92.0892
+          },
+          {
+            "month": "2025-02",
+            "complete": true,
+            "net_usd": -17.4845,
+            "trades": 36,
+            "wins": 25,
+            "losses": 11,
+            "ending_cash_usd": 74.6047
+          },
+          {
+            "month": "2025-03",
+            "complete": true,
+            "net_usd": 29.6051,
+            "trades": 48,
+            "wins": 42,
+            "losses": 6,
+            "ending_cash_usd": 104.2098
+          },
+          {
+            "month": "2025-04",
+            "complete": true,
+            "net_usd": 15.6095,
+            "trades": 56,
+            "wins": 45,
+            "losses": 11,
+            "ending_cash_usd": 119.8193
+          },
+          {
+            "month": "2025-05",
+            "complete": true,
+            "net_usd": -10.214,
+            "trades": 47,
+            "wins": 35,
+            "losses": 12,
+            "ending_cash_usd": 109.6053
+          },
+          {
+            "month": "2025-06",
+            "complete": true,
+            "net_usd": -7.1001,
+            "trades": 42,
+            "wins": 33,
+            "losses": 9,
+            "ending_cash_usd": 102.5052
+          },
+          {
+            "month": "2025-07",
+            "complete": true,
+            "net_usd": -19.5824,
+            "trades": 42,
+            "wins": 28,
+            "losses": 14,
+            "ending_cash_usd": 82.9228
+          },
+          {
+            "month": "2025-08",
+            "complete": true,
+            "net_usd": -27.8669,
+            "trades": 48,
+            "wins": 33,
+            "losses": 15,
+            "ending_cash_usd": 55.056
+          },
+          {
+            "month": "2025-09",
+            "complete": true,
+            "net_usd": -46.5138,
+            "trades": 33,
+            "wins": 19,
+            "losses": 14,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2025-10",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2025-11",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2025-12",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-01",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-02",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-03",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-04",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-05",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-06",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-07",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-08",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-09",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-10",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          },
+          {
+            "month": "2026-11",
+            "complete": false,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 8.5421
+          }
+        ]
+      },
+      "no_offer": {
+        "initial_cash_usd": 100.0,
+        "final_cash_usd": 3.4123,
+        "net_usd": -96.5877,
+        "trades": 232,
+        "win_rate_pct": 73.71,
+        "profit_factor": 0.652,
+        "positive_complete_months": 1,
+        "negative_complete_months": 4,
+        "flat_complete_months": 17,
+        "completed_months": 22,
+        "max_closed_drawdown_pct": 96.67,
+        "exits_liquidation": 0,
+        "preliq_stop_touch_exits": 15,
+        "supertrend_flip_exits": 7,
+        "assumed_fee_waivers": 0,
+        "skipped_wallet": 834,
+        "skipped_lots": 0,
+        "eligible_signals_when_flat": 1066,
+        "open_position_at_cutoff": false,
+        "fees_gst_usd": 261.9902,
+        "monthly": [
+          {
+            "month": "2025-01",
+            "complete": true,
+            "net_usd": -32.5766,
+            "trades": 63,
+            "wins": 48,
+            "losses": 15,
+            "ending_cash_usd": 67.4234
+          },
+          {
+            "month": "2025-02",
+            "complete": true,
+            "net_usd": -31.7353,
+            "trades": 36,
+            "wins": 20,
+            "losses": 16,
+            "ending_cash_usd": 35.6881
+          },
+          {
+            "month": "2025-03",
+            "complete": true,
+            "net_usd": 7.4226,
+            "trades": 48,
+            "wins": 41,
+            "losses": 7,
+            "ending_cash_usd": 43.1107
+          },
+          {
+            "month": "2025-04",
+            "complete": true,
+            "net_usd": -8.0547,
+            "trades": 56,
+            "wins": 45,
+            "losses": 11,
+            "ending_cash_usd": 35.0559
+          },
+          {
+            "month": "2025-05",
+            "complete": true,
+            "net_usd": -31.6437,
+            "trades": 29,
+            "wins": 17,
+            "losses": 12,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2025-06",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2025-07",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2025-08",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2025-09",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2025-10",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2025-11",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2025-12",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-01",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-02",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-03",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-04",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-05",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-06",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-07",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-08",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-09",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-10",
+            "complete": true,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          },
+          {
+            "month": "2026-11",
+            "complete": false,
+            "net_usd": 0.0,
+            "trades": 0,
+            "wins": 0,
+            "losses": 0,
+            "ending_cash_usd": 3.4123
+          }
+        ]
+      }
+    }
+  },
+  "preserved": {
+    "signal": "confirmed 15M EMA20 and ST10/3, ATR ratio >=1.0, volume ratio >=1.5",
+    "atr_stop": "2x ATR14 on 15M",
+    "trailing_activation_points": 150.0,
+    "trailing_distance_points": 50.0,
+    "initial_cash": 100.0,
+    "margin_budget_per_trade": 10.0,
+    "isolated_leverage": 100,
+    "contract_size_btc": 0.001,
+    "preliq_buffer_points": 1,
+    "fees_taker_each_side": 0.0005,
+    "gst_on_fees": 0.18,
+    "scalper_assumed_window_minutes": 30,
+    "spread": 0,
+    "slippage": 0,
+    "funding": 0
+  },
+  "changed": [
+    "Only entry execution at next 1M open after 15M close, and 1M OHLC stop/trail/exit resolution.",
+    "Supertrend flip is acted on at next 1M open after 15M close.",
+    "Offer eligibility derived from 1M conservative upper-bound hold time instead of 15M integer blocks."
+  ],
+  "limits": [
+    "1M candle OHLC still infers intraminute high/low order, not real ticks, quotes or fills.",
+    "No actual historical mark-price liquidation, spread, slippage, funding or latency.",
+    "Offer active all-history is an optimistic assumption; compare the no-offer scenario.",
+    "No pre-entry trading from unclosed 15-minute bars; 15M indicators unchanged.",
+    "No VPS live bot or main branch modified.",
+    "The previous +$828.50 includes partial Nov 2026; 22 complete months end Oct 2026.",
+    "Fixed $10 margin per position, no replenishment or position size compounding."
+  ]
+}
