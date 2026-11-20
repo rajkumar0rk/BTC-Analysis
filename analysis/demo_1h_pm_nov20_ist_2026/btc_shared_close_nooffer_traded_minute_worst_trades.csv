@@ -1,0 +1,3 @@
+entry_ist,exit_ist,side,entry,exit_proxy,points,qty,contracts,gross_usd,entry_fee_usd,exit_fee_usd,gst_usd,net_usd,balance_after,hold_minutes,exit_reason,mark_stop_at_exit,initial_stop,atr_stop,modeled_pm_boundary,modeled_preliq,trailing_active_at_exit,signal_bar_utc,scalper_discount_hypothetical
+2026-11-20 16:31:00+05:30,2026-11-20 16:53:00+05:30,short,62062.5,61756.5,306.0,0.016,16,4.896,0.4965,0.4941,0.1783,3.7271,103.7271,22,native_stop,61754.5,63274.0,63274.0,,,True,2026-11-20 10:00:00+00:00,False
+2026-11-20 20:31:00+05:30,2026-11-20 20:34:00+05:30,short,61789.5,61605.5,184.0,0.016,16,2.944,0.4943,0.4928,0.1777,1.7792,105.5063,3,native_stop,61613.700000000004,63018.0,63018.0,,,True,2026-11-20 14:00:00+00:00,False
