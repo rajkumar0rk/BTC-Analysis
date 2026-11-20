@@ -1,0 +1,89 @@
+name: Backtest BTC + ETH 1H EMA/ST trailing activation 1 distance 0.1
+on:
+  push:
+    branches: [research/ema-st-1h-fixed-1-0p1-20261120]
+    paths:
+      - scripts/backtest_ema_st_1h_trail_1_0p1_20261120.py
+      - .github/workflows/backtest-ema-st-1h-trailing-1-0p1-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: one-hour-ema-supertrend-trail-1-0p1-20261120
+  cancel-in-progress: false
+jobs:
+  one-minute-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas
+      - name: Verify source syntax and no exchange API write paths
+        run: |
+          python -m py_compile scripts/backtest_ema_st_1h_trail_1_0p1_20261120.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('scripts/backtest_ema_st_1h_trail_1_0p1_20261120.py').read_text()
+          assert 'from __future__ import annotations' in s
+          for op in ('place_order(', 'cancel_order(', 'requests.post(', 'systemctl', 'os.system('):
+              assert op not in s,op
+          assert 'read_minutes(module)' in s and 'profile shortlived' not in s
+          PY
+      - name: Full BTC and ETH one-minute execution backtest, OLD versus NEW trail only
+        run: |
+          set -Eeuo pipefail
+          python -u scripts/backtest_ema_st_1h_trail_1_0p1_20261120.py
+          test -s analysis/ema_st_1h_trailing_1_0p1_20261120/summary.json
+      - name: Verify results across all twenty-two months
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('analysis/ema_st_1h_trailing_1_0p1_20261120/summary.json').read_text())
+          assert len(j['scored_completed_months'])==22
+          assert set(j['assets'])=={'BTC','ETH'}
+          for asset in ('BTC','ETH'):
+              scenarios=j['assets'][asset]['results']
+              assert set(scenarios)=={'old_no_offer','old_assumed_offer','new_no_offer','new_assumed_offer'}
+              for label,s in scenarios.items():
+                  assert len(s['monthly'])==22
+                  print('VERIFIED_RESULT',asset,label,'net',s['realized_net_usd'],
+                        'PF',s['profit_factor'],'trades',s['completed_trades'],
+                        'positive',s['profitable_months'],'liquidations',s['liquidations'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-eth-1h-ema-st-trailing-1-0p1-100x
+          path: analysis/ema_st_1h_trailing_1_0p1_20261120/
+          if-no-files-found: warn
+          retention-days: 60
+      - name: Save results on independent research branch
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/ema_st_1h_trailing_1_0p1_20261120/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: record 22-month BTC and ETH 1h fixed 1/0.1 trail sensitivity'
+            git push origin HEAD:research/ema-st-1h-fixed-1-0p1-20261120
+          fi
+      - name: Publish short run summary
+        if: success()
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          j=json.loads(Path('analysis/ema_st_1h_trailing_1_0p1_20261120/summary.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('# BTC/ETH one-hour EMA20/Supertrend: trailing 1 / 0.1\n\n')
+              f.write('| Asset | Scenario | Net USD | Profit factor | Trades | Positive months |\n|---|---|---:|---:|---:|---:|\n')
+              for asset,data in j['assets'].items():
+                  for label,s in data['results'].items():
+                      f.write(f"| {asset} | {label} | ${s['realized_net_usd']:+.2f} | {s['profit_factor']} | {s['completed_trades']} | {s['profitable_months']}/22 |\n")
+              f.write('\nBased on *one-minute OHLC barrier proxies*, **not verified tick fills**. BTC 0.1 is below 0.5 assumed tick, modeled at 0.5. Fee entitlement/funding/spread unverified.\n')
+          PY
