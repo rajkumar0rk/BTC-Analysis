@@ -1,0 +1,28 @@
+name: HighPF External TSMOM BTC 2025 Screen
+on:
+  push:
+    branches:
+      - research/highpf-external-source-audit-20261120
+    paths:
+      - scripts/highpf_external_tsmom_screen_v1.py
+      - .github/workflows/highpf-external-tsmom-screen.yml
+  workflow_dispatch:
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Native BTC 2025 screen (fail closed on data gaps)
+        run: python scripts/highpf_external_tsmom_screen_v1.py
+      - name: Preserve original screening outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: highpf-external-tsmom-btc-2025
+          path: analysis/highpf_external_20261120/screen_v1/
+          if-no-files-found: warn
