@@ -8,6 +8,7 @@ from audit import sync_fills,summarize_fills
 from signals import closed_bars
 from bot import Bot,position_size
 from options_paper import OptionsPaperBot,good_quote
+from futures_paper import FuturesPaperBot
 
 def doctor(cfg):
     print("ENVIRONMENT",cfg.mode,"HOST",cfg.base_url,"ASSET",cfg.asset,"MARKET",cfg.market)
@@ -64,12 +65,14 @@ def status(cfg):
     try:
         result={
           "lane":cfg.lane,"mode":cfg.mode,"order_writes_enabled":cfg.trading,
-          "trading_type":"quote_based_options_paper" if cfg.market=="options" else "futures",
+          "trading_type":("quote_based_options_paper" if cfg.market=="options" else
+                    "forward_futures_paper" if not cfg.trading and cfg.futures_paper else "exchange_futures"),
           "heartbeat":db.get("heartbeat"),"halted":db.get("halted"),
           "signal":db.get("latest_signal"),"active":db.get(
-              "paper_position" if cfg.market=="options" else "active"),
+              "paper_position" if (cfg.market=="options" or
+                (cfg.market=="futures" and not cfg.trading and cfg.futures_paper)) else "active"),
           "events":db.latest_events(20)}
-        if cfg.market=="options":
+        if cfg.market=="options" or (cfg.market=="futures" and not cfg.trading and cfg.futures_paper):
             result.update(wallet_cash_usd=db.get("paper_wallet"),
                  option_equity_bid_estimate=db.get("paper_equity_bid_estimate"),
                  paper_statistics=db.get("paper_stats"),
@@ -142,7 +145,8 @@ def main():
             print(json.dumps({"new_fills":new,"estimated_pnl":stats},indent=2))
         finally:db.close()
     else:
-        worker=OptionsPaperBot(cfg) if cfg.market=="options" else Bot(cfg)
+        worker=(OptionsPaperBot(cfg) if cfg.market=="options" else
+                FuturesPaperBot(cfg) if cfg.futures_paper and not cfg.trading else Bot(cfg))
         try:
             if args.command=="run":worker.loop()
             else:
