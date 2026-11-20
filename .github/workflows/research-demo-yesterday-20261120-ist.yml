@@ -1,0 +1,47 @@
+name: Backtest yesterday Nov 20 2026 IST Demo-style BTC and ETH
+on:
+  push:
+    branches:
+      - research/demo-yesterday-20261120-ist
+    paths:
+      - scripts/backtest_demo_2026_11_20_ist.py
+      - scripts/replay_ema_st_demo_mark_1m_20261121.py
+      - .github/workflows/research-demo-yesterday-20261120-ist.yml
+permissions:
+  contents: write
+concurrency:
+  group: research-demo-20261120-ist
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==2.2.3 numpy==2.2.3
+      - name: Compile scripts and test Demo stop handling
+        run: |
+          python -m py_compile scripts/backtest_demo_2026_11_20_ist.py scripts/replay_ema_st_demo_mark_1m_20261121.py
+          python -c 'import sys;sys.path.insert(0,"scripts");from replay_ema_st_demo_mark_1m_20261121 import unit_test;unit_test();print("Mark stop tests passed")'
+      - name: Download actual traded and MARK one-minute candles and backtest the IST day
+        run: python scripts/backtest_demo_2026_11_20_ist.py
+      - name: Upload all source data and outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-2026-11-20-IST-backtest-data-results
+          path: analysis/demo_yesterday_2026_11_20_ist/
+          if-no-files-found: warn
+      - name: Commit verified results on this research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/demo_yesterday_2026_11_20_ist/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: Nov20 IST Demo-like BTC ETH one-day verified source replay"
+            git push origin HEAD:research/demo-yesterday-20261120-ist
+          fi
