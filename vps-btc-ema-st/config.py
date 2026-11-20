@@ -42,6 +42,7 @@ class Config:
     option_spread_max_pct:float=10.0
     option_fee_rate:float=0.0001
     option_fee_cap_pct:float=3.5
+    futures_paper:bool=True
 
     @property
     def symbol(self):
@@ -113,4 +114,5 @@ class Config:
             raise ValueError("STATE_DIR may not be application root")
         return cls(mode,trading,key,secret,portfolio,margin,leverage,daily,ntrades,
                    flag("HALT_AFTER_LIQUIDATION",True),buffer,staleness,poll,host,port,
-                   state,asset,market,optpremium,min_dte,max_dte,spread,fee,cap)
+                   state,asset,market,optpremium,min_dte,max_dte,spread,fee,cap,
+                   flag("FUTURES_PAPER_ENABLED",True))
