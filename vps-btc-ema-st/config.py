@@ -76,7 +76,7 @@ class Config:
             raise ValueError("Missing "+prefix+" credentials")
         if mode=="live" and trading:
             if os.getenv("LIVE_TRADING_ACK")!="I_ACCEPT_REAL_"+asset+"USD_TRADES":
-                raise ValueError("Live trading locked for "+asset+"USD")
+                raise ValueError("Live trading is locked for "+asset+"USD")
         if market=="futures" and trading and not flag("ISOLATED_MARGIN_CONFIRMED"):
             raise ValueError("Confirm isolated mode and disable auto-add margin in exchange UI first")
         portfolio=float(os.getenv("PORTFOLIO_BUDGET_USD","100"))
