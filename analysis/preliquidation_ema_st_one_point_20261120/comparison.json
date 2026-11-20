@@ -1,0 +1,51 @@
+{
+  "limitations": "STOP AT EXACT 1 USD BEFORE LIQ fills from estimated 15m OHLC path; NOT exchange mark price; no slippage/stop trigger latency; therefore cannot claim real liquidation prevention or fee savings.",
+  "BTC": {
+    "original": {
+      "ending_portfolio_usd": 913.1264,
+      "net_profit_usd": 813.1264,
+      "net_profit_factor": 1.5958,
+      "completed_trades": 1000,
+      "assumed_liquidations": 42,
+      "max_closed_equity_drawdown_pct": 11.75,
+      "profitable_completed_months": 19,
+      "losing_completed_months": 3,
+      "liq_penalties_usd": 20.232
+    },
+    "preliq_one_point": {
+      "ending_portfolio_usd": 928.4954,
+      "net_profit_usd": 828.4954,
+      "net_profit_factor": 1.6139,
+      "completed_trades": 1000,
+      "assumed_liquidations": 0,
+      "max_closed_equity_drawdown_pct": 11.51,
+      "profitable_completed_months": 19,
+      "losing_completed_months": 3,
+      "liq_penalties_usd": 0.0
+    }
+  },
+  "ETH": {
+    "original": {
+      "ending_portfolio_usd": 1964.6772,
+      "net_profit_usd": 1864.6772,
+      "net_profit_factor": 2.228,
+      "completed_trades": 1002,
+      "assumed_liquidations": 113,
+      "max_closed_equity_drawdown_pct": 17.71,
+      "profitable_completed_months": 21,
+      "losing_completed_months": 1,
+      "liq_penalties_usd": 55.797
+    },
+    "preliq_one_point": {
+      "ending_portfolio_usd": 2012.6697,
+      "net_profit_usd": 1912.6697,
+      "net_profit_factor": 2.3007,
+      "completed_trades": 1002,
+      "assumed_liquidations": 0,
+      "max_closed_equity_drawdown_pct": 16.98,
+      "profitable_completed_months": 21,
+      "losing_completed_months": 1,
+      "liq_penalties_usd": 0.0
+    }
+  }
+}
