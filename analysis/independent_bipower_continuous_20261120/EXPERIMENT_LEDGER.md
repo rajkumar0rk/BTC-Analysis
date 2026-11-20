@@ -1,0 +1,2 @@
+# Independent bipower-continuous convex research ledger — append only
+2026-11-20 10:42 IST | OPEN / PRE-REGISTERED. Baseline source is scripts/research_independent_bipower_continuous_20261120.py. Novelty PARTIAL OVERLAP with variance endload, extrema order and shock drift, distinct bipower jump decomposition. No results yet. Source and branch isolated. Next: push-trigger workflow, verify actual run ID, audit raw BTC 2025 trade ledger and cost stress; if no signal or negative after-cost, reject. Do not retune using BTC 2026 or ETH.
