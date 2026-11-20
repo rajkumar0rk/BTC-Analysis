@@ -249,6 +249,9 @@ def main():
     enriched=old_signals.indicators(bars)
     base_tr,base_stat=old_preliq.replay(enriched,0,"threshold")
     assert abs(base_stat["net_profit_usd"]-ORIGINAL_EXPECTED_NET)<.0002,      ("Original $828.50 baseline did not reproduce",base_stat["net_profit_usd"])
+    base_month=old_preliq.monthly(base_tr,"2025-01","2026-11")
+    npos=int((base_month.loc[base_month.complete_month,"net_profit_usd"]>0).sum())
+    assert npos==19,("Unexpected original 15M month tally",npos)
     base_tr.to_csv(OUT/"original_15m_ohlc_trades.csv.gz",index=False,compression="gzip")
     raw,raw_manifest=load_minutes()
     assert len(raw)==n and len(bars)*15==n
@@ -269,7 +272,7 @@ def main():
         comparison=dict(original_15m_ohlc={
             "net_usd":base_stat["net_profit_usd"],"trades":base_stat["completed_trades"],
             "profit_factor":base_stat["net_profit_factor"],
-            "positive_complete_months":base_stat["profitable_completed_months"],
+            "positive_complete_months":npos,
             "liquidations":base_stat["assumed_liquidations"]},
             one_minute=scenarios),
         preserved=dict(signal="confirmed 15M EMA20 and ST10/3, ATR ratio >=1.0, volume ratio >=1.5",
