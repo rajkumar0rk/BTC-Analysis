@@ -1,0 +1,2 @@
+# Independent extreme-order research ledger (append only)
+2026-11-20 06:39 IST — New falsifiable BTC-first intrahour extreme sequencing experiment; predecessor range-occupancy run 44630740725 rejected (BTC PF .782). Predeclared 15/30 minute high-low time separation, continuation/reversal. BTC 2025 selection only. Run status pending verification; workflow push trigger branch-scoped. No performance claims.
