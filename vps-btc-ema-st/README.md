@@ -221,8 +221,37 @@ cd vps-btc-ema-st
 .venv/bin/python -m pytest -q tests/
 ~~~
 
-Add the PRELIQ_ settings to the existing .env and **test PAPER first**. The dashboard surfaces the exchange liquidation price (when available), pre-liquidation stop, and effective stop. Do not confuse the previous BTC/ETH historical profit figures with a backtest of this NEW exit: the prior research backtests did not have pre-liquidation stops and have NOT been rerun with the change.
+Add the PRELIQ_ settings to the existing .env and **test PAPER first**. The dashboard surfaces the exchange liquidation price (when available), pre-liquidation stop, and effective stop. Do not confuse the previous BTC/ETH historical profit figures with this NEW exit: original research files remain unchanged, and dedicated one-point stop differential backtests are now saved separately under analysis/btc_ema_st_preliq_one_point_20261120 and analysis/eth_ema_st_preliq_one_point_20261120. The new historical model is optimistic: it assumes fills at the chosen stop with no trigger-to-fill latency or spread.
 
 **Execution risk:** Conditional stop-market orders are not guaranteed to fill before liquidation, especially if the mark price gaps or execution and API updates are delayed. Paper observations are not real fills, and fees/GST/funding may differ. Options have no futures-style liquidation and are unchanged.
 
 **Testing status:** Offline checks only. No Delta account has been accessed and no exchange order has been submitted by this change.
+
+
+### Completed historical fee-impact replay (optimistic scenario, not live evidence)
+
+Verified GitHub Actions research compared the exact previous entry strategy to its new 1-point exit-only overlay using 15m OHLC. All trade fees/GST and modeled liquidation penalties use the older research assumptions.
+
+| Metric | BTC original | BTC with preliq | ETH original | ETH with preliq |
+|---|---:|---:|---:|---:|
+| Ending $100 portfolio | $913.13 | $928.50 | $1,964.68 | $2,012.67 |
+| Net profit | $813.13 | $828.50 | $1,864.68 | $1,912.67 |
+| Assumed liquidations | 42 | 0 | 113 | 0 |
+| Estimated liquidation penalties | $20.23 | $0 | $55.80 | $0 |
+| Maximum closed-equity DD | 11.75% | 11.51% | 17.71% | 16.98% |
+
+The modeled liquidation count becomes zero because the replay assumes conditional stop execution one point before its estimated liquidation level **without tick-by-tick historical mark prices, gap/stop latency or execution slippage**. Treat this as a *best-case modeling bound*, not a claim that any future trading session will avoid liquidation. A normal exchange stop can still incur market taker fees and GST.
+
+Monthly CSVs, trade ledgers and reproducible summary are saved in:
+- analysis/preliquidation_ema_st_one_point_20261120/comparison.json
+- analysis/btc_ema_st_preliq_one_point_20261120/
+- analysis/eth_ema_st_preliq_one_point_20261120/
+
+Optional historical rerun commands:
+
+~~~bash
+.venv/bin/python app.py backtest --asset BTC --preliq
+.venv/bin/python app.py backtest --asset ETH --preliq
+~~~
+
+Plain commands without --preliq still rerun the **original** strategy. The dashboard provides an original/preliq historical-scenario selector. A real delta demo trade/mark-price capture is required to evaluate whether the emergency stop executes soon enough in practice.
