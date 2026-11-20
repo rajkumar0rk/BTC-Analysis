@@ -1,0 +1,34 @@
+name: BTC 0.5 vs 5 price point slippage — replay 22 months
+on:
+  push:
+    branches:
+      - research/btc-slippage-0p5-replay-20261120
+    paths:
+      - scripts/research_btc_48h_slippage_05_vs5_20261120.py
+      - .github/workflows/research-btc-slippage-05-vs5-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install backtest dependencies
+        run: pip install numpy pandas numba
+      - name: Test exact BTC point slippage assumption on full 1m history
+        run: |
+          python -m py_compile scripts/research_btc_48h_slippage_05_vs5_20261120.py
+          PYTHONPATH=scripts python scripts/research_btc_48h_slippage_05_vs5_20261120.py
+      - name: Save month by month costs, trades, result comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-slippage-05-vs-5-22month-research
+          path: analysis/btc_48h_slippage_0p5_vs5_20261120/
+          if-no-files-found: warn
+          retention-days: 30
