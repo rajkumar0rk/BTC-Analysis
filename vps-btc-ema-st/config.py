@@ -43,6 +43,9 @@ class Config:
     option_fee_rate:float=0.0001
     option_fee_cap_pct:float=3.5
     futures_paper:bool=True
+    preliq_enabled:bool=True
+    preliq_btc_points:float=1.0
+    preliq_reference_btc_price:float=80000.0
 
     @property
     def symbol(self):
@@ -96,6 +99,10 @@ class Config:
         spread=float(os.getenv("OPTION_MAX_SPREAD_PCT","10"))
         fee=float(os.getenv("OPTION_TAKER_FEE_RATE","0.0001"))
         cap=float(os.getenv("OPTION_PREMIUM_FEE_CAP_PCT","3.5"))
+        preliq_btc_points=float(os.getenv("PRELIQ_BTC_BUFFER_POINTS","1"))
+        preliq_reference_btc_price=float(os.getenv("PRELIQ_BTC_REFERENCE_PRICE","80000"))
+        if not(0<preliq_btc_points<=5000 and 1000<=preliq_reference_btc_price<=1000000):
+            raise ValueError("Invalid pre-liquidation price buffer/reference")
         if not(portfolio>0 and 0<margin<=portfolio and 0<leverage<=200):
             raise ValueError("Unsafe portfolio/margin/leverage")
         if not(0<daily<=portfolio and 1<=ntrades<=100 and 0<=buffer<2):
@@ -115,4 +122,5 @@ class Config:
         return cls(mode,trading,key,secret,portfolio,margin,leverage,daily,ntrades,
                    flag("HALT_AFTER_LIQUIDATION",True),buffer,staleness,poll,host,port,
                    state,asset,market,optpremium,min_dte,max_dte,spread,fee,cap,
-                   flag("FUTURES_PAPER_ENABLED",True))
+                   flag("FUTURES_PAPER_ENABLED",True),
+                   flag("PRELIQ_STOP_ENABLED",True),preliq_btc_points,preliq_reference_btc_price)
