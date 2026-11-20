@@ -159,3 +159,70 @@ STATE_DIR=./state/demo/BTC_futures_exchange
 ~~~
 
 For ETH use ./state/demo/ETH_futures_exchange. For live BTC/ETH use ./state/live/BTC_futures_exchange or ./state/live/ETH_futures_exchange, with the correct live keys and acknowledgement. Do not delete or overwrite the existing paper files: they continue to provide the side-by-side paper comparison. The dashboard separately displays exchange account state when those conventional exchange-specific directories exist. If the exchange returns unexpected order IDs or partial fills, manually inspect and reconcile before any restart.
+
+
+## New: pre-liquidation emergency stop for BTC and ETH FUTURES
+
+Available on branch: **feature/vps-preliquidation-stops-20261120**.
+
+The requested entry strategy remains unchanged: EMA20 + Supertrend, 2x ATR initial stop, original trailing/flip exits, fixed <=$10 isolated margin and 100x futures leverage. The entry-filtering liquidation guard remains OFF.
+
+The futures emergency EXIT uses the actual Delta reported position liquidation price for authenticated exchange demo/live:
+- LONG BTC: MAX(original ATR stop, liquidation price + $1, trailing stop).
+- SHORT BTC: MIN(original ATR stop, liquidation price - $1, trailing stop).
+- ETH uses an entry-relative BTC-equivalent $1 buffer. For ETH $4,000 with BTC reference $80,000, this is $0.05, rounded up to an ETH tick (current expected tick: $0.05).
+- The stop only tightens; it is never deliberately loosened.
+- The app reads the authenticated GET /v2/positions liquidation_price field after the exchange confirms a fill, and refreshes it with each position read. Its native reduce-only stop uses a MARK PRICE trigger.
+- The initial order has a provisional estimated stop, since actual liquidation price does not exist until the position is opened. Its price is replaced/tightened after a confirmed fill and exchange stop verification.
+- If the actual liquidation price is unavailable or invalid, the app attempts a reduce-only emergency close rather than substituting its proxy silently.
+- In paper mode the liquidation price is an approximate maintenance-margin model; jump-throughs are still modeled as liquidations and charged liquidation penalties. No liquidation fee reduction is guaranteed.
+
+### Configuration
+
+Add these to the existing .env (or copy the refreshed .env.example):
+
+~~~dotenv
+PRELIQ_STOP_ENABLED=true
+PRELIQ_BTC_BUFFER_POINTS=1
+PRELIQ_BTC_REFERENCE_PRICE=80000
+~~~
+
+Increase PRELIQ_BTC_BUFFER_POINTS to 10 or more if you choose to allow additional room for stop triggering and market execution; even a wider buffer cannot guarantee fills. One BTC dollar at an $80,000 price is only 0.00125% and may be too close to the mark-price liquidation threshold during volatility.
+
+### Install a fresh VPS copy
+
+~~~bash
+sudo apt update
+sudo apt install -y git python3 python3-venv python3-pip
+git clone --depth 1 --branch feature/vps-preliquidation-stops-20261120 https://github.com/rajkumar0rk/BTC-Analysis.git
+cd BTC-Analysis/vps-btc-ema-st
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+cp .env.example .env
+chmod 600 .env
+.venv/bin/python -m pytest -q tests/
+bash scripts/install_systemd_multi.sh
+~~~
+
+See the earlier sections for independent BTC_futures / ETH_futures / BTC_options / ETH_options services and the SSH-tunneled dashboard.
+
+### Update an existing VPS copy
+
+If any demo or live FUTURES exchange position is open, **do not upgrade/restart its active bot without independently confirming protective stops and safely flattening/handling the position on Delta**. Stop new entries, verify all open orders and backup state first.
+
+Once flat:
+
+~~~bash
+cd ~/BTC-Analysis
+git fetch origin
+git switch --track origin/feature/vps-preliquidation-stops-20261120
+cd vps-btc-ema-st
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m pytest -q tests/
+~~~
+
+Add the PRELIQ_ settings to the existing .env and **test PAPER first**. The dashboard surfaces the exchange liquidation price (when available), pre-liquidation stop, and effective stop. Do not confuse the previous BTC/ETH historical profit figures with a backtest of this NEW exit: the prior research backtests did not have pre-liquidation stops and have NOT been rerun with the change.
+
+**Execution risk:** Conditional stop-market orders are not guaranteed to fill before liquidation, especially if the mark price gaps or execution and API updates are delayed. Paper observations are not real fills, and fees/GST/funding may differ. Options have no futures-style liquidation and are unchanged.
+
+**Testing status:** Offline checks only. No Delta account has been accessed and no exchange order has been submitted by this change.
