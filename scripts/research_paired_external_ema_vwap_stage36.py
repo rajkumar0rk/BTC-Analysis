@@ -124,7 +124,9 @@ def main():
         for stress in (False,):
             g,dd=replay(f,symbol,stress)
             m,s=audit(g,f,symbol,stress,dd)
-            monthly.append(m);summary.append(s);trades.append(g)\n            if symbol=="BTCUSD" and (s["overall_PF"] is None or not np.isfinite(s["overall_PF"]) or s["overall_PF"]<=1 or s["trades"]<30 or s["net_22_month_pct"]<=0):\n                break
+            monthly.append(m);summary.append(s);trades.append(g)
+            if symbol=="BTCUSD" and (s["overall_PF"] is None or not np.isfinite(s["overall_PF"]) or s["overall_PF"]<=1 or s["trades"]<30 or s["net_22_month_pct"]<=0):
+                break
     m=pd.concat(monthly,ignore_index=True);s=pd.DataFrame(summary);g=pd.concat(trades,ignore_index=True)
     m.to_csv(OUT/"all_22_months.csv",index=False)
     s.to_csv(OUT/"summary.csv",index=False)
