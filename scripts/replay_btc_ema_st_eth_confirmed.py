@@ -45,11 +45,11 @@ def allow_btc_entries(frame, allowed):
     out["volume_ratio"] = out.volume_ratio.where(allowed, 0.0)
     return out
 
-def run_mode(name, frame, allowed, last_month):
+def run_mode(name, frame, allowed, last_month, external_entry_side=None):
     out = {}
     checked = allow_btc_entries(frame, allowed)
     for fill in ("threshold", "bankruptcy"):
-        trades, stats = prior.replay(checked, 0, fill)
+        trades, stats = prior.replay(checked, 0, fill, external_entry_side=external_entry_side)
         monthly = prior.monthly(trades, "2025-01", last_month)
         complete = monthly[monthly.complete_month]
         stats["completed_months"] = int(len(complete))
@@ -94,10 +94,16 @@ def main():
     # Secondary diagnostic: BTC full signal, ETH Supertrend agrees on trend.
     eth_trend_match = (b != 0) & (b == eth_st)
     assert not (both_full & ~eth_trend_match).any()
+    # Requested ETH-trigger mode: ETH meets its complete 15m EMA/ST entry,
+    # BTC has the same current Supertrend bias, and ONLY BTC is traded.
+    btc_st = pd.Series(np.where(btc.dir.to_numpy() == -1, 1, -1),
+                       index=common, dtype="int8")
+    eth_driven = e.where(e == btc_st, 0)
     modes = {
       "btc_only": b != 0,
       "btc_plus_eth_matching_full_entry": both_full,
-      "btc_plus_eth_matching_st_trend": eth_trend_match
+      "btc_plus_eth_matching_st_trend": eth_trend_match,
+      "eth_full_signal_triggers_btc_matching_st": eth_driven != 0
     }
     final_month = str(common[-1].to_period("M"))
     report = {
@@ -110,7 +116,8 @@ def main():
                                           "ETHUSD": eth_manifest["generated_at_utc"]},
       "signals": {"btc": int((b!=0).sum()), "eth": int((e!=0).sum()),
                   "both_full_same_bar": int(both_full.sum()),
-                  "btc_with_eth_trend": int(eth_trend_match.sum())},
+                  "btc_with_eth_trend": int(eth_trend_match.sum()),
+                  "eth_signal_with_btc_st_trend": int((eth_driven != 0).sum())},
       "settings": prior.PARAMS,
       "limitations": "No funding, slippage or spread; assumed 30-minute Scalper Offer; "
                      "same-bar close fills and OHLC liquidation proxies (not Mark Price). "
@@ -118,7 +125,8 @@ def main():
       "results": {}
     }
     for name, gate in modes.items():
-        report["results"][name] = run_mode(name, btc, gate, final_month)
+        report["results"][name] = run_mode(name, btc, gate, final_month,
+            external_entry_side=eth_driven.to_numpy() if name == "eth_full_signal_triggers_btc_matching_st" else None)
     (OUT / "summary.json").write_text(json.dumps(report, indent=2) + "\n")
     print("SUCCESS: BTC vs ETH-confirmed BTC research complete", flush=True)
 
