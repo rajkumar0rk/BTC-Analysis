@@ -1,0 +1,7 @@
+# External source parity decision — 2026-11-20 23:58 IST
+
+Continuation from commit 6812a3ff8d224e9f924c8e2efabab6a356fb113e; KeltnerBounceV1 previously rejected (3 trades; GitHub Actions 44710028523).
+
+Candidate: fabledforman, TradingView Opening Range Breakout, 2025-07-30, https://www.tradingview.com/script/8vjWAdLN-Opening-Range-Breakout/ . Attempted direct public source retrieval on 2026-11-20; tool returned `Failed to fetch restricted URL`. Source Pine version, exact reversal/stop-order handling, and usage license could not be independently checked. Prior description indicates 09:30–10:15 New York OR, 0.35% minimum width, 50% range stop, 1.1R target, 15:45 exit and optional reversal. There is a material overlap with existing first-four-hour box and opening-range studies; novel execution details cannot be verified.
+
+DECISION: BLOCKED / INCONCLUSIVE SOURCE PARITY; do not claim faithful reproduction, do not run guessed rules, do not claim positive BTC expectancy. No new BTC screen launched in this iteration. This is an external access/source reproducibility blocker, not a missing-data or profitable-strategy finding. Next cycle: prioritize transparent licensed third-party GitHub strategy with exact executable code and documented commit; perform novelty gate against prior session studies and launch genuine BTC2025 zero-slippage fee+GST screen on isolated branch. Preserve existing cadence and other branches. Historical funding remains UNMODELED.
