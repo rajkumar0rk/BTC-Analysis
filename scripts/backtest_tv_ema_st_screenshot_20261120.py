@@ -300,10 +300,24 @@ def main():
     m=month_results(exact)
     mr=month_results(realistic)
     ms=month_results(stressed)
+    # The saved Pine script explicitly sets calc_bars_count=10000.
+    # Report a separate indicative recent 10k-bar window; calculate the
+    # indicators using full preceding history to avoid cold-start bias.
+    nrecent=10000
+    recent_raw,recent_signals,recent_open=replay(
+        b.iloc[-nrecent:],direct[-nrecent:],atr14[-nrecent:],
+        lg[-nrecent:],sh[-nrecent:])
+    assert not recent_raw.empty
+    recent_exact=costs(recent_raw,SCREENSHOT_SCALP_MIN)
+    recent_30min=costs(recent_raw,REALISTIC_SCALP_MIN)
+    recent_m=month_results(recent_exact)
+    recent_m30=month_results(recent_30min)
     exact.to_csv(OUT/"trades_screenshot_offer.csv.gz",index=False,compression="gzip")
     m.to_csv(OUT/"monthly_screenshot_offer.csv",index=False)
     mr.to_csv(OUT/"monthly_30min_offer.csv",index=False)
     ms.to_csv(OUT/"monthly_30min_offer_plus_0p5pt_slippage.csv",index=False)
+    recent_m.to_csv(OUT/"recent_10000_bars_monthly_screenshot.csv",index=False)
+    recent_m30.to_csv(OUT/"recent_10000_bars_monthly_30min.csv",index=False)
     result=dict(
       status="completed_approximate_tradingview_native_trail",
       source=qual,
@@ -326,6 +340,13 @@ def main():
         funding_rate_per_8h_pct=0,estimate_fee_voucher=False),
       signals_on_completed_bars=signals,
       last_open_trade_at_cutoff=open_pos,
+      recent_10000_15m_bars=dict(
+        first_completed_bar=str(b.index[-nrecent]),
+        last_completed_bar=str(b.index[-1]),
+        counts=recent_signals,
+        screenshot_offer=metrics(recent_exact,recent_m),
+        window_30min_offer=metrics(recent_30min,recent_m30),
+        note="First and last calendar months are partial in this rolling 10000-bar sample."),
       scenarios={
         "screenshot_100000_min_offer_zero_slip":metrics(exact,m),
         "practical_30_min_offer_zero_slip":metrics(realistic,mr),
@@ -333,7 +354,7 @@ def main():
       caveats=[
         "Independent reconstruction of the saved Pine v6 logic; NOT a TradingView tester export.",
         "OHLC inferred path approximates native TradingView strategy.exit trail; same-bar execution, rounding, and fills can differ from TV.",
-        "Original Pine calc_bars_count=10000 may restrict accessible history on some TradingView charts; 22-month full replay here uses all source bars.",
+        "Original Pine calc_bars_count=10000 may restrict accessible history on some TradingView charts; a separate recent 10000-bar window is included alongside full 22-month replay.",
         "Exact screenshot's 100000-min qualifying window and all-history offer are assumptions, NOT verified Delta promotion terms.",
         "Entry and exit are TAKER per screenshot; exit fee waived only if offer eligible in model.",
         "No actual bid/ask spread, order-book impact, trading latency, realized slippage, or margin liquidation.",
@@ -357,7 +378,7 @@ def main():
     report+=["- "+x for x in result["caveats"]]
     (OUT/"RESEARCH_REPORT.md").write_text("\n".join(report)+"\n")
     print("REPLAY_SUMMARY_JSON "+json.dumps({k:result[k] for k in
-        ["status","source","scenarios","signals_on_completed_bars","last_open_trade_at_cutoff"]},
+        ["status","source","scenarios","signals_on_completed_bars","recent_10000_15m_bars","last_open_trade_at_cutoff"]},
         separators=(",",":"),default=str),flush=True)
     print("SCREENSHOT_MONTHLY_CSV\n"+m.to_csv(index=False),flush=True)
 
