@@ -1,0 +1,26 @@
+name: BTC ETH independent hourly path efficiency v1
+on:
+  push:
+    branches:
+      - research/independent-path-efficiency-20261120-v1
+    paths:
+      - scripts/independent_path_efficiency_v1.py
+      - .github/workflows/independent-path-efficiency-v1.yml
+      - analysis/independent_path_efficiency_v1/NOVELTY_CHECK.md
+  workflow_dispatch:
+jobs:
+  paired-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas numba tabulate
+      - run: python scripts/independent_path_efficiency_v1.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: path-efficiency-v1-ledgers
+          path: analysis/independent_path_efficiency_v1/
