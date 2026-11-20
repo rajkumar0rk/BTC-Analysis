@@ -10,6 +10,8 @@ from delta import Delta,DeltaError
 from store import Store
 from audit import sync_fills,summarize_fills
 from signals import BAR_SECONDS,closed_bars,signal,indicators,quantize_stop,size_contracts,trailing_points
+from preliq import (pre_liq_buffer,pre_liq_stop,effective_stop,
+                    reported_liquidation,estimate_liquidation,stop_crossed)
 
 def oid(prefix):
     # <=32 chars and unique among open orders.
@@ -95,6 +97,23 @@ class Bot:
 
     def exchange_position(self):
         return self.delta.position(self.pid)
+
+    def preliq_parameters(self,entry):
+        """Quote-based buffer for this instrument, not a liquidation calculation."""
+        return pre_liq_buffer(self.cfg.asset,entry,self.tick,
+               getattr(self.cfg,"preliq_btc_points",1.0),
+               getattr(self.cfg,"preliq_reference_btc_price",80000.0))
+
+    def exchange_liq_stop(self,position,side,entry):
+        """Source: Delta authenticated GET /v2/positions for this product."""
+        liq=reported_liquidation(position,side,entry)
+        buffer=self.preliq_parameters(entry)
+        stop=pre_liq_stop(side,liq,buffer,self.tick)
+        self.db.set("liquidation_risk",{
+            "source":"DELTA_POSITION_API","liquidation_price":liq,
+            "pre_liquidation_stop":stop,"pre_liquidation_buffer":buffer,
+            "asset":self.cfg.asset,"observed_at":time.time()})
+        return liq,stop,buffer
 
     def matching_orders(self):
         orders=result_list(self.delta.open_orders(self.pid))
@@ -239,14 +258,36 @@ class Bot:
                 self.halt("Entry fill differs from expected position",size=size)
             entry=float(ps.get("entry_price") or 0)
             if entry<=0:self.halt("Cannot read confirmed position entry price")
-            stop=quantize_stop(entry-sign*pending["stop_distance"],self.tick,pending["side"])
+            strategy_atr_stop=quantize_stop(
+                entry-sign*pending["stop_distance"],self.tick,pending["side"])
+            # The order's native initial bracket is submitted BEFORE the exchange
+            # knows our actual fill. Persist its submitted price for reconciliation.
+            bracket_stop=float(pending.get("bracket_stop",strategy_atr_stop))
             active={"side":pending["side"],"size":size,"entry":entry,
-                    "stop":stop,"initial_stop":stop,"best":entry,"trail_active":False,
-                    "stop_id":None,"entry_oid":pending["client_id"],
-                    "entry_time":time.time()}
+                    "stop":bracket_stop,"initial_stop":bracket_stop,
+                    "strategy_atr_stop":strategy_atr_stop,
+                    "best":entry,"trail_active":False,"stop_id":None,
+                    "entry_oid":pending["client_id"],"entry_time":time.time()}
             self.db.set("active",active)
             self.db.set("pending",None)
-            self.emit("INFO","entry_confirmed",size=size,entry=entry,stop=stop)
+            if getattr(self.cfg,"preliq_enabled",True):
+                try:
+                    liq,near,buff=self.exchange_liq_stop(ps,pending["side"],entry)
+                    active.update(exchange_liquidation_price=liq,
+                                  preliq_stop=near,preliq_buffer=buff)
+                    desired=effective_stop(pending["side"],strategy_atr_stop,near,entry)
+                except ValueError as exc:
+                    self.emit("ERROR","missing_or_invalid_actual_liquidation_price",
+                              error=str(exc))
+                    self.emergency_close(active,"unknown_actual_liquidation_price")
+                    return
+                self.db.set("active",active)
+                if stop_crossed(pending["side"],mark,desired):
+                    self.emergency_close(active,"pre_liquidation_price_already_crossed_after_fill")
+                    return
+            self.emit("INFO","entry_confirmed",size=size,entry=entry,
+                      bracket_stop=bracket_stop,
+                      exchange_liquidation_price=active.get("exchange_liquidation_price"))
             self.protect(active)
         elif pending and not active and not size:
             if time.time()-pending["submitted_at"]>25:
@@ -265,42 +306,88 @@ class Bot:
         elif active and size!=active["size"]:
             self.halt("Unexpected partial fill or changed position size",size=size,
                       expected=active["size"])
+        elif active and size and getattr(self.cfg,"preliq_enabled",True) and not self.db.get("exit_pending"):
+            # Liquidation price can move if the venue changes margin/funding.
+            # Never rely indefinitely on its entry-time value.
+            try:
+                liq,near,buff=self.exchange_liq_stop(ps,active["side"],active["entry"])
+                active.update(exchange_liquidation_price=liq,
+                              preliq_stop=near,preliq_buffer=buff)
+                desired=effective_stop(active["side"],
+                    active.get("strategy_atr_stop",active["initial_stop"]),near,
+                    active["entry"])
+            except ValueError as exc:
+                self.emit("ERROR","invalid_exchange_liquidation_price",error=str(exc))
+                self.emergency_close(active,"cannot_verify_current_liquidation_price")
+                return
+            self.db.set("active",active)
+            if stop_crossed(active["side"],mark,desired):
+                self.emergency_close(active,"pre_liquidation_emergency_close")
+                return
         elif size and not active and not pending:
             self.halt("Unexpected position; bot will not take ownership",size=size)
         if self.db.get("active") and not self.db.get("exit_pending"):
             self.manage_stop(mark)
 
     def manage_stop(self,mark):
+        """Maintain ONE verified native mark-triggered stop, never loosen it."""
         active=self.db.get("active")
         if not active:return
-        if not self.protect(active):
-            return
         side=1 if active["side"]=="buy" else -1
         entry=float(active["entry"])
-        best=float(active["best"])
         stop=float(active["stop"])
+        desired=stop
+        # Native pre-liquidation stop is based on Delta's *actual position* price.
+        if getattr(self.cfg,"preliq_enabled",True):
+            near=active.get("preliq_stop")
+            if near is None:
+                self.emergency_close(active,"missing_pre_liquidation_stop")
+                return
+            strategy=active.get("strategy_atr_stop",active["initial_stop"])
+            try:
+                guarded=effective_stop(active["side"],strategy,near,entry)
+            except ValueError:
+                self.emergency_close(active,"pre_liquidation_stop_invalid_or_near_entry")
+                return
+            desired=max(desired,guarded) if side==1 else min(desired,guarded)
+
+        best=float(active["best"])
         activation,distance=trailing_points(self.cfg.asset,entry)
         if (mark-entry)*side>=activation:
             active["trail_active"]=True
         if active["trail_active"]:
             best=max(best,mark) if side==1 else min(best,mark)
             candidate=quantize_stop(best-side*distance,self.tick,active["side"])
-            if (candidate>stop+self.tick if side==1 else candidate<stop-self.tick):
-                if (candidate>=mark if side==1 else candidate<=mark):
-                    self.emergency_close(active,"trailing_stop_market_crossed")
-                    return
-                try:
-                    self.delta.edit_stop(self.pid,active["stop_id"],candidate)
-                    # Confirm exchange protective order actually updated.
-                    matching=[o for o in self.matching_orders() if int(o.get("id",-1))==active["stop_id"]]
-                    if not matching or abs(float(matching[0]["stop_price"])-candidate)>self.tick/2:
-                        self.halt("Trailing stop edit was not verified at exchange")
-                except Exception:
-                    self.halt("Trailing stop edit failed: exchange stop may be stale")
-                active["stop"]=candidate
-                self.emit("INFO","stop_trailed",stop=candidate,mark=mark)
+            desired=max(desired,candidate) if side==1 else min(desired,candidate)
         active["best"]=best
         self.db.set("active",active)
+
+        # A stop that is already crossed should never be submitted/edited
+        # as though it will protect the open position.
+        if stop_crossed(active["side"],mark,desired):
+            self.emergency_close(active,"protective_stop_already_crossed_by_mark")
+            return
+        if not self.protect(active):
+            return
+
+        should_move=(desired>stop+self.tick/2 if side==1 else desired<stop-self.tick/2)
+        if not should_move:return
+        try:
+            self.delta.edit_stop(self.pid,active["stop_id"],desired)
+            matching=[o for o in self.matching_orders()
+                      if int(o.get("id",-1))==active["stop_id"]]
+            if len(matching)!=1 or abs(float(matching[0]["stop_price"])-desired)>self.tick/2:
+                raise RuntimeError("Exchange did not confirm stop edit")
+        except Exception as exc:
+            self.emit("ERROR","protective_stop_tighten_unverified",
+                      target_stop=desired,reason=str(exc))
+            self.emergency_close(active,"could_not_confirm_pre_liquidation_stop_edit")
+            return
+        active["stop"]=desired
+        self.db.set("active",active)
+        self.emit("INFO","stop_tightened",new_stop=desired,
+                  exchange_liquidation_price=active.get("exchange_liquidation_price"),
+                  preliquidation_buffer=active.get("preliq_buffer"),mark=mark)
 
     def on_bar(self,frame,price,mark):
         bar_ts=int(frame.index[-1].timestamp())
@@ -344,7 +431,22 @@ class Bot:
             self.emit("INFO","skip",reason="price_moved_since_bar_close")
             return
         direction=1 if s["side"]=="buy" else -1
-        stop=quantize_stop(price-direction*s["stop_distance_points"],self.tick,s["side"])
+        strategy_atr_stop=quantize_stop(
+            price-direction*s["stop_distance_points"],self.tick,s["side"])
+        stop=strategy_atr_stop
+        if getattr(self.cfg,"preliq_enabled",True):
+            try:
+                # Provisional bracket price, for the brief interval before the
+                # fill is known. Replaced using actual /v2/positions liq price.
+                liq_est=estimate_liquidation(price,s["side"],self.cfg.leverage,
+                    float(self.product["maintenance_margin"]))
+                buffer=self.preliq_parameters(price)
+                near=pre_liq_stop(s["side"],liq_est,buffer,self.tick)
+                stop=effective_stop(s["side"],strategy_atr_stop,near,price)
+            except ValueError as exc:
+                self.emit("WARN","skip",
+                          reason="cannot_construct_valid_provisional_bracket",error=str(exc))
+                return
         # Server stop triggers on MARK, so it must be on the safe side of mark now.
         if (s["side"]=="buy" and mark<=stop) or (s["side"]=="sell" and mark>=stop):
             self.emit("WARN","skip",reason="mark_price_already_crossed_protective_stop",mark=mark,stop=stop)
@@ -357,13 +459,15 @@ class Bot:
                  "bracket_stop_trigger_method":"mark_price"}
         self.db.set("pending",{"client_id":client_id,"side":s["side"],
                 "contracts":contracts,"stop_distance":s["stop_distance_points"],
-                "submitted_at":time.time(),"bar_ts":bar_ts})
+                "bracket_stop":stop,"submitted_at":time.time(),"bar_ts":bar_ts})
         self.place("entry_with_attached_stop",payload)
         d=self.db.get("daily_snapshot")
         d["entries"]+=1
         self.db.set("daily_snapshot",d)
         self.emit("INFO","entry_sent",client_id=client_id,size=contracts,
-                  stop=stop,notional=price*contracts*self.value)
+                  stop=stop,atr_stop=strategy_atr_stop,
+                  preliq_enabled=getattr(self.cfg,"preliq_enabled",True),
+                  notional=price*contracts*self.value)
 
     def tick_once(self):
         price,mark=self.public_snapshot()
