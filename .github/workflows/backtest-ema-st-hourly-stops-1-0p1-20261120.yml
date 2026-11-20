@@ -1,0 +1,90 @@
+name: Backtest EMA-ST BTC ETH 1H-only ATR/trailing versus 1M
+on:
+  push:
+    branches: [research/ema-st-1h-stop-trail-hourly-20261120]
+    paths:
+      - scripts/backtest_ema_st_hourly_stops_1_0p1_20261120.py
+      - .github/workflows/backtest-ema-st-hourly-stops-1-0p1-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ema-st-hourly-stop-vs-minute-20261120
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas
+      - name: Compile and verify no order write actions
+        run: |
+          python -m py_compile scripts/backtest_ema_st_hourly_stops_1_0p1_20261120.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path("scripts/backtest_ema_st_hourly_stops_1_0p1_20261120.py").read_text()
+          for prohibited in ("place_order(", "cancel_order(", "systemctl ", "requests.post(", "os.system("):
+            assert prohibited not in s
+          assert "prior.walk" in s and "prior.close" in s and "mod.source()" in s
+          PY
+      - name: Run hourly ATR and trailing exit using 22 months of verified data
+        run: |
+          set -Eeuo pipefail
+          python -u scripts/backtest_ema_st_hourly_stops_1_0p1_20261120.py
+      - name: Verify every result and 1M baseline
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path("analysis/ema_st_1h_all_stops_hourly_1_0p1_20261120/summary.json").read_text())
+          assert j["status"]=="completed" and len(j["completed_months"])==22
+          assert set(j["assets"])=={"BTC","ETH"}
+          assert j["preserved_settings"]["trailing_activation_literal_points"]==1
+          assert j["preserved_settings"]["trailing_distance_requested_literal_points"]==.1
+          for asset,a in j["assets"].items():
+              assert set(a["hourly_results"])=={"inferred","adverse_first","favorable_first"}
+              for mode,r in a["hourly_results"].items():
+                  assert len(r["monthly"])==22 and r["exit_monitoring"]=="one_hour_OHLC"
+                  print("RESULT",asset,mode,"net",r["net_usd"],"pf",r["profit_factor"],"trades",r["trade_count"],
+                        "positive_months",r["winning_months"],flush=True)
+          PY
+      - name: Publish full artifact with individual trades and monthly CSV
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-eth-one-hour-only-atr-trailing-1-0p1
+          path: analysis/ema_st_1h_all_stops_hourly_1_0p1_20261120/
+          if-no-files-found: warn
+          retention-days: 60
+      - name: Commit results to the isolated research branch
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/ema_st_1h_all_stops_hourly_1_0p1_20261120/
+          if ! git diff --cached --quiet; then
+            git commit -m 'research: archive one-hour-only ATR/trailing 1/0.1 results'
+            git push origin HEAD:research/ema-st-1h-stop-trail-hourly-20261120
+          fi
+      - name: Summarize results
+        if: success()
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          j=json.loads(Path("analysis/ema_st_1h_all_stops_hourly_1_0p1_20261120/summary.json").read_text())
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              f.write("# BTC/ETH 1H-only ATR+trailing monitoring\n\n")
+              f.write("| Asset | Resolution/path | Net USD | PF | Trades | Profitable months |\n|---|---|---:|---:|---:|---:|\n")
+              for asset,a in j["assets"].items():
+                  b=a["original_1m_no_offer"]
+                  f.write(f'| {asset} | Previous 1M | ${b["realized_net_usd"]:+.2f} | {b["profit_factor"]} | {b["completed_trades"]} | {b["profitable_months"]}/22 |\n')
+                  for mode,r in a["hourly_results"].items():
+                      f.write(f'| {asset} | 1H {mode} | ${r["net_usd"]:+.2f} | {r["profit_factor"]} | {r["trade_count"]} | {r["winning_months"]}/22 |\n')
+              f.write("\n**1H OHLC paths cannot determine real order of intra-hour highs/lows.** No funding, spread, slippage, exchange mark-price or guaranteed Scalper waiver. Research only; VPS bots untouched.\n")
+          PY
