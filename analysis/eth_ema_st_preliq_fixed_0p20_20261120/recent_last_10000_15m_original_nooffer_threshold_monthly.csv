@@ -1,0 +1,5 @@
+month_ist,opening_balance_usd,net_profit_usd,monthly_return_pct,closing_balance_usd,trades,winning_trades,losing_trades,liquidations,fees_and_gst_usd,complete_month
+2026-08,100.0,30.9834,30.98,130.9834,33,27,6,0,38.5681,False
+2026-09,130.9834,71.501,54.59,202.4845,52,42,10,0,60.491,True
+2026-10,202.4845,-8.5128,-4.2,193.9716,49,34,15,0,57.1153,True
+2026-11,193.9716,34.9931,18.04,228.9647,21,18,3,0,24.4719,False
