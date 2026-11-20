@@ -4,11 +4,12 @@ Dataset: 963,360 authenticated Delta India 1-minute candle rows, 22 months.
 Reference: saved Pine v6 BTCUSD EMA / ST | ATR & Volume Min Max + Net.
 
 **Screenshot cost assumption:** Taker 0.05% opening, closing waived for <=27 minutes, GST 18%, 0 funding, 0 slippage.
-**Other scenario:** a 100000-minute hypothetical qualifying window; third scenario applies $0.5 adverse price slippage on both sides with the 27-minute offer.
+**Additional fee scenario:** upper bound grants the 27-minute waiver to every first-hour intrabar stop (qualification unknown). A hypothetical 100000-minute offer is also reported; 0.5-point slippage is a separate stress test.
 
 | Scenario | Trades | Net USD (1x0.001 BTC) | PF | Positive months /22 |
 |---|---:|---:|---:|---:|
 | screenshot_27_min_offer_zero_slip | 1462 | +134.56 | 1.7498 | 20/22 |
+| optimistic_27min_first_hour_fee_bound | 1462 | +185.51 | 2.0782 | 21/22 |
 | unlimited_100000_min_offer_zero_slip | 1462 | +212.03 | 2.3031 | 22/22 |
 | screenshot_27_min_offer_0p5point_adverse_each_side | 1462 | +133.10 | 1.7398 | 20/22 |
 
@@ -51,4 +52,5 @@ Reference: saved Pine v6 BTCUSD EMA / ST | ATR & Volume Min Max + Net.
 - One TradingView fixed contract=0.001 BTC; no leverage, margin, portfolio compounding or account sizing applied.
 - Returns scored by UTC exit calendar month to provide 22 truly complete months Jan 2025-Oct 2026.
 - Entry timestamp is signal candle close. Intrabar exits timestamped at bar close as conservative upper bound for fee-window eligibility.
+- 27-minute window CANNOT be exactly checked against 1h OHLC. The optimistic scenario counts every first-hour intrabar stop as fee-waived; actual result under the same modeled trade list lies between conservative and optimistic figures.
 - Uses assumed 0.5 BTCUSD price tick for rounded initial ATR stops.
