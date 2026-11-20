@@ -49,6 +49,32 @@ class Store:
             );
         """)
         self.db.commit()
+    def claim_lane(self,asset,market,mode,execution):
+        """Persist and enforce market/environment/paper-vs-exchange DB identity.
+
+        Reject paper -> exchange, exchange -> paper, demo -> live, BTC -> ETH
+        state reuse even when a process is restarted or credentials change.
+        """
+        identity={"asset":asset,"market":market,"mode":mode,"execution":execution}
+        old=self.get("lane_identity")
+        if old is not None and old!=identity:
+            raise ValueError("STATE_DIR is owned by a different strategy lane: "+
+                 str(old)+"; use separate state for "+str(identity))
+        if old is None:
+            has_paper=(self.get("paper_wallet") is not None or
+                       self.get("paper_position") is not None)
+            has_exchange=(self.get("active") is not None or
+                          self.get("pending") is not None or
+                          bool(self.db.execute("SELECT 1 FROM intents LIMIT 1").fetchone()) or
+                          bool(self.db.execute("SELECT 1 FROM exchange_fills LIMIT 1").fetchone()))
+            if has_paper and execution not in ("futures_paper","options_paper"):
+                raise ValueError("Existing paper wallet belongs to another execution mode")
+            if has_exchange and execution in ("futures_paper","options_paper"):
+                raise ValueError("Exchange order/fill journal cannot be reused for paper trading")
+            with self.db:
+                self.db.execute("""INSERT INTO kv(key,value) VALUES(?,?)
+                       ON CONFLICT(key) DO NOTHING""",
+                       ("lane_identity",json.dumps(identity,separators=(",",":"))))
     def get(self,key,default=None):
         row=self.db.execute("SELECT value FROM kv WHERE key=?",(key,)).fetchone()
         return json.loads(row["value"]) if row else default
