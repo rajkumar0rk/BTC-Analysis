@@ -1,0 +1,83 @@
+name: Compare BTC ETH 1H EMA20/ST trailing grid with 1M stop execution
+on:
+  push:
+    branches: [research/ema-st-1h-trailing-grid-costs-20261120]
+    paths:
+      - scripts/backtest_ema_st_trailing_grid_costs_20261120.py
+      - .github/workflows/backtest-ema-st-1h-trailing-grid-costs-20261120.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ema-st-1h-trailing-grid-costs-20261120
+  cancel-in-progress: false
+jobs:
+  research-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research runtime
+        run: python -m pip install numpy pandas
+      - name: Syntax and no exchange-order writes
+        run: |
+          set -Eeuo pipefail
+          python -m py_compile scripts/backtest_ema_st_trailing_grid_costs_20261120.py
+          python - <<'PY'
+          from pathlib import Path
+          s=Path("scripts/backtest_ema_st_trailing_grid_costs_20261120.py").read_text()
+          for blocked in ("place_order(", "cancel_order(", "systemctl", "requests.post(", "os.system("):
+              assert blocked not in s,blocked
+          assert "prior.replay(" in s and "prior.read_minutes(" in s
+          assert "(100,50),(150,50),(200,50),(200,100),(300,100)" in s
+          assert "continuity_fixed_size" in s and "constrained_100usd" in s
+          PY
+      - name: Full 22-month BTC/ETH trailing grid with 1-minute OHLC replay
+        run: |
+          set -Eeuo pipefail
+          python -u scripts/backtest_ema_st_trailing_grid_costs_20261120.py
+      - name: Verify full results and cost-scenario coverage
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("analysis/ema_st_1h_trailing_grid_costs_20261120/summary.json").read_text())
+          assert d["status"]=="completed" and len(d["complete_months"])==22
+          assert set(d["assets"])=={"BTC","ETH"}
+          for asset,details in d["assets"].items():
+              assert set(details["results"])=={"100_50","150_50","200_50","200_100","300_100"}
+              for combo,cases in details["results"].items():
+                  assert len(cases)==6,(asset,combo)
+                  for mode,v in cases.items():
+                      assert len(v["monthly"])==22
+                      assert v["completed_trades"]>0
+                      assert v["closed_trades_net_usd"] is not None
+                      print("VERIFIED",asset,combo,mode,"net",v["closed_trades_net_usd"],
+                            "PF",v["profit_factor"],"trades",v["completed_trades"],
+                            "positive_months",v["positive_months"])
+          PY
+      - name: Upload monthly and individual trade results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-eth-1h-ema-st-trailing-grid-after-costs
+          path: analysis/ema_st_1h_trailing_grid_costs_20261120/
+          if-no-files-found: warn
+          retention-days: 60
+      - name: Store output only on independent research branch
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/ema_st_1h_trailing_grid_costs_20261120/
+          if ! git diff --cached --quiet; then
+             git commit -m 'research: save 22-month BTC and ETH trailing-grid 1m replay after costs'
+             git push origin HEAD:research/ema-st-1h-trailing-grid-costs-20261120
+          fi
+      - name: Publish table
+        if: success()
+        run: |
+          cat analysis/ema_st_1h_trailing_grid_costs_20261120/RESEARCH_REPORT.md >> "$GITHUB_STEP_SUMMARY"
