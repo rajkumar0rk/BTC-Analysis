@@ -1,0 +1,44 @@
+name: Screenshot BTC ETH both trailing controls fixed500-250 extra1000 initial9ATR
+on:
+  push:
+    branches:
+      - research/both-trail-controls-500-250-1000-sl9atr-20261121
+    paths:
+      - scripts/backtest_dual_trail_screenshot_500_250_1000_20261121.py
+      - .github/workflows/backtest-dual-trail-500-250-extra1000-20261121.yml
+
+permissions:
+  contents: write
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned 1m simulator dependencies
+        run: python -m pip install numpy==2.2.3 pandas==2.2.3 numba==0.61.2
+      - name: Test both screenshot trailing rules and compare parity with original
+        run: |
+          python -m py_compile scripts/backtest_dual_trail_screenshot_500_250_1000_20261121.py
+          python scripts/backtest_dual_trail_screenshot_500_250_1000_20261121.py
+      - name: Upload week and monthly results plus trade records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-both-trails-500-250-extra1000-initial9atr
+          path: analysis/screenshot_dual_trail_500_250_extra1000_sl9atr_20261121/
+          if-no-files-found: warn
+      - name: Commit research only, never fetched archive candles
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/screenshot_dual_trail_500_250_extra1000_sl9atr_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: screenshot both trailing controls with 9xATR 22 month and current week"
+            git push origin HEAD:research/both-trail-controls-500-250-1000-sl9atr-20261121
+          fi
