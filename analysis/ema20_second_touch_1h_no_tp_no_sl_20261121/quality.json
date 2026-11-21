@@ -1,0 +1,30 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "policy": {
+    "tp": "NONE",
+    "sl": "NONE",
+    "trailing": "NONE",
+    "supertrend_flip_exit": "NONE",
+    "time_exit": "NONE",
+    "max_entry_count_per_confirmed_supertrend_epoch": 1,
+    "exit_status": "No normal exit. Position held to final sample mark only.",
+    "fees": "0.05 percent taker per side plus 18 percent GST",
+    "slippage": "0.02 percent adverse on entry and hypothetical exit",
+    "size": "1x notional of initial USD1000 account, each asset independently",
+    "exposure": "No funding, actual margin, liquidation, order book or live spreads",
+    "first_month": "January 2025 starts only at midnight UTC; first 5.5h IST not covered"
+  }
+}
