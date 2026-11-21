@@ -1,0 +1,26 @@
+name: Original 1H trade ledger 600 TP 300 SL first hit
+on:
+  push:
+    branches: [research/original-ledger-first-hit-600-300]
+    paths:
+      - scripts/original_ledger_first_hit_600_300.py
+      - .github/workflows/original-ledger-first-touch-600-300.yml
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy numba
+      - name: Replay archived 1-minute first touches
+        run: python scripts/original_ledger_first_hit_600_300.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-ledger-600-300
+          path: analysis/original_1h_first_touch_600_300/
