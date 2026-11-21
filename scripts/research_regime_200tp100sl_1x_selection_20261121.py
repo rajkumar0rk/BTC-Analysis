@@ -279,6 +279,9 @@ def main():
     ledger=ledgers[name_to_audit]
     if len(ledger):
         daily,monthly,account=core.summarize(ledger,quality,diag)
+        # The reused account simulator defaults to its older model label; correct
+        # the metadata to identify the actual candidate being replayed here.
+        account["strategy"]=name_to_audit
         ledger.to_csv(OUT/"leader_trades.csv",index=False)
         daily.to_csv(OUT/"leader_daily.csv",index=False)
         monthly.to_csv(OUT/"leader_monthly.csv",index=False)
