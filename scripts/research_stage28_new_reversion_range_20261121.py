@@ -86,10 +86,10 @@ def prepare_new_events(f):
     # breakout pullback by requiring extreme prior close vs EMA20/Bollinger.
     cond_MR1L=(h1.rsi2.shift(1)<=8)&(
          pclose<h1.ema20.shift(1)-.6*h1.atr.shift(1))&(
-         h1.close>pclose)&bull&(h1.loc>=.6)&(h1.close<h1.ema20)
+         h1.close>pclose)&bull&(h1["loc"]>=.6)&(h1.close<h1.ema20)
     cond_MR1S=(h1.rsi2.shift(1)>=92)&(
          pclose>h1.ema20.shift(1)+.6*h1.atr.shift(1))&(
-         h1.close<pclose)&bear&(h1.loc<=.4)&(h1.close>h1.ema20)
+         h1.close<pclose)&bear&(h1["loc"]<=.4)&(h1.close>h1.ema20)
     # 1H MEAN REVERSION: exceptionally stretched Bollinger close, half-way
     # retrace of previous candle, still on stretched side of rolling mean.
     cond_MR2L=(pclose<h1.bblo.shift(1))&(h1.rsi2.shift(1)<=12)&(
@@ -103,9 +103,9 @@ def prepare_new_events(f):
     # 1H MEAN REVERSION: large consecutive downside deviation followed
     # by a recovery bar. Does not require a Bollinger cross.
     cond_MR3L=(pclose<h1.ema20.shift(1)-1.9*h1.atr.shift(1))&(
-         h1.close>h1.open)&(h1.loc>=.65)&(h1.close<h1.ema20)
+         h1.close>h1.open)&(h1["loc"]>=.65)&(h1.close<h1.ema20)
     cond_MR3S=(pclose>h1.ema20.shift(1)+1.9*h1.atr.shift(1))&(
-         h1.close<h1.open)&(h1.loc<=.35)&(h1.close>h1.ema20)
+         h1.close<h1.open)&(h1["loc"]<=.35)&(h1.close>h1.ema20)
     onehour=[
       ("mr_rsi2_recovery_h1",cond_MR1L,cond_MR1S,h1.ema20),
       ("mr_bollinger_reclaim_h1",cond_MR2L,cond_MR2S,h1.sma20),
@@ -150,18 +150,18 @@ def prepare_new_events(f):
     # 4H (multi-day) mean reversion: prior bar RSI2 oversold followed
     # by a substantial reversal candle. 4H exposure lowers trading frictions.
     cond4L=(h4.rsi2.shift(1)<=10)&(h4.close>h4.open)&(
-         h4.close>h4.close.shift(1))&(h4.loc>=.65)&(
+         h4.close>h4.close.shift(1))&(h4["loc"]>=.65)&(
          h4.close<h4.ema20)
     cond4S=(h4.rsi2.shift(1)>=90)&(h4.close<h4.open)&(
-         h4.close<h4.close.shift(1))&(h4.loc<=.35)&(
+         h4.close<h4.close.shift(1))&(h4["loc"]<=.35)&(
          h4.close>h4.ema20)
     twohour.append(("mr_4h_rsi2_rebound",cond4L,cond4S,h4.ema20))
     cond4bbL=(h4.close.shift(1)<h4.bblo.shift(1))&(
          h4.close>h4.bblo)&(h4.close<h4.sma20)&(
-         h4.close>h4.open)&(h4.loc>=.55)
+         h4.close>h4.open)&(h4["loc"]>=.55)
     cond4bbS=(h4.close.shift(1)>h4.bbhi.shift(1))&(
          h4.close<h4.bbhi)&(h4.close>h4.sma20)&(
-         h4.close<h4.open)&(h4.loc<=.45)
+         h4.close<h4.open)&(h4["loc"]<=.45)
     twohour.append(("mr_4h_bollinger_reentry",cond4bbL,cond4bbS,h4.sma20))
     add_from_bars(h4,twohour,"4h",h4.adx,h4.eff)
     for channel in (12,24):
@@ -171,15 +171,15 @@ def prepare_new_events(f):
         width_ok=(width>2.5*h4.atr)&(width<15*h4.atr)
         l_sweep=width_ok&(h4.low<lower-.05*h4.atr)&(
           h4.close>lower+.15*h4.atr)&(h4.close<h4.open+.55*(h4.high-h4.low))&(
-          h4.close>h4.open)&(h4.loc>=.60)
+          h4.close>h4.open)&(h4["loc"]>=.60)
         s_sweep=width_ok&(h4.high>upper+.05*h4.atr)&(
-          h4.close<upper-.15*h4.atr)&(h4.close<h4.open)&(h4.loc<=.40)
+          h4.close<upper-.15*h4.atr)&(h4.close<h4.open)&(h4["loc"]<=.40)
         l_touch=width_ok&(h4.low>=lower-.05*h4.atr)&(
           h4.low<=lower+.3*h4.atr)&(h4.close>lower+.4*h4.atr)&(
-          h4.close>h4.open)&(h4.loc>=.65)
+          h4.close>h4.open)&(h4["loc"]>=.65)
         s_touch=width_ok&(h4.high<=upper+.05*h4.atr)&(
           h4.high>=upper-.3*h4.atr)&(h4.close<upper-.4*h4.atr)&(
-          h4.close<h4.open)&(h4.loc<=.35)
+          h4.close<h4.open)&(h4["loc"]<=.35)
         mid=(lower+upper)/2
         add_from_bars(h4,[
            (f"range_4h_sweep_{channel}",l_sweep,s_sweep,mid),
