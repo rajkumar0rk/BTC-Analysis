@@ -1,0 +1,49 @@
+{
+  "source": "Delta India BTCUSD native 1M SHA256 checked against manifest",
+  "native_minute_bars": 992160,
+  "native_partitions": 23,
+  "full_hours": 16536,
+  "complete_ist_months": 22,
+  "eligible_1h_with_known_closed_4h": 15851,
+  "initial_warmup_unclassified_hours": 199,
+  "timestamp_no_gaps": true,
+  "all_1h_complete_60m": true,
+  "all_4h_complete_240m": true,
+  "unfinished_4h_used": false,
+  "source_history_prefix_replays": [
+    {
+      "prefix_exclusive_utc": "2025-05-17T00:00:00Z",
+      "hours": 3264,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    },
+    {
+      "prefix_exclusive_utc": "2025-12-19T00:00:00Z",
+      "hours": 8448,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    },
+    {
+      "prefix_exclusive_utc": "2026-08-17T00:00:00Z",
+      "hours": 14232,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    }
+  ],
+  "unchanged_prefix_history": true,
+  "mixed_uncertain_share_pct": 58.034,
+  "one_hour_label_switch_pct": 24.246,
+  "confirmed_hours": 1971,
+  "backward24h_reference_available_hours": 1902,
+  "confirmed_trend_matches_past24h_direction_pct": 98.843,
+  "independent_structure_reference": "current completed close minus close 24h earlier / current 1H ATR; if |value|>1, compare direction. Backward-looking price structure only, NOT true market-state accuracy.",
+  "active_1h_up_hours": 2449,
+  "active_1h_down_hours": 2581,
+  "active_4h_up_hours": 2680,
+  "active_4h_down_hours": 3036,
+  "opposing_hourly_and_4h_trends": 13,
+  "external_regime_ground_truth_available": false,
+  "reliable_future_direction_demonstrated": false,
+  "strategy_pnl_backtest_performed": false,
+  "all_months_profitable_target_proved": false
+}

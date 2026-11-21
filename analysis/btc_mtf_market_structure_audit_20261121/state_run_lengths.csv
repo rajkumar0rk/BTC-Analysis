@@ -1,0 +1,10 @@
+state,runs,median_consecutive_hours,mean_consecutive_hours
+breakout_down,251,1.0,1.4183266932270917
+breakout_up,301,1.0,1.26578073089701
+compression,291,3.0,3.6907216494845363
+confirmed_trend_down,248,3.0,4.153225806451613
+confirmed_trend_up,224,2.0,4.200892857142857
+mixed_uncertain,1485,3.0,6.1946127946127945
+range,506,2.0,3.632411067193676
+shock,532,1.0,1.9248120300751879
+transition,6,1.0,1.3333333333333333

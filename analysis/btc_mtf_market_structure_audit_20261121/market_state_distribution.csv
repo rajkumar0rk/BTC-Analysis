@@ -1,0 +1,10 @@
+state,hours,share_pct
+shock,1024,6.46
+confirmed_trend_up,941,5.937
+confirmed_trend_down,1030,6.498
+breakout_up,381,2.404
+breakout_down,356,2.246
+transition,8,0.05
+compression,1074,6.776
+range,1838,11.595
+mixed_uncertain,9199,58.034
