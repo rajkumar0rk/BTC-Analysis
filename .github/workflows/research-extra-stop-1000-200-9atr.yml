@@ -1,0 +1,44 @@
+name: BTC ETH additional trailing STOP 1000-200 initial9ATR full22
+on:
+  push:
+    branches:
+      - research/1h-points1000-200-initial9atr-20261121
+    paths:
+      - scripts/extra_trailing_stop_1000_200_initial9atr_full22_20261121.py
+      - .github/workflows/research-extra-stop-1000-200-9atr.yml
+
+permissions:
+  contents: write
+
+jobs:
+  full22:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin research dependencies
+        run: python -m pip install pandas==2.2.3 numpy==2.2.3 numba==0.61.2
+      - name: Compile and execute 22-month stop-points backtest
+        run: |
+          python -m py_compile scripts/extra_trailing_stop_1000_200_initial9atr_full22_20261121.py
+          python scripts/extra_trailing_stop_1000_200_initial9atr_full22_20261121.py
+      - name: Upload monthly results and trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-activation1000-extra-stop200-initial9atr-monthly
+          path: analysis/extra_trailing_stop_1000_200_initial9atr_full22_20261121/
+          if-no-files-found: warn
+      - name: Commit outputs to research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/extra_trailing_stop_1000_200_initial9atr_full22_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: full22 additional trailing stop 1000/200 initial SL 9xATR"
+            git push origin HEAD:research/1h-points1000-200-initial9atr-20261121
+          fi
