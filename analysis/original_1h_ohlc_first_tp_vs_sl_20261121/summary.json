@@ -1,0 +1,87 @@
+{
+  "source": "original 1H-OHLC inferred-path reported profits +4298.1778 BTC and +6773.0919 ETH",
+  "date_start": "2025-01-01 UTC",
+  "date_end_exclusive": "2026-11-01 UTC",
+  "method": "Compare TP and SL first-touch order on actual 1m traded candles, confined to historical original inferred-path trade windows.",
+  "warning": "These counts DO NOT represent an independent fixed TP/SL backtest. Original simulated exit times are one-hour bar-end placeholders; after-exit movements inside the final hour may contaminate first-touch result. Same-1m TP/SL order is unknown. Historical actual execution costs, liquidity, liquidation and fills not validated.",
+  "assets": {
+    "BTC": {
+      "asset": "BTC",
+      "original_1h_inferred_path_net_usd": 4298.1778,
+      "original_reported_trades": 2405,
+      "original_source": "https://api.india.delta.exchange/v2/history/candles",
+      "first_hit_window": "from original entry_epoch (hourly boundary, traded 1m open) through 1m candle opening before original exit_epoch (hourly bar-end upper bound)",
+      "price_data": "archived Delta India PROD 1m traded OHLC",
+      "ETH_equivalence": "100 BTC points = 0.125% of per-trade ETH entry; 200 = 0.25%",
+      "counts": {
+        "100": {
+          "TP_first": 1121,
+          "SL_first": 1148,
+          "ambiguous_TP_and_SL_same_first_1m": 10,
+          "neither_before_original_reported_exit": 126,
+          "resolved_first_hit_trades": 2269,
+          "TP_first_pct_all_original_trades": 46.61,
+          "SL_first_pct_all_original_trades": 47.73,
+          "TP_first_pct_resolved_hits": 49.41,
+          "TP_first_pct_possible_low_bound": 46.61,
+          "TP_first_pct_possible_high_bound": 47.03,
+          "TP": "+100 BTC price points",
+          "SL": "-100 BTC price points"
+        },
+        "200": {
+          "TP_first": 892,
+          "SL_first": 907,
+          "ambiguous_TP_and_SL_same_first_1m": 0,
+          "neither_before_original_reported_exit": 606,
+          "resolved_first_hit_trades": 1799,
+          "TP_first_pct_all_original_trades": 37.09,
+          "SL_first_pct_all_original_trades": 37.71,
+          "TP_first_pct_resolved_hits": 49.58,
+          "TP_first_pct_possible_low_bound": 37.09,
+          "TP_first_pct_possible_high_bound": 37.09,
+          "TP": "+200 BTC price points",
+          "SL": "-200 BTC price points"
+        }
+      }
+    },
+    "ETH": {
+      "asset": "ETH",
+      "original_1h_inferred_path_net_usd": 6773.0919,
+      "original_reported_trades": 2421,
+      "original_source": "https://api.india.delta.exchange/v2/history/candles",
+      "first_hit_window": "from original entry_epoch (hourly boundary, traded 1m open) through 1m candle opening before original exit_epoch (hourly bar-end upper bound)",
+      "price_data": "archived Delta India PROD 1m traded OHLC",
+      "ETH_equivalence": "100 BTC points = 0.125% of per-trade ETH entry; 200 = 0.25%",
+      "counts": {
+        "100": {
+          "TP_first": 1177,
+          "SL_first": 1186,
+          "ambiguous_TP_and_SL_same_first_1m": 28,
+          "neither_before_original_reported_exit": 30,
+          "resolved_first_hit_trades": 2363,
+          "TP_first_pct_all_original_trades": 48.62,
+          "SL_first_pct_all_original_trades": 48.99,
+          "TP_first_pct_resolved_hits": 49.81,
+          "TP_first_pct_possible_low_bound": 48.62,
+          "TP_first_pct_possible_high_bound": 49.77,
+          "TP": "+0.125% of entry",
+          "SL": "-0.125% of entry"
+        },
+        "200": {
+          "TP_first": 1078,
+          "SL_first": 1062,
+          "ambiguous_TP_and_SL_same_first_1m": 4,
+          "neither_before_original_reported_exit": 277,
+          "resolved_first_hit_trades": 2140,
+          "TP_first_pct_all_original_trades": 44.53,
+          "SL_first_pct_all_original_trades": 43.87,
+          "TP_first_pct_resolved_hits": 50.37,
+          "TP_first_pct_possible_low_bound": 44.53,
+          "TP_first_pct_possible_high_bound": 44.69,
+          "TP": "+0.250% of entry",
+          "SL": "-0.250% of entry"
+        }
+      }
+    }
+  }
+}
