@@ -74,3 +74,24 @@
 - Found a reporting gap: monthly_nav.csv reports mark-to-market NAV return and entries but not realized PF or exit counts. Added exit-month realized net winning and losing sums, closed-trade count and realized PF to each IST month; explicitly separate realized trade PF from monthly MTM return. No strategy signals, sizing, fills or costs changed. Corrected misleading source-faithful script docstring to state independently implemented variant. Script commit 0ca4c400f64d902099be29e7057bd3cc1a87b1ed.
 - Script change matches isolated branch push workflow trigger. Actual new run/job/artifact is NOT yet confirmed; no claim that this rerun completed. Next: inspect registered run and archived monthly_nav.csv, verify realized sums against the 28 original trades, preserve artifact hash. Then resolve publisher source/license or classify NOT REPRODUCIBLE and move to distinct trend persistence candidate.
 - Limitations remain: 28 trades insufficient for robust edge, source commit/license unverified, 2026/ETH not run, funding unmodeled. No main, other-family or live changes.
+
+## 2026-11-22 — TF-ICH-001 independent monthly realized-PF artifact audit (iteration 15)
+
+- Retrieved and parsed the actual corrected-run GitHub Actions ZIP artifact 14715293182 from successful run https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44925231993; verified ZIP SHA-256 `df0fccdf160adf1b56847811aefcf57fa88ab0c2e9b4ab157b9870bd507828d6`. This is a retrospective audit of the previously completed historical run, **not a newly completed backtest**.
+- Calculated exit-month realized PF independently from the immutable 28-row `trades.csv`, and kept it distinct from the archived `monthly_nav.csv` mark-to-market returns. Columns below: IST month | NAV % | exits | realized PF | realized net USD:
+  - 2025-01 | +0.2119 | 1 | +infinity (no losses) | +0.21191
+  - 2025-02 | +0.0305 | 3 | 1.061 | +0.03059
+  - 2025-03 | -0.5520 | 4 | 0.498 | -0.55334
+  - 2025-04 | -0.2442 | 1 | 0.000 | -0.24341
+  - 2025-05 | +0.7322 | 3 | 2.387 | +0.72810
+  - 2025-06 | -0.4169 | 2 | 0.000 | -0.41764
+  - 2025-07 | +1.4664 | 3 | 2.803 | +1.46280
+  - 2025-08 | -0.7034 | 2 | 0.000 | -0.57569
+  - 2025-09 | -0.9427 | 2 | 0.000 | -1.08380
+  - 2025-10 | +0.4416 | 1 | +infinity (no losses) | +0.43961
+  - 2025-11 | +3.5606 | 2 | +infinity (no losses) | +3.56058
+  - 2025-12 | -1.7960 | 4 | 0.000 | -1.85996
+- Accounting decomposition independently calculated from archived fill prices and quantities: gross before fees +2.4629726321 NAV USD units, two-sided exchange fees plus GST -0.7632205322, net +1.6997520998. Total exit-month realized P&L reconciles to final NAV 101.6997521 from 100 initial.
+- Differences between exit-month realized P&L and monthly NAV returns (notably Aug/Sep) are expected when positions span calendar boundaries; do not conflate realized PF and mark-to-market performance.
+- Current isolated script now includes monthly realized PF fields (commit 0ca4c40), but **no new run for that reporting change is independently verified**. Connector's commit-run lookup only indexes PR-triggered runs and returned empty for d48cf63; this is inconclusive for push workflows.
+- Decision: TF-ICH-001 remains weak-positive, non-source-faithful and unpromoted (28 trades, 6/12 profitable months, PF 1.239). Publisher source/license and independent minute-level DD remain unresolved. Next action: verify actual latest workflow job/artifact for the reporting change; if unavailable, use a registered isolated runner rather than asserting it completed. No BTC2026/ETH, no live orders.
