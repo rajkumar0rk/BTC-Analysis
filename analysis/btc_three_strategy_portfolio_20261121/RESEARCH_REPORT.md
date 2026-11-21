@@ -8,6 +8,18 @@
 - 48H Donchian monthly returns: [run 44681039768](https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44681039768) artifact `btc-slippage-05-vs-5-22month-research`; read `all_22_months_and_rejected_signals.csv`, variant `unmodified`, adverse 5 BTC price points each side, `slippage_bps_side=0`.
 - Matched 22 IST months, 2025-01 through 2026-10; previously simulated 0.05% taker fee each leg, 18% GST on these fees, adverse 5 BTC price points each leg; funding, bid/ask order book, margin, and liquidation NOT included.
 
+## ADDITIONAL STRICT NO-DUPLICATE-CORE TEST — closer to the original proposed allocation
+
+The main 50/20/30 test uses Stage20's FULL historical portfolio, duplicating the Stage15 Range Pullback exposure already included inside Stage18. I ALSO ran a **distinct-sleeve composition** that removes that repeated Stage20 core: 50% Stage18, 20% Stage20's EXTRA components only, and 30% 48H Donchian. Stage20 EXTRA is the originally reported 22.5% Daily20 + 10% 1H momentum, normalized to a 20% allocation (13.846% absolute Daily20 and 6.154% absolute 1H momentum). Stage18 retains 37.5% Range Pullback plus 12.5% Daily55. All five economic sleeves sum to 100% capital; same-market cross-strategy risk remains.
+
+**DE-DUPLICATED MONTHLY SCREEN RESULT: +11.5709% compounded over 22 IST months; 13 profitable, 9 losing, 0 flat; worst month −0.8753%.** The negative months are 2025-01, 2025-08, 2025-09, 2025-11, 2025-12, 2026-04, 2026-07, 2026-09 and 2026-10. Stage20 published aggregate monthly results were algebraically reconstructed from its same archived daily20 and hourly components with maximum absolute error under 5e-16, proving correct sleeve extraction in this model.
+
+A separate, alternative EXTRA split (90% Daily20 / 10% 1H momentum within the 20% supplemental allocation) scored +12.1652%, 14 positive / 8 negative months; still not 22/22. This alternate split was NOT part of the predeclared initial 50/20/30 composite and is exploratory.
+
+Reproducible code: [deduplicated monthly replay script](https://github.com/rajkumar0rk/BTC-Analysis/blob/research/btc-stage18-stage20-donchian-combo-20261121/scripts/research_three_strategy_dedup_stage20_20261121.py). It requires monthly CSVs already checked into BTC-Analysis at `analysis/institutional_discovery_stage17_swing_breakout/monthly_mark_to_market.csv` and `analysis/institutional_discovery_stage19_new_1h_patterns/monthly_results.csv`, plus the archived Actions ZIPs above.
+
+Neither version is a completed synchronized 1-minute shared-margin backtest, and neither is suitable for live trading.
+
 ## Result
 
 Each month a predeclared **50% Stage18 / 20% Stage20 / 30% 48H Donchian** capital weighting was applied to the three already-after-cost monthly returns and compounded into one hypothetical month-end NAV.
