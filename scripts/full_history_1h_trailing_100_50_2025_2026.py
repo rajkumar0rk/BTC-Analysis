@@ -104,7 +104,15 @@ def read_asset(asset):
     t=traded_df.time.to_numpy(dtype=np.int64)
     m=mark_df.time.to_numpy(dtype=np.int64)
     # No aligning/filling across price gaps, no unseen 1m OHLC synthesis.
-    assert len(t)==len(m),f"{asset} mark/traded length mismatch"
+    # Nov-2026 partial partition differs by asset/feed, trim ONLY the
+    # unmatched final Nov minutes; Jan2025-Oct2026 must still be complete.
+    if len(t)!=len(m):
+        shared=min(len(t),len(m))
+        assert t[shared-1]>=int(pd.Timestamp("2026-11-01",tz="UTC").timestamp())
+        assert np.array_equal(t[:shared],m[:shared]),f"{asset} source mismatch before partial tail"
+        traded_df=traded_df.iloc[:shared].copy()
+        mark_df=mark_df.iloc[:shared].copy()
+        t=t[:shared];m=m[:shared]
     assert np.array_equal(t,m),f"{asset} mark/traded timestamp mismatch"
     assert np.all(np.diff(t)==60),f"{asset}: historical 1m data gaps"
     assert t[0]==int(pd.Timestamp("2025-01-01",tz="UTC").timestamp())
@@ -123,7 +131,7 @@ def read_asset(asset):
        "all_minute_intervals_60s":True,
     }
 
-def signal_map(df):
+def signal_map(df,asset):
     h=df.resample("1h",origin="epoch",label="left",closed="left").agg({
       "open":"first","high":"max","low":"min",
       "close":"last","volume":"sum","time":"count"
@@ -131,6 +139,7 @@ def signal_map(df):
     h=h[h.time==60].drop(columns=["time"])
     f=indicators(h)
     indices=np.asarray(f.index.view("int64")//1_000_000_000,dtype="int64")
+    tick=.5 if asset=="BTC" else .05
     ema=f.ema.to_numpy(dtype=float);atr=f.atr14.to_numpy(dtype=float)
     d=f.dir.to_numpy(dtype=int)
     op=f.open.to_numpy(dtype=float);hi=f.high.to_numpy(dtype=float)
@@ -154,7 +163,7 @@ def signal_map(df):
         if flip or side:
             events[at]={
               "side":side,"flip":int(d[i]) if flip else 0,
-              "stopdist":max(0.5,round(2*float(atr[i])/.5)*.5),
+              "stopdist":max(tick,round(2*float(atr[i])/tick)*tick),
               "close":float(cl[i]),"signal_utc":str(f.index[i])
             }
     return events,{"completed_1h_bars":len(f),"hourly_entry_signals":signals,
@@ -387,7 +396,7 @@ def main():
             },"datasets":{},"scenarios":{}}
     for asset in ASSETS:
         traded,mark,provenance=read_asset(asset)
-        events,smeta=signal_map(traded)
+        events,smeta=signal_map(traded,asset)
         provenance.update(smeta)
         output["datasets"][asset]=provenance
         for mode in ("minute_close","OHLC","OLHC"):
