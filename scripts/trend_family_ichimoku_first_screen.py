@@ -10,6 +10,20 @@ OUT.mkdir(parents=True,exist_ok=True)
 f,seg_start,seg_end,q=read_archive()
 f=f.loc[(f.index>=pd.Timestamp("2024-11-01",tz="UTC"))&(f.index<pd.Timestamp("2025-12-31 18:30:00",tz="UTC"))].copy()
 if f.empty:raise RuntimeError("No source candles")
+# Reject malformed authentic candles before aggregating or simulating stops.
+# A corrupt low/high can otherwise create an impossible protective-stop fill.
+if not f.index.is_monotonic_increasing or not f.index.is_unique:
+    raise RuntimeError("Source timestamps must be strictly increasing and unique")
+ohlc=f[["open","high","low","close"]]
+if not np.isfinite(ohlc.to_numpy(dtype=float)).all():
+    raise RuntimeError("Source contains non-finite OHLC")
+if (ohlc<=0).any().any():
+    raise RuntimeError("Source contains non-positive OHLC")
+if ((ohlc.low>ohlc[["open","close"]].min(axis=1)) |
+    (ohlc.high<ohlc[["open","close"]].max(axis=1)) |
+    (ohlc.low>ohlc.high)).any():
+    raise RuntimeError("Source OHLC ordering invalid")
+
 # Closed 4H candles only; no signals from incomplete source blocks.
 b=f[["open","high","low","close"]].resample("4h",closed="left",label="right").agg({"open":"first","high":"max","low":"min","close":"last"})
 cnt=f.close.resample("4h",closed="left",label="right").count()
