@@ -1,0 +1,44 @@
+name: BTC ETH no-filter 1H activation100 ATR9 monthly backtest
+on:
+  push:
+    branches:
+      - research/1h-activation100-atr9-no-filters-20261121
+    paths:
+      - scripts/atr9_activation100_unfiltered_full22_20261121.py
+      - .github/workflows/research-atr9-100-unfiltered-full22.yml
+
+permissions:
+  contents: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install tested research packages
+        run: python -m pip install pandas==2.2.3 numpy==2.2.3 numba==0.61.2
+      - name: Verify and backtest no-filter activation100 ATR9
+        run: |
+          python -m py_compile scripts/atr9_activation100_unfiltered_full22_20261121.py
+          python scripts/atr9_activation100_unfiltered_full22_20261121.py
+      - name: Upload full trade ledgers, month-by-month reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-unfiltered-100-atr9-full22
+          path: analysis/1h_activation100_atr9_unfiltered_full22_20261121/
+          if-no-files-found: warn
+      - name: Save result only on isolated research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/1h_activation100_atr9_unfiltered_full22_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: monthly BTC ETH 1H ATR9 100 activation unfiltered backtest"
+            git push origin HEAD:research/1h-activation100-atr9-no-filters-20261121
+          fi
