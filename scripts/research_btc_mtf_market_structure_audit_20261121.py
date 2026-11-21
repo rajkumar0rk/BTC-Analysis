@@ -57,7 +57,8 @@ def align_complete4(h,h4):
         raise RuntimeError("4H lookahead occurred")
     result=pd.DataFrame(index=h.index)
     for col in cols:
-        result[col]=joined[col].to_numpy()
+        alias="valid4" if col=="valid" else col
+        result[alias]=joined[alias].to_numpy()
     return result
 
 def classify(one):
