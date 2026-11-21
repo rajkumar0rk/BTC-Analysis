@@ -1,0 +1,23 @@
+{
+  "native_1m_bars": 992160,
+  "data_partitions": 23,
+  "original_15m_confirmed_candidate_signals": 513,
+  "original_6m_eligibility_event_count": 85,
+  "original_12m_eligibility_event_count": 80,
+  "independent_original_6m_baseline_trade_level_parity": true,
+  "independent_original_12m_baseline_trade_level_parity": true,
+  "selected_12m_and_6m_gates_fixed_from_previous_study": true,
+  "fixed_breakout_protect_trigger_R": 1.5,
+  "fixed_stop_protection_offset_R": 0.15,
+  "fixed_runner_trailing_atr": 1.8,
+  "trailing_updates_only_effective_following_1m_bar": true,
+  "stop_first_same_1m_bar": true,
+  "one_position_global": true,
+  "original_fee_gst_and_slippage_preserved": true,
+  "original_month_selection_uses_original_exit_shadow_trades": true,
+  "realized_funding_ledger_included": false,
+  "historical_spread_included": false,
+  "liquidation_and_exchange_contract_rounding_included": false,
+  "external_unresearched_validation_available": false,
+  "live_trading_approved": false
+}

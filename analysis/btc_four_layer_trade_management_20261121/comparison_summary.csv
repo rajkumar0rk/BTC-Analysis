@@ -1,0 +1,6 @@
+model,candidate_events,exclusive_position_rejections,entry_unavailable,executed_trades,trades_activated,post_bar_stop_updates,trades,wins,win_rate_pct,profit_factor,net_return_pct,net_profit_usd,ending_equity_usd,max_trade_close_drawdown_pct,fees_gst_usd,slippage_usd,profitable_months,losing_months,idle_months,passes_22_22
+past12_original,80,29,0,51,0,0,51,21,41.176,1.5211,8.9446,894.46,10894.46,4.857,313.71,36.19,7,3,12,False
+past12_protected,80,29,0,51,23,23,51,23,45.098,1.6135,9.207,920.7,10920.7,4.864,311.42,35.93,7,3,12,False
+past12_runner,80,24,0,56,25,254,56,27,48.214,1.2204,3.5734,357.34,10357.34,5.215,331.62,37.93,7,3,12,False
+past6_original,85,30,0,55,0,0,55,19,34.545,1.203,3.9621,396.21,10396.21,4.857,325.3,36.28,7,5,10,False
+past6_protected,85,30,0,55,23,23,55,22,40.0,1.2833,4.8154,481.54,10481.54,4.864,324.72,36.22,7,5,10,False

@@ -1,0 +1,11 @@
+strategy,state,trades,wins,net_usd,net_R,stop_update_trades,model
+shock_breakout,shock,29,11,210.51956055926115,4.424536945324757,0,past12_original
+structured_breakout,breakout_down,22,10,683.9447832542796,13.133880544777373,0,past12_original
+shock_breakout,shock,29,11,116.30335490223453,2.572573001879107,11,past12_protected
+structured_breakout,breakout_down,22,12,804.4003701140676,15.435237544777383,12,past12_protected
+shock_breakout,shock,33,15,-250.25604908265015,-4.664806653882139,13,past12_runner
+structured_breakout,breakout_down,23,12,607.597742302398,11.980292671537923,12,past12_runner
+shock_breakout,shock,27,8,-151.95356835659553,-2.7788527392262568,0,past6_original
+structured_breakout,breakout_down,28,11,548.1625575639852,10.970981607944509,0,past6_original
+shock_breakout,shock,27,8,-241.93406607456137,-4.630816682671907,9,past6_protected
+structured_breakout,breakout_down,28,14,723.4693517635759,14.423017107944514,14,past6_protected

@@ -1,0 +1,11 @@
+model,year,months,profitable,losing,no_trade,compounded_net_return_pct
+past12_original,2025,12,0,0,12,0.0
+past12_original,2026,10,7,3,0,8.9446
+past12_protected,2025,12,0,0,12,0.0
+past12_protected,2026,10,7,3,0,9.207
+past12_runner,2025,12,0,0,12,0.0
+past12_runner,2026,10,7,3,0,3.5734
+past6_original,2025,12,0,2,10,-3.3589
+past6_original,2026,10,7,3,0,7.5755
+past6_protected,2025,12,0,2,10,-2.7999
+past6_protected,2026,10,7,3,0,7.8346
