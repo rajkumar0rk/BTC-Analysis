@@ -1,0 +1,48 @@
+name: BTC ETH fixed 200pt TP and 200pt SL 22 months + current week
+on:
+  push:
+    branches:
+      - research/fixed-tp200-sl200-btc-eth-20261121
+    paths:
+      - scripts/fixed_tp200_sl200_btc_eth_full22_week_20261121.py
+      - .github/workflows/research-fixed-tp200-sl200-20261121.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research-fixed-tp200-sl200-20261121
+  cancel-in-progress: false
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned Numba research packages
+        run: python -m pip install numpy==2.2.3 pandas==2.2.3 numba==0.61.2
+      - name: Run causal 1m bracket replay and ambiguous same-candle audit
+        run: |
+          python -m py_compile scripts/fixed_tp200_sl200_btc_eth_full22_week_20261121.py
+          python scripts/fixed_tp200_sl200_btc_eth_full22_week_20261121.py
+      - name: Upload fixed TP SL monthly and week trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-fixed-tp200-sl200-full22-current-week
+          path: analysis/fixed_takeprofit200_stoploss200_20261121/
+          if-no-files-found: warn
+      - name: Save research report only (never temporary refreshed market archive)
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/fixed_takeprofit200_stoploss200_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: fixed 200pt TP SL BTC ETH monthly 22mo and weekly backtest"
+            git push origin HEAD:research/fixed-tp200-sl200-btc-eth-20261121
+          fi
