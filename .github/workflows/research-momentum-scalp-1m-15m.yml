@@ -1,0 +1,44 @@
+name: BTC Momentum Scalping 1M 15M fixed rule research
+on:
+  push:
+    branches:
+      - research/momentum-scalp-1m-15m-20261121
+    paths:
+      - scripts/research_momentum_scalp_1m_15m.py
+      - .github/workflows/research-momentum-scalp-1m-15m.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Run fixed predeclared BTCUSD momentum strategy
+        run: python scripts/research_momentum_scalp_1m_15m.py
+      - name: Upload full trade ledger
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: momentum-scalp-full-ledger
+          path: analysis/momentum_scalp_1m_15m/trade_ledger.csv.gz
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit report and monthly data on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/momentum_scalp_1m_15m/RESEARCH_REPORT.md
+          git add analysis/momentum_scalp_1m_15m/monthly_results.csv
+          git add analysis/momentum_scalp_1m_15m/summary.json
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record 1m momentum scalping results"
+            git push origin HEAD:research/momentum-scalp-1m-15m-20261121
+          fi
