@@ -47,3 +47,13 @@
 - GitHub registered rerun https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44925231993 (queued when checked). Await actual completion and artifact before reporting revised metrics.
 - Additional limitations: publisher license/source commit not pinned; implementation is an independent Ichimoku variant; source-faithful claim in script docstring must not be relied on. Funding and realistic spread remain unmodeled. No BTC2026/ETH verification or live activity.
 - Next: inspect completed rerun's trade/monthly artifact, compare immediate-stop trades against original, verify fee reconciliation and monthly PF, then decide rejection versus preregistered robustness work. Do not optimize based on 2026.
+
+
+## 2026-11-21 — TF-ICH-001 corrected entry-minute replay verified (iteration 12)
+
+- Verified completed GitHub Actions historical job: https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44925231993/job/136909740974 ; conclusion success; source commit a70de4f0eef0e520cd1cabf1a6dcf63cb4f5ecba.
+- Artifact: https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44925231993/artifacts/14715293182 ; ZIP SHA-256 df0fccdf160adf1b56847811aefcf57fa88ab0c2e9b4ab157b9870bd507828d6. Job log confirms 3 files uploaded: trades.csv, monthly_nav.csv, summary.json.
+- Actual logged corrected replay summary: 28 completed trades; realized PF 1.2387453630546115; final NAV 101.69975209984057 from 100 initial (+1.69975209984057%); maximum marked DD 4.211306785463211%; 6 positive, 6 losing, 0 flat IST months. Source reports zero missing 1m minutes and candle frame SHA-256 c6d8aa094646c66b17c092fd68d49ca35d30ff1385cc2b0deb1246d8a4ed9af2. Fees 0.05% notional each side plus GST 18%; zero slippage; funding unmodeled.
+- Corrected summary matches prior baseline aggregate metrics exactly; this DOES NOT prove entry-minute stop events absent, because trade-ledger comparison was not performed. Artifact ZIP has not been independently parsed in this iteration. Original and corrected artifacts remain preserved.
+- Decision: weak positive, NOT validated economic edge. 28 trades and PF 1.239 are below preferred robustness thresholds; 6/12 months negative. The referenced public Ichimoku repository is not yet pinned to a publisher commit/license, and strategy has independent 2ATR protective overlay; classify as independent variant, not source-faithful reproduction.
+- Next: retrieve and compare CSV ledgers, count entry_minute_stop rows, audit fee/mark-to-market month calculations and exact source/license; if audit passes, reject or preregister narrowly motivated 2025-only tests. No BTC2026/ETH testing yet, no live trading or other-family modifications.
