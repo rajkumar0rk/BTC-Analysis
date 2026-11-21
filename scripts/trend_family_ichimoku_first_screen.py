@@ -69,6 +69,17 @@ for t,r in f.iterrows():
             qty=min(equity*risk_fraction/(2*float(atr)),equity/entry)
             entry_fee=qty*entry*fee;side=sig;entry_time=t
             month_entries[str(t.tz_convert("Asia/Kolkata").to_period("M"))]=month_entries.get(str(t.tz_convert("Asia/Kolkata").to_period("M")),0)+1
+            # The entry fills at this minute's open. Its subsequent intraminute
+            # range can hit the protective stop before the next minute arrives.
+            # Omitting this check would systematically suppress immediate losses.
+            entry_bar_stop_hit=(float(r.low)<=stop if side==1 else float(r.high)>=stop)
+            if entry_bar_stop_hit:
+                x=stop
+                exitfee=qty*x*fee
+                pnl=side*qty*(x-entry)-entry_fee-exitfee
+                equity+=pnl
+                trades.append((entry_time,t,side,entry,x,qty,pnl,"entry_minute_stop"))
+                side=0
     month=str(t.tz_convert("Asia/Kolkata").to_period("M"))
     mark=equity+(side*qty*(float(r.close)-entry)-entry_fee-qty*float(r.close)*fee if side else 0.)
     if month!=last_month and last_month is not None:pass
