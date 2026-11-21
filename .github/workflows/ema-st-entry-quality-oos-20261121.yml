@@ -1,0 +1,27 @@
+name: EMA ST Entry Quality Filter Audit 15m and 1h
+on:
+  push:
+    branches: [research/ema-st-entry-quality-oos-20261121]
+    paths:
+      - scripts/ema_st_entry_quality_oos_20261121.py
+      - .github/workflows/ema-st-entry-quality-oos-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy
+      - name: Replay filter grid with real minute data
+        run: python scripts/ema_st_entry_quality_oos_20261121.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ema-st-15m-1h-entry-filter-quality
+          path: analysis/ema_st_entry_quality_oos_20261121/
