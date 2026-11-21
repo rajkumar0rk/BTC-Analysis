@@ -1,0 +1,44 @@
+name: BTC Stage18 causal 1m exit improvement
+on:
+  push:
+    branches:
+      - research/stage18-exit-improvement-20261121-v1
+    paths:
+      - scripts/research_stage18_exit_improvement_20261121.py
+      - .github/workflows/research-stage18-exit-improvement-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  stage18-exit-experiments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Load original Stage14 full pre-entry events
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/stage14-events"
+          gh run download 44118024590 -n btc-stage14-monthly-regime-trades -D "$RUNNER_TEMP/stage14-events" --repo "$GITHUB_REPOSITORY"
+          test -s "$RUNNER_TEMP/stage14-events/event_states.csv.gz"
+      - name: Validate original 75-trade baseline and test independent exits
+        env:
+          STAGE14_EVENTS: ${{ runner.temp }}/stage14-events/event_states.csv.gz
+        run: |
+          python -m py_compile scripts/research_stage18_exit_improvement_20261121.py
+          PYTHONPATH=scripts python scripts/research_stage18_exit_improvement_20261121.py
+      - name: Save all variants, monthly comparisons and trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage18-exit-improvement-20261121
+          path: analysis/stage18_exit_improvement_20261121/
+          if-no-files-found: warn
+          retention-days: 30
