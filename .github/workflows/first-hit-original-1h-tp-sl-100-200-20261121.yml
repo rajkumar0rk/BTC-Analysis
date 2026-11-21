@@ -1,0 +1,42 @@
+name: Original 1H trades BTC ETH first TP vs SL 100 200 on 1m
+on:
+  push:
+    branches:
+      - research/first-hit-tp-sl-100-200-original-1h-20261121
+    paths:
+      - scripts/first_hit_tp_sl_original_1h_ohlc_20261121.py
+      - .github/workflows/first-hit-original-1h-tp-sl-100-200-20261121.yml
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install data and replay requirements
+        run: python -m pip install numpy==2.2.3 pandas==2.2.3 numba==0.61.2
+      - name: Check fixed TP/SL first touch on 1m candles for original hourly trades
+        run: |
+          python -m py_compile scripts/first_hit_tp_sl_original_1h_ohlc_20261121.py
+          python -u scripts/first_hit_tp_sl_original_1h_ohlc_20261121.py
+      - name: Upload full trade hit-order auditable CSV for BTC and ETH
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-1h-btc-eth-first-hit-tp-sl-100-200
+          path: analysis/original_1h_ohlc_first_tp_vs_sl_20261121/
+          if-no-files-found: warn
+      - name: Commit verified first-touch findings only to isolated branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/original_1h_ohlc_first_tp_vs_sl_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: BTC and ETH original 1H inferred trade first TP vs SL 1m counts 100/200"
+            git push origin HEAD:research/first-hit-tp-sl-100-200-original-1h-20261121
+          fi
