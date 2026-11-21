@@ -1,0 +1,39 @@
+name: Mean Reversion MR002 BTC 1m historical baseline
+on:
+  push:
+    branches:
+      - research/mean-reversion-bb-rsi-source-audit-20261121
+    paths:
+      - .github/workflows/mean-reversion-mr002.yml
+      - scripts/research_mean_reversion_mr002_20261121.py
+  workflow_dispatch:
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy pandas numba
+      - name: Verify genuine BTC minute partitions
+        run: |
+          test -f data/delta_india/BTCUSD/1m/2025-01.csv.gz
+          test -f data/delta_india/BTCUSD/1m/2026-10.csv.gz
+          python - <<'PY'
+          import glob,hashlib,json,pathlib
+          paths=sorted(glob.glob('data/delta_india/BTCUSD/1m/20??-??.csv.gz'))
+          print(json.dumps({p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in paths},indent=2))
+          PY
+      - name: Run source-derived zero-slippage BTC 1m replay with fees and GST
+        run: python scripts/research_mean_reversion_mr002_20261121.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mr002-btc-1m-zero-slippage-baseline
+          path: analysis/mean_reversion_research/MR002/results/
+          if-no-files-found: warn
+          retention-days: 90
