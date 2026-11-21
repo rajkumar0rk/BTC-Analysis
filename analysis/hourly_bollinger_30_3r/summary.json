@@ -16,13 +16,12 @@
   ],
   "isolated": {
     "source": "Delta Exchange India BTCUSD perpetual 1m actual OHLCV",
-    "timeframe": "1D UTC close; next 1m OPEN entry, 1m stop/TP",
+    "timeframe": "1H UTC close; next 1m OPEN entry, 1m TP/SL",
     "bars_1m": 990720,
     "period_start_utc": "2025-01-01 00:00:00+00:00",
     "period_end_utc": "2026-11-19 23:59:00+00:00",
     "initial_equity_usd": 10000.0,
     "final_marked_equity_usd": 6529.35,
-    "raw_daily_signals": 2214,
     "ignored_while_position_open": 1849,
     "invalid_risk_signals": 0,
     "trades_closed": 365,
@@ -50,7 +49,8 @@
       "No spread/L1 order book, impact, fill depth, liquidation, contract minimums or real margin.",
       "Month-end equity includes unrealized open position at pessimistic estimated exit cost.",
       "2026 is previously research-exposed, not a pristine out-of-sample validation."
-    ]
+    ],
+    "raw_hourly_signals": 2214
   },
   "concurrent": {
     "data": "Delta India BTCUSD genuine 1m",
