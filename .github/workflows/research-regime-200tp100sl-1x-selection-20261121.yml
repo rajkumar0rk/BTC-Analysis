@@ -1,0 +1,47 @@
+name: BTC 200TP 100SL 1x Causal Market Regime Research
+on:
+  push:
+    branches:
+      - research/regime-200tp-100sl-1x-selection-20261121
+    paths:
+      - scripts/research_regime_200tp100sl_1x_selection_20261121.py
+      - .github/workflows/research-regime-200tp100sl-1x-selection-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install minimal data dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Run causal regime selection and 1M 200/100 fixed-stop replay
+        run: python scripts/research_regime_200tp100sl_1x_selection_20261121.py
+      - name: Archive exploratory candidate ledgers
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-regime-200-100-1x-audit-trades-daily
+          path: |
+            analysis/btc_regime_200tp100sl_selection_20261121/leader_trades.csv
+            analysis/btc_regime_200tp100sl_selection_20261121/leader_daily.csv
+          retention-days: 30
+      - name: Commit training and followup monthly findings
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_regime_200tp100sl_selection_20261121/summary.json
+          git add analysis/btc_regime_200tp100sl_selection_20261121/RESEARCH_REPORT.md
+          git add analysis/btc_regime_200tp100sl_selection_20261121/all_predeclared_candidates.csv
+          git add analysis/btc_regime_200tp100sl_selection_20261121/top12_period_checks.csv
+          git add analysis/btc_regime_200tp100sl_selection_20261121/leader_monthly.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record causal regime 1x fixed 200/100 candidate win probabilities"
+            git push origin HEAD:research/regime-200tp-100sl-1x-selection-20261121
+          fi
