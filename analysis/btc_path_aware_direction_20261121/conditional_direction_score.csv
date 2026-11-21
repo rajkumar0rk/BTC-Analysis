@@ -1,0 +1,13 @@
+period,model,events,actual_net_win_rate_pct,model_accuracy_pct,model_balanced_accuracy_pct,direction_auc,brier_score,forecast_logloss,acceptance_events,acceptance_coverage_pct,accepted_isolated_net_win_pct
+2025H2,boosted,229,34.934,62.445,50.881,0.5503,0.23162,0.65682,26,11.35,38.462
+2025H2,logistic,229,34.934,63.755,50.44,0.5137,0.23222,0.65775,13,5.68,38.462
+2025H2,trained_event_prior,229,34.934,65.066,50.0,0.4961,0.22811,0.64878,0,0.0,
+2025H2,always_follow_confirmed_event,229,34.934,34.934,,,,,229,100.0,34.934
+2026JanOct,boosted,331,34.441,63.746,49.867,0.5247,0.22906,0.65014,18,5.44,33.333
+2026JanOct,logistic,331,34.441,64.653,49.309,0.5227,0.22859,0.64945,3,0.91,0.0
+2026JanOct,trained_event_prior,331,34.441,65.559,50.0,0.5427,0.22644,0.64532,0,0.0,
+2026JanOct,always_follow_confirmed_event,331,34.441,34.441,,,,,331,100.0,34.441
+combined,boosted,560,34.643,63.214,50.299,0.5389,0.23011,0.65287,44,7.86,36.364
+combined,logistic,560,34.643,64.286,49.786,0.5187,0.23008,0.65284,16,2.86,31.25
+combined,trained_event_prior,560,34.643,65.357,50.0,0.5276,0.22712,0.64674,0,0.0,
+combined,always_follow_confirmed_event,560,34.643,34.643,,,,,560,100.0,34.643
