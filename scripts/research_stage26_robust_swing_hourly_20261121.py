@@ -263,7 +263,7 @@ def select_and_report(rows,series):
 
     # Monthly simple blending, same independent return sources, not a shared
     # order book or margin account.
-    bp=pd.read_csv(BASE)
+    bp=pd.read_csv(BASELINE)
     models={}
     for bps in (0,5):
         group=bp[(bp.scenario=="stage18_70_30_30d")&(bp.extra_bps_side==bps)].copy()
