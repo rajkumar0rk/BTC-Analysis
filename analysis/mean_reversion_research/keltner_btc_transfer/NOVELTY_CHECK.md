@@ -1,0 +1,15 @@
+# KeltnerBounceV1 — novelty and transfer decision (2026-11-22)
+
+Decision: **SKIP direct BTCUSD source-faithful reproduction**. This is a pre-run gate, not a completed backtest.
+
+Frozen source: IvPalmer/Master-Trader commit 912d9ff1cb0e638e52131950d2d82a56f2ad428e, ft_userdata/user_data/strategies/KeltnerBounceV1.py; source blob 0bab8240cbe5cfb4c3ba949c96f8478bb231eb22. License not established. No upstream code copied.
+
+Original deterministic rules: long-only 1h close crosses above SMA25(close) - 2.5*SMA25(true range); volume > 1.75*SMA20(volume); external BTC/USDT 1h close > its SMA50; 200-bar startup; stop -7%; trail 3% after +5%; ROI 10% initially, 7% after 360m, 4% after 720m, 2% after 1440m; cooldown and stoploss guard. Original market is selected ALTCOIN SPOT pairs, not BTCUSD futures. Original source and publisher report are in source_discovery_20261122_keltnerbounce.md.
+
+Mechanism comparison: Stage19 (scripts/research_wide_monthly_stage23.py and analysis/institutional_discovery_stage19_monthly_10pct/RESEARCH_REPORT.md) covers 5m sweep/reversal, RSI2, EMA pullback with structural exits; different entry and stop. Stage23 (analysis/institutional_discovery_stage23_broad_5m_monthly/RESEARCH_REPORT.md) covers 5m fade/original variants; overlap in reversion economic hypothesis but not this exact 1h channel-crossback + volume expansion. Stage24 (research/stage24-monthly10, analysis/institutional_discovery_stage24_structure_monthly10/RESEARCH_REPORT.md) covers 15m breakout/retest/squeeze, different mechanism. MR-002 (mean_reversion_research) is VWAP-z crossback, different anchor and volume timing but same broad crossback-to-equilibrium thesis. Novelty is at best PARTIAL OVERLAP, not enough by itself to justify claiming new source-faithful BTC evidence.
+
+Decisive transfer blocker: BTC/USDT is the EXTERNAL market-regime gate on altcoin positions. On BTCUSD itself the gate becomes same-instrument, removing the cross-asset information and materially changing the causal rule. Replacing it with another external filter would invent new rules; retaining it is a BTC adaptation, NOT reproduction of the publisher's market. A separate clearly labeled adaptation could be studied later after explicit novelty approval, but is not the original baseline. The original implementation license is also unverified.
+
+Data requirements if separately approved: authentic Delta India BTCUSD 1m OHLCV, complete 1h aggregation and BTC gate, next eligible 1m open, stop-first and gap-through fill, sequential NAV, 0.05% per-side fee plus 18% GST, zero initial slippage, funding unmodeled. 2025 training then 2026 chronological recheck (not pristine); 2025-01 first 5.5 IST hours and UTC 2026-10-31 absent. No fabricated monthly coverage.
+
+Disposition: do not run KeltnerBounceV1 as an allegedly source-faithful BTC backtest. Seek a publicly licensed BTC-native mean-reversion strategy with exact rules and distinct mechanism. Preserve MR-002 rejection and original publisher statistics separately. No trading or protected-branch changes.
