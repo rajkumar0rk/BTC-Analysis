@@ -1,0 +1,27 @@
+name: EMA ST Risk Capped Stop Validation BTC ETH
+on:
+  push:
+    branches: [research/ema-st-risk-capped-validation-20261121]
+    paths:
+      - scripts/ema_st_risk_caps_validation_20261121.py
+      - .github/workflows/ema-st-risk-caps-validation-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas numba
+      - name: Validate 2025 2026 with capped and skipped stops
+        run: python scripts/ema_st_risk_caps_validation_20261121.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: modified-ema-st-capped-stops-validation
+          path: analysis/ema_st_modified_risk_caps_20261121/
