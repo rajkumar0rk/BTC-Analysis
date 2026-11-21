@@ -58,7 +58,7 @@ from full_history_1h_trailing_100_50_2025_2026 import read_asset, signal_map
 OUT=Path(__file__).resolve().parents[1]/"analysis"/"full_history_trailing_stop_points_grid_20261121"
 OUT.mkdir(parents=True,exist_ok=True)
 ACTIVATIONS=(50,100,200,300,500,800,1000)
-STOPS=(50,100,200,300,500,750,1000,1500,2000)
+STOPS=(50,100,200,300,500,750,1000,1500,2000,2500,3000,4000,6000,8000)
 MONTHS=[str(x) for x in pd.period_range("2025-01","2026-11",freq="M")]
 TRAIN_END=12
 TEST_END=22
@@ -341,7 +341,9 @@ def main():
             trainbest=max(rows,key=lambda x:x["train_2025"]["net_usd"])
             fullbest=rows[0]
             fixed=next(x for x in rows if x["activation"]==100 and x["trailing_stop_points"]==500)
+            best100=max((x for x in rows if x["activation"]==100),key=lambda x:x["train_2025"]["net_usd"])
             candidates=[("requested_activation100_stop500",fixed),
+                        ("best_activation100_train_2025",best100),
                         ("best_training_2025",trainbest),("best_all22_in_sample",fullbest)]
             root["selected"][label]={}
             for name,s in candidates:
@@ -350,7 +352,7 @@ def main():
                 root["selected"][label][name]={"summary":recheck,"monthly":monthly}
                 f.to_csv(OUT/f"{label}_{name}_trades.csv.gz",index=False,compression="gzip")
                 pd.DataFrame(monthly).to_csv(OUT/f"{label}_{name}_monthly.csv",index=False)
-                if name in ("requested_activation100_stop500","best_training_2025"):
+                if name in ("requested_activation100_stop500","best_activation100_train_2025","best_training_2025"):
                     f2,gated=run_one(args,asset,mode,s["activation"],s["trailing_stop_points"],True)
                     root["selected"][label][name]["wallet_guarded"]=gated
                     f2.to_csv(OUT/f"{label}_{name}_wallet_guarded_trades.csv.gz",index=False,compression="gzip")
