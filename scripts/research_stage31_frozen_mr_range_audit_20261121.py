@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Stage31 frozen replay and November-partial diagnostic.
-Two hypotheses were selected AFTER looking at 2026. They are post-hoc
+Two hypotheses were selected AFTER examining 2026, so retrospective. They are post-hoc
 historical discoveries, NOT 2025-selected candidates or forward validation.
 
 Never place actual futures orders. Uses complete 1H/4H features and 1m
