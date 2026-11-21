@@ -1,0 +1,31 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "assumptions": {
+    "fee_taker_each_side": 0.0005,
+    "fee_gst_rate": 0.18,
+    "slippage_each_side_fraction": 0.0002,
+    "account_initial_usd": 1000,
+    "notional_leverage": 1,
+    "position_exclusivity": "per symbol and timeframe",
+    "monthly_period": "Asia/Kolkata, closed trades at exit",
+    "fixed_take_profit": false,
+    "supertrend": "10-period Wilder ATR, 3x; previous fully closed HTF bar",
+    "touch_price": "last completed signal timeframe EMA20",
+    "instant_touch_fill": "EMA20 plus adverse 0.02% slippage; 1m OHLC approximation",
+    "stop_update": "breakeven 1R, trailing from 2R at 1R distance; new stop effective next minute",
+    "disclaimer": "No spreads, funding, tick-level order paths or guaranteed executable fills; entry-minute stop-first"
+  }
+}

@@ -1,0 +1,5 @@
+symbol,timeframe,trades,wins,losses,win_rate_pct,profit_factor,gross_profit_usd,gross_loss_usd,fee_usd,net_profit_usd,net_return_pct,max_closed_trade_drawdown_pct,positive_months,negative_months,zero_months,train_2025_return_pct,check_2026_net_usd
+BTCUSD,15m,1977,495,1482,25.038,0.6833,2021.3402,2958.2672,796.7082,-936.927,-93.6927,93.9358,1,21,0,-81.6067,-120.8596
+BTCUSD,60m,699,170,529,24.32,0.6763,1564.014,2312.4661,444.1114,-748.4521,-74.8452,74.8452,6,16,0,-50.3688,-244.7638
+ETHUSD,15m,2335,578,1757,24.754,0.7168,2464.5555,3438.3259,715.061,-973.7704,-97.377,97.4004,1,21,0,-90.3436,-70.3345
+ETHUSD,60m,1020,235,785,23.039,0.6321,1513.9302,2395.1245,432.8061,-881.1942,-88.1194,88.5662,3,19,0,-73.5144,-146.0503
