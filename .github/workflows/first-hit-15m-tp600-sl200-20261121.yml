@@ -1,0 +1,27 @@
+name: 15m first-touch 600 TP 200 SL BTC ETH
+on:
+  push:
+    branches: [research/15m-first-touch-tp600-sl200-20261121]
+    paths:
+      - scripts/first_hit_15m_tp600_sl200_20261121.py
+      - .github/workflows/first-hit-15m-tp600-sl200-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  first-touch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy
+      - name: Replay 15m strategy with actual 1m first touch
+        run: python scripts/first_hit_15m_tp600_sl200_20261121.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: first-touch-15m-600tp-200sl
+          path: analysis/first_hit_15m_tp600_sl200_20261121/
