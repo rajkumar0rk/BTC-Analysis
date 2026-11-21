@@ -1,0 +1,4343 @@
+{
+  "title": "Monthly results: Nov 16-21 weekly-selected EMA20+Supertrend trailing-stop-point settings",
+  "data_last_utc_inclusive": "2026-11-21 02:08:00+00:00",
+  "partial_month_note": "Nov 2026 only up to cutoff. Excluded from 22-complete-month total.",
+  "monthly_timezone": "UTC",
+  "venue": "Delta India PRODUCTION 1m traded and MARK historical candles, not Delta DEMO",
+  "stops": "1H EMA20/ST(10,3) stable direction; 2 ATR14 initial risk stop. Extra trailing stop points enabled; original fixed trailing distance OFF; 1m stop updates take effect in NEXT minute. Stop triggered via MARK or traded price candle.",
+  "eth_conversion": "ETH activation/trailing points scaled by entry/80000 and rounded to .05 tick",
+  "execution_assumptions": "1m mark/traded OHLC cross existing stop; exit approximated using 1m traded CLOSE when stop triggered within minute, traded OPEN for gap/flip",
+  "costs": "regular taker fee 0.05% EACH side plus 18% GST; excludes funding, bid/ask execution slippage, liquidation",
+  "sizing": "fixed target ~$1000 notional per trade. No wallet gate. Results are NOT possible $100 account trajectory if wallet depleted.",
+  "selection_bias": "weekly-winner settings were selected IN SAMPLE using same week, not independent validation",
+  "datasets": {
+    "BTC": {
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "mark_source": "Delta India historical MARK:xxxxUSD 1m REST archive",
+      "traded_rows": 987840,
+      "mark_rows": 987840,
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2026-11-17 23:59:00+00:00",
+      "mark_time_alignment_verified": true,
+      "traded_sha256_verified": true,
+      "all_minute_intervals_60s": true,
+      "completed_1h_bars": 16538,
+      "hourly_entry_signals": 2502,
+      "hourly_st_flips": 406,
+      "warmup_bars": 72,
+      "fetched_traded_1m": 4449,
+      "fetched_mark_1m": 4449,
+      "most_recent_traded_utc": "2026-11-21 02:08:00+00:00",
+      "most_recent_mark_utc": "2026-11-21 02:08:00+00:00"
+    },
+    "ETH": {
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "mark_source": "Delta India historical MARK:xxxxUSD 1m REST archive",
+      "traded_rows": 987840,
+      "mark_rows": 987840,
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2026-11-17 23:59:00+00:00",
+      "mark_time_alignment_verified": true,
+      "traded_sha256_verified": true,
+      "all_minute_intervals_60s": true,
+      "completed_1h_bars": 16538,
+      "hourly_entry_signals": 2561,
+      "hourly_st_flips": 392,
+      "warmup_bars": 72,
+      "fetched_traded_1m": 4449,
+      "fetched_mark_1m": 4449,
+      "most_recent_traded_utc": "2026-11-21 02:08:00+00:00",
+      "most_recent_mark_utc": "2026-11-21 02:08:00+00:00"
+    }
+  },
+  "configs": {
+    "btc_weekly_winner_800_100": {
+      "activation_points": 800,
+      "trailing_stop_points": 100,
+      "models": {
+        "mark": {
+          "model": "mark",
+          "train_2025": {
+            "trades": 483,
+            "wins": 264,
+            "losses": 219,
+            "net_usd": -1121.6543,
+            "gross_usd": -579.0455,
+            "fees_gst_usd": 542.6088,
+            "profit_factor": 0.6114,
+            "win_rate_pct": 54.66,
+            "max_closed_trade_drawdown_usd": 1177.9636,
+            "positive_months": 0,
+            "negative_months": 12
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 327,
+            "wins": 171,
+            "losses": 156,
+            "net_usd": -407.5649,
+            "gross_usd": -36.225,
+            "fees_gst_usd": 371.3399,
+            "profit_factor": 0.7975,
+            "win_rate_pct": 52.29,
+            "max_closed_trade_drawdown_usd": 503.29,
+            "positive_months": 2,
+            "negative_months": 8
+          },
+          "complete_22_months": {
+            "trades": 810,
+            "wins": 435,
+            "losses": 375,
+            "net_usd": -1529.2192,
+            "gross_usd": -615.2705,
+            "fees_gst_usd": 913.9487,
+            "profit_factor": 0.6878,
+            "win_rate_pct": 53.7,
+            "max_closed_trade_drawdown_usd": 1578.7304,
+            "positive_months": 2,
+            "negative_months": 20
+          },
+          "nov_2026_partial": {
+            "trades": 18,
+            "wins": 11,
+            "losses": 7,
+            "net_usd": 29.5994,
+            "gross_usd": 50.007,
+            "fees_gst_usd": 20.4076,
+            "profit_factor": 1.3062,
+            "win_rate_pct": 61.11,
+            "max_closed_trade_drawdown_usd": 29.8148,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -146.1213,
+              "trades": 38,
+              "wins": 21,
+              "losses": 17,
+              "pf": 0.4979
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -65.2808,
+              "trades": 36,
+              "wins": 22,
+              "losses": 14,
+              "pf": 0.6779
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -179.2891,
+              "trades": 47,
+              "wins": 25,
+              "losses": 22,
+              "pf": 0.5346
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -85.9812,
+              "trades": 39,
+              "wins": 23,
+              "losses": 16,
+              "pf": 0.6714
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -20.3129,
+              "trades": 45,
+              "wins": 27,
+              "losses": 18,
+              "pf": 0.9032
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -61.1676,
+              "trades": 40,
+              "wins": 21,
+              "losses": 19,
+              "pf": 0.6608
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -67.4732,
+              "trades": 44,
+              "wins": 25,
+              "losses": 19,
+              "pf": 0.6789
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": -25.1118,
+              "trades": 41,
+              "wins": 24,
+              "losses": 17,
+              "pf": 0.8438
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -88.1074,
+              "trades": 29,
+              "wins": 11,
+              "losses": 18,
+              "pf": 0.4409
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": -49.6754,
+              "trades": 39,
+              "wins": 24,
+              "losses": 15,
+              "pf": 0.7495
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -179.069,
+              "trades": 50,
+              "wins": 26,
+              "losses": 24,
+              "pf": 0.5173
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -154.0646,
+              "trades": 35,
+              "wins": 15,
+              "losses": 20,
+              "pf": 0.402
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 76.9214,
+              "trades": 33,
+              "wins": 24,
+              "losses": 9,
+              "pf": 1.7591
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -86.4095,
+              "trades": 34,
+              "wins": 20,
+              "losses": 14,
+              "pf": 0.7059
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -168.08,
+              "trades": 35,
+              "wins": 16,
+              "losses": 19,
+              "pf": 0.5125
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -61.1643,
+              "trades": 34,
+              "wins": 16,
+              "losses": 18,
+              "pf": 0.7077
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -4.8417,
+              "trades": 29,
+              "wins": 15,
+              "losses": 14,
+              "pf": 0.9637
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 32.0954,
+              "trades": 35,
+              "wins": 21,
+              "losses": 14,
+              "pf": 1.1537
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -35.0463,
+              "trades": 33,
+              "wins": 16,
+              "losses": 17,
+              "pf": 0.8235
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": -58.2835,
+              "trades": 36,
+              "wins": 15,
+              "losses": 21,
+              "pf": 0.7107
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -73.6574,
+              "trades": 35,
+              "wins": 17,
+              "losses": 18,
+              "pf": 0.6357
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -29.099,
+              "trades": 23,
+              "wins": 11,
+              "losses": 12,
+              "pf": 0.7549
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 29.5994,
+              "trades": 18,
+              "wins": 11,
+              "losses": 7,
+              "pf": 1.3062
+            }
+          ],
+          "open_at_latest_cutoff": false
+        },
+        "traded": {
+          "model": "traded",
+          "train_2025": {
+            "trades": 485,
+            "wins": 266,
+            "losses": 219,
+            "net_usd": -1137.3613,
+            "gross_usd": -592.5,
+            "fees_gst_usd": 544.8613,
+            "profit_factor": 0.6073,
+            "win_rate_pct": 54.85,
+            "max_closed_trade_drawdown_usd": 1189.4856,
+            "positive_months": 0,
+            "negative_months": 12
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 329,
+            "wins": 171,
+            "losses": 158,
+            "net_usd": -421.1875,
+            "gross_usd": -47.558,
+            "fees_gst_usd": 373.6295,
+            "profit_factor": 0.7914,
+            "win_rate_pct": 51.98,
+            "max_closed_trade_drawdown_usd": 510.9184,
+            "positive_months": 2,
+            "negative_months": 8
+          },
+          "complete_22_months": {
+            "trades": 814,
+            "wins": 437,
+            "losses": 377,
+            "net_usd": -1558.5488,
+            "gross_usd": -640.058,
+            "fees_gst_usd": 918.4908,
+            "profit_factor": 0.6829,
+            "win_rate_pct": 53.69,
+            "max_closed_trade_drawdown_usd": 1603.8695,
+            "positive_months": 2,
+            "negative_months": 20
+          },
+          "nov_2026_partial": {
+            "trades": 18,
+            "wins": 11,
+            "losses": 7,
+            "net_usd": 47.638,
+            "gross_usd": 68.035,
+            "fees_gst_usd": 20.397,
+            "profit_factor": 1.4928,
+            "win_rate_pct": 61.11,
+            "max_closed_trade_drawdown_usd": 25.6543,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -149.0526,
+              "trades": 38,
+              "wins": 21,
+              "losses": 17,
+              "pf": 0.487
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -61.3919,
+              "trades": 36,
+              "wins": 22,
+              "losses": 14,
+              "pf": 0.6955
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -179.068,
+              "trades": 48,
+              "wins": 26,
+              "losses": 22,
+              "pf": 0.546
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -90.9685,
+              "trades": 40,
+              "wins": 24,
+              "losses": 16,
+              "pf": 0.6675
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -31.8725,
+              "trades": 45,
+              "wins": 27,
+              "losses": 18,
+              "pf": 0.8467
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -60.2954,
+              "trades": 40,
+              "wins": 21,
+              "losses": 19,
+              "pf": 0.6642
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -60.4827,
+              "trades": 45,
+              "wins": 26,
+              "losses": 19,
+              "pf": 0.7108
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": -23.5454,
+              "trades": 41,
+              "wins": 24,
+              "losses": 17,
+              "pf": 0.8542
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -89.8252,
+              "trades": 29,
+              "wins": 11,
+              "losses": 18,
+              "pf": 0.4265
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": -59.0196,
+              "trades": 38,
+              "wins": 23,
+              "losses": 15,
+              "pf": 0.702
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -182.1701,
+              "trades": 50,
+              "wins": 26,
+              "losses": 24,
+              "pf": 0.5105
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -149.6695,
+              "trades": 35,
+              "wins": 15,
+              "losses": 20,
+              "pf": 0.405
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 70.9272,
+              "trades": 33,
+              "wins": 24,
+              "losses": 9,
+              "pf": 1.7015
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -79.8038,
+              "trades": 34,
+              "wins": 20,
+              "losses": 14,
+              "pf": 0.7259
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -171.9081,
+              "trades": 35,
+              "wins": 16,
+              "losses": 19,
+              "pf": 0.5
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -64.5883,
+              "trades": 34,
+              "wins": 16,
+              "losses": 18,
+              "pf": 0.6899
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -3.0297,
+              "trades": 29,
+              "wins": 15,
+              "losses": 14,
+              "pf": 0.9773
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 30.7382,
+              "trades": 35,
+              "wins": 21,
+              "losses": 14,
+              "pf": 1.1491
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -28.2984,
+              "trades": 35,
+              "wins": 17,
+              "losses": 18,
+              "pf": 0.8622
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": -57.6226,
+              "trades": 36,
+              "wins": 15,
+              "losses": 21,
+              "pf": 0.7107
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -73.7234,
+              "trades": 35,
+              "wins": 17,
+              "losses": 18,
+              "pf": 0.6354
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -43.8788,
+              "trades": 23,
+              "wins": 10,
+              "losses": 13,
+              "pf": 0.659
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 47.638,
+              "trades": 18,
+              "wins": 11,
+              "losses": 7,
+              "pf": 1.4928
+            }
+          ],
+          "open_at_latest_cutoff": false
+        }
+      }
+    },
+    "btc_week_alt_100_1500": {
+      "activation_points": 100,
+      "trailing_stop_points": 1500,
+      "models": {
+        "mark": {
+          "model": "mark",
+          "train_2025": {
+            "trades": 378,
+            "wins": 116,
+            "losses": 262,
+            "net_usd": -740.6787,
+            "gross_usd": -316.575,
+            "fees_gst_usd": 424.1037,
+            "profit_factor": 0.6897,
+            "win_rate_pct": 30.69,
+            "max_closed_trade_drawdown_usd": 781.4122,
+            "positive_months": 1,
+            "negative_months": 11
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 234,
+            "wins": 79,
+            "losses": 155,
+            "net_usd": -353.7513,
+            "gross_usd": -87.776,
+            "fees_gst_usd": 265.9753,
+            "profit_factor": 0.7819,
+            "win_rate_pct": 33.76,
+            "max_closed_trade_drawdown_usd": 450.0853,
+            "positive_months": 3,
+            "negative_months": 7
+          },
+          "complete_22_months": {
+            "trades": 612,
+            "wins": 195,
+            "losses": 417,
+            "net_usd": -1094.43,
+            "gross_usd": -404.351,
+            "fees_gst_usd": 690.079,
+            "profit_factor": 0.727,
+            "win_rate_pct": 31.86,
+            "max_closed_trade_drawdown_usd": 1135.1635,
+            "positive_months": 4,
+            "negative_months": 18
+          },
+          "nov_2026_partial": {
+            "trades": 12,
+            "wins": 6,
+            "losses": 6,
+            "net_usd": 141.4025,
+            "gross_usd": 154.964,
+            "fees_gst_usd": 13.5615,
+            "profit_factor": 3.017,
+            "win_rate_pct": 50.0,
+            "max_closed_trade_drawdown_usd": 46.0956,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -150.8035,
+              "trades": 30,
+              "wins": 6,
+              "losses": 24,
+              "pf": 0.4022
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -28.1076,
+              "trades": 27,
+              "wins": 11,
+              "losses": 16,
+              "pf": 0.8257
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -70.2994,
+              "trades": 36,
+              "wins": 13,
+              "losses": 23,
+              "pf": 0.7345
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -9.9432,
+              "trades": 29,
+              "wins": 11,
+              "losses": 18,
+              "pf": 0.9511
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": 6.7949,
+              "trades": 30,
+              "wins": 12,
+              "losses": 18,
+              "pf": 1.0427
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -6.0321,
+              "trades": 29,
+              "wins": 8,
+              "losses": 21,
+              "pf": 0.9613
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -23.2671,
+              "trades": 34,
+              "wins": 10,
+              "losses": 24,
+              "pf": 0.8529
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": -1.2079,
+              "trades": 30,
+              "wins": 12,
+              "losses": 18,
+              "pf": 0.9907
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -88.5949,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "pf": 0.2931
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": -12.811,
+              "trades": 37,
+              "wins": 13,
+              "losses": 24,
+              "pf": 0.9393
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -150.5147,
+              "trades": 43,
+              "wins": 9,
+              "losses": 34,
+              "pf": 0.5277
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -205.8923,
+              "trades": 29,
+              "wins": 5,
+              "losses": 24,
+              "pf": 0.1687
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 62.5083,
+              "trades": 25,
+              "wins": 9,
+              "losses": 16,
+              "pf": 1.4959
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -57.4391,
+              "trades": 30,
+              "wins": 11,
+              "losses": 19,
+              "pf": 0.7768
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -196.4969,
+              "trades": 32,
+              "wins": 8,
+              "losses": 24,
+              "pf": 0.3966
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -96.2104,
+              "trades": 22,
+              "wins": 8,
+              "losses": 14,
+              "pf": 0.3307
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": 5.7183,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "pf": 1.0699
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 121.8043,
+              "trades": 23,
+              "wins": 9,
+              "losses": 14,
+              "pf": 1.8778
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -17.0334,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "pf": 0.8469
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": -27.1386,
+              "trades": 23,
+              "wins": 7,
+              "losses": 16,
+              "pf": 0.8219
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -88.1897,
+              "trades": 25,
+              "wins": 7,
+              "losses": 18,
+              "pf": 0.4814
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -61.2741,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "pf": 0.4682
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 141.4025,
+              "trades": 12,
+              "wins": 6,
+              "losses": 6,
+              "pf": 3.017
+            }
+          ],
+          "open_at_latest_cutoff": false
+        },
+        "traded": {
+          "model": "traded",
+          "train_2025": {
+            "trades": 380,
+            "wins": 117,
+            "losses": 263,
+            "net_usd": -732.927,
+            "gross_usd": -306.6125,
+            "fees_gst_usd": 426.3145,
+            "profit_factor": 0.6945,
+            "win_rate_pct": 30.79,
+            "max_closed_trade_drawdown_usd": 773.3457,
+            "positive_months": 2,
+            "negative_months": 10
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 235,
+            "wins": 79,
+            "losses": 156,
+            "net_usd": -335.8117,
+            "gross_usd": -68.6665,
+            "fees_gst_usd": 267.1452,
+            "profit_factor": 0.7928,
+            "win_rate_pct": 33.62,
+            "max_closed_trade_drawdown_usd": 438.9035,
+            "positive_months": 3,
+            "negative_months": 7
+          },
+          "complete_22_months": {
+            "trades": 615,
+            "wins": 196,
+            "losses": 419,
+            "net_usd": -1068.7387,
+            "gross_usd": -375.279,
+            "fees_gst_usd": 693.4597,
+            "profit_factor": 0.7341,
+            "win_rate_pct": 31.87,
+            "max_closed_trade_drawdown_usd": 1109.1574,
+            "positive_months": 5,
+            "negative_months": 17
+          },
+          "nov_2026_partial": {
+            "trades": 12,
+            "wins": 6,
+            "losses": 6,
+            "net_usd": 144.798,
+            "gross_usd": 158.3575,
+            "fees_gst_usd": 13.5595,
+            "profit_factor": 3.1148,
+            "win_rate_pct": 50.0,
+            "max_closed_trade_drawdown_usd": 44.4597,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -159.3845,
+              "trades": 30,
+              "wins": 6,
+              "losses": 24,
+              "pf": 0.389
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -32.0933,
+              "trades": 28,
+              "wins": 11,
+              "losses": 17,
+              "pf": 0.8136
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -74.6815,
+              "trades": 36,
+              "wins": 13,
+              "losses": 23,
+              "pf": 0.7228
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -9.9949,
+              "trades": 29,
+              "wins": 11,
+              "losses": 18,
+              "pf": 0.95
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": 11.5681,
+              "trades": 30,
+              "wins": 12,
+              "losses": 18,
+              "pf": 1.074
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -5.4115,
+              "trades": 29,
+              "wins": 8,
+              "losses": 21,
+              "pf": 0.9651
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -17.531,
+              "trades": 34,
+              "wins": 10,
+              "losses": 24,
+              "pf": 0.8881
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 3.7327,
+              "trades": 30,
+              "wins": 13,
+              "losses": 17,
+              "pf": 1.029
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -84.6976,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "pf": 0.3122
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": -10.5138,
+              "trades": 37,
+              "wins": 13,
+              "losses": 24,
+              "pf": 0.9497
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -148.4612,
+              "trades": 43,
+              "wins": 9,
+              "losses": 34,
+              "pf": 0.5331
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -205.4586,
+              "trades": 30,
+              "wins": 5,
+              "losses": 25,
+              "pf": 0.1791
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 72.0617,
+              "trades": 25,
+              "wins": 9,
+              "losses": 16,
+              "pf": 1.5898
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -56.2654,
+              "trades": 30,
+              "wins": 11,
+              "losses": 19,
+              "pf": 0.7811
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -194.8111,
+              "trades": 32,
+              "wins": 8,
+              "losses": 24,
+              "pf": 0.4003
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -107.2389,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "pf": 0.3072
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": 8.3992,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "pf": 1.1027
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 128.3194,
+              "trades": 23,
+              "wins": 9,
+              "losses": 14,
+              "pf": 1.9748
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -17.0857,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "pf": 0.8465
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": -20.133,
+              "trades": 23,
+              "wins": 7,
+              "losses": 16,
+              "pf": 0.8674
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -87.8024,
+              "trades": 25,
+              "wins": 7,
+              "losses": 18,
+              "pf": 0.4829
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -61.2556,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "pf": 0.4696
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 144.798,
+              "trades": 12,
+              "wins": 6,
+              "losses": 6,
+              "pf": 3.1148
+            }
+          ],
+          "open_at_latest_cutoff": false
+        }
+      }
+    },
+    "btc_previous_100_500": {
+      "activation_points": 100,
+      "trailing_stop_points": 500,
+      "models": {
+        "mark": {
+          "model": "mark",
+          "train_2025": {
+            "trades": 789,
+            "wins": 255,
+            "losses": 534,
+            "net_usd": -1084.0079,
+            "gross_usd": -198.9485,
+            "fees_gst_usd": 885.0594,
+            "profit_factor": 0.547,
+            "win_rate_pct": 32.32,
+            "max_closed_trade_drawdown_usd": 1093.0059,
+            "positive_months": 0,
+            "negative_months": 12
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 560,
+            "wins": 182,
+            "losses": 378,
+            "net_usd": -667.4492,
+            "gross_usd": -32.0765,
+            "fees_gst_usd": 635.3727,
+            "profit_factor": 0.6671,
+            "win_rate_pct": 32.5,
+            "max_closed_trade_drawdown_usd": 695.6642,
+            "positive_months": 1,
+            "negative_months": 9
+          },
+          "complete_22_months": {
+            "trades": 1349,
+            "wins": 437,
+            "losses": 912,
+            "net_usd": -1751.4571,
+            "gross_usd": -231.025,
+            "fees_gst_usd": 1520.4321,
+            "profit_factor": 0.6017,
+            "win_rate_pct": 32.39,
+            "max_closed_trade_drawdown_usd": 1760.4551,
+            "positive_months": 1,
+            "negative_months": 21
+          },
+          "nov_2026_partial": {
+            "trades": 35,
+            "wins": 9,
+            "losses": 26,
+            "net_usd": -25.9862,
+            "gross_usd": 13.8275,
+            "fees_gst_usd": 39.8137,
+            "profit_factor": 0.8138,
+            "win_rate_pct": 25.71,
+            "max_closed_trade_drawdown_usd": 71.2212,
+            "positive_months": 0,
+            "negative_months": 1
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -135.9679,
+              "trades": 52,
+              "wins": 12,
+              "losses": 40,
+              "pf": 0.3152
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -24.4751,
+              "trades": 62,
+              "wins": 23,
+              "losses": 39,
+              "pf": 0.8464
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -130.1073,
+              "trades": 73,
+              "wins": 22,
+              "losses": 51,
+              "pf": 0.5444
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -129.6029,
+              "trades": 65,
+              "wins": 25,
+              "losses": 40,
+              "pf": 0.4858
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -163.4706,
+              "trades": 73,
+              "wins": 20,
+              "losses": 53,
+              "pf": 0.3685
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -80.4749,
+              "trades": 68,
+              "wins": 19,
+              "losses": 49,
+              "pf": 0.5081
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -5.1689,
+              "trades": 68,
+              "wins": 30,
+              "losses": 38,
+              "pf": 0.9639
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": -52.6419,
+              "trades": 65,
+              "wins": 23,
+              "losses": 42,
+              "pf": 0.6801
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -76.948,
+              "trades": 51,
+              "wins": 13,
+              "losses": 38,
+              "pf": 0.4482
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": -69.3958,
+              "trades": 72,
+              "wins": 24,
+              "losses": 48,
+              "pf": 0.6255
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -68.886,
+              "trades": 86,
+              "wins": 31,
+              "losses": 55,
+              "pf": 0.7134
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -146.8684,
+              "trades": 54,
+              "wins": 13,
+              "losses": 41,
+              "pf": 0.2729
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": -24.2138,
+              "trades": 59,
+              "wins": 22,
+              "losses": 37,
+              "pf": 0.8419
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -17.0699,
+              "trades": 67,
+              "wins": 25,
+              "losses": 42,
+              "pf": 0.9208
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -154.6412,
+              "trades": 65,
+              "wins": 20,
+              "losses": 45,
+              "pf": 0.457
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -102.8682,
+              "trades": 56,
+              "wins": 16,
+              "losses": 40,
+              "pf": 0.5091
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -97.9932,
+              "trades": 48,
+              "wins": 16,
+              "losses": 32,
+              "pf": 0.4436
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 2.769,
+              "trades": 64,
+              "wins": 20,
+              "losses": 44,
+              "pf": 1.0115
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -90.9845,
+              "trades": 50,
+              "wins": 17,
+              "losses": 33,
+              "pf": 0.6064
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": -36.842,
+              "trades": 48,
+              "wins": 16,
+              "losses": 32,
+              "pf": 0.7886
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -37.6672,
+              "trades": 52,
+              "wins": 18,
+              "losses": 34,
+              "pf": 0.7644
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -107.9382,
+              "trades": 51,
+              "wins": 12,
+              "losses": 39,
+              "pf": 0.3265
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": -25.9862,
+              "trades": 35,
+              "wins": 9,
+              "losses": 26,
+              "pf": 0.8138
+            }
+          ],
+          "open_at_latest_cutoff": false
+        },
+        "traded": {
+          "model": "traded",
+          "train_2025": {
+            "trades": 799,
+            "wins": 258,
+            "losses": 541,
+            "net_usd": -1124.983,
+            "gross_usd": -228.885,
+            "fees_gst_usd": 896.098,
+            "profit_factor": 0.54,
+            "win_rate_pct": 32.29,
+            "max_closed_trade_drawdown_usd": 1137.7888,
+            "positive_months": 0,
+            "negative_months": 12
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 559,
+            "wins": 189,
+            "losses": 370,
+            "net_usd": -666.0502,
+            "gross_usd": -31.7435,
+            "fees_gst_usd": 634.3067,
+            "profit_factor": 0.6635,
+            "win_rate_pct": 33.81,
+            "max_closed_trade_drawdown_usd": 695.0823,
+            "positive_months": 0,
+            "negative_months": 10
+          },
+          "complete_22_months": {
+            "trades": 1358,
+            "wins": 447,
+            "losses": 911,
+            "net_usd": -1791.0332,
+            "gross_usd": -260.6285,
+            "fees_gst_usd": 1530.4047,
+            "profit_factor": 0.5952,
+            "win_rate_pct": 32.92,
+            "max_closed_trade_drawdown_usd": 1800.0312,
+            "positive_months": 0,
+            "negative_months": 22
+          },
+          "nov_2026_partial": {
+            "trades": 35,
+            "wins": 9,
+            "losses": 26,
+            "net_usd": -24.8109,
+            "gross_usd": 15.003,
+            "fees_gst_usd": 39.8139,
+            "profit_factor": 0.8213,
+            "win_rate_pct": 25.71,
+            "max_closed_trade_drawdown_usd": 71.5649,
+            "positive_months": 0,
+            "negative_months": 1
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -166.1838,
+              "trades": 53,
+              "wins": 13,
+              "losses": 40,
+              "pf": 0.2688
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -22.0402,
+              "trades": 62,
+              "wins": 24,
+              "losses": 38,
+              "pf": 0.8603
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -143.5267,
+              "trades": 74,
+              "wins": 22,
+              "losses": 52,
+              "pf": 0.5034
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -139.2087,
+              "trades": 65,
+              "wins": 24,
+              "losses": 41,
+              "pf": 0.4632
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -163.3507,
+              "trades": 74,
+              "wins": 20,
+              "losses": 54,
+              "pf": 0.3741
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -79.3912,
+              "trades": 69,
+              "wins": 20,
+              "losses": 49,
+              "pf": 0.5129
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -8.235,
+              "trades": 69,
+              "wins": 29,
+              "losses": 40,
+              "pf": 0.945
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": -38.742,
+              "trades": 67,
+              "wins": 23,
+              "losses": 44,
+              "pf": 0.76
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -84.5545,
+              "trades": 53,
+              "wins": 14,
+              "losses": 39,
+              "pf": 0.4233
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": -65.0208,
+              "trades": 72,
+              "wins": 24,
+              "losses": 48,
+              "pf": 0.6462
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -66.1844,
+              "trades": 86,
+              "wins": 31,
+              "losses": 55,
+              "pf": 0.7248
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -148.545,
+              "trades": 55,
+              "wins": 14,
+              "losses": 41,
+              "pf": 0.2794
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": -24.242,
+              "trades": 59,
+              "wins": 22,
+              "losses": 37,
+              "pf": 0.8447
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -8.0435,
+              "trades": 67,
+              "wins": 27,
+              "losses": 40,
+              "pf": 0.9617
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -149.6585,
+              "trades": 65,
+              "wins": 20,
+              "losses": 45,
+              "pf": 0.4712
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -90.0553,
+              "trades": 57,
+              "wins": 19,
+              "losses": 38,
+              "pf": 0.5626
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -100.9869,
+              "trades": 48,
+              "wins": 16,
+              "losses": 32,
+              "pf": 0.4375
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": -13.7687,
+              "trades": 64,
+              "wins": 19,
+              "losses": 45,
+              "pf": 0.9421
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -83.3011,
+              "trades": 50,
+              "wins": 17,
+              "losses": 33,
+              "pf": 0.6293
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": -33.8328,
+              "trades": 48,
+              "wins": 16,
+              "losses": 32,
+              "pf": 0.8042
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -63.849,
+              "trades": 52,
+              "wins": 19,
+              "losses": 33,
+              "pf": 0.5959
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -98.3125,
+              "trades": 49,
+              "wins": 14,
+              "losses": 35,
+              "pf": 0.3518
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": -24.8109,
+              "trades": 35,
+              "wins": 9,
+              "losses": 26,
+              "pf": 0.8213
+            }
+          ],
+          "open_at_latest_cutoff": false
+        }
+      }
+    },
+    "btc_historical_full_best_100_3000": {
+      "activation_points": 100,
+      "trailing_stop_points": 3000,
+      "models": {
+        "mark": {
+          "model": "mark",
+          "train_2025": {
+            "trades": 234,
+            "wins": 63,
+            "losses": 171,
+            "net_usd": -537.4815,
+            "gross_usd": -274.7695,
+            "fees_gst_usd": 262.712,
+            "profit_factor": 0.7362,
+            "win_rate_pct": 26.92,
+            "max_closed_trade_drawdown_usd": 564.9143,
+            "positive_months": 5,
+            "negative_months": 7
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 169,
+            "wins": 54,
+            "losses": 115,
+            "net_usd": 9.4594,
+            "gross_usd": 201.5335,
+            "fees_gst_usd": 192.0741,
+            "profit_factor": 1.0078,
+            "win_rate_pct": 31.95,
+            "max_closed_trade_drawdown_usd": 359.6773,
+            "positive_months": 4,
+            "negative_months": 6
+          },
+          "complete_22_months": {
+            "trades": 403,
+            "wins": 117,
+            "losses": 286,
+            "net_usd": -528.0221,
+            "gross_usd": -73.236,
+            "fees_gst_usd": 454.7861,
+            "profit_factor": 0.8378,
+            "win_rate_pct": 29.03,
+            "max_closed_trade_drawdown_usd": 602.9629,
+            "positive_months": 9,
+            "negative_months": 13
+          },
+          "nov_2026_partial": {
+            "trades": 6,
+            "wins": 2,
+            "losses": 4,
+            "net_usd": 91.4776,
+            "gross_usd": 98.1875,
+            "fees_gst_usd": 6.7099,
+            "profit_factor": 2.7123,
+            "win_rate_pct": 33.33,
+            "max_closed_trade_drawdown_usd": 35.4732,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -199.4598,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "pf": 0.1945
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": 12.214,
+              "trades": 17,
+              "wins": 6,
+              "losses": 11,
+              "pf": 1.0823
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -131.1483,
+              "trades": 25,
+              "wins": 5,
+              "losses": 20,
+              "pf": 0.5954
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": 69.9045,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "pf": 1.4535
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -0.4853,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "pf": 0.9958
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": 41.5866,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "pf": 1.3986
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -6.19,
+              "trades": 18,
+              "wins": 3,
+              "losses": 15,
+              "pf": 0.9493
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 14.3157,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "pf": 1.2635
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -88.373,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "pf": 0.2907
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 65.8044,
+              "trades": 21,
+              "wins": 7,
+              "losses": 14,
+              "pf": 1.3563
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -84.9072,
+              "trades": 23,
+              "wins": 7,
+              "losses": 16,
+              "pf": 0.6072
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -230.743,
+              "trades": 24,
+              "wins": 2,
+              "losses": 22,
+              "pf": 0.0445
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 161.7139,
+              "trades": 11,
+              "wins": 7,
+              "losses": 4,
+              "pf": 6.3242
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": 159.9147,
+              "trades": 16,
+              "wins": 8,
+              "losses": 8,
+              "pf": 2.3125
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -199.1776,
+              "trades": 19,
+              "wins": 3,
+              "losses": 16,
+              "pf": 0.203
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -118.5691,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "pf": 0.1839
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -9.1948,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "pf": 0.8856
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 110.1579,
+              "trades": 14,
+              "wins": 6,
+              "losses": 8,
+              "pf": 2.1916
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -30.6728,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "pf": 0.7387
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": 93.7151,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "pf": 1.6416
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -70.2651,
+              "trades": 17,
+              "wins": 2,
+              "losses": 15,
+              "pf": 0.3758
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -88.1629,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "pf": 0.2755
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 91.4776,
+              "trades": 6,
+              "wins": 2,
+              "losses": 4,
+              "pf": 2.7123
+            }
+          ],
+          "open_at_latest_cutoff": true
+        },
+        "traded": {
+          "model": "traded",
+          "train_2025": {
+            "trades": 237,
+            "wins": 64,
+            "losses": 173,
+            "net_usd": -592.3686,
+            "gross_usd": -326.285,
+            "fees_gst_usd": 266.0836,
+            "profit_factor": 0.712,
+            "win_rate_pct": 27.0,
+            "max_closed_trade_drawdown_usd": 611.0788,
+            "positive_months": 6,
+            "negative_months": 6
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 169,
+            "wins": 54,
+            "losses": 115,
+            "net_usd": 19.2325,
+            "gross_usd": 211.304,
+            "fees_gst_usd": 192.0715,
+            "profit_factor": 1.0159,
+            "win_rate_pct": 31.95,
+            "max_closed_trade_drawdown_usd": 359.2523,
+            "positive_months": 4,
+            "negative_months": 6
+          },
+          "complete_22_months": {
+            "trades": 406,
+            "wins": 118,
+            "losses": 288,
+            "net_usd": -573.1362,
+            "gross_usd": -114.981,
+            "fees_gst_usd": 458.1552,
+            "profit_factor": 0.8245,
+            "win_rate_pct": 29.06,
+            "max_closed_trade_drawdown_usd": 642.8525,
+            "positive_months": 10,
+            "negative_months": 12
+          },
+          "nov_2026_partial": {
+            "trades": 6,
+            "wins": 2,
+            "losses": 4,
+            "net_usd": 93.8255,
+            "gross_usd": 100.534,
+            "fees_gst_usd": 6.7085,
+            "profit_factor": 2.7562,
+            "win_rate_pct": 33.33,
+            "max_closed_trade_drawdown_usd": 35.4732,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -207.0845,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "pf": 0.1799
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": 13.2696,
+              "trades": 17,
+              "wins": 6,
+              "losses": 11,
+              "pf": 1.0901
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -136.1841,
+              "trades": 25,
+              "wins": 5,
+              "losses": 20,
+              "pf": 0.586
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": 56.8732,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "pf": 1.3715
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": 1.3766,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "pf": 1.0121
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": 41.5866,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "pf": 1.3986
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -6.1576,
+              "trades": 18,
+              "wins": 3,
+              "losses": 15,
+              "pf": 0.9495
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 15.3443,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "pf": 1.2825
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -87.3084,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "pf": 0.2932
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 51.9637,
+              "trades": 21,
+              "wins": 7,
+              "losses": 14,
+              "pf": 1.2853
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -108.6055,
+              "trades": 24,
+              "wins": 7,
+              "losses": 17,
+              "pf": 0.5405
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -227.4427,
+              "trades": 24,
+              "wins": 2,
+              "losses": 22,
+              "pf": 0.0451
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 164.2034,
+              "trades": 11,
+              "wins": 7,
+              "losses": 4,
+              "pf": 6.4456
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": 163.2752,
+              "trades": 16,
+              "wins": 8,
+              "losses": 8,
+              "pf": 2.3846
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -199.383,
+              "trades": 19,
+              "wins": 3,
+              "losses": 16,
+              "pf": 0.199
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -117.9387,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "pf": 0.1847
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -9.1948,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "pf": 0.8856
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 112.7845,
+              "trades": 14,
+              "wins": 6,
+              "losses": 8,
+              "pf": 2.2557
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -30.7251,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "pf": 0.7384
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": 93.9252,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "pf": 1.6439
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -70.2651,
+              "trades": 17,
+              "wins": 2,
+              "losses": 15,
+              "pf": 0.3758
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -87.4492,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "pf": 0.2772
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 93.8255,
+              "trades": 6,
+              "wins": 2,
+              "losses": 4,
+              "pf": 2.7562
+            }
+          ],
+          "open_at_latest_cutoff": true
+        }
+      }
+    },
+    "eth_weekly_winner_500_750": {
+      "activation_points": 500,
+      "trailing_stop_points": 750,
+      "models": {
+        "mark": {
+          "model": "mark",
+          "train_2025": {
+            "trades": 581,
+            "wins": 265,
+            "losses": 316,
+            "net_usd": -929.221,
+            "gross_usd": -253.7985,
+            "fees_gst_usd": 675.4225,
+            "profit_factor": 0.7506,
+            "win_rate_pct": 45.61,
+            "max_closed_trade_drawdown_usd": 1048.2563,
+            "positive_months": 3,
+            "negative_months": 9
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 437,
+            "wins": 192,
+            "losses": 245,
+            "net_usd": -508.9474,
+            "gross_usd": 1.34,
+            "fees_gst_usd": 510.2874,
+            "profit_factor": 0.7952,
+            "win_rate_pct": 43.94,
+            "max_closed_trade_drawdown_usd": 584.1666,
+            "positive_months": 1,
+            "negative_months": 9
+          },
+          "complete_22_months": {
+            "trades": 1018,
+            "wins": 457,
+            "losses": 561,
+            "net_usd": -1438.1685,
+            "gross_usd": -252.4585,
+            "fees_gst_usd": 1185.71,
+            "profit_factor": 0.7684,
+            "win_rate_pct": 44.89,
+            "max_closed_trade_drawdown_usd": 1505.4691,
+            "positive_months": 4,
+            "negative_months": 18
+          },
+          "nov_2026_partial": {
+            "trades": 25,
+            "wins": 11,
+            "losses": 14,
+            "net_usd": 87.4549,
+            "gross_usd": 116.509,
+            "fees_gst_usd": 29.0541,
+            "profit_factor": 1.626,
+            "win_rate_pct": 44.0,
+            "max_closed_trade_drawdown_usd": 55.5957,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -42.5102,
+              "trades": 51,
+              "wins": 23,
+              "losses": 28,
+              "pf": 0.8326
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": 10.9769,
+              "trades": 48,
+              "wins": 26,
+              "losses": 22,
+              "pf": 1.0394
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -282.3092,
+              "trades": 57,
+              "wins": 23,
+              "losses": 34,
+              "pf": 0.4734
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -423.57,
+              "trades": 47,
+              "wins": 14,
+              "losses": 33,
+              "pf": 0.1846
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -130.6252,
+              "trades": 44,
+              "wins": 22,
+              "losses": 22,
+              "pf": 0.5779
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -0.4699,
+              "trades": 43,
+              "wins": 25,
+              "losses": 18,
+              "pf": 0.9979
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -35.3047,
+              "trades": 49,
+              "wins": 25,
+              "losses": 24,
+              "pf": 0.8652
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 36.1348,
+              "trades": 48,
+              "wins": 25,
+              "losses": 23,
+              "pf": 1.1231
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -4.5139,
+              "trades": 45,
+              "wins": 19,
+              "losses": 26,
+              "pf": 0.9794
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 65.2617,
+              "trades": 54,
+              "wins": 23,
+              "losses": 31,
+              "pf": 1.2647
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -66.8436,
+              "trades": 50,
+              "wins": 23,
+              "losses": 27,
+              "pf": 0.8055
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -55.4477,
+              "trades": 45,
+              "wins": 17,
+              "losses": 28,
+              "pf": 0.7707
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": -2.4161,
+              "trades": 49,
+              "wins": 23,
+              "losses": 26,
+              "pf": 0.9893
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -142.6991,
+              "trades": 52,
+              "wins": 23,
+              "losses": 29,
+              "pf": 0.6868
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -67.8755,
+              "trades": 56,
+              "wins": 29,
+              "losses": 27,
+              "pf": 0.7756
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -23.312,
+              "trades": 41,
+              "wins": 18,
+              "losses": 23,
+              "pf": 0.8826
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -7.2917,
+              "trades": 33,
+              "wins": 18,
+              "losses": 15,
+              "pf": 0.9537
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": -24.4431,
+              "trades": 46,
+              "wins": 19,
+              "losses": 27,
+              "pf": 0.9074
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -119.7125,
+              "trades": 46,
+              "wins": 17,
+              "losses": 29,
+              "pf": 0.547
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": 43.294,
+              "trades": 36,
+              "wins": 17,
+              "losses": 19,
+              "pf": 1.2495
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -78.5396,
+              "trades": 45,
+              "wins": 15,
+              "losses": 30,
+              "pf": 0.6504
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -85.9519,
+              "trades": 33,
+              "wins": 13,
+              "losses": 20,
+              "pf": 0.6052
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 87.4549,
+              "trades": 25,
+              "wins": 11,
+              "losses": 14,
+              "pf": 1.626
+            }
+          ],
+          "open_at_latest_cutoff": false
+        },
+        "traded": {
+          "model": "traded",
+          "train_2025": {
+            "trades": 590,
+            "wins": 265,
+            "losses": 325,
+            "net_usd": -1096.8823,
+            "gross_usd": -411.02,
+            "fees_gst_usd": 685.8623,
+            "profit_factor": 0.7145,
+            "win_rate_pct": 44.92,
+            "max_closed_trade_drawdown_usd": 1170.7961,
+            "positive_months": 2,
+            "negative_months": 10
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 444,
+            "wins": 194,
+            "losses": 250,
+            "net_usd": -732.1916,
+            "gross_usd": -213.7245,
+            "fees_gst_usd": 518.4671,
+            "profit_factor": 0.7072,
+            "win_rate_pct": 43.69,
+            "max_closed_trade_drawdown_usd": 806.9925,
+            "positive_months": 1,
+            "negative_months": 9
+          },
+          "complete_22_months": {
+            "trades": 1034,
+            "wins": 459,
+            "losses": 575,
+            "net_usd": -1829.0739,
+            "gross_usd": -624.7445,
+            "fees_gst_usd": 1204.3294,
+            "profit_factor": 0.7116,
+            "win_rate_pct": 44.39,
+            "max_closed_trade_drawdown_usd": 1896.1653,
+            "positive_months": 3,
+            "negative_months": 19
+          },
+          "nov_2026_partial": {
+            "trades": 29,
+            "wins": 12,
+            "losses": 17,
+            "net_usd": 74.2027,
+            "gross_usd": 107.891,
+            "fees_gst_usd": 33.6883,
+            "profit_factor": 1.4764,
+            "win_rate_pct": 41.38,
+            "max_closed_trade_drawdown_usd": 70.491,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -47.1811,
+              "trades": 51,
+              "wins": 23,
+              "losses": 28,
+              "pf": 0.8193
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -5.8203,
+              "trades": 48,
+              "wins": 25,
+              "losses": 23,
+              "pf": 0.9793
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -266.7769,
+              "trades": 57,
+              "wins": 23,
+              "losses": 34,
+              "pf": 0.496
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -436.2012,
+              "trades": 47,
+              "wins": 13,
+              "losses": 34,
+              "pf": 0.1689
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -169.3372,
+              "trades": 46,
+              "wins": 22,
+              "losses": 24,
+              "pf": 0.4982
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -4.6249,
+              "trades": 44,
+              "wins": 25,
+              "losses": 19,
+              "pf": 0.9803
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -24.2869,
+              "trades": 49,
+              "wins": 27,
+              "losses": 22,
+              "pf": 0.9046
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 49.5194,
+              "trades": 48,
+              "wins": 26,
+              "losses": 22,
+              "pf": 1.1714
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -22.9748,
+              "trades": 47,
+              "wins": 18,
+              "losses": 29,
+              "pf": 0.8981
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 63.9003,
+              "trades": 55,
+              "wins": 25,
+              "losses": 30,
+              "pf": 1.2562
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -101.6812,
+              "trades": 51,
+              "wins": 24,
+              "losses": 27,
+              "pf": 0.7149
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -131.4175,
+              "trades": 47,
+              "wins": 14,
+              "losses": 33,
+              "pf": 0.5605
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": -12.7971,
+              "trades": 49,
+              "wins": 23,
+              "losses": 26,
+              "pf": 0.9424
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -187.3492,
+              "trades": 53,
+              "wins": 23,
+              "losses": 30,
+              "pf": 0.5865
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -98.9808,
+              "trades": 58,
+              "wins": 29,
+              "losses": 29,
+              "pf": 0.6745
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -90.4065,
+              "trades": 43,
+              "wins": 19,
+              "losses": 24,
+              "pf": 0.5744
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -12.4114,
+              "trades": 33,
+              "wins": 18,
+              "losses": 15,
+              "pf": 0.9209
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": -54.0506,
+              "trades": 46,
+              "wins": 19,
+              "losses": 27,
+              "pf": 0.7949
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -138.6586,
+              "trades": 46,
+              "wins": 17,
+              "losses": 29,
+              "pf": 0.4732
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": 24.0835,
+              "trades": 37,
+              "wins": 17,
+              "losses": 20,
+              "pf": 1.1361
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -77.3751,
+              "trades": 46,
+              "wins": 16,
+              "losses": 30,
+              "pf": 0.6638
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -84.2459,
+              "trades": 33,
+              "wins": 13,
+              "losses": 20,
+              "pf": 0.6132
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 74.2027,
+              "trades": 29,
+              "wins": 12,
+              "losses": 17,
+              "pf": 1.4764
+            }
+          ],
+          "open_at_latest_cutoff": false
+        }
+      }
+    },
+    "eth_week_alt_100_750": {
+      "activation_points": 100,
+      "trailing_stop_points": 750,
+      "models": {
+        "mark": {
+          "model": "mark",
+          "train_2025": {
+            "trades": 754,
+            "wins": 254,
+            "losses": 500,
+            "net_usd": -1043.5176,
+            "gross_usd": -166.933,
+            "fees_gst_usd": 876.5846,
+            "profit_factor": 0.7206,
+            "win_rate_pct": 33.69,
+            "max_closed_trade_drawdown_usd": 1095.3076,
+            "positive_months": 3,
+            "negative_months": 9
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 556,
+            "wins": 191,
+            "losses": 365,
+            "net_usd": -598.6156,
+            "gross_usd": 50.6425,
+            "fees_gst_usd": 649.2581,
+            "profit_factor": 0.765,
+            "win_rate_pct": 34.35,
+            "max_closed_trade_drawdown_usd": 708.3633,
+            "positive_months": 2,
+            "negative_months": 8
+          },
+          "complete_22_months": {
+            "trades": 1310,
+            "wins": 445,
+            "losses": 865,
+            "net_usd": -1642.1332,
+            "gross_usd": -116.2905,
+            "fees_gst_usd": 1525.8427,
+            "profit_factor": 0.7386,
+            "win_rate_pct": 33.97,
+            "max_closed_trade_drawdown_usd": 1693.9232,
+            "positive_months": 5,
+            "negative_months": 17
+          },
+          "nov_2026_partial": {
+            "trades": 35,
+            "wins": 12,
+            "losses": 23,
+            "net_usd": 109.4855,
+            "gross_usd": 150.201,
+            "fees_gst_usd": 40.7155,
+            "profit_factor": 1.8338,
+            "win_rate_pct": 34.29,
+            "max_closed_trade_drawdown_usd": 65.3652,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -115.4055,
+              "trades": 63,
+              "wins": 25,
+              "losses": 38,
+              "pf": 0.6513
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": 36.9471,
+              "trades": 60,
+              "wins": 25,
+              "losses": 35,
+              "pf": 1.1403
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -229.1469,
+              "trades": 69,
+              "wins": 20,
+              "losses": 49,
+              "pf": 0.5057
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -461.8253,
+              "trades": 69,
+              "wins": 13,
+              "losses": 56,
+              "pf": 0.1451
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -108.9481,
+              "trades": 61,
+              "wins": 21,
+              "losses": 40,
+              "pf": 0.6143
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -26.9476,
+              "trades": 58,
+              "wins": 23,
+              "losses": 35,
+              "pf": 0.894
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -1.6878,
+              "trades": 56,
+              "wins": 26,
+              "losses": 30,
+              "pf": 0.9924
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 72.5399,
+              "trades": 61,
+              "wins": 22,
+              "losses": 39,
+              "pf": 1.3132
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -19.6012,
+              "trades": 58,
+              "wins": 19,
+              "losses": 39,
+              "pf": 0.9134
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 57.6721,
+              "trades": 68,
+              "wins": 23,
+              "losses": 45,
+              "pf": 1.2352
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -75.5825,
+              "trades": 67,
+              "wins": 19,
+              "losses": 48,
+              "pf": 0.7698
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -171.5317,
+              "trades": 64,
+              "wins": 18,
+              "losses": 46,
+              "pf": 0.5052
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 43.3865,
+              "trades": 52,
+              "wins": 21,
+              "losses": 31,
+              "pf": 1.2615
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -127.3888,
+              "trades": 71,
+              "wins": 23,
+              "losses": 48,
+              "pf": 0.714
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -39.1147,
+              "trades": 70,
+              "wins": 29,
+              "losses": 41,
+              "pf": 0.8468
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -4.3666,
+              "trades": 48,
+              "wins": 19,
+              "losses": 29,
+              "pf": 0.9768
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -32.9587,
+              "trades": 48,
+              "wins": 20,
+              "losses": 28,
+              "pf": 0.8291
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": -115.2697,
+              "trades": 60,
+              "wins": 19,
+              "losses": 41,
+              "pf": 0.6523
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -109.0881,
+              "trades": 53,
+              "wins": 15,
+              "losses": 38,
+              "pf": 0.5517
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": 14.9995,
+              "trades": 47,
+              "wins": 17,
+              "losses": 30,
+              "pf": 1.0714
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -96.9757,
+              "trades": 59,
+              "wins": 15,
+              "losses": 44,
+              "pf": 0.61
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -131.8393,
+              "trades": 48,
+              "wins": 13,
+              "losses": 35,
+              "pf": 0.5049
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 109.4855,
+              "trades": 35,
+              "wins": 12,
+              "losses": 23,
+              "pf": 1.8338
+            }
+          ],
+          "open_at_latest_cutoff": false
+        },
+        "traded": {
+          "model": "traded",
+          "train_2025": {
+            "trades": 759,
+            "wins": 256,
+            "losses": 503,
+            "net_usd": -1096.5711,
+            "gross_usd": -214.135,
+            "fees_gst_usd": 882.4361,
+            "profit_factor": 0.7092,
+            "win_rate_pct": 33.73,
+            "max_closed_trade_drawdown_usd": 1147.5381,
+            "positive_months": 4,
+            "negative_months": 8
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 561,
+            "wins": 195,
+            "losses": 366,
+            "net_usd": -740.3299,
+            "gross_usd": -85.22,
+            "fees_gst_usd": 655.1099,
+            "profit_factor": 0.7034,
+            "win_rate_pct": 34.76,
+            "max_closed_trade_drawdown_usd": 795.4756,
+            "positive_months": 2,
+            "negative_months": 8
+          },
+          "complete_22_months": {
+            "trades": 1320,
+            "wins": 451,
+            "losses": 869,
+            "net_usd": -1836.9011,
+            "gross_usd": -299.355,
+            "fees_gst_usd": 1537.5461,
+            "profit_factor": 0.7069,
+            "win_rate_pct": 34.17,
+            "max_closed_trade_drawdown_usd": 1887.868,
+            "positive_months": 6,
+            "negative_months": 16
+          },
+          "nov_2026_partial": {
+            "trades": 39,
+            "wins": 13,
+            "losses": 26,
+            "net_usd": 106.6363,
+            "gross_usd": 151.992,
+            "fees_gst_usd": 45.3557,
+            "profit_factor": 1.7786,
+            "win_rate_pct": 33.33,
+            "max_closed_trade_drawdown_usd": 70.0335,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -108.4965,
+              "trades": 63,
+              "wins": 25,
+              "losses": 38,
+              "pf": 0.6681
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": 11.3356,
+              "trades": 60,
+              "wins": 24,
+              "losses": 36,
+              "pf": 1.0415
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -213.0703,
+              "trades": 69,
+              "wins": 20,
+              "losses": 49,
+              "pf": 0.5331
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -462.3511,
+              "trades": 70,
+              "wins": 13,
+              "losses": 57,
+              "pf": 0.145
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -135.5419,
+              "trades": 62,
+              "wins": 20,
+              "losses": 42,
+              "pf": 0.5504
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -20.7891,
+              "trades": 58,
+              "wins": 23,
+              "losses": 35,
+              "pf": 0.9185
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": 7.348,
+              "trades": 56,
+              "wins": 28,
+              "losses": 28,
+              "pf": 1.0338
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 83.5097,
+              "trades": 61,
+              "wins": 23,
+              "losses": 38,
+              "pf": 1.364
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -12.7476,
+              "trades": 58,
+              "wins": 19,
+              "losses": 39,
+              "pf": 0.9429
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 55.9044,
+              "trades": 69,
+              "wins": 25,
+              "losses": 44,
+              "pf": 1.226
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -69.8469,
+              "trades": 67,
+              "wins": 20,
+              "losses": 47,
+              "pf": 0.7666
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -231.8256,
+              "trades": 66,
+              "wins": 16,
+              "losses": 50,
+              "pf": 0.4208
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 37.8806,
+              "trades": 52,
+              "wins": 21,
+              "losses": 31,
+              "pf": 1.2416
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -142.562,
+              "trades": 72,
+              "wins": 24,
+              "losses": 48,
+              "pf": 0.655
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -47.2267,
+              "trades": 70,
+              "wins": 30,
+              "losses": 40,
+              "pf": 0.8125
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -63.1837,
+              "trades": 50,
+              "wins": 20,
+              "losses": 30,
+              "pf": 0.6735
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -33.2026,
+              "trades": 48,
+              "wins": 20,
+              "losses": 28,
+              "pf": 0.8233
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": -140.1684,
+              "trades": 60,
+              "wins": 19,
+              "losses": 41,
+              "pf": 0.5704
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -133.7076,
+              "trades": 54,
+              "wins": 16,
+              "losses": 38,
+              "pf": 0.4602
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": 1.001,
+              "trades": 47,
+              "wins": 17,
+              "losses": 30,
+              "pf": 1.0048
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -90.4304,
+              "trades": 60,
+              "wins": 15,
+              "losses": 45,
+              "pf": 0.633
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -128.7301,
+              "trades": 48,
+              "wins": 13,
+              "losses": 35,
+              "pf": 0.5143
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 106.6363,
+              "trades": 39,
+              "wins": 13,
+              "losses": 26,
+              "pf": 1.7786
+            }
+          ],
+          "open_at_latest_cutoff": false
+        }
+      }
+    },
+    "eth_previous_100_500": {
+      "activation_points": 100,
+      "trailing_stop_points": 500,
+      "models": {
+        "mark": {
+          "model": "mark",
+          "train_2025": {
+            "trades": 883,
+            "wins": 310,
+            "losses": 573,
+            "net_usd": -1165.2044,
+            "gross_usd": -138.929,
+            "fees_gst_usd": 1026.2754,
+            "profit_factor": 0.6478,
+            "win_rate_pct": 35.11,
+            "max_closed_trade_drawdown_usd": 1193.4744,
+            "positive_months": 2,
+            "negative_months": 10
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 698,
+            "wins": 250,
+            "losses": 448,
+            "net_usd": -811.8963,
+            "gross_usd": 3.008,
+            "fees_gst_usd": 814.9043,
+            "profit_factor": 0.6607,
+            "win_rate_pct": 35.82,
+            "max_closed_trade_drawdown_usd": 839.6534,
+            "positive_months": 1,
+            "negative_months": 9
+          },
+          "complete_22_months": {
+            "trades": 1581,
+            "wins": 560,
+            "losses": 1021,
+            "net_usd": -1977.1007,
+            "gross_usd": -135.921,
+            "fees_gst_usd": 1841.1797,
+            "profit_factor": 0.6532,
+            "win_rate_pct": 35.42,
+            "max_closed_trade_drawdown_usd": 2005.3706,
+            "positive_months": 3,
+            "negative_months": 19
+          },
+          "nov_2026_partial": {
+            "trades": 48,
+            "wins": 18,
+            "losses": 30,
+            "net_usd": 40.3099,
+            "gross_usd": 96.2265,
+            "fees_gst_usd": 55.9166,
+            "profit_factor": 1.2948,
+            "win_rate_pct": 37.5,
+            "max_closed_trade_drawdown_usd": 59.3838,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -127.8178,
+              "trades": 71,
+              "wins": 28,
+              "losses": 43,
+              "pf": 0.5885
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -14.5544,
+              "trades": 69,
+              "wins": 28,
+              "losses": 41,
+              "pf": 0.9419
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -236.1573,
+              "trades": 84,
+              "wins": 30,
+              "losses": 54,
+              "pf": 0.4446
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -393.0696,
+              "trades": 76,
+              "wins": 16,
+              "losses": 60,
+              "pf": 0.1186
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -93.0878,
+              "trades": 67,
+              "wins": 19,
+              "losses": 48,
+              "pf": 0.5822
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -60.2575,
+              "trades": 67,
+              "wins": 24,
+              "losses": 43,
+              "pf": 0.7399
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -12.6756,
+              "trades": 67,
+              "wins": 34,
+              "losses": 33,
+              "pf": 0.9427
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 51.4505,
+              "trades": 71,
+              "wins": 27,
+              "losses": 44,
+              "pf": 1.2643
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -40.4249,
+              "trades": 73,
+              "wins": 25,
+              "losses": 48,
+              "pf": 0.8127
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 49.1681,
+              "trades": 84,
+              "wins": 29,
+              "losses": 55,
+              "pf": 1.2289
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -146.8153,
+              "trades": 79,
+              "wins": 25,
+              "losses": 54,
+              "pf": 0.4772
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -140.9628,
+              "trades": 75,
+              "wins": 25,
+              "losses": 50,
+              "pf": 0.5205
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": 9.6009,
+              "trades": 66,
+              "wins": 29,
+              "losses": 37,
+              "pf": 1.0588
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -172.18,
+              "trades": 77,
+              "wins": 27,
+              "losses": 50,
+              "pf": 0.5397
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -44.1892,
+              "trades": 84,
+              "wins": 34,
+              "losses": 50,
+              "pf": 0.8285
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -130.6912,
+              "trades": 72,
+              "wins": 26,
+              "losses": 46,
+              "pf": 0.4835
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -32.1687,
+              "trades": 68,
+              "wins": 25,
+              "losses": 43,
+              "pf": 0.8289
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": -121.5142,
+              "trades": 72,
+              "wins": 24,
+              "losses": 48,
+              "pf": 0.5688
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -66.1664,
+              "trades": 62,
+              "wins": 24,
+              "losses": 38,
+              "pf": 0.6511
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": -111.2223,
+              "trades": 68,
+              "wins": 20,
+              "losses": 48,
+              "pf": 0.54
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -41.8458,
+              "trades": 73,
+              "wins": 25,
+              "losses": 48,
+              "pf": 0.8175
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -101.5192,
+              "trades": 56,
+              "wins": 16,
+              "losses": 40,
+              "pf": 0.5256
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 40.3099,
+              "trades": 48,
+              "wins": 18,
+              "losses": 30,
+              "pf": 1.2948
+            }
+          ],
+          "open_at_latest_cutoff": false
+        },
+        "traded": {
+          "model": "traded",
+          "train_2025": {
+            "trades": 891,
+            "wins": 311,
+            "losses": 580,
+            "net_usd": -1173.2152,
+            "gross_usd": -137.696,
+            "fees_gst_usd": 1035.5192,
+            "profit_factor": 0.645,
+            "win_rate_pct": 34.9,
+            "max_closed_trade_drawdown_usd": 1202.1376,
+            "positive_months": 2,
+            "negative_months": 10
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 708,
+            "wins": 256,
+            "losses": 452,
+            "net_usd": -830.5968,
+            "gross_usd": -4.029,
+            "fees_gst_usd": 826.5678,
+            "profit_factor": 0.6504,
+            "win_rate_pct": 36.16,
+            "max_closed_trade_drawdown_usd": 849.2974,
+            "positive_months": 0,
+            "negative_months": 10
+          },
+          "complete_22_months": {
+            "trades": 1599,
+            "wins": 567,
+            "losses": 1032,
+            "net_usd": -2003.8121,
+            "gross_usd": -141.725,
+            "fees_gst_usd": 1862.0871,
+            "profit_factor": 0.6472,
+            "win_rate_pct": 35.46,
+            "max_closed_trade_drawdown_usd": 2032.7344,
+            "positive_months": 2,
+            "negative_months": 20
+          },
+          "nov_2026_partial": {
+            "trades": 56,
+            "wins": 19,
+            "losses": 37,
+            "net_usd": 32.951,
+            "gross_usd": 98.174,
+            "fees_gst_usd": 65.223,
+            "profit_factor": 1.2209,
+            "win_rate_pct": 33.93,
+            "max_closed_trade_drawdown_usd": 68.758,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -128.8334,
+              "trades": 70,
+              "wins": 29,
+              "losses": 41,
+              "pf": 0.5755
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": -12.8016,
+              "trades": 69,
+              "wins": 27,
+              "losses": 42,
+              "pf": 0.9511
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -224.5777,
+              "trades": 84,
+              "wins": 31,
+              "losses": 53,
+              "pf": 0.4615
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -384.9402,
+              "trades": 76,
+              "wins": 17,
+              "losses": 59,
+              "pf": 0.1225
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -97.0272,
+              "trades": 68,
+              "wins": 19,
+              "losses": 49,
+              "pf": 0.583
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": -84.6899,
+              "trades": 66,
+              "wins": 22,
+              "losses": 44,
+              "pf": 0.6289
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": -14.047,
+              "trades": 68,
+              "wins": 33,
+              "losses": 35,
+              "pf": 0.9353
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 50.7625,
+              "trades": 74,
+              "wins": 26,
+              "losses": 48,
+              "pf": 1.2501
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": -34.005,
+              "trades": 73,
+              "wins": 27,
+              "losses": 46,
+              "pf": 0.8388
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 33.8422,
+              "trades": 86,
+              "wins": 30,
+              "losses": 56,
+              "pf": 1.1563
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -112.023,
+              "trades": 80,
+              "wins": 26,
+              "losses": 54,
+              "pf": 0.5492
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -164.8748,
+              "trades": 77,
+              "wins": 24,
+              "losses": 53,
+              "pf": 0.4952
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": -7.7567,
+              "trades": 68,
+              "wins": 28,
+              "losses": 40,
+              "pf": 0.9541
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": -141.1208,
+              "trades": 78,
+              "wins": 29,
+              "losses": 49,
+              "pf": 0.5905
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -25.7856,
+              "trades": 85,
+              "wins": 35,
+              "losses": 50,
+              "pf": 0.8992
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -139.4257,
+              "trades": 72,
+              "wins": 26,
+              "losses": 46,
+              "pf": 0.4371
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -38.7012,
+              "trades": 69,
+              "wins": 25,
+              "losses": 44,
+              "pf": 0.8022
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": -121.3625,
+              "trades": 73,
+              "wins": 24,
+              "losses": 49,
+              "pf": 0.5758
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -61.3528,
+              "trades": 62,
+              "wins": 25,
+              "losses": 37,
+              "pf": 0.6729
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": -120.5265,
+              "trades": 69,
+              "wins": 22,
+              "losses": 47,
+              "pf": 0.4981
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -76.0626,
+              "trades": 73,
+              "wins": 24,
+              "losses": 49,
+              "pf": 0.6706
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -98.5024,
+              "trades": 59,
+              "wins": 18,
+              "losses": 41,
+              "pf": 0.5482
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 32.951,
+              "trades": 56,
+              "wins": 19,
+              "losses": 37,
+              "pf": 1.2209
+            }
+          ],
+          "open_at_latest_cutoff": false
+        }
+      }
+    },
+    "eth_historical_full_best_100_8000": {
+      "activation_points": 100,
+      "trailing_stop_points": 8000,
+      "models": {
+        "mark": {
+          "model": "mark",
+          "train_2025": {
+            "trades": 200,
+            "wins": 50,
+            "losses": 150,
+            "net_usd": -150.8252,
+            "gross_usd": 81.941,
+            "fees_gst_usd": 232.7662,
+            "profit_factor": 0.9469,
+            "win_rate_pct": 25.0,
+            "max_closed_trade_drawdown_usd": 978.7955,
+            "positive_months": 6,
+            "negative_months": 6
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 168,
+            "wins": 47,
+            "losses": 121,
+            "net_usd": -31.3569,
+            "gross_usd": 164.8375,
+            "fees_gst_usd": 196.1944,
+            "profit_factor": 0.9824,
+            "win_rate_pct": 27.98,
+            "max_closed_trade_drawdown_usd": 391.3498,
+            "positive_months": 3,
+            "negative_months": 7
+          },
+          "complete_22_months": {
+            "trades": 368,
+            "wins": 97,
+            "losses": 271,
+            "net_usd": -182.1821,
+            "gross_usd": 246.7785,
+            "fees_gst_usd": 428.9606,
+            "profit_factor": 0.9606,
+            "win_rate_pct": 26.36,
+            "max_closed_trade_drawdown_usd": 978.7955,
+            "positive_months": 9,
+            "negative_months": 13
+          },
+          "nov_2026_partial": {
+            "trades": 7,
+            "wins": 1,
+            "losses": 6,
+            "net_usd": 72.8233,
+            "gross_usd": 80.864,
+            "fees_gst_usd": 8.0407,
+            "profit_factor": 1.6914,
+            "win_rate_pct": 14.29,
+            "max_closed_trade_drawdown_usd": 55.0326,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -129.5786,
+              "trades": 17,
+              "wins": 4,
+              "losses": 13,
+              "pf": 0.4591
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": 67.0869,
+              "trades": 15,
+              "wins": 2,
+              "losses": 13,
+              "pf": 1.3299
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -137.2778,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "pf": 0.5979
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -375.6825,
+              "trades": 26,
+              "wins": 2,
+              "losses": 24,
+              "pf": 0.3587
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -235.4542,
+              "trades": 17,
+              "wins": 3,
+              "losses": 14,
+              "pf": 0.1898
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": 181.61,
+              "trades": 14,
+              "wins": 6,
+              "losses": 8,
+              "pf": 2.3942
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": 197.226,
+              "trades": 14,
+              "wins": 3,
+              "losses": 11,
+              "pf": 2.098
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 234.4033,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "pf": 2.2204
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": 111.8787,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "pf": 2.5059
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 187.73,
+              "trades": 14,
+              "wins": 6,
+              "losses": 8,
+              "pf": 2.2291
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -195.3003,
+              "trades": 17,
+              "wins": 4,
+              "losses": 13,
+              "pf": 0.3625
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -57.4666,
+              "trades": 16,
+              "wins": 4,
+              "losses": 12,
+              "pf": 0.6018
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": -59.9302,
+              "trades": 16,
+              "wins": 4,
+              "losses": 12,
+              "pf": 0.6722
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": 62.9455,
+              "trades": 18,
+              "wins": 6,
+              "losses": 12,
+              "pf": 1.2331
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -43.114,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "pf": 0.8274
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -123.107,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "pf": 0.4053
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -7.3812,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "pf": 0.9408
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 127.6212,
+              "trades": 12,
+              "wins": 5,
+              "losses": 7,
+              "pf": 2.0741
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -24.9281,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "pf": 0.8612
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": 203.316,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "pf": 2.8831
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -80.0563,
+              "trades": 19,
+              "wins": 3,
+              "losses": 16,
+              "pf": 0.4979
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -86.7227,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "pf": 0.5338
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 72.8233,
+              "trades": 7,
+              "wins": 1,
+              "losses": 6,
+              "pf": 1.6914
+            }
+          ],
+          "open_at_latest_cutoff": true
+        },
+        "traded": {
+          "model": "traded",
+          "train_2025": {
+            "trades": 200,
+            "wins": 50,
+            "losses": 150,
+            "net_usd": -108.2287,
+            "gross_usd": 124.523,
+            "fees_gst_usd": 232.7517,
+            "profit_factor": 0.9618,
+            "win_rate_pct": 25.0,
+            "max_closed_trade_drawdown_usd": 979.7826,
+            "positive_months": 6,
+            "negative_months": 6
+          },
+          "holdout_2026_jan_oct": {
+            "trades": 168,
+            "wins": 47,
+            "losses": 121,
+            "net_usd": -12.6806,
+            "gross_usd": 183.504,
+            "fees_gst_usd": 196.1846,
+            "profit_factor": 0.9928,
+            "win_rate_pct": 27.98,
+            "max_closed_trade_drawdown_usd": 380.9254,
+            "positive_months": 3,
+            "negative_months": 7
+          },
+          "complete_22_months": {
+            "trades": 368,
+            "wins": 97,
+            "losses": 271,
+            "net_usd": -120.9093,
+            "gross_usd": 308.027,
+            "fees_gst_usd": 428.9363,
+            "profit_factor": 0.9737,
+            "win_rate_pct": 26.36,
+            "max_closed_trade_drawdown_usd": 979.7826,
+            "positive_months": 9,
+            "negative_months": 13
+          },
+          "nov_2026_partial": {
+            "trades": 7,
+            "wins": 1,
+            "losses": 6,
+            "net_usd": 73.5057,
+            "gross_usd": 81.546,
+            "fees_gst_usd": 8.0403,
+            "profit_factor": 1.7024,
+            "win_rate_pct": 14.29,
+            "max_closed_trade_drawdown_usd": 55.0326,
+            "positive_months": 1,
+            "negative_months": 0
+          },
+          "monthly": [
+            {
+              "month_utc": "2025-01",
+              "complete_month": true,
+              "net_usd": -127.7295,
+              "trades": 17,
+              "wins": 4,
+              "losses": 13,
+              "pf": 0.4627
+            },
+            {
+              "month_utc": "2025-02",
+              "complete_month": true,
+              "net_usd": 102.2097,
+              "trades": 15,
+              "wins": 2,
+              "losses": 13,
+              "pf": 1.5106
+            },
+            {
+              "month_utc": "2025-03",
+              "complete_month": true,
+              "net_usd": -137.2778,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "pf": 0.5979
+            },
+            {
+              "month_utc": "2025-04",
+              "complete_month": true,
+              "net_usd": -377.4039,
+              "trades": 26,
+              "wins": 2,
+              "losses": 24,
+              "pf": 0.3576
+            },
+            {
+              "month_utc": "2025-05",
+              "complete_month": true,
+              "net_usd": -237.9038,
+              "trades": 17,
+              "wins": 3,
+              "losses": 14,
+              "pf": 0.1882
+            },
+            {
+              "month_utc": "2025-06",
+              "complete_month": true,
+              "net_usd": 181.61,
+              "trades": 14,
+              "wins": 6,
+              "losses": 8,
+              "pf": 2.3942
+            },
+            {
+              "month_utc": "2025-07",
+              "complete_month": true,
+              "net_usd": 201.5129,
+              "trades": 14,
+              "wins": 3,
+              "losses": 11,
+              "pf": 2.1493
+            },
+            {
+              "month_utc": "2025-08",
+              "complete_month": true,
+              "net_usd": 234.4033,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "pf": 2.2204
+            },
+            {
+              "month_utc": "2025-09",
+              "complete_month": true,
+              "net_usd": 114.4072,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "pf": 2.5942
+            },
+            {
+              "month_utc": "2025-10",
+              "complete_month": true,
+              "net_usd": 187.73,
+              "trades": 14,
+              "wins": 6,
+              "losses": 8,
+              "pf": 2.2291
+            },
+            {
+              "month_utc": "2025-11",
+              "complete_month": true,
+              "net_usd": -192.3201,
+              "trades": 17,
+              "wins": 4,
+              "losses": 13,
+              "pf": 0.366
+            },
+            {
+              "month_utc": "2025-12",
+              "complete_month": true,
+              "net_usd": -57.4666,
+              "trades": 16,
+              "wins": 4,
+              "losses": 12,
+              "pf": 0.6018
+            },
+            {
+              "month_utc": "2026-01",
+              "complete_month": true,
+              "net_usd": -59.9302,
+              "trades": 16,
+              "wins": 4,
+              "losses": 12,
+              "pf": 0.6722
+            },
+            {
+              "month_utc": "2026-02",
+              "complete_month": true,
+              "net_usd": 68.1326,
+              "trades": 18,
+              "wins": 6,
+              "losses": 12,
+              "pf": 1.2523
+            },
+            {
+              "month_utc": "2026-03",
+              "complete_month": true,
+              "net_usd": -40.5242,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "pf": 0.8361
+            },
+            {
+              "month_utc": "2026-04",
+              "complete_month": true,
+              "net_usd": -116.5257,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "pf": 0.4186
+            },
+            {
+              "month_utc": "2026-05",
+              "complete_month": true,
+              "net_usd": -6.128,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "pf": 0.9504
+            },
+            {
+              "month_utc": "2026-06",
+              "complete_month": true,
+              "net_usd": 127.6212,
+              "trades": 12,
+              "wins": 5,
+              "losses": 7,
+              "pf": 2.0741
+            },
+            {
+              "month_utc": "2026-07",
+              "complete_month": true,
+              "net_usd": -24.9281,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "pf": 0.8612
+            },
+            {
+              "month_utc": "2026-08",
+              "complete_month": true,
+              "net_usd": 202.0582,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "pf": 2.8499
+            },
+            {
+              "month_utc": "2026-09",
+              "complete_month": true,
+              "net_usd": -75.7338,
+              "trades": 19,
+              "wins": 3,
+              "losses": 16,
+              "pf": 0.5118
+            },
+            {
+              "month_utc": "2026-10",
+              "complete_month": true,
+              "net_usd": -86.7227,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "pf": 0.5338
+            },
+            {
+              "month_utc": "2026-11",
+              "complete_month": false,
+              "net_usd": 73.5057,
+              "trades": 7,
+              "wins": 1,
+              "losses": 6,
+              "pf": 1.7024
+            }
+          ],
+          "open_at_latest_cutoff": true
+        }
+      }
+    }
+  }
+}
