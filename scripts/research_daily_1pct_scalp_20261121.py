@@ -104,7 +104,9 @@ def features(f):
     session=(local.hour>=12)&(local.hour<19)
     valid_day=np.asarray(local.strftime("%Y-%m").isin(MONTHS),bool)
     t=f.time.to_numpy(np.int64)
-    end_seconds=np.asarray(hour_end.asi8//10**9,dtype=np.int64)
+    # Pandas 3 may store DatetimeIndex internally in microseconds; .asi8/1e9 is NOT portable.
+    # Explicit datetime64[s] conversion preserves UTC epoch second labels.
+    end_seconds=hour_end.to_numpy(dtype="datetime64[s]").astype(np.int64)
     k=np.searchsorted(t,end_seconds,side="left")
     k_safe=np.minimum(k,len(t)-1)
     present=(k<len(t))&(t[k_safe]==end_seconds)
