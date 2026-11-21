@@ -1,0 +1,44 @@
+name: Audit BTC ETH filtered ATR 22-month monthly returns and slippage
+on:
+  push:
+    branches:
+      - research/20261121-volume-volatility-1h-atr-exits
+    paths:
+      - scripts/audit_filtered_atr_pnl_cost_20261121.py
+      - .github/workflows/audit-volume-atr-filter-cost-20261121.yml
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install research libraries
+        run: python -m pip install numpy==2.2.3 pandas==2.2.3 numba==0.61.2
+      - name: Run candidate PnL concentration, monthly and stress audit
+        run: |
+          python -m py_compile scripts/audit_filtered_atr_pnl_cost_20261121.py
+          python scripts/audit_filtered_atr_pnl_cost_20261121.py
+      - name: Upload full audit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-filtered-atr-monthly-cost-audit
+          path: analysis/filter_candidate_cost_monthly_audit_20261121/
+          if-no-files-found: warn
+      - name: Save audit on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/filter_candidate_cost_monthly_audit_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: filtered BTC ETH ATR monthly and slippage sensitivity audit"
+            git push origin HEAD:research/20261121-volume-volatility-1h-atr-exits
+          fi
