@@ -169,8 +169,8 @@ def run_model(f,models,which):
     ledger=[]
     last_exit=-1
     for k,side,kind in models[which]:
-        if k<=last_exit or dayid[k] in booked_day:continue
         day=str(ymd[k])
+        if k<=last_exit or day in booked_day:continue
         booked_day.add(day)
         start_equity=equity
         p=float(op[k])
