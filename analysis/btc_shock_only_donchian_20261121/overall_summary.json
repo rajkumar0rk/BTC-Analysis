@@ -1,0 +1,32 @@
+{
+  "shock_only": {
+    "trades": 301,
+    "wins": 107,
+    "losses": 194,
+    "win_rate_pct": 35.548,
+    "profit_factor": 1.0316,
+    "net_pnl_usd": 334.69,
+    "net_return_pct": 3.3469,
+    "ending_account_usd": 10334.69,
+    "max_trade_close_drawdown_pct": 9.177,
+    "avg_net_R": 0.0284,
+    "total_fee_gst_usd": 1841.47,
+    "total_slippage_usd": 184.26,
+    "gross_before_costs_usd": 2360.43
+  },
+  "unfiltered": {
+    "trades": 573,
+    "wins": 187,
+    "losses": 386,
+    "win_rate_pct": 32.635,
+    "profit_factor": 0.931,
+    "net_pnl_usd": -1323.02,
+    "net_return_pct": -13.2302,
+    "ending_account_usd": 8676.98,
+    "max_trade_close_drawdown_pct": 18.925,
+    "avg_net_R": -0.0432,
+    "total_fee_gst_usd": 3277.52,
+    "total_slippage_usd": 320.86,
+    "gross_before_costs_usd": 2275.36
+  }
+}
