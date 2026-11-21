@@ -1,5 +1,5 @@
 month_utc,status,closed_trades,wins,losses,net_usd,profit_factor_net,no_losses
-2025-01,complete_UTC_month,40,14,26,-89.6771,0.1718,False
+2025-01,complete_UTC_month,40,14,26,-98.6183,0.1587,False
 2025-02,complete_UTC_month,0,0,0,0.0,,False
 2025-03,complete_UTC_month,0,0,0,0.0,,False
 2025-04,complete_UTC_month,0,0,0,0.0,,False

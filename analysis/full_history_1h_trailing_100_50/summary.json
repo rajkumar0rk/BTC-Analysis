@@ -13,6 +13,7 @@
     "liquidation": "No true account PM liquidation model; accounts below $11 cannot initiate new positions",
     "intraminute": "minute_close causal baseline, alternate hypothetical OHLC and OLHC price paths to show price-order uncertainty",
     "signal_warmup": "First 72 complete hourly candles excluded",
+    "wallet_reference": "Research-only unconstrained $1000-target notional per position, ignores depletion and negative equity, NOT a fundable investment account",
     "warnings": [
       "Historic 1m OHLC cannot reveal order of high and low or true 3s mark polling",
       "1m traded CLOSE is not the actual execution price for an earlier stop trigger",
@@ -56,18 +57,20 @@
     "btc_minute_close": {
       "asset": "BTC",
       "method": "minute_close",
+      "wallet_guard": true,
+      "reference_unfundable_if_negative": false,
       "starting_wallet_usd": 100.0,
-      "realized_wallet_end_usd": 5.1022,
-      "net_profit_usd": -94.8978,
-      "net_return_pct_on_start_wallet": -94.8978,
+      "realized_wallet_end_usd": -2.8361,
+      "net_profit_usd": -102.8361,
+      "net_return_pct_on_start_wallet": -102.8361,
       "closed_trades": 37,
       "wins": 14,
       "losses": 23,
       "win_rate_pct": 37.838,
-      "profit_factor_net": 0.2066,
-      "worst_closed_drawdown_pct": 95.3258,
-      "total_gross_usd": -52.9565,
-      "total_fees_gst_usd": 41.9413,
+      "profit_factor_net": 0.1937,
+      "worst_closed_drawdown_pct": 102.5981,
+      "total_gross_usd": -60.9025,
+      "total_fees_gst_usd": 41.9336,
       "hourly_candidates_seen": 2493,
       "skips": {
         "existing_position": 18,
@@ -82,8 +85,8 @@
           "closed_trades": 37,
           "wins": 14,
           "losses": 23,
-          "net_usd": -94.8978,
-          "profit_factor_net": 0.2066,
+          "net_usd": -102.8361,
+          "profit_factor_net": 0.1937,
           "no_losses": false
         },
         "2025-02": {
@@ -286,25 +289,26 @@
         }
       }
     },
-    "btc_ohlc": {
+    "btc_minute_close_reference": {
       "asset": "BTC",
-      "method": "OHLC",
+      "method": "minute_close",
+      "wallet_guard": false,
+      "reference_unfundable_if_negative": true,
       "starting_wallet_usd": 100.0,
-      "realized_wallet_end_usd": 10.7073,
-      "net_profit_usd": -89.2927,
-      "net_return_pct_on_start_wallet": -89.2927,
-      "closed_trades": 42,
-      "wins": 17,
-      "losses": 25,
-      "win_rate_pct": 40.476,
-      "profit_factor_net": 0.1575,
-      "worst_closed_drawdown_pct": 89.8295,
-      "total_gross_usd": -41.7925,
-      "total_fees_gst_usd": 47.5002,
+      "realized_wallet_end_usd": -2143.901,
+      "net_profit_usd": -2243.901,
+      "net_return_pct_on_start_wallet": -2243.901,
+      "closed_trades": 1865,
+      "wins": 838,
+      "losses": 1027,
+      "win_rate_pct": 44.933,
+      "profit_factor_net": 0.3236,
+      "worst_closed_drawdown_pct": 2064.0379,
+      "total_gross_usd": -141.7875,
+      "total_fees_gst_usd": 2102.1136,
       "hourly_candidates_seen": 2493,
       "skips": {
-        "existing_position": 18,
-        "wallet_below_11_usd": 2433
+        "existing_position": 628
       },
       "still_open_at_end": null,
       "actual_pm_liquidation_not_simulated": true,
@@ -312,11 +316,246 @@
       "monthly": {
         "2025-01": {
           "status": "complete_UTC_month",
-          "closed_trades": 42,
-          "wins": 17,
+          "closed_trades": 65,
+          "wins": 25,
+          "losses": 40,
+          "net_usd": -143.1622,
+          "profit_factor_net": 0.2068,
+          "no_losses": false
+        },
+        "2025-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 85,
+          "wins": 31,
+          "losses": 54,
+          "net_usd": -89.0536,
+          "profit_factor_net": 0.2809,
+          "no_losses": false
+        },
+        "2025-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 92,
+          "wins": 39,
+          "losses": 53,
+          "net_usd": -161.1634,
+          "profit_factor_net": 0.3002,
+          "no_losses": false
+        },
+        "2025-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 38,
+          "losses": 49,
+          "net_usd": -135.0725,
+          "profit_factor_net": 0.2834,
+          "no_losses": false
+        },
+        "2025-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 88,
+          "wins": 38,
+          "losses": 50,
+          "net_usd": -133.0219,
+          "profit_factor_net": 0.2827,
+          "no_losses": false
+        },
+        "2025-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 94,
+          "wins": 30,
+          "losses": 64,
+          "net_usd": -75.9005,
+          "profit_factor_net": 0.2075,
+          "no_losses": false
+        },
+        "2025-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 92,
+          "wins": 33,
+          "losses": 59,
+          "net_usd": -87.4162,
+          "profit_factor_net": 0.2685,
+          "no_losses": false
+        },
+        "2025-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 29,
+          "losses": 57,
+          "net_usd": -99.2756,
+          "profit_factor_net": 0.1821,
+          "no_losses": false
+        },
+        "2025-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 71,
+          "wins": 23,
+          "losses": 48,
+          "net_usd": -113.3853,
+          "profit_factor_net": 0.1289,
+          "no_losses": false
+        },
+        "2025-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 84,
+          "wins": 40,
+          "losses": 44,
+          "net_usd": -121.1192,
+          "profit_factor_net": 0.2571,
+          "no_losses": false
+        },
+        "2025-11": {
+          "status": "complete_UTC_month",
+          "closed_trades": 106,
+          "wins": 51,
+          "losses": 55,
+          "net_usd": -81.2606,
+          "profit_factor_net": 0.4199,
+          "no_losses": false
+        },
+        "2025-12": {
+          "status": "complete_UTC_month",
+          "closed_trades": 76,
+          "wins": 24,
+          "losses": 52,
+          "net_usd": -123.9018,
+          "profit_factor_net": 0.1856,
+          "no_losses": false
+        },
+        "2026-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 38,
+          "losses": 48,
+          "net_usd": -59.4072,
+          "profit_factor_net": 0.4889,
+          "no_losses": false
+        },
+        "2026-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 82,
+          "wins": 54,
+          "losses": 28,
+          "net_usd": -17.7303,
+          "profit_factor_net": 0.8747,
+          "no_losses": false
+        },
+        "2026-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 83,
+          "wins": 41,
+          "losses": 42,
+          "net_usd": -167.6021,
+          "profit_factor_net": 0.3104,
+          "no_losses": false
+        },
+        "2026-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 82,
+          "wins": 43,
+          "losses": 39,
+          "net_usd": -105.0972,
+          "profit_factor_net": 0.3626,
+          "no_losses": false
+        },
+        "2026-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 68,
+          "wins": 26,
+          "losses": 42,
+          "net_usd": -83.9304,
+          "profit_factor_net": 0.2006,
+          "no_losses": false
+        },
+        "2026-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 56,
+          "losses": 31,
+          "net_usd": -74.634,
+          "profit_factor_net": 0.4159,
+          "no_losses": false
+        },
+        "2026-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 66,
+          "wins": 43,
+          "losses": 23,
+          "net_usd": -98.1397,
+          "profit_factor_net": 0.3598,
+          "no_losses": false
+        },
+        "2026-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 82,
+          "wins": 38,
+          "losses": 44,
+          "net_usd": -140.0741,
+          "profit_factor_net": 0.2509,
+          "no_losses": false
+        },
+        "2026-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 76,
+          "wins": 35,
+          "losses": 41,
+          "net_usd": -47.1407,
+          "profit_factor_net": 0.4674,
+          "no_losses": false
+        },
+        "2026-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 83,
+          "wins": 41,
+          "losses": 42,
+          "net_usd": -37.0674,
+          "profit_factor_net": 0.5488,
+          "no_losses": false
+        },
+        "2026-11": {
+          "status": "partial_UTC_month",
+          "closed_trades": 44,
+          "wins": 22,
+          "losses": 22,
+          "net_usd": -49.3453,
+          "profit_factor_net": 0.3614,
+          "no_losses": false
+        }
+      }
+    },
+    "btc_ohlc": {
+      "asset": "BTC",
+      "method": "OHLC",
+      "wallet_guard": true,
+      "reference_unfundable_if_negative": false,
+      "starting_wallet_usd": 100.0,
+      "realized_wallet_end_usd": 2.0144,
+      "net_profit_usd": -97.9856,
+      "net_return_pct_on_start_wallet": -97.9856,
+      "closed_trades": 40,
+      "wins": 15,
+      "losses": 25,
+      "win_rate_pct": 37.5,
+      "profit_factor_net": 0.1428,
+      "worst_closed_drawdown_pct": 98.0866,
+      "total_gross_usd": -52.716,
+      "total_fees_gst_usd": 45.2696,
+      "hourly_candidates_seen": 2493,
+      "skips": {
+        "existing_position": 18,
+        "wallet_below_11_usd": 2435
+      },
+      "still_open_at_end": null,
+      "actual_pm_liquidation_not_simulated": true,
+      "actual_funding_not_included": true,
+      "monthly": {
+        "2025-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 40,
+          "wins": 15,
           "losses": 25,
-          "net_usd": -89.2927,
-          "profit_factor_net": 0.1575,
+          "net_usd": -97.9856,
+          "profit_factor_net": 0.1428,
           "no_losses": false
         },
         "2025-02": {
@@ -519,21 +758,257 @@
         }
       }
     },
+    "btc_ohlc_reference": {
+      "asset": "BTC",
+      "method": "OHLC",
+      "wallet_guard": false,
+      "reference_unfundable_if_negative": true,
+      "starting_wallet_usd": 100.0,
+      "realized_wallet_end_usd": -2154.1123,
+      "net_profit_usd": -2254.1123,
+      "net_return_pct_on_start_wallet": -2254.1123,
+      "closed_trades": 1936,
+      "wins": 815,
+      "losses": 1121,
+      "win_rate_pct": 42.097,
+      "profit_factor_net": 0.2211,
+      "worst_closed_drawdown_pct": 2146.1258,
+      "total_gross_usd": -72.1085,
+      "total_fees_gst_usd": 2182.004,
+      "hourly_candidates_seen": 2493,
+      "skips": {
+        "existing_position": 557
+      },
+      "still_open_at_end": null,
+      "actual_pm_liquidation_not_simulated": true,
+      "actual_funding_not_included": true,
+      "monthly": {
+        "2025-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 65,
+          "wins": 29,
+          "losses": 36,
+          "net_usd": -107.6379,
+          "profit_factor_net": 0.1603,
+          "no_losses": false
+        },
+        "2025-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 90,
+          "wins": 34,
+          "losses": 56,
+          "net_usd": -73.6956,
+          "profit_factor_net": 0.2554,
+          "no_losses": false
+        },
+        "2025-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 93,
+          "wins": 31,
+          "losses": 62,
+          "net_usd": -156.3113,
+          "profit_factor_net": 0.1622,
+          "no_losses": false
+        },
+        "2025-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 89,
+          "wins": 33,
+          "losses": 56,
+          "net_usd": -142.5762,
+          "profit_factor_net": 0.1262,
+          "no_losses": false
+        },
+        "2025-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 93,
+          "wins": 35,
+          "losses": 58,
+          "net_usd": -151.8841,
+          "profit_factor_net": 0.1454,
+          "no_losses": false
+        },
+        "2025-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 98,
+          "wins": 25,
+          "losses": 73,
+          "net_usd": -64.868,
+          "profit_factor_net": 0.1454,
+          "no_losses": false
+        },
+        "2025-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 97,
+          "wins": 21,
+          "losses": 76,
+          "net_usd": -97.9748,
+          "profit_factor_net": 0.0842,
+          "no_losses": false
+        },
+        "2025-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 91,
+          "wins": 31,
+          "losses": 60,
+          "net_usd": -102.3625,
+          "profit_factor_net": 0.1295,
+          "no_losses": false
+        },
+        "2025-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 76,
+          "wins": 20,
+          "losses": 56,
+          "net_usd": -101.781,
+          "profit_factor_net": 0.1023,
+          "no_losses": false
+        },
+        "2025-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 90,
+          "wins": 29,
+          "losses": 61,
+          "net_usd": -108.6272,
+          "profit_factor_net": 0.1533,
+          "no_losses": false
+        },
+        "2025-11": {
+          "status": "complete_UTC_month",
+          "closed_trades": 109,
+          "wins": 46,
+          "losses": 63,
+          "net_usd": -93.5056,
+          "profit_factor_net": 0.2144,
+          "no_losses": false
+        },
+        "2025-12": {
+          "status": "complete_UTC_month",
+          "closed_trades": 80,
+          "wins": 34,
+          "losses": 46,
+          "net_usd": -113.5266,
+          "profit_factor_net": 0.1237,
+          "no_losses": false
+        },
+        "2026-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 90,
+          "wins": 38,
+          "losses": 52,
+          "net_usd": -79.5431,
+          "profit_factor_net": 0.299,
+          "no_losses": false
+        },
+        "2026-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 45,
+          "losses": 42,
+          "net_usd": -37.7444,
+          "profit_factor_net": 0.6048,
+          "no_losses": false
+        },
+        "2026-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 46,
+          "losses": 41,
+          "net_usd": -154.1815,
+          "profit_factor_net": 0.2485,
+          "no_losses": false
+        },
+        "2026-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 83,
+          "wins": 49,
+          "losses": 34,
+          "net_usd": -110.9941,
+          "profit_factor_net": 0.3192,
+          "no_losses": false
+        },
+        "2026-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 70,
+          "wins": 29,
+          "losses": 41,
+          "net_usd": -86.6213,
+          "profit_factor_net": 0.1571,
+          "no_losses": false
+        },
+        "2026-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 55,
+          "losses": 32,
+          "net_usd": -73.0693,
+          "profit_factor_net": 0.3517,
+          "no_losses": false
+        },
+        "2026-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 69,
+          "wins": 42,
+          "losses": 27,
+          "net_usd": -107.7548,
+          "profit_factor_net": 0.2601,
+          "no_losses": false
+        },
+        "2026-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 82,
+          "wins": 41,
+          "losses": 41,
+          "net_usd": -136.9113,
+          "profit_factor_net": 0.2161,
+          "no_losses": false
+        },
+        "2026-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 79,
+          "wins": 41,
+          "losses": 38,
+          "net_usd": -49.4443,
+          "profit_factor_net": 0.3957,
+          "no_losses": false
+        },
+        "2026-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 38,
+          "losses": 48,
+          "net_usd": -58.8068,
+          "profit_factor_net": 0.3001,
+          "no_losses": false
+        },
+        "2026-11": {
+          "status": "partial_UTC_month",
+          "closed_trades": 45,
+          "wins": 23,
+          "losses": 22,
+          "net_usd": -44.2908,
+          "profit_factor_net": 0.3654,
+          "no_losses": false
+        }
+      }
+    },
     "btc_olhc": {
       "asset": "BTC",
       "method": "OLHC",
+      "wallet_guard": true,
+      "reference_unfundable_if_negative": false,
       "starting_wallet_usd": 100.0,
-      "realized_wallet_end_usd": 10.3229,
-      "net_profit_usd": -89.6771,
-      "net_return_pct_on_start_wallet": -89.6771,
+      "realized_wallet_end_usd": 1.3817,
+      "net_profit_usd": -98.6183,
+      "net_return_pct_on_start_wallet": -98.6183,
       "closed_trades": 40,
       "wins": 14,
       "losses": 26,
       "win_rate_pct": 35.0,
-      "profit_factor_net": 0.1718,
-      "worst_closed_drawdown_pct": 90.0488,
-      "total_gross_usd": -44.394,
-      "total_fees_gst_usd": 45.2831,
+      "profit_factor_net": 0.1587,
+      "worst_closed_drawdown_pct": 98.6681,
+      "total_gross_usd": -53.3435,
+      "total_fees_gst_usd": 45.2748,
       "hourly_candidates_seen": 2493,
       "skips": {
         "existing_position": 18,
@@ -548,8 +1023,8 @@
           "closed_trades": 40,
           "wins": 14,
           "losses": 26,
-          "net_usd": -89.6771,
-          "profit_factor_net": 0.1718,
+          "net_usd": -98.6183,
+          "profit_factor_net": 0.1587,
           "no_losses": false
         },
         "2025-02": {
@@ -748,6 +1223,240 @@
           "losses": 0,
           "net_usd": 0.0,
           "profit_factor_net": null,
+          "no_losses": false
+        }
+      }
+    },
+    "btc_olhc_reference": {
+      "asset": "BTC",
+      "method": "OLHC",
+      "wallet_guard": false,
+      "reference_unfundable_if_negative": true,
+      "starting_wallet_usd": 100.0,
+      "realized_wallet_end_usd": -2202.4606,
+      "net_profit_usd": -2302.4606,
+      "net_return_pct_on_start_wallet": -2302.4606,
+      "closed_trades": 1936,
+      "wins": 811,
+      "losses": 1125,
+      "win_rate_pct": 41.89,
+      "profit_factor_net": 0.2036,
+      "worst_closed_drawdown_pct": 2224.9634,
+      "total_gross_usd": -120.4405,
+      "total_fees_gst_usd": 2182.0203,
+      "hourly_candidates_seen": 2493,
+      "skips": {
+        "existing_position": 557
+      },
+      "still_open_at_end": null,
+      "actual_pm_liquidation_not_simulated": true,
+      "actual_funding_not_included": true,
+      "monthly": {
+        "2025-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 65,
+          "wins": 26,
+          "losses": 39,
+          "net_usd": -108.7275,
+          "profit_factor_net": 0.1835,
+          "no_losses": false
+        },
+        "2025-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 91,
+          "wins": 39,
+          "losses": 52,
+          "net_usd": -67.0071,
+          "profit_factor_net": 0.2815,
+          "no_losses": false
+        },
+        "2025-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 94,
+          "wins": 38,
+          "losses": 56,
+          "net_usd": -156.0555,
+          "profit_factor_net": 0.1393,
+          "no_losses": false
+        },
+        "2025-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 89,
+          "wins": 37,
+          "losses": 52,
+          "net_usd": -127.7527,
+          "profit_factor_net": 0.1956,
+          "no_losses": false
+        },
+        "2025-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 92,
+          "wins": 34,
+          "losses": 58,
+          "net_usd": -141.3098,
+          "profit_factor_net": 0.2087,
+          "no_losses": false
+        },
+        "2025-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 99,
+          "wins": 27,
+          "losses": 72,
+          "net_usd": -62.6137,
+          "profit_factor_net": 0.1403,
+          "no_losses": false
+        },
+        "2025-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 97,
+          "wins": 24,
+          "losses": 73,
+          "net_usd": -93.2489,
+          "profit_factor_net": 0.1419,
+          "no_losses": false
+        },
+        "2025-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 91,
+          "wins": 29,
+          "losses": 62,
+          "net_usd": -105.1378,
+          "profit_factor_net": 0.1261,
+          "no_losses": false
+        },
+        "2025-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 75,
+          "wins": 15,
+          "losses": 60,
+          "net_usd": -104.2606,
+          "profit_factor_net": 0.0733,
+          "no_losses": false
+        },
+        "2025-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 89,
+          "wins": 25,
+          "losses": 64,
+          "net_usd": -105.9041,
+          "profit_factor_net": 0.169,
+          "no_losses": false
+        },
+        "2025-11": {
+          "status": "complete_UTC_month",
+          "closed_trades": 109,
+          "wins": 46,
+          "losses": 63,
+          "net_usd": -88.9629,
+          "profit_factor_net": 0.2249,
+          "no_losses": false
+        },
+        "2025-12": {
+          "status": "complete_UTC_month",
+          "closed_trades": 80,
+          "wins": 26,
+          "losses": 54,
+          "net_usd": -112.6286,
+          "profit_factor_net": 0.1711,
+          "no_losses": false
+        },
+        "2026-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 91,
+          "wins": 35,
+          "losses": 56,
+          "net_usd": -97.3913,
+          "profit_factor_net": 0.1965,
+          "no_losses": false
+        },
+        "2026-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 55,
+          "losses": 32,
+          "net_usd": -46.4874,
+          "profit_factor_net": 0.4637,
+          "no_losses": false
+        },
+        "2026-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 38,
+          "losses": 49,
+          "net_usd": -175.0911,
+          "profit_factor_net": 0.1658,
+          "no_losses": false
+        },
+        "2026-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 83,
+          "wins": 52,
+          "losses": 31,
+          "net_usd": -122.3948,
+          "profit_factor_net": 0.2475,
+          "no_losses": false
+        },
+        "2026-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 70,
+          "wins": 33,
+          "losses": 37,
+          "net_usd": -87.1946,
+          "profit_factor_net": 0.1476,
+          "no_losses": false
+        },
+        "2026-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 52,
+          "losses": 35,
+          "net_usd": -76.9638,
+          "profit_factor_net": 0.3137,
+          "no_losses": false
+        },
+        "2026-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 69,
+          "wins": 40,
+          "losses": 29,
+          "net_usd": -103.4143,
+          "profit_factor_net": 0.2877,
+          "no_losses": false
+        },
+        "2026-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 82,
+          "wins": 37,
+          "losses": 45,
+          "net_usd": -150.1585,
+          "profit_factor_net": 0.1559,
+          "no_losses": false
+        },
+        "2026-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 78,
+          "wins": 41,
+          "losses": 37,
+          "net_usd": -60.3499,
+          "profit_factor_net": 0.2878,
+          "no_losses": false
+        },
+        "2026-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 34,
+          "losses": 52,
+          "net_usd": -59.3697,
+          "profit_factor_net": 0.2918,
+          "no_losses": false
+        },
+        "2026-11": {
+          "status": "partial_UTC_month",
+          "closed_trades": 45,
+          "wins": 28,
+          "losses": 17,
+          "net_usd": -50.0362,
+          "profit_factor_net": 0.2528,
           "no_losses": false
         }
       }
@@ -755,22 +1464,24 @@
     "eth_minute_close": {
       "asset": "ETH",
       "method": "minute_close",
+      "wallet_guard": true,
+      "reference_unfundable_if_negative": false,
       "starting_wallet_usd": 100.0,
-      "realized_wallet_end_usd": 3.898,
-      "net_profit_usd": -96.102,
-      "net_return_pct_on_start_wallet": -96.102,
-      "closed_trades": 74,
-      "wins": 44,
-      "losses": 30,
-      "win_rate_pct": 59.459,
-      "profit_factor_net": 0.3907,
-      "worst_closed_drawdown_pct": 96.4205,
-      "total_gross_usd": -10.133,
-      "total_fees_gst_usd": 85.969,
+      "realized_wallet_end_usd": 4.4993,
+      "net_profit_usd": -95.5007,
+      "net_return_pct_on_start_wallet": -95.5007,
+      "closed_trades": 47,
+      "wins": 24,
+      "losses": 23,
+      "win_rate_pct": 51.064,
+      "profit_factor_net": 0.2454,
+      "worst_closed_drawdown_pct": 95.8683,
+      "total_gross_usd": -40.9165,
+      "total_fees_gst_usd": 54.5842,
       "hourly_candidates_seen": 2546,
       "skips": {
-        "existing_position": 14,
-        "wallet_below_11_usd": 2458
+        "existing_position": 10,
+        "wallet_below_11_usd": 2489
       },
       "still_open_at_end": null,
       "actual_pm_liquidation_not_simulated": true,
@@ -778,11 +1489,11 @@
       "monthly": {
         "2025-01": {
           "status": "complete_UTC_month",
-          "closed_trades": 74,
-          "wins": 44,
-          "losses": 30,
-          "net_usd": -96.102,
-          "profit_factor_net": 0.3907,
+          "closed_trades": 47,
+          "wins": 24,
+          "losses": 23,
+          "net_usd": -95.5007,
+          "profit_factor_net": 0.2454,
           "no_losses": false
         },
         "2025-02": {
@@ -981,6 +1692,240 @@
           "losses": 0,
           "net_usd": 0.0,
           "profit_factor_net": null,
+          "no_losses": false
+        }
+      }
+    },
+    "eth_minute_close_reference": {
+      "asset": "ETH",
+      "method": "minute_close",
+      "wallet_guard": false,
+      "reference_unfundable_if_negative": true,
+      "starting_wallet_usd": 100.0,
+      "realized_wallet_end_usd": -2448.9779,
+      "net_profit_usd": -2548.9779,
+      "net_return_pct_on_start_wallet": -2548.9779,
+      "closed_trades": 1972,
+      "wins": 1054,
+      "losses": 918,
+      "win_rate_pct": 53.448,
+      "profit_factor_net": 0.3881,
+      "worst_closed_drawdown_pct": 2348.9616,
+      "total_gross_usd": -252.0635,
+      "total_fees_gst_usd": 2296.9145,
+      "hourly_candidates_seen": 2546,
+      "skips": {
+        "existing_position": 574
+      },
+      "still_open_at_end": null,
+      "actual_pm_liquidation_not_simulated": true,
+      "actual_funding_not_included": true,
+      "monthly": {
+        "2025-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 81,
+          "wins": 45,
+          "losses": 36,
+          "net_usd": -151.8289,
+          "profit_factor_net": 0.2754,
+          "no_losses": false
+        },
+        "2025-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 75,
+          "wins": 40,
+          "losses": 35,
+          "net_usd": -132.0667,
+          "profit_factor_net": 0.293,
+          "no_losses": false
+        },
+        "2025-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 92,
+          "wins": 45,
+          "losses": 47,
+          "net_usd": -254.2081,
+          "profit_factor_net": 0.2414,
+          "no_losses": false
+        },
+        "2025-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 84,
+          "wins": 44,
+          "losses": 40,
+          "net_usd": -309.9479,
+          "profit_factor_net": 0.2092,
+          "no_losses": false
+        },
+        "2025-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 80,
+          "wins": 46,
+          "losses": 34,
+          "net_usd": -92.6795,
+          "profit_factor_net": 0.4754,
+          "no_losses": false
+        },
+        "2025-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 78,
+          "wins": 50,
+          "losses": 28,
+          "net_usd": -97.7766,
+          "profit_factor_net": 0.3649,
+          "no_losses": false
+        },
+        "2025-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 91,
+          "wins": 53,
+          "losses": 38,
+          "net_usd": -95.1033,
+          "profit_factor_net": 0.4309,
+          "no_losses": false
+        },
+        "2025-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 81,
+          "wins": 48,
+          "losses": 33,
+          "net_usd": -11.5349,
+          "profit_factor_net": 0.8827,
+          "no_losses": false
+        },
+        "2025-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 93,
+          "wins": 45,
+          "losses": 48,
+          "net_usd": -112.7346,
+          "profit_factor_net": 0.3377,
+          "no_losses": false
+        },
+        "2025-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 101,
+          "wins": 58,
+          "losses": 43,
+          "net_usd": -35.5015,
+          "profit_factor_net": 0.66,
+          "no_losses": false
+        },
+        "2025-11": {
+          "status": "complete_UTC_month",
+          "closed_trades": 90,
+          "wins": 55,
+          "losses": 35,
+          "net_usd": -119.9662,
+          "profit_factor_net": 0.5186,
+          "no_losses": false
+        },
+        "2025-12": {
+          "status": "complete_UTC_month",
+          "closed_trades": 94,
+          "wins": 51,
+          "losses": 43,
+          "net_usd": -145.0105,
+          "profit_factor_net": 0.3335,
+          "no_losses": false
+        },
+        "2026-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 93,
+          "wins": 53,
+          "losses": 40,
+          "net_usd": -58.7329,
+          "profit_factor_net": 0.6053,
+          "no_losses": false
+        },
+        "2026-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 84,
+          "wins": 41,
+          "losses": 43,
+          "net_usd": -180.226,
+          "profit_factor_net": 0.313,
+          "no_losses": false
+        },
+        "2026-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 90,
+          "wins": 50,
+          "losses": 40,
+          "net_usd": -47.0713,
+          "profit_factor_net": 0.727,
+          "no_losses": false
+        },
+        "2026-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 109,
+          "wins": 53,
+          "losses": 56,
+          "net_usd": -113.7955,
+          "profit_factor_net": 0.3444,
+          "no_losses": false
+        },
+        "2026-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 85,
+          "wins": 39,
+          "losses": 46,
+          "net_usd": -86.2733,
+          "profit_factor_net": 0.3333,
+          "no_losses": false
+        },
+        "2026-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 82,
+          "wins": 51,
+          "losses": 31,
+          "net_usd": -84.1125,
+          "profit_factor_net": 0.4751,
+          "no_losses": false
+        },
+        "2026-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 81,
+          "wins": 43,
+          "losses": 38,
+          "net_usd": -90.4146,
+          "profit_factor_net": 0.4368,
+          "no_losses": false
+        },
+        "2026-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 89,
+          "wins": 41,
+          "losses": 48,
+          "net_usd": -94.1148,
+          "profit_factor_net": 0.346,
+          "no_losses": false
+        },
+        "2026-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 94,
+          "wins": 44,
+          "losses": 50,
+          "net_usd": -83.3284,
+          "profit_factor_net": 0.3782,
+          "no_losses": false
+        },
+        "2026-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 75,
+          "wins": 32,
+          "losses": 43,
+          "net_usd": -84.7072,
+          "profit_factor_net": 0.2778,
+          "no_losses": false
+        },
+        "2026-11": {
+          "status": "partial_UTC_month",
+          "closed_trades": 50,
+          "wins": 27,
+          "losses": 23,
+          "net_usd": -67.8425,
+          "profit_factor_net": 0.3379,
           "no_losses": false
         }
       }
@@ -988,22 +1933,24 @@
     "eth_ohlc": {
       "asset": "ETH",
       "method": "OHLC",
+      "wallet_guard": true,
+      "reference_unfundable_if_negative": false,
       "starting_wallet_usd": 100.0,
-      "realized_wallet_end_usd": -0.3085,
-      "net_profit_usd": -100.3085,
-      "net_return_pct_on_start_wallet": -100.3085,
-      "closed_trades": 80,
-      "wins": 42,
-      "losses": 38,
-      "win_rate_pct": 52.5,
-      "profit_factor_net": 0.3088,
-      "worst_closed_drawdown_pct": 100.294,
-      "total_gross_usd": -7.374,
-      "total_fees_gst_usd": 92.9345,
+      "realized_wallet_end_usd": -4.8859,
+      "net_profit_usd": -104.8859,
+      "net_return_pct_on_start_wallet": -104.8859,
+      "closed_trades": 52,
+      "wins": 25,
+      "losses": 27,
+      "win_rate_pct": 48.077,
+      "profit_factor_net": 0.1802,
+      "worst_closed_drawdown_pct": 104.8376,
+      "total_gross_usd": -44.53,
+      "total_fees_gst_usd": 60.3559,
       "hourly_candidates_seen": 2546,
       "skips": {
-        "existing_position": 8,
-        "wallet_below_11_usd": 2458
+        "existing_position": 5,
+        "wallet_below_11_usd": 2489
       },
       "still_open_at_end": null,
       "actual_pm_liquidation_not_simulated": true,
@@ -1011,11 +1958,11 @@
       "monthly": {
         "2025-01": {
           "status": "complete_UTC_month",
-          "closed_trades": 80,
-          "wins": 42,
-          "losses": 38,
-          "net_usd": -100.3085,
-          "profit_factor_net": 0.3088,
+          "closed_trades": 52,
+          "wins": 25,
+          "losses": 27,
+          "net_usd": -104.8859,
+          "profit_factor_net": 0.1802,
           "no_losses": false
         },
         "2025-02": {
@@ -1218,25 +2165,26 @@
         }
       }
     },
-    "eth_olhc": {
+    "eth_ohlc_reference": {
       "asset": "ETH",
-      "method": "OLHC",
+      "method": "OHLC",
+      "wallet_guard": false,
+      "reference_unfundable_if_negative": true,
       "starting_wallet_usd": 100.0,
-      "realized_wallet_end_usd": 4.274,
-      "net_profit_usd": -95.726,
-      "net_return_pct_on_start_wallet": -95.726,
-      "closed_trades": 80,
-      "wins": 46,
-      "losses": 34,
-      "win_rate_pct": 57.5,
-      "profit_factor_net": 0.3167,
-      "worst_closed_drawdown_pct": 96.042,
-      "total_gross_usd": -2.789,
-      "total_fees_gst_usd": 92.9369,
+      "realized_wallet_end_usd": -2631.1594,
+      "net_profit_usd": -2731.1594,
+      "net_return_pct_on_start_wallet": -2731.1594,
+      "closed_trades": 2116,
+      "wins": 1050,
+      "losses": 1066,
+      "win_rate_pct": 49.622,
+      "profit_factor_net": 0.2594,
+      "worst_closed_drawdown_pct": 2705.2559,
+      "total_gross_usd": -266.3615,
+      "total_fees_gst_usd": 2464.798,
       "hourly_candidates_seen": 2546,
       "skips": {
-        "existing_position": 8,
-        "wallet_below_11_usd": 2458
+        "existing_position": 430
       },
       "still_open_at_end": null,
       "actual_pm_liquidation_not_simulated": true,
@@ -1244,11 +2192,246 @@
       "monthly": {
         "2025-01": {
           "status": "complete_UTC_month",
-          "closed_trades": 80,
+          "closed_trades": 86,
+          "wins": 44,
+          "losses": 42,
+          "net_usd": -172.538,
+          "profit_factor_net": 0.2007,
+          "no_losses": false
+        },
+        "2025-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 79,
+          "wins": 47,
+          "losses": 32,
+          "net_usd": -126.4225,
+          "profit_factor_net": 0.2505,
+          "no_losses": false
+        },
+        "2025-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 99,
+          "wins": 41,
+          "losses": 58,
+          "net_usd": -292.4123,
+          "profit_factor_net": 0.1287,
+          "no_losses": false
+        },
+        "2025-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 87,
+          "wins": 31,
+          "losses": 56,
+          "net_usd": -307.5158,
+          "profit_factor_net": 0.0992,
+          "no_losses": false
+        },
+        "2025-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 84,
+          "wins": 44,
+          "losses": 40,
+          "net_usd": -122.3321,
+          "profit_factor_net": 0.2213,
+          "no_losses": false
+        },
+        "2025-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 42,
+          "losses": 44,
+          "net_usd": -87.0048,
+          "profit_factor_net": 0.2496,
+          "no_losses": false
+        },
+        "2025-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 92,
+          "wins": 59,
+          "losses": 33,
+          "net_usd": -124.3767,
+          "profit_factor_net": 0.2448,
+          "no_losses": false
+        },
+        "2025-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 85,
+          "wins": 48,
+          "losses": 37,
+          "net_usd": -50.1071,
+          "profit_factor_net": 0.5209,
+          "no_losses": false
+        },
+        "2025-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 100,
           "wins": 46,
-          "losses": 34,
-          "net_usd": -95.726,
-          "profit_factor_net": 0.3167,
+          "losses": 54,
+          "net_usd": -105.3955,
+          "profit_factor_net": 0.3117,
+          "no_losses": false
+        },
+        "2025-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 109,
+          "wins": 59,
+          "losses": 50,
+          "net_usd": -21.0311,
+          "profit_factor_net": 0.6708,
+          "no_losses": false
+        },
+        "2025-11": {
+          "status": "complete_UTC_month",
+          "closed_trades": 98,
+          "wins": 49,
+          "losses": 49,
+          "net_usd": -135.4767,
+          "profit_factor_net": 0.2476,
+          "no_losses": false
+        },
+        "2025-12": {
+          "status": "complete_UTC_month",
+          "closed_trades": 101,
+          "wins": 51,
+          "losses": 50,
+          "net_usd": -135.6688,
+          "profit_factor_net": 0.2954,
+          "no_losses": false
+        },
+        "2026-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 99,
+          "wins": 53,
+          "losses": 46,
+          "net_usd": -77.3668,
+          "profit_factor_net": 0.4048,
+          "no_losses": false
+        },
+        "2026-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 85,
+          "wins": 35,
+          "losses": 50,
+          "net_usd": -211.5369,
+          "profit_factor_net": 0.2019,
+          "no_losses": false
+        },
+        "2026-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 102,
+          "wins": 56,
+          "losses": 46,
+          "net_usd": -27.4043,
+          "profit_factor_net": 0.718,
+          "no_losses": false
+        },
+        "2026-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 113,
+          "wins": 56,
+          "losses": 57,
+          "net_usd": -135.3109,
+          "profit_factor_net": 0.2354,
+          "no_losses": false
+        },
+        "2026-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 102,
+          "wins": 46,
+          "losses": 56,
+          "net_usd": -70.37,
+          "profit_factor_net": 0.3212,
+          "no_losses": false
+        },
+        "2026-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 88,
+          "wins": 45,
+          "losses": 43,
+          "net_usd": -104.42,
+          "profit_factor_net": 0.2708,
+          "no_losses": false
+        },
+        "2026-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 47,
+          "losses": 39,
+          "net_usd": -89.532,
+          "profit_factor_net": 0.2677,
+          "no_losses": false
+        },
+        "2026-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 100,
+          "wins": 47,
+          "losses": 53,
+          "net_usd": -91.3837,
+          "profit_factor_net": 0.2638,
+          "no_losses": false
+        },
+        "2026-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 102,
+          "wins": 42,
+          "losses": 60,
+          "net_usd": -115.5144,
+          "profit_factor_net": 0.2433,
+          "no_losses": false
+        },
+        "2026-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 82,
+          "wins": 34,
+          "losses": 48,
+          "net_usd": -75.1084,
+          "profit_factor_net": 0.2698,
+          "no_losses": false
+        },
+        "2026-11": {
+          "status": "partial_UTC_month",
+          "closed_trades": 51,
+          "wins": 28,
+          "losses": 23,
+          "net_usd": -52.9306,
+          "profit_factor_net": 0.3055,
+          "no_losses": false
+        }
+      }
+    },
+    "eth_olhc": {
+      "asset": "ETH",
+      "method": "OLHC",
+      "wallet_guard": true,
+      "reference_unfundable_if_negative": false,
+      "starting_wallet_usd": 100.0,
+      "realized_wallet_end_usd": -0.9714,
+      "net_profit_usd": -100.9714,
+      "net_return_pct_on_start_wallet": -100.9714,
+      "closed_trades": 52,
+      "wins": 24,
+      "losses": 28,
+      "win_rate_pct": 46.154,
+      "profit_factor_net": 0.2074,
+      "worst_closed_drawdown_pct": 100.9654,
+      "total_gross_usd": -40.6145,
+      "total_fees_gst_usd": 60.3569,
+      "hourly_candidates_seen": 2546,
+      "skips": {
+        "existing_position": 5,
+        "wallet_below_11_usd": 2489
+      },
+      "still_open_at_end": null,
+      "actual_pm_liquidation_not_simulated": true,
+      "actual_funding_not_included": true,
+      "monthly": {
+        "2025-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 52,
+          "wins": 24,
+          "losses": 28,
+          "net_usd": -100.9714,
+          "profit_factor_net": 0.2074,
           "no_losses": false
         },
         "2025-02": {
@@ -1447,6 +2630,240 @@
           "losses": 0,
           "net_usd": 0.0,
           "profit_factor_net": null,
+          "no_losses": false
+        }
+      }
+    },
+    "eth_olhc_reference": {
+      "asset": "ETH",
+      "method": "OLHC",
+      "wallet_guard": false,
+      "reference_unfundable_if_negative": true,
+      "starting_wallet_usd": 100.0,
+      "realized_wallet_end_usd": -2623.3057,
+      "net_profit_usd": -2723.3057,
+      "net_return_pct_on_start_wallet": -2723.3057,
+      "closed_trades": 2117,
+      "wins": 1084,
+      "losses": 1033,
+      "win_rate_pct": 51.205,
+      "profit_factor_net": 0.2591,
+      "worst_closed_drawdown_pct": 2707.4781,
+      "total_gross_usd": -257.3455,
+      "total_fees_gst_usd": 2465.9603,
+      "hourly_candidates_seen": 2546,
+      "skips": {
+        "existing_position": 429
+      },
+      "still_open_at_end": null,
+      "actual_pm_liquidation_not_simulated": true,
+      "actual_funding_not_included": true,
+      "monthly": {
+        "2025-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 47,
+          "losses": 39,
+          "net_usd": -169.4155,
+          "profit_factor_net": 0.202,
+          "no_losses": false
+        },
+        "2025-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 79,
+          "wins": 43,
+          "losses": 36,
+          "net_usd": -119.4222,
+          "profit_factor_net": 0.2812,
+          "no_losses": false
+        },
+        "2025-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 99,
+          "wins": 48,
+          "losses": 51,
+          "net_usd": -286.9635,
+          "profit_factor_net": 0.1216,
+          "no_losses": false
+        },
+        "2025-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 88,
+          "wins": 32,
+          "losses": 56,
+          "net_usd": -312.1294,
+          "profit_factor_net": 0.0908,
+          "no_losses": false
+        },
+        "2025-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 84,
+          "wins": 45,
+          "losses": 39,
+          "net_usd": -105.1584,
+          "profit_factor_net": 0.3325,
+          "no_losses": false
+        },
+        "2025-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 44,
+          "losses": 42,
+          "net_usd": -77.4213,
+          "profit_factor_net": 0.303,
+          "no_losses": false
+        },
+        "2025-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 92,
+          "wins": 53,
+          "losses": 39,
+          "net_usd": -121.0198,
+          "profit_factor_net": 0.282,
+          "no_losses": false
+        },
+        "2025-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 85,
+          "wins": 45,
+          "losses": 40,
+          "net_usd": -40.0799,
+          "profit_factor_net": 0.607,
+          "no_losses": false
+        },
+        "2025-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 100,
+          "wins": 53,
+          "losses": 47,
+          "net_usd": -105.6486,
+          "profit_factor_net": 0.2782,
+          "no_losses": false
+        },
+        "2025-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 109,
+          "wins": 55,
+          "losses": 54,
+          "net_usd": -24.4106,
+          "profit_factor_net": 0.6309,
+          "no_losses": false
+        },
+        "2025-11": {
+          "status": "complete_UTC_month",
+          "closed_trades": 98,
+          "wins": 52,
+          "losses": 46,
+          "net_usd": -127.7523,
+          "profit_factor_net": 0.2806,
+          "no_losses": false
+        },
+        "2025-12": {
+          "status": "complete_UTC_month",
+          "closed_trades": 101,
+          "wins": 51,
+          "losses": 50,
+          "net_usd": -131.1264,
+          "profit_factor_net": 0.308,
+          "no_losses": false
+        },
+        "2026-01": {
+          "status": "complete_UTC_month",
+          "closed_trades": 99,
+          "wins": 52,
+          "losses": 47,
+          "net_usd": -76.5947,
+          "profit_factor_net": 0.4231,
+          "no_losses": false
+        },
+        "2026-02": {
+          "status": "complete_UTC_month",
+          "closed_trades": 85,
+          "wins": 41,
+          "losses": 44,
+          "net_usd": -226.4827,
+          "profit_factor_net": 0.1295,
+          "no_losses": false
+        },
+        "2026-03": {
+          "status": "complete_UTC_month",
+          "closed_trades": 102,
+          "wins": 60,
+          "losses": 42,
+          "net_usd": -46.2988,
+          "profit_factor_net": 0.504,
+          "no_losses": false
+        },
+        "2026-04": {
+          "status": "complete_UTC_month",
+          "closed_trades": 113,
+          "wins": 66,
+          "losses": 47,
+          "net_usd": -124.2377,
+          "profit_factor_net": 0.2878,
+          "no_losses": false
+        },
+        "2026-05": {
+          "status": "complete_UTC_month",
+          "closed_trades": 101,
+          "wins": 49,
+          "losses": 52,
+          "net_usd": -86.3229,
+          "profit_factor_net": 0.2403,
+          "no_losses": false
+        },
+        "2026-06": {
+          "status": "complete_UTC_month",
+          "closed_trades": 88,
+          "wins": 45,
+          "losses": 43,
+          "net_usd": -110.6287,
+          "profit_factor_net": 0.2326,
+          "no_losses": false
+        },
+        "2026-07": {
+          "status": "complete_UTC_month",
+          "closed_trades": 86,
+          "wins": 49,
+          "losses": 37,
+          "net_usd": -77.0845,
+          "profit_factor_net": 0.3775,
+          "no_losses": false
+        },
+        "2026-08": {
+          "status": "complete_UTC_month",
+          "closed_trades": 100,
+          "wins": 43,
+          "losses": 57,
+          "net_usd": -96.0709,
+          "profit_factor_net": 0.2603,
+          "no_losses": false
+        },
+        "2026-09": {
+          "status": "complete_UTC_month",
+          "closed_trades": 103,
+          "wins": 43,
+          "losses": 60,
+          "net_usd": -122.8184,
+          "profit_factor_net": 0.2096,
+          "no_losses": false
+        },
+        "2026-10": {
+          "status": "complete_UTC_month",
+          "closed_trades": 82,
+          "wins": 39,
+          "losses": 43,
+          "net_usd": -81.6107,
+          "profit_factor_net": 0.1993,
+          "no_losses": false
+        },
+        "2026-11": {
+          "status": "partial_UTC_month",
+          "closed_trades": 51,
+          "wins": 29,
+          "losses": 22,
+          "net_usd": -54.6078,
+          "profit_factor_net": 0.3084,
           "no_losses": false
         }
       }
