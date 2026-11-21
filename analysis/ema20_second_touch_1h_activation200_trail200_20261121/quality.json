@@ -1,0 +1,45 @@
+{
+  "source": {
+    "BTCUSD": {
+      "rows": 963030,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-10-31 18:29:00+00:00",
+      "partitions_sha256_verified": 22,
+      "missing_minutes": 0
+    },
+    "ETHUSD": {
+      "rows": 963030,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-10-31 18:29:00+00:00",
+      "partitions_sha256_verified": 22,
+      "missing_minutes": 0
+    }
+  },
+  "entry": "1H completed Supertrend(10,3) EMA20 second distinct touch, immediate 1m OHLC approximation",
+  "one_entry_per_confirmed_supertrend_epoch": true,
+  "fixed_btc_tp_price_points": null,
+  "btc_trailing_activation_points": 200.0,
+  "btc_trailing_distance_points": 200.0,
+  "eth_price_distance": "activation and distance each = 200 * ETH entry / prior completed 1m BTC close, frozen per entry",
+  "trailing_activated": "only after favorable 200 BTC points (percentage equivalent ETH), no stop before activation",
+  "atr_exit": false,
+  "separate_fixed_sl": false,
+  "order_of_1m_exits": "check previously active trailing stop first; tighten for next minute; if trail activates within minute and adverse wick also crosses newly activated stop, assume pessimistic activation-then-retrace and exit at activated stop",
+  "entry_minute": "do not activate on the entry minute; no stop exists before +200 points",
+  "hourly_volume_and_volatility_filters": false,
+  "fees": "0.05 percent taker per side plus GST 18 percent",
+  "adverse_slippage_fraction_each_side": 0.0002,
+  "initial_usd": 1000.0,
+  "model_exposure": "1x evolving model equity",
+  "date_scope": "2025-01 through 2026-10 IST, source SHA verified",
+  "not_modeled": [
+    "funding",
+    "true spreads",
+    "orderbook",
+    "liquidation",
+    "tick-level sequence",
+    "latency"
+  ],
+  "sample_end_forced_close_only_for_reporting": true,
+  "historical_2026_not_pristine_out_of_sample": true
+}
