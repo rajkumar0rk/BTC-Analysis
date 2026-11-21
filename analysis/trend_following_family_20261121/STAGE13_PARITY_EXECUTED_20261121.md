@@ -1,0 +1,11 @@
+# Trend family — executed Stage13 parity baseline, 2026-11-21
+
+This is a **replay of previously researched Stage13**, not a new strategy or a new discovery. Completed GitHub Actions job: https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44890027821 ; job 136803626800; artifact https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44890027821/artifacts/14700753927 ; artifact SHA256 623286365a621fce6fcc002f0e51fa7a22f953a2c4274eaa18ce98e57c90bd8c. Commit 78718f962cdc3a756b4e5238a4396e96618a2deb.
+
+The workflow executed scripts/research_trend_pullback_breakout_stage13.py and uploaded events.csv.gz, trades.csv.gz, strategy_summary.csv, monthly_IST.csv, monthly_consistency.csv, quality.json, and RESEARCH_REPORT.md. Run and upload succeeded.
+
+**Result: reject Stage13 as a standalone trend-following baseline under the tested costs.** All 16 2025 standard-taker variants were net negative; their 2025 realized trade profit factors ranged 0.675–0.955. The least-negative variant (near_half_atr, volume_1p2x, 3R, 480 minutes) had 222 trades, 82 wins, 140 losses, 36.94% win rate, PF 0.955 and -4109.43 BTC price-points net in 2025. These price-points are NOT account NAV returns. No variant passed the study's monthly consistency gate. The predefined touch + volume_1p2x + 2R + 480m baseline had 135 trades, PF 0.758, -13780.09 net BTC points in 2025; monthly table shows 3 profitable and 9 losing 2025 months, and 3 profitable and 7 losing Jan–Oct 2026 months. 2026 was previously seen, not a pristine holdout.
+
+Execution assumptions in Stage13 code: completed 4H/1H/15M signals, next 1M open, stop-first intrabar OHLC, 0.05% taker fee per side + 18% GST and 5 BTC-price-point adverse slippage per side. Funding, spread and actual account NAV were not modeled. This replay is not the mandate's first-screen zero-slippage risk-matched NAV study, and must not be represented as such.
+
+Decision: preserve original baseline and artifact, do not tune this already-rejected mechanism further. Next independent candidate must have verified source rules, license and novelty and run a new zero-slippage/fees/GST BTC2025 1m sequential NAV replay before 2026/ETH rechecks. Do not change main, other research branches or live trading.
