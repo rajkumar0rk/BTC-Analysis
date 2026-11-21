@@ -1,0 +1,45 @@
+name: BTC one-percent account target daily scalping research
+on:
+  push:
+    branches:
+      - research/daily-one-percent-scalp-20261121
+    paths:
+      - scripts/research_daily_1pct_scalp_20261121.py
+      - .github/workflows/research-daily-1pct-scalp-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install data processing
+        run: python -m pip install numpy pandas tabulate
+      - name: Run fixed 2025+2026 1 percent account scalp experiment
+        run: python scripts/research_daily_1pct_scalp_20261121.py
+      - name: Upload complete daily and trade histories
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-daily-one-percent-scalping-trades
+          path: |
+            analysis/daily_1pct_scalp_20261121/*_trades.csv
+            analysis/daily_1pct_scalp_20261121/*_daily.csv
+          retention-days: 30
+      - name: Save compact public report in research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/daily_1pct_scalp_20261121/RESEARCH_REPORT.md
+          git add analysis/daily_1pct_scalp_20261121/summary.json
+          git add analysis/daily_1pct_scalp_20261121/monthly_results.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record daily 1 percent scalp costs and hit rates"
+            git push origin HEAD:research/daily-one-percent-scalp-20261121
+          fi
