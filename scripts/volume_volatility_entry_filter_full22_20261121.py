@@ -77,8 +77,8 @@ def indicator_signal_ratios(asset,args):
     atr_ratio=ind.atr14/previous_atr_mean
 
     times=args[0]
-    indices=np.flatnonzero(args[11]!=0)
-    signed=args[11][indices]
+    indices=np.flatnonzero(args[9]!=0)
+    signed=args[9][indices]
     entry_t=times[indices]
     assert np.all(entry_t%3600==0)
     base=int(times[0])
@@ -110,10 +110,10 @@ def indicator_signal_ratios(asset,args):
 
 def apply_filter(args,indices,v_ratio,atr_ratio,vol_min,atr_min,vol_cap,atr_cap):
     """Filter ONLY new entries; preserves flip event, prices and existing exit logic."""
-    original=args[11]
+    original=args[9]
     candidate=original.copy()
     if vol_min==0 and atr_min==0 and vol_cap is None and atr_cap is None:
-        return [*args[:11],candidate,*args[12:]],int(len(indices))
+        return [*args[:9],candidate,*args[10:]],int(len(indices))
     keep=np.isfinite(v_ratio)&np.isfinite(atr_ratio)
     if vol_min>0:keep &= (v_ratio>=vol_min)
     if atr_min>0:keep &= (atr_ratio>=atr_min)
@@ -122,12 +122,16 @@ def apply_filter(args,indices,v_ratio,atr_ratio,vol_min,atr_min,vol_cap,atr_cap)
     candidate[indices[~keep]]=0
     if not np.array_equal(candidate[indices[keep]],original[indices[keep]]):
         raise AssertionError("Entry filter changed signal side")
-    if not np.array_equal(args[12],args[12].copy()):
-        raise AssertionError("Unexpected change in flip signals")
-    return [*args[:11],candidate,*args[12:]],int(keep.sum())
+    if not np.array_equal(candidate[indices[~keep]],np.zeros(len(indices[~keep]),dtype=candidate.dtype)):
+        raise AssertionError("Entry filter left a prohibited signal")
+    return [*args[:9],candidate,*args[10:]],int(keep.sum())
 
 
 def summarized(df):
+    if len(df)==0:
+        df=df.copy()
+        df['month_utc']=pd.Series(dtype='object')
+        df['exit_reason']=pd.Series(dtype='object')
     full=get_summary(df,MONTHS)
     train=get_summary(df,MONTHS[:12])
     holdout=get_summary(df,MONTHS[12:])
