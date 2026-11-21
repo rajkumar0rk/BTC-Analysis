@@ -1,0 +1,27 @@
+name: Breakout Range BTC 1m Archive Integrity
+on:
+  push:
+    branches:
+      - research/breakout-range-source-audit-20261121
+    paths:
+      - '.github/workflows/breakout-range-archive-integrity.yml'
+      - 'scripts/breakout_range_validate_delta_1m_20261121.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify all 22 months of BTC minute bars
+        run: python scripts/breakout_range_validate_delta_1m_20261121.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: breakout-range-btc-1m-integrity
+          path: analysis/breakout_range_20261121/archive_validation_20261121.json
