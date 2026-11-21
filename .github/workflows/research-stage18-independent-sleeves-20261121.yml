@@ -1,0 +1,67 @@
+name: Stage18 independent Core and Donchian improvement
+on:
+  push:
+    branches:
+      - research/stage18-separate-core-donchian-20261121-v1
+    paths:
+      - scripts/research_stage18_core_standalone_20261121.py
+      - scripts/research_stage18_donchian_standalone_20261121.py
+      - .github/workflows/research-stage18-independent-sleeves-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  core-alone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install analytics dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Retrieve preserved original Stage14 pre-entry signals
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/stage14-events"
+          gh run download 44118024590 -n btc-stage14-monthly-regime-trades -D "$RUNNER_TEMP/stage14-events" --repo "$GITHUB_REPOSITORY"
+          test -s "$RUNNER_TEMP/stage14-events/event_states.csv.gz"
+      - name: Independently backtest core, verify all original 75 trades
+        env:
+          STAGE14_EVENTS: ${{ runner.temp }}/stage14-events/event_states.csv.gz
+        run: |
+          python -m py_compile scripts/research_stage18_core_standalone_20261121.py
+          PYTHONPATH=scripts python scripts/research_stage18_core_standalone_20261121.py
+      - name: Preserve standalone core metrics, month returns and trades
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage18-core-standalone-20261121
+          path: analysis/stage18_independent_core_20261121/
+          if-no-files-found: warn
+          retention-days: 30
+  donchian-alone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install analytics dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Independently backtest daily Donchian with Stage17 parity
+        run: |
+          python -m py_compile scripts/research_stage18_donchian_standalone_20261121.py
+          PYTHONPATH=scripts python scripts/research_stage18_donchian_standalone_20261121.py
+      - name: Preserve standalone Donchian month-end MTM and trades
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage18-donchian-standalone-20261121
+          path: analysis/stage18_independent_donchian_20261121/
+          if-no-files-found: warn
+          retention-days: 30
