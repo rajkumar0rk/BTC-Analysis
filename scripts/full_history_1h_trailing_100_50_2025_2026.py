@@ -186,7 +186,7 @@ def round_activation(asset,entry,tick):
     d=max(tick,math.floor((entry*50/80000)/tick+.5+1e-9)*tick)
     return a,d
 
-def run_sim(asset,df,mark,events,kind):
+def run_sim(asset,df,mark,events,kind,gate_wallet=True):
     assert kind in ("minute_close","OHLC","OLHC")
     times=df.time.to_numpy(dtype=np.int64)
     trade_o=df.open.to_numpy(dtype=float)
@@ -218,7 +218,7 @@ def run_sim(asset,df,mark,events,kind):
         if active is None and entry_candidate:
             entry=float(trade_o[i])
             s=evt["side"]
-            if equity<MIN_WALLET:skips["wallet_below_11_usd"]+=1
+            if gate_wallet and equity<MIN_WALLET:skips["wallet_below_11_usd"]+=1
             elif abs(entry-evt["close"])/evt["close"]>ENTRY_DIVERGENCE:
                 skips["entry_deviation_gt_0.2pct"]+=1
             else:
@@ -326,7 +326,8 @@ def run_sim(asset,df,mark,events,kind):
     else:
         gains=losses=0.;win=loss=0
     stats={
-        "asset":asset,"method":kind,
+        "asset":asset,"method":kind,"wallet_guard":gate_wallet,
+        "reference_unfundable_if_negative":not gate_wallet,
         "starting_wallet_usd":EQUITY_START,
         "realized_wallet_end_usd":round(equity,4),
         "net_profit_usd":round(equity-EQUITY_START,4),
@@ -388,6 +389,7 @@ def main():
                "liquidation":"No true account PM liquidation model; accounts below $11 cannot initiate new positions",
                "intraminute":"minute_close causal baseline, alternate hypothetical OHLC and OLHC price paths to show price-order uncertainty",
                "signal_warmup":"First 72 complete hourly candles excluded",
+               "wallet_reference":"Research-only unconstrained $1000-target notional per position, ignores depletion and negative equity, NOT a fundable investment account",
                "warnings":[
                  "Historic 1m OHLC cannot reveal order of high and low or true 3s mark polling",
                  "1m traded CLOSE is not the actual execution price for an earlier stop trigger",
@@ -401,16 +403,16 @@ def main():
         provenance.update(smeta)
         output["datasets"][asset]=provenance
         for mode in ("minute_close","OHLC","OLHC"):
-            print("RUN",asset,mode,flush=True)
-            trades,stats=run_sim(asset,traded,mark,events,mode)
-            name=f"{asset.lower()}_{mode.lower()}"
-            trades.to_csv(OUTPUT/f"{name}_trades.csv.gz",index=False,compression="gzip")
-            output["scenarios"][name]=stats
-            # Format-friendly monthly CSV for each independent instrument.
-            pd.DataFrame([{"month_utc":k,**v} for k,v in stats["monthly"].items()]).to_csv(
-                OUTPUT/f"{name}_monthly.csv",index=False)
-            concise={k:v for k,v in stats.items() if k!="monthly"}
-            print("HISTORY_RESULT",name,json.dumps(concise,sort_keys=True),flush=True)
+            for gate_wallet in (True,False):
+                print("RUN",asset,mode,"wallet" if gate_wallet else "reference",flush=True)
+                trades,stats=run_sim(asset,traded,mark,events,mode,gate_wallet=gate_wallet)
+                name=f"{asset.lower()}_{mode.lower()}" if gate_wallet else f"{asset.lower()}_{mode.lower()}_reference"
+                trades.to_csv(OUTPUT/f"{name}_trades.csv.gz",index=False,compression="gzip")
+                output["scenarios"][name]=stats
+                pd.DataFrame([{"month_utc":k,**v} for k,v in stats["monthly"].items()]).to_csv(
+                    OUTPUT/f"{name}_monthly.csv",index=False)
+                concise={k:v for k,v in stats.items() if k!="monthly"}
+                print("HISTORY_RESULT",name,json.dumps(concise,sort_keys=True),flush=True)
         del traded,mark
     # Side-by-side baseline table.
     rows=[]
@@ -424,6 +426,17 @@ def main():
             row[asset+"_PF"]=a["profit_factor_net"]
         rows.append(row)
     pd.DataFrame(rows).to_csv(OUTPUT/"monthly_baseline_comparison.csv",index=False)
+    reference_rows=[]
+    for m in pd.period_range("2025-01","2026-11",freq="M"):
+        k=str(m)
+        row={"month_utc":k,"complete_month":k<=FULL_END}
+        for asset in ASSETS:
+            a=output["scenarios"][f"{asset.lower()}_minute_close_reference"]["monthly"][k]
+            row[asset+"_net_usd"]=a["net_usd"]
+            row[asset+"_trades"]=a["closed_trades"]
+            row[asset+"_PF"]=a["profit_factor_net"]
+        reference_rows.append(row)
+    pd.DataFrame(reference_rows).to_csv(OUTPUT/"monthly_reference_comparison.csv",index=False)
     (OUTPUT/"summary.json").write_text(json.dumps(output,indent=2)+"\n")
     print("FULL_HISTORY_SUCCESS",OUTPUT,flush=True)
 
