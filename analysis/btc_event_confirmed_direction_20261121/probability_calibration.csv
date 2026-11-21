@@ -1,0 +1,11 @@
+model,p_low,p_high,samples,mean_probability,actual_continuation_pct
+boosted,0.0,0.4,88,0.351,51.14
+boosted,0.4,0.5,172,0.452,47.09
+boosted,0.5,0.6,216,0.546,51.85
+boosted,0.6,0.7,83,0.633,59.04
+boosted,0.7,1.0,1,0.737,0.0
+logistic,0.0,0.4,59,0.36,40.68
+logistic,0.4,0.5,214,0.455,51.4
+logistic,0.5,0.6,235,0.548,54.89
+logistic,0.6,0.7,51,0.635,45.1
+logistic,0.7,1.0,1,0.716,100.0

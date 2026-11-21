@@ -1,0 +1,3 @@
+model,events_candidate,trades,wins,win_rate_pct,profit_factor,net_return_pct,net_usd,max_trade_close_drawdown_pct,fees_gst_usd,slippage_usd,profitable_months,losing_months,idle_months,is_22_of_22
+event_baseline,2304,1085,405,37.33,0.7628,-60.1432,-6014.32,61.879,6823.61,663.9,2,14,6,False
+conditional_meta,2304,262,99,37.79,0.6587,-27.3152,-2731.52,29.361,2220.25,215.99,4,12,6,False

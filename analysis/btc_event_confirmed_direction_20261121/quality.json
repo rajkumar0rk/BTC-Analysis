@@ -1,0 +1,22 @@
+{
+  "source": "Delta India BTCUSD futures, original SHA256 verified 1M candles",
+  "native_minutes": 992160,
+  "source_partitions": 23,
+  "evaluated_complete_months": 16,
+  "total_complete_ist_months": 22,
+  "training_months": 6,
+  "model_threshold": 0.6,
+  "label_horizon": "event-side future completed 4H close direction, release t+5H",
+  "event_family_order": [
+    "24h_breakout",
+    "24h_failed_sweep",
+    "displacement"
+  ],
+  "all_models_fitted_before_evaluation_month": true,
+  "next_1m_open_no_lookahead": true,
+  "stops_first_on_1m_both_touch": true,
+  "real_orderbook_spread_available": false,
+  "realized_funding_included": false,
+  "exchange_contract_margin_accurate": false,
+  "blind_holdout_2026": false
+}
