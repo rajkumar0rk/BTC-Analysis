@@ -1,0 +1,52 @@
+name: 1H EMA20 second touch TP200 trailing200 one-per-Supertrend
+on:
+  push:
+    branches:
+      - research/ema20-second-touch-1h-tp200-trailing200-20261121
+    paths:
+      - scripts/research_ema20_second_touch_1h_tp200_trailing200.py
+      - .github/workflows/research-ema20-second-touch-1h-tp200-trailing200.yml
+      - analysis/ema20_second_touch_1h_tp200_trailing200_20261121/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ema20-second-touch-1h-tp200-trailing200
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas
+      - name: Backtest BTC ETH 1H second-touch TP200 trailing200
+        shell: bash
+        run: |
+          mkdir -p analysis/ema20_second_touch_1h_tp200_trailing200_20261121/
+          set -o pipefail
+          python -u scripts/research_ema20_second_touch_1h_tp200_trailing200.py 2>&1 | tee analysis/ema20_second_touch_1h_tp200_trailing200_20261121/execution.log
+      - name: Archive outputs or errors
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-second-ema20-1h-tp200-trail200
+          path: analysis/ema20_second_touch_1h_tp200_trailing200_20261121/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Persist results only on research branch
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ema20_second_touch_1h_tp200_trailing200_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save 1H TP200 trailing200 BTC ETH results"
+            git push origin HEAD:research/ema20-second-touch-1h-tp200-trailing200-20261121
+          fi
