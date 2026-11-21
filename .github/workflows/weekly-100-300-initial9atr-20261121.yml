@@ -1,0 +1,46 @@
+name: Current IST week BTC ETH 100 activation 300 extra stop initial9ATR
+on:
+  push:
+    branches:
+      - research/weekly-100-300-initial9atr-nov16-21-2026
+    paths:
+      - scripts/current_week_100_300_initial9atr_20261121.py
+      - .github/workflows/weekly-100-300-initial9atr-20261121.yml
+
+permissions:
+  contents: write
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned historical research libraries
+        run: python -m pip install pandas==2.2.3 numpy==2.2.3 numba==0.61.2
+      - name: Fetch verified minute archives and backtest actual current IST week
+        run: |
+          python -m py_compile scripts/current_week_100_300_initial9atr_20261121.py
+          python scripts/current_week_100_300_initial9atr_20261121.py
+      - name: Upload weekly trade ledger and daily breakdown
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-week-nov16-21-extra-stop100-300-initial9atr
+          path: analysis/current_week_100_300_initial9atr_20261121/
+          if-no-files-found: warn
+      - name: Commit research report only (not temporary updated market-data archives)
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/current_week_100_300_initial9atr_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: current IST week 100/300 additional stop initial9ATR with current 1m candles"
+            git push origin HEAD:research/weekly-100-300-initial9atr-nov16-21-2026
+          fi
