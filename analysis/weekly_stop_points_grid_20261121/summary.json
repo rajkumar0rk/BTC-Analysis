@@ -1,0 +1,2065 @@
+{
+  "title": "2026-11-16 week: EMA20 Supertrend trailing STOP POINTS, multiple activation/stop combinations",
+  "week_begin_ist": "2026-11-16 00:00:00+05:30",
+  "end_exclusive_ist": "2026-11-21 07:35:00+05:30",
+  "calendar_week_incomplete": true,
+  "venue": "Delta India production historical 1m; not Delta Demo testnet",
+  "settings": "EMA20+Supertrend10,3 1H entry, ATR14*2 initial stop; 1m point trailing, fixed trailing distance DISABLED",
+  "stop_semantics": "candidate LONG = best 1m high - stop_points, SHORT = best 1m low + stop_points; applied from following minute; exchange MARK or traded proxy alternative",
+  "eth_points": "BTC-equivalent activation and trailing stop points scaled by ETH entry/80000, tick-rounded",
+  "cost": "Regular 0.05% each side plus 18% GST, estimated, exclude funding, actual bid/ask fills, spread, slippage, liquidation",
+  "sizing": "Unfunded constant target notional near $1000 per position, not a realistic $100 equity simulation",
+  "optimization_caveat": "Selecting best on the very same partial week is overfitting; benchmark using 2025 train and 2026 Jan-Oct holdout. Prior history is also a tested grid and cannot prove profitability.",
+  "grid": {
+    "activation_points": [
+      50,
+      100,
+      200,
+      300,
+      500,
+      800,
+      1000
+    ],
+    "stop_points": [
+      50,
+      100,
+      200,
+      300,
+      500,
+      750,
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      4000,
+      6000,
+      8000
+    ],
+    "combinations_per_asset": 98
+  },
+  "datasets": {
+    "BTC": {
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "mark_source": "Delta India historical MARK:xxxxUSD 1m REST archive",
+      "traded_rows": 987840,
+      "mark_rows": 987840,
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2026-11-17 23:59:00+00:00",
+      "mark_time_alignment_verified": true,
+      "traded_sha256_verified": true,
+      "all_minute_intervals_60s": true,
+      "completed_1h_bars": 16538,
+      "hourly_entry_signals": 2502,
+      "hourly_st_flips": 406,
+      "warmup_bars": 72,
+      "fetched_traded_1m": 4445,
+      "fetched_mark_1m": 4445,
+      "most_recent_traded_utc": "2026-11-21 02:04:00+00:00",
+      "most_recent_mark_utc": "2026-11-21 02:04:00+00:00"
+    },
+    "ETH": {
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "mark_source": "Delta India historical MARK:xxxxUSD 1m REST archive",
+      "traded_rows": 987840,
+      "mark_rows": 987840,
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2026-11-17 23:59:00+00:00",
+      "mark_time_alignment_verified": true,
+      "traded_sha256_verified": true,
+      "all_minute_intervals_60s": true,
+      "completed_1h_bars": 16538,
+      "hourly_entry_signals": 2561,
+      "hourly_st_flips": 392,
+      "warmup_bars": 72,
+      "fetched_traded_1m": 4445,
+      "fetched_mark_1m": 4445,
+      "most_recent_traded_utc": "2026-11-21 02:04:00+00:00",
+      "most_recent_mark_utc": "2026-11-21 02:04:00+00:00"
+    }
+  },
+  "results": {
+    "BTC": {
+      "selected": {
+        "best_week_robust_both_models_min4trades": {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 100,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 27.4319,
+          "mark_trades": 6,
+          "mark_wins": 4,
+          "mark_pf": 1.7834,
+          "traded_net_usd": 25.8355,
+          "traded_trades": 6,
+          "traded_pf": 1.7378,
+          "min_model_net_usd": 25.8355,
+          "max_model_net_usd": 27.4319,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1121.6543,
+          "hist2026_holdout_mark_net_usd": -407.5649,
+          "hist22months_mark_net_usd": -1529.2192,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -22.8595,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 13.405,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -12.1573,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 30.3064,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 18.7374,
+              "trades": 1
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -22.8595,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 12.3769,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -12.1573,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 29.7381,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 18.7374,
+              "trades": 1
+            }
+          ],
+          "mark_gross": 34.2545,
+          "mark_fees_gst": 6.8226,
+          "traded_gross": 32.659,
+          "traded_fees_gst": 6.8235
+        },
+        "best_week_mark_min4trades": {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 100,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 27.4319,
+          "mark_trades": 6,
+          "mark_wins": 4,
+          "mark_pf": 1.7834,
+          "traded_net_usd": 25.8355,
+          "traded_trades": 6,
+          "traded_pf": 1.7378,
+          "min_model_net_usd": 25.8355,
+          "max_model_net_usd": 27.4319,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1121.6543,
+          "hist2026_holdout_mark_net_usd": -407.5649,
+          "hist22months_mark_net_usd": -1529.2192,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -22.8595,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 13.405,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -12.1573,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 30.3064,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 18.7374,
+              "trades": 1
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -22.8595,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 12.3769,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -12.1573,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 29.7381,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 18.7374,
+              "trades": 1
+            }
+          ],
+          "mark_gross": 34.2545,
+          "mark_fees_gst": 6.8226,
+          "traded_gross": 32.659,
+          "traded_fees_gst": 6.8235
+        },
+        "best_week_activation100_robust_min4trades": {
+          "asset": "BTC",
+          "activation": 100,
+          "trailing_stop_points": 1500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 15.164,
+          "mark_trades": 4,
+          "mark_wins": 2,
+          "mark_pf": 1.4025,
+          "traded_net_usd": 16.5073,
+          "traded_trades": 4,
+          "traded_pf": 1.4381,
+          "min_model_net_usd": 15.164,
+          "max_model_net_usd": 16.5073,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -740.6787,
+          "hist2026_holdout_mark_net_usd": -353.7513,
+          "hist22months_mark_net_usd": -1094.43,
+          "hist22_positive_months": 4,
+          "open_mark": false,
+          "open_traded": false,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -18.4746,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -19.2023,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": 10.1781,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 42.6628,
+              "trades": 1
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -18.4746,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -19.2023,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": 11.5214,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 42.6628,
+              "trades": 1
+            }
+          ],
+          "mark_gross": 19.7255,
+          "mark_fees_gst": 4.5615,
+          "traded_gross": 21.068,
+          "traded_fees_gst": 4.5607
+        },
+        "historical_2025_train_best": {
+          "asset": "BTC",
+          "activation": 50,
+          "trailing_stop_points": 2000,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": -19.2253,
+          "mark_trades": 2,
+          "mark_wins": 1,
+          "mark_pf": 0.159,
+          "traded_net_usd": -19.2253,
+          "traded_trades": 2,
+          "traded_pf": 0.159,
+          "min_model_net_usd": -19.2253,
+          "max_model_net_usd": -19.2253,
+          "both_min_4trades": false,
+          "hist2025_mark_net_usd": -462.5432,
+          "hist2026_holdout_mark_net_usd": -101.5049,
+          "hist22months_mark_net_usd": -564.0481,
+          "hist22_positive_months": 9,
+          "open_mark": true,
+          "open_traded": true,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -22.8595,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": 3.6342,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -22.8595,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": 3.6342,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": -16.95,
+          "mark_fees_gst": 2.2753,
+          "traded_gross": -16.95,
+          "traded_fees_gst": 2.2753
+        },
+        "historical_2025_train_best_activation100": {
+          "asset": "BTC",
+          "activation": 100,
+          "trailing_stop_points": 2000,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": -19.2253,
+          "mark_trades": 2,
+          "mark_wins": 1,
+          "mark_pf": 0.159,
+          "traded_net_usd": -19.2253,
+          "traded_trades": 2,
+          "traded_pf": 0.159,
+          "min_model_net_usd": -19.2253,
+          "max_model_net_usd": -19.2253,
+          "both_min_4trades": false,
+          "hist2025_mark_net_usd": -465.5552,
+          "hist2026_holdout_mark_net_usd": -101.5049,
+          "hist22months_mark_net_usd": -567.0601,
+          "hist22_positive_months": 9,
+          "open_mark": true,
+          "open_traded": true,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -22.8595,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": 3.6342,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -22.8595,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": 3.6342,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": -16.95,
+          "mark_fees_gst": 2.2753,
+          "traded_gross": -16.95,
+          "traded_fees_gst": 2.2753
+        },
+        "original_100_500": {
+          "asset": "BTC",
+          "activation": 100,
+          "trailing_stop_points": 500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": -8.3344,
+          "mark_trades": 11,
+          "mark_wins": 3,
+          "mark_pf": 0.8641,
+          "traded_net_usd": -8.1583,
+          "traded_trades": 11,
+          "traded_pf": 0.867,
+          "min_model_net_usd": -8.3344,
+          "max_model_net_usd": -8.1583,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1084.0079,
+          "hist2026_holdout_mark_net_usd": -667.4492,
+          "hist22months_mark_net_usd": -1751.4571,
+          "hist22_positive_months": 1,
+          "open_mark": false,
+          "open_traded": false,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -24.6827,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -13.0785,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": -0.0089,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -12.1573,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 41.593,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -24.6827,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -13.0785,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": -0.0089,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -12.1573,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 41.7691,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": 4.259,
+          "mark_fees_gst": 12.5934,
+          "traded_gross": 4.435,
+          "traded_fees_gst": 12.5933
+        }
+      },
+      "top10_min_model_net": [
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 100,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 27.4319,
+          "mark_trades": 6,
+          "mark_wins": 4,
+          "mark_pf": 1.7834,
+          "traded_net_usd": 25.8355,
+          "traded_trades": 6,
+          "traded_pf": 1.7378,
+          "min_model_net_usd": 25.8355,
+          "max_model_net_usd": 27.4319,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1121.6543,
+          "hist2026_holdout_mark_net_usd": -407.5649,
+          "hist22months_mark_net_usd": -1529.2192,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 300,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 24.6863,
+          "mark_trades": 6,
+          "mark_wins": 4,
+          "mark_pf": 1.705,
+          "traded_net_usd": 25.815,
+          "traded_trades": 6,
+          "traded_pf": 1.7372,
+          "min_model_net_usd": 24.6863,
+          "max_model_net_usd": 25.815,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -975.2161,
+          "hist2026_holdout_mark_net_usd": -453.712,
+          "hist22months_mark_net_usd": -1428.9281,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 200,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 23.7898,
+          "mark_trades": 6,
+          "mark_wins": 4,
+          "mark_pf": 1.6794,
+          "traded_net_usd": 25.0545,
+          "traded_trades": 6,
+          "traded_pf": 1.7155,
+          "min_model_net_usd": 23.7898,
+          "max_model_net_usd": 25.0545,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1088.0761,
+          "hist2026_holdout_mark_net_usd": -426.1965,
+          "hist22months_mark_net_usd": -1514.2726,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 500,
+          "trailing_stop_points": 1500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 22.7015,
+          "mark_trades": 4,
+          "mark_wins": 2,
+          "mark_pf": 1.7532,
+          "traded_net_usd": 24.0447,
+          "traded_trades": 4,
+          "traded_pf": 1.7978,
+          "min_model_net_usd": 22.7015,
+          "max_model_net_usd": 24.0447,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -846.4672,
+          "hist2026_holdout_mark_net_usd": -354.5022,
+          "hist22months_mark_net_usd": -1200.9694,
+          "hist22_positive_months": 5,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "trailing_stop_points": 300,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 21.6656,
+          "mark_trades": 5,
+          "mark_wins": 3,
+          "mark_pf": 1.6187,
+          "traded_net_usd": 22.7943,
+          "traded_trades": 5,
+          "traded_pf": 1.651,
+          "min_model_net_usd": 21.6656,
+          "max_model_net_usd": 22.7943,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -924.2849,
+          "hist2026_holdout_mark_net_usd": -299.9756,
+          "hist22months_mark_net_usd": -1224.2605,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "trailing_stop_points": 100,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 21.4975,
+          "mark_trades": 5,
+          "mark_wins": 3,
+          "mark_pf": 1.6139,
+          "traded_net_usd": 20.9292,
+          "traded_trades": 5,
+          "traded_pf": 1.5977,
+          "min_model_net_usd": 20.9292,
+          "max_model_net_usd": 21.4975,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1024.6023,
+          "hist2026_holdout_mark_net_usd": -381.489,
+          "hist22months_mark_net_usd": -1406.0913,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "trailing_stop_points": 200,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 20.2328,
+          "mark_trades": 5,
+          "mark_wins": 3,
+          "mark_pf": 1.5778,
+          "traded_net_usd": 21.4975,
+          "traded_trades": 5,
+          "traded_pf": 1.6139,
+          "min_model_net_usd": 20.2328,
+          "max_model_net_usd": 21.4975,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1004.5295,
+          "hist2026_holdout_mark_net_usd": -391.4589,
+          "hist22months_mark_net_usd": -1395.9884,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "trailing_stop_points": 500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 17.5564,
+          "mark_trades": 4,
+          "mark_wins": 2,
+          "mark_pf": 1.5014,
+          "traded_net_usd": 17.5564,
+          "traded_trades": 4,
+          "traded_pf": 1.5014,
+          "min_model_net_usd": 17.5564,
+          "max_model_net_usd": 17.5564,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -856.5049,
+          "hist2026_holdout_mark_net_usd": -250.4816,
+          "hist22months_mark_net_usd": -1106.9864,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 17.047,
+          "mark_trades": 5,
+          "mark_wins": 3,
+          "mark_pf": 1.4868,
+          "traded_net_usd": 17.2231,
+          "traded_trades": 5,
+          "traded_pf": 1.4919,
+          "min_model_net_usd": 17.047,
+          "max_model_net_usd": 17.2231,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -911.2547,
+          "hist2026_holdout_mark_net_usd": -261.0005,
+          "hist22months_mark_net_usd": -1172.2553,
+          "hist22_positive_months": 4,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 500,
+          "trailing_stop_points": 300,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 16.7953,
+          "mark_trades": 7,
+          "mark_wins": 5,
+          "mark_pf": 1.4722,
+          "traded_net_usd": 16.7953,
+          "traded_trades": 7,
+          "traded_pf": 1.4722,
+          "min_model_net_usd": 16.7953,
+          "max_model_net_usd": 16.7953,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1038.0785,
+          "hist2026_holdout_mark_net_usd": -446.849,
+          "hist22months_mark_net_usd": -1484.9274,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        }
+      ],
+      "top10_mark_net": [
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 100,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 27.4319,
+          "mark_trades": 6,
+          "mark_wins": 4,
+          "mark_pf": 1.7834,
+          "traded_net_usd": 25.8355,
+          "traded_trades": 6,
+          "traded_pf": 1.7378,
+          "min_model_net_usd": 25.8355,
+          "max_model_net_usd": 27.4319,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1121.6543,
+          "hist2026_holdout_mark_net_usd": -407.5649,
+          "hist22months_mark_net_usd": -1529.2192,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 300,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 24.6863,
+          "mark_trades": 6,
+          "mark_wins": 4,
+          "mark_pf": 1.705,
+          "traded_net_usd": 25.815,
+          "traded_trades": 6,
+          "traded_pf": 1.7372,
+          "min_model_net_usd": 24.6863,
+          "max_model_net_usd": 25.815,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -975.2161,
+          "hist2026_holdout_mark_net_usd": -453.712,
+          "hist22months_mark_net_usd": -1428.9281,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 200,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 23.7898,
+          "mark_trades": 6,
+          "mark_wins": 4,
+          "mark_pf": 1.6794,
+          "traded_net_usd": 25.0545,
+          "traded_trades": 6,
+          "traded_pf": 1.7155,
+          "min_model_net_usd": 23.7898,
+          "max_model_net_usd": 25.0545,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1088.0761,
+          "hist2026_holdout_mark_net_usd": -426.1965,
+          "hist22months_mark_net_usd": -1514.2726,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 500,
+          "trailing_stop_points": 1500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 22.7015,
+          "mark_trades": 4,
+          "mark_wins": 2,
+          "mark_pf": 1.7532,
+          "traded_net_usd": 24.0447,
+          "traded_trades": 4,
+          "traded_pf": 1.7978,
+          "min_model_net_usd": 22.7015,
+          "max_model_net_usd": 24.0447,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -846.4672,
+          "hist2026_holdout_mark_net_usd": -354.5022,
+          "hist22months_mark_net_usd": -1200.9694,
+          "hist22_positive_months": 5,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "trailing_stop_points": 300,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 21.6656,
+          "mark_trades": 5,
+          "mark_wins": 3,
+          "mark_pf": 1.6187,
+          "traded_net_usd": 22.7943,
+          "traded_trades": 5,
+          "traded_pf": 1.651,
+          "min_model_net_usd": 21.6656,
+          "max_model_net_usd": 22.7943,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -924.2849,
+          "hist2026_holdout_mark_net_usd": -299.9756,
+          "hist22months_mark_net_usd": -1224.2605,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "trailing_stop_points": 100,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 21.4975,
+          "mark_trades": 5,
+          "mark_wins": 3,
+          "mark_pf": 1.6139,
+          "traded_net_usd": 20.9292,
+          "traded_trades": 5,
+          "traded_pf": 1.5977,
+          "min_model_net_usd": 20.9292,
+          "max_model_net_usd": 21.4975,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1024.6023,
+          "hist2026_holdout_mark_net_usd": -381.489,
+          "hist22months_mark_net_usd": -1406.0913,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "trailing_stop_points": 200,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 20.2328,
+          "mark_trades": 5,
+          "mark_wins": 3,
+          "mark_pf": 1.5778,
+          "traded_net_usd": 21.4975,
+          "traded_trades": 5,
+          "traded_pf": 1.6139,
+          "min_model_net_usd": 20.2328,
+          "max_model_net_usd": 21.4975,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1004.5295,
+          "hist2026_holdout_mark_net_usd": -391.4589,
+          "hist22months_mark_net_usd": -1395.9884,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "trailing_stop_points": 500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 17.5564,
+          "mark_trades": 4,
+          "mark_wins": 2,
+          "mark_pf": 1.5014,
+          "traded_net_usd": 17.5564,
+          "traded_trades": 4,
+          "traded_pf": 1.5014,
+          "min_model_net_usd": 17.5564,
+          "max_model_net_usd": 17.5564,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -856.5049,
+          "hist2026_holdout_mark_net_usd": -250.4816,
+          "hist22months_mark_net_usd": -1106.9864,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "trailing_stop_points": 500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 17.047,
+          "mark_trades": 5,
+          "mark_wins": 3,
+          "mark_pf": 1.4868,
+          "traded_net_usd": 17.2231,
+          "traded_trades": 5,
+          "traded_pf": 1.4919,
+          "min_model_net_usd": 17.047,
+          "max_model_net_usd": 17.2231,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -911.2547,
+          "hist2026_holdout_mark_net_usd": -261.0005,
+          "hist22months_mark_net_usd": -1172.2553,
+          "hist22_positive_months": 4,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "BTC",
+          "activation": 500,
+          "trailing_stop_points": 300,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 16.7953,
+          "mark_trades": 7,
+          "mark_wins": 5,
+          "mark_pf": 1.4722,
+          "traded_net_usd": 16.7953,
+          "traded_trades": 7,
+          "traded_pf": 1.4722,
+          "min_model_net_usd": 16.7953,
+          "max_model_net_usd": 16.7953,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1038.0785,
+          "hist2026_holdout_mark_net_usd": -446.849,
+          "hist22months_mark_net_usd": -1484.9274,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        }
+      ],
+      "tested": 98,
+      "min_four_trades_candidates": 54,
+      "positive_both_models": 30
+    },
+    "ETH": {
+      "selected": {
+        "best_week_robust_both_models_min4trades": {
+          "asset": "ETH",
+          "activation": 500,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 37.6073,
+          "mark_trades": 9,
+          "mark_wins": 5,
+          "mark_pf": 1.7125,
+          "traded_net_usd": 22.7121,
+          "traded_trades": 13,
+          "traded_pf": 1.3255,
+          "min_model_net_usd": 22.7121,
+          "max_model_net_usd": 37.6073,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -929.221,
+          "hist2026_holdout_mark_net_usd": -508.9474,
+          "hist22months_mark_net_usd": -1438.1685,
+          "hist22_positive_months": 4,
+          "open_mark": false,
+          "open_traded": false,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 6.0355,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -49.5049,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 16.9891,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -3.2758,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 67.3634,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -18.5615,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -39.803,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 16.9891,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -3.2758,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 67.3634,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": 48.0795,
+          "mark_fees_gst": 10.4722,
+          "traded_gross": 37.8195,
+          "traded_fees_gst": 15.1074
+        },
+        "best_week_mark_min4trades": {
+          "asset": "ETH",
+          "activation": 300,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 41.5129,
+          "mark_trades": 12,
+          "mark_wins": 5,
+          "mark_pf": 1.8283,
+          "traded_net_usd": -2.0211,
+          "traded_trades": 17,
+          "traded_pf": 0.9775,
+          "min_model_net_usd": -2.0211,
+          "max_model_net_usd": 41.5129,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1137.032,
+          "hist2026_holdout_mark_net_usd": -559.7164,
+          "hist22months_mark_net_usd": -1696.7484,
+          "hist22_positive_months": 6,
+          "open_mark": false,
+          "open_traded": false,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 6.0355,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -30.697,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 11.2517,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -8.8775,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 63.8001,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -57.4272,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -10.7682,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 11.2517,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -8.8775,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 63.8001,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": 55.508,
+          "mark_fees_gst": 13.9951,
+          "traded_gross": 17.762,
+          "traded_fees_gst": 19.7831
+        },
+        "best_week_activation100_robust_min4trades": {
+          "asset": "ETH",
+          "activation": 100,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 24.3034,
+          "mark_trades": 17,
+          "mark_wins": 6,
+          "mark_pf": 1.3049,
+          "traded_net_usd": 19.6351,
+          "traded_trades": 21,
+          "traded_pf": 1.2271,
+          "min_model_net_usd": 19.6351,
+          "max_model_net_usd": 24.3034,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1043.5176,
+          "hist2026_holdout_mark_net_usd": -598.6156,
+          "hist22months_mark_net_usd": -1642.1332,
+          "hist22_positive_months": 5,
+          "open_mark": false,
+          "open_traded": false,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -5.4343,
+              "trades": 5
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -30.697,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 5.512,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -8.8775,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 63.8001,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -30.0314,
+              "trades": 7
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -10.7682,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 5.512,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -8.8775,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 63.8001,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": 44.112,
+          "mark_fees_gst": 19.8086,
+          "traded_gross": 44.085,
+          "traded_fees_gst": 24.4499
+        },
+        "historical_2025_train_best": {
+          "asset": "ETH",
+          "activation": 50,
+          "trailing_stop_points": 4000,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": -55.0326,
+          "mark_trades": 3,
+          "mark_wins": 0,
+          "mark_pf": 0.0,
+          "traded_net_usd": -55.0326,
+          "traded_trades": 3,
+          "traded_pf": 0.0,
+          "min_model_net_usd": -55.0326,
+          "max_model_net_usd": -55.0326,
+          "both_min_4trades": false,
+          "hist2025_mark_net_usd": -78.7169,
+          "hist2026_holdout_mark_net_usd": -117.9262,
+          "hist22months_mark_net_usd": -196.6431,
+          "hist22_positive_months": 9,
+          "open_mark": true,
+          "open_traded": true,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -31.4723,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -23.5603,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -31.4723,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -23.5603,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": -51.551,
+          "mark_fees_gst": 3.4816,
+          "traded_gross": -51.551,
+          "traded_fees_gst": 3.4816
+        },
+        "historical_2025_train_best_activation100": {
+          "asset": "ETH",
+          "activation": 100,
+          "trailing_stop_points": 4000,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": -55.0326,
+          "mark_trades": 3,
+          "mark_wins": 0,
+          "mark_pf": 0.0,
+          "traded_net_usd": -55.0326,
+          "traded_trades": 3,
+          "traded_pf": 0.0,
+          "min_model_net_usd": -55.0326,
+          "max_model_net_usd": -55.0326,
+          "both_min_4trades": false,
+          "hist2025_mark_net_usd": -78.7169,
+          "hist2026_holdout_mark_net_usd": -117.9262,
+          "hist22months_mark_net_usd": -196.6431,
+          "hist22_positive_months": 9,
+          "open_mark": true,
+          "open_traded": true,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -31.4723,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -23.5603,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -31.4723,
+              "trades": 1
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -23.5603,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 0.0,
+              "trades": 0
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": -51.551,
+          "mark_fees_gst": 3.4816,
+          "traded_gross": -51.551,
+          "traded_fees_gst": 3.4816
+        },
+        "original_100_500": {
+          "asset": "ETH",
+          "activation": 100,
+          "trailing_stop_points": 500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 7.8952,
+          "mark_trades": 20,
+          "mark_wins": 8,
+          "mark_pf": 1.1147,
+          "traded_net_usd": -1.4505,
+          "traded_trades": 27,
+          "traded_pf": 0.9831,
+          "min_model_net_usd": -1.4505,
+          "max_model_net_usd": 7.8952,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1165.2044,
+          "hist2026_holdout_mark_net_usd": -811.8963,
+          "hist22months_mark_net_usd": -1977.1007,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false,
+          "mark_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -3.1713,
+              "trades": 6
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -31.9922,
+              "trades": 2
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": -8.9211,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -1.0609,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 53.0407,
+              "trades": 5
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "traded_daily": [
+            {
+              "date": "2026-11-16",
+              "net_usd": -26.2346,
+              "trades": 9
+            },
+            {
+              "date": "2026-11-17",
+              "net_usd": -18.303,
+              "trades": 6
+            },
+            {
+              "date": "2026-11-18",
+              "net_usd": -8.9211,
+              "trades": 4
+            },
+            {
+              "date": "2026-11-19",
+              "net_usd": -1.0609,
+              "trades": 3
+            },
+            {
+              "date": "2026-11-20",
+              "net_usd": 53.0692,
+              "trades": 5
+            },
+            {
+              "date": "2026-11-21",
+              "net_usd": 0.0,
+              "trades": 0
+            }
+          ],
+          "mark_gross": 31.2195,
+          "mark_fees_gst": 23.3243,
+          "traded_gross": 30.006,
+          "traded_fees_gst": 31.4565
+        }
+      },
+      "top10_min_model_net": [
+        {
+          "asset": "ETH",
+          "activation": 500,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 37.6073,
+          "mark_trades": 9,
+          "mark_wins": 5,
+          "mark_pf": 1.7125,
+          "traded_net_usd": 22.7121,
+          "traded_trades": 13,
+          "traded_pf": 1.3255,
+          "min_model_net_usd": 22.7121,
+          "max_model_net_usd": 37.6073,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -929.221,
+          "hist2026_holdout_mark_net_usd": -508.9474,
+          "hist22months_mark_net_usd": -1438.1685,
+          "hist22_positive_months": 4,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 50,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 24.3034,
+          "mark_trades": 17,
+          "mark_wins": 6,
+          "mark_pf": 1.3049,
+          "traded_net_usd": 19.6351,
+          "traded_trades": 21,
+          "traded_pf": 1.2271,
+          "min_model_net_usd": 19.6351,
+          "max_model_net_usd": 24.3034,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -937.4458,
+          "hist2026_holdout_mark_net_usd": -557.4215,
+          "hist22months_mark_net_usd": -1494.8673,
+          "hist22_positive_months": 5,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 100,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 24.3034,
+          "mark_trades": 17,
+          "mark_wins": 6,
+          "mark_pf": 1.3049,
+          "traded_net_usd": 19.6351,
+          "traded_trades": 21,
+          "traded_pf": 1.2271,
+          "min_model_net_usd": 19.6351,
+          "max_model_net_usd": 24.3034,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1043.5176,
+          "hist2026_holdout_mark_net_usd": -598.6156,
+          "hist22months_mark_net_usd": -1642.1332,
+          "hist22_positive_months": 5,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 500,
+          "trailing_stop_points": 1500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 13.756,
+          "mark_trades": 7,
+          "mark_wins": 2,
+          "mark_pf": 1.2489,
+          "traded_net_usd": 13.756,
+          "traded_trades": 7,
+          "traded_pf": 1.2489,
+          "min_model_net_usd": 13.756,
+          "max_model_net_usd": 13.756,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -659.5267,
+          "hist2026_holdout_mark_net_usd": -409.6262,
+          "hist22months_mark_net_usd": -1069.1529,
+          "hist22_positive_months": 9,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 500,
+          "trailing_stop_points": 2000,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 9.9938,
+          "mark_trades": 7,
+          "mark_wins": 2,
+          "mark_pf": 1.1333,
+          "traded_net_usd": 9.9938,
+          "traded_trades": 7,
+          "traded_pf": 1.1333,
+          "min_model_net_usd": 9.9938,
+          "max_model_net_usd": 9.9938,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -417.8125,
+          "hist2026_holdout_mark_net_usd": -501.2424,
+          "hist22months_mark_net_usd": -919.0549,
+          "hist22_positive_months": 8,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 800,
+          "trailing_stop_points": 2000,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 6.884,
+          "mark_trades": 7,
+          "mark_wins": 2,
+          "mark_pf": 1.0882,
+          "traded_net_usd": 6.884,
+          "traded_trades": 7,
+          "traded_pf": 1.0882,
+          "min_model_net_usd": 6.884,
+          "max_model_net_usd": 6.884,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -485.9389,
+          "hist2026_holdout_mark_net_usd": -513.7855,
+          "hist22months_mark_net_usd": -999.7243,
+          "hist22_positive_months": 8,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 500,
+          "trailing_stop_points": 200,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 9.8314,
+          "mark_trades": 11,
+          "mark_wins": 9,
+          "mark_pf": 1.1986,
+          "traded_net_usd": 5.8852,
+          "traded_trades": 14,
+          "traded_pf": 1.0919,
+          "min_model_net_usd": 5.8852,
+          "max_model_net_usd": 9.8314,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1303.2699,
+          "hist2026_holdout_mark_net_usd": -494.37,
+          "hist22months_mark_net_usd": -1797.6399,
+          "hist22_positive_months": 4,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 800,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 18.6401,
+          "mark_trades": 9,
+          "mark_wins": 5,
+          "mark_pf": 1.2598,
+          "traded_net_usd": 5.1745,
+          "traded_trades": 12,
+          "traded_pf": 1.0593,
+          "min_model_net_usd": 5.1745,
+          "max_model_net_usd": 18.6401,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -983.3217,
+          "hist2026_holdout_mark_net_usd": -453.3357,
+          "hist22months_mark_net_usd": -1436.6574,
+          "hist22_positive_months": 8,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 800,
+          "trailing_stop_points": 1500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 4.5106,
+          "mark_trades": 7,
+          "mark_wins": 2,
+          "mark_pf": 1.0699,
+          "traded_net_usd": 4.5106,
+          "traded_trades": 7,
+          "traded_pf": 1.0699,
+          "min_model_net_usd": 4.5106,
+          "max_model_net_usd": 4.5106,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -775.4469,
+          "hist2026_holdout_mark_net_usd": -462.3681,
+          "hist22months_mark_net_usd": -1237.815,
+          "hist22_positive_months": 7,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 1000,
+          "trailing_stop_points": 2000,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 4.0531,
+          "mark_trades": 7,
+          "mark_wins": 2,
+          "mark_pf": 1.0501,
+          "traded_net_usd": 4.0531,
+          "traded_trades": 7,
+          "traded_pf": 1.0501,
+          "min_model_net_usd": 4.0531,
+          "max_model_net_usd": 4.0531,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -460.5134,
+          "hist2026_holdout_mark_net_usd": -542.8849,
+          "hist22months_mark_net_usd": -1003.3984,
+          "hist22_positive_months": 8,
+          "open_mark": false,
+          "open_traded": false
+        }
+      ],
+      "top10_mark_net": [
+        {
+          "asset": "ETH",
+          "activation": 300,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 41.5129,
+          "mark_trades": 12,
+          "mark_wins": 5,
+          "mark_pf": 1.8283,
+          "traded_net_usd": -2.0211,
+          "traded_trades": 17,
+          "traded_pf": 0.9775,
+          "min_model_net_usd": -2.0211,
+          "max_model_net_usd": 41.5129,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1137.032,
+          "hist2026_holdout_mark_net_usd": -559.7164,
+          "hist22months_mark_net_usd": -1696.7484,
+          "hist22_positive_months": 6,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 500,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 37.6073,
+          "mark_trades": 9,
+          "mark_wins": 5,
+          "mark_pf": 1.7125,
+          "traded_net_usd": 22.7121,
+          "traded_trades": 13,
+          "traded_pf": 1.3255,
+          "min_model_net_usd": 22.7121,
+          "max_model_net_usd": 37.6073,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -929.221,
+          "hist2026_holdout_mark_net_usd": -508.9474,
+          "hist22months_mark_net_usd": -1438.1685,
+          "hist22_positive_months": 4,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 50,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 24.3034,
+          "mark_trades": 17,
+          "mark_wins": 6,
+          "mark_pf": 1.3049,
+          "traded_net_usd": 19.6351,
+          "traded_trades": 21,
+          "traded_pf": 1.2271,
+          "min_model_net_usd": 19.6351,
+          "max_model_net_usd": 24.3034,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -937.4458,
+          "hist2026_holdout_mark_net_usd": -557.4215,
+          "hist22months_mark_net_usd": -1494.8673,
+          "hist22_positive_months": 5,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 100,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 24.3034,
+          "mark_trades": 17,
+          "mark_wins": 6,
+          "mark_pf": 1.3049,
+          "traded_net_usd": 19.6351,
+          "traded_trades": 21,
+          "traded_pf": 1.2271,
+          "min_model_net_usd": 19.6351,
+          "max_model_net_usd": 24.3034,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1043.5176,
+          "hist2026_holdout_mark_net_usd": -598.6156,
+          "hist22months_mark_net_usd": -1642.1332,
+          "hist22_positive_months": 5,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 300,
+          "trailing_stop_points": 500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 24.0945,
+          "mark_trades": 13,
+          "mark_wins": 7,
+          "mark_pf": 1.6167,
+          "traded_net_usd": -9.9439,
+          "traded_trades": 19,
+          "traded_pf": 0.8647,
+          "min_model_net_usd": -9.9439,
+          "max_model_net_usd": 24.0945,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1307.1997,
+          "hist2026_holdout_mark_net_usd": -718.1058,
+          "hist22months_mark_net_usd": -2025.3055,
+          "hist22_positive_months": 3,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 800,
+          "trailing_stop_points": 750,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 18.6401,
+          "mark_trades": 9,
+          "mark_wins": 5,
+          "mark_pf": 1.2598,
+          "traded_net_usd": 5.1745,
+          "traded_trades": 12,
+          "traded_pf": 1.0593,
+          "min_model_net_usd": 5.1745,
+          "max_model_net_usd": 18.6401,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -983.3217,
+          "hist2026_holdout_mark_net_usd": -453.3357,
+          "hist22months_mark_net_usd": -1436.6574,
+          "hist22_positive_months": 8,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 300,
+          "trailing_stop_points": 300,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 17.9932,
+          "mark_trades": 14,
+          "mark_wins": 8,
+          "mark_pf": 1.6166,
+          "traded_net_usd": -7.7836,
+          "traded_trades": 20,
+          "traded_pf": 0.8641,
+          "min_model_net_usd": -7.7836,
+          "max_model_net_usd": 17.9932,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1558.7922,
+          "hist2026_holdout_mark_net_usd": -721.4423,
+          "hist22months_mark_net_usd": -2280.2345,
+          "hist22_positive_months": 0,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 500,
+          "trailing_stop_points": 1500,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 13.756,
+          "mark_trades": 7,
+          "mark_wins": 2,
+          "mark_pf": 1.2489,
+          "traded_net_usd": 13.756,
+          "traded_trades": 7,
+          "traded_pf": 1.2489,
+          "min_model_net_usd": 13.756,
+          "max_model_net_usd": 13.756,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -659.5267,
+          "hist2026_holdout_mark_net_usd": -409.6262,
+          "hist22months_mark_net_usd": -1069.1529,
+          "hist22_positive_months": 9,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 500,
+          "trailing_stop_points": 300,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 12.4704,
+          "mark_trades": 11,
+          "mark_wins": 9,
+          "mark_pf": 1.2519,
+          "traded_net_usd": 2.0192,
+          "traded_trades": 14,
+          "traded_pf": 1.0315,
+          "min_model_net_usd": 2.0192,
+          "max_model_net_usd": 12.4704,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -1274.9125,
+          "hist2026_holdout_mark_net_usd": -594.5509,
+          "hist22months_mark_net_usd": -1869.4634,
+          "hist22_positive_months": 2,
+          "open_mark": false,
+          "open_traded": false
+        },
+        {
+          "asset": "ETH",
+          "activation": 300,
+          "trailing_stop_points": 2000,
+          "fixed_trailing_distance_enabled": false,
+          "mark_net_usd": 11.9636,
+          "mark_trades": 7,
+          "mark_wins": 2,
+          "mark_pf": 1.1639,
+          "traded_net_usd": -26.8821,
+          "traded_trades": 8,
+          "traded_pf": 0.7597,
+          "min_model_net_usd": -26.8821,
+          "max_model_net_usd": 11.9636,
+          "both_min_4trades": true,
+          "hist2025_mark_net_usd": -452.5525,
+          "hist2026_holdout_mark_net_usd": -464.3193,
+          "hist22months_mark_net_usd": -916.8717,
+          "hist22_positive_months": 8,
+          "open_mark": false,
+          "open_traded": false
+        }
+      ],
+      "tested": 98,
+      "min_four_trades_candidates": 77,
+      "positive_both_models": 14
+    }
+  }
+}
