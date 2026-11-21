@@ -116,8 +116,8 @@ def stats(a):
         train_2025_pct=float(100*(np.prod(1+a[:12]/100)-1)),
         first6_2025_pct=float(100*(np.prod(1+a[:6]/100)-1)),
         second6_2025_pct=float(100*(np.prod(1+a[6:12]/100)-1)),
-        2026_JanOct_pct=float(100*(np.prod(1+a[12:]/100)-1)),
-        2026_profitable_months=int((a[12:]>EPS).sum()),
+        seen_2026_JanOct_pct=float(100*(np.prod(1+a[12:]/100)-1)),
+        seen_2026_profitable_months=int((a[12:]>EPS).sum()),
         worst_month_pct=float(a.min()),
         max_monthend_drawdown_pct=float(100*np.max(1-q/peak)),
         train_2025_max_monthend_dd_pct=float(100*np.max(
@@ -330,7 +330,7 @@ def select_and_report(rows,series):
       variants=len(df),selected={k:dict(model=v["model"],
           net22=v["base_total_pct"],net22_cost5=v["stress5_total_pct"],
           months_win=v["base_profitable_months"],months_win_cost5=v["stress5_profitable_months"],
-          train_cost5=v["stress5_train_2025_pct"],check2026_cost5=v["stress5_2026_JanOct_pct"])
+          train_cost5=v["stress5_train_2025_pct"],check2026_cost5=v["stress5_seen_2026_JanOct_pct"])
           for k,v in winners.items()},portfolio_2025selected=report),default=str))
 
 def main():
