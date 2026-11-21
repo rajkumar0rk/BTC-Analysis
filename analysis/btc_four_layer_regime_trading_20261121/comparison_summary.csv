@@ -1,0 +1,5 @@
+model,candidate_events,exclusive_position_rejections,entry_unavailable,executed_trades,trades,wins,win_rate_pct,profit_factor,net_return_pct,net_profit_usd,ending_equity_usd,max_trade_close_drawdown_pct,fees_gst_usd,slippage_usd,profitable_months,losing_months,idle_months,passes_22_22
+no_trade,0,0,0,0,0,0,0.0,,0.0,0.0,10000.0,0.0,0.0,0.0,0,0,22,False
+ungated_immediate,5776,4547,0,1229,1229,444,36.127,0.8167,-54.0446,-5404.46,4595.54,55.08,6297.93,605.97,6,16,0,False
+regime_eligible_immediate,1103,564,0,539,539,172,31.911,0.8159,-30.2622,-3026.22,6973.78,31.558,3141.81,302.99,7,15,0,False
+four_layer_15m_confirmed,513,176,0,337,337,112,33.234,0.7996,-22.1561,-2215.61,7784.39,24.335,2197.86,210.23,9,13,0,False

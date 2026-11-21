@@ -1,0 +1,49 @@
+{
+  "data": "Delta India native BTCUSD 1M, each source gzip SHA256 verified",
+  "candles_native_1m": 992160,
+  "source_partitions": 23,
+  "complete_IST_months": 22,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "full_1h_bars": 16536,
+  "valid_current_1h_and_4h_states": 16337,
+  "completed_4h_lookahead_violations": 0,
+  "fifteen_minute_bars_verified_complete": true,
+  "hourly_observation_no_repaint_prefixes": [
+    {
+      "prefix_exclusive_utc": "2025-05-17T00:00:00Z",
+      "hours": 3264,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    },
+    {
+      "prefix_exclusive_utc": "2025-12-19T00:00:00Z",
+      "hours": 8448,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    },
+    {
+      "prefix_exclusive_utc": "2026-08-17T00:00:00Z",
+      "hours": 14232,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    }
+  ],
+  "signal_hourly_decisions": 16536,
+  "signals_with_state_strategy_eligibility": 1103,
+  "signals_confirmed_by_first_future_15m": 513,
+  "eligibility_confirmation_acceptance_pct": 46.51,
+  "uncertain_current_state_share_pct": 58.187,
+  "one_position_globally_per_model": true,
+  "stop_target_uses_1m_conservative_stop_first": true,
+  "fee_taker_each_side_plus_GST": 0.00059,
+  "assumed_adverse_slippage_btc_price_points_each_leg": 5.0,
+  "simulated_account_initial_usd": 10000.0,
+  "stop_risk_frac_current_equity": 0.005,
+  "max_notional_leverage": 3.0,
+  "actual_funding_transfers_included": false,
+  "historical_bid_ask_spread_available": false,
+  "liquidation_and_margin_feasibility_modelled": false,
+  "prospective_fresh_holdout": false,
+  "after_cost_live_readiness": false
+}

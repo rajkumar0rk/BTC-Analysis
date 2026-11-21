@@ -1,0 +1,5 @@
+model,candidate_events,exclusive_position_rejections,entry_unavailable,executed_trades
+no_trade,0,0,0,0
+ungated_immediate,5776,4547,0,1229
+regime_eligible_immediate,1103,564,0,539
+four_layer_15m_confirmed,513,176,0,337
