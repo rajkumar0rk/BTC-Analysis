@@ -1,0 +1,45 @@
+name: BTC 1H market regime attribution (fixed baselines)
+on:
+  push:
+    branches:
+      - research/btc-regime-attribution-20261121
+    paths:
+      - scripts/research_btc_regime_attribution_20261121.py
+      - analysis/btc_regime_attribution_20261121/NOVELTY_CHECK.md
+      - .github/workflows/research-btc-regime-attribution.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-regime-attribution-20261121
+  cancel-in-progress: false
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research libraries
+        run: python -m pip install pandas numpy tabulate
+      - name: Verify all BTCUSD 1M source partitions and run the fixed regime analysis
+        run: python scripts/research_btc_regime_attribution_20261121.py
+      - name: Upload full reproducible results
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-1h-regime-attribution-20261121
+          path: analysis/btc_regime_attribution_20261121/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Commit compact findings and complete trade ledger on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_regime_attribution_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save 1H BTC regime census and fixed strategy attribution"
+            git push origin HEAD:research/btc-regime-attribution-20261121
+          fi
