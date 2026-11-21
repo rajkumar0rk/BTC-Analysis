@@ -1,0 +1,51 @@
+name: BTC ETH 1H EMA20 second touch one per Supertrend ATR trail
+on:
+  push:
+    branches: [research/ema20-second-touch-1h-atr-trail-20261121]
+    paths:
+      - scripts/research_ema20_second_touch_1h_atr_trail.py
+      - .github/workflows/research-ema20-second-touch-1h-atr-trail.yml
+      - analysis/ema20_second_touch_1h_atr_trail_20261121/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ema20-1h-second-touch-one-per-supertrend-atr-trail
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install scientific dependencies
+        run: python -m pip install numpy pandas
+      - name: Run BTC and ETH 1m-verified 1h ATR-trailing strategy backtest
+        shell: bash
+        run: |
+          mkdir -p analysis/ema20_second_touch_1h_atr_trail_20261121
+          set -o pipefail
+          python -u scripts/research_ema20_second_touch_1h_atr_trail.py 2>&1 | tee analysis/ema20_second_touch_1h_atr_trail_20261121/execution.log
+      - name: Archive monthly mark-to-market results and trade ledger
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: second-ema20-1h-one-supertrend-atr-trail-btc-eth
+          path: analysis/ema20_second_touch_1h_atr_trail_20261121/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Commit outputs only to research branch
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ema20_second_touch_1h_atr_trail_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive BTC and ETH one-per-Supertrend ATR trail exit results"
+            git push origin HEAD:research/ema20-second-touch-1h-atr-trail-20261121
+          fi
