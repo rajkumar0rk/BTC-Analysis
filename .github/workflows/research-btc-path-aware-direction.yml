@@ -1,0 +1,45 @@
+name: Research BTC native-1M path-aware direction meta model
+on:
+  push:
+    branches:
+      - research/btc-path-aware-direction-20261121
+    paths:
+      - scripts/research_btc_path_aware_direction_20261121.py
+      - analysis/btc_path_aware_direction_20261121/NOVELTY_CHECK.md
+      - .github/workflows/research-btc-path-aware-direction.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-path-aware-direction-20261121
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install modeling requirements
+        run: python -m pip install numpy pandas scikit-learn tabulate
+      - name: Compute native 1M path labels and monthly past-only trade prediction
+        run: python scripts/research_btc_path_aware_direction_20261121.py
+      - name: Archive full validation and 1M path evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-path-aware-direction-20261121
+          path: analysis/btc_path_aware_direction_20261121/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Commit research evidence to branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_path_aware_direction_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: preserve path-aware BTC direction and first-touch execution result"
+            git push origin HEAD:research/btc-path-aware-direction-20261121
+          fi
