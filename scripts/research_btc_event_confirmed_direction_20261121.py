@@ -281,7 +281,7 @@ def main():
                  real_orderbook_spread_available=False,
                  realized_funding_included=False,
                  exchange_contract_margin_accurate=False,
-                 2026_independent_blind_holdout=False)
+                 blind_holdout_2026=False)
     (OUT/"quality.json").write_text(json.dumps(quality,indent=2)+"\n")
     report=[
         "# BTC event-conditioned direction meta-forecast and 1M trade replay",
