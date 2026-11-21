@@ -1,0 +1,44 @@
+name: Audit BTC current market state via completed 1H+4H structure
+on:
+  push:
+    branches: [research/btc-mtf-market-structure-audit-20261121]
+    paths:
+      - scripts/research_btc_mtf_market_structure_audit_20261121.py
+      - analysis/btc_mtf_market_structure_audit_20261121/NOVELTY_CHECK.md
+      - .github/workflows/research-btc-mtf-market-structure-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-mtf-state-structure-20261121
+  cancel-in-progress: false
+jobs:
+  market_state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis packages
+        run: python -m pip install numpy pandas tabulate
+      - name: Audit completed 4H aggregation, historical-prefix invariance, current trend and all market regimes
+        run: python scripts/research_btc_mtf_market_structure_audit_20261121.py
+      - name: Preserve market-state evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-mtf-market-structure-20261121
+          path: analysis/btc_mtf_market_structure_audit_20261121/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Save report and full state ledger to research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_mtf_market_structure_audit_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record causal 1H+4H BTC regime classification quality"
+            git push origin HEAD:research/btc-mtf-market-structure-audit-20261121
+          fi
