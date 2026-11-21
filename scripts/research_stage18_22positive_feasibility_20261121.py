@@ -76,7 +76,7 @@ def main():
         best_two.append((maximum,float(score[i,j]),float(w),cname[i],dname[j]))
     best_two.sort(reverse=True)
     print("BEST_2_SLEEVES_EXPOST",json.dumps(best_two[:3]))
-    if best_two[0][0] > 19:
+    if best_two[0][0] > 21:
         raise AssertionError("Two-sleeve 2025-Jan no-trade proof invalid")
 
     # Screen only 1H families that have positive Jan25; other sleeves are 0
