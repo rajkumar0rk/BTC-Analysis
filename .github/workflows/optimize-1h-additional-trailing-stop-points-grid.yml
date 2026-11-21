@@ -1,0 +1,56 @@
+name: Optimize 1H trailing STOP POINTS (not fixed trailing distance)
+on:
+  push:
+    branches:
+      - research/1h-activation-trailing-stop-points-grid-20261121
+    paths:
+      - scripts/optimize_1h_additional_trailing_stop_points_20261121.py
+      - .github/workflows/optimize-1h-additional-trailing-stop-points-grid.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research-additional-trailing-stop-grid-20261121
+  cancel-in-progress: false
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Research dependencies
+        run: python -m pip install pandas==2.2.3 numpy==2.2.3 numba==0.61.2
+      - name: Validate code and trailing stop point control
+        run: |
+          python -m py_compile scripts/optimize_1h_additional_trailing_stop_points_20261121.py
+          python - <<'PY'
+          import sys
+          sys.path.insert(0,"scripts")
+          from optimize_1h_additional_trailing_stop_points_20261121 import checks, compute
+          checks()
+          print("TRAILING STOP POINTS CONTROL TEST PASS")
+          PY
+      - name: Run 22-month BTC/ETH stop-points optimization on 1m data
+        run: python scripts/optimize_1h_additional_trailing_stop_points_20261121.py
+      - name: Upload full research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trailing-stop-points-grid-22-months-btc-eth
+          path: analysis/full_history_trailing_stop_points_grid_20261121/
+          if-no-files-found: warn
+      - name: Save results on research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/full_history_trailing_stop_points_grid_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: 22-month BTC ETH separate trailing stop points grid and holdout"
+            git push origin HEAD:research/1h-activation-trailing-stop-points-grid-20261121
+          fi
