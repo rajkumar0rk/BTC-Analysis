@@ -1,0 +1,45 @@
+name: Research BTC confirmed-event next-4H direction with 1M fills
+on:
+  push:
+    branches:
+      - research/btc-event-confirmed-direction-20261121
+    paths:
+      - scripts/research_btc_event_confirmed_direction_20261121.py
+      - analysis/btc_event_confirmed_direction_20261121/NOVELTY_CHECK.md
+      - .github/workflows/research-btc-event-confirmed-direction.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-event-confirmed-direction-20261121
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install modeling and report packages
+        run: python -m pip install numpy pandas scikit-learn tabulate
+      - name: Audit historical event labels and replay 1M accounts
+        run: python scripts/research_btc_event_confirmed_direction_20261121.py
+      - name: Preserve all research evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-confirmed-event-direction-20261121
+          path: analysis/btc_event_confirmed_direction_20261121/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Save evidence on isolated research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_event_confirmed_direction_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: preserve conditional event-direction and 1M backtest"
+            git push origin HEAD:research/btc-event-confirmed-direction-20261121
+          fi
