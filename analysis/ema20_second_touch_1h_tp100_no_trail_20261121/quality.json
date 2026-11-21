@@ -1,0 +1,35 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "data": "original 1m Delta Exchange India candles, 22 IST months January 2025 through October 2026",
+  "signal": "second EMA20 touch with completed 1h Supertrend; one trade per confirmed Supertrend direction cycle; no volume/volatility filters",
+  "entry": "immediate 1m frozen EMA touch; no current-candle volume or ATR",
+  "stop_loss": "NONE",
+  "trailing": "NONE",
+  "reverse_exit": "NONE",
+  "time_exit": "NONE",
+  "btc_take_profit_usd_points": 100,
+  "eth_take_profit_usd_points": "100 * ETHentry / preceding 1m BTC close",
+  "source_previous_script": "scripts/research_ema20_second_touch_1h_no_sl.py",
+  "one_trade_per_supertrend_cycle": true,
+  "reentry_after_tp_in_same_trend": false,
+  "epoch_reset": "only on confirmed opposite-direction Supertrend flip",
+  "fees_per_side": 0.00059,
+  "slippage_per_side": 0.0002,
+  "initial_cash_usd": 1000.0,
+  "sample_end_forced_close": "reporting-only, not a strategy exit rule",
+  "intraminute_ordering": "same-entry minute TP intentionally never counted",
+  "risk_warning": "no actual liquidation, margins, tick sequencing, funding, bid/ask spread, market impact; 1x notional modeled"
+}
