@@ -127,7 +127,7 @@ Exploratory leader (not approved when no qualification): V01_EXHAUSTION_FADE_HIG
 
 |                                        | 0                                                                            |
 |:---------------------------------------|:-----------------------------------------------------------------------------|
-| strategy                               | h1_ema20_50_m15_prior4_ema20_touch_previous_high_break_200tp_100sl_1x        |
+| strategy                               | V01_EXHAUSTION_FADE_HIGHVOL        |
 | trades                                 | 71                                                                           |
 | longs                                  | 36                                                                           |
 | shorts                                 | 35                                                                           |
