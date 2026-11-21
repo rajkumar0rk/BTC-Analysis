@@ -172,6 +172,30 @@ def main():
         selection=futureout,returns=stats(futurevec)),default=str))
     output_monthly("INVALID_hindsight_maximin_monthly.csv",futurevec)
 
+    # Execution-cost vulnerability. This is deliberately OPTIMISTIC: stress
+    # ONLY the 70/30 anchor, leave all supplemental sleeve costs unchanged.
+    # Actual stress on 5m/1h sleeves would be worse than this narrow test.
+    stress_rows=[]
+    for bps in (0,2,5):
+        same=raw[(raw.scenario=="stage18_70_30_30d")&
+                 (raw.extra_bps_side==bps)].set_index("month_ist").reindex(MONTHS)
+        if same.portfolio_month_pct.isna().any():
+            raise AssertionError("Missing baseline slippage-stress months")
+        changed=same.portfolio_month_pct.to_numpy(float)-base
+        v_train=trainvec+float(trainw[0])*changed
+        v_future=futurevec+float(futurew[0])*changed
+        for label,v in (("selected_2025_only",v_train),
+                        ("INVALID_full_22m_hindsight",v_future)):
+            measure=stats(v)
+            stress_rows.append(dict(portfolio=label,extra_anchor_bps_per_side=bps,
+                                    anchor_fraction=float(trainw[0] if label=="selected_2025_only" else futurew[0]),
+                                    **measure))
+            if label=="INVALID_full_22m_hindsight":
+                print("HINDSIGHT_ANCHOR_ONLY_COST_STRESS",
+                      json.dumps(dict(bps=bps,**measure),default=str))
+    pd.DataFrame(stress_rows).to_csv(
+        OUT/"OPTIMISTIC_anchor_only_slippage_stress.csv",index=False)
+
     summary=dict(
         baseline=bs,catalog=count,admissible_models=len(allmodels),
         tested_fixed_single_portfolios=len(tab),weights=[.02,.05,.10,.15,.2,.25,.3],
@@ -181,6 +205,7 @@ def main():
         selected_portfolio_using_2025=dict(training_floor_pct=trainfloor,monthly_results=stats(trainvec),sleeves=trainout),
         INVALID_hindsight_full_period_LP=dict(fitted_floor_pct=futurefloor,
              monthly_results=stats(futurevec),sleeves=futureout),
+        OPTIMISTIC_anchor_only_cost_stress=stress_rows,
         limitations=[
             "Models are archival, independently simulated 1m stop-first 5m and 1h signals; no new joint trade-level simulation",
             "Portfolio weighted monthly returns are synthetic, not a live shared-margin account",
@@ -188,6 +213,7 @@ def main():
             "Hindsight full-period LP must NEVER be presented as a tradable 22-month solution",
             "Profitability of single month may be smaller than unmodeled extra execution costs and funding",
             "Only initial standard 0.05% taker fee per side + 18%GST + 5 BTC-point slip per side included",
+            "Cost sensitivity adds 2/5bps per side ONLY to existing Stage18 70/30 anchor, not other sleeves; optimistic lower-bound stress",
             "Stage19 5m source model uses risk .5% per trade with max 5x leverage and 1m next-open fills",
             "No funding, spread, liquidation, exact lot or intramonth portfolio risk",
         ],NO_LIVE_TRADING=True)
