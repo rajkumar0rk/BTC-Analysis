@@ -375,6 +375,22 @@ def run():
     proba=model.predict_proba(X)[:,1]
     # Economic selection uses actual f.open for fee price, not 15m closing quote.
     entry_actual=o[ix]
+    probability_diagnostics={}
+    for name,(sdate,edate) in {"2025_CAL":(CAL_START,CAL_END),
+            "2026_H1_SEEN":("2026-01-01",VAL_END),
+            "2026_H2_SEEN":("2026-07-01",FULL_END)}.items():
+        mask=(dates>=sdate)&(dates<=edate)
+        cand_prob=np.maximum(proba[::2],proba[1::2])[mask]
+        prices=entry_actual[mask]
+        be=(core.SL+2*core.SLIP_POINTS+2*core.TAKER_FEE_WITH_GST*prices)/\
+           (core.SL+core.TP)
+        fee_aware=be+MIN_CONFIDENCE_MARGIN
+        probability_diagnostics[name]={"candidate_15m_events":int(mask.sum()),
+          "max_model_probability":round(float(np.max(cand_prob)),5),
+          "p95_model_probability":round(float(np.percentile(cand_prob,95)),5),
+          "p99_model_probability":round(float(np.percentile(cand_prob,99)),5),
+          "p50_fee_aware_required_probability":round(float(np.median(fee_aware)),5),
+          "number_qualifying_fee_aware_before_daily_cap":int((cand_prob>=fee_aware).sum())}
     periods={
        "2025_CAL":(CAL_START,CAL_END),
        "2026_H1_SEEN":("2026-01-01",VAL_END),
@@ -447,6 +463,7 @@ def run():
        "model":MODEL_SETTINGS,
        "class_balance_train":round(float(y[train_rows].mean()),4),
        "class_balance_cal":round(float(y[np.repeat((dates>=CAL_START)&(dates<=CAL_END),2)].mean()),4),
+       "probability_diagnostics":probability_diagnostics,
        "features":colnames,
        "probability_thresholds":list(THRESHOLDS),
        "additional_fee_gate_margin":MIN_CONFIDENCE_MARGIN,
@@ -494,6 +511,10 @@ def run():
         "## Fixed probability-gate comparison",
         "",
         results[compact].to_markdown(index=False),
+        "",
+        "## Model confidence versus cost-adjusted required probability",
+        "",
+        pd.DataFrame([{"period":k,**v} for k,v in probability_diagnostics.items()]).to_markdown(index=False),
         "",
         "## Gate used in the diagnostic account replay",
         "",
