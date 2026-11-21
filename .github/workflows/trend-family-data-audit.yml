@@ -1,0 +1,29 @@
+name: Trend family BTC 2025 minute archive audit
+on:
+  push:
+    branches:
+      - research/trend-following-family-20261121
+    paths:
+      - scripts/trend_family_audit_2025.py
+      - .github/workflows/trend-family-data-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit genuine 2025 BTC minute archive
+        run: python scripts/trend_family_audit_2025.py
+      - name: Publish immutable audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trend-family-2025-data-audit
+          path: analysis/trend_following_family_20261121/data_audit_2025.json
+          if-no-files-found: warn
