@@ -69,7 +69,7 @@ def signals(d):
     return h.index[a],np.where(long[a],1,-1)
 
 def test(d,times,sides,asset):
-    ts = d.index.asi8 // 10**9
+    ts = d.index.to_numpy(dtype='datetime64[s]').astype(np.int64)
     op,hi,lo = [d[c].to_numpy(dtype=float) for c in ("open","high","low")]
     totals=[]
     print("ENTRY_DEBUG",asset,"numsignals",len(times),"numsides",len(sides),"first_time",str(times[0]),"when",int(times[0].timestamp())+3600,"tsfirst",int(ts[0]),"tslast",int(ts[-1]),"search",int(np.searchsorted(ts,int(times[0].timestamp())+3600)),"len",len(d),flush=True)
