@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "market": "BTCUSD_FUTURES",
+  "state": "BACKTEST_ONLY",
+  "live_enabled": false,
+  "audit_type": "independently verified post-hoc historical candidate pair",
+  "warning": "Both settings were selected after viewing Jan 2025-Oct 2026 results. Passing these periods is not true out-of-sample evidence. November has only one trade per strategy and is not a statistically meaningful forward test.",
+  "data": {
+    "from": "2025-01",
+    "historic_to": "2026-10",
+    "partial_extra_through": "2026-11-18",
+    "execution": "1m next bar open, 1m intrabar stop-first",
+    "cost": "0.05% futures taker per side + GST 18% on trading fees +5 BTC points adverse slippage per side, stress additional 0/2/5/10bps per side",
+    "sizing": "0.5% of sleeve equity per 1R, max 5x notional",
+    "missing": "real funding, market depth/spread, liquidation"
+  },
+  "strategies": [
+    {
+      "id": "BTC_HISTORIC_MR_BB_REENTRY_H1_DRIFT_CAPPED",
+      "enabled": false,
+      "family": "MEAN_REVERSION",
+      "direction": "LONG",
+      "entry": "Previous 1H close below lower Bollinger20 2sigma, RSI2 <=15, next completed bullish 1H re-entry above lower band, below SMA20; next 1m open",
+      "regime": "4H ADX<=45, 4H 8-bar efficiency<=0.70, abs(4H close - close three 4H bars ago) <= 1.5x 4H ATR",
+      "stop": "3x H1 ATR14 from 1m entry",
+      "target": "H1 SMA20 known at signal",
+      "max_holding_minutes": 1920,
+      "plus_5bps": {
+        "yr2025_pct": 1.07329,
+        "jan_oct_2026_pct": 1.57139,
+        "total22mo_pct": 2.66155,
+        "win_months": 11,
+        "loss_months": 6,
+        "flat_months": 5,
+        "trade_count": 36,
+        "nov2026_partial_pct": 0.27874,
+        "nov2026_trades": 1
+      },
+      "plus_10bps": {
+        "total22mo_pct": 1.32921
+      }
+    },
+    {
+      "id": "BTC_HISTORIC_RANGE_H1_TOUCH48_H4_MIDREGIME",
+      "enabled": false,
+      "family": "RANGE_TRADING",
+      "direction": "LONG_AND_SHORT",
+      "entry": "Previous 48 completed 1H candles bound channel; range width 2.5-15x H1 ATR; current completed candle touches/rejects upper/lower boundary, enters toward range midpoint at next 1m open",
+      "regime": "4H ADX<=45, 4H 8-bar efficiency<=.70; completed 4H price within middle 50% of PRIOR 48 completed 4H bars channel",
+      "stop": "3x H1 ATR14 from 1m entry",
+      "target": "48h range midpoint known at signal",
+      "max_holding_minutes": 1920,
+      "plus_5bps": {
+        "yr2025_pct": 4.05622,
+        "jan_oct_2026_pct": 4.04297,
+        "total22mo_pct": 8.26319,
+        "win_months": 15,
+        "loss_months": 6,
+        "flat_months": 1,
+        "trade_count": 51,
+        "nov2026_partial_pct": -0.55316,
+        "nov2026_trades": 1
+      },
+      "plus_10bps": {
+        "total22mo_pct": 6.55659
+      }
+    }
+  ],
+  "comparison": {
+    "weight_mr": 0.5,
+    "weight_range": 0.5,
+    "kind": "synthetic monthly blend, not joint real-account backtest",
+    "plus_5bps": {
+      "yr2025_pct": 2.56736,
+      "jan_oct_2026_pct": 2.80608,
+      "total22mo_pct": 5.44548,
+      "win_months": 16,
+      "loss_months": 5,
+      "flat_months": 1
+    }
+  },
+  "requires_before_live": [
+    "new unseen data with frozen parameters and min trade sample",
+    "independent broker contract/fee/funding stress",
+    "trade-level shared-margin backtest and paper forward trading"
+  ]
+}
