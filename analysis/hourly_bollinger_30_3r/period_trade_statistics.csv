@@ -1,0 +1,11 @@
+scenario,period,trades,wins,losses,win_rate_pct,net_profit_factor,net_closed_usd,avg_net_R,targets_hit,median_held_minutes
+isolated,2025,183,47,136,25.68,0.84,-2180.82,-0.1276,47,671.0
+isolated,2026_Jan_Oct,182,48,134,26.37,0.888,-1289.83,-0.0865,48,698.0
+isolated,2026_Nov_partial,9,3,6,33.33,1.343,145.77,0.269,3,1174.0
+isolated,through_Oct_2026,356,92,264,25.84,0.854,-3616.42,-0.1166,92,674.5
+isolated,entire_archive,365,95,270,26.03,0.862,-3470.65,-0.1071,95,678.0
+concurrent,2025,968,232,736,23.97,0.807,-5593.93,-0.2345,232,336.5
+concurrent,2026_Jan_Oct,812,197,615,24.26,0.917,-1255.59,-0.226,197,338.0
+concurrent,2026_Nov_partial,57,18,39,31.58,1.843,479.86,0.1257,18,314.0
+concurrent,through_Oct_2026,1723,411,1312,23.85,0.832,-7329.38,-0.2425,411,337.0
+concurrent,entire_archive,1780,429,1351,24.1,0.845,-6849.52,-0.2307,429,337.0
