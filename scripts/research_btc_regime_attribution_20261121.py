@@ -250,6 +250,26 @@ def summarize(one,h,tr,manifest):
     month.to_csv(OUT/"monthly_by_strategy.csv",index=False)
     conditional.to_csv(OUT/"performance_by_entry_regime.csv",index=False)
     summary.to_csv(OUT/"strategy_summary.csv",index=False)
+    # Frozen diagnostic slicing only: never choose model settings from 2026.
+    year_rows=[]
+    for name in SPECS:
+        for state in STATES:
+            for year in ("2025","2026"):
+                g=tr[(tr.strategy==name)&(tr.regime==state)&
+                     (tr.entry_utc.str[:4]==year)]
+                gain=g.pnl_usd[g.pnl_usd>0].sum()
+                loss=-g.pnl_usd[g.pnl_usd<0].sum()
+                year_rows.append(dict(strategy=name,regime=state,year=year,
+                    trades=len(g),mean_net_R=round(float(g.net_R.mean()),4) if len(g) else None,
+                    net_pnl_usd=round(float(g.pnl_usd.sum()),2),
+                    profit_factor=round(float(gain/loss),3) if loss>0 else None,
+                    active_months=int(g.month_ist.nunique())))
+    year_cond=pd.DataFrame(year_rows)
+    year_cond.to_csv(OUT/"yearly_performance_by_entry_regime.csv",index=False)
+    month_regime=tr.groupby(["strategy","regime","month_ist"],as_index=False).agg(
+        trades=("pnl_usd","size"),net_pnl_usd=("pnl_usd","sum"),
+        sum_net_R=("net_R","sum"))
+    month_regime.to_csv(OUT/"monthly_performance_by_entry_regime.csv",index=False)
     q=dict(exchange="Delta Exchange India",symbol="BTCUSD",
         minute_partitions=len(manifest["partitions"]),minute_bars=len(one),
         first_utc=str(one.index[0]),last_utc=str(one.index[-1]),
@@ -272,6 +292,7 @@ def summarize(one,h,tr,manifest):
       "## Additional overlapping events",ev.to_markdown(index=False),"",
       "## Separate baseline account results",summary.to_markdown(index=False),"",
       "## Entry regime conditional performance",conditional.to_markdown(index=False),"",
+      "## Yearly breakdown of every conditional subgroup",year_cond.to_markdown(index=False),"",
       "## Every complete IST month, net account % per baseline",
       month.pivot(index="month_ist",columns="strategy",values="net_return_pct").round(3).to_markdown(),"",
       "## Important limits",
