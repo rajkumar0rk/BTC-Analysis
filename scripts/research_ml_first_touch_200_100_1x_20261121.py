@@ -15,6 +15,7 @@ from sklearn.metrics import roc_auc_score, brier_score_loss
 import research_btc_daily_200tp_100sl_1x_20261121 as core
 
 OUT=Path("analysis/btc_ml_first_touch_200_100_1x_20261121")
+BASE_INITIAL_NAV=10000.0
 TRAIN_END="2025-06-30"
 CAL_START="2025-07-01"
 CAL_END="2025-12-31"
