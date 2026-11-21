@@ -1,0 +1,15 @@
+# High-PF external source provenance — 2026-11-21 09:07 IST
+
+## Execution priority
+Latest task-specific GitHub Actions run 44815513786 (2026-11-20T20:54:14Z) FAILED. Workflow highpf-external-tsmom-screen.yml. Source 86194a4003547170ed813adf364809ae098c02f4. Authentic 60-day pre-2025 warmup is missing; available BTC dataset begins 2025-01-01 00:00 UTC. Existing diagnostic commit e71facfeb6a92eac3b50d12affdb15d61383de42. Do not fabricate warmup or report zero trades as negative edge. No completed BTC zero-slippage screen or 22-month PF exists for this study. Next: retrieve verified historical pre-2025 BTC candles and rerun the SAME study; if permanently unavailable, close as data-blocked and select reproducible external rules requiring available warmup.
+
+## New external-source checks (public web, 2026-11-21)
+Searches: site:roboquant.dev/t/d196c274-57a2-4f2d-9f31-63fa68cfa963 Trend Day Pullback; site:roboquant.dev/t/c630aaf2-3d6c-480f-ae16-82478a385012 Bitcoin SuperTrend; algojan EMA9 VWAP crossover strategy source rules.
+
+| Source and attribution | Original market and published performance (unverified) | Reproducibility and disposition |
+|---|---|---|
+| https://roboquant.dev/t/d196c274-57a2-4f2d-9f31-63fa68cfa963 ; **publisher chudtrader**, v1 2026-11-12, NOT established as authored by @algojan | MNQ CME 5m, Nov 2025-Nov 2026, 229 trades, +57.8%, PF 1.67, DD 3.7%, win 46.7% | NY 10:30-12:30 session VWAP pullback + continuation; 1x ATR stop, 2R target, one trade/day, 15:50 flat, $400 risk and $800/$1000 daily limits. Missing exact code, pullback tolerance, continuation definition, VWAP/day-range gates, holiday/session/fill/cost settings. NOT REPRODUCIBLE rule-for-rule from public listing; do not claim BTC native. Remix attribution permitted per listing, full code access not verified. BLOCKED pending original source. |
+| https://roboquant.dev/t/c630aaf2-3d6c-480f-ae16-82478a385012 ; **publisher sird**, v1 2026-11-17, NOT @algojan | CME MBT 5m, Dec 2021-Oct 2026, 1321 trades, +230.8%, PF 1.32, DD 16.3%, win 37.2% | SuperTrend(10,5) flip, rising/falling SMA200, 52-bar efficiency >=0.05, stop at ST line, opposite flip exit, 2 contracts default. Some exact execution details and original source inaccessible publicly; overlaps prior SuperTrend research. HOLD / novelty review before adapting, never treat publisher return as Delta result. |
+| @algojan https://x.com/algojan ; alleged EMA9/VWAP prop-firm evaluation example | ~85% evaluation-pass claim (unverified, not NAV profit) | No authenticated original code, exact session/filters, or verified independent replication from this search. NOT REPRODUCIBLE. |
+
+Publisher backtests are not independent verification. Source code license for both listings is stated as remix allowed with attribution, but exact repository license and fill implementation remain unverified. No 0.5/5-point slippage stress authorized before successful zero-slippage BTC screen (with commission and GST). Funding UNMODELED; spread/market impact not evidenced. No changes to other task branches or live accounts.
