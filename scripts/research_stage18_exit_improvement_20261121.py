@@ -130,8 +130,21 @@ def main():
     OUT.mkdir(parents=True,exist_ok=True)
     f,_,_,q=read_archive()
     events=pd.read_csv(core.EVENTS)
-    assert (f.time.to_numpy(np.int64)[events.k.to_numpy(int)] ==
-            events.entry_unix.to_numpy(np.int64)).all(),"Source event indexes changed"
+    # Original Stage14 rows were generated before a historical 1m archive
+    # repair. Re-align by immutable UTC timestamp rather than stale row number.
+    # This protects October/November boundary candles against shifted arrays.
+    timestamps=f.time.to_numpy(np.int64)
+    source_indices=events.k.to_numpy(int)
+    source_times=events.entry_unix.to_numpy(np.int64)
+    mismatched=(timestamps[source_indices]!=source_times)
+    print("SOURCE_INDEX_ALIGNMENT",json.dumps({
+        "source_events":len(events),"stale_indices":int(mismatched.sum()),
+        "earliest_mismatch_utc":str(pd.to_datetime(source_times[mismatched].min(),unit="s",utc=True))
+             if mismatched.any() else None}))
+    repaired=pd.Index(timestamps).get_indexer(source_times)
+    if (repaired<0).any():raise AssertionError("Stage14 event timestamp absent from repaired archive")
+    events=events.copy()
+    events["k"]=repaired
     # Verify our custom baseline against archived Stage15 execution engine.
     ref_case=next(x for x in old.CASES if x[0]=="5R_broader_eff25_no_gate")
     ref,_=old.execute(events,f,ref_case)
