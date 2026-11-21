@@ -1,0 +1,58 @@
+name: Stage18 70-30 daily realized exit profitability audit
+on:
+  push:
+    branches:
+      - research/stage18-daily-realized-audit-20261121
+    paths:
+      - scripts/audit_stage18_daily_realized_20261121.py
+      - .github/workflows/research-stage18-daily-realized-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  daily-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Fetch original Stage14 pre-entry events (read-only source)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/stage14-events"
+          gh run download 44118024590 -n btc-stage14-monthly-regime-trades -D "$RUNNER_TEMP/stage14-events" --repo "$GITHUB_REPOSITORY"
+          test -s "$RUNNER_TEMP/stage14-events/event_states.csv.gz"
+      - name: Reproduce unchanged audited BTC 70-30 portfolio
+        env:
+          STAGE14_EVENTS: ${{ runner.temp }}/stage14-events/event_states.csv.gz
+        run: PYTHONPATH=scripts python scripts/research_stage18_70_30_portfolio_20261121.py
+      - name: Audit daily realized net wins, losses, no-exit days
+        run: python scripts/audit_stage18_daily_realized_20261121.py
+      - name: Retain true source trade files and audit
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage18-daily-realized-audit-ledgers
+          path: |
+            analysis/stage18_btc_70core_30donchian_implementation/
+            analysis/stage18_daily_realized_audit_20261121/
+          retention-days: 30
+      - name: Commit compact audit report to research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/stage18_daily_realized_audit_20261121/RESEARCH_REPORT.md
+          git add analysis/stage18_daily_realized_audit_20261121/summary.json
+          git add analysis/stage18_daily_realized_audit_20261121/monthly_daily_outcomes.csv
+          git add analysis/stage18_daily_realized_audit_20261121/daily_realized_exit_proxy.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record Stage18 daily realized exit audit"
+            git push origin HEAD:research/stage18-daily-realized-audit-20261121
+          fi
