@@ -148,7 +148,7 @@ def backtest(f,events):
     O=f.open.to_numpy(float);H=f.high.to_numpy(float)
     L=f.low.to_numpy(float);C=f.close.to_numpy(float)
     TS=f.time.to_numpy(np.int64)
-    results=[];selected_months=[];selected_ledgers={};full_months=[]
+    results=[];selected_months=[];selected_ledgers={};selected_summary=[]
     for group,rows in events.items():
         src=SOURCES[group]
         ncases=0
@@ -241,6 +241,7 @@ def backtest(f,events):
              if a[0]["variant"]==frozen["variant"])[1],
                next(a for a in all_runs if a[0]["variant"]==frozen["variant"])[2]))
         selected_ledgers[group]=best[3]
+        selected_summary.append(best[0])
         print("2025_ONLY_EXIT_SELECTION",json.dumps(best[0]))
         print("2025_ONLY_MINUS_FROZEN",json.dumps(dict(cohort=group,
           selected_train5=best[0]["extra5_train2025_pct"],
@@ -260,19 +261,25 @@ def backtest(f,events):
     pd.DataFrame(mrows).to_csv(OUT/"frozen_vs_2025selected_monthly.csv",index=False)
     for group,ledger in selected_ledgers.items():
         pd.DataFrame(ledger).to_csv(OUT/(group.lower()+"_selected_trade_ledger.csv"),index=False)
-    selection=out.loc[out.groupby("cohort").apply(
-      lambda g: g[g.train_eligible].train_score.idxmax()
-          if g.train_eligible.any() else g.train_score.idxmax(),
-      include_groups=False).to_numpy()] if False else None
-    # Do NOT select on 2026 data, or treat retrospective source hypotheses
-    # as independently validated.
-    print("STAGE32_1M_EXIT_OPTIMIZATION_COMPLETE",json.dumps(dict(
+    summary=dict(
       variants_tested=len(results),
       families=out.groupby("cohort").size().to_dict(),
-      selected_from_2025_only=[
-          d for d,_,_,_ in []],
-      dataset_complete_2026_months=22,november_partial_only=True,
-      forward_holdout_unavailable=True)))
+      selected_from_2025_only=[dict(
+        cohort=d["cohort"],variant=d["variant"],
+        trades22=d["trades22"],train_trades=d["train_trades"],
+        return22_after5bps=d["extra5_total_pct"],
+        train2025_after5bps=d["extra5_train2025_pct"],
+        reviewed2026_after5bps=d["extra5_reviewed2026_pct"],
+        winning_months=d["extra5_win22"],
+        november_partial=d["extra5_november_partial_pct"]
+      ) for d in selected_summary],
+      sample_22_months="Jan 2025-Oct 2026",
+      november_partial_through="Nov 18, 2026",
+      historically_researched_2026_not_pristine_holdout=True,
+      funding_spread_liquidation_shared_margin_unmodeled=True,
+      no_live_orders=True)
+    (OUT/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
+    print("STAGE32_1M_EXIT_OPTIMIZATION_COMPLETE",json.dumps(summary))
     return out
 
 def main():
