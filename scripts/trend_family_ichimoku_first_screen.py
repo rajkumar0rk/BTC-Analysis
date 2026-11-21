@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent 4H causal Ichimoku source-faithful first screen. No live orders."""
+"""Independent 4H causal Ichimoku research variant; NOT source-faithful. No live orders."""
 import hashlib,json
 from pathlib import Path
 import numpy as np
@@ -104,6 +104,17 @@ months["net_return_pct"]=100*(months.end_nav/months.start_nav-1)
 months["entries"]=months.month_ist.map(month_entries).fillna(0).astype(int)
 assert len(months)==12, f"Expected all 12 IST months, got {len(months)}"
 assert abs(float(months.end_nav.iloc[-1])-equity)<1e-7, "Final monthly NAV mismatch"
+# Realized PF is grouped by EXIT month, distinct from mark-to-market NAV returns.
+# Include every losing exit and both-side fee-adjusted P&L; an empty group has no PF.
+trade["exit_month_ist"]=pd.to_datetime(trade.exit_utc,utc=True).dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")
+realized=[]
+for m in months.month_ist:
+    closed=trade.loc[trade.exit_month_ist.eq(m),"net_usd"]
+    positive=float(closed.loc[closed>0].sum())
+    negative=float(-closed.loc[closed<0].sum())
+    realized.append((int(len(closed)),positive,negative,
+                     positive/negative if negative>0 else (None if positive==0 else float("inf"))))
+months[["closed_trades","realized_wins_net_usd","realized_losses_abs_net_usd","realized_pf"]]=pd.DataFrame(realized,index=months.index)
 months.to_csv(OUT/"monthly_nav.csv",index=False)
 wins=trade.loc[trade.net_usd>0,"net_usd"].sum() if len(trade) else 0
 loss=-trade.loc[trade.net_usd<0,"net_usd"].sum() if len(trade) else 0
