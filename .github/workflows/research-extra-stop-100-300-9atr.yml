@@ -2,7 +2,7 @@ name: BTC ETH additional trailing STOP 100-300 initial9ATR full22
 on:
   push:
     branches:
-      - research/1h-points100-300-initial9atr-20261121
+      - research/1h-additional-stop-100-300-initial9atr-20261121
     paths:
       - scripts/extra_trailing_stop_100_300_initial9atr_full22_20261121.py
       - .github/workflows/research-extra-stop-100-300-9atr.yml
@@ -29,7 +29,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: btc-eth-activation1000-extra-stop200-initial9atr-monthly
+          name: btc-eth-activation100-extra-stop300-initial9atr-monthly
           path: analysis/extra_trailing_stop_100_300_initial9atr_full22_20261121/
           if-no-files-found: warn
       - name: Commit outputs to research branch only
@@ -40,5 +40,5 @@ jobs:
           git add analysis/extra_trailing_stop_100_300_initial9atr_full22_20261121/
           if ! git diff --cached --quiet; then
             git commit -m "research: full22 additional trailing stop 100/300 initial SL 9xATR"
-            git push origin HEAD:research/1h-points100-300-initial9atr-20261121
+            git push origin HEAD:research/1h-additional-stop-100-300-initial9atr-20261121
           fi
