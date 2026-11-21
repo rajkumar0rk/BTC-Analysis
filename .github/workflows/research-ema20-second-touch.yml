@@ -1,0 +1,43 @@
+name: EMA20 second touch BTC ETH 1m replay
+on:
+  push:
+    branches:
+      - research/ema20-second-touch-20261121
+    paths:
+      - scripts/research_ema20_second_touch.py
+      - .github/workflows/research-ema20-second-touch.yml
+      - analysis/ema20_second_touch_20261121/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical libraries
+        run: python -m pip install numpy pandas
+      - name: Validate data and run all four backtests
+        run: python scripts/research_ema20_second_touch.py
+      - name: Upload trade ledger and all evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ema20-second-touch-btc-eth-1m
+          path: analysis/ema20_second_touch_20261121/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit summary and monthly backtest result on research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ema20_second_touch_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record BTC/ETH second-touch intrabar outcomes"
+            git push origin HEAD:research/ema20-second-touch-20261121
+          fi
