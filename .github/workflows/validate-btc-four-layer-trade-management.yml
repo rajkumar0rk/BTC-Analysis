@@ -1,0 +1,45 @@
+name: Validate BTC four-layer trade management safe 1M stop activation
+on:
+  push:
+    branches: [research/btc-four-layer-trade-management-20261121]
+    paths:
+      - scripts/validate_btc_four_layer_trade_management_20261121.py
+      - .github/workflows/validate-btc-four-layer-trade-management.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-trade-management-validation-20261121
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Validate synthetic stop timing, all 5 model cash ledgers and cost stresses
+        run: python scripts/validate_btc_four_layer_trade_management_20261121.py
+      - name: Retain independently checked evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-trade-management-stop-first-no-go-20261121
+          path: |
+            analysis/btc_four_layer_trade_management_20261121/RELEASE_VALIDATION.json
+            analysis/btc_four_layer_trade_management_20261121/RELEASE_VALIDATION.md
+          retention-days: 90
+          if-no-files-found: error
+      - name: Commit release report on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_four_layer_trade_management_20261121/RELEASE_VALIDATION.*
+          if ! git diff --cached --quiet; then
+            git commit -m "research: store 1M protected stop and runner NO-GO validator"
+            git push origin HEAD:research/btc-four-layer-trade-management-20261121
+          fi
