@@ -312,7 +312,7 @@ def select_and_report(rows,series):
                 target="22 profitable months and positive long-run net return",
                 selection="2025-only, +5bp adverse slip on EVERY sleeve",
                 no_hindsight_month_selection=True,
-                2026_seen_not_pristine=True,
+                seen_2026_not_pristine=True,
                 synthetic_not_integrated=True,
                 no_live_execution=True)
     print("PORTFOLIO_2025_ONLY_WINNER",json.dumps(report,default=str))
