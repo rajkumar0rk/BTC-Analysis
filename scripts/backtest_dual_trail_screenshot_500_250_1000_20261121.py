@@ -198,11 +198,11 @@ def dual_compute(time_s,traded_o,traded_h,traded_l,traded_c,
     return trades[:ntrades],skips,wallet,active
 
 
-def original_shape(dualrows):
+def original_shape(dualrows,use_additional=False):
     """Compare core fields exactly with original validated single-stop engine."""
     if not len(dualrows):
         return dualrows.reshape(0,15)
-    return dualrows[:,[0,1,2,3,4,5,6,7,8,9,10,11,12,14,15]]
+    return dualrows[:,[0,1,2,3,4,5,6,7,8,9,10,11,(13 if use_additional else 12),14,15]]
 
 def unit_tests():
     previous_tests()
@@ -220,7 +220,7 @@ def unit_tests():
     arrs=[np.full(n,60000.,dtype=np.float64) for _ in range(8)]
     # traded O H L C and mark O H L C
     t_o,t_h,t_l,t_c,m_o,m_h,m_l,m_c=arrs
-    t_h[1:60]=60550;m_h[1:60]=60550
+    t_h[59]=60550;m_h[59]=60550
     t_c[59]=60550;m_c[59]=60550
     t_o[60:]=60550;m_o[60:]=60550
     t_h[60:]=60560;m_h[60:]=60560
@@ -238,7 +238,7 @@ def unit_tests():
     # Same user settings on SHORT should mirror behavior.
     sig[0]=-1
     t_h[1:]=60000.;m_h[1:]=60000.
-    t_l[1:60]=59450.;m_l[1:60]=59450.
+    t_l[59]=59450.;m_l[59]=59450.
     t_c[59]=59450.;m_c[59]=59450.
     t_o[60:]=59450.;m_o[60:]=59450.
     t_l[60:]=59440.;m_l[60:]=59440.
@@ -371,7 +371,7 @@ def main():
                 original,_,_,_=original_single_trail(
                     *cfg,float(act),float(points),int(asset=="ETH"),mode,False
                 )
-                got=original_shape(sim[variant][0])
+                got=original_shape(sim[variant][0],variant=="EXTRA_ONLY")
                 assert got.shape==original.shape,(asset,source,variant,got.shape,original.shape)
                 assert np.allclose(got,original,atol=.000001,rtol=0.),(
                     "Mismatch against validated original engine",asset,source,variant,
