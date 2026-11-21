@@ -193,7 +193,7 @@ def results(one,hr,manifest,checks):
         source_history_prefix_replays=checks,
         unchanged_prefix_history=all(x["revised_state_labels"]==0 and x["revised_validity_flags"]==0 for x in checks),
         mixed_uncertain_share_pct=round(float(100*(active.state=="mixed_uncertain").mean()),3),
-        one_hour_label_switch_pct=round(float(100*state_changes),3),
+        one_hour_label_switch_pct=round(float(state_changes),3),
         **structure_stats,
         external_regime_ground_truth_available=False,
         reliable_future_direction_demonstrated=False,
