@@ -342,8 +342,10 @@ def main():
             fullbest=rows[0]
             fixed=next(x for x in rows if x["activation"]==100 and x["trailing_stop_points"]==500)
             best100=max((x for x in rows if x["activation"]==100),key=lambda x:x["train_2025"]["net_usd"])
+            best100full=max((x for x in rows if x["activation"]==100),key=lambda x:x["all_22_months"]["net_usd"])
             candidates=[("requested_activation100_stop500",fixed),
                         ("best_activation100_train_2025",best100),
+                        ("best_activation100_all22_in_sample",best100full),
                         ("best_training_2025",trainbest),("best_all22_in_sample",fullbest)]
             root["selected"][label]={}
             for name,s in candidates:
