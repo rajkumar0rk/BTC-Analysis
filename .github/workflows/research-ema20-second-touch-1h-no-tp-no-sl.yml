@@ -1,0 +1,51 @@
+name: 1H EMA20 second-touch no TP no SL mark-to-market
+on:
+  push:
+    branches: [research/ema20-second-touch-1h-no-tp-no-sl-20261121]
+    paths:
+      - scripts/research_ema20_second_touch_1h_no_tp_no_sl.py
+      - .github/workflows/research-ema20-second-touch-1h-no-tp-no-sl.yml
+      - analysis/ema20_second_touch_1h_no_tp_no_sl_20261121/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: second-ema20-one-per-st-1h-no-exits
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install numpy pandas
+      - name: Compute BTC/ETH first position held with no exit
+        shell: bash
+        run: |
+          mkdir -p analysis/ema20_second_touch_1h_no_tp_no_sl_20261121
+          set -o pipefail
+          python -u scripts/research_ema20_second_touch_1h_no_tp_no_sl.py 2>&1 | tee analysis/ema20_second_touch_1h_no_tp_no_sl_20261121/execution.log
+      - name: Archive results or errors
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ema20-1h-no-tp-no-sl-first-trade-only
+          path: analysis/ema20_second_touch_1h_no_tp_no_sl_20261121/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Commit research artifacts on branch only
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ema20_second_touch_1h_no_tp_no_sl_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record 1h no TP no SL first-trade floating exposure"
+            git push origin HEAD:research/ema20-second-touch-1h-no-tp-no-sl-20261121
+          fi
