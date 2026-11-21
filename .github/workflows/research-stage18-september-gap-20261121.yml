@@ -1,0 +1,46 @@
+name: BTC Stage18 September 2026 no-trade gap diagnosis
+on:
+  push:
+    branches:
+      - research/stage18-september-gap-diagnostic-20261121-v1
+    paths:
+      - scripts/research_stage18_september_gap_20261121.py
+      - .github/workflows/research-stage18-september-gap-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  september-core-gap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install analytics dependencies
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Retrieve original pre-entry events and independent Daily55 30-day monthly performance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/stage14-events" /tmp/stage18-donchian
+          gh run download 44118024590 -n btc-stage14-monthly-regime-trades -D "$RUNNER_TEMP/stage14-events" --repo "$GITHUB_REPOSITORY"
+          gh run download 44889747997 -n stage18-donchian-standalone-20261121 -D /tmp/stage18-donchian --repo "$GITHUB_REPOSITORY"
+          test -s "$RUNNER_TEMP/stage14-events/event_states.csv.gz"
+          test -s /tmp/stage18-donchian/donchian_monthly_mtm.csv
+      - name: Replay 1m eligible trades and September filter relaxations
+        env:
+          STAGE14_EVENTS: ${{ runner.temp }}/stage14-events/event_states.csv.gz
+        run: |
+          python -m py_compile scripts/research_stage18_september_gap_20261121.py
+          PYTHONPATH=scripts python scripts/research_stage18_september_gap_20261121.py
+      - name: Save September diagnosis with trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage18-september-2026-gate-diagnostic
+          path: analysis/stage18_september_gap_diagnostic_20261121/
+          if-no-files-found: warn
+          retention-days: 30
