@@ -226,7 +226,7 @@ def run_sim(asset,df,mark,events,kind,gate_wallet=True):
                 if qtyc<=0:skips["less_than_one_contract"]+=1
                 else:
                     # 2x ATR14 stop rounded with the bot's rounding semantics.
-                    distance_atr=max(tick,round(2*evt["stopdist"]/tick)*tick)
+                    distance_atr=float(evt["stopdist"])  # signal_map already stores 2x ATR14, never multiply twice
                     st=round_stop(entry-s*distance_atr,tick,s)
                     if (s==1 and mark_o[i]<=st) or (s==-1 and mark_o[i]>=st):
                         skips["mark_already_crossed_at_entry"]+=1
@@ -372,6 +372,7 @@ def test():
     act,dist=round_activation("ETH",1740,.05)
     assert abs(act-2.2)<1e-9 and abs(dist-1.1)<1e-9
     assert pm_size(62000,.001)==16
+    # Stop distance is computed ONCE at 2x ATR14 when signal is created.
 
 def main():
     test()
