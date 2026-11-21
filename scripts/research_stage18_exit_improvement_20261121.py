@@ -272,5 +272,43 @@ def main():
         print("FOCUS_RESULTS",focus.to_json(orient="records"))
     print("2025_RANKED",eligible[["variant","train_2025_pct","train_2025_positive",
             "exposed_2026JanOct_pct","net_22_pct","positive_22"]].to_json(orient="records"))
-    print("STAGE18_EXIT_IMPROVEMENT_COMPLETE",json.dumps(dict(selected=winner,variants=len(CASES))))
+    # Standalone secondary-sleeve comparison. Core is frozen, no futures
+    # shared-margin simulation, every alternative daily/4H Donchian return
+    # comes from the archived Stage17 month-end MTM data. 2025-only ranking.
+    swing_src=pd.read_csv("analysis/institutional_discovery_stage17_swing_breakout/monthly_mark_to_market.csv")
+    swing_results=[]
+    swing_monthly=[]
+    for model,gr in swing_src.groupby("model",sort=True):
+        stream=gr.set_index("month_ist").month_return_pct.reindex(MONTHS)
+        if stream.isna().any():continue
+        other=stream.to_numpy(float)
+        for stress in (0,2,5):
+            cur=core.replay_nav(base,stress)
+            base_month=np.asarray([x["net_pct"] for x in cur["monthly"]])
+            portfolio=.75*base_month+.25*other
+            tr=metrics(portfolio[:12]);fu=metrics(portfolio[12:]);total=metrics(portfolio)
+            swing_results.append(dict(model=model,extra_slippage_bps_side=stress,
+                train_2025_pct=tr["net"],train_2025_pos=tr["profitable"],train_2025_dd=tr["month_end_dd"],
+                seen_2026_pct=fu["net"],seen_2026_pos=fu["profitable"],
+                full_22_pct=total["net"],positive_22=total["profitable"],
+                negative_22=total["negative"],flat_22=total["flat"],
+                month_end_dd=total["month_end_dd"]))
+            swing_monthly += [dict(model=model,extra_slippage_bps_side=stress,month_ist=m,
+                                 core_pct=float(a),secondary_pct=float(b),portfolio_pct=float(v))
+                for m,a,b,v in zip(MONTHS,base_month,other,portfolio)]
+    swings=pd.DataFrame(swing_results)
+    swings.to_csv(OUT/"alternative_donchian_sleeves.csv",index=False)
+    pd.DataFrame(swing_monthly).to_csv(OUT/"alternative_donchian_months.csv",index=False)
+    rank=swings[swings.extra_slippage_bps_side==2].copy()
+    rank["train_score"]=rank.train_2025_pct+.2*rank.train_2025_pos-.8*rank.train_2025_dd
+    rank=rank.sort_values(["train_score","train_2025_pct"],ascending=False,kind="stable")
+    selected_swing=str(rank.iloc[0].model)
+    for cost in (0,2,5):
+        focus=swings[(swings.extra_slippage_bps_side==cost)&
+                     (swings.model.isin([core.DAILY55,selected_swing]))]
+        print("DONCHIAN_COMPARE",focus.to_json(orient="records"))
+    print("DONCHIAN_2025_RANKING",rank[["model","train_2025_pct","train_2025_pos",
+          "seen_2026_pct","full_22_pct","positive_22"]].to_json(orient="records"))
+    print("STAGE18_EXIT_IMPROVEMENT_COMPLETE",json.dumps(dict(selected=winner,variants=len(CASES),
+          alternative_donchian_models=int(swings.model.nunique()),swing_selected_2025=selected_swing)))
 if __name__=="__main__":main()
