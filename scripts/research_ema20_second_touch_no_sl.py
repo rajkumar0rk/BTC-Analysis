@@ -257,7 +257,7 @@ def main():
         print("RUN",symbol,flush=True)
         ledger,mm,ss=model(df,previous_btc,symbol)
         logs.append(ledger);monthly.extend(mm);summary.append(ss)
-        print("RESULT",json.dumps(ss,sort_keys=True),flush=True)
+        print("RESULT",json.dumps(ss,sort_keys=True,default=lambda x: x.item() if hasattr(x,"item") else str(x)),flush=True)
     pd.concat(logs,ignore_index=True).to_csv(OUT/"trade_ledger.csv.gz",index=False,compression="gzip")
     pd.DataFrame(monthly).to_csv(OUT/"monthly_mark_to_market.csv",index=False)
     pd.DataFrame(summary).to_csv(OUT/"summary.csv",index=False)
@@ -292,7 +292,7 @@ def main():
        "- January 2025 first 330 IST minutes unavailable; 2026 not an untouched statistical validation.",
        "","Outputs: summary.csv, monthly_mark_to_market.csv, trade_ledger.csv.gz, quality.json."])
     (OUT/"RESEARCH_REPORT.md").write_text("\n".join(lines)+"\n")
-    print("BACKTEST_DONE",json.dumps(summary),flush=True)
+    print("BACKTEST_DONE",json.dumps(summary,default=lambda x: x.item() if hasattr(x,"item") else str(x)),flush=True)
 
 if __name__=="__main__":
     main()
