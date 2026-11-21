@@ -107,6 +107,32 @@
   },
   "class_balance_train": 0.3335,
   "class_balance_cal": 0.3343,
+  "probability_diagnostics": {
+    "2025_CAL": {
+      "candidate_15m_events": 17634,
+      "max_model_probability": 0.57831,
+      "p95_model_probability": 0.41663,
+      "p99_model_probability": 0.46913,
+      "p50_fee_aware_required_probability": 0.82811,
+      "number_qualifying_fee_aware_before_daily_cap": 0
+    },
+    "2026_H1_SEEN": {
+      "candidate_15m_events": 17356,
+      "max_model_probability": 0.53062,
+      "p95_model_probability": 0.40141,
+      "p99_model_probability": 0.44177,
+      "p50_fee_aware_required_probability": 0.67425,
+      "number_qualifying_fee_aware_before_daily_cap": 0
+    },
+    "2026_H2_SEEN": {
+      "candidate_15m_events": 11707,
+      "max_model_probability": 0.55559,
+      "p95_model_probability": 0.4172,
+      "p99_model_probability": 0.47551,
+      "p50_fee_aware_required_probability": 0.696,
+      "number_qualifying_fee_aware_before_daily_cap": 0
+    }
+  },
   "features": [
     "price_100k",
     "atr15_relative",

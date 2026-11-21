@@ -24,6 +24,14 @@
 | p_0.80 | False                           |                  0 |                       0 |                      0 |                            |                                    |                                 0 |                          0 |                      0 |                                     0 |                      0 |                                     0 |
 | p_0.85 | False                           |                  0 |                       0 |                      0 |                            |                                    |                                 0 |                          0 |                      0 |                                     0 |                      0 |                                     0 |
 
+## Model confidence versus cost-adjusted required probability
+
+| period       |   candidate_15m_events |   max_model_probability |   p95_model_probability |   p99_model_probability |   p50_fee_aware_required_probability |   number_qualifying_fee_aware_before_daily_cap |
+|:-------------|-----------------------:|------------------------:|------------------------:|------------------------:|-------------------------------------:|-----------------------------------------------:|
+| 2025_CAL     |                  17634 |                 0.57831 |                 0.41663 |                 0.46913 |                              0.82811 |                                              0 |
+| 2026_H1_SEEN |                  17356 |                 0.53062 |                 0.40141 |                 0.44177 |                              0.67425 |                                              0 |
+| 2026_H2_SEEN |                  11707 |                 0.55559 |                 0.4172  |                 0.47551 |                              0.696   |                                              0 |
+
 ## Gate used in the diagnostic account replay
 
 Approved gate: None
