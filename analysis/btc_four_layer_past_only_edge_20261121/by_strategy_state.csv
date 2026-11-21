@@ -1,0 +1,11 @@
+strategy,state,trades,wins,net_usd,sum_net_R,model
+range_fade,range,66,21,-1424.2656800425789,-31.68229023639868,old_four_layer_baseline
+shock_breakout,shock,43,18,440.91355774754186,10.89626255140573,old_four_layer_baseline
+structured_breakout,breakout_down,94,35,591.1828240211382,13.405467462778937,old_four_layer_baseline
+structured_breakout,breakout_up,103,29,-1364.8836208046848,-30.561818590624142,old_four_layer_baseline
+trend_pullback,confirmed_trend_down,15,4,-245.38545999073676,-5.362776762611155,old_four_layer_baseline
+trend_pullback,confirmed_trend_up,16,5,-213.172039657313,-4.930744993729632,old_four_layer_baseline
+shock_breakout,shock,27,8,-151.95356835659553,-2.7788527392262568,past6m_edge
+structured_breakout,breakout_down,28,11,548.1625575639852,10.970981607944509,past6m_edge
+shock_breakout,shock,29,11,210.51956055926115,4.424536945324757,past12m_robustness
+structured_breakout,breakout_down,22,10,683.9447832542796,13.133880544777373,past12m_robustness

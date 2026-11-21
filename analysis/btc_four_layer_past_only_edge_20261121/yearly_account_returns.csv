@@ -1,0 +1,7 @@
+model,year,months,trades,profitable_months,losing_months,idle_months,net_compounded_return_pct
+old_four_layer_baseline,2025,12,186,4,8,0,-15.82115
+old_four_layer_baseline,2026,10,151,5,5,0,-7.52558
+past6m_edge,2025,12,10,0,2,10,-3.35893
+past6m_edge,2026,10,45,7,3,0,7.57547
+past12m_robustness,2025,12,0,0,0,12,0.0
+past12m_robustness,2026,10,51,7,3,0,8.94464

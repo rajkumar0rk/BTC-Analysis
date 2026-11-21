@@ -1,0 +1,40 @@
+{
+  "data": "Delta India native BTCUSD 1M, verified SHA256 + contiguity",
+  "native_1m_candles": 992160,
+  "source_partitions": 23,
+  "all_IST_months": 22,
+  "base_shadow_ledger_pnl_entry_exit_parity_verified": true,
+  "previous_1H_4H_no_repaint_prefixes": [
+    {
+      "prefix_exclusive_utc": "2025-05-17T00:00:00Z",
+      "hours": 3264,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    },
+    {
+      "prefix_exclusive_utc": "2025-12-19T00:00:00Z",
+      "hours": 8448,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    },
+    {
+      "prefix_exclusive_utc": "2026-08-17T00:00:00Z",
+      "hours": 14232,
+      "revised_state_labels": 0,
+      "revised_validity_flags": 0
+    }
+  ],
+  "original_confirmed_signal_events": 513,
+  "original_shadow_executed_trades": 337,
+  "sample_model_count": 2,
+  "sample_models_pre_registered_before_output": true,
+  "training_on_prior_exited_shadow_trades_only": true,
+  "training_window_at_month_open_only": true,
+  "no_train_outcome_after_month_begin": true,
+  "native_1m_stop_first_replay": true,
+  "next_1m_open_after_15m_confirmation": true,
+  "all_models_separate_compounded_account": true,
+  "actual_spreads_funding_liquidation_and_rounding_missing": true,
+  "globally_untouched_holdout_available": false,
+  "live_trade_approved": false
+}
