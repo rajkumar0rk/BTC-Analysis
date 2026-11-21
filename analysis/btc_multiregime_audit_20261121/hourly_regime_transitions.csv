@@ -1,0 +1,9 @@
+regime,shock,breakout_up,breakout_down,trend_up,trend_down,compression,range,mixed
+shock,506,29,32,90,97,8,42,257
+breakout_up,14,40,0,93,0,0,18,53
+breakout_down,17,0,71,0,87,0,12,85
+trend_up,68,61,0,1205,0,1,0,343
+trend_down,72,0,60,0,1361,1,0,381
+compression,26,0,0,2,7,807,154,118
+range,87,25,22,0,0,159,1826,370
+mixed,271,63,87,288,324,137,437,6136

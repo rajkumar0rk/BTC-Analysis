@@ -1,0 +1,9 @@
+regime,sampled_nonoverlapping_4h,average_next4h_net_ATR,next4h_up_pct,next4h_range_ATR
+shock,229,0.1779,53.71,2.596
+breakout_up,52,-0.2408,34.62,2.189
+breakout_down,63,-0.2606,55.56,2.651
+trend_up,418,0.0264,46.41,2.189
+trend_down,460,-0.014,55.43,2.181
+compression,277,-0.0004,53.07,2.148
+range,639,-0.0443,48.98,2.095
+mixed,1973,-0.0138,49.32,2.066

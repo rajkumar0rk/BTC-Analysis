@@ -1,0 +1,14 @@
+{
+  "native_minutes": 992160,
+  "source_partitions": 23,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "verified_1M_data_no_missing": true,
+  "candidate_comparison_trades": 3800,
+  "past_only_monthly_rule": true,
+  "separate_1M_account_replay": true,
+  "fees_each_side_plus_gst": 0.00059,
+  "assumed_slippage_points_each_side": 5.0,
+  "missing_funding_and_spread": true,
+  "evaluation_period_was_prior_research_exposed": true
+}

@@ -1,0 +1,37 @@
+{
+  "native_minutes": 992160,
+  "total_hours": 16536,
+  "eligible_hours": 16451,
+  "warmup_hours": 85,
+  "primary_states": 8,
+  "disallowed_labels": [],
+  "mutually_exclusive_primary_state": true,
+  "label_and_validity_history_prefix_invariance": [
+    {
+      "cutoff": "2025-04-15T00:00:00Z",
+      "historical_hours": 2496,
+      "label_mismatches": 0,
+      "validity_mismatches": 0
+    },
+    {
+      "cutoff": "2025-12-15T00:00:00Z",
+      "historical_hours": 8352,
+      "label_mismatches": 0,
+      "validity_mismatches": 0
+    },
+    {
+      "cutoff": "2026-08-15T00:00:00Z",
+      "historical_hours": 14184,
+      "label_mismatches": 0,
+      "validity_mismatches": 0
+    }
+  ],
+  "history_revision_detected": false,
+  "mixed_hours": 7743,
+  "mixed_share_pct": 47.067,
+  "all_hours_nonmixed_share_pct": 52.933,
+  "one_hour_label_change_pct": 27.343,
+  "four_hour_diagnostic_nonoverlapping_samples": 4111,
+  "classifier_objective_ground_truth_accuracy_measurable": false,
+  "ground_truth_explanation": "Regime names are deterministic technical proxies; independent manually labeled true market regimes are unavailable. Future results measure predictive utility, NOT actual state-label accuracy."
+}
