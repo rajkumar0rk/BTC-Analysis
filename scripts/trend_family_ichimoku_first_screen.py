@@ -30,10 +30,10 @@ events={t:(int(long.loc[t])-int(short.loc[t]),bool(exitlong.loc[t]),bool(exitsho
 fee=.0005*1.18;capital=100.;risk_fraction=.005
 side=0;qty=0.;entry=0.;entry_fee=0.;entry_time=None;stop=0.;equity=capital
 trades=[];marks=[];peak=capital;maxdd=0.
-last_month=None;month_entries={}
+last_month=None;month_entries={};source_hash=hashlib.sha256(pd.util.hash_pandas_object(f[["open","high","low","close"]],index=True).values.tobytes()).hexdigest()
 prev_time=None
 for t,r in f.iterrows():
-    if t<pd.Timestamp("2025-01-01",tz="UTC"):continue
+    if t.tz_convert("Asia/Kolkata")<pd.Timestamp("2025-01-01",tz="Asia/Kolkata"):continue
     if prev_time is not None and (t-prev_time)!=pd.Timedelta(minutes=1) and side:
         # Source gap: no invented fill; mark forced exit at previous observed close.
         x=prev_close; exitfee=qty*x*fee; pnl=side*qty*(x-entry)-entry_fee-exitfee
@@ -42,17 +42,14 @@ for t,r in f.iterrows():
     sig,el,es=events.get(t,(0,False,False))
     # Closed-bar exit at next open, stop-first on current 1m candle.
     if side:
-        hit=(float(r.low)<=stop if side==1 else float(r.high)>=stop)
-        if hit:
+        # Stop-first, but execute scheduled exit at the open BEFORE testing this minute\u0027s range.\n        scheduled=(side==1 and el) or (side==-1 and es)\n        if scheduled:\n            x=float(r.open);reason="signal"\n        else:\n            x=None\n        hit=(float(r.low)<=stop if side==1 else float(r.high)>=stop)
+        if x is None and hit:
             x=min(float(r.open),stop) if side==1 else max(float(r.open),stop)
             reason="stop"
-        elif (side==1 and el) or (side==-1 and es):
-            x=float(r.open);reason="signal"
-        else:x=None
         if x is not None:
             exitfee=qty*x*fee;pnl=side*qty*(x-entry)-entry_fee-exitfee
             equity+=pnl;trades.append((entry_time,t,side,entry,x,qty,pnl,reason));side=0
-    if not side and sig and t in events:
+    if not side and sig and t in events and t.tz_convert("Asia/Kolkata")<pd.Timestamp("2026-01-01",tz="Asia/Kolkata"):
         # Fixed 2x 4H ATR protective stop; separate risk overlay disclosed.
         loc=b.index.get_indexer([t])[0]
         pc=b.close.shift(1);tr=pd.concat([b.high-b.low,(b.high-pc).abs(),(b.low-pc).abs()],axis=1).max(axis=1)
@@ -74,13 +71,13 @@ if side:
 trade=pd.DataFrame(trades,columns=["entry_utc","exit_utc","side","entry_price","exit_price","quantity","net_usd","reason"])
 trade.to_csv(OUT/"trades.csv",index=False)
 months=pd.DataFrame(marks,columns=["month_ist","end_nav"])
-months=months[(months.month_ist>="2025-01")&(months.month_ist<="2026-01")].copy()
+months=months[(months.month_ist>="2025-01")&(months.month_ist<="2025-12")].copy()
 months["start_nav"]=months.end_nav.shift(1).fillna(capital)
 months["net_return_pct"]=100*(months.end_nav/months.start_nav-1)
 months["entries"]=months.month_ist.map(month_entries).fillna(0).astype(int)
 months.to_csv(OUT/"monthly_nav.csv",index=False)
 wins=trade.loc[trade.net_usd>0,"net_usd"].sum() if len(trade) else 0
 loss=-trade.loc[trade.net_usd<0,"net_usd"].sum() if len(trade) else 0
-result={"source":"https://github.com/sakshamverma2030/Algorithmic-Trading-Framework-in-Crypto-Python","strategy":"4H Ichimoku 9/26/52/26 TK cross cloud Chikou causal","cost":"0.05% per side plus 18% GST; zero slippage; funding unmodeled","risk":"0.5% nominal initial risk, 1x notional cap; 2ATR stop added as protective overlay","source_missing_minutes":q.get("missing_minutes"),"trades":len(trade),"pf":float(wins/loss) if loss else None,"end_nav":float(equity),"max_dd_pct":100*maxdd,"positive_months":int((months.net_return_pct>0).sum()),"losing_months":int((months.net_return_pct<0).sum()),"flat_months":int((months.net_return_pct==0).sum()),"months":len(months)}
+result={"source":"https://github.com/sakshamverma2030/Algorithmic-Trading-Framework-in-Crypto-Python","strategy":"4H Ichimoku 9/26/52/26 TK cross cloud Chikou causal","cost":"0.05% per side plus 18% GST; zero slippage; funding unmodeled","risk":"0.5% nominal initial risk, 1x notional cap; 2ATR stop added as protective overlay","source_missing_minutes":q.get("missing_minutes"),"candle_frame_hash_sha256":source_hash,"trades":len(trade),"pf":float(wins/loss) if loss else None,"end_nav":float(equity),"max_dd_pct":100*maxdd,"positive_months":int((months.net_return_pct>0).sum()),"losing_months":int((months.net_return_pct<0).sum()),"flat_months":int((months.net_return_pct==0).sum()),"months":len(months)}
 (OUT/"summary.json").write_text(json.dumps(result,indent=2))
 print("ICHIMOKU_SCREEN_DONE",json.dumps(result))
