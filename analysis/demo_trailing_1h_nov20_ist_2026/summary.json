@@ -1,0 +1,831 @@
+{
+  "day_ist": "2026-11-20",
+  "strategy": "DEMO 1h EMA20 Supertrend10,3; trailing BTC activation100 distance50; ETH price normalized",
+  "execution_warning": "1m OHLC path order and +10s entry timing unobserved; no simulation is exact; mark and traded execution not identical",
+  "fee_assumptions": "0.05% taker each side, 18% GST, funding excluded and not presumed zero",
+  "model_assumptions": "1m mark OHLC and hypothetical high-low order with instantaneous edit; fill mark trigger + first-minute traded-mark basis + optional adverse tick",
+  "real_bot_3second_poll_reproduced": false,
+  "delta_exchange_actual_fill_reproduced": false,
+  "scenarios": {
+    "btc_early_open_OHLC_0tick_whole_day": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 0,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 103.832,
+      "net_realized": 3.832,
+      "signals_in_window": 3,
+      "completed_trades": 3,
+      "wins": 3,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 3.4544,
+      "skips": [],
+      "open_trade": null
+    },
+    "btc_early_open_OHLC_0tick_after_1723": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 0,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 103.3749,
+      "net_realized": 3.3749,
+      "signals_in_window": 3,
+      "completed_trades": 2,
+      "wins": 2,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 2.2843,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_early_open_OHLC_1tick_whole_day": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 1,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 103.8272,
+      "net_realized": 3.8272,
+      "signals_in_window": 3,
+      "completed_trades": 3,
+      "wins": 3,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 3.4544,
+      "skips": [],
+      "open_trade": null
+    },
+    "btc_early_open_OHLC_1tick_after_1723": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 1,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 103.3717,
+      "net_realized": 3.3717,
+      "signals_in_window": 3,
+      "completed_trades": 2,
+      "wins": 2,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 2.2843,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_early_open_OLHC_0tick_whole_day": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 0,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 101.5458,
+      "net_realized": 1.5458,
+      "signals_in_window": 3,
+      "completed_trades": 3,
+      "wins": 3,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 3.4557,
+      "skips": [],
+      "open_trade": null
+    },
+    "btc_early_open_OLHC_0tick_after_1723": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 0,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 101.0231,
+      "net_realized": 1.0231,
+      "signals_in_window": 3,
+      "completed_trades": 2,
+      "wins": 2,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 2.2856,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_early_open_OLHC_1tick_whole_day": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 1,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 101.541,
+      "net_realized": 1.541,
+      "signals_in_window": 3,
+      "completed_trades": 3,
+      "wins": 3,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 3.4557,
+      "skips": [],
+      "open_trade": null
+    },
+    "btc_early_open_OLHC_1tick_after_1723": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 1,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 101.0199,
+      "net_realized": 1.0199,
+      "signals_in_window": 3,
+      "completed_trades": 2,
+      "wins": 2,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 2.2856,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_late_close_OHLC_0tick_whole_day": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 0,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 102.9879,
+      "net_realized": 2.9879,
+      "signals_in_window": 3,
+      "completed_trades": 2,
+      "wins": 2,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 2.3353,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 21:30:00+05:30",
+          "side": -1,
+          "reason": "price_divergence_gt_0.2pct"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_late_close_OHLC_0tick_after_1723": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 0,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 101.8752,
+      "net_realized": 1.8752,
+      "signals_in_window": 3,
+      "completed_trades": 1,
+      "wins": 1,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 1.1648,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 21:30:00+05:30",
+          "side": -1,
+          "reason": "price_divergence_gt_0.2pct"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_late_close_OHLC_1tick_whole_day": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 1,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 102.9847,
+      "net_realized": 2.9847,
+      "signals_in_window": 3,
+      "completed_trades": 2,
+      "wins": 2,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 2.3353,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 21:30:00+05:30",
+          "side": -1,
+          "reason": "price_divergence_gt_0.2pct"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_late_close_OHLC_1tick_after_1723": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 1,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 101.8736,
+      "net_realized": 1.8736,
+      "signals_in_window": 3,
+      "completed_trades": 1,
+      "wins": 1,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 1.1648,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 21:30:00+05:30",
+          "side": -1,
+          "reason": "price_divergence_gt_0.2pct"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_late_close_OLHC_0tick_whole_day": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 0,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 100.9083,
+      "net_realized": 0.9083,
+      "signals_in_window": 3,
+      "completed_trades": 2,
+      "wins": 2,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 2.3366,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 21:30:00+05:30",
+          "side": -1,
+          "reason": "price_divergence_gt_0.2pct"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_late_close_OLHC_0tick_after_1723": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 0,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 100.564,
+      "net_realized": 0.564,
+      "signals_in_window": 3,
+      "completed_trades": 1,
+      "wins": 1,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 1.1656,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 21:30:00+05:30",
+          "side": -1,
+          "reason": "price_divergence_gt_0.2pct"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_late_close_OLHC_1tick_whole_day": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 1,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 100.9051,
+      "net_realized": 0.9051,
+      "signals_in_window": 3,
+      "completed_trades": 2,
+      "wins": 2,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 2.3366,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 21:30:00+05:30",
+          "side": -1,
+          "reason": "price_divergence_gt_0.2pct"
+        }
+      ],
+      "open_trade": null
+    },
+    "btc_late_close_OLHC_1tick_after_1723": {
+      "asset": "BTC",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 1,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 100.5624,
+      "net_realized": 0.5624,
+      "signals_in_window": 3,
+      "completed_trades": 1,
+      "wins": 1,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 1.1656,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 21:30:00+05:30",
+          "side": -1,
+          "reason": "price_divergence_gt_0.2pct"
+        }
+      ],
+      "open_trade": null
+    },
+    "eth_early_open_OHLC_0tick_whole_day": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 0,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 107.4351,
+      "net_realized": 7.4351,
+      "signals_in_window": 6,
+      "completed_trades": 6,
+      "wins": 5,
+      "losses": 1,
+      "profit_factor": 32.4784,
+      "total_modeled_fees_gst": 7.0278,
+      "skips": [],
+      "open_trade": null
+    },
+    "eth_early_open_OHLC_0tick_after_1723": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 0,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 105.8544,
+      "net_realized": 5.8544,
+      "signals_in_window": 6,
+      "completed_trades": 4,
+      "wins": 4,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 4.692,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 14:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "eth_early_open_OHLC_1tick_whole_day": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 1,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 107.263,
+      "net_realized": 7.263,
+      "signals_in_window": 6,
+      "completed_trades": 6,
+      "wins": 5,
+      "losses": 1,
+      "profit_factor": 28.4902,
+      "total_modeled_fees_gst": 7.0281,
+      "skips": [],
+      "open_trade": null
+    },
+    "eth_early_open_OHLC_1tick_after_1723": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 1,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 105.7388,
+      "net_realized": 5.7388,
+      "signals_in_window": 6,
+      "completed_trades": 4,
+      "wins": 4,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 4.6923,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 14:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "eth_early_open_OLHC_0tick_whole_day": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 0,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 107.207,
+      "net_realized": 7.207,
+      "signals_in_window": 6,
+      "completed_trades": 6,
+      "wins": 5,
+      "losses": 1,
+      "profit_factor": 31.5123,
+      "total_modeled_fees_gst": 7.028,
+      "skips": [],
+      "open_trade": null
+    },
+    "eth_early_open_OLHC_0tick_after_1723": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 0,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 105.997,
+      "net_realized": 5.997,
+      "signals_in_window": 6,
+      "completed_trades": 4,
+      "wins": 4,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 4.692,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 14:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "eth_early_open_OLHC_1tick_whole_day": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 1,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 107.0349,
+      "net_realized": 7.0349,
+      "signals_in_window": 6,
+      "completed_trades": 6,
+      "wins": 4,
+      "losses": 2,
+      "profit_factor": 26.6277,
+      "total_modeled_fees_gst": 7.0282,
+      "skips": [],
+      "open_trade": null
+    },
+    "eth_early_open_OLHC_1tick_after_1723": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "early_open",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 1,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 105.8814,
+      "net_realized": 5.8814,
+      "signals_in_window": 6,
+      "completed_trades": 4,
+      "wins": 3,
+      "losses": 1,
+      "profit_factor": 572.0097,
+      "total_modeled_fees_gst": 4.6921,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 14:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "eth_late_close_OHLC_0tick_whole_day": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 0,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 108.001,
+      "net_realized": 8.001,
+      "signals_in_window": 6,
+      "completed_trades": 6,
+      "wins": 6,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 7.0259,
+      "skips": [],
+      "open_trade": null
+    },
+    "eth_late_close_OHLC_0tick_after_1723": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 0,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 105.5778,
+      "net_realized": 5.5778,
+      "signals_in_window": 6,
+      "completed_trades": 4,
+      "wins": 4,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 4.6896,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 14:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "eth_late_close_OHLC_1tick_whole_day": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 1,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 107.8289,
+      "net_realized": 7.8289,
+      "signals_in_window": 6,
+      "completed_trades": 6,
+      "wins": 6,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 7.0261,
+      "skips": [],
+      "open_trade": null
+    },
+    "eth_late_close_OHLC_1tick_after_1723": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OHLC",
+        "adverse_fill_ticks": 1,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 105.4622,
+      "net_realized": 5.4622,
+      "signals_in_window": 6,
+      "completed_trades": 4,
+      "wins": 4,
+      "losses": 0,
+      "profit_factor": null,
+      "total_modeled_fees_gst": 4.6898,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 14:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "eth_late_close_OLHC_0tick_whole_day": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 0,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 107.2596,
+      "net_realized": 7.2596,
+      "signals_in_window": 6,
+      "completed_trades": 6,
+      "wins": 5,
+      "losses": 1,
+      "profit_factor": 23.3924,
+      "total_modeled_fees_gst": 7.0264,
+      "skips": [],
+      "open_trade": null
+    },
+    "eth_late_close_OLHC_0tick_after_1723": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 0,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 105.2071,
+      "net_realized": 5.2071,
+      "signals_in_window": 6,
+      "completed_trades": 4,
+      "wins": 3,
+      "losses": 1,
+      "profit_factor": 17.0614,
+      "total_modeled_fees_gst": 4.6899,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 14:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    },
+    "eth_late_close_OLHC_1tick_whole_day": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 1,
+        "uptime": "whole_day"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 107.0875,
+      "net_realized": 7.0875,
+      "signals_in_window": 6,
+      "completed_trades": 6,
+      "wins": 5,
+      "losses": 1,
+      "profit_factor": 21.0887,
+      "total_modeled_fees_gst": 7.0267,
+      "skips": [],
+      "open_trade": null
+    },
+    "eth_late_close_OLHC_1tick_after_1723": {
+      "asset": "ETH",
+      "scenario": {
+        "entry_timing": "late_close",
+        "mark_path": "OLHC",
+        "adverse_fill_ticks": 1,
+        "uptime": "after_1723"
+      },
+      "starting_equity": 100.0,
+      "ending_realized_equity": 105.0915,
+      "net_realized": 5.0915,
+      "signals_in_window": 6,
+      "completed_trades": 4,
+      "wins": 3,
+      "losses": 1,
+      "profit_factor": 15.4314,
+      "total_modeled_fees_gst": 4.6901,
+      "skips": [
+        {
+          "time_ist": "2026-11-20 14:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        },
+        {
+          "time_ist": "2026-11-20 16:30:00+05:30",
+          "side": -1,
+          "reason": "bot_not_running_at_hourly_decision"
+        }
+      ],
+      "open_trade": null
+    }
+  }
+}

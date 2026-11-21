@@ -1,0 +1,5 @@
+side,entry_ist,exit_ist,entry_proxy,exit_proxy,mark_stop_trigger,initial_stop,final_stop,activation,trail_distance,trailing_active,stop_updates,quantity,contracts,gross,fees_gst,net,balance_after,exit_reason
+short,2026-11-20 17:30:00+05:30,2026-11-20 17:32:00+05:30,1748.95,1745.5,1745.05,1786.7,1745.05,2.2,1.1,True,1,0.5700000000000001,57,1.9665,1.1752,0.7913,100.7913,native_trailing_or_initial_stop
+short,2026-11-20 19:30:00+05:30,2026-11-20 19:34:00+05:30,1754.0,1751.35,1751.6,1793.75,1751.6,2.2,1.1,True,2,0.5700000000000001,57,1.5105,1.1788,0.3317,101.123,native_trailing_or_initial_stop
+short,2026-11-20 20:30:00+05:30,2026-11-20 20:33:00+05:30,1741.6,1733.95,1733.65,1783.45,1733.65,2.2,1.1,True,2,0.5700000000000001,57,4.3605,1.1688,3.1917,104.3146,native_trailing_or_initial_stop
+short,2026-11-20 21:30:00+05:30,2026-11-20 21:31:00+05:30,1650.1,1646.05,1645.95,1702.95,1645.95,2.0500000000000003,1.05,True,1,0.6,60,2.43,1.1668,1.2632,105.5778,native_trailing_or_initial_stop
