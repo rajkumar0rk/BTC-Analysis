@@ -1,0 +1,26 @@
+{
+  "source": "Stage18 70% Core 30% Donchian rechecked native BTCUSD 1m",
+  "verified_compounded_monthly_net_22m_pct": 14.43807,
+  "verified_months_profitable": 19,
+  "verified_months_losing": 2,
+  "verified_months_flat": 1,
+  "core_closed_trades": 63,
+  "swing_closed_trades": 10,
+  "all_ist_calendar_dates": 669,
+  "dates_with_at_least_one_exit": 56,
+  "dates_with_positive_realized_exit_proxy": 36,
+  "dates_with_negative_realized_exit_proxy": 20,
+  "dates_without_any_exit": 613,
+  "positive_calendar_date_pct": 5.3812,
+  "positive_given_exit_day_pct": 64.2857,
+  "daily_profit_possible_every_day_in_history": false,
+  "limitations": [
+    "No trading or realized exit on most days means no claim of daily income",
+    "Realized-exit-day proxy is not mark-to-market NAV, cannot recreate combined daily account equity",
+    "Daily55 long-hold positions can gain/lose on days with no exit",
+    "0.7/0.3 weighted daily net proxy uses standalone 0.5% risk-per-trade returns and does not model daily rebalancing",
+    "Only pre-existing model parameters tested; no after-the-fact day filter",
+    "Fees incl GST and $5/side slip were modeled upstream; funding and actual order book depth omitted",
+    "All 2025 and 2026 data already researched; no untouched forward sample"
+  ]
+}
