@@ -1,0 +1,16 @@
+{
+  "trades": 2,
+  "win_rate_pct": 0.0,
+  "net_return_pct": -1.1429,
+  "net_profit_usd": -114.29,
+  "ending_equity_usd": 9885.71,
+  "profit_factor": 0.0,
+  "max_trade_close_drawdown_pct": 1.143,
+  "profitable_months": 0,
+  "losing_months": 2,
+  "idle_months": 20,
+  "evaluation_profitable_months": 0,
+  "fee_gst_usd": 13.57,
+  "slippage_usd": 1.02,
+  "passes_22_positive_months": false
+}

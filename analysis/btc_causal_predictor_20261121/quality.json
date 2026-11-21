@@ -1,0 +1,25 @@
+{
+  "data": "BTCUSD 1M Delta India, SHA and minute continuity verified",
+  "native_minutes": 992160,
+  "expected_minutes": 992160,
+  "source_partitions": 23,
+  "hourly_bars": 16536,
+  "features_known_at_1H_close": true,
+  "monthly_training_only_available_released_labels": true,
+  "first_replayed_month": "2025-07",
+  "initial_training_only_months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06"
+  ],
+  "target": "forward 4H close difference / ATR14 at signal close; UP >1, DOWN <-1, else RANGE",
+  "model": "fixed L2 logistic regression with StandardScaler, C=1, max_iter=500, past-only fit",
+  "signal_threshold": "prob_up/down >=0.55 AND 0.15 margin over both other classes",
+  "fees": "taker 0.05% each side plus GST 18%",
+  "assumed_slippage_price_points_each_side": 5.0,
+  "historical_spreads_real_funding_liquidation_missing": true,
+  "truly_blind_external_holdout": false
+}

@@ -1,0 +1,4 @@
+,pred_DOWN,pred_RANGE,pred_UP
+true_DOWN,1,527,6
+true_RANGE,2,1886,3
+true_UP,0,501,2

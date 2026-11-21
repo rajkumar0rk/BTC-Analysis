@@ -1,0 +1,4 @@
+period,scored_nonoverlapping_4h_hours,model_accuracy_pct,train_majority_accuracy_pct,model_macro_f1,train_majority_macro_f1,model_logloss,train_climatology_logloss,model_confident_direction_signal_hours
+2025-Jul-Dec,1104,64.493,64.493,0.2653,0.2614,0.88746,0.89716,0
+2026-Jan-Oct,1824,64.529,64.638,0.2658,0.2617,0.88212,0.89518,0
+combined,2928,64.515,64.583,0.2655,0.2616,0.88414,0.89592,0
