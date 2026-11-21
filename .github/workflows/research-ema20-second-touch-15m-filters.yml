@@ -1,0 +1,48 @@
+name: 15m second EMA20 touch volume and volatility filters
+on:
+  push:
+    branches:
+      - research/ema20-second-touch-15m-volume-volatility-20261121
+    paths:
+      - scripts/research_ema20_second_touch_15m_filters.py
+      - .github/workflows/research-ema20-second-touch-15m-filters.yml
+      - analysis/ema20_second_touch_15m_filters_20261121/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ema20-second-touch-15m-filters
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install numpy pandas
+      - name: Run all BTC ETH 15m filter variants
+        run: python scripts/research_ema20_second_touch_15m_filters.py
+      - name: Archive all trade evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-15m-second-touch-volume-volatility-filters
+          path: analysis/ema20_second_touch_15m_filters_20261121/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Commit research outputs only on branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ema20_second_touch_15m_filters_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record 15m second EMA20 touch volume volatility test outcomes"
+            git push origin HEAD:research/ema20-second-touch-15m-volume-volatility-20261121
+          fi
