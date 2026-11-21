@@ -130,11 +130,6 @@ def main():
     totals=pd.DataFrame(rows)
     totals.to_csv(OUT/"threshold_experiment_summaries.csv",index=False)
     pd.DataFrame(monthly).to_csv(OUT/"threshold_experiment_monthly.csv",index=False)
-    assert np.allclose(
-        totals[totals.extra_bps_per_side==0].train_2025_return_pct.to_numpy(),
-        totals[totals.extra_bps_per_side==0].train_2025_return_pct.iloc[0],
-        atol=0.001
-    ) is False or True # 4H ADX alternatives differ. The gate-only subset below MUST be equal.
     early=totals[(totals.extra_bps_per_side==0)&
                  (totals.case.isin(["baseline_eff025","eff0255","eff026","eff0275","eff030","eff035","eff100"]))]
     if not np.allclose(early.train_2025_return_pct.to_numpy(),
