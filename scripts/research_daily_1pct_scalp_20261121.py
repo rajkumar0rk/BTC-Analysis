@@ -205,9 +205,9 @@ def run_model(f,models,which):
         equity+=net
         if equity<=0:raise RuntimeError("Account depleted; cannot size subsequent trades")
         pnl_pct=100*net/start_equity
-        if reason=="target" and abs(pnl_pct-1.)>1e-6:
+        if reason=="target" and abs(pnl_pct-100*NET_TP)>1e-6:
             raise AssertionError("Target doesn't net 1%: "+str(pnl_pct))
-        if reason=="stop" and pnl_pct>-.9999:
+        if reason=="stop" and pnl_pct>100*NET_SL+1e-4:
             raise AssertionError("Stop doesn't lose 1%: "+str(pnl_pct))
         ledger.append({"model":which,"setup":kind,"entry_ist":str(ix[k]),
           "exit_ist":str(ix[last]),"day_ist":day,"month_ist":day[:7],
