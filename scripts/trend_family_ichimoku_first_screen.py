@@ -8,7 +8,7 @@ from research_every_candle_200 import read_archive
 OUT=Path("analysis/trend_following_family_20261121/ichimoku_screen")
 OUT.mkdir(parents=True,exist_ok=True)
 f,seg_start,seg_end,q=read_archive()
-f=f.loc[(f.index>=pd.Timestamp("2024-11-01",tz="UTC"))&(f.index<pd.Timestamp("2026-01-01",tz="UTC"))].copy()
+f=f.loc[(f.index>=pd.Timestamp("2024-11-01",tz="UTC"))&(f.index<pd.Timestamp("2025-12-31 18:30:00",tz="UTC"))].copy()
 if f.empty:raise RuntimeError("No source candles")
 # Closed 4H candles only; no signals from incomplete source blocks.
 b=f[["open","high","low","close"]].resample("4h",closed="left",label="right").agg({"open":"first","high":"max","low":"min","close":"last"})
@@ -34,6 +34,8 @@ last_month=None;month_entries={};source_hash=hashlib.sha256(pd.util.hash_pandas_
 prev_time=None
 for t,r in f.iterrows():
     if t.tz_convert("Asia/Kolkata")<pd.Timestamp("2025-01-01",tz="Asia/Kolkata"):continue
+    if t.tz_convert("Asia/Kolkata")>=pd.Timestamp("2026-01-01",tz="Asia/Kolkata"):
+        break
     if prev_time is not None and (t-prev_time)!=pd.Timedelta(minutes=1) and side:
         # Source gap: no invented fill; mark forced exit at previous observed close.
         x=prev_close; exitfee=qty*x*fee; pnl=side*qty*(x-entry)-entry_fee-exitfee
@@ -42,7 +44,15 @@ for t,r in f.iterrows():
     sig,el,es=events.get(t,(0,False,False))
     # Closed-bar exit at next open, stop-first on current 1m candle.
     if side:
-        # Stop-first, but execute scheduled exit at the open BEFORE testing this minute\u0027s range.\n        scheduled=(side==1 and el) or (side==-1 and es)\n        if scheduled:\n            x=float(r.open);reason="signal"\n        else:\n            x=None\n        hit=(float(r.low)<=stop if side==1 else float(r.high)>=stop)
+        # A completed 4H signal executes at the current minute OPEN.
+        # Otherwise, check the current minute for a stop, with gap-aware fills.
+        scheduled=(side==1 and el) or (side==-1 and es)
+        if scheduled:
+            x=float(r.open)
+            reason="signal"
+        else:
+            x=None
+        hit=(float(r.low)<=stop if side==1 else float(r.high)>=stop)
         if x is None and hit:
             x=min(float(r.open),stop) if side==1 else max(float(r.open),stop)
             reason="stop"
