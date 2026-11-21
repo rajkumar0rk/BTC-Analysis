@@ -288,12 +288,12 @@ def main():
             stop_update_trades=("stop_update_count",lambda x:int((x>0).sum())))
         d["model"]=model
         groups.append(d)
-    summary=pd.DataFrame(result)
+    summary_df=pd.DataFrame(result)
     monthly=pd.concat(allmonth,ignore_index=True)
     yy=pd.DataFrame(year)
     sens=pd.DataFrame(extra)
     grouping=pd.concat(groups,ignore_index=True)
-    summary.to_csv(OUT/"comparison_summary.csv",index=False)
+    summary_df.to_csv(OUT/"comparison_summary.csv",index=False)
     monthly.to_csv(OUT/"monthly_account_returns.csv",index=False)
     yy.to_csv(OUT/"yearly_account_returns.csv",index=False)
     sens.to_csv(OUT/"additional_spread_sensitivity.csv",index=False)
@@ -327,7 +327,7 @@ def main():
       "",
       "## Quality","~~~json",json.dumps(quality,indent=2),"~~~","",
       "## After-cost 22-month account returns",
-      summary.to_markdown(index=False),"",
+      summary_df.to_markdown(index=False),"",
       "## Annual net returns (training-only months count as idle)",
       yy.to_markdown(index=False),"",
       "## Complete month-by-month after-cost % returns",
@@ -342,7 +342,7 @@ def main():
       "Historical monthly eligibility was trained on shadow trades made with the original 3R exits, NOT with the new exit variants. Thus even an improved exit model is a conditional ablation, not an internally re-trained standalone alpha system. Bid/ask, realized funding, liquidation and exchange contract rounding not reconstructed. Drawdown only at trade exits. Never promote a result to real-money trading without genuinely unseen forward testing and actual exchange-cost verification.",
     ]
     (OUT/"RESEARCH_REPORT.md").write_text("\n".join(report)+"\n")
-    print("SUMMARY\n"+summary.to_string(index=False))
+    print("SUMMARY\n"+summary_df.to_string(index=False))
     print("YEARLY\n"+yy.to_string(index=False))
     print("MONTHLY\n"+monthly.pivot(index="month_ist",columns="model",values="month_net_return_pct").round(3).to_string())
     print("STRESS\n"+sens.to_string(index=False))
