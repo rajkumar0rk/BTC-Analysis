@@ -90,7 +90,7 @@
     "volatility_classification": "Completed 1H ATR14 / last 1H close >=0.007 high volatility"
   },
   "leader_full_1x_account_if_qualified_or_exploratory": {
-    "strategy": "h1_ema20_50_m15_prior4_ema20_touch_previous_high_break_200tp_100sl_1x",
+    "strategy": "V01_EXHAUSTION_FADE_HIGHVOL",
     "data_quality": {
       "instrument": "Delta Exchange India BTCUSD perpetual",
       "files_used": [
