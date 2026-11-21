@@ -1,0 +1,46 @@
+{
+  "research_validation": "PASS",
+  "strategy_live_approval": "BLOCKED",
+  "strategy_enterprise_deployment_approved": false,
+  "current_market_classifier_history_repaint": false,
+  "cross_timeframe_lookahead": false,
+  "entry_before_15m_confirmation": false,
+  "overlapping_positions": false,
+  "costs_and_monthly_cash_reconciled": true,
+  "full_22_calendar_months_evaluated": true,
+  "selected_positive_months": 9,
+  "selected_net_return_pct": -22.1561,
+  "selected_profit_factor": 0.7996,
+  "target_22_of_22_met": false,
+  "actual_bid_ask_historical_available": false,
+  "funding_settlement_cash_flows_modelled": false,
+  "exchange_liquidation_contract_size_validated": false,
+  "independent_future_unseen_holdout_available": false,
+  "comparator_evidence": {
+    "ungated_immediate": {
+      "trades": 1229,
+      "profit_factor": 0.8167,
+      "final_equity": 4595.54,
+      "positive_months": 6,
+      "first_entry": "2025-01-04 14:00:00+00:00",
+      "last_exit": "2026-10-31 18:29:00+00:00"
+    },
+    "regime_eligible_immediate": {
+      "trades": 539,
+      "profit_factor": 0.8159,
+      "final_equity": 6973.78,
+      "positive_months": 7,
+      "first_entry": "2025-01-09 18:00:00+00:00",
+      "last_exit": "2026-10-31 18:29:00+00:00"
+    },
+    "four_layer_15m_confirmed": {
+      "trades": 337,
+      "profit_factor": 0.7996,
+      "final_equity": 7784.39,
+      "positive_months": 9,
+      "first_entry": "2025-01-12 09:15:00+00:00",
+      "last_exit": "2026-10-29 14:33:00+00:00"
+    }
+  },
+  "conclusion": "The four-layer causal execution system passes research integrity checks but the selected strategy loses money after modeled fees/GST/slippage. Correct classification and modular code are NOT evidence of a live trading edge."
+}
