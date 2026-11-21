@@ -60,7 +60,7 @@ def label_every_candidate(k_arr,day_end,op,hi,lo,cl):
                     exj=j
                     break
             entryfill=ent+side*5.0
-            exitfill=closep-side*core.SLIP_POINTS
+            exitfill=closep-side*5.0
             gross=side*(closep-ent)
             feepts=0.00059*(entryfill+exitfill)
             net=gross-2*5.0-feepts
