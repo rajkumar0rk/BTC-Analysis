@@ -1,0 +1,21 @@
+{
+  "source": "Delta India BTCUSD native 1M, SHA256 and timestamp audited",
+  "native_minutes": 992160,
+  "native_partitions": 23,
+  "state_causal_prefix_invariance_verified": true,
+  "all_models_on_identical_single_account_1M_engine": true,
+  "legacy_selector_parity_verified": true,
+  "shock_only_parity_verified": true,
+  "calendar_months": 22,
+  "predeclared_comparators": [
+    "no_trade",
+    "fixed_logic",
+    "shock_only",
+    "prior_selector",
+    "strict_lower_bound"
+  ],
+  "historical_spread_realized_funding_liquidation_included": false,
+  "historical_funding_is_rate_proxy_not_settlement": true,
+  "is_externally_blind_holdout": false,
+  "cost_stress_hypothetical_not_historical": true
+}

@@ -1,0 +1,6 @@
+model,trades,wins,losses,positive_months,negative_months,idle_months,positive_evaluation_months,net_return_pct,net_pnl_usd,ending_equity_usd,profit_factor,max_trade_close_drawdown_pct,total_fee_gst_usd,total_slippage_usd,passes_22_profitable_months,candidate_signal_hours,selected_signal_hours,blocked_due_exclusive_position,actually_executed_trades
+no_trade,0,0,0,0,0,22,0,0.0,0.0,10000.0,,0.0,0.0,0.0,False,6418,0,0,0
+fixed_logic,688,234,454,8,14,0,8,-34.8618,-3486.18,6513.82,0.8211,36.995,3992.07,386.34,False,6418,1369,681,688
+shock_only,301,107,194,10,12,0,8,3.3469,334.69,10334.69,1.0316,9.177,1841.47,184.26,False,6418,390,89,301
+prior_selector,221,68,153,2,12,8,2,-24.0037,-2400.37,7599.63,0.6763,24.635,1386.46,148.81,False,6418,401,180,221
+strict_lower_bound,0,0,0,0,0,22,0,0.0,0.0,10000.0,,0.0,0.0,0.0,False,6418,0,0,0
