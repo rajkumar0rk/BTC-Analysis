@@ -1,0 +1,47 @@
+name: Full 22-month BTC ETH 1H trailing 1m mark backtest
+on:
+  push:
+    branches:
+      - research/full-history-1h-trailing-2025-2026
+    paths:
+      - scripts/full_history_1h_trailing_100_50_2025_2026.py
+      - .github/workflows/full-history-1h-trailing-2025-2026.yml
+permissions:
+  contents: write
+concurrency:
+  group: research-full-history-1h-ema20-supertrend-trailing
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install pandas==2.2.3 numpy==2.2.3
+      - name: Compile and verify research unit tests
+        run: |
+          python -m py_compile scripts/full_history_1h_trailing_100_50_2025_2026.py
+          python -c 'import sys;sys.path.insert(0,"scripts");from full_history_1h_trailing_100_50_2025_2026 import test;test();print("FULL_BACKTEST_UNIT_TESTS_PASS")'
+      - name: Replay 22 complete months plus partial November
+        run: python scripts/full_history_1h_trailing_100_50_2025_2026.py
+      - name: Upload result ledgers and monthly reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-22-month-trailing-results
+          path: analysis/full_history_1h_trailing_100_50/
+          if-no-files-found: warn
+      - name: Save only research output on dedicated branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/full_history_1h_trailing_100_50/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: full BTC ETH 1h trailing backtest monthly and trade ledger"
+            git push origin HEAD:research/full-history-1h-trailing-2025-2026
+          fi
