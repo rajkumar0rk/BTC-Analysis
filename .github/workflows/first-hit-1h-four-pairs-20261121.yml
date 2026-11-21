@@ -1,0 +1,30 @@
+name: 1H EMA20 Supertrend first touch 4 TP SL pairs BTC ETH
+on:
+  push:
+    branches:
+      - research/1h-first-hit-grid-200-100-300-100-600-200-900-300-20261121
+    paths:
+      - scripts/first_hit_1h_four_pairs_20261121.py
+      - .github/workflows/first-hit-1h-four-pairs-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install pandas numpy
+      - name: Run 1H signals with genuine 1M first-touch execution
+        run: python scripts/first_hit_1h_four_pairs_20261121.py
+      - name: Upload reproducible trade ledger
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 1h-btc-eth-first-touch-four-tp-sl
+          path: analysis/one_hour_first_hit_four_pairs_20261121/
