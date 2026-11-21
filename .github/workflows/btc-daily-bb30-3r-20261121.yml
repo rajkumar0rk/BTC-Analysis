@@ -5,6 +5,7 @@ on:
       - research/btc-daily-bb30-3r-20261121
     paths:
       - scripts/research_daily_bollinger_30_3r.py
+      - scripts/research_daily_bollinger_30_3r_concurrent.py
       - .github/workflows/btc-daily-bb30-3r-20261121.yml
   workflow_dispatch:
 permissions:
@@ -24,7 +25,9 @@ jobs:
       - name: Dependencies
         run: python -m pip install pandas numpy tabulate
       - name: Run historical Delta BTCUSD 1m replay
-        run: python scripts/research_daily_bollinger_30_3r.py
+        run: |
+          python scripts/research_daily_bollinger_30_3r.py
+          python scripts/research_daily_bollinger_30_3r_concurrent.py
       - name: Commit immutable research artifacts
         run: |
           git config user.name "github-actions[bot]"
