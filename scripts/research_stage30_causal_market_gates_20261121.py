@@ -99,7 +99,7 @@ def add_gate_features(events,f):
 
 def gate_subset(e,g):
     v=pd.Series(True,index=e.index)
-    if "chop_ge55" in g:v&=e.gate_chop>=55
+    if "chop_ge55" in g or "chop55" in g:v&=e.gate_chop>=55
     if "chop_ge60" in g:v&=e.gate_chop>=60
     if "channel_no_break" in g:v&=e.gate_channel_no_break
     if "atr_ratio_le1p2" in g:v&=e.gate_atr_ratio<=1.2
