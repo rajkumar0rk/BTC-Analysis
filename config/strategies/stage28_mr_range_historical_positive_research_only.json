@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "btc_mr_range_historical_positive_candidates_stage28",
+  "market": "BTCUSD_FUTURES",
+  "execution_mode": "BACKTEST_ONLY",
+  "enabled": false,
+  "research_status": "POST_HOC_FULL_HISTORY_TUNED__NOT_FORWARD_VALIDATED",
+  "evaluation_period": {
+    "from": "2025-01",
+    "through": "2026-10"
+  },
+  "cost_assumptions": {
+    "taker_rate_per_side": 0.0005,
+    "gst_on_fees": 0.18,
+    "slippage_points_per_side": 5,
+    "extra_stress_bps_per_side": 5
+  },
+  "size_model": {
+    "risk_fraction_per_trade": 0.005,
+    "max_notional_multiple": 5
+  },
+  "notes": "These choices were identified after inspecting ALL 2025-2026 historical models; treating Jan-Oct 2026 as out-of-sample would be false. Do not execute live.",
+  "strategies": [
+    {
+      "id": "MR_BOLL_H1_LONG_ATR3_MEAN_32H",
+      "family": "MEAN_REVERSION",
+      "enabled": false,
+      "setup": "Prior COMPLETED 1H close below lower 20-period Bollinger Band (2 std) and RSI(2)<=15; current completed bullish 1H closes back inside lower band, in upper part of candle, still below SMA20",
+      "filter": "4H completed-bar ADX<=45 and directional-efficiency8<=0.70",
+      "direction": "LONG",
+      "entry": "NEXT_1MIN_OPEN",
+      "stop": "Entry - 3 * 1H ATR14 frozen at signal",
+      "take_profit": "1H SMA20 frozen at signal",
+      "max_hold_minutes": 1920,
+      "historical": {
+        "trades": 66,
+        "train_2025_trades": 39,
+        "base_22m_pct": 4.449025,
+        "stress5_22m_pct": 2.273644,
+        "stress5_2025_pct": 1.650137,
+        "stress5_2026_JanOct_pct": 0.613385,
+        "stress5_profitable_months": 9,
+        "stress5_losing_months": 11,
+        "stress5_flat_months": 2
+      }
+    },
+    {
+      "id": "RANGE_TOUCH48_H1_LONG_STRUCT_3R_16H",
+      "family": "RANGE_TRADING",
+      "enabled": false,
+      "setup": "Prior 48 completed 1H candles define range; range width 2.5-15 ATR. Current completed bullish 1H touches lower bound without significant breach, closes >lower+0.35 ATR, close in upper 30% of candle, close below the range midpoint",
+      "filter": "4H completed-bar ADX<=32 and directional-efficiency8<=0.50",
+      "direction": "LONG",
+      "entry": "NEXT_1MIN_OPEN",
+      "stop": "min(current,prior 1H low) - 0.15*ATR14 (frozen at signal)",
+      "take_profit": "Entry + 3R (R distance to structural stop)",
+      "max_hold_minutes": 960,
+      "historical": {
+        "trades": 42,
+        "train_2025_trades": 27,
+        "base_22m_pct": 9.047982,
+        "stress5_22m_pct": 5.512804,
+        "stress5_2025_pct": 4.056451,
+        "stress5_2026_JanOct_pct": 1.39958,
+        "stress5_profitable_months": 9,
+        "stress5_losing_months": 7,
+        "stress5_flat_months": 6
+      }
+    }
+  ]
+}
