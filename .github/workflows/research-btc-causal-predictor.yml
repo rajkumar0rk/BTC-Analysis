@@ -1,0 +1,45 @@
+name: BTC 4H forward-state walkforward prediction and 1M trading test
+on:
+  push:
+    branches:
+      - research/btc-causal-4h-predictor-20261121
+    paths:
+      - scripts/research_btc_causal_predictor_20261121.py
+      - analysis/btc_causal_predictor_20261121/NOVELTY_CHECK.md
+      - .github/workflows/research-btc-causal-predictor.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-4h-causal-predictor
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical forecasting dependencies
+        run: python -m pip install numpy pandas scikit-learn tabulate
+      - name: Backtest every monthly past-only predictive market state
+        run: python scripts/research_btc_causal_predictor_20261121.py
+      - name: Preserve model audit and trade evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-past-only-4h-predictor-research-20261121
+          path: analysis/btc_causal_predictor_20261121/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Save immutable research results on branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_causal_predictor_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save causal monthly predictor and 1M results"
+            git push origin HEAD:research/btc-causal-4h-predictor-20261121
+          fi
