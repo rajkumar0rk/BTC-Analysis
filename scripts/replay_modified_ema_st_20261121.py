@@ -63,7 +63,7 @@ MODES=(
 @njit
 def core(op,hi,lo,cl,clock,signal,atr_st,st_line,flipdir,
          asset_eth,stopkind,stoparg,profit_r,be_r,activation_r,distance_r,
-         use_flip,tick,qty,fee_rate,gst,entry_cutoff,maxtrades):
+         use_flip,tick,qty,fee_rate,gst,entry_cutoff,maxtrades,max_risk_fraction=0.0):
     eidx=np.empty(maxtrades,np.int64)
     xidx=np.empty(maxtrades,np.int64)
     enter=np.empty(maxtrades,np.float64)
@@ -99,6 +99,8 @@ def core(op,hi,lo,cl,clock,signal,atr_st,st_line,flipdir,
                 if d>tick and np.isfinite(d) and np.isfinite(e):
                     # nearest exchange tick for protective risk distance
                     d=max(tick,np.floor(d/tick+0.5)*tick)
+                    if max_risk_fraction>0. and d>e*max_risk_fraction:
+                        d=max(tick,np.floor(e*max_risk_fraction/tick+0.5)*tick)
                     pstop=e-sg*d
                     ptp=(e+sg*profit_r*d) if profit_r>0 else 0.
                     pos=int(sg)
