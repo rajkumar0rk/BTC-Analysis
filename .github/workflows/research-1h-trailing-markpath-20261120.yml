@@ -1,0 +1,46 @@
+name: BTC ETH 1H Demo trailing-stop replay 20 Nov IST
+on:
+  push:
+    branches:
+      - research/1h-intraminute-trailing-20261120-ist
+    paths:
+      - scripts/backtest_1h_trailing_mark_path_20261120.py
+      - .github/workflows/research-1h-trailing-markpath-20261120.yml
+permissions:
+  contents: write
+concurrency:
+  group: research-1h-trailing-markpath
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==2.2.3 numpy==2.2.3
+      - name: Validate and test causal trailing-stop logic
+        run: |
+          python -m py_compile scripts/backtest_1h_trailing_mark_path_20261120.py
+          python -c 'import sys;sys.path.insert(0,"scripts");from backtest_1h_trailing_mark_path_20261120 import unit_tests;unit_tests();print("TRAIL TESTS PASS")'
+      - name: Execute 1H signal and 1m mark-path trailing-stop scenarios
+        run: python scripts/backtest_1h_trailing_mark_path_20261120.py
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 1h-ema-st-trailing-1m-path-sensitivity-20261120-ist
+          path: analysis/demo_trailing_1h_nov20_ist_2026/
+          if-no-files-found: warn
+      - name: Commit only scenario results on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/demo_trailing_1h_nov20_ist_2026/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: 1H Demo trailing sensitivity outcomes Nov20 IST"
+            git push origin HEAD:research/1h-intraminute-trailing-20261120-ist
+          fi
