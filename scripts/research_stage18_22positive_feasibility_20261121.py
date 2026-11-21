@@ -136,7 +136,7 @@ def main():
 
             # Choose using ONLY the 2025 training portion. Require positive
             # all 12 months if possible; rank by training return secondarily.
-            first12=wc*c[None if False else :,None,:12]+wd*d[None,:,:12]+wh*hk[:12]
+            first12=wc*c[:,None,:12]+wd*d[None,:,:12]+wh*hk[:12]
             positive_25=(first12>EPS).sum(axis=-1)
             maxpositive=int(positive_25.max())
             ix,jx=np.where(positive_25==maxpositive)
