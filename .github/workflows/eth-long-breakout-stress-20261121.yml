@@ -1,0 +1,27 @@
+name: ETH Long Breakout 4H 15M Slippage Robustness Audit
+on:
+  push:
+    branches: [research/new-4h-trend-15m-breakout-1m-20261121]
+    paths:
+      - scripts/research_eth_long_breakout_stress_audit_20261121.py
+      - .github/workflows/eth-long-breakout-stress-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy
+      - name: Replay ETH breakout long-only with 0-8 bps execution stress
+        run: python scripts/research_eth_long_breakout_stress_audit_20261121.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eth-long-breakout-stress-audit-20261121
+          path: analysis/eth_long_breakout_stress_audit_20261121/
