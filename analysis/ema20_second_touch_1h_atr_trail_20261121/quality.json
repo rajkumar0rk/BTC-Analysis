@@ -1,0 +1,32 @@
+{
+  "source": {
+    "BTCUSD": {
+      "rows": 963030,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-10-31 18:29:00+00:00",
+      "partitions_sha256_verified": 22,
+      "missing_minutes": 0
+    },
+    "ETHUSD": {
+      "rows": 963030,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-10-31 18:29:00+00:00",
+      "partitions_sha256_verified": 22,
+      "missing_minutes": 0
+    }
+  },
+  "entry": "Second EMA20 touch on a distinct post-flip 1h candle, immediate 1m approximation",
+  "supertrend": "10,3; one entry per confirmed direction epoch",
+  "exit": "2x ATR(14) 1h trailing; updated from last completed hour, once per 1m after checking previous stop",
+  "initial_atr_stop": true,
+  "fixed_tp": false,
+  "separate_fixed_sl": false,
+  "hourly_volume_and_volatility_filters": false,
+  "fees": "0.05 percent taker per side; 18 percent GST",
+  "adverse_slippage_fraction_each_side": 0.0002,
+  "capital_usd": 1000.0,
+  "model_exposure": "1x evolving equity",
+  "no_orderbook_funding_actual_liquidation_or_tick_sequence": true,
+  "month_scope": "2025-01 to 2026-10 Asia/Kolkata",
+  "one_minute_double_cross": "active stop checked before favorable trailing updates"
+}
