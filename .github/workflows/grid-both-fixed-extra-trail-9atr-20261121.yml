@@ -1,0 +1,50 @@
+name: Sweep BOTH trailing controls, BTC ETH, week and 22 months
+on:
+  push:
+    branches:
+      - research/grid-both-fixed-and-extra-trail-9atr-20261121
+    paths:
+      - scripts/grid_both_fixed_extra_9atr_20261121.py
+      - .github/workflows/grid-both-fixed-extra-trail-9atr-20261121.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research-dual-trailing-grid-20261121
+  cancel-in-progress: false
+
+jobs:
+  historical:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned causal replay dependencies
+        run: python -m pip install numpy==2.2.3 pandas==2.2.3 numba==0.61.2
+      - name: Run dual-control parameter sweep
+        run: |
+          python -m py_compile scripts/grid_both_fixed_extra_9atr_20261121.py
+          python scripts/grid_both_fixed_extra_9atr_20261121.py
+      - name: Upload all scenario rankings, full22 monthly and current weekly trades
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: both-trailing-controls-9atr-grid-week-and22months
+          path: analysis/dual_trailing_all_values_9atr_week_full22_20261121/
+          if-no-files-found: warn
+      - name: Commit research reports only, exclude temporary November refreshed data
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/dual_trailing_all_values_9atr_week_full22_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: dual trail activation distance extra stop grid full 22 months + week"
+            git push origin HEAD:research/grid-both-fixed-and-extra-trail-9atr-20261121
+          fi
