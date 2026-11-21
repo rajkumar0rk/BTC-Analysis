@@ -193,7 +193,7 @@ def run(one,h,sides):
 
 def summarize(one,h,tr,manifest):
     census=h[h.valid].copy()
-    census["month_ist"]=census.index.tz_convert("Asia/Kolkata").strftime("%Y-%m")
+    census["month_ist"]=(census.index+pd.Timedelta(hours=1)).tz_convert("Asia/Kolkata").strftime("%Y-%m")
     census=census[census.month_ist<=LAST_MONTH]
     count=census.regime.value_counts().reindex(STATES,fill_value=0)
     share=pd.DataFrame({"regime":STATES,"hours":count.values,
@@ -257,7 +257,7 @@ def summarize(one,h,tr,manifest):
         fee_each_side_incl_gst=FEE,slippage_each_side_btc_price_points=SLIP,
         account_initial_usd=INITIAL,stop_risk_fraction=RISK,leverage_cap=LEV_CAP,
         complete_IST_months=len(months),partial_Nov_2026_excluded=True,
-        2026_is_not_blind_holdout=True)
+        is_2026_blind_holdout=False)
     (OUT/"quality.json").write_text(json.dumps(q,indent=2)+"\n")
     rpt=[
       "# BTCUSD 1H regime frequencies and conditional fixed-strategy backtest","",
