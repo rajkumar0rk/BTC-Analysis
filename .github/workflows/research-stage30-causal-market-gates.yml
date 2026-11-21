@@ -1,0 +1,35 @@
+name: BTC Stage30 causal market-condition filters MR and Range
+on:
+  push:
+    branches:
+      - research/stage30-causal-market-regime-gates-20261121
+    paths:
+      - scripts/research_stage30_causal_market_gates_20261121.py
+      - .github/workflows/research-stage30-causal-market-gates.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  causal-regime-backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install research libraries
+        run: python -m pip install pandas numpy numba
+      - name: Syntax check
+        run: python -m py_compile scripts/research_stage30_causal_market_gates_20261121.py
+      - name: Backtest finished-candle 4H choppiness and volatility gates using BTCUSD 1m
+        run: PYTHONUNBUFFERED=1 PYTHONPATH=scripts python scripts/research_stage30_causal_market_gates_20261121.py
+      - name: Store monthly and trade audit even if partial
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-stage30-market-regime-meanreversion-range-results
+          path: analysis/stage30_causal_regime_gate_20261121/
+          if-no-files-found: warn
+          retention-days: 30
