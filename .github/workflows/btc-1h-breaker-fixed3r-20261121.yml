@@ -1,0 +1,35 @@
+name: BTC 1H Breaker Block Fixed 3R Real-1m Test
+on:
+  push:
+    branches:
+      - research/btc-1h-breaker-3r-20261121
+    paths:
+      - scripts/research_hourly_breaker_block_3r.py
+      - .github/workflows/btc-1h-breaker-fixed3r-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-breaker-3r-20261121
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install pandas numpy tabulate
+      - name: Run fixed-hypothesis causal 1H breaker 3R test
+        run: python scripts/research_hourly_breaker_block_3r.py
+      - name: Commit reproducible results to isolated research branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/hourly_breaker_block_3r/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: store BTC 1H breaker 3R performance and trades"
+            git push
