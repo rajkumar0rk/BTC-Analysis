@@ -1,0 +1,51 @@
+name: BTC ETH 1H EMA second touch activation200 trail1 path sensitivity
+on:
+  push:
+    branches: [research/ema20-second-touch-1h-activate200-trail1-20261121]
+    paths:
+      - scripts/research_ema20_second_touch_1h_activate200_trail1_paths.py
+      - .github/workflows/research-ema20-second-touch-1h-activate200-trail1.yml
+      - analysis/ema20_second_touch_1h_activation200_trail1_20261121/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ema20-1h-activation200-trail1-paths
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy pandas
+        run: python -m pip install numpy pandas
+      - name: Replay explicit within-1m path assumptions
+        shell: bash
+        run: |
+          mkdir -p analysis/ema20_second_touch_1h_activation200_trail1_20261121/
+          set -o pipefail
+          python -u scripts/research_ema20_second_touch_1h_activate200_trail1_paths.py 2>&1 | tee analysis/ema20_second_touch_1h_activation200_trail1_20261121/execution.log
+      - name: Upload research results or diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-1h-activate200-trail1-ohlc-path-sensitivity
+          path: analysis/ema20_second_touch_1h_activation200_trail1_20261121/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Commit outputs to research branch only
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ema20_second_touch_1h_activation200_trail1_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive activation200 trail1 with transparent 1m path assumptions"
+            git push origin HEAD:research/ema20-second-touch-1h-activate200-trail1-20261121
+          fi
