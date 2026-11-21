@@ -334,7 +334,7 @@ def main():
         "- 2025 archive begins UTC Jan 1 and excludes first 5.5 IST hours of Jan 2025.",
         "","Outputs: summary.csv, monthly_mark_to_market.csv, trade_ledger.csv.gz, quality.json."
     ]
-    (OUT/"RESEARCH_REPORT.md").write_text("\\n".join(lines)+"\n")
+    (OUT/"RESEARCH_REPORT.md").write_text("\n".join(lines)+"\n")
     print("BACKTEST_DONE",json.dumps(summaries,default=str),flush=True)
 
 if __name__=="__main__":
