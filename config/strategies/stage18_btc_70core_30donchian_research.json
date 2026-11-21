@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "strategy_id": "stage18-btc-70core-30donchian-research",
+  "description": "Stage18 monthly-rebalanced synthetic 70/30 BTC Futures allocation, research only; do not deploy live",
+  "execution_mode": "BACKTEST_ONLY",
+  "market": "BTCUSD_FUTURES",
+  "timezone": "Asia/Kolkata",
+  "sample": {
+    "first_month": "2025-01",
+    "last_month": "2026-10"
+  },
+  "allocation": {
+    "core": 0.7,
+    "donchian": 0.3,
+    "rebalance": "monthly_end_synthetic"
+  },
+  "core": {
+    "name": "4H Trend + 1H Pullback + 15M Breakout",
+    "archive_signal_family": "S13_pullback_near_half_atr",
+    "previous_month_efficiency_max": 0.25,
+    "adx_4h_max": 18,
+    "h1_relative_volume_max": 1.2,
+    "min_structural_stop_points": 150,
+    "max_structural_stop_points": 700,
+    "take_profit_R": 5,
+    "max_hold_minutes": 240,
+    "theoretical_risk_per_trade_fraction": 0.005,
+    "max_notional_multiple": 3,
+    "monthly_accounting": "exit_month_realized",
+    "execution": "next_available_1m_open"
+  },
+  "donchian": {
+    "name": "Daily Donchian55 EMA50 Breakout",
+    "channel_days": 55,
+    "ema_filter": "ema50_agrees",
+    "initial_stop_atr": 2,
+    "trailing_stop_atr": 3,
+    "max_hold_days": 30,
+    "exit_on_opposite_signal": true,
+    "history_complete_days": 120,
+    "risk_per_trade_fraction": 0.005,
+    "monthly_accounting": "month_end_mark_to_market",
+    "execution": "next_available_1m_open"
+  },
+  "costs": {
+    "taker_fee_rate_per_side": 0.0005,
+    "gst_rate": 0.18,
+    "base_adverse_slippage_points_per_side": 5,
+    "extra_adverse_slippage_bps_per_side": [
+      0,
+      2,
+      5
+    ],
+    "funding_included": false,
+    "measured_spread_included": false,
+    "actual_liquidation_included": false
+  },
+  "limitations": [
+    "No live orders; this script provides a synthetic monthly-rebalanced return blend",
+    "Open Donchian positions crossing month-end are not actually resized; rebalance is synthetic",
+    "No integrated account PnL, margin, liquidations, funding, spreads, contract precision, or portfolio cross-position netting",
+    "Core uses exit-month accounting while Donchian uses month-end mark-to-market",
+    "Historical dates were examined in prior research, no untouched out-of-sample evidence",
+    "Never assume 19 profitable months repeat in forward live market"
+  ]
+}
