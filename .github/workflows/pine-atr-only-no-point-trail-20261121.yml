@@ -5,13 +5,13 @@ on:
       - research/pine-15m-atr-only-no-point-trailing-20261121
     paths:
       - scripts/backtest_pine_atr_only_no_fixed_no_points_20261121.py
-      - .github/workflows/pine-atronly-15m-1m-source-20261121.yml
+      - .github/workflows/pine-atr-only-no-point-trail-20261121.yml
 
 permissions:
   contents: write
 
 concurrency:
-  group: pine-atr-only-15m-source-20261121
+  group: pine-atr-only-no-fixed-no-points-20261121
   cancel-in-progress: false
 
 jobs:
