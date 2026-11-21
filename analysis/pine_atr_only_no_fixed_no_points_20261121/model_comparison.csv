@@ -1,0 +1,9 @@
+scenario,net_full22,pf_full22,trades_full22,positive_months,net_2025,net_2026,net_week,trades_week
+btc_traded_tv_nearest_scalper_assumed,-286.06737,0.5955,3746,1,-200.61239,-85.45499,1.36712,34
+btc_traded_tv_nearest_no_scalper,-345.24017,0.5308,3746,1,-245.29848,-99.94169,1.10357,34
+btc_traded_alternate_path_scalper_assumed,-286.06737,0.5955,3746,1,-200.61239,-85.45499,1.36712,34
+btc_traded_alternate_path_no_scalper,-345.24017,0.5308,3746,1,-245.29848,-99.94169,1.10357,34
+btc_mark_tv_nearest_scalper_assumed,-313.79948,0.5697,3720,1,-219.86004,-93.93944,0.87651,34
+btc_mark_tv_nearest_no_scalper,-370.49789,0.5107,3720,0,-262.66146,-107.83643,0.57477,34
+btc_mark_alternate_path_scalper_assumed,-313.79948,0.5697,3720,1,-219.86004,-93.93944,0.87651,34
+btc_mark_alternate_path_no_scalper,-370.49789,0.5107,3720,0,-262.66146,-107.83643,0.57477,34
