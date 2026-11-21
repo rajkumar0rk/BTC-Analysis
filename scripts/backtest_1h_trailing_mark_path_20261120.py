@@ -103,7 +103,7 @@ def simulate(asset,h,trade,mark,product,entry_timing,path_order,extra_slip_ticks
                 stop=max(atr,near) if side==1 and near is not None else (
                     min(atr,near) if side==-1 and near is not None else atr)
                 if side*(stop-entry)>=0:reason="invalid_stop_vs_entry"
-                elif side*(mark_entry-stop)>=0:reason="mark_crosses_initial_stop"
+                elif side*(mark_entry-stop)<=0:reason="mark_crosses_initial_stop"
             if reason is None:
                 activation=100. if asset=="BTC" else max(tick,math.floor((entry*100/80000)/tick+.5)*tick)
                 distance=50. if asset=="BTC" else max(tick,math.floor((entry*50/80000)/tick+.5)*tick)
