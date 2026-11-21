@@ -66,15 +66,10 @@ def main():
             if tp2>=tp1:tp2=tp1-.5*sd0
         # Gaps beyond the structural stop are not tradable at an assumed better fill.
         if side*(entry-stop)<=0:continue
-        qty=cash/entry
-        start_cash=cash
-        fee_in=qty*entry*FEE
-        cash-=fee_in
+        # Pre-entry idle NAV must not include a fee paid only at entry.\n        minute_nav[cursor:k]=cash\n        qty=cash/entry\n        start_cash=cash\n        fee_in=qty*entry*FEE\n        cash-=fee_in
         realized=0.;rem=qty;partial=False
         exit_parts=[];end=min(k+240,len(raw),int(seg_end[k]))
         if end<=k:continue
-        for j in range(cursor,k):
-            minute_nav[j]=cash
         for j in range(k,end):
             # Mark-to-market at 1m close; prioritize stop over TP on same minute.
             if side==1:
@@ -120,7 +115,6 @@ def main():
     ends=ist.resample("ME").last()
     start_nav=1.;monthly=[]
     for m in MONTHS:
-        e=ends.get(pd.Timestamp(m+"-01",tz="Asia/Kolkata")+pd.offsets.MonthEnd(0),np.nan)
         # Period end timezone matching via PeriodIndex avoids DST and month-label confusion.
         e=next((float(v) for t,v in ends.items() if t.strftime("%Y-%m")==m),float("nan"))
         if not np.isfinite(e):raise RuntimeError("Missing IST month "+m)
@@ -132,7 +126,7 @@ def main():
     table.to_csv(OUT/"monthly_ist_nav.csv",index=False)
     # All minute marks saved for audit, compressed to avoid artifact size blowup.
     nav.rename("account_nav").to_csv(OUT/"minute_nav.csv.gz",compression="gzip")
-    summary=dict(source_commit="7f9bcd24d0e1cf7258699f4835ecd80dcb684a84",
+    # Stop-first on every minute is conservative, but entry-minute OHLC paths\n    # are unknowable: an adverse gap at the next open must not be filled\n    # at a more favorable stop.\n    summary=dict(source_commit="7f9bcd24d0e1cf7258699f4835ecd80dcb684a84",
                  data_quality=quality,signals=len(signals),trades=len(rows),
                  net_return_pct=100*(cash-1),positive_months=int((table.net_return_pct>0).sum()),
                  losing_months=int((table.net_return_pct<0).sum()),
