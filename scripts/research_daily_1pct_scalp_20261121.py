@@ -111,6 +111,25 @@ def features(f):
     eligible=np.asarray(session,bool)&valid_day&present
     longmask={"trend":trend_long,"sweep":sweep_long}
     shortmask={"trend":trend_short,"sweep":sweep_short}
+    # Correctness diagnostics: assert non-degenerate time and signal alignment.
+    print("SIGNAL_DIAGNOSTIC",json.dumps({
+        "minute_rows":len(f),"fifteen_bars":len(b15),
+        "valid_15m":int(valid.sum()),"complete_hours":int(v1h.sum()),
+        "finite_hour_spread":int(np.isfinite(spread).sum()),
+        "hour_trend_up":int(trend_up.sum()),"hour_trend_down":int(trend_down.sum()),
+        "session_eligible":int(eligible.sum()),
+        "next_open_matches":int(present.sum()),
+        "vol_ge_1p25":int(vu.sum()),
+        "trend_long_unrestricted":int(trend_long.sum()),
+        "trend_short_unrestricted":int(trend_short.sum()),
+        "sweep_long_unrestricted":int(sweep_long.sum()),
+        "sweep_short_unrestricted":int(sweep_short.sum()),
+        "trend_session_signals":int((eligible&(trend_long|trend_short)).sum()),
+        "sweep_session_signals":int((eligible&(sweep_long|sweep_short)).sum()),
+        "first_15m":str(b15.index[0]),"first_hour":str(b1h.index[0]),
+        "sample_hour_e20":float(aligned.e20.dropna().iloc[0]) if aligned.e20.notna().any() else None,
+        "sample_first_close":float(b15.close.iloc[0])
+    }))
     models={}
     for name in ("trend","sweep","combined"):
         if name=="combined":
