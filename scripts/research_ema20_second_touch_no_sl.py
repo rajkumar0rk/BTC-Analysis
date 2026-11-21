@@ -67,6 +67,15 @@ def model(bars, btc_prev, symbol):
                 last_direction=direction
             if pos is not None:
                 side=pos["side"]
+                # The TP-hit 1m candle may also have moved deeply against us.
+                # Include the adverse wick in each trade's MAE before exiting,
+                # rather than silently omitting same-bar adverse excursion.
+                adverse_now=(max(0.,pos["entry"]-lo[i]) if side==1
+                             else max(0.,hi[i]-pos["entry"]))
+                pos["mae_pts"]=max(pos["mae_pts"],adverse_now)
+                pos["mae_pct"]=max(pos["mae_pct"],100*adverse_now/pos["entry"])
+                max_adverse_points=max(max_adverse_points,adverse_now)
+                max_adverse_pct=max(max_adverse_pct,pos["mae_pct"])
                 # No SL, and no Supertrend reversal/timeout exit.
                 # TP only on strictly subsequent 1m bars.
                 tgt=pos["target"]
