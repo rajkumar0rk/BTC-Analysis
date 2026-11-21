@@ -1,0 +1,43 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "research_rules": {
+    "first_lock_activation_BTC_points": 200.0,
+    "each_subsequent_lock_increment_BTC_points": 200.0,
+    "breach_price_increment_BTC": 1.0,
+    "scaled_ETH_step": "200*ETH executed entry / previous completed 1m BTC close",
+    "scaled_ETH_breach": "1*ETH executed entry / previous completed 1m BTC close",
+    "user_example": "entry 80000, 80200 locks 80200, 80300 still 80200, 80400 locks 80400, next 80399 exits",
+    "no_continuous_peak_trailing": true,
+    "exit_on_confirmed_1h_supertrend_flip": true,
+    "supertrend_flip_executes": "first 1m open of following 1h candle after flip confirmation",
+    "exit_whichever_happens_first": "step profit lock breach OR confirmed Supertrend flip",
+    "synthetic_path_assumptions": [
+      "O-H-L-C",
+      "O-L-H-C"
+    ],
+    "verified_tick_stream_available": false,
+    "warning": "1m OHLC artificial continuous paths are NOT realized tick backtests; a strict 1-point reversal and real order fills cannot be verified",
+    "fixed_take_profit": null,
+    "stop_before_first_step": null,
+    "entry": "second post-flip distinct 1h candle EMA20 touch",
+    "supertrend": "10,3 confirmed on closed 1h",
+    "fees_taker_each_side": 0.0005,
+    "GST_on_fees_fraction": 0.18,
+    "adverse_slippage_each_side": 0.0002,
+    "no_real_bidask_liquidation_funding_or_latency_model": true,
+    "months": "2025-01 through 2026-10 IST; Jan 2025 first 5h30m outside UTC-start data"
+  }
+}
