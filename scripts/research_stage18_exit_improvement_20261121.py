@@ -41,7 +41,29 @@ CASES=[
  ("trail_activate_3_dist_1R",5,240,"trail",{"activate":3.,"distance":1.}),
  ("trail_activate_3_dist_1p5R",5,240,"trail",{"activate":3.,"distance":1.5}),
  ("trail_activate_2_dist_2R",5,240,"trail",{"activate":2.,"distance":2.}),
- ("trail_activate_3_dist_2R",5,240,"trail",{"activate":3.,"distance":2.})
+ ("trail_activate_3_dist_2R",5,240,"trail",{"activate":3.,"distance":2.}),
+ ("entry_adx_le12",5,240,"fixed",{"entry_filter":"adx_le12"}),
+ ("entry_adx_le15",5,240,"fixed",{"entry_filter":"adx_le15"}),
+ ("entry_adx_ge10",5,240,"fixed",{"entry_filter":"adx_ge10"}),
+ ("entry_atr4_le08",5,240,"fixed",{"entry_filter":"atr4_le08"}),
+ ("entry_atr4_le1",5,240,"fixed",{"entry_filter":"atr4_le1"}),
+ ("entry_atr4_ge1",5,240,"fixed",{"entry_filter":"atr4_ge1"}),
+ ("entry_h1vol_le08",5,240,"fixed",{"entry_filter":"h1vol_le08"}),
+ ("entry_h1vol_le10",5,240,"fixed",{"entry_filter":"h1vol_le10"}),
+ ("entry_h1vol_le15",5,240,"fixed",{"entry_filter":"h1vol_le15"}),
+ ("entry_month_eff_le20",5,240,"fixed",{"entry_filter":"month_eff_le20"}),
+ ("entry_month_eff_le15",5,240,"fixed",{"entry_filter":"month_eff_le15"}),
+ ("entry_month_eff_le30",5,240,"fixed",{"entry_filter":"month_eff_le30"}),
+ ("entry_breakvol_ge1",5,240,"fixed",{"entry_filter":"breakvol_ge1"}),
+ ("entry_breakvol_ge12",5,240,"fixed",{"entry_filter":"breakvol_ge12"}),
+ ("entry_breakvol_le1",5,240,"fixed",{"entry_filter":"breakvol_le1"}),
+ ("entry_risk_le500",5,240,"fixed",{"entry_filter":"risk_le500"}),
+ ("entry_risk_le700",5,240,"fixed",{"entry_filter":"risk_le700"}),
+ ("entry_risk_ge400",5,240,"fixed",{"entry_filter":"risk_ge400"}),
+ ("entry_long_only",5,240,"fixed",{"entry_filter":"long_only"}),
+ ("entry_short_only",5,240,"fixed",{"entry_filter":"short_only"}),
+ ("entry_adx15_atr1",5,240,"fixed",{"entry_filter":"adx15_atr1"}),
+ ("entry_adx15_vol5_ge1",5,240,"fixed",{"entry_filter":"adx15_vol5_ge1"})
 ]
 def replay(O,H,L,C,k,side,stop,targetR,hold,mode,params):
     entry=float(O[k])
@@ -87,9 +109,38 @@ def replay(O,H,L,C,k,side,stop,targetR,hold,mode,params):
 
 def simulate(events,f,c):
     name,rr,hold,mode,params=c
+    entry_filter=params.get("entry_filter","none")
+    volume_limit=1.5 if entry_filter=="h1vol_le15" else 1.2
+    efficiency_limit=.3 if entry_filter=="month_eff_le30" else .25
     e=events[(events.family==s15.FAMILY)&
-             (events.previous_month_eff<=.25)&
-             (events.h4_adx<=18)&(events.h1_vr<=1.2)]
+             (events.previous_month_eff<=efficiency_limit)&
+             (events.h4_adx<=18)&(events.h1_vr<=volume_limit)]
+    predicates={
+      "none": lambda x: x.h4_adx<=18,
+      "adx_le12": lambda x: x.h4_adx<=12,
+      "adx_le15": lambda x: x.h4_adx<=15,
+      "adx_ge10": lambda x: x.h4_adx>=10,
+      "atr4_le08": lambda x: x.h4_atr_ratio<=.8,
+      "atr4_le1": lambda x: x.h4_atr_ratio<=1.,
+      "atr4_ge1": lambda x: x.h4_atr_ratio>=1.,
+      "h1vol_le08": lambda x: x.h1_vr<=.8,
+      "h1vol_le10": lambda x: x.h1_vr<=1.,
+      "h1vol_le15": lambda x: x.h1_vr<=1.5,
+      "month_eff_le20": lambda x: x.previous_month_eff<=.20,
+      "month_eff_le15": lambda x: x.previous_month_eff<=.15,
+      "month_eff_le30": lambda x: x.previous_month_eff<=.30,
+      "breakvol_ge1": lambda x: x.volume_ratio_5m>=1.,
+      "breakvol_ge12": lambda x: x.volume_ratio_5m>=1.2,
+      "breakvol_le1": lambda x: x.volume_ratio_5m<=1.,
+      "risk_le500": lambda x: x.risk_pts<=500,
+      "risk_le700": lambda x: x.risk_pts<=700,
+      "risk_ge400": lambda x: x.risk_pts>=400,
+      "long_only": lambda x: x.side==1,
+      "short_only": lambda x: x.side==-1,
+      "adx15_atr1": lambda x: (x.h4_adx<=15)&(x.h4_atr_ratio<=1.),
+      "adx15_vol5_ge1": lambda x: (x.h4_adx<=15)&(x.volume_ratio_5m>=1.)
+    }
+    e=e[predicates[entry_filter](e)]
     e=e.sort_values(["k","side"],kind="stable")
     O=f.open.to_numpy(float);H=f.high.to_numpy(float)
     L=f.low.to_numpy(float);C=f.close.to_numpy(float)
