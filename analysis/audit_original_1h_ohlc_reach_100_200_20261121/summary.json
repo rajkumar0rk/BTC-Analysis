@@ -1,0 +1,68 @@
+{
+  "reference": "original 1H OHLC inferred-path profit BTC +4298.1778 / ETH +6773.09",
+  "date_window": "2025-01-01 through 2026-10-31 UTC, 22 complete months",
+  "source_branch": "research/ema-st-1h-stop-trail-hourly-20261120",
+  "metrics": "BTC literal $100/$200 price points; ETH 0.125%/0.25% of own entry (100/200 BTC-equivalent), not literal $100/$200",
+  "assets": {
+    "BTC": {
+      "asset": "BTC",
+      "source_original_22_month_reported_net_usd": 4298.1778,
+      "original_trade_count": 2405,
+      "reproduced_original_trade_ledger_every_row": true,
+      "reach_definition": "Modeled maximum favorable excursion before assumed exit, from original hourly OHLC-inferred-path replay (pos.best plus favorable exit gap). For ETH use 100/200 BTC-equivalent points = 0.125%/0.25% of trade entry price, not fixed $100/$200.",
+      "thresholds": {
+        "first_absolute_price_points": 100,
+        "second_absolute_price_points": 200
+      },
+      "realized_definition": "Gross directional price-point difference entry vs exit, disregards fees, margin and leverage.",
+      "counts": {
+        "modeled_reached_100_or_more": 1634,
+        "modeled_reached_200_or_more": 1082,
+        "modeled_reached_100_to_under_200": 552,
+        "modeled_reached_below_100": 771,
+        "realized_gross_exit_gain_100_or_more": 1632,
+        "realized_gross_exit_gain_200_or_more": 1080,
+        "realized_gross_exit_gain_100_to_under_200": 552,
+        "realized_gross_exit_gain_below_100": 773,
+        "net_profit_trades_usd_positive": 1609
+      },
+      "max_mfe_points": 4544.0,
+      "max_realized_gain_points": 4543.5,
+      "modeled_reached_pct_100": 67.94,
+      "modeled_reached_pct_200": 44.99,
+      "caveat": "MFE is reconstructed from the original OHLC-inferred (not observed tick) path; possible high/low sequence uncertainty and unrealistic sub-tick trailing profits. This is NOT evidence the original +$4,298/+6,773 were achievable."
+    },
+    "ETH": {
+      "asset": "ETH",
+      "source_original_22_month_reported_net_usd": 6773.0919,
+      "original_trade_count": 2421,
+      "reproduced_original_trade_ledger_every_row": true,
+      "reach_definition": "Modeled maximum favorable excursion before assumed exit, from original hourly OHLC-inferred-path replay (pos.best plus favorable exit gap). For ETH use 100/200 BTC-equivalent points = 0.125%/0.25% of trade entry price, not fixed $100/$200.",
+      "thresholds": {
+        "first_pct_of_entry": 0.125,
+        "second_pct_of_entry": 0.25,
+        "example_for_eth_at_4000": {
+          "first_native_eth_points": 5.0,
+          "second_native_eth_points": 10.0
+        }
+      },
+      "realized_definition": "Gross directional price-point difference entry vs exit, disregards fees, margin and leverage.",
+      "counts": {
+        "modeled_reached_100_or_more": 1866,
+        "modeled_reached_200_or_more": 1366,
+        "modeled_reached_100_to_under_200": 500,
+        "modeled_reached_below_100": 555,
+        "realized_gross_exit_gain_100_or_more": 1848,
+        "realized_gross_exit_gain_200_or_more": 1353,
+        "realized_gross_exit_gain_100_to_under_200": 495,
+        "realized_gross_exit_gain_below_100": 573,
+        "net_profit_trades_usd_positive": 1882
+      },
+      "max_mfe_points": 356.15,
+      "max_realized_gain_points": 356.05,
+      "modeled_reached_pct_100": 77.08,
+      "modeled_reached_pct_200": 56.42,
+      "caveat": "MFE is reconstructed from the original OHLC-inferred (not observed tick) path; possible high/low sequence uncertainty and unrealistic sub-tick trailing profits. This is NOT evidence the original +$4,298/+6,773 were achievable."
+    }
+  }
+}
