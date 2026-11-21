@@ -1,0 +1,28 @@
+name: New 4H Trend 15M Breakout 1M Causal Backtest BTC ETH
+on:
+  push:
+    branches: [research/new-4h-trend-15m-breakout-1m-20261121]
+    paths:
+      - scripts/research_new_4h15m_breakout_1m_20261121.py
+      - .github/workflows/research-new-4h15m-breakout-1m-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pandas and numpy
+        run: python -m pip install pandas numpy
+      - name: Replay real 1 minute data with fee and funding proxy
+        run: python scripts/research_new_4h15m_breakout_1m_20261121.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: new-mtf-breakout-fee-funding-2025-2026
+          path: analysis/new_4h_trend_15m_breakout_1m_20261121/
