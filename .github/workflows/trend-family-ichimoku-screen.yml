@@ -5,6 +5,8 @@ on:
       - research/trend-following-family-20261121
     paths:
       - .github/workflows/trend-family-ichimoku-screen.yml
+      - scripts/trend_family_ichimoku_first_screen.py
+      - analysis/trend_following_family_20261121/EXPERIMENT_LEDGER.md
   workflow_dispatch:
 permissions:
   contents: read
