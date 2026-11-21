@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Conditional BTC direction after CONFIRMED 1H events: monthly causal meta-label,
+"""Path-aware profitable event selection after CONFIRMED 1H events: monthly causal meta-label,
 native-1M stop-first trade replay; compares filtered vs all confirmed events.
 
-Not a claim of universal UP/DOWN forecasting. Target = realized direction of
-next 4H vs event side, known only at 4H label maturity.
+Not a universal UP/DOWN oracle. Target = real modeled after-cost profitable
+stop-first exit on the future native-1M path, learned only after exit completion.
 """
 import json
 from pathlib import Path
@@ -22,7 +22,7 @@ OUT=Path("analysis/btc_path_aware_direction_20261121")
 OUT.mkdir(parents=True,exist_ok=True)
 MONTHS=[str(x) for x in pd.period_range("2025-01","2026-10",freq="M")]
 EVAL_MONTHS=MONTHS[6:]
-THRESHOLD=.60
+THRESHOLD=.50
 
 def start_of_month(month):
     return pd.Timestamp(month+"-01",tz="Asia/Kolkata").tz_convert("UTC")
