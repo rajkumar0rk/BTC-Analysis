@@ -1,0 +1,40 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "signal_timeframe": "15m",
+  "monitoring": "1m",
+  "volume_ratio_min": 1.2,
+  "volume_mean": "mean of 20 bars strictly preceding last completed 15m bar",
+  "volatility_atr": "Wilder ATR14 on last completed 15m bar",
+  "volatility_atr_ratio_min": 1.0,
+  "volatility_mean": "mean ATR14 of 20 bars strictly preceding last completed 15m bar",
+  "filters_checked": "second touch only, before entry",
+  "second_touch_filter_failure": "discard setup, count reset to zero",
+  "variants": [
+    "none",
+    "volume",
+    "volatility",
+    "both"
+  ],
+  "btc_fixed_target_points": 200,
+  "btc_fixed_stop_points": 100,
+  "eth_target_formula": "200 * ETH_entry / preceding_1m_BTC_close",
+  "eth_stop_formula": "100 * ETH_entry / preceding_1m_BTC_close",
+  "fee_taker_each_side": 0.0005,
+  "gst_on_fees": 0.18,
+  "adverse_slippage_each_side": 0.0002,
+  "assumed_exposure": "1x evolving model equity initially USD 1000",
+  "notes": "1m OHLC cannot establish true event order; stop-first, missing funding/quotes"
+}
