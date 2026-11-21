@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "market": "BTCUSD_FUTURES",
+  "execution_mode": "BACKTEST_ONLY",
+  "live_trading_enabled": false,
+  "source_research": "Stage31 frozen post-hoc entries; Stage32 exit replays.",
+  "selection_warning": "The underlying entry patterns and market gates were discovered using previously examined Jan2025-Oct2026. Stage32 2025-only exit selection does not turn 2026 into fresh out-of-sample evidence.",
+  "cost_assumptions": {
+    "taker_rate_per_side": 0.0005,
+    "GST_on_fees": 0.18,
+    "adverse_slippage_points_per_side": 5,
+    "additional_stress_bps_per_side": 5,
+    "funding_included": false,
+    "measured_spread_included": false,
+    "liquidation_included": false
+  },
+  "fills": {
+    "signal_timeframe": "1H",
+    "gate_timeframe": "4H",
+    "entry": "first_1m_open_after_complete_signal",
+    "exits": "1m_stop_first_if_stop_and_target_touch_same_bar",
+    "trailing_activation": "next_minute_after_observed_favorable_extreme"
+  },
+  "candidate_strategies": [
+    {
+      "id": "MR_HISTORIC_BOLL_DRIFT",
+      "family": "MEAN_REVERSION",
+      "enabled": false,
+      "selection_status": "HINDSIGHT_ENTRY; 2025-SELECTED_EXIT DID_NOT_CHANGE_BASELINE",
+      "direction": "LONG_ONLY",
+      "signal": "Prior completed 1H close below 20-period Bollinger lower 2 sigma with RSI2<=15; current completed 1H bullish reentry below SMA20",
+      "gate": "Completed 4H ADX<=45, 4H efficiency8<=0.70, absolute 4H 3bar close drift <=1.5x 4H ATR",
+      "stop": "3x 1H ATR(14) from next 1m open",
+      "take_profit": "1H SMA20 frozen at signal",
+      "max_hold_minutes": 1920,
+      "extra5bps_historical": {
+        "net_22m_pct": 2.661548,
+        "net_2025_pct": 1.073291,
+        "net_JanOct2026_pct": 1.571392,
+        "winning_months": 11,
+        "total_months": 22
+      }
+    },
+    {
+      "id": "RANGE_HISTORIC_TOUCH48_LONGER_HOLD",
+      "family": "RANGE_TRADING",
+      "enabled": false,
+      "selection_status": "HINDSIGHT_ENTRY; 2025-SELECTED_48H_EXIT",
+      "direction": "LONG_SHORT",
+      "signal": "Previous 48 fully complete 1H candles form high low range; current completed 1H candle touches/rejects boundary in direction of range midpoint",
+      "gate": "Completed 4H ADX<=45, 4H efficiency8<=0.70, completed 4H close within middle 50% of PRIOR 48 4H highs-lows channel",
+      "stop": "3x 1H ATR(14) from next 1m open",
+      "take_profit": "Midpoint of prior 48 1H high/low frozen at signal",
+      "max_hold_minutes": 2880,
+      "extra5bps_historical": {
+        "net_22m_pct": 8.797853,
+        "net_2025_pct": 4.056924,
+        "net_JanOct2026_pct": 4.556092,
+        "winning_months": 15,
+        "total_months": 22
+      }
+    }
+  ],
+  "model_risk": [
+    "Both are historical post-hoc ENTRY discoveries; 2026 results are not unbiased forward validation",
+    "Risk fraction 0.5% of sleeve equity, 5x notional cap, exact real-market contract/margin model missing",
+    "Partial November 2026 (through Nov18) had only 1 trade in each cohort; Range -0.553% after extra5bps",
+    "Separate research branch; do not merge/live-run until truly unseen paper period and exchange-level cost verification"
+  ]
+}
