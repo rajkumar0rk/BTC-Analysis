@@ -1,0 +1,42 @@
+name: Audit 1H OHLC original 4298 BTC 6773 ETH 100 200 point reach
+on:
+  push:
+    branches:
+      - research/count-mfe-100-200-original-1h-ohlc-20261121
+    paths:
+      - scripts/audit_original_1h_ohlc_100_200_20261121.py
+      - .github/workflows/audit-original-1h-mfe100-mfe200-20261121.yml
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis tools
+        run: python -m pip install numpy pandas
+      - name: Reproduce original 1H simulated ledger and measure pre-exit MFE
+        run: |
+          python -m py_compile scripts/audit_original_1h_ohlc_100_200_20261121.py
+          python -u scripts/audit_original_1h_ohlc_100_200_20261121.py
+      - name: Archive complete trades annotated with modeled MFE
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-btc-eth-1h-ohlc-100-200-point-audit
+          path: analysis/audit_original_1h_ohlc_reach_100_200_20261121/
+          if-no-files-found: warn
+      - name: Commit audit report to isolated research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/audit_original_1h_ohlc_reach_100_200_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: audit 100 and 200 point reach from original 1H inferred trades"
+            git push origin HEAD:research/count-mfe-100-200-original-1h-ohlc-20261121
+          fi
