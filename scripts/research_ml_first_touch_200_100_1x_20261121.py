@@ -38,11 +38,11 @@ def label_every_candidate(k_arr,day_end,op,hi,lo,cl):
     for ii in range(n):
         k=k_arr[ii]
         ent=op[k]
-        final=min(k+core.HOLD_MIN-1, day_end[k])
+        final=min(k+240-1, day_end[k])
         for dd in range(2):
             side=1. if dd==0 else -1.
-            goal=ent+side*core.TP
-            stop=ent-side*core.SL
+            goal=ent+side*200.0
+            stop=ent-side*100.0
             closep=cl[final]
             reason=0  # 1=TP, -1=SL, 0=timeout
             exj=final
@@ -59,11 +59,11 @@ def label_every_candidate(k_arr,day_end,op,hi,lo,cl):
                     reason=1
                     exj=j
                     break
-            entryfill=ent+side*core.SLIP_POINTS
+            entryfill=ent+side*5.0
             exitfill=closep-side*core.SLIP_POINTS
             gross=side*(closep-ent)
-            feepts=core.TAKER_FEE_WITH_GST*(entryfill+exitfill)
-            net=gross-2*core.SLIP_POINTS-feepts
+            feepts=0.00059*(entryfill+exitfill)
+            net=gross-2*5.0-feepts
             outcome[ii,dd]=reason
             chart_points[ii,dd]=gross
             net_points[ii,dd]=net
@@ -179,8 +179,8 @@ def features_events(f):
     goodi=np.minimum(i,len(ts)-1)
     exists=(i<len(ts))&(ts[goodi]==endsec)
     ist_dates=np.asarray(ist.strftime("%Y-%m-%d"))
-    usable=valid15.to_numpy(bool)&np.isfinite(aligned.h1_adx.to_numpy(float))&
-       exists&(ist_dates>=core.FULL_DAY_START)&(ist_dates<=FULL_END)
+    usable=(valid15.to_numpy(bool)&np.isfinite(aligned.h1_adx.to_numpy(float))&
+       exists&(ist_dates>=core.FULL_DAY_START)&(ist_dates<=FULL_END))
     # Select rows where every model feature is defined and finite.
     finite=np.isfinite(feat.to_numpy(float)).all(axis=1)
     usable=usable&finite
