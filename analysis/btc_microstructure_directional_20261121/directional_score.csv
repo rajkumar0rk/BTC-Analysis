@@ -1,0 +1,13 @@
+accuracy_pct,balanced_accuracy_pct,auc,brier,logloss,period,model,n,actual_up_pct,confident_hours,confident_direction_hit_pct,boosted_move_gated_signal_hours
+52.899,52.841,0.5574,0.24761,0.68833,2025H2,boosted,1104,50.45,99.0,63.64,58.0
+54.801,54.773,0.5624,0.24747,0.68816,2025H2,logistic,1104,50.45,128.0,60.16,
+50.453,50.0,0.4894,0.25005,0.69325,2025H2,training_prior,1104,50.45,0.0,,
+49.004,49.0,,,,2025H2,previous4h_momentum,1104,50.45,,,
+49.342,49.332,0.489,0.25408,0.70148,2026JanOct,boosted,1824,50.16,70.0,47.14,36.0
+48.739,48.72,0.4853,0.25339,0.69995,2026JanOct,logistic,1824,50.16,25.0,64.0,
+49.945,49.814,0.4918,0.25003,0.6932,2026JanOct,training_prior,1824,50.16,0.0,,
+47.094,47.094,,,,2026JanOct,previous4h_momentum,1824,50.16,,,
+50.683,50.659,0.5167,0.25164,0.69652,overall,boosted,2928,50.27,169.0,56.8,94.0
+51.025,50.998,0.5184,0.25116,0.69551,overall,logistic,2928,50.27,153.0,60.78,
+50.137,49.898,0.4951,0.25004,0.69322,overall,training_prior,2928,50.27,0.0,,
+47.814,47.813,,,,overall,previous4h_momentum,2928,50.27,,,

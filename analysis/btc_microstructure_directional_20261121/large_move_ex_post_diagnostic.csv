@@ -1,0 +1,4 @@
+model,n,directional_accuracy_pct
+boosted,1037,48.795
+logistic,1037,49.18
+training_prior,1037,48.023

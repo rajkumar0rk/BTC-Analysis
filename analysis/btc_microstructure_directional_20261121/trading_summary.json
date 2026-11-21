@@ -1,0 +1,15 @@
+{
+  "trades": 234,
+  "wins": 87,
+  "win_rate_pct": 37.179,
+  "profitable_months": 3,
+  "losing_months": 13,
+  "no_trade_months": 6,
+  "account_net_return_pct": -33.5052,
+  "account_net_usd": -3350.52,
+  "profit_factor": 0.4767,
+  "max_trade_close_drawdown_pct": 34.566,
+  "fees_gst_usd": 2257.38,
+  "slippage_usd": 191.77,
+  "passes_22_22": false
+}

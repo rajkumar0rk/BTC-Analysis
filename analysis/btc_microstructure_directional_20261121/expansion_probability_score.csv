@@ -1,0 +1,4 @@
+model,n,actual_expansion_pct,brier,auc,logloss
+boosted,2928,35.417,0.21204,0.6595,0.61267
+logistic,2928,35.417,0.22181,0.6092,0.63481
+training_prior,2928,35.417,0.22878,0.4982,0.6501

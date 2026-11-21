@@ -1,0 +1,29 @@
+{
+  "source": "Delta India BTCUSD native 1M plus MARK 1M, OI 5M, FUNDING 1H rate",
+  "native_minutes": 992160,
+  "partitions": 23,
+  "extra_market_data": [
+    "MARK:BTCUSD 1M",
+    "OI:BTCUSD 5M",
+    "FUNDING:BTCUSD 1H rate proxy"
+  ],
+  "extra_sources_known_after_complete_1H_close": true,
+  "complete_ist_months": 22,
+  "training_only_months": 6,
+  "evaluated_months": 16,
+  "model_selection_on_test": false,
+  "training_target_available_before_month": true,
+  "no_lookahead_prefix_classifier_test": true,
+  "direction_target": "sign(close[t+4]-close[t]) on completed 1H; future outcome release t+5h",
+  "expansion_target": "abs(next4h move) >= ATR14 at signal hour",
+  "signal": "boosted p(up)>=.62 or <=.38 and p(expansion)>=.35",
+  "initial_equity_usd": 10000.0,
+  "risk_fraction": 0.005,
+  "max_leverage": 3.0,
+  "maker_fee_assumed": false,
+  "taker_fee_plus_gst_each_side": 0.00059,
+  "adverse_slip_points_each_side": 5.0,
+  "funding_settlement_spread_and_liquidation_missing": true,
+  "all_histories_previously_explored": true,
+  "external_blind_holdout": false
+}
