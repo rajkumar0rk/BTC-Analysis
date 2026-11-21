@@ -413,6 +413,49 @@ def main():
     for asset in ("BTC","ETH"):
         pick=base[base.asset==asset].sort_values("net_funding_proxy",ascending=False).head(8)
         print("NEW_TOP_FUNDING",asset,pick.to_json(orient="records"),flush=True)
+    # Follow-up structural checks, NOT part of original parameter grid.
+    # Re-run the best ETH baseline with entries restricted to long, short,
+    # weekdays, weekends, for independent exclusive-position results.
+    m,_,_=load("ETH")
+    b15,b4=prepare(m)
+    filtered_signals=generate_signals(m,b15,b4)
+    fc,mc,fp=funding_proxy("ETH",m)
+    key=("slow_50_200","donchian48")
+    full_candidates=filtered_signals[key]
+    for subgroup in ("long_only","short_only","weekdays_only","weekends_only"):
+        if subgroup=="long_only":
+            chosen=[x for x in full_candidates if x[1]==1]
+        elif subgroup=="short_only":
+            chosen=[x for x in full_candidates if x[1]==-1]
+        elif subgroup=="weekdays_only":
+            chosen=[x for x in full_candidates if m.index[x[0]].dayofweek<5]
+        else:
+            chosen=[x for x in full_candidates if m.index[x[0]].dayofweek>=5]
+        for slip in (0.0,SLIPPAGE_STRESS_FRACTION):
+            data=replay("ETH",m,{key:chosen},(*key,"trail_2atr"),fc,mc,slip)
+            detail=evaluate(data)
+            print("ETH_SUBGROUP",subgroup,"zero_slip" if slip==0 else "stress_2bps",
+                  json.dumps(detail),flush=True)
+    for slip in (0.0,SLIPPAGE_STRESS_FRACTION):
+        name=f"ETH_slow_50_200_donchian48_trail_2atr_{'zero_slip' if slip==0 else 'stress_2bps'}"
+        candidate=pd.concat(all_trade_rows,ignore_index=True)
+        candidate=candidate[candidate.case==name].copy()
+        print("ETH_BEST_MONTHLY",name,candidate.groupby("exit_month_utc").agg(
+            trades=("net_taker_usd","size"),net=("net_taker_usd","sum"),
+            funded=("net_taker_funding_proxy_usd","sum")).round(4).reset_index().to_json(orient="records"),flush=True)
+        print("ETH_BEST_SIDE_STATS",name,candidate.groupby("side").agg(
+            trades=("net_taker_usd","size"),net=("net_taker_usd","sum"),
+            funded=("net_taker_funding_proxy_usd","sum"),
+            fees_gst=("fees_and_gst_usd","sum"),
+            avg_hold_min=("hold_min","mean")).round(4).reset_index().to_json(orient="records"),flush=True)
+        print("ETH_BEST_EXTRA",name,json.dumps({
+            "ambiguous_both":int(candidate.ambiguous_same_1m.sum()),
+            "funding_rate_missing_trades":int((candidate.missing_funding_events>0).sum()),
+            "total_fees_gst":round(float(candidate.fees_and_gst_usd.sum()),4),
+            "total_gross_usd":round(float(candidate.gross_usd.sum()),4),
+            "total_funding_proxy_usd":round(float(candidate.funding_proxy_usd.dropna().sum()),4),
+            "avg_risk_pct":round(float((candidate.initial_risk_points/candidate.entry).mean()*100),3),
+            "max_holding_minutes":int(candidate.hold_min.max())}),flush=True)
     print("NEW_MTF_BACKTEST_COMPLETE",str(OUT),flush=True)
 
 if __name__=="__main__":
