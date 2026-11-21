@@ -72,7 +72,7 @@ def make_records(baseline,models):
             blend=(1-w)*baseline+w*x
             s=stats(blend)
             row=dict(model=m["name"],source=m["source"],extra_weight=w,
-                2025_source_trades=int(np.maximum(0,m["trades"][:12]).sum()),
+                train_2025_source_trades=int(np.maximum(0,m["trades"][:12]).sum()),
                 september_source_trades=int(max(0,m["trades"][20])),
                 september_source_return=float(x[20]),
                 **s)
