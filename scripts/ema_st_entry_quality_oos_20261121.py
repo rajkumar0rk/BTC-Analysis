@@ -118,24 +118,37 @@ def all_signals(bars,higher,mins,higher_mins,clock):
     return out
 
 def first_touch(op,hi,lo,j,entry,side,tp,sl):
-    # Slices cover future minutes, never use guessed OHLC path within a minute.
-    if side>0:
-        qt=np.flatnonzero(hi[j:]>=tp)
-        qs=np.flatnonzero(lo[j:]<=sl)
-    else:
-        qt=np.flatnonzero(lo[j:]<=tp)
-        qs=np.flatnonzero(hi[j:]>=sl)
-    t=j+int(qt[0]) if len(qt) else len(op)+1
-    s=j+int(qs[0]) if len(qs) else len(op)+1
-    end=min(t,s)
-    if end>len(op)-1:return None
-    if t<s:result="TP"
-    elif s<t:result="SL"
-    else:
-        if (side>0 and op[end]>=tp) or (side<0 and op[end]<=tp):result="TP"
-        elif (side>0 and op[end]<=sl) or (side<0 and op[end]>=sl):result="SL"
-        else:result="AMBIGUOUS"
-    return end,result
+    # Early-exit chunks are exactly equivalent to full-history TP / SL scans,
+    # but avoid rereading hundreds of thousands of bars per signal.
+    k=j
+    N=len(op)
+    while k<N:
+        e=min(k+1440,N)
+        if side>0:
+            hits=(hi[k:e]>=tp)|(lo[k:e]<=sl)
+        else:
+            hits=(lo[k:e]<=tp)|(hi[k:e]>=sl)
+        loc=np.flatnonzero(hits)
+        if len(loc):
+            end=k+int(loc[0])
+            if side>0:
+                tp_hit=hi[end]>=tp
+                sl_hit=lo[end]<=sl
+                open_tp=op[end]>=tp
+                open_sl=op[end]<=sl
+            else:
+                tp_hit=lo[end]<=tp
+                sl_hit=hi[end]>=sl
+                open_tp=op[end]<=tp
+                open_sl=op[end]>=sl
+            if open_tp:result="TP"
+            elif open_sl:result="SL"
+            elif tp_hit and sl_hit:result="AMBIGUOUS"
+            elif tp_hit:result="TP"
+            else:result="SL"
+            return end,result
+        k=e
+    return None
 
 def replay(asset,m,signals,gate,tp_points,sl_points):
     op=m.open.to_numpy(float);hi=m.high.to_numpy(float);lo=m.low.to_numpy(float)
