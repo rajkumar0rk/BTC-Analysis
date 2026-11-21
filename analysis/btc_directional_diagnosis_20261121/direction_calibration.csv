@@ -1,0 +1,16 @@
+model,bin_low,bin_high,count,average_forecast_up_prob,actual_up_rate
+boosted,0.0,0.2,0,,
+boosted,0.2,0.4,104,0.375,0.5
+boosted,0.4,0.6,2577,0.505,0.498
+boosted,0.6,0.8,247,0.63,0.555
+boosted,0.8,1.0,0,,
+logistic,0.0,0.2,0,,
+logistic,0.2,0.4,84,0.378,0.464
+logistic,0.4,0.6,2698,0.505,0.499
+logistic,0.6,0.8,146,0.629,0.603
+logistic,0.8,1.0,0,,
+training_prior,0.0,0.2,0,,
+training_prior,0.2,0.4,0,,
+training_prior,0.4,0.6,2928,0.505,0.503
+training_prior,0.6,0.8,0,,
+training_prior,0.8,1.0,0,,
