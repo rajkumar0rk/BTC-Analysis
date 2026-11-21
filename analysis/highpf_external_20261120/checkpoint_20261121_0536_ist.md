@@ -1,0 +1,9 @@
+# 2026-11-21 05:36 IST — verified high-PF execution checkpoint
+
+Verified repository Actions branch filter: only run 44735120702 and newer 44815513786 exist for highpf-external-tsmom-screen.yml. Both concluded FAILURE; newer job 136562679886 failed at "Native BTC 2025 screen (fail closed on data gaps)" while checkout, Python setup and artifact-upload steps succeeded. No successful backtest or trustworthy trade/NAV ledger. [Run](https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44815513786).
+
+Verified branch recursive tree: BTCUSD 1m archive starts at data/delta_india/BTCUSD/1m/2025-01.csv.gz; no 2024 monthly BTCUSD minute archive found in this branch. The 60 complete pre-2025 IST daily bars required by the original external 60-day momentum strategy therefore cannot be authenticated from this branch. This is a genuine DATA BLOCKER for original 2025-01-01 screening, not evidence of negative expectancy. Preserve original candidate as INCONCLUSIVE / DATA-BLOCKED; do not shorten warmup or synthesize prices.
+
+Important new discovery: tree contains data/delta_india/BTCUSD/institutional/history/funding_1h/2025-01.csv.gz onward. Funding should NOT automatically be declared absent globally; validate this historical funding dataset's timestamps, instrument applicability, provenance, completeness and cashflow conventions before using it. Until validated, funding is UNMODELED for this study.
+
+Next exact action: do not rerun the unchanged failed job. Either acquire and hash authentic November–December 2024 Delta BTC minute bars and repair next-open execution/cost parity, or close this data-blocked candidate and first discover a distinct public GitHub/TradingView/Freqtrade/academic strategy with available 2025-only warmup. Run a zero-slippage BTC2025 screen with both-sided fees and GST; stress only upon credible positive screen. Preserve isolated branch, never change main or live accounts.
