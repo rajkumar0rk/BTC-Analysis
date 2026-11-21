@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "strategy_pack_id": "stage27-btc-mean-reversion-range-research",
+  "market": "BTCUSD_FUTURES",
+  "execution_mode": "BACKTEST_ONLY",
+  "enabled": false,
+  "data_timeframes": {
+    "signal": "1H",
+    "regime": "4H",
+    "fills_and_intrabar_stops": "1M"
+  },
+  "note": "Research-selected hypotheses, NOT live-ready. 2026 has been studied previously.",
+  "strategies": [
+    {
+      "id": "BTC-MR-BOLL-1H-20261121",
+      "family": "MEAN_REVERSION",
+      "status": "RESEARCH_REJECT_LIVE",
+      "enabled": false,
+      "direction": "LONG_ONLY",
+      "entry": {
+        "type": "bollinger_band_reentry",
+        "band_length": 20,
+        "band_std": 2,
+        "prior_close_below_lower_band": true,
+        "prior_rsi2_max": 15,
+        "current_close_inside_band": true,
+        "bullish_confirmation": true,
+        "h4_adx_max": 25,
+        "h4_efficiency8_max": 0.35
+      },
+      "exit": {
+        "stop": "min(last_2_1h_lows)-0.15_ATR14",
+        "target": "1h_SMA20_frozen_at_signal",
+        "max_hold_minutes": 720
+      },
+      "position_risk_fraction": 0.005,
+      "max_leverage": 5,
+      "latest_backtest": {
+        "2025_net_pct": 1.854104,
+        "jan_oct_2026_net_pct": -1.786685,
+        "full22_net_pct": 0.034292,
+        "extra5bps_per_side_full22_net_pct": -4.44009
+      },
+      "rationale": "Fails 2025 +5bps robustness; loses during Jan-Oct 2026"
+    },
+    {
+      "id": "BTC-RANGE-TOUCH48-1H-20261121",
+      "family": "RANGE_TRADING",
+      "status": "RESEARCH_FORWARD_WATCH_ONLY",
+      "enabled": false,
+      "direction": "LONG_AND_SHORT",
+      "entry": {
+        "type": "1h_prior_48bar_range_boundary_touch_rejection",
+        "range_lookback_bars": 48,
+        "range_width_min_atr14": 2.5,
+        "range_width_max_atr14": 15,
+        "h4_adx_max": 30,
+        "h4_efficiency8_max": 0.45,
+        "long": "low touches prior range lower edge within 0.2 ATR; bullish candle closes >edge+0.35ATR and near bar high",
+        "short": "inverse at upper edge"
+      },
+      "exit": {
+        "stop": "1.5_ATR14_from_next_1m_open",
+        "target": "prior_48bar_range_midpoint_frozen_at_signal",
+        "max_hold_minutes": 720
+      },
+      "position_risk_fraction": 0.005,
+      "max_leverage": 5,
+      "latest_backtest": {
+        "2025_net_pct": 6.480997,
+        "jan_oct_2026_net_pct": -1.10046,
+        "full22_net_pct": 5.309216,
+        "extra5bps_per_side_full22_net_pct": 2.070493
+      },
+      "rationale": "2026 negative; does not improve Core + 4H portfolio"
+    }
+  ],
+  "execution_assumptions": {
+    "baseline_taker_fee_rate_per_side": 0.0005,
+    "GST_on_fee": 0.18,
+    "adverse_slippage_points_per_side": 5,
+    "stress_adverse_bps_per_side": [
+      0,
+      5
+    ],
+    "max_one_position_per_strategy": true,
+    "stop_target_same_1m_bar": "STOP_FIRST",
+    "sample": "2025-01 through 2026-10",
+    "funding_included": false,
+    "actual_bid_ask_and_liquidation_included": false,
+    "shared_margin_simulated": false
+  }
+}
