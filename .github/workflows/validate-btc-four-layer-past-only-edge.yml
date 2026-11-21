@@ -1,0 +1,47 @@
+name: Validate BTC past-only multi-regime improvement and extra spread cost
+on:
+  push:
+    branches: [research/btc-four-layer-past-only-edge-20261121]
+    paths:
+      - scripts/validate_btc_four_layer_past_only_edge_20261121.py
+      - .github/workflows/validate-btc-four-layer-past-only-edge.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-4layer-past-only-release-20261121
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install audit packages
+        run: python -m pip install numpy pandas tabulate
+      - name: Verify as-of month-past decisions, account cash, 15M confirmation and cost sensitivity
+        run: python scripts/validate_btc_four_layer_past_only_edge_20261121.py
+      - name: Archive independent no-go evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-4layer-past-only-release-no-go-20261121
+          path: |
+            analysis/btc_four_layer_past_only_edge_20261121/RELEASE_VALIDATION.json
+            analysis/btc_four_layer_past_only_edge_20261121/RELEASE_VALIDATION.md
+            analysis/btc_four_layer_past_only_edge_20261121/extra_cost_sensitivity.csv
+          retention-days: 90
+          if-no-files-found: error
+      - name: Commit research audit without touching main
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_four_layer_past_only_edge_20261121/RELEASE_VALIDATION.*
+          git add analysis/btc_four_layer_past_only_edge_20261121/extra_cost_sensitivity.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save historical pass / live NO-GO selector validation"
+            git push origin HEAD:research/btc-four-layer-past-only-edge-20261121
+          fi
