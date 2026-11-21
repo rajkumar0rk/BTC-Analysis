@@ -107,7 +107,10 @@ def run():
             monthly_nav[ts.tz_convert("Asia/Kolkata").strftime("%Y-%m")]=equity+qty*float(r.close)
     trades=pd.DataFrame(rows)
     trades.to_csv(OUT/"trades.csv",index=False)
-    # Exclude spurious 2026-01 from UTC-only 2025 data. 2025-01 lacks\n    # 2024-12-31 18:30 UTC IST boundary and pre-2025 indicator warmup.\n    monthly_nav={k:v for k,v in monthly_nav.items() if "2025-01"<=k<="2025-12"}\n    months=[];last=10000.
+    # Exclude spurious 2026-01 from UTC-only 2025 data. 2025-01 lacks
+    # 2024-12-31 18:30 UTC IST boundary and pre-2025 indicator warmup.
+    monthly_nav={k:v for k,v in monthly_nav.items() if "2025-01"<=k<="2025-12"}
+    months=[];last=10000.
     for month,nav in sorted(monthly_nav.items()):
         months.append(dict(month_ist=month,ending_nav=nav,net_return_pct=(nav/last-1)*100))
         last=nav
