@@ -1,0 +1,44 @@
+{
+  "source": {
+    "BTCUSD": {
+      "rows": 963030,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-10-31 18:29:00+00:00",
+      "partitions_sha256_verified": 22,
+      "missing_minutes": 0
+    },
+    "ETHUSD": {
+      "rows": 963030,
+      "first_utc": "2025-01-01 00:00:00+00:00",
+      "last_utc": "2026-10-31 18:29:00+00:00",
+      "partitions_sha256_verified": 22,
+      "missing_minutes": 0
+    }
+  },
+  "entry": "same 1H EMA20 2nd distinct touch after confirmed Supertrend10,3 flip, one entry per epoch",
+  "first_passage": "first TP +200 BTC points OR SL -100 BTC points, both sides mirrored",
+  "eth_distances": "200/100 * executed ETH entry / previous completed BTC 1m close, frozen at entry",
+  "modes": [
+    "BARRIER_ONLY",
+    "FLIP_EXIT"
+  ],
+  "paths": [
+    "O-H-L-C",
+    "O-L-H-C"
+  ],
+  "data": "1m OHLC, no full-sample historical ticks",
+  "warning": "Within-minute O-H-L-C vs O-L-H-C invented paths, not real tick sequence",
+  "fees": {
+    "taker_side": 0.0005,
+    "GST_on_fee": 0.18,
+    "adverse_slippage_side": 0.0002
+  },
+  "excluded": [
+    "funding",
+    "margin and liquidation",
+    "real bid ask",
+    "latency",
+    "orderbook"
+  ],
+  "historical_period": "Jan 2025 to Oct 2026 IST, 22 months, first 5h30m Jan 1 not sourced"
+}
