@@ -110,6 +110,10 @@ def run():
     # Exclude spurious 2026-01 from UTC-only 2025 data. 2025-01 lacks
     # 2024-12-31 18:30 UTC IST boundary and pre-2025 indicator warmup.
     monthly_nav={k:v for k,v in monthly_nav.items() if "2025-01"<=k<="2025-12"}
+    # Month-end NAV must reconcile to the 2025-12 IST cutoff, NOT to the
+    # 2025-12-31 23:59 UTC forced liquidation (already 2026-01 IST).
+    assert len(monthly_nav)==12, f"expected 12 IST month-end NAVs, got {sorted(monthly_nav)}"
+    ist_dec_nav=monthly_nav["2025-12"]
     months=[];last=10000.
     for month,nav in sorted(monthly_nav.items()):
         months.append(dict(month_ist=month,ending_nav=nav,net_return_pct=(nav/last-1)*100))
@@ -117,7 +121,12 @@ def run():
     pd.DataFrame(months).to_csv(OUT/"monthly_nav.csv",index=False)
     wins=trades.loc[trades.net_usd>0,"net_usd"].sum() if len(trades) else 0
     losses=-trades.loc[trades.net_usd<0,"net_usd"].sum() if len(trades) else 0
-    meta=dict(source="shahzaib-574/MarketCipherTrading/vwap_momentum_strategy.pine",model="Delta zero-slip baseline, 0.05pct fee each side +18pct GST",funding="UNMODELED",files_sha256=hashes,minute_count=n,signal_count=int(signal.sum()),trades=len(trades),profit_factor=float(wins/losses) if losses else None,ending_nav=equity,net_return_pct=(equity/10000-1)*100,months=months,coverage_note="2025-01 is partial IST and lacks 2024 warmup; 2025-12 IST endpoint is covered; 2026-01 is excluded",monthly_2025_positive=sum(x["net_return_pct"]>0 for x in months),monthly_2025_negative=sum(x["net_return_pct"]<0 for x in months),monthly_2025_flat=sum(x["net_return_pct"]==0 for x in months))
+    monthly_product=1.
+    for m in months: monthly_product*=1+m["net_return_pct"]/100
+    assert abs(monthly_product*10000-ist_dec_nav)<1e-6, "IST monthly NAV reconciliation failed"
+    jan_partial=True  # first UTC minute 2025-01-01 00:00 = 05:30 IST
+    december_post_cutoff_delta=equity-ist_dec_nav
+    meta=dict(ist_dec_2025_nav=ist_dec_nav, ist_monthly_compounded_pct=(ist_dec_nav/10000-1)*100, post_ist_2025_cutoff_pnl_usd=december_post_cutoff_delta, jan_2025_ist_partial=jan_partial, source="shahzaib-574/MarketCipherTrading/vwap_momentum_strategy.pine",model="Delta zero-slip baseline, 0.05pct fee each side +18pct GST",funding="UNMODELED",files_sha256=hashes,minute_count=n,signal_count=int(signal.sum()),trades=len(trades),profit_factor=float(wins/losses) if losses else None,ending_nav=equity,net_return_pct=(equity/10000-1)*100,months=months,coverage_note="2025-01 is partial IST and lacks 2024 warmup; 2025-12 IST endpoint is covered; 2026-01 is excluded from monthly series but the UTC-2025 final liquidation falls in 2026-01 IST; ending_nav/net_return_pct cover UTC end, ist_dec_2025_nav/ist_monthly_compounded_pct cover IST end",monthly_2025_positive=sum(x["net_return_pct"]>0 for x in months),monthly_2025_negative=sum(x["net_return_pct"]<0 for x in months),monthly_2025_flat=sum(x["net_return_pct"]==0 for x in months))
     (OUT/"summary.json").write_text(json.dumps(meta,indent=2))
     print("MOMENTUM_M08_COMPLETED "+json.dumps({k:meta[k] for k in ("minute_count","signal_count","trades","profit_factor","net_return_pct")}),flush=True)
 if __name__=="__main__":run()
