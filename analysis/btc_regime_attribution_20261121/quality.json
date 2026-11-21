@@ -1,0 +1,19 @@
+{
+  "exchange": "Delta Exchange India",
+  "symbol": "BTCUSD",
+  "minute_partitions": 23,
+  "minute_bars": 992160,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "verified_missing_minutes": 0,
+  "hourly_bars": 16536,
+  "classified_complete_month_hours": 15965,
+  "fee_each_side_incl_gst": 0.00059,
+  "slippage_each_side_btc_price_points": 5.0,
+  "account_initial_usd": 10000.0,
+  "stop_risk_fraction": 0.005,
+  "leverage_cap": 3.0,
+  "complete_IST_months": 22,
+  "partial_Nov_2026_excluded": true,
+  "is_2026_blind_holdout": false
+}

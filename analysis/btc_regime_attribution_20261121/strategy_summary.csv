@@ -1,0 +1,5 @@
+strategy,trades,net_account_pct,profitable_months,losing_months,idle_months,max_trade_close_drawdown_pct,profit_factor
+trend_pullback,704,-49.342,6,16,0,51.04,0.738
+donchian_breakout,573,-13.23,9,13,0,18.92,0.931
+bollinger_reversion,1523,-80.959,1,21,0,82.03,0.693
+failed_break_fade,1000,-54.307,3,19,0,56.98,0.774
