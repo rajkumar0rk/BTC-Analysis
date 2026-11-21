@@ -1,0 +1,38 @@
+name: Trend family isolated Stage13 replay parity baseline
+on:
+  push:
+    branches:
+      - research/trend-following-family-20261121
+    paths:
+      - .github/workflows/trend-family-stage13-parity.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned replay prerequisites
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'numba==0.61.2' 'tabulate==0.9.0'
+      - name: Execute existing Stage13 baseline for engine parity (NOT novel research)
+        run: python scripts/research_trend_pullback_breakout_stage13.py
+      - name: Upload actual executed trades, monthly results and reproducibility notes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trend-family-stage13-parity-baseline-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            analysis/institutional_discovery_stage13_4h_1h_15m/events.csv.gz
+            analysis/institutional_discovery_stage13_4h_1h_15m/trades.csv.gz
+            analysis/institutional_discovery_stage13_4h_1h_15m/strategy_summary.csv
+            analysis/institutional_discovery_stage13_4h_1h_15m/monthly_IST.csv
+            analysis/institutional_discovery_stage13_4h_1h_15m/monthly_consistency.csv
+            analysis/institutional_discovery_stage13_4h_1h_15m/quality.json
+            analysis/institutional_discovery_stage13_4h_1h_15m/RESEARCH_REPORT.md
