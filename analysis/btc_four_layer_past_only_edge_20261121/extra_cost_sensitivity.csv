@@ -1,0 +1,13 @@
+model,extra_roundtrip_bps,net_account_return_pct,extra_spread_like_cost_usd,profitable_months,losing_months,zero_trade_months
+old_four_layer_baseline,0.0,-22.1561,0.0,9,13,0
+old_four_layer_baseline,2.0,-25.3287,365.43,9,13,0
+old_four_layer_baseline,5.0,-29.8477,887.09,9,13,0
+old_four_layer_baseline,10.0,-36.7818,1690.53,8,14,0
+past6m_edge,0.0,3.9621,0.0,7,5,10
+past6m_edge,2.0,3.4016,55.07,7,5,10
+past6m_edge,5.0,2.5664,137.12,7,5,10
+past6m_edge,10.0,1.189,272.42,7,5,10
+past12m_robustness,0.0,8.9446,0.0,7,3,12
+past12m_robustness,2.0,8.404,53.15,7,3,12
+past12m_robustness,5.0,7.598,132.38,7,3,12
+past12m_robustness,10.0,6.2676,263.14,7,3,12

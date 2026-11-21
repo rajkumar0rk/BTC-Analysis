@@ -1,0 +1,49 @@
+{
+  "research_validation": "PASS",
+  "strategy_trading_release": "BLOCKED",
+  "train_decisions_verified": 264,
+  "first_hour_and_completed_15m_entry_causal": true,
+  "monthly_selector_uses_only_prior_complete_trades": true,
+  "past_only_monthly_qualification_recomputed": true,
+  "all_model_trade_ledger_pnl_fees_slippage_reconciled": true,
+  "all_variants_one_exclusive_position": true,
+  "baseline_full_history_parity": true,
+  "no_replay_smuggling_current_month_outcomes": true,
+  "target_22_profitable_months_met": false,
+  "original_after_cost_return_pct": -22.1561,
+  "primary_6m_return_pct": 3.9621,
+  "robustness_12m_return_pct": 8.9446,
+  "2025_2026_was_previously_researched": true,
+  "new_unseen_holdout_exists": false,
+  "actual_bid_ask_spreads_known": false,
+  "funding_cash_flows_known": false,
+  "real_time_liquidation_feasibility_known": false,
+  "confirmed_positive_after_extra_costs_not_assumed": true,
+  "models": {
+    "old_four_layer_baseline": {
+      "trades": 337,
+      "net_return_pct": -22.1561,
+      "profitable_months": 9,
+      "win_rate": 33.234,
+      "pf": 0.7996,
+      "trade_close_drawdown_pct": 24.335
+    },
+    "past6m_edge": {
+      "trades": 55,
+      "net_return_pct": 3.9621,
+      "profitable_months": 7,
+      "win_rate": 34.545,
+      "pf": 1.203,
+      "trade_close_drawdown_pct": 4.857
+    },
+    "past12m_robustness": {
+      "trades": 51,
+      "net_return_pct": 8.9446,
+      "profitable_months": 7,
+      "win_rate": 41.176,
+      "pf": 1.5211,
+      "trade_close_drawdown_pct": 4.857
+    }
+  },
+  "reason": "Historical after-cost improvement on a previously explored archive is not a genuine new future holdout or 22/22 result. Keep all live trading disabled until prospective and real execution checks."
+}
