@@ -140,7 +140,7 @@ def results(one,hr,manifest,checks):
     yearstate.to_csv(OUT/"yearly_state_hours.csv")
     running=(active.state!=active.state.shift()).cumsum()
     durations=active.groupby(running).agg(state=("state","first"),hours=("state","size"))
-    run_stats=durations.groupby("state").agg(runs=("hours","size"),
+    run_stats=durations.reset_index(drop=True).groupby("state").agg(runs=("hours","size"),
        median_consecutive_hours=("hours","median"),mean_consecutive_hours=("hours","mean")).reset_index()
     run_stats.to_csv(OUT/"state_run_lengths.csv",index=False)
     eligible=active[active.state.isin(("confirmed_trend_up","confirmed_trend_down"))].copy()
