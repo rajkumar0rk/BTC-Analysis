@@ -1,0 +1,56 @@
+name: Wider ATR take-profit optimization BTC ETH 22 complete months
+on:
+  push:
+    branches:
+      - research/22month-wide-atr-profit-grid-20261121
+    paths:
+      - scripts/wide_atr_hourly_take_profit_grid_20261121.py
+      - .github/workflows/research-wide-atr-profit-grid-full22.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research-wide-atr-grid-22months-20261121
+  cancel-in-progress: false
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned research requirements
+        run: python -m pip install pandas==2.2.3 numpy==2.2.3 numba==0.61.2
+      - name: Validate code and lookahead tests
+        run: |
+          python -m py_compile scripts/wide_atr_hourly_take_profit_grid_20261121.py
+          python - <<'PY'
+          import sys
+          sys.path.insert(0,"scripts")
+          from wide_atr_hourly_take_profit_grid_20261121 import unit_tests
+          unit_tests()
+          print("NO_LOOKAHEAD_TESTS_PASS")
+          PY
+      - name: Run full 22-month BTC ETH 1h ATR exit parameter grid
+        run: python scripts/wide_atr_hourly_take_profit_grid_20261121.py
+      - name: Upload full grid, monthly reports and selected trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-wide-atr-profit-full22-months
+          path: analysis/wide_hybrid_atr_profit_grid_full22_20261121/
+          if-no-files-found: warn
+      - name: Commit reports to research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/wide_hybrid_atr_profit_grid_full22_20261121/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: BTC ETH full22 wide ATR TP exit grid and monthly results"
+            git push origin HEAD:research/22month-wide-atr-profit-grid-20261121
+          fi
