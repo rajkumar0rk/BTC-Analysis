@@ -173,7 +173,7 @@ def optimize_4h(f,segstart):
                         baseline=(channel==55 and trend=="ema50_agrees" and
                                   stop_atr==2.0 and trail==3.0 and maxhold==14*1440)
                         if baseline:
-                            ref,_,_,_,_=swing.run_one(O,H,L,C,T,month_code,segstart,
+                            _,ref,_,_,_=swing.run_one(O,H,L,C,T,month_code,segstart,
                                  signal,updates,atr,ref_close,3.0,len(all_months))
                             max_delta=float(np.max(np.abs(ref-eq0)))
                             if max_delta>1e-7:
