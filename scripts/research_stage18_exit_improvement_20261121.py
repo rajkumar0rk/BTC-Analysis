@@ -226,6 +226,7 @@ def main():
                 core_target=int((g.reason=="target").sum()),
                 core_timeout=int((g.reason=="timeout").sum()),
                 train_2025_pct=train["net"],train_2025_positive=train["profitable"],
+                train_2025_dd=train["month_end_dd"],
                 exposed_2026JanOct_pct=future["net"],
                 exposed_2026_positive=future["profitable"],
                 net_22_pct=allm["net"],positive_22=allm["profitable"],
@@ -246,7 +247,7 @@ def main():
     eligible=summary[summary.extra_slippage_bps_side==2].copy()
     eligible["selection_score_2025"]=(
        eligible.train_2025_pct + .2*eligible.train_2025_positive -
-       .8*eligible.month_end_dd)
+       .8*eligible.train_2025_dd)
     eligible=eligible.sort_values(["selection_score_2025","train_2025_pct"],
                                   ascending=False,kind="stable")
     winner=str(eligible.iloc[0].variant)
