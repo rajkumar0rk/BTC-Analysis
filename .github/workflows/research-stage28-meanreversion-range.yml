@@ -1,0 +1,44 @@
+name: Stage28 BTC new 1H and 4H mean reversion plus range trading
+on:
+  push:
+    branches:
+      - research/stage28-reversion-range-new-signals-20261121-v1
+    paths:
+      - scripts/research_stage28_new_reversion_range_20261121.py
+      - .github/workflows/research-stage28-meanreversion-range.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  btc-independent-mr-range:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Get frozen reference baseline artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/stage18-70-30 /tmp/stage26
+          gh run download 44890734790 -n stage18-btc-70core-30donchian-portfolio-implementation -D /tmp/stage18-70-30 --repo "$GITHUB_REPOSITORY"
+          gh run download 44908493237 -n btc-stage26-aftercost-swing-hourly-20261121 -D /tmp/stage26 --repo "$GITHUB_REPOSITORY"
+          test -s /tmp/stage18-70-30/scenario_monthly_22.csv
+          test -s /tmp/stage26/4h_donchian_2025selected_monthly.csv
+      - name: Syntax-check
+        run: python -m py_compile scripts/research_stage28_new_reversion_range_20261121.py
+      - name: Run Stage28 1-minute backtest and 2025-only selection
+        run: PYTHONUNBUFFERED=1 PYTHONPATH=scripts python scripts/research_stage28_new_reversion_range_20261121.py
+      - name: Preserve all results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-stage28-new-meanreversion-range-aftercost
+          path: analysis/stage28_new_reversion_range_20261121/
+          retention-days: 30
+          if-no-files-found: warn
