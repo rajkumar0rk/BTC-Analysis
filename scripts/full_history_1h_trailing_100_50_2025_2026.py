@@ -182,8 +182,8 @@ def trailing_rule(mark_price,entry,side,best,active,stop,activation,distance,tic
 
 def round_activation(asset,entry,tick):
     if asset=="BTC":return 100.,50.
-    a=max(tick,math.floor((entry*100/80000)/tick+.5)*tick)
-    d=max(tick,math.floor((entry*50/80000)/tick+.5)*tick)
+    a=max(tick,math.floor((entry*100/80000)/tick+.5+1e-9)*tick)
+    d=max(tick,math.floor((entry*50/80000)/tick+.5+1e-9)*tick)
     return a,d
 
 def run_sim(asset,df,mark,events,kind):
@@ -368,7 +368,8 @@ def test():
     assert not mark_reaches_stop(90,100,101,-1)
     assert trailing_rule(59900,60000,-1,60000,False,61000,100,50,.5)[2]==59950
     assert round_activation("BTC",60000,.5)==(100,50)
-    assert round_activation("ETH",1740,.05)==(2.2,1.1)
+    act,dist=round_activation("ETH",1740,.05)
+    assert abs(act-2.2)<1e-9 and abs(dist-1.1)<1e-9
     assert pm_size(62000,.001)==16
 
 def main():
