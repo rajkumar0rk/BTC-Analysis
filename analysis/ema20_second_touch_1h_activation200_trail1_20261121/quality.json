@@ -1,0 +1,39 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "research_rules": {
+    "activation_BTC_price_points": 200.0,
+    "trail_distance_BTC_price_points": 1.0,
+    "scaled_ETH_activation": "200*ETH executed entry/previous closed 1m BTC",
+    "scaled_ETH_trail": "1*ETH executed entry/previous closed 1m BTC",
+    "user_example_long": "entry 80000, activate 80200, exit upon falling to 80199",
+    "path_assumptions": [
+      "O-H-L-C",
+      "O-L-H-C"
+    ],
+    "historical_ticks_available_for_full_sample": false,
+    "exit_accuracy_warning": "1m OHLC synthetic paths NOT actual ticks; trading price 1 point reversal cannot be verified",
+    "fixed_tp": null,
+    "stop_before_activation": null,
+    "entry": "second post-flip distinct 1h candle EMA20 touch",
+    "supertrend": "10,3 confirmed on closed 1h",
+    "fees_taker_each_side": 0.0005,
+    "GST_on_fees_fraction": 0.18,
+    "adverse_slippage_each_side": 0.0002,
+    "price_change_model": "piecewise linear 1m OHLC path only",
+    "margin_liquidation_funding_bidask_not_modelled": true,
+    "output_months": "2025-01..2026-10 IST, 22 months, prior 5h30m missing Jan 2025"
+  }
+}
