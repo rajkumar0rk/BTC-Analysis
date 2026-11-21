@@ -52,6 +52,7 @@ SOURCES=[
 ]
 
 def aligned(frame,return_col,description):
+    frame=frame[frame.month_ist.isin(MONTHS)]
     assert len(frame)==22, f"{description} has {len(frame)} rows expected 22"
     if frame.month_ist.duplicated().any(): raise AssertionError(f"Duplicate source months for {description}")
     s=frame.set_index("month_ist").reindex(MONTHS)[return_col]
