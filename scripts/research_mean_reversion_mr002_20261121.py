@@ -66,7 +66,12 @@ def main():
             if tp2>=tp1:tp2=tp1-.5*sd0
         # Gaps beyond the structural stop are not tradable at an assumed better fill.
         if side*(entry-stop)<=0:continue
-        # Pre-entry idle NAV must not include a fee paid only at entry.\n        minute_nav[cursor:k]=cash\n        qty=cash/entry\n        start_cash=cash\n        fee_in=qty*entry*FEE\n        cash-=fee_in
+        # Pre-entry idle NAV must not include a fee paid only at entry.
+        minute_nav[cursor:k]=cash
+        qty=cash/entry
+        start_cash=cash
+        fee_in=qty*entry*FEE
+        cash-=fee_in
         realized=0.;rem=qty;partial=False
         exit_parts=[];end=min(k+240,len(raw),int(seg_end[k]))
         if end<=k:continue
@@ -126,7 +131,10 @@ def main():
     table.to_csv(OUT/"monthly_ist_nav.csv",index=False)
     # All minute marks saved for audit, compressed to avoid artifact size blowup.
     nav.rename("account_nav").to_csv(OUT/"minute_nav.csv.gz",compression="gzip")
-    # Stop-first on every minute is conservative, but entry-minute OHLC paths\n    # are unknowable: an adverse gap at the next open must not be filled\n    # at a more favorable stop.\n    summary=dict(source_commit="7f9bcd24d0e1cf7258699f4835ecd80dcb684a84",
+    # Stop-first on every minute is conservative, but entry-minute OHLC paths
+    # are unknowable: an adverse gap at the next open must not be filled
+    # at a more favorable stop.
+    summary=dict(source_commit="7f9bcd24d0e1cf7258699f4835ecd80dcb684a84",
                  data_quality=quality,signals=len(signals),trades=len(rows),
                  net_return_pct=100*(cash-1),positive_months=int((table.net_return_pct>0).sum()),
                  losing_months=int((table.net_return_pct<0).sum()),
