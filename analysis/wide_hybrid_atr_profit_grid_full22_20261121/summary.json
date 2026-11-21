@@ -1,0 +1,6136 @@
+{
+  "study": "BTC ETH wider 1H ATR-based profit exit research, 22 complete months, NOT weekly",
+  "period": "2025-01-01 UTC through 2026-10-31 UTC, inclusive (22 complete UTC months)",
+  "variants": {
+    "activations": [
+      0,
+      100,
+      250,
+      500,
+      800,
+      1000,
+      1500,
+      2000,
+      2500,
+      4000
+    ],
+    "atr_multipliers": [
+      0.5,
+      0.75,
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      8.0
+    ],
+    "exit_modes": [
+      "H_CLOSE",
+      "M1_TRIGGER"
+    ],
+    "profit_price_sources": [
+      "MARK",
+      "TRADED"
+    ],
+    "per_asset_scenarios": 360
+  },
+  "strategy": "1H EMA20 touch and close reclaim in continuing Supertrend10,3; independent 1m mark-triggered emergency 2xATR14; native 1H opposite-ST flip",
+  "profit_rule": "Only activate at a completed 1H favorable close; best completed 1H close as high-watermark; trailing ATR multiple never loosens; exit next hour-close-confirmed or 1m triggered on last installed stop.",
+  "venue": "Delta India production archived 1m historical MARK + traded OHLC, NOT Demo testnet",
+  "fees": "0.05 percent each side taker plus 18 percent GST on fees; does NOT model funding, spread, actual fills, 3-second order latency or liquidation",
+  "capital": "Fixed ~$1000 notional per trade without wallet guard. This is an unfundable reference if equity turns negative, NOT a true $100 account backtest.",
+  "selection": "2025 training, Jan-Oct2026 holdout separately; in-sample 22-month rankings also shown. Profit triggers must actually occur for take-profit-effective ranking.",
+  "min_trades": 200,
+  "min_take_profit_exits_for_effective_ranking": 10,
+  "data": {
+    "BTC": {
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "mark_source": "Delta India historical MARK:xxxxUSD 1m REST archive",
+      "traded_rows": 987840,
+      "mark_rows": 987840,
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2026-11-17 23:59:00+00:00",
+      "mark_time_alignment_verified": true,
+      "traded_sha256_verified": true,
+      "all_minute_intervals_60s": true,
+      "completed_1h_bars": 16056,
+      "hourly_entry_signals": 2433,
+      "hourly_st_flips": 396,
+      "warmup_bars": 72,
+      "used_to_utc": "2026-10-31 23:59:00+00:00",
+      "used_1m_rows": 963360,
+      "hour_bars": 16056,
+      "mark_trade_timestamps_identical": true
+    },
+    "ETH": {
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "mark_source": "Delta India historical MARK:xxxxUSD 1m REST archive",
+      "traded_rows": 987840,
+      "mark_rows": 987840,
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2026-11-17 23:59:00+00:00",
+      "mark_time_alignment_verified": true,
+      "traded_sha256_verified": true,
+      "all_minute_intervals_60s": true,
+      "completed_1h_bars": 16056,
+      "hourly_entry_signals": 2478,
+      "hourly_st_flips": 382,
+      "warmup_bars": 72,
+      "used_to_utc": "2026-10-31 23:59:00+00:00",
+      "used_1m_rows": 963360,
+      "hour_bars": 16056,
+      "mark_trade_timestamps_identical": true
+    }
+  },
+  "rankings": {
+    "BTC": {
+      "best": {
+        "most_robust_full_net_with_TP": {
+          "asset": "BTC",
+          "activation": 1000,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -515.8965,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -566.8961,
+          "worst_source_holdout_net": 50.5948,
+          "mark_full_net": -512.5609,
+          "traded_full_net": -515.8965,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 424,
+          "min_tp_exits": 176
+        },
+        "most_profitable_months_with_TP": {
+          "asset": "BTC",
+          "activation": 1500,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -673.3675,
+          "worst_source_positive_months": 11,
+          "worst_source_train_net": -610.3024,
+          "worst_source_holdout_net": -65.3688,
+          "mark_full_net": -664.12,
+          "traded_full_net": -673.3675,
+          "mark_positive_months": 11,
+          "traded_positive_months": 11,
+          "min_closed_trades": 511,
+          "min_tp_exits": 169
+        },
+        "best_2025_train_with_TP": {
+          "asset": "BTC",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -525.3407,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -484.9674,
+          "worst_source_holdout_net": -40.3733,
+          "mark_full_net": -510.0697,
+          "traded_full_net": -525.3407,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 414,
+          "min_tp_exits": 50
+        },
+        "overall_best_including_no_TP": {
+          "asset": "BTC",
+          "activation": 1000,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -515.8965,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -566.8961,
+          "worst_source_holdout_net": 50.5948,
+          "mark_full_net": -512.5609,
+          "traded_full_net": -515.8965,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 424,
+          "min_tp_exits": 176
+        }
+      },
+      "top10_robust_net": [
+        {
+          "asset": "BTC",
+          "activation": 1000,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -515.8965,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -566.8961,
+          "worst_source_holdout_net": 50.5948,
+          "mark_full_net": -512.5609,
+          "traded_full_net": -515.8965,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 424,
+          "min_tp_exits": 176
+        },
+        {
+          "asset": "BTC",
+          "activation": 1500,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -519.2712,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -580.7933,
+          "worst_source_holdout_net": 61.5221,
+          "mark_full_net": -515.6343,
+          "traded_full_net": -519.2712,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 411,
+          "min_tp_exits": 135
+        },
+        {
+          "asset": "BTC",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -525.3407,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -484.9674,
+          "worst_source_holdout_net": -40.3733,
+          "mark_full_net": -510.0697,
+          "traded_full_net": -525.3407,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 414,
+          "min_tp_exits": 50
+        },
+        {
+          "asset": "BTC",
+          "activation": 800,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -527.4223,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -578.4219,
+          "worst_source_holdout_net": 50.5948,
+          "mark_full_net": -524.0867,
+          "traded_full_net": -527.4223,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 427,
+          "min_tp_exits": 187
+        },
+        {
+          "asset": "BTC",
+          "activation": 500,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -528.8801,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -581.6866,
+          "worst_source_holdout_net": 52.4018,
+          "mark_full_net": -526.0178,
+          "traded_full_net": -528.8801,
+          "mark_positive_months": 9,
+          "traded_positive_months": 8,
+          "min_closed_trades": 431,
+          "min_tp_exits": 202
+        },
+        {
+          "asset": "BTC",
+          "activation": 2500,
+          "atr_multiplier": 4.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -529.3779,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -557.143,
+          "worst_source_holdout_net": 27.7651,
+          "mark_full_net": -529.3779,
+          "traded_full_net": -523.904,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 386,
+          "min_tp_exits": 56
+        },
+        {
+          "asset": "BTC",
+          "activation": 2000,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -537.2302,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -603.6235,
+          "worst_source_holdout_net": 66.3933,
+          "mark_full_net": -533.5932,
+          "traded_full_net": -537.2302,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 405,
+          "min_tp_exits": 102
+        },
+        {
+          "asset": "BTC",
+          "activation": 4000,
+          "atr_multiplier": 2.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -544.2989,
+          "worst_source_positive_months": 9,
+          "worst_source_train_net": -533.0639,
+          "worst_source_holdout_net": -11.2349,
+          "mark_full_net": -505.6463,
+          "traded_full_net": -544.2989,
+          "mark_positive_months": 9,
+          "traded_positive_months": 9,
+          "min_closed_trades": 413,
+          "min_tp_exits": 50
+        },
+        {
+          "asset": "BTC",
+          "activation": 100,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -545.3444,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -589.0792,
+          "worst_source_holdout_net": 43.33,
+          "mark_full_net": -542.4822,
+          "traded_full_net": -545.3444,
+          "mark_positive_months": 9,
+          "traded_positive_months": 8,
+          "min_closed_trades": 436,
+          "min_tp_exits": 214
+        },
+        {
+          "asset": "BTC",
+          "activation": 250,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -546.3228,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -588.3013,
+          "worst_source_holdout_net": 41.5737,
+          "mark_full_net": -543.4606,
+          "traded_full_net": -546.3228,
+          "mark_positive_months": 9,
+          "traded_positive_months": 8,
+          "min_closed_trades": 434,
+          "min_tp_exits": 210
+        }
+      ],
+      "top10_positive_months": [
+        {
+          "asset": "BTC",
+          "activation": 1500,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -673.3675,
+          "worst_source_positive_months": 11,
+          "worst_source_train_net": -610.3024,
+          "worst_source_holdout_net": -65.3688,
+          "mark_full_net": -664.12,
+          "traded_full_net": -673.3675,
+          "mark_positive_months": 11,
+          "traded_positive_months": 11,
+          "min_closed_trades": 511,
+          "min_tp_exits": 169
+        },
+        {
+          "asset": "BTC",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -525.3407,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -484.9674,
+          "worst_source_holdout_net": -40.3733,
+          "mark_full_net": -510.0697,
+          "traded_full_net": -525.3407,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 414,
+          "min_tp_exits": 50
+        },
+        {
+          "asset": "BTC",
+          "activation": 2500,
+          "atr_multiplier": 4.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -529.3779,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -557.143,
+          "worst_source_holdout_net": 27.7651,
+          "mark_full_net": -529.3779,
+          "traded_full_net": -523.904,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 386,
+          "min_tp_exits": 56
+        },
+        {
+          "asset": "BTC",
+          "activation": 2000,
+          "atr_multiplier": 4.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -547.0404,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -588.1744,
+          "worst_source_holdout_net": 41.1339,
+          "mark_full_net": -547.0404,
+          "traded_full_net": -542.0421,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 392,
+          "min_tp_exits": 73
+        },
+        {
+          "asset": "BTC",
+          "activation": 1500,
+          "atr_multiplier": 4.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -551.5651,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -575.4789,
+          "worst_source_holdout_net": 23.9138,
+          "mark_full_net": -551.5651,
+          "traded_full_net": -546.6713,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 396,
+          "min_tp_exits": 100
+        },
+        {
+          "asset": "BTC",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -566.9992,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -560.6163,
+          "worst_source_holdout_net": -7.0782,
+          "mark_full_net": -546.1755,
+          "traded_full_net": -566.9992,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 417,
+          "min_tp_exits": 50
+        },
+        {
+          "asset": "BTC",
+          "activation": 2000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -594.2539,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -574.1784,
+          "worst_source_holdout_net": -20.0754,
+          "mark_full_net": -594.2539,
+          "traded_full_net": -592.0791,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 473,
+          "min_tp_exits": 121
+        },
+        {
+          "asset": "BTC",
+          "activation": 2500,
+          "atr_multiplier": 4.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -595.5466,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -592.9846,
+          "worst_source_holdout_net": -2.5619,
+          "mark_full_net": -595.5466,
+          "traded_full_net": -595.5466,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 380,
+          "min_tp_exits": 44
+        },
+        {
+          "asset": "BTC",
+          "activation": 4000,
+          "atr_multiplier": 4.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -596.3864,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -591.9081,
+          "worst_source_holdout_net": -4.4783,
+          "mark_full_net": -596.3864,
+          "traded_full_net": -596.3864,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 378,
+          "min_tp_exits": 28
+        },
+        {
+          "asset": "BTC",
+          "activation": 4000,
+          "atr_multiplier": 5.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -597.1237,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -596.206,
+          "worst_source_holdout_net": -0.9177,
+          "mark_full_net": -594.1355,
+          "traded_full_net": -597.1237,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 376,
+          "min_tp_exits": 14
+        }
+      ],
+      "number_scenarios": 360,
+      "number_paired_settings": 180,
+      "number_TP_effective_paired_settings": 160,
+      "any_net_positive_both_sources": false
+    },
+    "ETH": {
+      "best": {
+        "most_robust_full_net_with_TP": {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -181.063,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -144.0343,
+          "worst_source_holdout_net": -37.0287,
+          "mark_full_net": -177.4048,
+          "traded_full_net": -181.063,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 424,
+          "min_tp_exits": 75
+        },
+        "most_profitable_months_with_TP": {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -181.063,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -144.0343,
+          "worst_source_holdout_net": -37.0287,
+          "mark_full_net": -177.4048,
+          "traded_full_net": -181.063,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 424,
+          "min_tp_exits": 75
+        },
+        "best_2025_train_with_TP": {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 2.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -202.5797,
+          "worst_source_positive_months": 9,
+          "worst_source_train_net": -125.642,
+          "worst_source_holdout_net": -76.9377,
+          "mark_full_net": -202.5797,
+          "traded_full_net": -195.8277,
+          "mark_positive_months": 9,
+          "traded_positive_months": 9,
+          "min_closed_trades": 411,
+          "min_tp_exits": 71
+        },
+        "overall_best_including_no_TP": {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -181.063,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -144.0343,
+          "worst_source_holdout_net": -37.0287,
+          "mark_full_net": -177.4048,
+          "traded_full_net": -181.063,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 424,
+          "min_tp_exits": 75
+        }
+      },
+      "top10_robust_net": [
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -181.063,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -144.0343,
+          "worst_source_holdout_net": -37.0287,
+          "mark_full_net": -177.4048,
+          "traded_full_net": -181.063,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 424,
+          "min_tp_exits": 75
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 2.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -202.5797,
+          "worst_source_positive_months": 9,
+          "worst_source_train_net": -125.642,
+          "worst_source_holdout_net": -76.9377,
+          "mark_full_net": -202.5797,
+          "traded_full_net": -195.8277,
+          "mark_positive_months": 9,
+          "traded_positive_months": 9,
+          "min_closed_trades": 411,
+          "min_tp_exits": 71
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 3.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -204.7423,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -234.7954,
+          "worst_source_holdout_net": 30.0531,
+          "mark_full_net": -204.7423,
+          "traded_full_net": -191.4885,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 382,
+          "min_tp_exits": 65
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 3.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -248.8856,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -297.3935,
+          "worst_source_holdout_net": 47.0497,
+          "mark_full_net": -248.6338,
+          "traded_full_net": -248.8856,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 399,
+          "min_tp_exits": 67
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 4.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -270.3973,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -247.3839,
+          "worst_source_holdout_net": -23.0135,
+          "mark_full_net": -270.3973,
+          "traded_full_net": -247.0396,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 368,
+          "min_tp_exits": 35
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 4.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -289.741,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -243.5857,
+          "worst_source_holdout_net": -47.602,
+          "mark_full_net": -289.741,
+          "traded_full_net": -285.9702,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 376,
+          "min_tp_exits": 55
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 5.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -293.8828,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -247.6672,
+          "worst_source_holdout_net": -46.2157,
+          "mark_full_net": -293.8828,
+          "traded_full_net": -293.8828,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 366,
+          "min_tp_exits": 10
+        },
+        {
+          "asset": "ETH",
+          "activation": 0,
+          "atr_multiplier": 5.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -301.2537,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -233.749,
+          "worst_source_holdout_net": -67.5047,
+          "mark_full_net": -301.2537,
+          "traded_full_net": -301.2537,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 369,
+          "min_tp_exits": 26
+        },
+        {
+          "asset": "ETH",
+          "activation": 100,
+          "atr_multiplier": 5.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -301.2537,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -233.749,
+          "worst_source_holdout_net": -67.5047,
+          "mark_full_net": -301.2537,
+          "traded_full_net": -301.2537,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 369,
+          "min_tp_exits": 26
+        },
+        {
+          "asset": "ETH",
+          "activation": 250,
+          "atr_multiplier": 5.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -301.2537,
+          "worst_source_positive_months": 8,
+          "worst_source_train_net": -233.749,
+          "worst_source_holdout_net": -67.5047,
+          "mark_full_net": -301.2537,
+          "traded_full_net": -301.2537,
+          "mark_positive_months": 8,
+          "traded_positive_months": 8,
+          "min_closed_trades": 369,
+          "min_tp_exits": 26
+        }
+      ],
+      "top10_positive_months": [
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -181.063,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -144.0343,
+          "worst_source_holdout_net": -37.0287,
+          "mark_full_net": -177.4048,
+          "traded_full_net": -181.063,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 424,
+          "min_tp_exits": 75
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 3.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -248.8856,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -297.3935,
+          "worst_source_holdout_net": 47.0497,
+          "mark_full_net": -248.6338,
+          "traded_full_net": -248.8856,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 399,
+          "min_tp_exits": 67
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 2.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -407.7381,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -352.6342,
+          "worst_source_holdout_net": -68.3306,
+          "mark_full_net": -407.7381,
+          "traded_full_net": -403.7318,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 430,
+          "min_tp_exits": 76
+        },
+        {
+          "asset": "ETH",
+          "activation": 1000,
+          "atr_multiplier": 1.5,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -691.2091,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -550.3208,
+          "worst_source_holdout_net": -145.1284,
+          "mark_full_net": -678.7901,
+          "traded_full_net": -691.2091,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 588,
+          "min_tp_exits": 280
+        },
+        {
+          "asset": "ETH",
+          "activation": 2500,
+          "atr_multiplier": 0.75,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -977.1316,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -533.5611,
+          "worst_source_holdout_net": -451.2322,
+          "mark_full_net": -949.4757,
+          "traded_full_net": -977.1316,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 496,
+          "min_tp_exits": 135
+        },
+        {
+          "asset": "ETH",
+          "activation": 2500,
+          "atr_multiplier": 0.5,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -1024.372,
+          "worst_source_positive_months": 10,
+          "worst_source_train_net": -628.2847,
+          "worst_source_holdout_net": -396.0873,
+          "mark_full_net": -978.8474,
+          "traded_full_net": -1024.372,
+          "mark_positive_months": 10,
+          "traded_positive_months": 10,
+          "min_closed_trades": 496,
+          "min_tp_exits": 135
+        },
+        {
+          "asset": "ETH",
+          "activation": 4000,
+          "atr_multiplier": 2.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -202.5797,
+          "worst_source_positive_months": 9,
+          "worst_source_train_net": -125.642,
+          "worst_source_holdout_net": -76.9377,
+          "mark_full_net": -202.5797,
+          "traded_full_net": -195.8277,
+          "mark_positive_months": 9,
+          "traded_positive_months": 9,
+          "min_closed_trades": 411,
+          "min_tp_exits": 71
+        },
+        {
+          "asset": "ETH",
+          "activation": 1500,
+          "atr_multiplier": 3.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -372.5366,
+          "worst_source_positive_months": 9,
+          "worst_source_train_net": -266.6899,
+          "worst_source_holdout_net": -105.8468,
+          "mark_full_net": -368.4717,
+          "traded_full_net": -372.5366,
+          "mark_positive_months": 9,
+          "traded_positive_months": 9,
+          "min_closed_trades": 452,
+          "min_tp_exits": 172
+        },
+        {
+          "asset": "ETH",
+          "activation": 1000,
+          "atr_multiplier": 2.0,
+          "exit_mode": "H_CLOSE",
+          "worst_source_full_net": -373.5137,
+          "worst_source_positive_months": 9,
+          "worst_source_train_net": -219.6119,
+          "worst_source_holdout_net": -153.9018,
+          "mark_full_net": -373.5137,
+          "traded_full_net": -346.6048,
+          "mark_positive_months": 9,
+          "traded_positive_months": 9,
+          "min_closed_trades": 513,
+          "min_tp_exits": 238
+        },
+        {
+          "asset": "ETH",
+          "activation": 800,
+          "atr_multiplier": 3.0,
+          "exit_mode": "M1_TRIGGER",
+          "worst_source_full_net": -389.2638,
+          "worst_source_positive_months": 9,
+          "worst_source_train_net": -308.0783,
+          "worst_source_holdout_net": -81.1855,
+          "mark_full_net": -338.4956,
+          "traded_full_net": -389.2638,
+          "mark_positive_months": 9,
+          "traded_positive_months": 9,
+          "min_closed_trades": 468,
+          "min_tp_exits": 234
+        }
+      ],
+      "number_scenarios": 360,
+      "number_paired_settings": 180,
+      "number_TP_effective_paired_settings": 160,
+      "any_net_positive_both_sources": false
+    }
+  },
+  "combinations": {
+    "BTC": [
+      {
+        "activation": 500,
+        "atr_multiplier": 1.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "BTC",
+            "activation": 500,
+            "atr_multiplier": 1.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -1146.8369,
+            "full_pf": 0.7374,
+            "full_trades": 698,
+            "full_wins": 275,
+            "full_winrate": 39.4,
+            "full_positive_months": 5,
+            "full_negative_months": 17,
+            "full_maxdd_usd": 1201.9942,
+            "full_gross": -359.152,
+            "full_fees_gst": 787.6849,
+            "train2025_net": -876.6326,
+            "train2025_pf": 0.6589,
+            "train2025_positive_months": 2,
+            "test2026_net": -270.2043,
+            "test2026_pf": 0.8497,
+            "test2026_positive_months": 3,
+            "tp_exits": 378,
+            "emergency_exits": 262,
+            "flip_exits": 58,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -194.386,
+              "trades": 28,
+              "wins": 8,
+              "losses": 20,
+              "profit_factor": 0.3221
+            },
+            "2025-02": {
+              "net_usd": -50.4141,
+              "trades": 31,
+              "wins": 15,
+              "losses": 16,
+              "profit_factor": 0.7141
+            },
+            "2025-03": {
+              "net_usd": -146.3817,
+              "trades": 35,
+              "wins": 12,
+              "losses": 23,
+              "profit_factor": 0.6126
+            },
+            "2025-04": {
+              "net_usd": -32.6714,
+              "trades": 31,
+              "wins": 16,
+              "losses": 15,
+              "profit_factor": 0.8454
+            },
+            "2025-05": {
+              "net_usd": -54.5097,
+              "trades": 38,
+              "wins": 16,
+              "losses": 22,
+              "profit_factor": 0.737
+            },
+            "2025-06": {
+              "net_usd": -13.1131,
+              "trades": 36,
+              "wins": 12,
+              "losses": 24,
+              "profit_factor": 0.9177
+            },
+            "2025-07": {
+              "net_usd": -26.3957,
+              "trades": 40,
+              "wins": 15,
+              "losses": 25,
+              "profit_factor": 0.8384
+            },
+            "2025-08": {
+              "net_usd": 21.1948,
+              "trades": 34,
+              "wins": 15,
+              "losses": 19,
+              "profit_factor": 1.1738
+            },
+            "2025-09": {
+              "net_usd": -77.0459,
+              "trades": 27,
+              "wins": 10,
+              "losses": 17,
+              "profit_factor": 0.4206
+            },
+            "2025-10": {
+              "net_usd": 6.2087,
+              "trades": 33,
+              "wins": 15,
+              "losses": 18,
+              "profit_factor": 1.031
+            },
+            "2025-11": {
+              "net_usd": -116.6166,
+              "trades": 40,
+              "wins": 11,
+              "losses": 29,
+              "profit_factor": 0.6122
+            },
+            "2025-12": {
+              "net_usd": -192.5019,
+              "trades": 30,
+              "wins": 10,
+              "losses": 20,
+              "profit_factor": 0.169
+            },
+            "2026-01": {
+              "net_usd": 107.5111,
+              "trades": 24,
+              "wins": 13,
+              "losses": 11,
+              "profit_factor": 2.4917
+            },
+            "2026-02": {
+              "net_usd": 42.1682,
+              "trades": 29,
+              "wins": 14,
+              "losses": 15,
+              "profit_factor": 1.2065
+            },
+            "2026-03": {
+              "net_usd": -172.8731,
+              "trades": 31,
+              "wins": 9,
+              "losses": 22,
+              "profit_factor": 0.4077
+            },
+            "2026-04": {
+              "net_usd": -109.9799,
+              "trades": 32,
+              "wins": 12,
+              "losses": 20,
+              "profit_factor": 0.4227
+            },
+            "2026-05": {
+              "net_usd": -49.2291,
+              "trades": 30,
+              "wins": 11,
+              "losses": 19,
+              "profit_factor": 0.6598
+            },
+            "2026-06": {
+              "net_usd": -21.8344,
+              "trades": 29,
+              "wins": 13,
+              "losses": 16,
+              "profit_factor": 0.8853
+            },
+            "2026-07": {
+              "net_usd": -52.7275,
+              "trades": 30,
+              "wins": 13,
+              "losses": 17,
+              "profit_factor": 0.7289
+            },
+            "2026-08": {
+              "net_usd": 95.236,
+              "trades": 35,
+              "wins": 14,
+              "losses": 21,
+              "profit_factor": 1.4751
+            },
+            "2026-09": {
+              "net_usd": -63.3706,
+              "trades": 32,
+              "wins": 12,
+              "losses": 20,
+              "profit_factor": 0.6621
+            },
+            "2026-10": {
+              "net_usd": -45.105,
+              "trades": 23,
+              "wins": 9,
+              "losses": 14,
+              "profit_factor": 0.629
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "BTC",
+            "activation": 500,
+            "atr_multiplier": 1.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -1119.5171,
+            "full_pf": 0.7437,
+            "full_trades": 698,
+            "full_wins": 275,
+            "full_winrate": 39.4,
+            "full_positive_months": 4,
+            "full_negative_months": 18,
+            "full_maxdd_usd": 1174.9557,
+            "full_gross": -331.9465,
+            "full_fees_gst": 787.5706,
+            "train2025_net": -888.0011,
+            "train2025_pf": 0.6545,
+            "train2025_positive_months": 1,
+            "test2026_net": -231.516,
+            "test2026_pf": 0.8712,
+            "test2026_positive_months": 3,
+            "tp_exits": 378,
+            "emergency_exits": 262,
+            "flip_exits": 58,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -205.7086,
+              "trades": 29,
+              "wins": 9,
+              "losses": 20,
+              "profit_factor": 0.3179
+            },
+            "2025-02": {
+              "net_usd": -50.4141,
+              "trades": 31,
+              "wins": 15,
+              "losses": 16,
+              "profit_factor": 0.7141
+            },
+            "2025-03": {
+              "net_usd": -146.3817,
+              "trades": 35,
+              "wins": 12,
+              "losses": 23,
+              "profit_factor": 0.6126
+            },
+            "2025-04": {
+              "net_usd": -19.773,
+              "trades": 31,
+              "wins": 16,
+              "losses": 15,
+              "profit_factor": 0.9003
+            },
+            "2025-05": {
+              "net_usd": -54.5097,
+              "trades": 38,
+              "wins": 16,
+              "losses": 22,
+              "profit_factor": 0.737
+            },
+            "2025-06": {
+              "net_usd": -12.4536,
+              "trades": 36,
+              "wins": 12,
+              "losses": 24,
+              "profit_factor": 0.9211
+            },
+            "2025-07": {
+              "net_usd": -26.2396,
+              "trades": 40,
+              "wins": 15,
+              "losses": 25,
+              "profit_factor": 0.8394
+            },
+            "2025-08": {
+              "net_usd": 21.1948,
+              "trades": 34,
+              "wins": 15,
+              "losses": 19,
+              "profit_factor": 1.1738
+            },
+            "2025-09": {
+              "net_usd": -77.0459,
+              "trades": 27,
+              "wins": 10,
+              "losses": 17,
+              "profit_factor": 0.4206
+            },
+            "2025-10": {
+              "net_usd": -7.5512,
+              "trades": 33,
+              "wins": 15,
+              "losses": 18,
+              "profit_factor": 0.9623
+            },
+            "2025-11": {
+              "net_usd": -116.6166,
+              "trades": 40,
+              "wins": 11,
+              "losses": 29,
+              "profit_factor": 0.6122
+            },
+            "2025-12": {
+              "net_usd": -192.5019,
+              "trades": 30,
+              "wins": 10,
+              "losses": 20,
+              "profit_factor": 0.169
+            },
+            "2026-01": {
+              "net_usd": 107.5111,
+              "trades": 24,
+              "wins": 13,
+              "losses": 11,
+              "profit_factor": 2.4917
+            },
+            "2026-02": {
+              "net_usd": 42.1682,
+              "trades": 29,
+              "wins": 14,
+              "losses": 15,
+              "profit_factor": 1.2065
+            },
+            "2026-03": {
+              "net_usd": -172.8731,
+              "trades": 31,
+              "wins": 9,
+              "losses": 22,
+              "profit_factor": 0.4077
+            },
+            "2026-04": {
+              "net_usd": -109.9799,
+              "trades": 32,
+              "wins": 12,
+              "losses": 20,
+              "profit_factor": 0.4227
+            },
+            "2026-05": {
+              "net_usd": -26.3486,
+              "trades": 30,
+              "wins": 11,
+              "losses": 19,
+              "profit_factor": 0.8179
+            },
+            "2026-06": {
+              "net_usd": -5.5458,
+              "trades": 29,
+              "wins": 13,
+              "losses": 16,
+              "profit_factor": 0.9709
+            },
+            "2026-07": {
+              "net_usd": -56.112,
+              "trades": 30,
+              "wins": 13,
+              "losses": 17,
+              "profit_factor": 0.7115
+            },
+            "2026-08": {
+              "net_usd": 94.9959,
+              "trades": 35,
+              "wins": 14,
+              "losses": 21,
+              "profit_factor": 1.4739
+            },
+            "2026-09": {
+              "net_usd": -63.3706,
+              "trades": 32,
+              "wins": 12,
+              "losses": 20,
+              "profit_factor": 0.6621
+            },
+            "2026-10": {
+              "net_usd": -41.9612,
+              "trades": 22,
+              "wins": 8,
+              "losses": 14,
+              "profit_factor": 0.6548
+            }
+          }
+        }
+      },
+      {
+        "activation": 800,
+        "atr_multiplier": 1.5,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "BTC",
+            "activation": 800,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -780.9903,
+            "full_pf": 0.8135,
+            "full_trades": 586,
+            "full_wins": 214,
+            "full_winrate": 36.52,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 861.4831,
+            "full_gross": -120.3955,
+            "full_fees_gst": 660.5948,
+            "train2025_net": -663.3686,
+            "train2025_pf": 0.7265,
+            "train2025_positive_months": 4,
+            "test2026_net": -117.6217,
+            "test2026_pf": 0.9333,
+            "test2026_positive_months": 4,
+            "tp_exits": 263,
+            "emergency_exits": 251,
+            "flip_exits": 72,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -215.4434,
+              "trades": 25,
+              "wins": 6,
+              "losses": 19,
+              "profit_factor": 0.2746
+            },
+            "2025-02": {
+              "net_usd": 2.0656,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "profit_factor": 1.0129
+            },
+            "2025-03": {
+              "net_usd": -123.5825,
+              "trades": 29,
+              "wins": 9,
+              "losses": 20,
+              "profit_factor": 0.6317
+            },
+            "2025-04": {
+              "net_usd": 36.4311,
+              "trades": 27,
+              "wins": 13,
+              "losses": 14,
+              "profit_factor": 1.196
+            },
+            "2025-05": {
+              "net_usd": -0.7723,
+              "trades": 29,
+              "wins": 12,
+              "losses": 17,
+              "profit_factor": 0.9957
+            },
+            "2025-06": {
+              "net_usd": -18.3741,
+              "trades": 29,
+              "wins": 9,
+              "losses": 20,
+              "profit_factor": 0.8806
+            },
+            "2025-07": {
+              "net_usd": -3.048,
+              "trades": 31,
+              "wins": 12,
+              "losses": 19,
+              "profit_factor": 0.9807
+            },
+            "2025-08": {
+              "net_usd": 30.3026,
+              "trades": 29,
+              "wins": 12,
+              "losses": 17,
+              "profit_factor": 1.2437
+            },
+            "2025-09": {
+              "net_usd": -86.2363,
+              "trades": 25,
+              "wins": 8,
+              "losses": 17,
+              "profit_factor": 0.3533
+            },
+            "2025-10": {
+              "net_usd": 24.9633,
+              "trades": 31,
+              "wins": 13,
+              "losses": 18,
+              "profit_factor": 1.1237
+            },
+            "2025-11": {
+              "net_usd": -90.9455,
+              "trades": 29,
+              "wins": 9,
+              "losses": 20,
+              "profit_factor": 0.6477
+            },
+            "2025-12": {
+              "net_usd": -218.7292,
+              "trades": 26,
+              "wins": 6,
+              "losses": 20,
+              "profit_factor": 0.0847
+            },
+            "2026-01": {
+              "net_usd": 82.5679,
+              "trades": 19,
+              "wins": 10,
+              "losses": 9,
+              "profit_factor": 1.9556
+            },
+            "2026-02": {
+              "net_usd": 105.4957,
+              "trades": 25,
+              "wins": 10,
+              "losses": 15,
+              "profit_factor": 1.5121
+            },
+            "2026-03": {
+              "net_usd": -180.7213,
+              "trades": 26,
+              "wins": 7,
+              "losses": 19,
+              "profit_factor": 0.3796
+            },
+            "2026-04": {
+              "net_usd": -104.5951,
+              "trades": 28,
+              "wins": 10,
+              "losses": 18,
+              "profit_factor": 0.4267
+            },
+            "2026-05": {
+              "net_usd": -37.7219,
+              "trades": 25,
+              "wins": 9,
+              "losses": 16,
+              "profit_factor": 0.7626
+            },
+            "2026-06": {
+              "net_usd": 119.8411,
+              "trades": 23,
+              "wins": 12,
+              "losses": 11,
+              "profit_factor": 1.8706
+            },
+            "2026-07": {
+              "net_usd": -75.1028,
+              "trades": 29,
+              "wins": 11,
+              "losses": 18,
+              "profit_factor": 0.6306
+            },
+            "2026-08": {
+              "net_usd": 123.382,
+              "trades": 29,
+              "wins": 11,
+              "losses": 18,
+              "profit_factor": 1.7383
+            },
+            "2026-09": {
+              "net_usd": -86.2903,
+              "trades": 28,
+              "wins": 10,
+              "losses": 18,
+              "profit_factor": 0.5472
+            },
+            "2026-10": {
+              "net_usd": -64.4771,
+              "trades": 21,
+              "wins": 7,
+              "losses": 14,
+              "profit_factor": 0.5366
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "BTC",
+            "activation": 800,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -792.5415,
+            "full_pf": 0.8113,
+            "full_trades": 586,
+            "full_wins": 213,
+            "full_winrate": 36.35,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 873.0343,
+            "full_gross": -131.9535,
+            "full_fees_gst": 660.588,
+            "train2025_net": -674.9198,
+            "train2025_pf": 0.7231,
+            "train2025_positive_months": 4,
+            "test2026_net": -117.6217,
+            "test2026_pf": 0.9333,
+            "test2026_positive_months": 4,
+            "tp_exits": 263,
+            "emergency_exits": 251,
+            "flip_exits": 72,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -215.4434,
+              "trades": 25,
+              "wins": 6,
+              "losses": 19,
+              "profit_factor": 0.2746
+            },
+            "2025-02": {
+              "net_usd": 2.0656,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "profit_factor": 1.0129
+            },
+            "2025-03": {
+              "net_usd": -137.3084,
+              "trades": 29,
+              "wins": 8,
+              "losses": 21,
+              "profit_factor": 0.6049
+            },
+            "2025-04": {
+              "net_usd": 36.4311,
+              "trades": 27,
+              "wins": 13,
+              "losses": 14,
+              "profit_factor": 1.196
+            },
+            "2025-05": {
+              "net_usd": -0.7723,
+              "trades": 29,
+              "wins": 12,
+              "losses": 17,
+              "profit_factor": 0.9957
+            },
+            "2025-06": {
+              "net_usd": -18.3741,
+              "trades": 29,
+              "wins": 9,
+              "losses": 20,
+              "profit_factor": 0.8806
+            },
+            "2025-07": {
+              "net_usd": -3.048,
+              "trades": 31,
+              "wins": 12,
+              "losses": 19,
+              "profit_factor": 0.9807
+            },
+            "2025-08": {
+              "net_usd": 32.4773,
+              "trades": 29,
+              "wins": 12,
+              "losses": 17,
+              "profit_factor": 1.2612
+            },
+            "2025-09": {
+              "net_usd": -86.2363,
+              "trades": 25,
+              "wins": 8,
+              "losses": 17,
+              "profit_factor": 0.3533
+            },
+            "2025-10": {
+              "net_usd": 24.9633,
+              "trades": 31,
+              "wins": 13,
+              "losses": 18,
+              "profit_factor": 1.1237
+            },
+            "2025-11": {
+              "net_usd": -90.9455,
+              "trades": 29,
+              "wins": 9,
+              "losses": 20,
+              "profit_factor": 0.6477
+            },
+            "2025-12": {
+              "net_usd": -218.7292,
+              "trades": 26,
+              "wins": 6,
+              "losses": 20,
+              "profit_factor": 0.0847
+            },
+            "2026-01": {
+              "net_usd": 82.5679,
+              "trades": 19,
+              "wins": 10,
+              "losses": 9,
+              "profit_factor": 1.9556
+            },
+            "2026-02": {
+              "net_usd": 105.4957,
+              "trades": 25,
+              "wins": 10,
+              "losses": 15,
+              "profit_factor": 1.5121
+            },
+            "2026-03": {
+              "net_usd": -180.7213,
+              "trades": 26,
+              "wins": 7,
+              "losses": 19,
+              "profit_factor": 0.3796
+            },
+            "2026-04": {
+              "net_usd": -104.5951,
+              "trades": 28,
+              "wins": 10,
+              "losses": 18,
+              "profit_factor": 0.4267
+            },
+            "2026-05": {
+              "net_usd": -37.7219,
+              "trades": 25,
+              "wins": 9,
+              "losses": 16,
+              "profit_factor": 0.7626
+            },
+            "2026-06": {
+              "net_usd": 119.8411,
+              "trades": 23,
+              "wins": 12,
+              "losses": 11,
+              "profit_factor": 1.8706
+            },
+            "2026-07": {
+              "net_usd": -75.1028,
+              "trades": 29,
+              "wins": 11,
+              "losses": 18,
+              "profit_factor": 0.6306
+            },
+            "2026-08": {
+              "net_usd": 123.382,
+              "trades": 29,
+              "wins": 11,
+              "losses": 18,
+              "profit_factor": 1.7383
+            },
+            "2026-09": {
+              "net_usd": -86.2903,
+              "trades": 28,
+              "wins": 10,
+              "losses": 18,
+              "profit_factor": 0.5472
+            },
+            "2026-10": {
+              "net_usd": -64.4771,
+              "trades": 21,
+              "wins": 7,
+              "losses": 14,
+              "profit_factor": 0.5366
+            }
+          }
+        }
+      },
+      {
+        "activation": 1000,
+        "atr_multiplier": 2.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "BTC",
+            "activation": 1000,
+            "atr_multiplier": 2.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -685.6246,
+            "full_pf": 0.8231,
+            "full_trades": 517,
+            "full_wins": 172,
+            "full_winrate": 33.27,
+            "full_positive_months": 9,
+            "full_negative_months": 13,
+            "full_maxdd_usd": 792.7734,
+            "full_gross": -102.6135,
+            "full_fees_gst": 583.0111,
+            "train2025_net": -638.1176,
+            "train2025_pf": 0.7151,
+            "train2025_positive_months": 5,
+            "test2026_net": -47.507,
+            "test2026_pf": 0.9709,
+            "test2026_positive_months": 4,
+            "tp_exits": 212,
+            "emergency_exits": 227,
+            "flip_exits": 78,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -223.3781,
+              "trades": 22,
+              "wins": 4,
+              "losses": 18,
+              "profit_factor": 0.2363
+            },
+            "2025-02": {
+              "net_usd": 19.5952,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "profit_factor": 1.1444
+            },
+            "2025-03": {
+              "net_usd": -180.6186,
+              "trades": 30,
+              "wins": 8,
+              "losses": 22,
+              "profit_factor": 0.5158
+            },
+            "2025-04": {
+              "net_usd": 86.9279,
+              "trades": 20,
+              "wins": 10,
+              "losses": 10,
+              "profit_factor": 1.6501
+            },
+            "2025-05": {
+              "net_usd": 13.2265,
+              "trades": 24,
+              "wins": 8,
+              "losses": 16,
+              "profit_factor": 1.0877
+            },
+            "2025-06": {
+              "net_usd": -29.6879,
+              "trades": 27,
+              "wins": 8,
+              "losses": 19,
+              "profit_factor": 0.8056
+            },
+            "2025-07": {
+              "net_usd": -2.6593,
+              "trades": 25,
+              "wins": 8,
+              "losses": 17,
+              "profit_factor": 0.9808
+            },
+            "2025-08": {
+              "net_usd": 38.067,
+              "trades": 24,
+              "wins": 11,
+              "losses": 13,
+              "profit_factor": 1.4264
+            },
+            "2025-09": {
+              "net_usd": -99.3015,
+              "trades": 22,
+              "wins": 4,
+              "losses": 18,
+              "profit_factor": 0.2649
+            },
+            "2025-10": {
+              "net_usd": 30.5601,
+              "trades": 27,
+              "wins": 10,
+              "losses": 17,
+              "profit_factor": 1.1642
+            },
+            "2025-11": {
+              "net_usd": -72.1777,
+              "trades": 26,
+              "wins": 9,
+              "losses": 17,
+              "profit_factor": 0.6642
+            },
+            "2025-12": {
+              "net_usd": -218.6713,
+              "trades": 25,
+              "wins": 5,
+              "losses": 20,
+              "profit_factor": 0.0789
+            },
+            "2026-01": {
+              "net_usd": 96.1131,
+              "trades": 17,
+              "wins": 9,
+              "losses": 8,
+              "profit_factor": 2.2362
+            },
+            "2026-02": {
+              "net_usd": 146.256,
+              "trades": 22,
+              "wins": 10,
+              "losses": 12,
+              "profit_factor": 1.7207
+            },
+            "2026-03": {
+              "net_usd": -210.7179,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "profit_factor": 0.3262
+            },
+            "2026-04": {
+              "net_usd": -88.5746,
+              "trades": 22,
+              "wins": 6,
+              "losses": 16,
+              "profit_factor": 0.4501
+            },
+            "2026-05": {
+              "net_usd": -35.6404,
+              "trades": 23,
+              "wins": 9,
+              "losses": 14,
+              "profit_factor": 0.739
+            },
+            "2026-06": {
+              "net_usd": 133.6907,
+              "trades": 20,
+              "wins": 10,
+              "losses": 10,
+              "profit_factor": 2.1371
+            },
+            "2026-07": {
+              "net_usd": -39.8964,
+              "trades": 24,
+              "wins": 9,
+              "losses": 15,
+              "profit_factor": 0.7624
+            },
+            "2026-08": {
+              "net_usd": 101.3845,
+              "trades": 27,
+              "wins": 8,
+              "losses": 19,
+              "profit_factor": 1.6427
+            },
+            "2026-09": {
+              "net_usd": -69.6562,
+              "trades": 25,
+              "wins": 7,
+              "losses": 18,
+              "profit_factor": 0.5612
+            },
+            "2026-10": {
+              "net_usd": -80.4659,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.4345
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "BTC",
+            "activation": 1000,
+            "atr_multiplier": 2.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -688.1312,
+            "full_pf": 0.8224,
+            "full_trades": 518,
+            "full_wins": 172,
+            "full_winrate": 33.2,
+            "full_positive_months": 9,
+            "full_negative_months": 13,
+            "full_maxdd_usd": 792.7954,
+            "full_gross": -103.946,
+            "full_fees_gst": 584.1852,
+            "train2025_net": -638.1397,
+            "train2025_pf": 0.7151,
+            "train2025_positive_months": 5,
+            "test2026_net": -49.9915,
+            "test2026_pf": 0.9694,
+            "test2026_positive_months": 4,
+            "tp_exits": 213,
+            "emergency_exits": 227,
+            "flip_exits": 78,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -223.3781,
+              "trades": 22,
+              "wins": 4,
+              "losses": 18,
+              "profit_factor": 0.2363
+            },
+            "2025-02": {
+              "net_usd": 19.5952,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "profit_factor": 1.1444
+            },
+            "2025-03": {
+              "net_usd": -180.1949,
+              "trades": 30,
+              "wins": 8,
+              "losses": 22,
+              "profit_factor": 0.517
+            },
+            "2025-04": {
+              "net_usd": 87.0424,
+              "trades": 21,
+              "wins": 10,
+              "losses": 11,
+              "profit_factor": 1.6499
+            },
+            "2025-05": {
+              "net_usd": 12.6662,
+              "trades": 24,
+              "wins": 8,
+              "losses": 16,
+              "profit_factor": 1.084
+            },
+            "2025-06": {
+              "net_usd": -29.6879,
+              "trades": 27,
+              "wins": 8,
+              "losses": 19,
+              "profit_factor": 0.8056
+            },
+            "2025-07": {
+              "net_usd": -2.6593,
+              "trades": 25,
+              "wins": 8,
+              "losses": 17,
+              "profit_factor": 0.9808
+            },
+            "2025-08": {
+              "net_usd": 38.067,
+              "trades": 24,
+              "wins": 11,
+              "losses": 13,
+              "profit_factor": 1.4264
+            },
+            "2025-09": {
+              "net_usd": -99.3015,
+              "trades": 22,
+              "wins": 4,
+              "losses": 18,
+              "profit_factor": 0.2649
+            },
+            "2025-10": {
+              "net_usd": 30.5601,
+              "trades": 27,
+              "wins": 10,
+              "losses": 17,
+              "profit_factor": 1.1642
+            },
+            "2025-11": {
+              "net_usd": -72.1777,
+              "trades": 26,
+              "wins": 9,
+              "losses": 17,
+              "profit_factor": 0.6642
+            },
+            "2025-12": {
+              "net_usd": -218.6713,
+              "trades": 25,
+              "wins": 5,
+              "losses": 20,
+              "profit_factor": 0.0789
+            },
+            "2026-01": {
+              "net_usd": 96.1131,
+              "trades": 17,
+              "wins": 9,
+              "losses": 8,
+              "profit_factor": 2.2362
+            },
+            "2026-02": {
+              "net_usd": 146.256,
+              "trades": 22,
+              "wins": 10,
+              "losses": 12,
+              "profit_factor": 1.7207
+            },
+            "2026-03": {
+              "net_usd": -210.7179,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "profit_factor": 0.3262
+            },
+            "2026-04": {
+              "net_usd": -88.5746,
+              "trades": 22,
+              "wins": 6,
+              "losses": 16,
+              "profit_factor": 0.4501
+            },
+            "2026-05": {
+              "net_usd": -35.6404,
+              "trades": 23,
+              "wins": 9,
+              "losses": 14,
+              "profit_factor": 0.739
+            },
+            "2026-06": {
+              "net_usd": 133.6907,
+              "trades": 20,
+              "wins": 10,
+              "losses": 10,
+              "profit_factor": 2.1371
+            },
+            "2026-07": {
+              "net_usd": -39.8964,
+              "trades": 24,
+              "wins": 9,
+              "losses": 15,
+              "profit_factor": 0.7624
+            },
+            "2026-08": {
+              "net_usd": 101.3845,
+              "trades": 27,
+              "wins": 8,
+              "losses": 19,
+              "profit_factor": 1.6427
+            },
+            "2026-09": {
+              "net_usd": -72.1407,
+              "trades": 25,
+              "wins": 7,
+              "losses": 18,
+              "profit_factor": 0.5456
+            },
+            "2026-10": {
+              "net_usd": -80.4659,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.4345
+            }
+          }
+        }
+      },
+      {
+        "activation": 1000,
+        "atr_multiplier": 3.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "BTC",
+            "activation": 1000,
+            "atr_multiplier": 3.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -512.5609,
+            "full_pf": 0.8417,
+            "full_trades": 424,
+            "full_wins": 127,
+            "full_winrate": 29.95,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 645.6654,
+            "full_gross": -34.017,
+            "full_fees_gst": 478.5439,
+            "train2025_net": -563.1558,
+            "train2025_pf": 0.7141,
+            "train2025_positive_months": 4,
+            "test2026_net": 50.5948,
+            "test2026_pf": 1.0399,
+            "test2026_positive_months": 4,
+            "tp_exits": 177,
+            "emergency_exits": 191,
+            "flip_exits": 56,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -208.5283,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.1946
+            },
+            "2025-02": {
+              "net_usd": -17.2149,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 0.8752
+            },
+            "2025-03": {
+              "net_usd": -148.9375,
+              "trades": 24,
+              "wins": 5,
+              "losses": 19,
+              "profit_factor": 0.5132
+            },
+            "2025-04": {
+              "net_usd": 61.6494,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "profit_factor": 1.4329
+            },
+            "2025-05": {
+              "net_usd": 55.3852,
+              "trades": 17,
+              "wins": 7,
+              "losses": 10,
+              "profit_factor": 1.5295
+            },
+            "2025-06": {
+              "net_usd": -5.9143,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.9501
+            },
+            "2025-07": {
+              "net_usd": -3.2467,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.9708
+            },
+            "2025-08": {
+              "net_usd": 44.3009,
+              "trades": 19,
+              "wins": 8,
+              "losses": 11,
+              "profit_factor": 1.678
+            },
+            "2025-09": {
+              "net_usd": -97.6379,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.2474
+            },
+            "2025-10": {
+              "net_usd": 49.4395,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 1.2855
+            },
+            "2025-11": {
+              "net_usd": -49.0403,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.7137
+            },
+            "2025-12": {
+              "net_usd": -243.4109,
+              "trades": 25,
+              "wins": 2,
+              "losses": 23,
+              "profit_factor": 0.0287
+            },
+            "2026-01": {
+              "net_usd": 109.6381,
+              "trades": 12,
+              "wins": 7,
+              "losses": 5,
+              "profit_factor": 3.9577
+            },
+            "2026-02": {
+              "net_usd": 187.8708,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "profit_factor": 2.4898
+            },
+            "2026-03": {
+              "net_usd": -208.3721,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 0.1884
+            },
+            "2026-04": {
+              "net_usd": -97.7009,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.29
+            },
+            "2026-05": {
+              "net_usd": -10.9429,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "profit_factor": 0.8809
+            },
+            "2026-06": {
+              "net_usd": 155.6444,
+              "trades": 14,
+              "wins": 7,
+              "losses": 7,
+              "profit_factor": 3.0383
+            },
+            "2026-07": {
+              "net_usd": -21.423,
+              "trades": 20,
+              "wins": 9,
+              "losses": 11,
+              "profit_factor": 0.8342
+            },
+            "2026-08": {
+              "net_usd": 99.4306,
+              "trades": 25,
+              "wins": 8,
+              "losses": 17,
+              "profit_factor": 1.643
+            },
+            "2026-09": {
+              "net_usd": -74.3268,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.4579
+            },
+            "2026-10": {
+              "net_usd": -89.2233,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 0.2635
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "BTC",
+            "activation": 1000,
+            "atr_multiplier": 3.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -515.8965,
+            "full_pf": 0.8407,
+            "full_trades": 424,
+            "full_wins": 127,
+            "full_winrate": 29.95,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 649.4057,
+            "full_gross": -37.3565,
+            "full_fees_gst": 478.54,
+            "train2025_net": -566.8961,
+            "train2025_pf": 0.7122,
+            "train2025_positive_months": 4,
+            "test2026_net": 50.9996,
+            "test2026_pf": 1.0402,
+            "test2026_positive_months": 4,
+            "tp_exits": 176,
+            "emergency_exits": 191,
+            "flip_exits": 57,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -208.5283,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.1946
+            },
+            "2025-02": {
+              "net_usd": -15.8341,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 0.8841
+            },
+            "2025-03": {
+              "net_usd": -148.9375,
+              "trades": 24,
+              "wins": 5,
+              "losses": 19,
+              "profit_factor": 0.5132
+            },
+            "2025-04": {
+              "net_usd": 57.6972,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "profit_factor": 1.4052
+            },
+            "2025-05": {
+              "net_usd": 53.901,
+              "trades": 17,
+              "wins": 7,
+              "losses": 10,
+              "profit_factor": 1.5081
+            },
+            "2025-06": {
+              "net_usd": -5.9143,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.9501
+            },
+            "2025-07": {
+              "net_usd": -3.2467,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.9708
+            },
+            "2025-08": {
+              "net_usd": 44.6161,
+              "trades": 19,
+              "wins": 8,
+              "losses": 11,
+              "profit_factor": 1.6829
+            },
+            "2025-09": {
+              "net_usd": -97.6379,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.2474
+            },
+            "2025-10": {
+              "net_usd": 49.4395,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 1.2855
+            },
+            "2025-11": {
+              "net_usd": -49.0403,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.7137
+            },
+            "2025-12": {
+              "net_usd": -243.4109,
+              "trades": 25,
+              "wins": 2,
+              "losses": 23,
+              "profit_factor": 0.0287
+            },
+            "2026-01": {
+              "net_usd": 109.6381,
+              "trades": 12,
+              "wins": 7,
+              "losses": 5,
+              "profit_factor": 3.9577
+            },
+            "2026-02": {
+              "net_usd": 187.8708,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "profit_factor": 2.4898
+            },
+            "2026-03": {
+              "net_usd": -208.3721,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 0.1884
+            },
+            "2026-04": {
+              "net_usd": -97.7009,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.29
+            },
+            "2026-05": {
+              "net_usd": -10.9429,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "profit_factor": 0.8809
+            },
+            "2026-06": {
+              "net_usd": 156.0492,
+              "trades": 14,
+              "wins": 7,
+              "losses": 7,
+              "profit_factor": 3.0436
+            },
+            "2026-07": {
+              "net_usd": -21.423,
+              "trades": 20,
+              "wins": 9,
+              "losses": 11,
+              "profit_factor": 0.8342
+            },
+            "2026-08": {
+              "net_usd": 99.4306,
+              "trades": 25,
+              "wins": 8,
+              "losses": 17,
+              "profit_factor": 1.643
+            },
+            "2026-09": {
+              "net_usd": -74.3268,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.4579
+            },
+            "2026-10": {
+              "net_usd": -89.2233,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 0.2635
+            }
+          }
+        }
+      },
+      {
+        "activation": 1500,
+        "atr_multiplier": 1.5,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "BTC",
+            "activation": 1500,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -664.12,
+            "full_pf": 0.8372,
+            "full_trades": 511,
+            "full_wins": 169,
+            "full_winrate": 33.07,
+            "full_positive_months": 11,
+            "full_negative_months": 11,
+            "full_maxdd_usd": 834.8002,
+            "full_gross": -87.67,
+            "full_fees_gst": 576.45,
+            "train2025_net": -598.7512,
+            "train2025_pf": 0.7501,
+            "train2025_positive_months": 7,
+            "test2026_net": -65.3688,
+            "test2026_pf": 0.9612,
+            "test2026_positive_months": 4,
+            "tp_exits": 169,
+            "emergency_exits": 239,
+            "flip_exits": 103,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -225.8565,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "profit_factor": 0.2704
+            },
+            "2025-02": {
+              "net_usd": 32.188,
+              "trades": 19,
+              "wins": 8,
+              "losses": 11,
+              "profit_factor": 1.2281
+            },
+            "2025-03": {
+              "net_usd": -136.0226,
+              "trades": 27,
+              "wins": 9,
+              "losses": 18,
+              "profit_factor": 0.6082
+            },
+            "2025-04": {
+              "net_usd": 48.3547,
+              "trades": 21,
+              "wins": 10,
+              "losses": 11,
+              "profit_factor": 1.2782
+            },
+            "2025-05": {
+              "net_usd": 11.7298,
+              "trades": 26,
+              "wins": 10,
+              "losses": 16,
+              "profit_factor": 1.0704
+            },
+            "2025-06": {
+              "net_usd": 5.6422,
+              "trades": 23,
+              "wins": 7,
+              "losses": 16,
+              "profit_factor": 1.0416
+            },
+            "2025-07": {
+              "net_usd": 12.1532,
+              "trades": 25,
+              "wins": 11,
+              "losses": 14,
+              "profit_factor": 1.0838
+            },
+            "2025-08": {
+              "net_usd": 43.5448,
+              "trades": 25,
+              "wins": 11,
+              "losses": 14,
+              "profit_factor": 1.3718
+            },
+            "2025-09": {
+              "net_usd": -115.3471,
+              "trades": 23,
+              "wins": 4,
+              "losses": 19,
+              "profit_factor": 0.2602
+            },
+            "2025-10": {
+              "net_usd": 27.3452,
+              "trades": 28,
+              "wins": 11,
+              "losses": 17,
+              "profit_factor": 1.1274
+            },
+            "2025-11": {
+              "net_usd": -80.1024,
+              "trades": 26,
+              "wins": 8,
+              "losses": 18,
+              "profit_factor": 0.6773
+            },
+            "2025-12": {
+              "net_usd": -222.3805,
+              "trades": 25,
+              "wins": 4,
+              "losses": 21,
+              "profit_factor": 0.0773
+            },
+            "2026-01": {
+              "net_usd": 77.9339,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "profit_factor": 1.8376
+            },
+            "2026-02": {
+              "net_usd": 102.225,
+              "trades": 24,
+              "wins": 10,
+              "losses": 14,
+              "profit_factor": 1.4675
+            },
+            "2026-03": {
+              "net_usd": -235.9155,
+              "trades": 26,
+              "wins": 6,
+              "losses": 20,
+              "profit_factor": 0.318
+            },
+            "2026-04": {
+              "net_usd": -99.8924,
+              "trades": 22,
+              "wins": 4,
+              "losses": 18,
+              "profit_factor": 0.4215
+            },
+            "2026-05": {
+              "net_usd": -17.2601,
+              "trades": 22,
+              "wins": 7,
+              "losses": 15,
+              "profit_factor": 0.8773
+            },
+            "2026-06": {
+              "net_usd": 130.7761,
+              "trades": 19,
+              "wins": 10,
+              "losses": 9,
+              "profit_factor": 2.2072
+            },
+            "2026-07": {
+              "net_usd": -41.0605,
+              "trades": 24,
+              "wins": 8,
+              "losses": 16,
+              "profit_factor": 0.7593
+            },
+            "2026-08": {
+              "net_usd": 130.2563,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "profit_factor": 1.7927
+            },
+            "2026-09": {
+              "net_usd": -58.1029,
+              "trades": 22,
+              "wins": 5,
+              "losses": 17,
+              "profit_factor": 0.5937
+            },
+            "2026-10": {
+              "net_usd": -54.3288,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 0.5718
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "BTC",
+            "activation": 1500,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -673.3675,
+            "full_pf": 0.8354,
+            "full_trades": 511,
+            "full_wins": 168,
+            "full_winrate": 32.88,
+            "full_positive_months": 11,
+            "full_negative_months": 11,
+            "full_maxdd_usd": 844.0477,
+            "full_gross": -96.922,
+            "full_fees_gst": 576.4455,
+            "train2025_net": -610.3024,
+            "train2025_pf": 0.7465,
+            "train2025_positive_months": 7,
+            "test2026_net": -63.0651,
+            "test2026_pf": 0.9625,
+            "test2026_positive_months": 4,
+            "tp_exits": 169,
+            "emergency_exits": 239,
+            "flip_exits": 103,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -225.8565,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "profit_factor": 0.2704
+            },
+            "2025-02": {
+              "net_usd": 32.188,
+              "trades": 19,
+              "wins": 8,
+              "losses": 11,
+              "profit_factor": 1.2281
+            },
+            "2025-03": {
+              "net_usd": -149.7485,
+              "trades": 27,
+              "wins": 8,
+              "losses": 19,
+              "profit_factor": 0.5831
+            },
+            "2025-04": {
+              "net_usd": 48.3547,
+              "trades": 21,
+              "wins": 10,
+              "losses": 11,
+              "profit_factor": 1.2782
+            },
+            "2025-05": {
+              "net_usd": 11.7298,
+              "trades": 26,
+              "wins": 10,
+              "losses": 16,
+              "profit_factor": 1.0704
+            },
+            "2025-06": {
+              "net_usd": 5.6422,
+              "trades": 23,
+              "wins": 7,
+              "losses": 16,
+              "profit_factor": 1.0416
+            },
+            "2025-07": {
+              "net_usd": 12.1532,
+              "trades": 25,
+              "wins": 11,
+              "losses": 14,
+              "profit_factor": 1.0838
+            },
+            "2025-08": {
+              "net_usd": 45.7195,
+              "trades": 25,
+              "wins": 11,
+              "losses": 14,
+              "profit_factor": 1.3903
+            },
+            "2025-09": {
+              "net_usd": -115.3471,
+              "trades": 23,
+              "wins": 4,
+              "losses": 19,
+              "profit_factor": 0.2602
+            },
+            "2025-10": {
+              "net_usd": 27.3452,
+              "trades": 28,
+              "wins": 11,
+              "losses": 17,
+              "profit_factor": 1.1274
+            },
+            "2025-11": {
+              "net_usd": -80.1024,
+              "trades": 26,
+              "wins": 8,
+              "losses": 18,
+              "profit_factor": 0.6773
+            },
+            "2025-12": {
+              "net_usd": -222.3805,
+              "trades": 25,
+              "wins": 4,
+              "losses": 21,
+              "profit_factor": 0.0773
+            },
+            "2026-01": {
+              "net_usd": 77.9339,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "profit_factor": 1.8376
+            },
+            "2026-02": {
+              "net_usd": 102.225,
+              "trades": 24,
+              "wins": 10,
+              "losses": 14,
+              "profit_factor": 1.4675
+            },
+            "2026-03": {
+              "net_usd": -235.9155,
+              "trades": 26,
+              "wins": 6,
+              "losses": 20,
+              "profit_factor": 0.318
+            },
+            "2026-04": {
+              "net_usd": -99.8924,
+              "trades": 22,
+              "wins": 4,
+              "losses": 18,
+              "profit_factor": 0.4215
+            },
+            "2026-05": {
+              "net_usd": -14.9563,
+              "trades": 22,
+              "wins": 7,
+              "losses": 15,
+              "profit_factor": 0.8935
+            },
+            "2026-06": {
+              "net_usd": 130.7761,
+              "trades": 19,
+              "wins": 10,
+              "losses": 9,
+              "profit_factor": 2.2072
+            },
+            "2026-07": {
+              "net_usd": -41.0605,
+              "trades": 24,
+              "wins": 8,
+              "losses": 16,
+              "profit_factor": 0.7593
+            },
+            "2026-08": {
+              "net_usd": 130.2563,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "profit_factor": 1.7927
+            },
+            "2026-09": {
+              "net_usd": -58.1029,
+              "trades": 22,
+              "wins": 5,
+              "losses": 17,
+              "profit_factor": 0.5937
+            },
+            "2026-10": {
+              "net_usd": -54.3288,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 0.5718
+            }
+          }
+        }
+      },
+      {
+        "activation": 1500,
+        "atr_multiplier": 3.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "BTC",
+            "activation": 1500,
+            "atr_multiplier": 3.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -515.6343,
+            "full_pf": 0.8415,
+            "full_trades": 411,
+            "full_wins": 119,
+            "full_winrate": 28.95,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 666.6093,
+            "full_gross": -51.725,
+            "full_fees_gst": 463.9093,
+            "train2025_net": -577.1563,
+            "train2025_pf": 0.7094,
+            "train2025_positive_months": 4,
+            "test2026_net": 61.5221,
+            "test2026_pf": 1.0485,
+            "test2026_positive_months": 4,
+            "tp_exits": 135,
+            "emergency_exits": 197,
+            "flip_exits": 79,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -208.5283,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.1946
+            },
+            "2025-02": {
+              "net_usd": -8.7204,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "profit_factor": 0.9347
+            },
+            "2025-03": {
+              "net_usd": -150.56,
+              "trades": 23,
+              "wins": 5,
+              "losses": 18,
+              "profit_factor": 0.5064
+            },
+            "2025-04": {
+              "net_usd": 55.9207,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "profit_factor": 1.3812
+            },
+            "2025-05": {
+              "net_usd": 56.5936,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 1.5369
+            },
+            "2025-06": {
+              "net_usd": -8.9905,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.9261
+            },
+            "2025-07": {
+              "net_usd": -9.1517,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.9217
+            },
+            "2025-08": {
+              "net_usd": 44.3009,
+              "trades": 19,
+              "wins": 8,
+              "losses": 11,
+              "profit_factor": 1.678
+            },
+            "2025-09": {
+              "net_usd": -105.009,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.2341
+            },
+            "2025-10": {
+              "net_usd": 49.4395,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 1.2855
+            },
+            "2025-11": {
+              "net_usd": -49.0403,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.7137
+            },
+            "2025-12": {
+              "net_usd": -243.4109,
+              "trades": 25,
+              "wins": 2,
+              "losses": 23,
+              "profit_factor": 0.0287
+            },
+            "2026-01": {
+              "net_usd": 112.1181,
+              "trades": 11,
+              "wins": 6,
+              "losses": 5,
+              "profit_factor": 4.0246
+            },
+            "2026-02": {
+              "net_usd": 184.3239,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "profit_factor": 2.4217
+            },
+            "2026-03": {
+              "net_usd": -213.1279,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 0.185
+            },
+            "2026-04": {
+              "net_usd": -105.3923,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.2746
+            },
+            "2026-05": {
+              "net_usd": -4.3721,
+              "trades": 17,
+              "wins": 6,
+              "losses": 11,
+              "profit_factor": 0.9496
+            },
+            "2026-06": {
+              "net_usd": 148.1118,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.8142
+            },
+            "2026-07": {
+              "net_usd": -19.0648,
+              "trades": 19,
+              "wins": 7,
+              "losses": 12,
+              "profit_factor": 0.8532
+            },
+            "2026-08": {
+              "net_usd": 113.5038,
+              "trades": 22,
+              "wins": 6,
+              "losses": 16,
+              "profit_factor": 1.7596
+            },
+            "2026-09": {
+              "net_usd": -59.8198,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.501
+            },
+            "2026-10": {
+              "net_usd": -94.7586,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 0.252
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "BTC",
+            "activation": 1500,
+            "atr_multiplier": 3.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -519.2712,
+            "full_pf": 0.8404,
+            "full_trades": 411,
+            "full_wins": 119,
+            "full_winrate": 28.95,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 670.2463,
+            "full_gross": -55.3645,
+            "full_fees_gst": 463.9067,
+            "train2025_net": -580.7933,
+            "train2025_pf": 0.7075,
+            "train2025_positive_months": 4,
+            "test2026_net": 61.5221,
+            "test2026_pf": 1.0485,
+            "test2026_positive_months": 4,
+            "tp_exits": 135,
+            "emergency_exits": 197,
+            "flip_exits": 79,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -208.5283,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.1946
+            },
+            "2025-02": {
+              "net_usd": -8.7204,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "profit_factor": 0.9347
+            },
+            "2025-03": {
+              "net_usd": -150.56,
+              "trades": 23,
+              "wins": 5,
+              "losses": 18,
+              "profit_factor": 0.5064
+            },
+            "2025-04": {
+              "net_usd": 51.9685,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "profit_factor": 1.3543
+            },
+            "2025-05": {
+              "net_usd": 56.5936,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 1.5369
+            },
+            "2025-06": {
+              "net_usd": -8.9905,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.9261
+            },
+            "2025-07": {
+              "net_usd": -9.1517,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.9217
+            },
+            "2025-08": {
+              "net_usd": 44.6161,
+              "trades": 19,
+              "wins": 8,
+              "losses": 11,
+              "profit_factor": 1.6829
+            },
+            "2025-09": {
+              "net_usd": -105.009,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.2341
+            },
+            "2025-10": {
+              "net_usd": 49.4395,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 1.2855
+            },
+            "2025-11": {
+              "net_usd": -49.0403,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.7137
+            },
+            "2025-12": {
+              "net_usd": -243.4109,
+              "trades": 25,
+              "wins": 2,
+              "losses": 23,
+              "profit_factor": 0.0287
+            },
+            "2026-01": {
+              "net_usd": 112.1181,
+              "trades": 11,
+              "wins": 6,
+              "losses": 5,
+              "profit_factor": 4.0246
+            },
+            "2026-02": {
+              "net_usd": 184.3239,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "profit_factor": 2.4217
+            },
+            "2026-03": {
+              "net_usd": -213.1279,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 0.185
+            },
+            "2026-04": {
+              "net_usd": -105.3923,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.2746
+            },
+            "2026-05": {
+              "net_usd": -4.3721,
+              "trades": 17,
+              "wins": 6,
+              "losses": 11,
+              "profit_factor": 0.9496
+            },
+            "2026-06": {
+              "net_usd": 148.1118,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.8142
+            },
+            "2026-07": {
+              "net_usd": -19.0648,
+              "trades": 19,
+              "wins": 7,
+              "losses": 12,
+              "profit_factor": 0.8532
+            },
+            "2026-08": {
+              "net_usd": 113.5038,
+              "trades": 22,
+              "wins": 6,
+              "losses": 16,
+              "profit_factor": 1.7596
+            },
+            "2026-09": {
+              "net_usd": -59.8198,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.501
+            },
+            "2026-10": {
+              "net_usd": -94.7586,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 0.252
+            }
+          }
+        }
+      },
+      {
+        "activation": 4000,
+        "atr_multiplier": 1.5,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "BTC",
+            "activation": 4000,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -510.0697,
+            "full_pf": 0.8543,
+            "full_trades": 414,
+            "full_wins": 114,
+            "full_winrate": 27.54,
+            "full_positive_months": 10,
+            "full_negative_months": 12,
+            "full_maxdd_usd": 637.6299,
+            "full_gross": -42.8375,
+            "full_fees_gst": 467.2322,
+            "train2025_net": -469.6964,
+            "train2025_pf": 0.7792,
+            "train2025_positive_months": 6,
+            "test2026_net": -40.3733,
+            "test2026_pf": 0.9706,
+            "test2026_positive_months": 4,
+            "tp_exits": 50,
+            "emergency_exits": 200,
+            "flip_exits": 164,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -222.4682,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.2435
+            },
+            "2025-02": {
+              "net_usd": 38.001,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "profit_factor": 1.3032
+            },
+            "2025-03": {
+              "net_usd": -132.3737,
+              "trades": 25,
+              "wins": 5,
+              "losses": 20,
+              "profit_factor": 0.629
+            },
+            "2025-04": {
+              "net_usd": 83.4936,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 1.5896
+            },
+            "2025-05": {
+              "net_usd": 37.6888,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 1.2831
+            },
+            "2025-06": {
+              "net_usd": 21.8476,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "profit_factor": 1.2116
+            },
+            "2025-07": {
+              "net_usd": -23.9116,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.8306
+            },
+            "2025-08": {
+              "net_usd": 32.3773,
+              "trades": 18,
+              "wins": 8,
+              "losses": 10,
+              "profit_factor": 1.5159
+            },
+            "2025-09": {
+              "net_usd": -87.0136,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.3476
+            },
+            "2025-10": {
+              "net_usd": 50.1354,
+              "trades": 22,
+              "wins": 7,
+              "losses": 15,
+              "profit_factor": 1.252
+            },
+            "2025-11": {
+              "net_usd": -30.3187,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.8436
+            },
+            "2025-12": {
+              "net_usd": -237.1542,
+              "trades": 23,
+              "wins": 1,
+              "losses": 22,
+              "profit_factor": 0.0253
+            },
+            "2026-01": {
+              "net_usd": 94.7982,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.5772
+            },
+            "2026-02": {
+              "net_usd": 125.2177,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "profit_factor": 1.5784
+            },
+            "2026-03": {
+              "net_usd": -193.2749,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "profit_factor": 0.2972
+            },
+            "2026-04": {
+              "net_usd": -118.5691,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.1839
+            },
+            "2026-05": {
+              "net_usd": -9.1948,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "profit_factor": 0.8856
+            },
+            "2026-06": {
+              "net_usd": 109.7517,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 2.0837
+            },
+            "2026-07": {
+              "net_usd": -23.6289,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "profit_factor": 0.7987
+            },
+            "2026-08": {
+              "net_usd": 128.7549,
+              "trades": 20,
+              "wins": 6,
+              "losses": 14,
+              "profit_factor": 1.9954
+            },
+            "2026-09": {
+              "net_usd": -66.0651,
+              "trades": 18,
+              "wins": 2,
+              "losses": 16,
+              "profit_factor": 0.479
+            },
+            "2026-10": {
+              "net_usd": -88.1629,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "profit_factor": 0.2755
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "BTC",
+            "activation": 4000,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -525.3407,
+            "full_pf": 0.8506,
+            "full_trades": 415,
+            "full_wins": 114,
+            "full_winrate": 27.47,
+            "full_positive_months": 10,
+            "full_negative_months": 12,
+            "full_maxdd_usd": 652.9009,
+            "full_gross": -56.992,
+            "full_fees_gst": 468.3487,
+            "train2025_net": -484.9674,
+            "train2025_pf": 0.7736,
+            "train2025_positive_months": 6,
+            "test2026_net": -40.3733,
+            "test2026_pf": 0.9706,
+            "test2026_positive_months": 4,
+            "tp_exits": 50,
+            "emergency_exits": 201,
+            "flip_exits": 164,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -222.4682,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.2435
+            },
+            "2025-02": {
+              "net_usd": 38.001,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "profit_factor": 1.3032
+            },
+            "2025-03": {
+              "net_usd": -132.3737,
+              "trades": 25,
+              "wins": 5,
+              "losses": 20,
+              "profit_factor": 0.629
+            },
+            "2025-04": {
+              "net_usd": 83.4936,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 1.5896
+            },
+            "2025-05": {
+              "net_usd": 37.6888,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 1.2831
+            },
+            "2025-06": {
+              "net_usd": 21.8476,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "profit_factor": 1.2116
+            },
+            "2025-07": {
+              "net_usd": -23.9116,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.8306
+            },
+            "2025-08": {
+              "net_usd": 34.552,
+              "trades": 18,
+              "wins": 8,
+              "losses": 10,
+              "profit_factor": 1.5506
+            },
+            "2025-09": {
+              "net_usd": -87.0136,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.3476
+            },
+            "2025-10": {
+              "net_usd": 50.1354,
+              "trades": 22,
+              "wins": 7,
+              "losses": 15,
+              "profit_factor": 1.252
+            },
+            "2025-11": {
+              "net_usd": -47.7644,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 0.7704
+            },
+            "2025-12": {
+              "net_usd": -237.1542,
+              "trades": 23,
+              "wins": 1,
+              "losses": 22,
+              "profit_factor": 0.0253
+            },
+            "2026-01": {
+              "net_usd": 94.7982,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.5772
+            },
+            "2026-02": {
+              "net_usd": 125.2177,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "profit_factor": 1.5784
+            },
+            "2026-03": {
+              "net_usd": -193.2749,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "profit_factor": 0.2972
+            },
+            "2026-04": {
+              "net_usd": -118.5691,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.1839
+            },
+            "2026-05": {
+              "net_usd": -9.1948,
+              "trades": 16,
+              "wins": 6,
+              "losses": 10,
+              "profit_factor": 0.8856
+            },
+            "2026-06": {
+              "net_usd": 109.7517,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 2.0837
+            },
+            "2026-07": {
+              "net_usd": -23.6289,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "profit_factor": 0.7987
+            },
+            "2026-08": {
+              "net_usd": 128.7549,
+              "trades": 20,
+              "wins": 6,
+              "losses": 14,
+              "profit_factor": 1.9954
+            },
+            "2026-09": {
+              "net_usd": -66.0651,
+              "trades": 18,
+              "wins": 2,
+              "losses": 16,
+              "profit_factor": 0.479
+            },
+            "2026-10": {
+              "net_usd": -88.1629,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "profit_factor": 0.2755
+            }
+          }
+        }
+      }
+    ],
+    "ETH": [
+      {
+        "activation": 500,
+        "atr_multiplier": 1.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "ETH",
+            "activation": 500,
+            "atr_multiplier": 1.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -1283.318,
+            "full_pf": 0.8033,
+            "full_trades": 727,
+            "full_wins": 283,
+            "full_winrate": 38.93,
+            "full_positive_months": 6,
+            "full_negative_months": 16,
+            "full_maxdd_usd": 1287.5314,
+            "full_gross": -436.3265,
+            "full_fees_gst": 846.9915,
+            "train2025_net": -980.7734,
+            "train2025_pf": 0.7528,
+            "train2025_positive_months": 4,
+            "test2026_net": -302.5446,
+            "test2026_pf": 0.8816,
+            "test2026_positive_months": 2,
+            "tp_exits": 428,
+            "emergency_exits": 257,
+            "flip_exits": 42,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -75.0966,
+              "trades": 35,
+              "wins": 14,
+              "losses": 21,
+              "profit_factor": 0.7261
+            },
+            "2025-02": {
+              "net_usd": -20.4284,
+              "trades": 31,
+              "wins": 15,
+              "losses": 16,
+              "profit_factor": 0.9223
+            },
+            "2025-03": {
+              "net_usd": -118.8772,
+              "trades": 40,
+              "wins": 12,
+              "losses": 28,
+              "profit_factor": 0.7467
+            },
+            "2025-04": {
+              "net_usd": -681.5558,
+              "trades": 35,
+              "wins": 4,
+              "losses": 31,
+              "profit_factor": 0.0339
+            },
+            "2025-05": {
+              "net_usd": -164.5901,
+              "trades": 29,
+              "wins": 9,
+              "losses": 20,
+              "profit_factor": 0.5091
+            },
+            "2025-06": {
+              "net_usd": 126.9388,
+              "trades": 30,
+              "wins": 11,
+              "losses": 19,
+              "profit_factor": 1.5924
+            },
+            "2025-07": {
+              "net_usd": -5.3194,
+              "trades": 38,
+              "wins": 15,
+              "losses": 23,
+              "profit_factor": 0.9817
+            },
+            "2025-08": {
+              "net_usd": 161.2739,
+              "trades": 34,
+              "wins": 18,
+              "losses": 16,
+              "profit_factor": 1.5579
+            },
+            "2025-09": {
+              "net_usd": 26.5987,
+              "trades": 36,
+              "wins": 17,
+              "losses": 19,
+              "profit_factor": 1.1196
+            },
+            "2025-10": {
+              "net_usd": 89.3107,
+              "trades": 33,
+              "wins": 18,
+              "losses": 15,
+              "profit_factor": 1.4374
+            },
+            "2025-11": {
+              "net_usd": -279.0277,
+              "trades": 39,
+              "wins": 10,
+              "losses": 29,
+              "profit_factor": 0.4043
+            },
+            "2025-12": {
+              "net_usd": -40.0003,
+              "trades": 30,
+              "wins": 13,
+              "losses": 17,
+              "profit_factor": 0.8274
+            },
+            "2026-01": {
+              "net_usd": -14.7654,
+              "trades": 30,
+              "wins": 14,
+              "losses": 16,
+              "profit_factor": 0.9218
+            },
+            "2026-02": {
+              "net_usd": -37.9247,
+              "trades": 34,
+              "wins": 11,
+              "losses": 23,
+              "profit_factor": 0.9161
+            },
+            "2026-03": {
+              "net_usd": -149.9727,
+              "trades": 38,
+              "wins": 14,
+              "losses": 24,
+              "profit_factor": 0.5975
+            },
+            "2026-04": {
+              "net_usd": -47.1306,
+              "trades": 31,
+              "wins": 12,
+              "losses": 19,
+              "profit_factor": 0.8101
+            },
+            "2026-05": {
+              "net_usd": -18.7926,
+              "trades": 26,
+              "wins": 11,
+              "losses": 15,
+              "profit_factor": 0.8941
+            },
+            "2026-06": {
+              "net_usd": 92.8799,
+              "trades": 29,
+              "wins": 15,
+              "losses": 14,
+              "profit_factor": 1.4199
+            },
+            "2026-07": {
+              "net_usd": -83.7916,
+              "trades": 34,
+              "wins": 10,
+              "losses": 24,
+              "profit_factor": 0.683
+            },
+            "2026-08": {
+              "net_usd": 89.5293,
+              "trades": 31,
+              "wins": 14,
+              "losses": 17,
+              "profit_factor": 1.4987
+            },
+            "2026-09": {
+              "net_usd": -75.4516,
+              "trades": 35,
+              "wins": 16,
+              "losses": 19,
+              "profit_factor": 0.6694
+            },
+            "2026-10": {
+              "net_usd": -57.1245,
+              "trades": 29,
+              "wins": 10,
+              "losses": 19,
+              "profit_factor": 0.7449
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "ETH",
+            "activation": 500,
+            "atr_multiplier": 1.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -1276.4431,
+            "full_pf": 0.8045,
+            "full_trades": 726,
+            "full_wins": 284,
+            "full_winrate": 39.12,
+            "full_positive_months": 7,
+            "full_negative_months": 15,
+            "full_maxdd_usd": 1280.6566,
+            "full_gross": -430.621,
+            "full_fees_gst": 845.8221,
+            "train2025_net": -996.0871,
+            "train2025_pf": 0.7497,
+            "train2025_positive_months": 4,
+            "test2026_net": -280.356,
+            "test2026_pf": 0.89,
+            "test2026_positive_months": 3,
+            "tp_exits": 426,
+            "emergency_exits": 258,
+            "flip_exits": 42,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -75.0966,
+              "trades": 35,
+              "wins": 14,
+              "losses": 21,
+              "profit_factor": 0.7261
+            },
+            "2025-02": {
+              "net_usd": -20.4284,
+              "trades": 31,
+              "wins": 15,
+              "losses": 16,
+              "profit_factor": 0.9223
+            },
+            "2025-03": {
+              "net_usd": -118.8772,
+              "trades": 40,
+              "wins": 12,
+              "losses": 28,
+              "profit_factor": 0.7467
+            },
+            "2025-04": {
+              "net_usd": -681.5558,
+              "trades": 35,
+              "wins": 4,
+              "losses": 31,
+              "profit_factor": 0.0339
+            },
+            "2025-05": {
+              "net_usd": -164.5901,
+              "trades": 29,
+              "wins": 9,
+              "losses": 20,
+              "profit_factor": 0.5091
+            },
+            "2025-06": {
+              "net_usd": 126.9388,
+              "trades": 30,
+              "wins": 11,
+              "losses": 19,
+              "profit_factor": 1.5924
+            },
+            "2025-07": {
+              "net_usd": -20.0466,
+              "trades": 38,
+              "wins": 15,
+              "losses": 23,
+              "profit_factor": 0.9335
+            },
+            "2025-08": {
+              "net_usd": 161.2739,
+              "trades": 34,
+              "wins": 18,
+              "losses": 16,
+              "profit_factor": 1.5579
+            },
+            "2025-09": {
+              "net_usd": 26.0122,
+              "trades": 36,
+              "wins": 17,
+              "losses": 19,
+              "profit_factor": 1.1165
+            },
+            "2025-10": {
+              "net_usd": 89.3107,
+              "trades": 33,
+              "wins": 18,
+              "losses": 15,
+              "profit_factor": 1.4374
+            },
+            "2025-11": {
+              "net_usd": -279.0277,
+              "trades": 39,
+              "wins": 10,
+              "losses": 29,
+              "profit_factor": 0.4043
+            },
+            "2025-12": {
+              "net_usd": -40.0003,
+              "trades": 30,
+              "wins": 13,
+              "losses": 17,
+              "profit_factor": 0.8274
+            },
+            "2026-01": {
+              "net_usd": 2.4519,
+              "trades": 30,
+              "wins": 15,
+              "losses": 15,
+              "profit_factor": 1.0132
+            },
+            "2026-02": {
+              "net_usd": -27.0699,
+              "trades": 33,
+              "wins": 11,
+              "losses": 22,
+              "profit_factor": 0.9393
+            },
+            "2026-03": {
+              "net_usd": -149.9727,
+              "trades": 38,
+              "wins": 14,
+              "losses": 24,
+              "profit_factor": 0.5975
+            },
+            "2026-04": {
+              "net_usd": -47.1306,
+              "trades": 31,
+              "wins": 12,
+              "losses": 19,
+              "profit_factor": 0.8101
+            },
+            "2026-05": {
+              "net_usd": -18.7926,
+              "trades": 26,
+              "wins": 11,
+              "losses": 15,
+              "profit_factor": 0.8941
+            },
+            "2026-06": {
+              "net_usd": 92.8799,
+              "trades": 29,
+              "wins": 15,
+              "losses": 14,
+              "profit_factor": 1.4199
+            },
+            "2026-07": {
+              "net_usd": -83.7916,
+              "trades": 34,
+              "wins": 10,
+              "losses": 24,
+              "profit_factor": 0.683
+            },
+            "2026-08": {
+              "net_usd": 88.7758,
+              "trades": 31,
+              "wins": 14,
+              "losses": 17,
+              "profit_factor": 1.4945
+            },
+            "2026-09": {
+              "net_usd": -80.5816,
+              "trades": 35,
+              "wins": 16,
+              "losses": 19,
+              "profit_factor": 0.6479
+            },
+            "2026-10": {
+              "net_usd": -57.1245,
+              "trades": 29,
+              "wins": 10,
+              "losses": 19,
+              "profit_factor": 0.7449
+            }
+          }
+        }
+      },
+      {
+        "activation": 800,
+        "atr_multiplier": 1.5,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "ETH",
+            "activation": 800,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -695.2039,
+            "full_pf": 0.8877,
+            "full_trades": 605,
+            "full_wins": 223,
+            "full_winrate": 36.86,
+            "full_positive_months": 9,
+            "full_negative_months": 13,
+            "full_maxdd_usd": 1066.0557,
+            "full_gross": 9.663,
+            "full_fees_gst": 704.8669,
+            "train2025_net": -524.9813,
+            "train2025_pf": 0.8603,
+            "train2025_positive_months": 6,
+            "test2026_net": -170.2227,
+            "test2026_pf": 0.93,
+            "test2026_positive_months": 3,
+            "tp_exits": 308,
+            "emergency_exits": 246,
+            "flip_exits": 51,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -179.8705,
+              "trades": 35,
+              "wins": 13,
+              "losses": 22,
+              "profit_factor": 0.4473
+            },
+            "2025-02": {
+              "net_usd": 86.595,
+              "trades": 28,
+              "wins": 8,
+              "losses": 20,
+              "profit_factor": 1.2904
+            },
+            "2025-03": {
+              "net_usd": -83.9507,
+              "trades": 33,
+              "wins": 11,
+              "losses": 22,
+              "profit_factor": 0.8055
+            },
+            "2025-04": {
+              "net_usd": -611.116,
+              "trades": 29,
+              "wins": 3,
+              "losses": 26,
+              "profit_factor": 0.038
+            },
+            "2025-05": {
+              "net_usd": -126.4595,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "profit_factor": 0.5537
+            },
+            "2025-06": {
+              "net_usd": 57.8325,
+              "trades": 28,
+              "wins": 10,
+              "losses": 18,
+              "profit_factor": 1.2138
+            },
+            "2025-07": {
+              "net_usd": 168.8845,
+              "trades": 31,
+              "wins": 11,
+              "losses": 20,
+              "profit_factor": 1.5974
+            },
+            "2025-08": {
+              "net_usd": 172.451,
+              "trades": 29,
+              "wins": 13,
+              "losses": 16,
+              "profit_factor": 1.5807
+            },
+            "2025-09": {
+              "net_usd": 125.0348,
+              "trades": 24,
+              "wins": 12,
+              "losses": 12,
+              "profit_factor": 1.8527
+            },
+            "2025-10": {
+              "net_usd": 197.2439,
+              "trades": 26,
+              "wins": 15,
+              "losses": 11,
+              "profit_factor": 2.2867
+            },
+            "2025-11": {
+              "net_usd": -250.6289,
+              "trades": 31,
+              "wins": 9,
+              "losses": 22,
+              "profit_factor": 0.3869
+            },
+            "2025-12": {
+              "net_usd": -80.9974,
+              "trades": 26,
+              "wins": 10,
+              "losses": 16,
+              "profit_factor": 0.6423
+            },
+            "2026-01": {
+              "net_usd": -98.7785,
+              "trades": 27,
+              "wins": 11,
+              "losses": 16,
+              "profit_factor": 0.5729
+            },
+            "2026-02": {
+              "net_usd": 21.7721,
+              "trades": 28,
+              "wins": 10,
+              "losses": 18,
+              "profit_factor": 1.0475
+            },
+            "2026-03": {
+              "net_usd": -115.999,
+              "trades": 31,
+              "wins": 10,
+              "losses": 21,
+              "profit_factor": 0.6985
+            },
+            "2026-04": {
+              "net_usd": -64.0687,
+              "trades": 27,
+              "wins": 11,
+              "losses": 16,
+              "profit_factor": 0.7349
+            },
+            "2026-05": {
+              "net_usd": -33.4174,
+              "trades": 23,
+              "wins": 10,
+              "losses": 13,
+              "profit_factor": 0.7967
+            },
+            "2026-06": {
+              "net_usd": 65.6813,
+              "trades": 25,
+              "wins": 12,
+              "losses": 13,
+              "profit_factor": 1.3079
+            },
+            "2026-07": {
+              "net_usd": -29.5718,
+              "trades": 26,
+              "wins": 8,
+              "losses": 18,
+              "profit_factor": 0.8469
+            },
+            "2026-08": {
+              "net_usd": 163.8535,
+              "trades": 26,
+              "wins": 10,
+              "losses": 16,
+              "profit_factor": 1.9761
+            },
+            "2026-09": {
+              "net_usd": -52.3732,
+              "trades": 25,
+              "wins": 9,
+              "losses": 16,
+              "profit_factor": 0.7133
+            },
+            "2026-10": {
+              "net_usd": -27.3211,
+              "trades": 24,
+              "wins": 9,
+              "losses": 15,
+              "profit_factor": 0.8601
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "ETH",
+            "activation": 800,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -702.0146,
+            "full_pf": 0.8869,
+            "full_trades": 604,
+            "full_wins": 223,
+            "full_winrate": 36.92,
+            "full_positive_months": 9,
+            "full_negative_months": 13,
+            "full_maxdd_usd": 1066.0557,
+            "full_gross": 1.727,
+            "full_fees_gst": 703.7416,
+            "train2025_net": -536.0321,
+            "train2025_pf": 0.858,
+            "train2025_positive_months": 6,
+            "test2026_net": -165.9825,
+            "test2026_pf": 0.9317,
+            "test2026_positive_months": 3,
+            "tp_exits": 305,
+            "emergency_exits": 248,
+            "flip_exits": 51,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -177.5477,
+              "trades": 34,
+              "wins": 13,
+              "losses": 21,
+              "profit_factor": 0.4658
+            },
+            "2025-02": {
+              "net_usd": 82.9368,
+              "trades": 28,
+              "wins": 8,
+              "losses": 20,
+              "profit_factor": 1.2782
+            },
+            "2025-03": {
+              "net_usd": -83.9507,
+              "trades": 33,
+              "wins": 11,
+              "losses": 22,
+              "profit_factor": 0.8055
+            },
+            "2025-04": {
+              "net_usd": -611.116,
+              "trades": 29,
+              "wins": 3,
+              "losses": 26,
+              "profit_factor": 0.038
+            },
+            "2025-05": {
+              "net_usd": -126.4595,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "profit_factor": 0.5537
+            },
+            "2025-06": {
+              "net_usd": 49.2474,
+              "trades": 28,
+              "wins": 10,
+              "losses": 18,
+              "profit_factor": 1.1765
+            },
+            "2025-07": {
+              "net_usd": 167.7542,
+              "trades": 31,
+              "wins": 11,
+              "losses": 20,
+              "profit_factor": 1.5934
+            },
+            "2025-08": {
+              "net_usd": 172.451,
+              "trades": 29,
+              "wins": 13,
+              "losses": 16,
+              "profit_factor": 1.5807
+            },
+            "2025-09": {
+              "net_usd": 125.0348,
+              "trades": 24,
+              "wins": 12,
+              "losses": 12,
+              "profit_factor": 1.8527
+            },
+            "2025-10": {
+              "net_usd": 197.2439,
+              "trades": 26,
+              "wins": 15,
+              "losses": 11,
+              "profit_factor": 2.2867
+            },
+            "2025-11": {
+              "net_usd": -250.6289,
+              "trades": 31,
+              "wins": 9,
+              "losses": 22,
+              "profit_factor": 0.3869
+            },
+            "2025-12": {
+              "net_usd": -80.9974,
+              "trades": 26,
+              "wins": 10,
+              "losses": 16,
+              "profit_factor": 0.6423
+            },
+            "2026-01": {
+              "net_usd": -98.7785,
+              "trades": 27,
+              "wins": 11,
+              "losses": 16,
+              "profit_factor": 0.5729
+            },
+            "2026-02": {
+              "net_usd": 21.7721,
+              "trades": 28,
+              "wins": 10,
+              "losses": 18,
+              "profit_factor": 1.0475
+            },
+            "2026-03": {
+              "net_usd": -115.999,
+              "trades": 31,
+              "wins": 10,
+              "losses": 21,
+              "profit_factor": 0.6985
+            },
+            "2026-04": {
+              "net_usd": -64.0687,
+              "trades": 27,
+              "wins": 11,
+              "losses": 16,
+              "profit_factor": 0.7349
+            },
+            "2026-05": {
+              "net_usd": -33.4174,
+              "trades": 23,
+              "wins": 10,
+              "losses": 13,
+              "profit_factor": 0.7967
+            },
+            "2026-06": {
+              "net_usd": 66.1437,
+              "trades": 25,
+              "wins": 12,
+              "losses": 13,
+              "profit_factor": 1.3124
+            },
+            "2026-07": {
+              "net_usd": -25.794,
+              "trades": 26,
+              "wins": 8,
+              "losses": 18,
+              "profit_factor": 0.8665
+            },
+            "2026-08": {
+              "net_usd": 163.8535,
+              "trades": 26,
+              "wins": 10,
+              "losses": 16,
+              "profit_factor": 1.9761
+            },
+            "2026-09": {
+              "net_usd": -52.3732,
+              "trades": 25,
+              "wins": 9,
+              "losses": 16,
+              "profit_factor": 0.7133
+            },
+            "2026-10": {
+              "net_usd": -27.3211,
+              "trades": 24,
+              "wins": 9,
+              "losses": 15,
+              "profit_factor": 0.8601
+            }
+          }
+        }
+      },
+      {
+        "activation": 1000,
+        "atr_multiplier": 2.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "ETH",
+            "activation": 1000,
+            "atr_multiplier": 2.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -373.5137,
+            "full_pf": 0.9338,
+            "full_trades": 513,
+            "full_wins": 168,
+            "full_winrate": 32.75,
+            "full_positive_months": 9,
+            "full_negative_months": 13,
+            "full_maxdd_usd": 917.2132,
+            "full_gross": 224.1725,
+            "full_fees_gst": 597.6862,
+            "train2025_net": -219.6119,
+            "train2025_pf": 0.9363,
+            "train2025_positive_months": 6,
+            "test2026_net": -153.9018,
+            "test2026_pf": 0.9299,
+            "test2026_positive_months": 3,
+            "tp_exits": 238,
+            "emergency_exits": 223,
+            "flip_exits": 52,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -124.4972,
+              "trades": 27,
+              "wins": 9,
+              "losses": 18,
+              "profit_factor": 0.5681
+            },
+            "2025-02": {
+              "net_usd": 39.0402,
+              "trades": 25,
+              "wins": 8,
+              "losses": 17,
+              "profit_factor": 1.1332
+            },
+            "2025-03": {
+              "net_usd": -9.548,
+              "trades": 26,
+              "wins": 9,
+              "losses": 17,
+              "profit_factor": 0.9714
+            },
+            "2025-04": {
+              "net_usd": -499.3809,
+              "trades": 28,
+              "wins": 2,
+              "losses": 26,
+              "profit_factor": 0.2412
+            },
+            "2025-05": {
+              "net_usd": -179.1423,
+              "trades": 22,
+              "wins": 6,
+              "losses": 16,
+              "profit_factor": 0.421
+            },
+            "2025-06": {
+              "net_usd": 95.1403,
+              "trades": 24,
+              "wins": 9,
+              "losses": 15,
+              "profit_factor": 1.4097
+            },
+            "2025-07": {
+              "net_usd": 182.3879,
+              "trades": 23,
+              "wins": 7,
+              "losses": 16,
+              "profit_factor": 1.7184
+            },
+            "2025-08": {
+              "net_usd": 227.8473,
+              "trades": 23,
+              "wins": 10,
+              "losses": 13,
+              "profit_factor": 1.9428
+            },
+            "2025-09": {
+              "net_usd": 143.1485,
+              "trades": 19,
+              "wins": 9,
+              "losses": 10,
+              "profit_factor": 2.4584
+            },
+            "2025-10": {
+              "net_usd": 250.7094,
+              "trades": 20,
+              "wins": 11,
+              "losses": 9,
+              "profit_factor": 2.9286
+            },
+            "2025-11": {
+              "net_usd": -253.9348,
+              "trades": 27,
+              "wins": 6,
+              "losses": 21,
+              "profit_factor": 0.3408
+            },
+            "2025-12": {
+              "net_usd": -91.3823,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "profit_factor": 0.5906
+            },
+            "2026-01": {
+              "net_usd": -92.2771,
+              "trades": 23,
+              "wins": 9,
+              "losses": 14,
+              "profit_factor": 0.5573
+            },
+            "2026-02": {
+              "net_usd": -16.5107,
+              "trades": 27,
+              "wins": 8,
+              "losses": 19,
+              "profit_factor": 0.9595
+            },
+            "2026-03": {
+              "net_usd": -93.1481,
+              "trades": 24,
+              "wins": 8,
+              "losses": 16,
+              "profit_factor": 0.7389
+            },
+            "2026-04": {
+              "net_usd": -75.0775,
+              "trades": 20,
+              "wins": 6,
+              "losses": 14,
+              "profit_factor": 0.6046
+            },
+            "2026-05": {
+              "net_usd": -6.3932,
+              "trades": 20,
+              "wins": 9,
+              "losses": 11,
+              "profit_factor": 0.9496
+            },
+            "2026-06": {
+              "net_usd": 109.4119,
+              "trades": 21,
+              "wins": 9,
+              "losses": 12,
+              "profit_factor": 1.5851
+            },
+            "2026-07": {
+              "net_usd": 7.4135,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 1.0443
+            },
+            "2026-08": {
+              "net_usd": 164.829,
+              "trades": 21,
+              "wins": 8,
+              "losses": 13,
+              "profit_factor": 2.238
+            },
+            "2026-09": {
+              "net_usd": -92.2643,
+              "trades": 25,
+              "wins": 6,
+              "losses": 19,
+              "profit_factor": 0.5855
+            },
+            "2026-10": {
+              "net_usd": -59.8853,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "profit_factor": 0.6934
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "ETH",
+            "activation": 1000,
+            "atr_multiplier": 2.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -346.6048,
+            "full_pf": 0.9383,
+            "full_trades": 513,
+            "full_wins": 168,
+            "full_winrate": 32.75,
+            "full_positive_months": 9,
+            "full_negative_months": 13,
+            "full_maxdd_usd": 917.2132,
+            "full_gross": 251.0735,
+            "full_fees_gst": 597.6783,
+            "train2025_net": -212.8599,
+            "train2025_pf": 0.9383,
+            "train2025_positive_months": 6,
+            "test2026_net": -133.7449,
+            "test2026_pf": 0.9385,
+            "test2026_positive_months": 3,
+            "tp_exits": 239,
+            "emergency_exits": 222,
+            "flip_exits": 52,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -124.4972,
+              "trades": 27,
+              "wins": 9,
+              "losses": 18,
+              "profit_factor": 0.5681
+            },
+            "2025-02": {
+              "net_usd": 39.0402,
+              "trades": 25,
+              "wins": 8,
+              "losses": 17,
+              "profit_factor": 1.1332
+            },
+            "2025-03": {
+              "net_usd": -9.548,
+              "trades": 26,
+              "wins": 9,
+              "losses": 17,
+              "profit_factor": 0.9714
+            },
+            "2025-04": {
+              "net_usd": -499.3809,
+              "trades": 28,
+              "wins": 2,
+              "losses": 26,
+              "profit_factor": 0.2412
+            },
+            "2025-05": {
+              "net_usd": -179.1423,
+              "trades": 22,
+              "wins": 6,
+              "losses": 16,
+              "profit_factor": 0.421
+            },
+            "2025-06": {
+              "net_usd": 95.1403,
+              "trades": 24,
+              "wins": 9,
+              "losses": 15,
+              "profit_factor": 1.4097
+            },
+            "2025-07": {
+              "net_usd": 182.3879,
+              "trades": 23,
+              "wins": 7,
+              "losses": 16,
+              "profit_factor": 1.7184
+            },
+            "2025-08": {
+              "net_usd": 227.8473,
+              "trades": 23,
+              "wins": 10,
+              "losses": 13,
+              "profit_factor": 1.9428
+            },
+            "2025-09": {
+              "net_usd": 149.9005,
+              "trades": 19,
+              "wins": 9,
+              "losses": 10,
+              "profit_factor": 2.5272
+            },
+            "2025-10": {
+              "net_usd": 250.7094,
+              "trades": 20,
+              "wins": 11,
+              "losses": 9,
+              "profit_factor": 2.9286
+            },
+            "2025-11": {
+              "net_usd": -253.9348,
+              "trades": 27,
+              "wins": 6,
+              "losses": 21,
+              "profit_factor": 0.3408
+            },
+            "2025-12": {
+              "net_usd": -91.3823,
+              "trades": 24,
+              "wins": 6,
+              "losses": 18,
+              "profit_factor": 0.5906
+            },
+            "2026-01": {
+              "net_usd": -92.2771,
+              "trades": 23,
+              "wins": 9,
+              "losses": 14,
+              "profit_factor": 0.5573
+            },
+            "2026-02": {
+              "net_usd": -16.5107,
+              "trades": 27,
+              "wins": 8,
+              "losses": 19,
+              "profit_factor": 0.9595
+            },
+            "2026-03": {
+              "net_usd": -72.9912,
+              "trades": 24,
+              "wins": 8,
+              "losses": 16,
+              "profit_factor": 0.7831
+            },
+            "2026-04": {
+              "net_usd": -75.0775,
+              "trades": 20,
+              "wins": 6,
+              "losses": 14,
+              "profit_factor": 0.6046
+            },
+            "2026-05": {
+              "net_usd": -6.3932,
+              "trades": 20,
+              "wins": 9,
+              "losses": 11,
+              "profit_factor": 0.9496
+            },
+            "2026-06": {
+              "net_usd": 109.4119,
+              "trades": 21,
+              "wins": 9,
+              "losses": 12,
+              "profit_factor": 1.5851
+            },
+            "2026-07": {
+              "net_usd": 7.4135,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 1.0443
+            },
+            "2026-08": {
+              "net_usd": 164.829,
+              "trades": 21,
+              "wins": 8,
+              "losses": 13,
+              "profit_factor": 2.238
+            },
+            "2026-09": {
+              "net_usd": -92.2643,
+              "trades": 25,
+              "wins": 6,
+              "losses": 19,
+              "profit_factor": 0.5855
+            },
+            "2026-10": {
+              "net_usd": -59.8853,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "profit_factor": 0.6934
+            }
+          }
+        }
+      },
+      {
+        "activation": 1500,
+        "atr_multiplier": 3.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "ETH",
+            "activation": 1500,
+            "atr_multiplier": 3.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -341.9599,
+            "full_pf": 0.9301,
+            "full_trades": 410,
+            "full_wins": 113,
+            "full_winrate": 27.56,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 954.5115,
+            "full_gross": 135.872,
+            "full_fees_gst": 477.8319,
+            "train2025_net": -249.4213,
+            "train2025_pf": 0.9169,
+            "train2025_positive_months": 5,
+            "test2026_net": -92.5385,
+            "test2026_pf": 0.9511,
+            "test2026_positive_months": 3,
+            "tp_exits": 151,
+            "emergency_exits": 206,
+            "flip_exits": 53,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -152.5469,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 0.4731
+            },
+            "2025-02": {
+              "net_usd": -88.1768,
+              "trades": 19,
+              "wins": 3,
+              "losses": 16,
+              "profit_factor": 0.68
+            },
+            "2025-03": {
+              "net_usd": -74.6845,
+              "trades": 22,
+              "wins": 5,
+              "losses": 17,
+              "profit_factor": 0.7725
+            },
+            "2025-04": {
+              "net_usd": -359.875,
+              "trades": 27,
+              "wins": 3,
+              "losses": 24,
+              "profit_factor": 0.3888
+            },
+            "2025-05": {
+              "net_usd": -223.4994,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 0.177
+            },
+            "2025-06": {
+              "net_usd": 153.5931,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "profit_factor": 1.9053
+            },
+            "2025-07": {
+              "net_usd": 180.499,
+              "trades": 16,
+              "wins": 5,
+              "losses": 11,
+              "profit_factor": 2.0049
+            },
+            "2025-08": {
+              "net_usd": 236.8062,
+              "trades": 18,
+              "wins": 8,
+              "losses": 10,
+              "profit_factor": 2.185
+            },
+            "2025-09": {
+              "net_usd": 135.4838,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.8237
+            },
+            "2025-10": {
+              "net_usd": 209.9694,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.8466
+            },
+            "2025-11": {
+              "net_usd": -225.5511,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.3313
+            },
+            "2025-12": {
+              "net_usd": -41.4389,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 0.7608
+            },
+            "2026-01": {
+              "net_usd": -77.8795,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 0.6242
+            },
+            "2026-02": {
+              "net_usd": 24.211,
+              "trades": 22,
+              "wins": 7,
+              "losses": 15,
+              "profit_factor": 1.0816
+            },
+            "2026-03": {
+              "net_usd": -72.3589,
+              "trades": 18,
+              "wins": 6,
+              "losses": 12,
+              "profit_factor": 0.735
+            },
+            "2026-04": {
+              "net_usd": -123.107,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.4053
+            },
+            "2026-05": {
+              "net_usd": -36.4905,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "profit_factor": 0.7535
+            },
+            "2026-06": {
+              "net_usd": 185.8124,
+              "trades": 12,
+              "wins": 5,
+              "losses": 7,
+              "profit_factor": 2.8802
+            },
+            "2026-07": {
+              "net_usd": -20.3753,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.8847
+            },
+            "2026-08": {
+              "net_usd": 197.0287,
+              "trades": 17,
+              "wins": 4,
+              "losses": 13,
+              "profit_factor": 2.7028
+            },
+            "2026-09": {
+              "net_usd": -82.7398,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "profit_factor": 0.5431
+            },
+            "2026-10": {
+              "net_usd": -86.6394,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "profit_factor": 0.5434
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "ETH",
+            "activation": 1500,
+            "atr_multiplier": 3.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -328.645,
+            "full_pf": 0.9328,
+            "full_trades": 410,
+            "full_wins": 113,
+            "full_winrate": 27.56,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 952.2531,
+            "full_gross": 149.179,
+            "full_fees_gst": 477.824,
+            "train2025_net": -236.1065,
+            "train2025_pf": 0.9213,
+            "train2025_positive_months": 5,
+            "test2026_net": -92.5385,
+            "test2026_pf": 0.9511,
+            "test2026_positive_months": 3,
+            "tp_exits": 151,
+            "emergency_exits": 206,
+            "flip_exits": 53,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -152.5469,
+              "trades": 21,
+              "wins": 5,
+              "losses": 16,
+              "profit_factor": 0.4731
+            },
+            "2025-02": {
+              "net_usd": -85.9185,
+              "trades": 19,
+              "wins": 3,
+              "losses": 16,
+              "profit_factor": 0.6856
+            },
+            "2025-03": {
+              "net_usd": -74.6845,
+              "trades": 22,
+              "wins": 5,
+              "losses": 17,
+              "profit_factor": 0.7725
+            },
+            "2025-04": {
+              "net_usd": -359.875,
+              "trades": 27,
+              "wins": 3,
+              "losses": 24,
+              "profit_factor": 0.3888
+            },
+            "2025-05": {
+              "net_usd": -223.4994,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 0.177
+            },
+            "2025-06": {
+              "net_usd": 153.5931,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "profit_factor": 1.9053
+            },
+            "2025-07": {
+              "net_usd": 180.499,
+              "trades": 16,
+              "wins": 5,
+              "losses": 11,
+              "profit_factor": 2.0049
+            },
+            "2025-08": {
+              "net_usd": 247.8627,
+              "trades": 18,
+              "wins": 8,
+              "losses": 10,
+              "profit_factor": 2.2403
+            },
+            "2025-09": {
+              "net_usd": 135.4838,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.8237
+            },
+            "2025-10": {
+              "net_usd": 209.9694,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.8466
+            },
+            "2025-11": {
+              "net_usd": -225.5511,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.3313
+            },
+            "2025-12": {
+              "net_usd": -41.4389,
+              "trades": 19,
+              "wins": 6,
+              "losses": 13,
+              "profit_factor": 0.7608
+            },
+            "2026-01": {
+              "net_usd": -77.8795,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 0.6242
+            },
+            "2026-02": {
+              "net_usd": 24.211,
+              "trades": 22,
+              "wins": 7,
+              "losses": 15,
+              "profit_factor": 1.0816
+            },
+            "2026-03": {
+              "net_usd": -72.3589,
+              "trades": 18,
+              "wins": 6,
+              "losses": 12,
+              "profit_factor": 0.735
+            },
+            "2026-04": {
+              "net_usd": -123.107,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.4053
+            },
+            "2026-05": {
+              "net_usd": -36.4905,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "profit_factor": 0.7535
+            },
+            "2026-06": {
+              "net_usd": 185.8124,
+              "trades": 12,
+              "wins": 5,
+              "losses": 7,
+              "profit_factor": 2.8802
+            },
+            "2026-07": {
+              "net_usd": -20.3753,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.8847
+            },
+            "2026-08": {
+              "net_usd": 197.0287,
+              "trades": 17,
+              "wins": 4,
+              "losses": 13,
+              "profit_factor": 2.7028
+            },
+            "2026-09": {
+              "net_usd": -82.7398,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "profit_factor": 0.5431
+            },
+            "2026-10": {
+              "net_usd": -86.6394,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "profit_factor": 0.5434
+            }
+          }
+        }
+      },
+      {
+        "activation": 4000,
+        "atr_multiplier": 1.5,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "ETH",
+            "activation": 4000,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -177.4048,
+            "full_pf": 0.9676,
+            "full_trades": 424,
+            "full_wins": 114,
+            "full_winrate": 26.89,
+            "full_positive_months": 10,
+            "full_negative_months": 12,
+            "full_maxdd_usd": 940.2268,
+            "full_gross": 316.723,
+            "full_fees_gst": 494.1278,
+            "train2025_net": -140.3761,
+            "train2025_pf": 0.9581,
+            "train2025_positive_months": 6,
+            "test2026_net": -37.0287,
+            "test2026_pf": 0.9826,
+            "test2026_positive_months": 4,
+            "tp_exits": 75,
+            "emergency_exits": 216,
+            "flip_exits": 133,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -137.5348,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.534
+            },
+            "2025-02": {
+              "net_usd": 117.0592,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 1.5184
+            },
+            "2025-03": {
+              "net_usd": -19.8103,
+              "trades": 23,
+              "wins": 5,
+              "losses": 18,
+              "profit_factor": 0.9453
+            },
+            "2025-04": {
+              "net_usd": -496.2507,
+              "trades": 27,
+              "wins": 1,
+              "losses": 26,
+              "profit_factor": 0.2505
+            },
+            "2025-05": {
+              "net_usd": -202.8587,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.3019
+            },
+            "2025-06": {
+              "net_usd": 73.4961,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 1.3344
+            },
+            "2025-07": {
+              "net_usd": 192.4704,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 1.8491
+            },
+            "2025-08": {
+              "net_usd": 191.9403,
+              "trades": 22,
+              "wins": 8,
+              "losses": 14,
+              "profit_factor": 1.6657
+            },
+            "2025-09": {
+              "net_usd": 124.9505,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 2.0743
+            },
+            "2025-10": {
+              "net_usd": 258.2419,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 2.6417
+            },
+            "2025-11": {
+              "net_usd": -206.5639,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.4107
+            },
+            "2025-12": {
+              "net_usd": -35.5162,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 0.7695
+            },
+            "2026-01": {
+              "net_usd": -69.3143,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "profit_factor": 0.6586
+            },
+            "2026-02": {
+              "net_usd": 27.4035,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "profit_factor": 1.0663
+            },
+            "2026-03": {
+              "net_usd": -70.0142,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.7987
+            },
+            "2026-04": {
+              "net_usd": -96.1821,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.5773
+            },
+            "2026-05": {
+              "net_usd": 2.0207,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 1.0162
+            },
+            "2026-06": {
+              "net_usd": 125.3066,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "profit_factor": 1.8201
+            },
+            "2026-07": {
+              "net_usd": -10.73,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.9403
+            },
+            "2026-08": {
+              "net_usd": 189.2842,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "profit_factor": 2.7531
+            },
+            "2026-09": {
+              "net_usd": -57.6985,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.6787
+            },
+            "2026-10": {
+              "net_usd": -77.1046,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.5966
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "ETH",
+            "activation": 4000,
+            "atr_multiplier": 1.5,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -181.063,
+            "full_pf": 0.9669,
+            "full_trades": 424,
+            "full_wins": 114,
+            "full_winrate": 26.89,
+            "full_positive_months": 10,
+            "full_negative_months": 12,
+            "full_maxdd_usd": 940.2268,
+            "full_gross": 313.064,
+            "full_fees_gst": 494.127,
+            "train2025_net": -144.0343,
+            "train2025_pf": 0.957,
+            "train2025_positive_months": 6,
+            "test2026_net": -37.0287,
+            "test2026_pf": 0.9826,
+            "test2026_positive_months": 4,
+            "tp_exits": 75,
+            "emergency_exits": 216,
+            "flip_exits": 133,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -137.5348,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.534
+            },
+            "2025-02": {
+              "net_usd": 113.401,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 1.5022
+            },
+            "2025-03": {
+              "net_usd": -19.8103,
+              "trades": 23,
+              "wins": 5,
+              "losses": 18,
+              "profit_factor": 0.9453
+            },
+            "2025-04": {
+              "net_usd": -496.2507,
+              "trades": 27,
+              "wins": 1,
+              "losses": 26,
+              "profit_factor": 0.2505
+            },
+            "2025-05": {
+              "net_usd": -202.8587,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.3019
+            },
+            "2025-06": {
+              "net_usd": 73.4961,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 1.3344
+            },
+            "2025-07": {
+              "net_usd": 192.4704,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 1.8491
+            },
+            "2025-08": {
+              "net_usd": 191.9403,
+              "trades": 22,
+              "wins": 8,
+              "losses": 14,
+              "profit_factor": 1.6657
+            },
+            "2025-09": {
+              "net_usd": 124.9505,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 2.0743
+            },
+            "2025-10": {
+              "net_usd": 258.2419,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 2.6417
+            },
+            "2025-11": {
+              "net_usd": -206.5639,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.4107
+            },
+            "2025-12": {
+              "net_usd": -35.5162,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 0.7695
+            },
+            "2026-01": {
+              "net_usd": -69.3143,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "profit_factor": 0.6586
+            },
+            "2026-02": {
+              "net_usd": 27.4035,
+              "trades": 23,
+              "wins": 8,
+              "losses": 15,
+              "profit_factor": 1.0663
+            },
+            "2026-03": {
+              "net_usd": -70.0142,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.7987
+            },
+            "2026-04": {
+              "net_usd": -96.1821,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.5773
+            },
+            "2026-05": {
+              "net_usd": 2.0207,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 1.0162
+            },
+            "2026-06": {
+              "net_usd": 125.3066,
+              "trades": 17,
+              "wins": 8,
+              "losses": 9,
+              "profit_factor": 1.8201
+            },
+            "2026-07": {
+              "net_usd": -10.73,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.9403
+            },
+            "2026-08": {
+              "net_usd": 189.2842,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "profit_factor": 2.7531
+            },
+            "2026-09": {
+              "net_usd": -57.6985,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.6787
+            },
+            "2026-10": {
+              "net_usd": -77.1046,
+              "trades": 21,
+              "wins": 6,
+              "losses": 15,
+              "profit_factor": 0.5966
+            }
+          }
+        }
+      },
+      {
+        "activation": 4000,
+        "atr_multiplier": 2.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "ETH",
+            "activation": 4000,
+            "atr_multiplier": 2.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -202.5797,
+            "full_pf": 0.9614,
+            "full_trades": 411,
+            "full_wins": 110,
+            "full_winrate": 26.76,
+            "full_positive_months": 9,
+            "full_negative_months": 13,
+            "full_maxdd_usd": 947.1227,
+            "full_gross": 276.4865,
+            "full_fees_gst": 479.0662,
+            "train2025_net": -125.642,
+            "train2025_pf": 0.9608,
+            "train2025_positive_months": 6,
+            "test2026_net": -76.9377,
+            "test2026_pf": 0.9623,
+            "test2026_positive_months": 3,
+            "tp_exits": 71,
+            "emergency_exits": 210,
+            "flip_exits": 130,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -140.3858,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.5
+            },
+            "2025-02": {
+              "net_usd": 82.2777,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 1.3644
+            },
+            "2025-03": {
+              "net_usd": -30.0953,
+              "trades": 22,
+              "wins": 5,
+              "losses": 17,
+              "profit_factor": 0.9119
+            },
+            "2025-04": {
+              "net_usd": -510.0913,
+              "trades": 27,
+              "wins": 1,
+              "losses": 26,
+              "profit_factor": 0.2296
+            },
+            "2025-05": {
+              "net_usd": -204.6727,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.2957
+            },
+            "2025-06": {
+              "net_usd": 118.0781,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 1.6011
+            },
+            "2025-07": {
+              "net_usd": 181.7789,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "profit_factor": 1.8169
+            },
+            "2025-08": {
+              "net_usd": 257.9579,
+              "trades": 19,
+              "wins": 7,
+              "losses": 12,
+              "profit_factor": 2.1282
+            },
+            "2025-09": {
+              "net_usd": 108.1252,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 1.9297
+            },
+            "2025-10": {
+              "net_usd": 261.5412,
+              "trades": 14,
+              "wins": 6,
+              "losses": 8,
+              "profit_factor": 2.9653
+            },
+            "2025-11": {
+              "net_usd": -217.8057,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.3786
+            },
+            "2025-12": {
+              "net_usd": -32.3501,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 0.7901
+            },
+            "2026-01": {
+              "net_usd": -54.116,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 0.704
+            },
+            "2026-02": {
+              "net_usd": -0.8419,
+              "trades": 22,
+              "wins": 7,
+              "losses": 15,
+              "profit_factor": 0.9977
+            },
+            "2026-03": {
+              "net_usd": -75.5284,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.7838
+            },
+            "2026-04": {
+              "net_usd": -113.9774,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.4494
+            },
+            "2026-05": {
+              "net_usd": 2.0207,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 1.0162
+            },
+            "2026-06": {
+              "net_usd": 146.645,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 1.9597
+            },
+            "2026-07": {
+              "net_usd": -15.7985,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.912
+            },
+            "2026-08": {
+              "net_usd": 176.7596,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "profit_factor": 2.6371
+            },
+            "2026-09": {
+              "net_usd": -59.1386,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.6665
+            },
+            "2026-10": {
+              "net_usd": -82.9622,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.566
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "ETH",
+            "activation": 4000,
+            "atr_multiplier": 2.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -195.8277,
+            "full_pf": 0.9626,
+            "full_trades": 411,
+            "full_wins": 110,
+            "full_winrate": 26.76,
+            "full_positive_months": 9,
+            "full_negative_months": 13,
+            "full_maxdd_usd": 947.1227,
+            "full_gross": 283.2425,
+            "full_fees_gst": 479.0702,
+            "train2025_net": -118.89,
+            "train2025_pf": 0.9629,
+            "train2025_positive_months": 6,
+            "test2026_net": -76.9377,
+            "test2026_pf": 0.9623,
+            "test2026_positive_months": 3,
+            "tp_exits": 71,
+            "emergency_exits": 210,
+            "flip_exits": 130,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -140.3858,
+              "trades": 19,
+              "wins": 4,
+              "losses": 15,
+              "profit_factor": 0.5
+            },
+            "2025-02": {
+              "net_usd": 82.2777,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 1.3644
+            },
+            "2025-03": {
+              "net_usd": -30.0953,
+              "trades": 22,
+              "wins": 5,
+              "losses": 17,
+              "profit_factor": 0.9119
+            },
+            "2025-04": {
+              "net_usd": -510.0913,
+              "trades": 27,
+              "wins": 1,
+              "losses": 26,
+              "profit_factor": 0.2296
+            },
+            "2025-05": {
+              "net_usd": -204.6727,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.2957
+            },
+            "2025-06": {
+              "net_usd": 118.0781,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 1.6011
+            },
+            "2025-07": {
+              "net_usd": 181.7789,
+              "trades": 18,
+              "wins": 5,
+              "losses": 13,
+              "profit_factor": 1.8169
+            },
+            "2025-08": {
+              "net_usd": 257.9579,
+              "trades": 19,
+              "wins": 7,
+              "losses": 12,
+              "profit_factor": 2.1282
+            },
+            "2025-09": {
+              "net_usd": 114.8772,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 1.9877
+            },
+            "2025-10": {
+              "net_usd": 261.5412,
+              "trades": 14,
+              "wins": 6,
+              "losses": 8,
+              "profit_factor": 2.9653
+            },
+            "2025-11": {
+              "net_usd": -217.8057,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.3786
+            },
+            "2025-12": {
+              "net_usd": -32.3501,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 0.7901
+            },
+            "2026-01": {
+              "net_usd": -54.116,
+              "trades": 17,
+              "wins": 5,
+              "losses": 12,
+              "profit_factor": 0.704
+            },
+            "2026-02": {
+              "net_usd": -0.8419,
+              "trades": 22,
+              "wins": 7,
+              "losses": 15,
+              "profit_factor": 0.9977
+            },
+            "2026-03": {
+              "net_usd": -75.5284,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.7838
+            },
+            "2026-04": {
+              "net_usd": -113.9774,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.4494
+            },
+            "2026-05": {
+              "net_usd": 2.0207,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 1.0162
+            },
+            "2026-06": {
+              "net_usd": 146.645,
+              "trades": 16,
+              "wins": 7,
+              "losses": 9,
+              "profit_factor": 1.9597
+            },
+            "2026-07": {
+              "net_usd": -15.7985,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.912
+            },
+            "2026-08": {
+              "net_usd": 176.7596,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "profit_factor": 2.6371
+            },
+            "2026-09": {
+              "net_usd": -59.1386,
+              "trades": 20,
+              "wins": 3,
+              "losses": 17,
+              "profit_factor": 0.6665
+            },
+            "2026-10": {
+              "net_usd": -82.9622,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.566
+            }
+          }
+        }
+      },
+      {
+        "activation": 4000,
+        "atr_multiplier": 3.0,
+        "exit_mode": "H_CLOSE",
+        "MARK": {
+          "score": {
+            "asset": "ETH",
+            "activation": 4000,
+            "atr_multiplier": 3.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "MARK",
+            "full_net": -204.7423,
+            "full_pf": 0.9566,
+            "full_trades": 382,
+            "full_wins": 104,
+            "full_winrate": 27.23,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 911.6763,
+            "full_gross": 240.476,
+            "full_fees_gst": 445.2183,
+            "train2025_net": -234.7954,
+            "train2025_pf": 0.9196,
+            "train2025_positive_months": 5,
+            "test2026_net": 30.0531,
+            "test2026_pf": 1.0168,
+            "test2026_positive_months": 3,
+            "tp_exits": 65,
+            "emergency_exits": 197,
+            "flip_exits": 120,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -130.4418,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 0.4852
+            },
+            "2025-02": {
+              "net_usd": -9.3021,
+              "trades": 15,
+              "wins": 2,
+              "losses": 13,
+              "profit_factor": 0.9543
+            },
+            "2025-03": {
+              "net_usd": -92.477,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "profit_factor": 0.7291
+            },
+            "2025-04": {
+              "net_usd": -359.0347,
+              "trades": 26,
+              "wins": 2,
+              "losses": 24,
+              "profit_factor": 0.3871
+            },
+            "2025-05": {
+              "net_usd": -242.5441,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 0.1654
+            },
+            "2025-06": {
+              "net_usd": 160.403,
+              "trades": 17,
+              "wins": 6,
+              "losses": 11,
+              "profit_factor": 1.9984
+            },
+            "2025-07": {
+              "net_usd": 172.3528,
+              "trades": 16,
+              "wins": 5,
+              "losses": 11,
+              "profit_factor": 1.9596
+            },
+            "2025-08": {
+              "net_usd": 216.07,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "profit_factor": 2.0079
+            },
+            "2025-09": {
+              "net_usd": 135.4838,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.8237
+            },
+            "2025-10": {
+              "net_usd": 194.2776,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.5679
+            },
+            "2025-11": {
+              "net_usd": -249.5725,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.288
+            },
+            "2025-12": {
+              "net_usd": -30.0104,
+              "trades": 16,
+              "wins": 5,
+              "losses": 11,
+              "profit_factor": 0.7874
+            },
+            "2026-01": {
+              "net_usd": -59.9302,
+              "trades": 16,
+              "wins": 4,
+              "losses": 12,
+              "profit_factor": 0.6722
+            },
+            "2026-02": {
+              "net_usd": 47.607,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "profit_factor": 1.1751
+            },
+            "2026-03": {
+              "net_usd": -20.0988,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "profit_factor": 0.9196
+            },
+            "2026-04": {
+              "net_usd": -123.107,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.4053
+            },
+            "2026-05": {
+              "net_usd": -7.3812,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 0.9408
+            },
+            "2026-06": {
+              "net_usd": 161.4087,
+              "trades": 12,
+              "wins": 5,
+              "losses": 7,
+              "profit_factor": 2.3584
+            },
+            "2026-07": {
+              "net_usd": -23.2596,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.8705
+            },
+            "2026-08": {
+              "net_usd": 203.316,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "profit_factor": 2.8831
+            },
+            "2026-09": {
+              "net_usd": -62.5676,
+              "trades": 19,
+              "wins": 3,
+              "losses": 16,
+              "profit_factor": 0.6076
+            },
+            "2026-10": {
+              "net_usd": -85.934,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.5505
+            }
+          }
+        },
+        "TRADED": {
+          "score": {
+            "asset": "ETH",
+            "activation": 4000,
+            "atr_multiplier": 3.0,
+            "exit_mode": "H_CLOSE",
+            "price_source": "TRADED",
+            "full_net": -191.4885,
+            "full_pf": 0.9594,
+            "full_trades": 382,
+            "full_wins": 104,
+            "full_winrate": 27.23,
+            "full_positive_months": 8,
+            "full_negative_months": 14,
+            "full_maxdd_usd": 911.6763,
+            "full_gross": 253.722,
+            "full_fees_gst": 445.2105,
+            "train2025_net": -221.5416,
+            "train2025_pf": 0.9241,
+            "train2025_positive_months": 5,
+            "test2026_net": 30.0531,
+            "test2026_pf": 1.0168,
+            "test2026_positive_months": 3,
+            "tp_exits": 65,
+            "emergency_exits": 197,
+            "flip_exits": 120,
+            "open_at_month_end": true
+          },
+          "monthly": {
+            "2025-01": {
+              "net_usd": -130.4418,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 0.4852
+            },
+            "2025-02": {
+              "net_usd": -7.1048,
+              "trades": 15,
+              "wins": 2,
+              "losses": 13,
+              "profit_factor": 0.9651
+            },
+            "2025-03": {
+              "net_usd": -92.477,
+              "trades": 21,
+              "wins": 4,
+              "losses": 17,
+              "profit_factor": 0.7291
+            },
+            "2025-04": {
+              "net_usd": -359.0347,
+              "trades": 26,
+              "wins": 2,
+              "losses": 24,
+              "profit_factor": 0.3871
+            },
+            "2025-05": {
+              "net_usd": -242.5441,
+              "trades": 18,
+              "wins": 4,
+              "losses": 14,
+              "profit_factor": 0.1654
+            },
+            "2025-06": {
+              "net_usd": 160.403,
+              "trades": 17,
+              "wins": 6,
+              "losses": 11,
+              "profit_factor": 1.9984
+            },
+            "2025-07": {
+              "net_usd": 172.3528,
+              "trades": 16,
+              "wins": 5,
+              "losses": 11,
+              "profit_factor": 1.9596
+            },
+            "2025-08": {
+              "net_usd": 227.1265,
+              "trades": 18,
+              "wins": 7,
+              "losses": 11,
+              "profit_factor": 2.0595
+            },
+            "2025-09": {
+              "net_usd": 135.4838,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.8237
+            },
+            "2025-10": {
+              "net_usd": 194.2776,
+              "trades": 13,
+              "wins": 6,
+              "losses": 7,
+              "profit_factor": 2.5679
+            },
+            "2025-11": {
+              "net_usd": -249.5725,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.288
+            },
+            "2025-12": {
+              "net_usd": -30.0104,
+              "trades": 16,
+              "wins": 5,
+              "losses": 11,
+              "profit_factor": 0.7874
+            },
+            "2026-01": {
+              "net_usd": -59.9302,
+              "trades": 16,
+              "wins": 4,
+              "losses": 12,
+              "profit_factor": 0.6722
+            },
+            "2026-02": {
+              "net_usd": 47.607,
+              "trades": 20,
+              "wins": 7,
+              "losses": 13,
+              "profit_factor": 1.1751
+            },
+            "2026-03": {
+              "net_usd": -20.0988,
+              "trades": 15,
+              "wins": 5,
+              "losses": 10,
+              "profit_factor": 0.9196
+            },
+            "2026-04": {
+              "net_usd": -123.107,
+              "trades": 19,
+              "wins": 5,
+              "losses": 14,
+              "profit_factor": 0.4053
+            },
+            "2026-05": {
+              "net_usd": -7.3812,
+              "trades": 15,
+              "wins": 6,
+              "losses": 9,
+              "profit_factor": 0.9408
+            },
+            "2026-06": {
+              "net_usd": 161.4087,
+              "trades": 12,
+              "wins": 5,
+              "losses": 7,
+              "profit_factor": 2.3584
+            },
+            "2026-07": {
+              "net_usd": -23.2596,
+              "trades": 20,
+              "wins": 4,
+              "losses": 16,
+              "profit_factor": 0.8705
+            },
+            "2026-08": {
+              "net_usd": 203.316,
+              "trades": 15,
+              "wins": 4,
+              "losses": 11,
+              "profit_factor": 2.8831
+            },
+            "2026-09": {
+              "net_usd": -62.5676,
+              "trades": 19,
+              "wins": 3,
+              "losses": 16,
+              "profit_factor": 0.6076
+            },
+            "2026-10": {
+              "net_usd": -85.934,
+              "trades": 20,
+              "wins": 5,
+              "losses": 15,
+              "profit_factor": 0.5505
+            }
+          }
+        }
+      }
+    ]
+  }
+}
