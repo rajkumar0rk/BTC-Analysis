@@ -1,0 +1,28 @@
+name: Modified EMA ST ATR Trailing Fee Aware Backtest BTC ETH
+on:
+  push:
+    branches: [research/ema-st-modified-trailing-atr-20261121]
+    paths:
+      - scripts/replay_modified_ema_st_20261121.py
+      - .github/workflows/replay-modified-ema-st-20261121.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install replay dependencies
+        run: python -m pip install numpy pandas numba
+      - name: Backtest modified EMA20 Supertrend with genuine 1M exits
+        run: python scripts/replay_modified_ema_st_20261121.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: modified-ema-st-atr-trail-btc-eth
+          path: analysis/ema_st_modified_atr_trail_20261121/
