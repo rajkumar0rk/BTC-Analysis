@@ -1,0 +1,32 @@
+{
+  "price_only": {
+    "direction_prediction_evidence_passed": false,
+    "historical_backtest_economics_passed": false,
+    "directional_strategy_promotion_allowed": false,
+    "directional_strategy_trading_enabled": false,
+    "causality_test_completed": true,
+    "external_blind_holdout_available": false,
+    "observed_2025_2026_periods_previously_explored": true,
+    "volatility_probability_candidate_for_new_research": true,
+    "volatility_probability_live_trade_allowed": false,
+    "goal_22_profitable_months_met": false,
+    "net_trade_return_pct": -32.9615,
+    "profitable_months": 2,
+    "why_failed": "No durable 2025H2+2026 directional skill with positive after-cost PnL; all year-specific safety gates required, plus new untouched data before enabling trading."
+  },
+  "oi_mark_funding": {
+    "direction_prediction_evidence_passed": false,
+    "historical_backtest_economics_passed": false,
+    "directional_strategy_promotion_allowed": false,
+    "directional_strategy_trading_enabled": false,
+    "causality_test_completed": true,
+    "external_blind_holdout_available": false,
+    "observed_2025_2026_periods_previously_explored": true,
+    "volatility_probability_candidate_for_new_research": true,
+    "volatility_probability_live_trade_allowed": false,
+    "goal_22_profitable_months_met": false,
+    "net_trade_return_pct": -33.5052,
+    "profitable_months": 3,
+    "why_failed": "No durable 2025H2+2026 directional skill with positive after-cost PnL; all year-specific safety gates required, plus new untouched data before enabling trading."
+  }
+}
