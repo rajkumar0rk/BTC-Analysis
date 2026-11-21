@@ -152,7 +152,7 @@ def main():
             m=metrics(blended)
             t=metrics(blended[:12])
             h1models.append(dict(model=name,allocation=alloc,
-                2025_training_trades=training_trades,
+                train_2025_trades=training_trades,
                 train_2025_return_pct=t["total_return_pct"],
                 train_2025_positive=t["positive_months"],
                 september_2026_hourly_pct=float(hr[20]),
