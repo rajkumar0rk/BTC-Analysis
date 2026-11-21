@@ -36,11 +36,11 @@ for t,r in f.iterrows():
     if t.tz_convert("Asia/Kolkata")<pd.Timestamp("2025-01-01",tz="Asia/Kolkata"):continue
     if t.tz_convert("Asia/Kolkata")>=pd.Timestamp("2026-01-01",tz="Asia/Kolkata"):
         break
-    if prev_time is not None and (t-prev_time)!=pd.Timedelta(minutes=1) and side:
-        # Source gap: no invented fill; mark forced exit at previous observed close.
-        x=prev_close; exitfee=qty*x*fee; pnl=side*qty*(x-entry)-entry_fee-exitfee
-        equity+=pnl;trades.append((entry_time,prev_time,side,entry,x,qty,pnl,"source_gap"));side=0
-    prev_time=t;prev_close=float(r.close)
+    if prev_time is not None and (t-prev_time)!=pd.Timedelta(minutes=1):
+        # A missing minute makes intragap stop execution unknowable.
+        # Fail closed: do not invent a favorable historical fill.
+        raise RuntimeError(f"Missing 1m source bar between {prev_time} and {t}; replay invalid")
+    prev_time=t
     sig,el,es=events.get(t,(0,False,False))
     # Closed-bar exit at next open, stop-first on current 1m candle.
     if side:
@@ -78,6 +78,12 @@ for t,r in f.iterrows():
 if side:
     t=f.index[-1];x=float(f.close.iloc[-1]);pnl=side*qty*(x-entry)-entry_fee-qty*x*fee
     equity+=pnl;trades.append((entry_time,t,side,entry,x,qty,pnl,"end_of_data"))
+    # Last monthly mark must agree with forced end-of-data close, after costs.
+    if marks:marks[-1]=(marks[-1][0],equity)
+# Every closed trade has both fees in net_usd; no unrealized position remains.
+assert abs(capital+sum(float(row[6]) for row in trades)-equity)<1e-7, "NAV/trade reconciliation failed"
+def _trade_sum(rows):
+    return sum(float(row[6]) for row in rows)
 trade=pd.DataFrame(trades,columns=["entry_utc","exit_utc","side","entry_price","exit_price","quantity","net_usd","reason"])
 trade.to_csv(OUT/"trades.csv",index=False)
 months=pd.DataFrame(marks,columns=["month_ist","end_nav"])
@@ -85,6 +91,8 @@ months=months[(months.month_ist>="2025-01")&(months.month_ist<="2025-12")].copy(
 months["start_nav"]=months.end_nav.shift(1).fillna(capital)
 months["net_return_pct"]=100*(months.end_nav/months.start_nav-1)
 months["entries"]=months.month_ist.map(month_entries).fillna(0).astype(int)
+assert len(months)==12, f"Expected all 12 IST months, got {len(months)}"
+assert abs(float(months.end_nav.iloc[-1])-equity)<1e-7, "Final monthly NAV mismatch"
 months.to_csv(OUT/"monthly_nav.csv",index=False)
 wins=trade.loc[trade.net_usd>0,"net_usd"].sum() if len(trade) else 0
 loss=-trade.loc[trade.net_usd<0,"net_usd"].sum() if len(trade) else 0
