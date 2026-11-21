@@ -1,0 +1,28 @@
+name: Momentum Fusion M08 corrected BTC2025 calendar replay
+on:
+  push:
+    branches:
+      - research/momentum-vwap-score-20261121
+    paths:
+      - scripts/research_momentum_fusion_m08.py
+      - .github/workflows/research-momentum-fusion-m08.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy pandas
+      - run: python scripts/research_momentum_fusion_m08.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: momentum-fusion-m08-btc2025-calendar
+          path: analysis/momentum_vwap_score_20261121/m08_calendar_replay/
+          if-no-files-found: warn
