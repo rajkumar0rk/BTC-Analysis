@@ -82,7 +82,7 @@ def split_trade_stats(df, suffix):
     dates = df[datecol].astype(str)
     periods = [
         ("2025", dates.str.startswith("2025")),
-        ("2026_Jan_Oct", (dates>="202601") & (dates<="202611")),
+        ("2026_Jan_Oct", (dates>="202601") & (dates<"202611")),
         ("2026_Nov_partial", dates=="202611"),
         ("through_Oct_2026", dates<"202611"),
         ("entire_archive", dates.notna()),
@@ -116,6 +116,8 @@ def main():
     hours, sig = hourly_signals(d)
     funding, rateparts = load_funding()
     iso_trades, iso_month, iso_result = backtest(d, sig, funding)
+    iso_result["timeframe"] = "1H UTC close; next 1m OPEN entry, 1m TP/SL"
+    iso_result["raw_hourly_signals"] = iso_result.pop("raw_daily_signals")
     con_trades, con_month, con_result = simulate(d, sig, funding)
     # Preserve every result including null / failed candidates.
     iso_trades.to_csv(OUT/"isolated_trade_ledger.csv",index=False)
