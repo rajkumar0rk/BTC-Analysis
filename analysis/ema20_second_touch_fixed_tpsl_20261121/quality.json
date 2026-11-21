@@ -1,0 +1,32 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "entry_rule": "second distinct HTF candle touching frozen last-completed HTF EMA20; Supertrend flip bar excluded",
+  "eth_scaling": "200*ETH entry/prior BTC minute close TP; 100*ETH entry/prior BTC minute close SL",
+  "btc_tp_points": 200,
+  "btc_sl_points": 100,
+  "taker_fee_fraction_each_side": 0.0005,
+  "gst_on_fee_fraction": 0.18,
+  "adverse_slippage_fraction_each_side": 0.0002,
+  "initial_usd": 1000.0,
+  "notional_exposure": "1x of evolving account equity",
+  "one_position": "per asset per timeframe",
+  "first_minute_handling": "stop-first; never award favorable TP on entry minute",
+  "double_touch_same_minute": "stop first",
+  "gap_handling": "adverse stop gap at open; TP at target limit price",
+  "monthly_timezone": "Asia/Kolkata",
+  "nov_2026_incomplete_excluded": true,
+  "limitations": "OHLC no tick sequencing, no actual bid ask, funding, order book or latency. Historical backtest only."
+}
