@@ -160,7 +160,7 @@ def audit():
       protected_6m_net_return_pct=float(protected6.net_return_pct),
       protected_6m_delta_percentage_points=round(
           float(protected6.net_return_pct-original6.net_return_pct),4),
-      22_profitable_calendar_months_achieved=False,
+      profitable_22_of_22_calendar_months_achieved=False,
       no_untouched_external_holdout=True,
       realized_funding_historical_spreads_liquidation_not_modelled=True,
       selected_exit_configuration_not_promoted=True,
