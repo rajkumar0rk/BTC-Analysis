@@ -1,0 +1,3 @@
+side,entry_price,exit_price_proxy,position_quantity,gross_usd,fees_gst_usd,net_usd,initial_stop,final_stop,activation_points,trailing_stop_points,stop_edits,entry_utc,exit_utc,month_utc,exit_reason,entry_ist,exit_ist,day_ist
+long,65103.0,63655.0,0.015,-21.72,1.1395083,-22.859508299999998,63740.0,63740.0,200.0,3000.0,0.0,2026-11-15 21:00:00+00:00,2026-11-17 15:49:00+00:00,2026-11,stop_crossed_in_minute,2026-11-16 02:30:00+05:30,2026-11-17 21:19:00+05:30,2026-11-17
+short,64328.0,63917.0,0.015,6.165,1.13496825,5.03003175,65477.0,65037.0,200.0,3000.0,5.0,2026-11-17 22:00:00+00:00,2026-11-19 12:00:00+00:00,2026-11,supertrend_flip,2026-11-18 03:30:00+05:30,2026-11-19 17:30:00+05:30,2026-11-19

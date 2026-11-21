@@ -1,0 +1,691 @@
+{
+  "research_week_start_ist": "2026-11-16T00:00:00+05:30",
+  "cutoff_utc_exclusive": "2026-11-21 01:53:00+00:00",
+  "cutoff_ist_exclusive": "2026-11-21 07:23:00+05:30",
+  "week_end_not_complete": true,
+  "historical_venue": "Delta India production, NOT Delta Demo testnet",
+  "signal": "1H EMA20+Supertrend(10,3), 2xATR(14) initial stop, native mark-price trigger proxy",
+  "modeled_execution": "1m MARK high/low checks old stop, trailing stop tightened only at completed candle for next minute",
+  "fill_model": "in-candle mark-trigger at that candle's traded CLOSE (PROXY); gaps and 1H ST flips at minute OPEN",
+  "costs": "0.05% taker entry, 0.05% taker exit, 18% GST. Funding, bid/ask slippage, true PM liquidation excluded",
+  "data_quality": "require minute-for-minute exact traded/MARK timestamps; no interpolation",
+  "position_sizing": "fixed notional max $1000 reference, not fundable by $100 account if depleted",
+  "configs": {
+    "BTC": [
+      [
+        "requested_100_500",
+        100,
+        500
+      ],
+      [
+        "best_fixed100_100_3000",
+        100,
+        3000
+      ],
+      [
+        "best_grid_200_3000",
+        200,
+        3000
+      ]
+    ],
+    "ETH": [
+      [
+        "requested_100_500",
+        100,
+        500
+      ],
+      [
+        "best_fixed100_100_8000",
+        100,
+        8000
+      ],
+      [
+        "best_grid_50_8000",
+        50,
+        8000
+      ]
+    ]
+  },
+  "dataset": {
+    "BTC": {
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "mark_source": "Delta India historical MARK:xxxxUSD 1m REST archive",
+      "traded_rows": 987840,
+      "mark_rows": 987840,
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2026-11-17 23:59:00+00:00",
+      "mark_time_alignment_verified": true,
+      "traded_sha256_verified": true,
+      "all_minute_intervals_60s": true,
+      "completed_1h_bars": 16537,
+      "hourly_entry_signals": 2502,
+      "hourly_st_flips": 406,
+      "warmup_bars": 72,
+      "fetched_traded_1m": 4433,
+      "fetched_mark_1m": 4433,
+      "most_recent_traded_utc": "2026-11-21 01:52:00+00:00",
+      "most_recent_mark_utc": "2026-11-21 01:52:00+00:00"
+    },
+    "ETH": {
+      "source": "https://api.india.delta.exchange/v2/history/candles",
+      "mark_source": "Delta India historical MARK:xxxxUSD 1m REST archive",
+      "traded_rows": 987840,
+      "mark_rows": 987840,
+      "start_utc": "2025-01-01 00:00:00+00:00",
+      "end_utc": "2026-11-17 23:59:00+00:00",
+      "mark_time_alignment_verified": true,
+      "traded_sha256_verified": true,
+      "all_minute_intervals_60s": true,
+      "completed_1h_bars": 16537,
+      "hourly_entry_signals": 2561,
+      "hourly_st_flips": 392,
+      "warmup_bars": 72,
+      "fetched_traded_1m": 4433,
+      "fetched_mark_1m": 4433,
+      "most_recent_traded_utc": "2026-11-21 01:52:00+00:00",
+      "most_recent_mark_utc": "2026-11-21 01:52:00+00:00"
+    }
+  },
+  "results": {
+    "btc_mark_requested_100_500": {
+      "net_realized_usd": -8.3344,
+      "gross_realized_usd": 4.259,
+      "assumed_fees_gst_usd": 12.5934,
+      "completed_trades": 11,
+      "wins": 3,
+      "losses": 8,
+      "win_rate_pct": 27.27,
+      "profit_factor": 0.8641,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": -24.6827,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -13.0785,
+          "trades": 3
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": -0.0089,
+          "trades": 3
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": -12.1573,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 41.593,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "BTC",
+      "mode": "mark",
+      "activation_points": 100,
+      "trailing_stop_points": 500,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": false,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -1677.4433
+    },
+    "btc_traded_requested_100_500": {
+      "net_realized_usd": -8.1583,
+      "gross_realized_usd": 4.435,
+      "assumed_fees_gst_usd": 12.5933,
+      "completed_trades": 11,
+      "wins": 3,
+      "losses": 8,
+      "win_rate_pct": 27.27,
+      "profit_factor": 0.867,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": -24.6827,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -13.0785,
+          "trades": 3
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": -0.0089,
+          "trades": 3
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": -12.1573,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 41.7691,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "BTC",
+      "mode": "traded",
+      "activation_points": 100,
+      "trailing_stop_points": 500,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": false,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -1715.8442
+    },
+    "btc_mark_best_fixed100_100_3000": {
+      "net_realized_usd": -17.8295,
+      "gross_realized_usd": -15.555,
+      "assumed_fees_gst_usd": 2.2745,
+      "completed_trades": 2,
+      "wins": 1,
+      "losses": 1,
+      "win_rate_pct": 50.0,
+      "profit_factor": 0.22,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -22.8595,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": 5.03,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "BTC",
+      "mode": "mark",
+      "activation_points": 100,
+      "trailing_stop_points": 3000,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": true,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -336.5445
+    },
+    "btc_traded_best_fixed100_100_3000": {
+      "net_realized_usd": -17.8295,
+      "gross_realized_usd": -15.555,
+      "assumed_fees_gst_usd": 2.2745,
+      "completed_trades": 2,
+      "wins": 1,
+      "losses": 1,
+      "win_rate_pct": 50.0,
+      "profit_factor": 0.22,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -22.8595,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": 5.03,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "BTC",
+      "mode": "traded",
+      "activation_points": 100,
+      "trailing_stop_points": 3000,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": true,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -379.3107
+    },
+    "btc_mark_best_grid_200_3000": {
+      "net_realized_usd": -17.8295,
+      "gross_realized_usd": -15.555,
+      "assumed_fees_gst_usd": 2.2745,
+      "completed_trades": 2,
+      "wins": 1,
+      "losses": 1,
+      "win_rate_pct": 50.0,
+      "profit_factor": 0.22,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -22.8595,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": 5.03,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "BTC",
+      "mode": "mark",
+      "activation_points": 200,
+      "trailing_stop_points": 3000,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": true,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -335.8609
+    },
+    "btc_traded_best_grid_200_3000": {
+      "net_realized_usd": -17.8295,
+      "gross_realized_usd": -15.555,
+      "assumed_fees_gst_usd": 2.2745,
+      "completed_trades": 2,
+      "wins": 1,
+      "losses": 1,
+      "win_rate_pct": 50.0,
+      "profit_factor": 0.22,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -22.8595,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": 5.03,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "BTC",
+      "mode": "traded",
+      "activation_points": 200,
+      "trailing_stop_points": 3000,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": true,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -379.3107
+    },
+    "eth_mark_requested_100_500": {
+      "net_realized_usd": 7.8952,
+      "gross_realized_usd": 31.2195,
+      "assumed_fees_gst_usd": 23.3243,
+      "completed_trades": 20,
+      "wins": 8,
+      "losses": 12,
+      "win_rate_pct": 40.0,
+      "profit_factor": 1.1147,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": -3.1713,
+          "trades": 6
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -31.9922,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": -8.9211,
+          "trades": 4
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": -1.0609,
+          "trades": 3
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 53.0407,
+          "trades": 5
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "ETH",
+      "mode": "mark",
+      "activation_points": 100,
+      "trailing_stop_points": 500,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": false,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -1836.7908
+    },
+    "eth_traded_requested_100_500": {
+      "net_realized_usd": -1.4505,
+      "gross_realized_usd": 30.006,
+      "assumed_fees_gst_usd": 31.4565,
+      "completed_trades": 27,
+      "wins": 9,
+      "losses": 18,
+      "win_rate_pct": 33.33,
+      "profit_factor": 0.9831,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": -26.2346,
+          "trades": 9
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -18.303,
+          "trades": 6
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": -8.9211,
+          "trades": 4
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": -1.0609,
+          "trades": 3
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 53.0692,
+          "trades": 5
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "ETH",
+      "mode": "traded",
+      "activation_points": 100,
+      "trailing_stop_points": 500,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": false,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -1870.8611
+    },
+    "eth_mark_best_fixed100_100_8000": {
+      "net_realized_usd": -55.0326,
+      "gross_realized_usd": -51.551,
+      "assumed_fees_gst_usd": 3.4816,
+      "completed_trades": 3,
+      "wins": 0,
+      "losses": 3,
+      "win_rate_pct": 0.0,
+      "profit_factor": 0.0,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -31.4723,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": -23.5603,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "ETH",
+      "mode": "mark",
+      "activation_points": 100,
+      "trailing_stop_points": 8000,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": true,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -9.3587
+    },
+    "eth_traded_best_fixed100_100_8000": {
+      "net_realized_usd": -55.0326,
+      "gross_realized_usd": -51.551,
+      "assumed_fees_gst_usd": 3.4816,
+      "completed_trades": 3,
+      "wins": 0,
+      "losses": 3,
+      "win_rate_pct": 0.0,
+      "profit_factor": 0.0,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -31.4723,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": -23.5603,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "ETH",
+      "mode": "traded",
+      "activation_points": 100,
+      "trailing_stop_points": 8000,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": true,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": 52.5964
+    },
+    "eth_mark_best_grid_50_8000": {
+      "net_realized_usd": -55.0326,
+      "gross_realized_usd": -51.551,
+      "assumed_fees_gst_usd": 3.4816,
+      "completed_trades": 3,
+      "wins": 0,
+      "losses": 3,
+      "win_rate_pct": 0.0,
+      "profit_factor": 0.0,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -31.4723,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": -23.5603,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "ETH",
+      "mode": "mark",
+      "activation_points": 50,
+      "trailing_stop_points": 8000,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": true,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": -9.3587
+    },
+    "eth_traded_best_grid_50_8000": {
+      "net_realized_usd": -55.0326,
+      "gross_realized_usd": -51.551,
+      "assumed_fees_gst_usd": 3.4816,
+      "completed_trades": 3,
+      "wins": 0,
+      "losses": 3,
+      "win_rate_pct": 0.0,
+      "profit_factor": 0.0,
+      "daily_exit_ist": [
+        {
+          "date": "2026-11-16",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-17",
+          "net_usd": -31.4723,
+          "trades": 1
+        },
+        {
+          "date": "2026-11-18",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-19",
+          "net_usd": -23.5603,
+          "trades": 2
+        },
+        {
+          "date": "2026-11-20",
+          "net_usd": 0.0,
+          "trades": 0
+        },
+        {
+          "date": "2026-11-21",
+          "net_usd": 0.0,
+          "trades": 0
+        }
+      ],
+      "asset": "ETH",
+      "mode": "traded",
+      "activation_points": 50,
+      "trailing_stop_points": 8000,
+      "fixed_trailing_distance_enabled": false,
+      "open_position_at_cutoff": true,
+      "sensitivity_vs_other_mode": "traded vs mark outcomes not exact execution bounds",
+      "running_reference_wallet_balance_usd": 52.5964
+    }
+  }
+}
