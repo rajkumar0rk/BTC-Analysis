@@ -176,9 +176,9 @@ def main():
         baseline=bs,catalog=count,admissible_models=len(allmodels),
         tested_fixed_single_portfolios=len(tab),weights=[.02,.05,.10,.15,.2,.25,.3],
         overlap_jan2025_and_sep2026_models=len(overlap),
-        2025_only_single=training[1],
+        selected_single_using_2025=training[1],
         invalid_hindsight_single=expost[1],
-        2025_only_LP=dict(training_floor_pct=trainfloor,monthly_results=stats(trainvec),sleeves=trainout),
+        selected_portfolio_using_2025=dict(training_floor_pct=trainfloor,monthly_results=stats(trainvec),sleeves=trainout),
         INVALID_hindsight_full_period_LP=dict(fitted_floor_pct=futurefloor,
              monthly_results=stats(futurevec),sleeves=futureout),
         limitations=[
