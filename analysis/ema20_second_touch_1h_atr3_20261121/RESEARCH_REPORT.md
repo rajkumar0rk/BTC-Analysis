@@ -1,7 +1,7 @@
 # Second EMA20 touch 1H — one trade per Supertrend — ATR trailing exit
 
 BTCUSD and ETHUSD Delta Exchange India original SHA-verified 1m candles, Jan 2025–Oct 2026 (22 IST months).
-**No fixed TP**. Stop is ATR-only: initialized 2× ATR14, tightened by completed 1m highs/lows at last completed 1h ATR; stop never retreats.
+**No fixed TP**. Stop is ATR-only: initialized 3× ATR14, tightened by completed 1m highs/lows at last completed 1h ATR; stop never retreats.
 One entry in each confirmed Supertrend direction epoch, 1H EMA20 second distinct touch. No 1H volume/volatility filter.
 
 | Asset | Trades | Wins | Win rate | Profit factor | Net return | Max floating drawdown | Profitable months |
