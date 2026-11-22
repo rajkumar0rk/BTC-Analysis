@@ -1,0 +1,33 @@
+{
+  "percent_gross_favorable_move": 0.118,
+  "source": "Delta India BTCUSD 1m Jan2025-Oct2026",
+  "entries": "Green second 15m after bullish flip / after first ST support touch",
+  "onward_fill": "Third 15m candle open, entry fill mid +5 BTC points",
+  "filters": "vol >=1x, 15m ATR14 >=0.20pct (prior completed bar)",
+  "exit": "300 point hard SL, 1200 point TP, 15m Supertrend closing stop",
+  "profit_protection": "off",
+  "collision_handling": "hard SL first if same 1m hit SL and percentage",
+  "count_definition": "reached 0.118% over entry execution price before exit",
+  "verification": "197 flip vs 108 touch, same setup used in prior verified report",
+  "caveat": "Same-minute high/low unobservable; conservative stop-first; no funding",
+  "summary": [
+    {
+      "entry_kind": "after_bullish_flip",
+      "trades": 197,
+      "hit_mid": 133,
+      "hit_fill": 132,
+      "pct_mid": 67.51,
+      "pct_fill": 67.01,
+      "not_hit_fill": 65
+    },
+    {
+      "entry_kind": "after_line_touch",
+      "trades": 108,
+      "hit_mid": 76,
+      "hit_fill": 75,
+      "pct_mid": 70.37,
+      "pct_fill": 69.44,
+      "not_hit_fill": 33
+    }
+  ]
+}
