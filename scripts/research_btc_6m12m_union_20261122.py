@@ -166,7 +166,7 @@ def main():
       original_fixed_15m_confirmation_and_next_1m_entry=True,
       no_synthetic_signal_from_future_month_pnl=True,
       same_protected_stop_exit_rules_for_all_variants=True,
-      1m_exit_stop_first_and_next_bar_stop_updates=True,
+      native_1m_stop_first_and_next_bar_stop_updates=True,
       fees_GST_slippage_accounted_as_original_assumptions=True,
       actual_funding_cash_or_historical_orderbook_spread_present=False,
       liquidation_or_contract_rounding_modelled=False,
