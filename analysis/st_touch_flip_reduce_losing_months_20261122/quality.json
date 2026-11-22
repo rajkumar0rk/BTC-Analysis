@@ -1,0 +1,22 @@
+{
+  "tested_pair_combinations": 703,
+  "2025_dev_qualified": 509,
+  "exploratory_positive_both_sufficient": 630,
+  "exploratory_both_halves_positive": 419,
+  "tested_retrospective_2026_already_seen": true,
+  "source_1m_archive_files": 23,
+  "same_baseline_parity": true,
+  "original_stop_tp_and_ST_exit_unchanged": true,
+  "entry_filters_from_last_closed_15m_1h_4h": true,
+  "same_cost_model_and_one_position": true,
+  "not_forward_tested": true,
+  "candidate_focus": [
+    "original_no_new_gate",
+    "previous_best_17mo_dmi4h",
+    "previous_best_17mo_1h4h",
+    "t__1h_bull_di_4h_ema20__f__off",
+    "t__1h_above_ema20_and_rising__f__1h_rsi50",
+    "t__1h_above_ema20_and_rising__f__1h_above_ema20",
+    "t__1h_above_ema20_and_rising__f__1h_above_ema20_weekday"
+  ]
+}
