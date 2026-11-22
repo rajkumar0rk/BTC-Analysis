@@ -1,0 +1,38 @@
+name: Count BTCUSD +0.118% before green-confirmation trade exit
+on:
+  push:
+    branches:
+      - research/green-entries-0118pct-before-exit-20261122
+    paths:
+      - scripts/research_second_green_0118pct_reach.py
+      - .github/workflows/research-second-green-0118pct.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  reach:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas tabulate
+      - name: Check exact percent before live-compatible modeled exit
+        run: python -u scripts/research_second_green_0118pct_reach.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: second-green-0118pct-before-exit-results
+          path: analysis/green_0118pct_before_exit_20261122/
+      - name: Publish results to research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/green_0118pct_before_exit_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: verified 0.118 percent favorable reach before exit"
+            git push origin HEAD:research/green-entries-0118pct-before-exit-20261122
+          fi
