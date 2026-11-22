@@ -260,7 +260,7 @@ def smoke_test():
     assert r["exit_mid"] == 81600 and r["rungs"]==(1.0,2.0),r
     r=simulate_bar((80000,79900,82000,81900),1,80000,80000,None,
                    (1.0,2.0,5.0),False)
-    assert r["exit_mid"] == 81600 and r["rungs"]==(1.0,2.0),r
+    assert r["exit_mid"] is None and r["stop"]==81600 and r["rungs"]==(1.0,2.0),r
     r=simulate_bar((80000,84050,84500,84400),1,80000,80000,None,
                    (1.0,2.0,5.0),False)
     assert r["exit_mid"] is None and r["stop"]==84000,r
