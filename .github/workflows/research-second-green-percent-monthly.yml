@@ -1,0 +1,41 @@
+name: BTCUSD 15m second green percent monthly audit
+on:
+  push:
+    branches:
+      - research/second-green-percentage-grid-20261122
+    paths:
+      - scripts/research_second_green_percent_monthly.py
+      - .github/workflows/research-second-green-percent-monthly.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  monthly-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install numpy pandas tabulate
+      - name: Reconcile 22 monthly rows with prior 16380-grid results
+        run: python -u scripts/research_second_green_percent_monthly.py
+      - name: Retain outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-15m-green-after-touch-monthly-percent
+          path: analysis/second_green_percentage_grid_20261122/monthly_audit/
+          if-no-files-found: warn
+      - name: Publish dedicated research results
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/second_green_percentage_grid_20261122/monthly_audit/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: publish month-by-month 1pct SL 1.5pct TP audited outcomes"
+            git push origin HEAD:research/second-green-percentage-grid-20261122
+          fi
