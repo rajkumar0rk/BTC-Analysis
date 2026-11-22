@@ -130,15 +130,14 @@ def main():
     assert int((ref>0).sum())==17
     assert tuple(m for m,v in zip(PERIOD,ref) if v<0)==ORIGINAL_LOSING_MONTHS
     # Require exact month-by-month parity against PRIOR verified report.
-    expected={
-      "2025-01":3133.33,"2025-02":1184.61,"2025-03":2029.28,
-      "2025-04":1599.33,"2025-05":2331.96,"2025-06":-293.78,
-      "2025-07":1662.05,"2025-08":-1596.71,"2025-09":486.27,
-      "2025-10":3769.88,"2025-11":327.91,"2025-12":-80.79,
-      "2026-01":372.88,"2026-02":1043.33,"2026-03":-1916.69,
-      "2026-04":250.03,"2026-05":1686.73,"2026-06":543.11,
-      "2026-07":213.71,"2026-08":1422.57,"2026-09":1445.21,
-      "2026-10":-817.32}
+    # Independent exact checkpoint: read the previously published original
+    # month-level research ledger rather than copying approximate values.
+    old=pd.read_csv(
+      "analysis/st_touch_flip_exit_protection_20261122/focus_profiles_monthly.csv")
+    checkpoint=old[old.profile=="touch_lock_1.0_0.4"]
+    assert len(checkpoint)==22,("published checkpoint missing",len(checkpoint))
+    expected=dict(zip(checkpoint.month_ist,
+                      checkpoint.exit_month_realized_net_pts))
     for mo,v in expected.items():
         assert abs(float(base_months.get(mo,0))-v)<.035,(mo,base_months.get(mo),v)
     print("BASELINE_PARITY_OK",len(reference),touch_count,ref.sum(),
