@@ -1,0 +1,67 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "risk_reward_unit_btc_price_points": 100.0,
+  "risk_reward_pairs": [
+    "1:1",
+    "1:2",
+    "1:3",
+    "1:4",
+    "2:2",
+    "2:4",
+    "2:6",
+    "2:8",
+    "3:3",
+    "3:6",
+    "3:9",
+    "3:12"
+  ],
+  "entry_modes": [
+    "touch",
+    "reclaim",
+    "combined"
+  ],
+  "candidate_trades_per_mode": {
+    "touch": 253,
+    "reclaim": 227,
+    "combined": 297
+  },
+  "protection_profiles": {
+    "none": [
+      0.0,
+      0.0
+    ],
+    "early_75_lock50": [
+      0.75,
+      0.5
+    ],
+    "late_90_lock75": [
+      0.9,
+      0.75
+    ]
+  },
+  "initial_cash_usd": 100.0,
+  "quantity_btc": 0.001,
+  "taker_fee_per_side_including_gst": 0.00059,
+  "adverse_slippage_btc_price_points_per_side": 5.0,
+  "max_one_filled_entry_per_supertrend_cycle": true,
+  "exit_rules": [
+    "fixed initial SL",
+    "fixed TP",
+    "optional next-minute profit lock",
+    "confirmed 1H ST reversal"
+  ],
+  "caveats": [
+    "Initial fixed stop is newly reintroduced for this risk:reward sweep; earlier protected TP sweep had NO initial SL",
+    "Entry-minute stop-first applies even when 1m bar's price path cannot show actual order of breakout and stop",
+    "A next-minute activated lock does not protect the activating 1m price excursion",
+    "No funding, mark price, bid/ask, liquidation or margin feasibility, exchange latency or order restrictions modeled",
+    "Months previously research-exposed, no genuine untouched holdout; November 2026 is partial",
+    "Monthly realized PnL booked by exit date in Asia/Kolkata"
+  ]
+}
