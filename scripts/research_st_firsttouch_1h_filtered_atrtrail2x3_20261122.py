@@ -140,7 +140,6 @@ def run_asset(df,symbol,tf,path_name,atr_multiple):
         longest_hold=max(longest_hold,hours)
         trade_rows.append(dict(symbol=symbol,signal_timeframe=f"{tf}m",path_assumption=path_name,
              entry_time_utc=ts_iso(p["entry_time"]),exit_time_utc=ts_iso(sec),
-             atr_trail_multiplier=atr_multiple,
              exit_month_ist=pd.Timestamp(sec,unit="s",tz="UTC").tz_convert("Asia/Kolkata").strftime("%Y-%m"),
              direction="LONG" if side==1 else "SHORT",entry_price=p["entry"],
              supertrend_line_at_entry=p["line"],risk_reference_points=p["risk"],
