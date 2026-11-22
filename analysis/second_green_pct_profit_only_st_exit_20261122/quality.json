@@ -1,0 +1,17 @@
+{
+  "configurations": 3780,
+  "entries": 2,
+  "filters": 42,
+  "modes": 45,
+  "supertrend_period": 10,
+  "supertrend_factor": 3,
+  "original_st_closing_exit_kept": true,
+  "fixed_TP": false,
+  "fixed_SL": false,
+  "changed_only": "profit lock activation and lock percentage",
+  "no_same_bar_lookahead": true,
+  "matched_previous_cohorts": "108 touch, 197 bullish flip",
+  "costs": "taker 0.05% each side + GST 18% + 5 pts slippage each side",
+  "liquidation_modeled": false,
+  "timeline": "22 IST entry months Jan2025-Oct2026"
+}
