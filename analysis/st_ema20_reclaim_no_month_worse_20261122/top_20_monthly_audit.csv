@@ -1,0 +1,881 @@
+filter_name,path,month_ist,original_net,new_net,original_status,new_status,changed_usd
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-12,-0.434855,0.211983,Loss,Profit,0.646838
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-12,0.4366,1.083438,Profit,Profit,0.646838
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-12,-0.434855,0.211983,Loss,Profit,0.646838
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-12,0.4366,1.083438,Profit,Profit,0.646838
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND ema_gap_pct <= 1,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-06,0.986303,1.878465,Profit,Profit,0.892162
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-06,0.986303,1.878465,Profit,Profit,0.892162
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND dir_rsi14 <= 65,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+dir_rsi14 <= 65 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-12,-0.434855,0.211983,Loss,Profit,0.646838
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-12,0.4366,1.083438,Profit,Profit,0.646838
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-12,-0.434855,0.211983,Loss,Profit,0.646838
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-12,0.4366,1.083438,Profit,Profit,0.646838
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2025-12,-0.434855,0.211983,Loss,Profit,0.646838
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2025-12,0.4366,1.083438,Profit,Profit,0.646838
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-05,0.988585,1.262489,Profit,Profit,0.273904
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-08,0.714602,1.215505,Profit,Profit,0.500903
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+supertrend_gap_pct >= 0.5 AND dir_rsi14 <= 65,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-06,0.986303,1.878465,Profit,Profit,0.892162
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-06,0.986303,1.878465,Profit,Profit,0.892162
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+ema_gap_pct <= 1,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1,open_low_high_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+ema_gap_pct <= 1,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-06,0.986303,1.878465,Profit,Profit,0.892162
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-06,0.986303,1.878465,Profit,Profit,0.892162
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-09,-1.717326,-0.130897,Loss,Loss,1.586429
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+volume_ratio <= 4 AND ema_gap_pct <= 1,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+dir_rsi14 <= 65,open_high_low_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+dir_rsi14 <= 65,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+dir_rsi14 <= 65,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+dir_rsi14 <= 65,open_low_high_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-05,0.988585,2.732412,Profit,Profit,1.743827
+dir_rsi14 <= 65,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+dir_rsi14 <= 65,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_high_low_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+atr_expansion <= 2 AND ema_slope_pct >= -0.2 AND volume_ratio <= 5,open_low_high_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,0.988585,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,0.0,Loss,Flat,2.187642
+ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,0.988585,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,-1.319047,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-06,4.923339,4.923339,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-07,3.199484,3.199484,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2025-12,-0.434855,-0.434855,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-07,2.237246,2.237246,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_high_low_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-01,-2.187642,-2.187642,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-02,5.987289,5.987289,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-03,1.651791,1.651791,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-04,0.312497,0.312497,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-05,0.104966,0.104966,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-06,3.851001,3.851001,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-07,4.284009,4.284009,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-08,0.405523,0.405523,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-09,-1.717326,-1.717326,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-10,-1.602894,-1.602894,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-11,1.625956,1.625956,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2025-12,0.4366,0.4366,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-01,1.657403,1.657403,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-02,1.306978,1.306978,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-03,-1.421728,-1.421728,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-04,-0.984376,-0.984376,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-05,0.988585,1.29343,Profit,Profit,0.304845
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-06,0.986303,0.986303,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-07,1.577732,1.577732,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-08,0.714602,0.714602,Profit,Profit,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-09,-2.911479,-2.911479,Loss,Loss,0.0
+volume_ratio <= 5 AND dir_rsi14 <= 65,open_low_high_close,2026-10,-1.319047,0.0,Loss,Flat,1.319047

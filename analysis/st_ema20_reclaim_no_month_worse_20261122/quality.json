@@ -1,0 +1,15 @@
+{
+  "tested_unique_filter_masks": 6806,
+  "never_worse_any_month_both_paths": 26,
+  "never_worse_any_month_and_fewer_loss_months_both_paths": 20,
+  "trade_signals": 62,
+  "conditions": "each complete month independent, both OHLC path assumptions, dollar-profit nondecrease and no new losing month",
+  "initial_stop_pct": 2,
+  "profit_lock_ladder_pct": [
+    2,
+    3,
+    5
+  ],
+  "years": "2025 full, 2026 Jan-Oct",
+  "warning": "Strong retrospective constraint overfits historical months; no unbiased holdout or real exchange execution"
+}
