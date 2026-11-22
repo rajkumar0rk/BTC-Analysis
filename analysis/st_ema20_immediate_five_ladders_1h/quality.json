@@ -1,0 +1,77 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "ladders": {
+    "100_200_400_800": [
+      100,
+      200,
+      400,
+      800
+    ],
+    "100_200_300_400_500": [
+      100,
+      200,
+      300,
+      400,
+      500
+    ],
+    "100_300_600_900": [
+      100,
+      300,
+      600,
+      900
+    ],
+    "100_400_800": [
+      100,
+      400,
+      800
+    ],
+    "100_500_1000": [
+      100,
+      500,
+      1000
+    ]
+  },
+  "no_extrapolation_beyond_given_levels": true,
+  "paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "path_scenarios": {
+    "open_high_low_close": "Price follows O->H->L->C in each 1m bar, with immediate stop updates",
+    "open_low_high_close": "Price follows O->L->H->C in each 1m bar, with immediate stop updates"
+  },
+  "entry_modes": [
+    "touch",
+    "reclaim",
+    "combined"
+  ],
+  "entry_count": {
+    "touch": 253,
+    "reclaim": 227,
+    "combined": 297
+  },
+  "qty_btc": 0.001,
+  "initial_cash_usd": 100.0,
+  "taker_fee_plus_GST_per_side": 0.00059,
+  "adverse_execution_slippage_btc_point_per_side": 5.0,
+  "one_fill_per_ST_cycle": true,
+  "no_initial_SL": true,
+  "no_fixed_TP": true,
+  "instant_stop_update_same_1m_bar": true,
+  "entry_minute_modeling": "Find breakout on O-H-L-C or O-L-H-C path, then replay ONLY subsequent points",
+  "fallback_exit": "next 1m open after completed opposite 1H ST flip",
+  "caveats": [
+    "These are two unverified intraminute paths consistent with 1m OHLC, not observed tick data",
+    "Cannot know actual OHLC ordering, stop amendment latency or trigger/stop exact fill from 1m data",
+    "Direct lock at the same touched milestone may execute quickly and be consumed by costs",
+    "No funding, liquidation, mark price, bid-ask spread or orderbook/margin execution model",
+    "No pristine out-of-sample month; Nov 2026 partial; reported PnL is exploratory only",
+    "Monthly returns grouped by IST exit date"
+  ]
+}
