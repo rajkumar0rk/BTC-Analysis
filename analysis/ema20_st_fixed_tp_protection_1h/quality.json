@@ -1,0 +1,51 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "qty_btc": 0.001,
+  "initial_account_usd": 100.0,
+  "side_taker_fee_including_gst": 0.00059,
+  "slippage_btc_price_points_per_side": 5.0,
+  "entry_modes": [
+    "touch",
+    "reclaim",
+    "combined"
+  ],
+  "targets_points": [
+    200,
+    500,
+    1000
+  ],
+  "protection_profiles": {
+    "early_75_lock50": {
+      "activation_fraction": 0.75,
+      "lock_fraction": 0.5
+    },
+    "late_90_lock75": {
+      "activation_fraction": 0.9,
+      "lock_fraction": 0.75
+    }
+  },
+  "exit_rules": [
+    "fixed TP",
+    "active profit lock",
+    "completed 1H Supertrend reversal"
+  ],
+  "max_one_fill_per_supertrend_cycle": true,
+  "no_initial_stop": true,
+  "no_R_based_exits": true,
+  "caveats": [
+    "Without initial SL there may be a large unrealized loss or liquidation before protection activates",
+    "Exchange fee+GST can exceed small locked points and lead to net losing lock exits",
+    "Profit lock live only after completed earlier 1m bar; bar with both TP/lock uses stop-first ambiguity",
+    "No execution at entry bar's hypothetical favorable extreme",
+    "No funding, mark price, bid-ask/depth, liquidation, latency or actual margin feasibility model",
+    "No untouched out-of-sample months; previously studied 200/500/1000 points are not an unbiased discovery",
+    "Month booked in IST on exit, November 2026 partial",
+    "Open position at end of archive is unrealized only"
+  ]
+}
