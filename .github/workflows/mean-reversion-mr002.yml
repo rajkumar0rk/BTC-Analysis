@@ -7,6 +7,7 @@ on:
       - .github/workflows/mean-reversion-mr002.yml
       - scripts/research_mean_reversion_mr002_20261121.py
       - scripts/research_mean_reversion_mr003_20261122.py
+      - scripts/verify_mean_reversion_mr003_20261122.py
   workflow_dispatch:
 jobs:
   replay:
@@ -31,6 +32,8 @@ jobs:
           PY
       - name: Run MR003 source-defined Keltner fade zero-slippage BTC 1m replay
         run: python scripts/research_mean_reversion_mr003_20261122.py
+      - name: Independently reconcile trade PnL, minute NAV, and 22 IST months
+        run: python scripts/verify_mean_reversion_mr003_20261122.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
