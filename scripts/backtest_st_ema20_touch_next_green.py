@@ -188,12 +188,12 @@ def smoke_confirmation():
             return {1:dict(side=1,cycle=1,kind="touch",signal=str(h_.index[0])),
                     2:dict(side=1,cycle=2,kind="touch",signal=str(h_.index[1])),
                     3:dict(side=-1,cycle=3,kind="touch",signal=str(h_.index[2])),
-                    4:dict(side=-1,cycle=4,kind="touch",signal=str(h_.index[3]))}
+                    4:dict(side=1,cycle=4,kind="touch",signal=str(h_.index[3]))}
         globals()["setups"]=fixture
         result,tally=next_hour_confirmation_candidates(m,h,allow_short=True)
         assert len(result)==2,(result,tally)
         assert result[0]["entry_j"]==120 and result[0]["entry"]==105.,result
-        assert result[1]["entry_j"]==300 and result[1]["side"]==-1,result
+        assert result[1]["entry_j"]==240 and result[1]["side"]==-1,result
         assert tally["wrong_color_or_doji"]==1,(result,tally)
         assert tally["supertrend_flipped"]==1,(result,tally)
         only,tally2=next_hour_confirmation_candidates(m,h,allow_short=False)
