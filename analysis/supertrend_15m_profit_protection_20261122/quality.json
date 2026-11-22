@@ -1,0 +1,121 @@
+{
+  "data_source": "Delta Exchange India BTCUSD perpetual 1m",
+  "archived_partitions": 23,
+  "minutes": 993600,
+  "bars_15m": 66240,
+  "dates": "Jan 2025-Oct 2026, 22 complete IST months; Nov partial excluded",
+  "signals": "15m Wilder Supertrend ATR10 factor3; first qualifying touch in each bullish cycle",
+  "filters": "Volume relative 20 older complete 15m; ATR14 percent or 50-sample relative, last closed 15m only",
+  "targets_points": [
+    200,
+    500,
+    1000
+  ],
+  "protection_modes": {
+    "off": [
+      "off",
+      0,
+      0,
+      0
+    ],
+    "be_200": [
+      "lock",
+      200,
+      0,
+      0
+    ],
+    "lock_200_100": [
+      "lock",
+      200,
+      100,
+      0
+    ],
+    "lock_300_100": [
+      "lock",
+      300,
+      100,
+      0
+    ],
+    "lock_500_200": [
+      "lock",
+      500,
+      200,
+      0
+    ],
+    "step_200_100_plus200": [
+      "step",
+      200,
+      100,
+      200
+    ],
+    "trail_300_100": [
+      "trail",
+      300,
+      0,
+      100
+    ],
+    "trail_500_200": [
+      "trail",
+      500,
+      0,
+      200
+    ],
+    "trail_500_300": [
+      "trail",
+      500,
+      0,
+      300
+    ],
+    "trail_1000_200": [
+      "trail",
+      1000,
+      0,
+      200
+    ]
+  },
+  "strategy_count": 1260,
+  "parity_200_500_1000": [
+    {
+      "target_pts": 200,
+      "expected_trades": 782,
+      "found_trades": 782,
+      "expected_tp_hits": 299,
+      "found_tp_hits": 299,
+      "passed": true
+    },
+    {
+      "target_pts": 500,
+      "expected_trades": 782,
+      "found_trades": 782,
+      "expected_tp_hits": 171,
+      "found_tp_hits": 171,
+      "passed": true
+    },
+    {
+      "target_pts": 1000,
+      "expected_trades": 782,
+      "found_trades": 782,
+      "expected_tp_hits": 92,
+      "found_tp_hits": 92,
+      "passed": true
+    }
+  ],
+  "costs": {
+    "taker_side": 0.0005,
+    "gst_on_fee": 0.18,
+    "slippage_points_each_side": 5.0
+  },
+  "simultaneous_exit_policy": "protective stop wins over fixed TP in same 1m OHLC bar",
+  "protective_arming_policy": "using current 1m high+low; simultaneous new protection and touch resolves at stop as pessimistic assumption; count flagged in result",
+  "gap_policy": "protective stop gap down exits at min(stop, 1m open)",
+  "entry_minute": "No stop or favorable TP credited within entry minute",
+  "stop_15m": "15m close below last closed bullish support or bearish flip; exit next 1m open",
+  "pnl_units": "1 BTC-equivalent price-point PnL not dollars or return on capital",
+  "limitations": [
+    "Intrabar OHLC cannot show true high/low ordering, especially during arming",
+    "Stop-order execution/slippage approximation only; no exchange orderbook queue",
+    "Funding, spread, leverage, liquidation, margin not modeled",
+    "Historical dates previously researched; no untouched holdout",
+    "Variants highly overlapping, best configuration suffers selection bias"
+  ]
+}

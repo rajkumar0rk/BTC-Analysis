@@ -1,0 +1,26 @@
+[
+  {
+    "target_pts": 200,
+    "expected_trades": 782,
+    "found_trades": 782,
+    "expected_tp_hits": 299,
+    "found_tp_hits": 299,
+    "passed": true
+  },
+  {
+    "target_pts": 500,
+    "expected_trades": 782,
+    "found_trades": 782,
+    "expected_tp_hits": 171,
+    "found_tp_hits": 171,
+    "passed": true
+  },
+  {
+    "target_pts": 1000,
+    "expected_trades": 782,
+    "found_trades": 782,
+    "expected_tp_hits": 92,
+    "found_tp_hits": 92,
+    "passed": true
+  }
+]
