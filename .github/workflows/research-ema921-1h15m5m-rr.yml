@@ -1,0 +1,41 @@
+name: Research EMA9/21 1H-15M-5M fixed 2R vs 3R
+on:
+  push:
+    branches:
+      - research/ema921-1h15m5m-rr-20261122
+    paths:
+      - scripts/research_ema921_1h15m5m_rr.py
+      - .github/workflows/research-ema921-1h15m5m-rr.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ema921-rr-on-research-branch
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install --disable-pip-version-check pandas numpy tabulate
+      - name: Pre-run novelty gate required
+        run: test -s analysis/ema921_1h15m5m_rr/NOVELTY_CHECK.md
+      - name: Backtest on authentic BTCUSD 1m data
+        run: python scripts/research_ema921_1h15m5m_rr.py
+      - name: Persist full results on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ema921_1h15m5m_rr/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save EMA921 1H15M5M 2R3R historical replay"
+            git push origin HEAD:research/ema921-1h15m5m-rr-20261122
+          fi
