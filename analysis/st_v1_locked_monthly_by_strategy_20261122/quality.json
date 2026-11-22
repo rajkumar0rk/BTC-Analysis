@@ -1,0 +1,14 @@
+{
+  "source_files": 23,
+  "source_candidate_signals": 150,
+  "HTF_eligible_signals": 87,
+  "locked_line_touch_replayed": 69,
+  "exclusive_trades": 85,
+  "all_22_month_parity": true,
+  "net_2025": 14553.35,
+  "net_2026": 4546.27,
+  "month_attribution": "realized_exit_month_IST",
+  "individual_contributions_sum_to_combined": true,
+  "original_strategy_parameters_unchanged": true,
+  "future_out_of_sample_validation": false
+}
