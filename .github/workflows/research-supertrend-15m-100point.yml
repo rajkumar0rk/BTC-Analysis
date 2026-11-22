@@ -1,0 +1,41 @@
+name: BTC 15m Supertrend +100 point first passage
+on:
+  push:
+    branches:
+      - research/supertrend-15m-12-rr-20261122
+    paths:
+      - scripts/research_supertrend_15m_100point.py
+      - .github/workflows/research-supertrend-15m-100point.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  count-first-100:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install pandas numpy tabulate
+      - name: Verify historical +100 count and prior target parity
+        run: python -u scripts/research_supertrend_15m_100point.py
+      - name: Upload raw result files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: supertrend-15m-first-100-point-results
+          path: analysis/supertrend_15m_touch_100point_20261122/
+          if-no-files-found: warn
+      - name: Store full backtest on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/supertrend_15m_touch_100point_20261122
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save +100 target reach counts"
+            git push origin HEAD:research/supertrend-15m-12-rr-20261122
+          fi
