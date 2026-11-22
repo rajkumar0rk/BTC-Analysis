@@ -1,0 +1,39 @@
+name: Mean Reversion MR003 Keltner BTC historical baseline
+on:
+  push:
+    branches:
+      - research/mean-reversion-bb-rsi-source-audit-20261121
+    paths:
+      - .github/workflows/mean-reversion-mr003.yml
+      - scripts/research_mean_reversion_mr003_20261122.py
+  workflow_dispatch:
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy pandas numba
+      - name: Verify authentic BTC partitions and hashes
+        run: |
+          test -f data/delta_india/BTCUSD/1m/2025-01.csv.gz
+          test -f data/delta_india/BTCUSD/1m/2026-10.csv.gz
+          python - <<'PY'
+          import glob,hashlib,json,pathlib
+          files=sorted(glob.glob('data/delta_india/BTCUSD/1m/20??-??.csv.gz'))
+          print(json.dumps({p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in files},indent=2))
+          PY
+      - name: Run source-defined Keltner signals with stop-first 1m execution
+        run: python scripts/research_mean_reversion_mr003_20261122.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mr003-keltner-btc-1m-baseline
+          path: analysis/mean_reversion_research/MR003/results/
+          if-no-files-found: warn
+          retention-days: 90
