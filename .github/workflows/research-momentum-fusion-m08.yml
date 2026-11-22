@@ -5,6 +5,7 @@ on:
       - research/momentum-vwap-score-20261121
     paths:
       - scripts/research_momentum_fusion_m08.py
+      - scripts/research_momentum_macd_rsi_m14.py
       - .github/workflows/research-momentum-fusion-m08.yml
   workflow_dispatch:
 permissions:
@@ -20,9 +21,17 @@ jobs:
           python-version: '3.11'
       - run: pip install numpy pandas
       - run: python scripts/research_momentum_fusion_m08.py
+      - name: M14 distinct MACD RSI historical replay
+        run: python scripts/research_momentum_macd_rsi_m14.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: momentum-fusion-m08-btc2025-calendar
           path: analysis/momentum_vwap_score_20261121/m08_calendar_replay/
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: momentum-m14-btc2025
+          path: analysis/momentum_macd_rsi_m14/replay/
           if-no-files-found: warn
