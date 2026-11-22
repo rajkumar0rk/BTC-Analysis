@@ -150,3 +150,11 @@
 - Read codex/AGENTS.md, codex/STRATEGY_NOVELTY_GATE.md, M26 and prior ledger; Actions branch list shows nine prior runs and latest M14 historical run 45008927897 completed SUCCESS; no repair pending.
 - Screened three immutable GPL-3.0 Freqtrade sources at upstream commit f3340ce11f5bdf62f598522e64d1f5638eaa13f5: UniversalMACD (5m negative EMA spread band; NOT momentum acceleration), TrendRiderStrategy (1h trend/pullback, Stage13/25 overlap), FSampleStrategy (1h RSI rebound template). All SKIP on novelty/family fidelity; no copied source or fabricated signals. Exact source blobs, rules, exits, fee and causal checks in M27_FREQTRADE_SOURCE_GATE.md.
 - 3 newly screened source-defined models, 3 rejected before replay, 0 distinct Delta historical backtests, 0 variants, 0 workflow launches, 0 verified new P&L. Preserve existing M08/M14 artifacts. Next: distinct impulse acceleration model with source-defined exits, novelty approval and authentic BTC2025 workflow + reconciled artifacts.
+
+
+## 2026-11-23 04:15 IST — M28 three-source momentum fidelity/novelty screen
+- Source gate: `M28_SOURCE_GATE.md` at commit `c9a9491e3685d5ecee4db6244c1def285485cb4f`.
+- TheoBrigitte 5m candle-run momentum: published long entry explicitly set to 0; long setup disabled; missing root license; primarily candle persistence. SKIP.
+- Freqtrade Strategy004: CCI/Stochastic oversold reversion rather than impulse acceleration. SKIP.
+- PineGen-AI market-open EMA/RSI/ATR: no complete immutable executable source/parameters recovered; NOT REPRODUCIBLE and trend-crossover overlap.
+- Actual branch Actions listing: 9 runs; historical M14 run 45008927897 completed SUCCESS. No pending repair claimed. Three distinct sources screened; zero new historical backtests, variants or workflow launches; no new P&L. Next: source-complete licensed acceleration mechanism and real BTC2025 replay. No changes to main, other families, VPS or trading.
