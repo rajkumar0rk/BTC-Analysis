@@ -1,0 +1,60 @@
+{
+  "status": "executed, parity verified",
+  "entries": [
+    "after_line_touch",
+    "after_bullish_flip"
+  ],
+  "full_configurations": 24024,
+  "specifically_requested_combinations": 36,
+  "specifically_requested_tests": 3024,
+  "filters": 42,
+  "sl_levels": [
+    0.1,
+    0.12,
+    0.15,
+    0.2,
+    0.3,
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    4.0,
+    5.0
+  ],
+  "tp_levels": [
+    0.12,
+    0.2,
+    0.24,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.75,
+    0.9,
+    1.0,
+    1.5,
+    2.0,
+    2.25,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    8.0,
+    9.0,
+    10.0,
+    12.0,
+    15.0
+  ],
+  "same_filter_cohorts": {
+    "touch": 108,
+    "flip": 197
+  },
+  "ST_closing_exit_enabled": true,
+  "price_stop_and_target_percentage": true,
+  "model_fee": "0.05% per side with GST18, 5 BTC pts per side",
+  "units": "BTC price points per 1 BTC equivalent, not equity ROI",
+  "liquidation_model": false,
+  "profit_protection": false
+}
