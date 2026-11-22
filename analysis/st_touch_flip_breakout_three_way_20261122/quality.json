@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "original_entry_cohort_counts": {
+    "after_line_touch": 108,
+    "after_bullish_flip": 197,
+    "flip_plus_green_breakout": 132
+  },
+  "breakout_confirmation": "next 15m GREEN close > preceding bullish flip HIGH",
+  "entry": "open of subsequent third 15m bar",
+  "ST_original_exit_unchanged": true,
+  "ST_period": 10,
+  "ST_mult": 3,
+  "percent_fixed_SL_TP": true,
+  "profit_lock": false,
+  "full_configurations": 36036,
+  "filter_pairs": 42,
+  "months": "2025Jan to 2026Oct, entry month IST",
+  "fill_model": "1m stop-first, 0.05% fee each side with 18% GST, 5 pt slip each side",
+  "liquidation_not_modeled": true
+}
