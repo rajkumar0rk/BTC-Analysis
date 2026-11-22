@@ -276,7 +276,7 @@ def main():
     quality=dict(data_source="Delta Exchange India BTCUSD perpetual 1m",
        archived_months=len(files), observed_minutes=len(minute), complete_15m=len(h),
        sample_start=str(minute.index[0]),sample_end=str(minute.index[-1]),
-       15m_touch_event_candidates=len(events),15m_stop_close_events=len(stops),
+       touch_event_candidates_15m=len(events),stop_close_events_15m=len(stops),
        months="22 complete IST Jan 2025–Oct 2026, November excluded",
        universe="Long-only Supertrend ATR(10) factor3, one fill per bullish cycle",
        volume_ratio="last CLOSED 15m vol / mean 20 older complete 15m vols",
