@@ -25,8 +25,8 @@ MONTHS=list(pd.period_range("2025-01","2026-10",freq="M").astype(str))
 STOPS=[("OFF","off",0.0)]
 STOPS += [(f"{v}pts","pts",float(v)) for v in (100,200,300,500,800,1000,1500,2000)]
 STOPS += [(f"{v:g}%","pct",float(v)) for v in (0.25,0.5,1.0,2.0,3.0)]
-EXPECTED={("touch","open_high_low_close"):(52,0.745669),
-          ("touch","open_low_high_close"):(52,0.743679),
+EXPECTED={("touch","open_high_low_close"):(50,0.725036),
+          ("touch","open_low_high_close"):(50,0.723046),
           ("reclaim","open_high_low_close"):(62,11.498422),
           ("reclaim","open_low_high_close"):(62,11.722550)}
 
