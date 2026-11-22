@@ -1,0 +1,41 @@
+name: BTC 15m three selected ST strategies combined portfolio 22 months
+on:
+  push:
+    branches:
+      - research/st-three-strategy-combined-portfolio-20261122
+    paths:
+      - scripts/research_st_three_best_combined_portfolio.py
+      - .github/workflows/research-st-three-best-combined-portfolio.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  portfolio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Execute independent parity and combined portfolio monthly MTM audit
+        run: python -u scripts/research_st_three_best_combined_portfolio.py
+      - name: Save entire portfolio audit as workflow artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-15m-three-strategy-combined-22-months
+          path: analysis/st_three_best_positive_months_combined_20261122/
+          if-no-files-found: warn
+      - name: Publish verified result to research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_three_best_positive_months_combined_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: verified independent and combined 22-month BTC ST portfolio"
+            git push origin HEAD:research/st-three-strategy-combined-portfolio-20261122
+          fi
