@@ -106,6 +106,14 @@ def run():
         if j==n-1 or (ts+pd.Timedelta(minutes=1)).tz_convert("Asia/Kolkata").strftime("%Y-%m")!=ts.tz_convert("Asia/Kolkata").strftime("%Y-%m"):
             monthly_nav[ts.tz_convert("Asia/Kolkata").strftime("%Y-%m")]=equity+qty*float(r.close)
     trades=pd.DataFrame(rows)
+    # Hard trading P&L invariant: ALL closed positions, both trading fees,
+    # and year-end liquidation must reconcile to the actual account NAV.
+    # Fail the CI historical replay instead of writing an inconsistent summary.
+    assert len(trades)==len(rows), "trade ledger row loss"
+    realized_net=float(trades.net_usd.sum()) if len(trades) else 0.
+    assert abs((10000.+realized_net)-equity)<1e-6, (
+        f"trade-level P&L / NAV mismatch: {10000.+realized_net} vs {equity}"
+    )
     trades.to_csv(OUT/"trades.csv",index=False)
     # Exclude spurious 2026-01 from UTC-only 2025 data. 2025-01 lacks
     # 2024-12-31 18:30 UTC IST boundary and pre-2025 indicator warmup.
