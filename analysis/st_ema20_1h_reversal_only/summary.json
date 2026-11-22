@@ -1,0 +1,80 @@
+{
+  "touch": {
+    "trades": 253,
+    "wins": 82,
+    "losses": 171,
+    "win_pct": 32.41,
+    "net_usd": -16.01,
+    "gross_usd": 10.42,
+    "fees_usd": 26.43,
+    "profit_factor": 0.922,
+    "ending_usd": 83.99,
+    "realized_max_drawdown_usd": 38.03,
+    "realized_max_drawdown_pct": 34.32,
+    "setup_counts": {
+      "touch": 253
+    },
+    "exit_counts": {
+      "supertrend_flip": 252,
+      "end_archive_mark_not_supertrend": 1
+    },
+    "max_mtm_drawdown_usd": 41.7965,
+    "min_marked_equity_usd": 72.3561,
+    "ended_with_open_position_marked": 1,
+    "note": "1m-close marked equity only, not liquidation modeling; intraminute losses can be greater",
+    "positive_full_months": 11,
+    "total_full_months": 22
+  },
+  "reclaim": {
+    "trades": 185,
+    "wins": 59,
+    "losses": 126,
+    "win_pct": 31.89,
+    "net_usd": -14.61,
+    "gross_usd": 4.95,
+    "fees_usd": 19.57,
+    "profit_factor": 0.9,
+    "ending_usd": 85.39,
+    "realized_max_drawdown_usd": 24.35,
+    "realized_max_drawdown_pct": 24.35,
+    "setup_counts": {
+      "reclaim": 185
+    },
+    "exit_counts": {
+      "supertrend_flip": 185
+    },
+    "max_mtm_drawdown_usd": 27.3696,
+    "min_marked_equity_usd": 75.1731,
+    "ended_with_open_position_marked": 0,
+    "note": "1m-close marked equity only, not liquidation modeling; intraminute losses can be greater",
+    "positive_full_months": 11,
+    "total_full_months": 22
+  },
+  "combined": {
+    "trades": 290,
+    "wins": 95,
+    "losses": 195,
+    "win_pct": 32.76,
+    "net_usd": -27.75,
+    "gross_usd": 2.84,
+    "fees_usd": 30.59,
+    "profit_factor": 0.887,
+    "ending_usd": 72.25,
+    "realized_max_drawdown_usd": 47.26,
+    "realized_max_drawdown_pct": 45.25,
+    "setup_counts": {
+      "touch": 175,
+      "reclaim": 115
+    },
+    "exit_counts": {
+      "supertrend_flip": 289,
+      "end_archive_mark_not_supertrend": 1
+    },
+    "max_mtm_drawdown_usd": 51.4798,
+    "min_marked_equity_usd": 56.5887,
+    "ended_with_open_position_marked": 1,
+    "note": "1m-close marked equity only, not liquidation modeling; intraminute losses can be greater",
+    "positive_full_months": 8,
+    "total_full_months": 22
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "exit_method": "completed_1h_supertrend_flip_only_no_stop_no_trail_no_tp",
+  "archive_files": 23,
+  "minute_bars": 992160,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "hourly_bars": 16536,
+  "source": "Delta India traded-price monthly CSV.gz",
+  "capital_usd": 100.0,
+  "position_qty_btc": 0.001,
+  "side_taker_fee_plus_gst": 0.00059,
+  "slippage_price_points_per_side": 5.0,
+  "notes": [
+    "1m OHLC not trade ticks or bid/ask; ambiguous stops conservatively first",
+    "Fundings, liquidation, latency, order size constraints not modeled",
+    "No protection stop at all; position can experience severe unrealized losses",
+    "Monthly PnL assigned to exit month, not entry month",
+    "1H indicators use only previously completed hours",
+    "No untouched holdout: historical months studied in earlier research"
+  ]
+}
