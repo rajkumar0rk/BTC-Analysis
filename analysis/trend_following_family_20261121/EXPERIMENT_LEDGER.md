@@ -103,3 +103,8 @@
 - Added fail-closed OHLC/timestamp checks in isolated script commit `f723b75f60a3135136eb8ca39f66ba69a67a640f`. Strategy logic, trade sizing, risk and fee assumptions unchanged. Script path matches the isolated workflow push trigger, constituting a new historical replay launch attempt, **not a confirmed completed run**.
 - This is an independent research variant, not a source-faithful Ichimoku reproduction. Latest monthly-reporting change also still lacks a verified new job/artifact. Do not claim new PF, monthly numbers or data-quality pass until the actual GitHub Actions run and CSV/JSON artifacts are inspected.
 - Next: locate the new registered push run and confirm its job, source commit, source-quality guard outcome and monthly realized-PF artifact; if run is not registered, execute via a registered isolated runner with the authentic archive. Verify 1m MTM drawdown and source provenance. No 2026/ETH, main/other-family edits or live trading.
+
+## 2026-11-22 — source triage / branch-run recovery (run 11)
+
+- Confirmed branch historical Actions listing has 18 runs, latest successful historical run 44952126471 at d5c667b; baseline unchanged. Screened 3 public leads: Freqtrade triple-Supertrend (novelty pending), Freqtrade Heracles (reject outside trend family), xy3293 Supertrend/EMA/ADX catalog (duplicate/source pin pending). Source definitions, license caveats and links in `SOURCE_TRIAGE_20261122_RUN11.md` (commit a075844).
+- **0 new distinct historical strategy backtests; 0 variants; 0 new verified P&L.** Source commit/dependency pinning and authentic historical execution still required. No live trading or other-family changes.
