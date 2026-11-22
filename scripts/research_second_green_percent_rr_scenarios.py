@@ -117,12 +117,20 @@ def main():
     combos.to_csv(OUT/"all_requested_ratio_combinations.csv",index=False)
     matched=combos[(combos.vol_filter=="vol_ge_1p0")&
                    (combos.atr_filter=="atrpct_ge_0p20")].copy()
-    matched=matched.merge(partition[partition.period.isin(["2025","2026_JanOct"])][
-        ["entry_type","vol_filter","atr_filter","sl_pct","tp_pct",
-         "period","net_pts","positive_months"]].pivot_table(
-        index=["entry_type","vol_filter","atr_filter","sl_pct","tp_pct"],
-        columns="period",values=["net_pts","positive_months"]
-        ).reset_index(),on=["entry_type","vol_filter","atr_filter","sl_pct","tp_pct"])
+    keys=["entry_type","vol_filter","atr_filter","sl_pct","tp_pct"]
+    yr=partition[partition.period.isin(["2025","2026_JanOct"])]
+    net_by_year=yr.pivot(index=keys,columns="period",values="net_pts").reset_index()
+    net_by_year.columns.name=None
+    net_by_year=net_by_year.rename(columns={
+        "2025":"net_2025_pts","2026_JanOct":"net_2026_pts"})
+    positive_by_year=yr.pivot(index=keys,columns="period",
+                               values="positive_months").reset_index()
+    positive_by_year.columns.name=None
+    positive_by_year=positive_by_year.rename(columns={
+        "2025":"positive_months_2025",
+        "2026_JanOct":"positive_months_2026"})
+    matched=matched.merge(net_by_year,on=keys,validate="one_to_one")
+    matched=matched.merge(positive_by_year,on=keys,validate="one_to_one")
     matched.to_csv(OUT/"matched_filter_requested_ratios_and_years.csv",index=False)
 
     robust=combos[combos.trades>=60].sort_values(
