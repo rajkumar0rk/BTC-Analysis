@@ -1,0 +1,11 @@
+# M14 — MACD% / RSI impulse source novelty gate (2026-11-22 IST)
+
+Source: Roshan7869/algotrading, commit `72a67c4db6b5585c3b576882c4ccbc2481832b95`, GPL-3.0, `user_data/strategies/_archived/hedge_momentum_macd_rsi_long.py`. Original market: 1h Freqtrade, long-only, 10x configured leverage, no verified original backtest statistics.
+
+Entry on completed 1h: EMA12(close)-EMA26(close) > 0.008*close AND RSI14 > 70 AND volume > 0. RSI uses Pandas EWM(alpha=1/14, adjust=True, min_periods=14); MACD EMA adjust=False. Exit on completed 1h RSI < 50 OR MACD/close < 0. Stop -10% trade profit; ROI +30%; trailing stop 1% below highest favorable price after +3%; custom stop returns -0.005 (relative current price) after profit >3%, not a breakeven stop. Original Freqtrade exit precedence and leverage/liquidation require explicit treatment.
+
+Closest prior art: `research/stage25-new-trend:scripts/research_independent_hourly_trend_stage25.py` momentum_accel requires bullish body, range >=1.35 ATR, break above previous 12/24h high, and volume ratio >=1.1, whereas this signal requires normalized MACD and extreme RSI without candle/range/breakout tests. `scripts/research_momentum_fusion_m08.py` uses 4h 7-component score and VWAP retest, different mechanism. Decision: PARTIAL OVERLAP — approved differential for standalone MACD%/RSI strength. No 2026 tuning. Historical input must be authentic Delta India 1m partitions. January 2025 IST partial and indicator warmup missing. Original leverage 10x is not safe to copy as 10x NAV; use matched unlevered NAV risk and explicitly label this a normalized comparison, not exact publisher portfolio replication.
+
+Pre-registered disproof: zero-slippage, fee+GST BTC2025 NAV <=0% or PF <=1.0 rejects economic edge; fewer than 30 trades is inconclusive; positive only proceeds to a limited 2025 grid, then frozen BTC2026/ETH recheck. No reported original PF, drawdown or trade count is verified.
+
+Source-faithful exit semantics still require verifying Freqtrade stop behavior (custom stop, trailing, stoploss-on-exchange, exit precedence) before any backtest may be labeled faithful. Same-minute entry/stop ordering and hourly completion must not use future information. No invented backtest results.
