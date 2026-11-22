@@ -1,0 +1,41 @@
+name: BTCUSD 15m 1to2 1to3 2to4 3to6 percentage RR
+on:
+  push:
+    branches:
+      - research/second-green-percent-rr-combos-20261122
+    paths:
+      - scripts/research_second_green_percent_rr_scenarios.py
+      - .github/workflows/research-second-green-percent-rr-scenarios.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  percent-rr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install backtesting dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Backtest all % risk-to-reward scenarios with ST closing exit unchanged
+        run: python -u scripts/research_second_green_percent_rr_scenarios.py
+      - name: Preserve 22-month results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-15m-second-green-percent-rr-scenarios
+          path: analysis/second_green_pct_rr_scenarios_20261122/
+          if-no-files-found: warn
+      - name: Publish result to research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/second_green_pct_rr_scenarios_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: verified percent RR results BTC 15m ST"
+            git push origin HEAD:research/second-green-percent-rr-combos-20261122
+          fi
