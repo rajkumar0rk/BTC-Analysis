@@ -1,0 +1,94 @@
+{
+  "status": "CROSS_WALLET_1M_LIQUIDATION_APPROXIMATION_NOT_EXCHANGE_FILLS",
+  "source_events": {
+    "core": 63,
+    "donchian": 20,
+    "hourly_exits_in_22mo": 197,
+    "hourly_source_expected_exits": 196,
+    "hourly_source_count_parity": false,
+    "hourly_entries": 197
+  },
+  "source_event_count": 280,
+  "historical_minutes": 963030,
+  "starting_wallet": 100.0,
+  "per_trade_budget_usd": 10.0,
+  "notional_multiplier": 50.0,
+  "maximum_position_notional_budget": 500.0,
+  "max_notional_filled": 499.735,
+  "margin_model": "CROSS ENTIRE WALLET SUPPORTS MM",
+  "initial_margin_requirement_rate": 0.02,
+  "maintenance_margin_rate": 0.0025,
+  "taker_fee_plus_gst_rate": 0.00059,
+  "liquidation_penalty_plus_gst_rate_assumed": 0.00059,
+  "final_balance": 204.61198670262155,
+  "net_pnl": 104.61198670262155,
+  "return_pct": 104.61198670262152,
+  "trades_executed": 199,
+  "wins": 88,
+  "losses": 111,
+  "liquidations": 0,
+  "skips_busy": 80,
+  "skips_insufficient_collateral": 0,
+  "skips_min_lot": 0,
+  "profitable_months": 10,
+  "losing_months": 12,
+  "flat_months": 0,
+  "fees_entry": 53.88736414500002,
+  "fees_exit": 53.62916769810716,
+  "penalties_liquidation": 0.0,
+  "costs_total": 107.51653184310717,
+  "max_account_drawdown_pct": 77.71814139349561,
+  "max_account_drawdown_utc": "2026-01-28 17:54:00+00:00",
+  "max_daily_intraday_drawdown_pct": 30.700809180244043,
+  "max_daily_drawdown_day_ist": "2025-12-02",
+  "worst_day": {
+    "day_ist": "2025-12-02",
+    "start_equity": 120.26888722907394,
+    "end_equity": 87.198741407474,
+    "net_pnl": -33.07014582159994,
+    "return_pct": -27.496841937692363,
+    "intraday_drawdown_pct": 30.700809180244043
+  },
+  "worst_month": {
+    "month_ist": "2025-09",
+    "start_equity": 135.18844220633474,
+    "end_equity": 93.46682720632347,
+    "net_pnl": -41.72161500001127,
+    "return_pct": -30.86182096568034
+  },
+  "breakdown": [
+    {
+      "strategy": "core",
+      "n": 50,
+      "liquidations": 0,
+      "net_pnl": 47.8079948852878
+    },
+    {
+      "strategy": "donchian",
+      "n": 16,
+      "liquidations": 0,
+      "net_pnl": 107.82881364857187
+    },
+    {
+      "strategy": "hourly",
+      "n": 133,
+      "liquidations": 0,
+      "net_pnl": -52.29848305981809
+    }
+  ],
+  "has_open_position_at_end": true,
+  "funding_applied": false,
+  "caveats": [
+    "Cross margin uses all wallet funds; the $10 is position sizing not isolated liquidation collateral",
+    "Historical signal streams are frozen; reentry after a prior liquidation is not regenerated",
+    "197 reconstructed H1 exits versus 196 archived monthly trade count; source parity warning",
+    "Position on same BTCUSD contract is exclusive, not real concurrent cross offset or portfolio allocation",
+    "Cross IM 2% at 50x and MM 0.25% BTCUSD small size; margin rates may change",
+    "Cross liquidation assumes full position force-closed at 1m mark threshold; actual Delta may partially liquidate",
+    "Liquidation fee rate uses 0.05% BTC isolated penalty as proxy; cross-specific schedule not verified",
+    "Funding excluded. No live bid/ask spreads, depth, exact intraminute sequence, or historical USD/INR",
+    "Trade returns in USD-equivalent, not actual INR settlement wallet statement",
+    "The old 21/22 monthly allocation is not executed in this fixed-notional single-position test",
+    "Real exchange fills, execution chronology, funding cashflows and real-forward performance unverified"
+  ]
+}
