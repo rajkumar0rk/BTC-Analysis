@@ -1,0 +1,50 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m OHLCV",
+  "lookback_ist_months": [
+    "2025-01",
+    "2026-10"
+  ],
+  "signal": {
+    "timeframe": "1H",
+    "supertrend_atr": 10,
+    "supertrend_mult": 3,
+    "entry": "EMA20 Reclaim",
+    "volume_ratio_min": 1.25
+  },
+  "execution": {
+    "timeframe": "1m",
+    "initial_stop_pct": 2.0,
+    "step_lock_ladders": {
+      "L235": [
+        2.0,
+        3.0,
+        5.0
+      ],
+      "L22535": [
+        2.0,
+        2.5,
+        3.0,
+        5.0
+      ],
+      "L175235": [
+        1.75,
+        2.0,
+        3.0,
+        5.0
+      ]
+    },
+    "qty_btc": 0.001,
+    "fee_gst_side": 0.00059,
+    "slippage_btc_points_leg": 5.0
+  },
+  "audit": {
+    "total_source_1m_candles": 992160,
+    "qualifying_entries": 62,
+    "primitive_entry_gates": 139,
+    "unique_entry_filters": 5143,
+    "backtest_configs": 15429,
+    "price_paths": 2
+  },
+  "validation": "Reclaim 2-3-5% initial2% exact historical baseline verified in both paths",
+  "bias": "2025 selection / 2026 diagnostic only; previously explored data is NOT untouched holdout"
+}

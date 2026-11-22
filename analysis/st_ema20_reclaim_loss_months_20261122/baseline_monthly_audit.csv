@@ -1,0 +1,45 @@
+path,month,status,net_usd,trades,winning_trades,losing_trades,initial_stop_exits,supertrend_flip_exits,profit_lock_exits,worst_trade_net_usd,losing_trade_entry_utcs,losing_trade_exit_reasons
+open_high_low_close,2025-01,loss,-2.187642,1,0,1,1,0,0,-2.187642,2025-01-21 15:02:00+00:00,initial_stop
+open_high_low_close,2025-02,profit,5.987289,5,4,1,0,1,4,-1.280517,2025-02-14 13:25:00+00:00,supertrend_flip
+open_high_low_close,2025-03,profit,1.651791,1,1,0,0,0,1,1.651791,,
+open_high_low_close,2025-04,profit,0.312497,2,1,1,0,1,1,-1.430521,2025-04-16 13:02:00+00:00,supertrend_flip
+open_high_low_close,2025-05,profit,0.104966,2,1,1,0,1,1,-1.698195,2025-05-14 11:14:00+00:00,supertrend_flip
+open_high_low_close,2025-06,profit,4.923339,5,3,2,0,2,3,-1.588928,2025-06-08 12:01:00+00:00; 2025-06-27 18:40:00+00:00,supertrend_flip; supertrend_flip
+open_high_low_close,2025-07,profit,3.199484,5,3,2,0,2,3,-2.107867,2025-07-17 15:00:00+00:00; 2025-07-21 14:21:00+00:00,supertrend_flip; supertrend_flip
+open_high_low_close,2025-08,profit,0.405523,3,1,2,0,2,1,-1.741681,2025-07-31 16:01:00+00:00; 2025-08-15 13:10:00+00:00,supertrend_flip; supertrend_flip
+open_high_low_close,2025-09,loss,-1.717326,2,0,2,0,2,0,-1.586429,2025-09-02 14:00:00+00:00; 2025-09-12 13:56:00+00:00,supertrend_flip; supertrend_flip
+open_high_low_close,2025-10,loss,-1.602894,3,1,2,0,2,1,-2.099171,2025-09-30 16:41:00+00:00; 2025-10-08 15:46:00+00:00,supertrend_flip; supertrend_flip
+open_high_low_close,2025-11,profit,1.625956,1,1,0,0,0,1,1.625956,,
+open_high_low_close,2025-12,loss,-0.434855,5,2,3,1,2,2,-1.835678,2025-12-16 14:01:00+00:00; 2025-12-23 18:00:00+00:00; 2025-12-28 18:02:00+00:00,initial_stop; supertrend_flip; supertrend_flip
+open_high_low_close,2026-01,profit,1.657403,1,1,0,0,0,1,1.657403,,
+open_high_low_close,2026-02,profit,1.306978,1,1,0,0,0,1,1.306978,,
+open_high_low_close,2026-03,loss,-1.421728,1,0,1,1,0,0,-1.421728,2026-03-08 13:25:00+00:00,initial_stop
+open_high_low_close,2026-04,loss,-0.984376,5,2,3,2,1,2,-1.458607,2026-04-01 15:23:00+00:00; 2026-04-02 18:08:00+00:00; 2026-04-07 11:00:00+00:00,initial_stop; supertrend_flip; initial_stop
+open_high_low_close,2026-05,profit,0.988585,6,3,3,1,2,3,-1.743827,2026-05-06 16:09:00+00:00; 2026-05-10 23:00:00+00:00; 2026-05-24 17:50:00+00:00,supertrend_flip; initial_stop; supertrend_flip
+open_high_low_close,2026-06,profit,0.986303,4,2,2,0,2,2,-0.892162,2026-06-19 17:03:00+00:00; 2026-06-20 15:18:00+00:00,supertrend_flip; supertrend_flip
+open_high_low_close,2026-07,profit,2.237246,3,2,1,0,1,2,-0.864388,2026-07-29 18:00:00+00:00,supertrend_flip
+open_high_low_close,2026-08,profit,0.714602,2,1,1,0,1,1,-0.500903,2026-08-02 17:24:00+00:00,supertrend_flip
+open_high_low_close,2026-09,loss,-2.911479,3,0,3,0,3,0,-1.299602,2026-09-02 17:02:00+00:00; 2026-09-05 20:18:00+00:00; 2026-09-16 13:02:00+00:00,supertrend_flip; supertrend_flip; supertrend_flip
+open_high_low_close,2026-10,loss,-1.319047,1,0,1,0,1,0,-1.319047,2026-10-29 02:00:00+00:00,supertrend_flip
+open_low_high_close,2025-01,loss,-2.187642,1,0,1,1,0,0,-2.187642,2025-01-21 15:02:00+00:00,initial_stop
+open_low_high_close,2025-02,profit,5.987289,5,4,1,0,1,4,-1.280517,2025-02-14 13:25:00+00:00,supertrend_flip
+open_low_high_close,2025-03,profit,1.651791,1,1,0,0,0,1,1.651791,,
+open_low_high_close,2025-04,profit,0.312497,2,1,1,0,1,1,-1.430521,2025-04-16 13:02:00+00:00,supertrend_flip
+open_low_high_close,2025-05,profit,0.104966,2,1,1,0,1,1,-1.698195,2025-05-14 11:14:00+00:00,supertrend_flip
+open_low_high_close,2025-06,profit,3.851001,5,3,2,0,2,3,-1.588928,2025-06-08 12:01:00+00:00; 2025-06-27 18:40:00+00:00,supertrend_flip; supertrend_flip
+open_low_high_close,2025-07,profit,4.284009,5,3,2,0,2,3,-2.107867,2025-07-17 15:00:00+00:00; 2025-07-21 14:21:00+00:00,supertrend_flip; supertrend_flip
+open_low_high_close,2025-08,profit,0.405523,3,1,2,0,2,1,-1.741681,2025-07-31 16:01:00+00:00; 2025-08-15 13:10:00+00:00,supertrend_flip; supertrend_flip
+open_low_high_close,2025-09,loss,-1.717326,2,0,2,0,2,0,-1.586429,2025-09-02 14:00:00+00:00; 2025-09-12 13:56:00+00:00,supertrend_flip; supertrend_flip
+open_low_high_close,2025-10,loss,-1.602894,3,1,2,0,2,1,-2.099171,2025-09-30 16:41:00+00:00; 2025-10-08 15:46:00+00:00,supertrend_flip; supertrend_flip
+open_low_high_close,2025-11,profit,1.625956,1,1,0,0,0,1,1.625956,,
+open_low_high_close,2025-12,profit,0.4366,5,2,3,1,2,2,-1.835678,2025-12-16 14:01:00+00:00; 2025-12-23 18:00:00+00:00; 2025-12-28 18:02:00+00:00,initial_stop; supertrend_flip; supertrend_flip
+open_low_high_close,2026-01,profit,1.657403,1,1,0,0,0,1,1.657403,,
+open_low_high_close,2026-02,profit,1.306978,1,1,0,0,0,1,1.306978,,
+open_low_high_close,2026-03,loss,-1.421728,1,0,1,1,0,0,-1.421728,2026-03-08 13:25:00+00:00,initial_stop
+open_low_high_close,2026-04,loss,-0.984376,5,2,3,2,1,2,-1.458607,2026-04-01 15:23:00+00:00; 2026-04-02 18:08:00+00:00; 2026-04-07 11:00:00+00:00,initial_stop; supertrend_flip; initial_stop
+open_low_high_close,2026-05,profit,0.988585,6,3,3,1,2,3,-1.743827,2026-05-06 16:09:00+00:00; 2026-05-10 23:00:00+00:00; 2026-05-24 17:50:00+00:00,supertrend_flip; initial_stop; supertrend_flip
+open_low_high_close,2026-06,profit,0.986303,4,2,2,0,2,2,-0.892162,2026-06-19 17:03:00+00:00; 2026-06-20 15:18:00+00:00,supertrend_flip; supertrend_flip
+open_low_high_close,2026-07,profit,1.577732,3,2,1,0,1,2,-0.864388,2026-07-29 18:00:00+00:00,supertrend_flip
+open_low_high_close,2026-08,profit,0.714602,2,1,1,0,1,1,-0.500903,2026-08-02 17:24:00+00:00,supertrend_flip
+open_low_high_close,2026-09,loss,-2.911479,3,0,3,0,3,0,-1.299602,2026-09-02 17:02:00+00:00; 2026-09-05 20:18:00+00:00; 2026-09-16 13:02:00+00:00,supertrend_flip; supertrend_flip; supertrend_flip
+open_low_high_close,2026-10,loss,-1.319047,1,0,1,0,1,0,-1.319047,2026-10-29 02:00:00+00:00,supertrend_flip
