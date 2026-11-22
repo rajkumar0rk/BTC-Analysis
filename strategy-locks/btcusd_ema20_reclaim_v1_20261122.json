@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "identifier": "BTCUSD_EMA20_RECLAIM_RESEARCH_V1_20261122",
+  "status": "LOCKED_RESEARCH_BASELINE_NOT_LIVE_APPROVED",
+  "locked_date_ist": "2026-11-22",
+  "description": "Reference snapshot only. New experiments must fork this version and not change its rules.",
+  "source": {
+    "repository": "rajkumar0rk/BTC-Analysis",
+    "ref": "research/st-ema20-reclaim-preserve-winning-months-20261122-v1",
+    "source_head_sha": "0d3d7e7ed3879244089e5cb4b0ecfa8a2b1e7d85",
+    "baseline_engine": "scripts/backtest_st_ema20_large_percent_locks.py",
+    "replay_engine": "scripts/research_st_ema20_initial_sl_grid_20261122.py",
+    "research_filter_script": "scripts/research_st_ema20_reclaim_preserve_profitable_months_20261122.py",
+    "audit_csv": "analysis/st_ema20_reclaim_no_month_worse_20261122/strict_all_months_nondecreasing.csv",
+    "monthly_audit": "analysis/st_ema20_reclaim_no_month_worse_20261122/top_20_monthly_audit.csv",
+    "audit_github_blob_sha": "0e0bb100516579cf4dff27f76c5c3310531d51fe",
+    "monthly_audit_github_blob_sha": "c21e2e4bc683d85d5ceb095c6b2fe8bea3f0b095"
+  },
+  "instrument": "BTCUSD",
+  "source_exchange": "Delta Exchange India",
+  "direction": "LONG_AND_SHORT",
+  "signal": {
+    "timeframe": "1h",
+    "closed_bars_only": true,
+    "supertrend": {
+      "atr_period": 10,
+      "multiplier": 3
+    },
+    "ema_period": 20,
+    "entry": "EMA20 Reclaim after Supertrend cycle has seen an adverse EMA close; eligible next 1H after completed signal",
+    "one_filled_entry_per_supertrend_cycle": true,
+    "volume_ratio_min": 1.25,
+    "volume_ratio_max": null,
+    "volume_lookback_prior_complete_hours": 20
+  },
+  "additional_entry_filters": {
+    "directional_ema_gap_pct_max": 1,
+    "directional_ema_slope_pct_4_closed_hours_min": -0.2,
+    "directional_supertrend_gap_pct_min": 0.5,
+    "filter_values_from_completed_1h_signal": true
+  },
+  "risk_exit": {
+    "initial_stop_loss_entry_pct": 2,
+    "profit_lock_stages_entry_pct": [
+      2,
+      3,
+      5
+    ],
+    "lock_stop_moves_to_entry_relative_stage": true,
+    "never_loosen_stop": true,
+    "opposite_supertrend_flip_fallback_exit": true,
+    "stop_monitor_timeframe": "1m"
+  },
+  "historical_replay": {
+    "window_ist": "2025-01..2026-10",
+    "months": 22,
+    "quantity_btc": 0.001,
+    "taker_fee_per_side_with_gst": 0.00059,
+    "slippage_btc_points_per_leg": 5,
+    "intraminute_paths": [
+      "open_high_low_close",
+      "open_low_high_close"
+    ],
+    "qualifying_entries_before_filters": 62,
+    "selected_entries": 55,
+    "profitable_months_by_path": [
+      15,
+      15
+    ],
+    "losing_months_by_path": [
+      5,
+      5
+    ],
+    "flat_months_by_path": [
+      2,
+      2
+    ],
+    "net_usd_by_path": [
+      20.037378,
+      20.261506
+    ],
+    "no_month_worse_than_baseline_on_both_paths": true
+  },
+  "constraints": [
+    "No production or master branch modifications under lock",
+    "Research only; parameter changes create V2",
+    "Historical in-sample constraints may overfit",
+    "No tick path, order book, funding, leverage liquidation, margin, stop amendment latency",
+    "Stop % is underlying BTC price % not account risk or leveraged P&L %"
+  ],
+  "supersedes": null
+}
