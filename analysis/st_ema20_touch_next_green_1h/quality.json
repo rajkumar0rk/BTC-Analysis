@@ -1,0 +1,94 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "strategy": "1H ST(ATR10, multiplier3) + EMA20 TOUCH, then next 1H candle color confirmation",
+  "confirmation_long": "next fully closed 1H candle GREEN (close > open), ST still GREEN",
+  "confirmation_short_auxiliary": "next fully closed 1H candle RED (close < open), ST still RED",
+  "next_hour_entry": "market at next hour OPEN AFTER 1H confirming candle CLOSE; no lookahead",
+  "original_baseline_entry": "next 1H breakout of TOUCH candle high/low +/- 0.5, using 1m prices",
+  "confirmation_long_only_counts": {
+    "touch_signals": 1633,
+    "long_signals": 785,
+    "short_signals": 848,
+    "skipped_short": 848,
+    "wrong_color_or_doji": 110,
+    "supertrend_flipped": 4,
+    "not_enough_future_data": 0,
+    "already_filled_cycle": 551,
+    "filled_long": 120,
+    "filled_short": 0
+  },
+  "confirmation_both_counts": {
+    "touch_signals": 1633,
+    "long_signals": 785,
+    "short_signals": 848,
+    "skipped_short": 0,
+    "wrong_color_or_doji": 234,
+    "supertrend_flipped": 13,
+    "not_enough_future_data": 0,
+    "already_filled_cycle": 1142,
+    "filled_long": 120,
+    "filled_short": 124
+  },
+  "candidate_counts": {
+    "original_touch_both": 253,
+    "original_touch_long": 125,
+    "next_1h_green_long": 120,
+    "next_1h_matching_color_both": 244
+  },
+  "percent_ladders": {
+    "S01_0p14": [
+      0.14
+    ],
+    "S02_0p50": [
+      0.5
+    ],
+    "S03_0p75": [
+      0.75
+    ],
+    "S04_1": [
+      1.0
+    ],
+    "S05_2": [
+      2.0
+    ],
+    "S06_5": [
+      5.0
+    ],
+    "L01_0p5_1_2_5": [
+      0.5,
+      1.0,
+      2.0,
+      5.0
+    ],
+    "L02_1_2_5": [
+      1.0,
+      2.0,
+      5.0
+    ],
+    "L03_2_3_5": [
+      2.0,
+      3.0,
+      5.0
+    ]
+  },
+  "paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "position_qty_btc": 0.001,
+  "initial_cash_usd": 100.0,
+  "taker_fee_plus_gst_per_side": 0.00059,
+  "adverse_slippage_price_points_per_side": 5.0,
+  "risks": [
+    "1m OHLC candle high/low sequencing unknown; separate two hypothetical intraminute paths",
+    "Stop amendment and execution assumed immediate; real latency/slippage not known",
+    "No initial protective stop; large reversal or liquidation possible before profit lock",
+    "Funding, liquidation, spread, margin/mark price and orderbook depth unmodeled",
+    "Nov 2026 partial, Jan2025-Oct2026 22 complete months, prior historical data previously inspected"
+  ]
+}
