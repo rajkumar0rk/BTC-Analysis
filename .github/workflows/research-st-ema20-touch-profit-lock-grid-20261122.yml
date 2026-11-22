@@ -1,0 +1,47 @@
+name: BTC EMA20 Touch 3pct SL variable profit lock grid
+on:
+  push:
+    branches:
+      - research/st-ema20-initial-stop-grid-20261122-v1
+    paths:
+      - scripts/backtest_st_ema20_touch_profit_lock_grid_20261122.py
+      - .github/workflows/research-st-ema20-touch-profit-lock-grid-20261122.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-ema20-touch-3pct-profit-lock-grid-20261122
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install pandas numpy tabulate
+      - name: Validate syntax
+        run: python -m py_compile scripts/backtest_st_ema20_touch_profit_lock_grid_20261122.py
+      - name: Run profit-lock increment grid against minute archive
+        run: python scripts/backtest_st_ema20_touch_profit_lock_grid_20261122.py
+      - name: Upload full results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-touch-3pct-profit-lock-grid
+          path: analysis/st_ema20_touch_profit_lock_grid_20261122/
+          if-no-files-found: warn
+      - name: Save research results
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_ema20_touch_profit_lock_grid_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save BTC Touch 3pct SL variable profit-lock backtest"
+            git pull --rebase origin research/st-ema20-initial-stop-grid-20261122-v1
+            git push origin HEAD:research/st-ema20-initial-stop-grid-20261122-v1
+          fi
