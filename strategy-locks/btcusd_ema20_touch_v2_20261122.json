@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "identifier": "BTCUSD_EMA20_TOUCH_RESEARCH_V2_20261122",
+  "status": "LOCKED_RESEARCH_BASELINE_NOT_LIVE_APPROVED",
+  "locked_date_ist": "2026-11-22",
+  "description": "Frozen reproducible research configuration; future improvements must create V3. Not a production deployment.",
+  "source": {
+    "repository": "rajkumar0rk/BTC-Analysis",
+    "source_branch": "research/st-ema20-touch-v2-preserve-profitable-months-20261122",
+    "script": "scripts/research_st_ema20_touch_v2_preserve_monthly_profit.py",
+    "replay": "scripts/research_st_ema20_initial_sl_grid_20261122.py",
+    "engine": "scripts/backtest_st_ema20_large_percent_locks.py",
+    "report": "analysis/st_ema20_touch_v2_preserve_monthly_profit_20261122/RESEARCH_REPORT.md",
+    "top_configs": "analysis/st_ema20_touch_v2_preserve_monthly_profit_20261122/no_month_dollar_loss_improvements.csv",
+    "monthly": "analysis/st_ema20_touch_v2_preserve_monthly_profit_20261122/selected_month_by_month.csv",
+    "slippage": "analysis/st_ema20_touch_v2_preserve_monthly_profit_20261122/additional_slippage_sensitivity_approx.csv",
+    "top_configs_blob_sha": "52a283d59771891afa8e6fdc0a9bdaa03310f94e"
+  },
+  "instrument": "BTCUSD",
+  "exchange": "Delta Exchange India",
+  "direction": "LONG_AND_SHORT",
+  "signal": {
+    "timeframe": "1h",
+    "completed_bars_only": true,
+    "supertrend": {
+      "atr_period": 10,
+      "multiplier": 3
+    },
+    "ema_period": 20,
+    "entry": "FIRST EMA20 touch following a Supertrend flip; 1 filled entry maximum per Supertrend cycle",
+    "volume_ratio_min": 1.25,
+    "volume_ratio_max": 2.5,
+    "volume_ratio_lookback_prior_complete_hours": 20
+  },
+  "risk_and_exit": {
+    "initial_stop_loss_entry_pct": 3,
+    "profit_lock_stages_entry_pct": [
+      0.16,
+      0.18,
+      0.2,
+      0.21,
+      0.3,
+      0.5,
+      1,
+      2
+    ],
+    "stop_moves_to_entry_relative_profit_lock": true,
+    "stop_never_loosen": true,
+    "opposite_supertrend_flip_exit": true,
+    "monitor_timeframe": "1m"
+  },
+  "historical_replay": {
+    "window_ist": "2025-01 through 2026-10",
+    "completed_months": 22,
+    "tested_ladders": 805,
+    "hypothetical_intraminute_paths": [
+      "open_high_low_close",
+      "open_low_high_close"
+    ],
+    "qualifying_entries": 52,
+    "executed_trades": 50,
+    "quantity_btc": 0.001,
+    "fee_per_side_including_GST": 0.00059,
+    "slippage_btc_points_per_leg": 5,
+    "profitable_months": 21,
+    "losing_months": 0,
+    "flat_months": 1,
+    "no_trade_month": "2025-07",
+    "net_usd_across_paths": [
+      3.829434,
+      4.410441
+    ],
+    "net_2025_worst_path": 2.74466,
+    "net_2026_jan_oct_worst_path": 1.08388,
+    "original_profitable_month_net_profits_maintained": true,
+    "initial_stop_exits": 0,
+    "slippage_note": "Approximate 20 BTC points slippage per leg reduces 21 positive months to 20, no rerun of fill timing.",
+    "realized_max_drawdown_is_not_floating_max_drawdown": true
+  },
+  "limitations": [
+    "Historical parameter search is highly in-sample and subject to overfitting",
+    "Zero loss trades does not establish zero floating risk",
+    "3% price-level SL may be beyond liquidation for leveraged positions",
+    "Tick paths, real stop amendment latency, depth, funding and liquidation not modeled",
+    "Needs independent forward paper trading and realistic execution validation"
+  ],
+  "governance": {
+    "frozen": true,
+    "change_requires_new_version": true,
+    "master_unchanged": true,
+    "live_approved": false
+  }
+}
