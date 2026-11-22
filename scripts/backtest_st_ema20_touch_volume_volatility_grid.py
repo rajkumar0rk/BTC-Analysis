@@ -63,7 +63,9 @@ def load_trades(h):
             # Relative volume may legitimately be zero on a low-activity signal candle.
             # Other malformed values are invalid for ACTIVE filters only; an OFF
             # filter must preserve the exact, unfiltered baseline trade ledger.
-            assert (np.isfinite(features[:,1:]) & (features[:,1:]>0)).all(), "Invalid ATR features"
+            # Initial January 2025 signal may predate the 20 *valid ATR* warmup.
+            # It remains in unfiltered baseline and is rejected only when
+            # a filter using that missing feature is enabled.
             ref=comparison.loc[(comparison.entry_mode=="touch")&
                  (comparison.ladder==ladder)&(comparison.intraminute_path==path)]
             assert len(ref)==1 and abs(float(ref.net_usd.iloc[0])-t.net_usd.sum())<0.002
@@ -182,7 +184,7 @@ def main():
             t.to_csv(OUT/f"top_{path}_trade_audit.csv",index=False)
 
     features=records[("0.75%",PATHS[0])]
-    quantiles={col:{str(q):round(float(np.quantile(features[col],q)),4)
+    quantiles={col:{str(q):round(float(np.nanquantile(np.where(np.isfinite(features[col]),features[col],np.nan),q)),4)
                     for q in (0,.1,.25,.5,.75,.9,1)}
                for col in ("vol","atr","exp")}
     doc={
@@ -200,6 +202,7 @@ def main():
        "best_combined_filter":({k:(None if pd.isna(v) else float(v) if isinstance(v,np.floating) else int(v) if isinstance(v,np.integer) else bool(v) if isinstance(v,np.bool_) else v)
                                for k,v in best.to_dict().items()} if best is not None else None),
        "feature_quantiles":quantiles,
+       "missing_signal_feature_counts":{col:int((~np.isfinite(features[col])).sum()) for col in ("vol","atr","exp")},
        "exclusions":["Not a fresh holdout; user previously evaluated both 2025 and 2026","No funding, margin, liquidation, ticks, stop amendment latency","Realized-exit max DD only; excludes floating drawdown","Precomputed stop trade ledgers assume one of two hypothetical minute OHLC paths"]
     }
     (OUT/"quality.json").write_text(json.dumps(doc,indent=2)+"\n")
