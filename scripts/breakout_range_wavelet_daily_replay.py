@@ -138,6 +138,20 @@ def main():
     daily=daily.loc[counts.eq(1440)].copy()
     # No synthetic daily bars across missing days; check calendar continuity.
     assert daily.index.to_series().diff().dropna().eq(pd.Timedelta(days=1)).all()
+    # Causal prefix-invariance gate: future candles must never change earlier signals.
+    # Check multiple chronological cuts, both source baselines, without modifying fills.
+    prefix_checks=[]
+    for kind in ("two_b","wavelet_two_b"):
+        full=signals(daily,kind)
+        for cut in ("2025-06-30","2025-12-31","2026-06-30"):
+            prefix=daily.loc[:cut]
+            if len(prefix)<130:continue
+            observed=signals(prefix,kind)
+            mismatch=np.flatnonzero(observed!=full[:len(prefix)])
+            assert not len(mismatch),f"LOOKAHEAD {kind} {cut}: {mismatch[:10]}"
+            prefix_checks.append(dict(strategy=kind,through=cut,bars=len(prefix),mismatches=0))
+    OUT.mkdir(parents=True,exist_ok=True)
+    (OUT/"causal_prefix_checks.json").write_text(json.dumps(prefix_checks,indent=2))
     output={"source_commit":"5d879b3d04031952f41d2b4d4c4a3cce43f04150","data_hashes":hashes,"fee_each_side_including_gst":FEE,"slippage":0,"funding":"unmodeled","daily_bars":len(daily),"results":[]}
     for name in ("two_b","wavelet_two_b"):
         sig=signals(daily,name)
