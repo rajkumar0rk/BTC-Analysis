@@ -1,0 +1,165 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "ladder_values_in_percent": {
+    "S01_single_0p12": [
+      0.12
+    ],
+    "S02_single_0p13": [
+      0.13
+    ],
+    "S03_single_0p14": [
+      0.14
+    ],
+    "S04_single_0p15": [
+      0.15
+    ],
+    "S05_single_0p18": [
+      0.18
+    ],
+    "S06_single_0p20": [
+      0.2
+    ],
+    "S07_single_0p25": [
+      0.25
+    ],
+    "S08_single_0p30": [
+      0.3
+    ],
+    "L01_0p12_0p20_0p30": [
+      0.12,
+      0.2,
+      0.3
+    ],
+    "L02_0p12_0p15_0p20_0p25_0p30": [
+      0.12,
+      0.15,
+      0.2,
+      0.25,
+      0.3
+    ],
+    "L03_0p12_0p20_0p40_0p80": [
+      0.12,
+      0.2,
+      0.4,
+      0.8
+    ],
+    "L04_0p12_0p30_0p60_0p90": [
+      0.12,
+      0.3,
+      0.6,
+      0.9
+    ],
+    "L05_0p12_0p40_0p80": [
+      0.12,
+      0.4,
+      0.8
+    ],
+    "L06_0p12_0p50_1p00": [
+      0.12,
+      0.5,
+      1.0
+    ],
+    "L07_0p13_0p20_0p30": [
+      0.13,
+      0.2,
+      0.3
+    ],
+    "L08_0p14_0p20_0p30": [
+      0.14,
+      0.2,
+      0.3
+    ],
+    "L09_0p15_0p20_0p30": [
+      0.15,
+      0.2,
+      0.3
+    ],
+    "L10_0p15_0p25_0p40": [
+      0.15,
+      0.25,
+      0.4
+    ],
+    "L11_0p15_0p30_0p60": [
+      0.15,
+      0.3,
+      0.6
+    ],
+    "L12_0p15_0p20_0p40_0p80": [
+      0.15,
+      0.2,
+      0.4,
+      0.8
+    ],
+    "L13_0p18_0p30_0p50": [
+      0.18,
+      0.3,
+      0.5
+    ],
+    "L14_0p20_0p30_0p40": [
+      0.2,
+      0.3,
+      0.4
+    ],
+    "L15_0p20_0p40_0p80": [
+      0.2,
+      0.4,
+      0.8
+    ],
+    "L16_0p20_0p50_1p00": [
+      0.2,
+      0.5,
+      1.0
+    ],
+    "L17_0p25_0p50_1p00": [
+      0.25,
+      0.5,
+      1.0
+    ],
+    "L18_0p30_0p60_0p90": [
+      0.3,
+      0.6,
+      0.9
+    ]
+  },
+  "definition": "0.12 is 0.12 percent of actual execution entry price (entry*0.0012)",
+  "paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "entry_modes": [
+    "touch",
+    "reclaim",
+    "combined"
+  ],
+  "entry_count": {
+    "touch": 253,
+    "reclaim": 227,
+    "combined": 297
+  },
+  "qty_btc": 0.001,
+  "initial_cash_usd": 100.0,
+  "taker_fee_plus_GST_per_side": 0.00059,
+  "adverse_execution_slippage_btc_points_per_side": 5.0,
+  "min_no_slippage_taker_fee_break_even_pct": 0.11800000000000001,
+  "estimated_roundtrip_slippage_btc_points": 10.0,
+  "one_fill_per_ST_cycle": true,
+  "no_initial_SL": true,
+  "no_fixed_TP": true,
+  "instant_stop_update_same_1m_bar": true,
+  "entry_minute_modeling": "Follow hypothetical OHLC path after breakout, immediately on-touch activate profit lock",
+  "ladder_after_last_rung": "hold final rung; no invented extra percentage milestones",
+  "fallback_exit": "next 1m open after completed opposite 1H Supertrend flip",
+  "caveats": [
+    "OHLC 1m cannot resolve intraminute high/low sequence, two possible path models are replayed separately",
+    "No exchange tick sequence, order amendment latency, margin, funding, mark/index price or liquidation model",
+    "A 0.12 percent gross lock can be negative net after the fee, GST and slippage",
+    "No pristine out-of-sample, parameters are exploratory, November 2026 partial",
+    "Monthly realized cash PnL is booked by exit month in IST"
+  ]
+}
