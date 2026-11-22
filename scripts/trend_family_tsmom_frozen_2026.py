@@ -65,7 +65,8 @@ for horizon,direction in [(90,"long_short")]:
     m=pd.DataFrame(months)
     m["start_nav"]=m.end_nav.shift().fillna(100.)
     m["net_return_pct"]=100*(m.end_nav/m.start_nav-1)
-    assert len(months)==9, f"Expected Jan-Sep 2026 IST, got {len(months)} months"\n    name=f"tsmom_{horizon}d_{direction}"
+    assert len(months)==9, f"Expected Jan-Sep 2026 IST, got {len(months)} months"
+    name=f"tsmom_{horizon}d_{direction}"
     pd.DataFrame(trades).to_csv(ROOT/f"{name}_orders.csv",index=False)
     m.to_csv(ROOT/f"{name}_monthly.csv",index=False)
     summary=dict(model=name,net_pct=nav-100,months=len(m),positive_months=int((m.net_return_pct>0).sum()),negative_months=int((m.net_return_pct<0).sum()),max_dd_pct=100*dd,orders=len(trades),source_missing_minutes=q.get("missing_minutes"),fee_per_side=fee,source="Engineer Investor CRYPTO_SPEC pinned de27263d630303d32fe0df3d5b688e1b8a27350a",caveat="Component study, not faithful full 30/90/365 TSMOM; no funding; 2025 historical warmup included; BTC2026 is research-exposed; Oct 2026 excluded for documented missing minutes")
