@@ -1,0 +1,75 @@
+{
+  "data_source": "Delta India BTCUSD perpetual 1m archive",
+  "period": "22 complete IST entry months, Jan2025-Oct2026",
+  "minute_count": 993600,
+  "bar15_count": 66240,
+  "target_points": [
+    100,
+    200,
+    500,
+    1000
+  ],
+  "unfiltered_parity": [
+    {
+      "target_pts": 100,
+      "volume_filter": "vol_off",
+      "volatility_filter": "atr_off",
+      "period": "22_months",
+      "trades": 782,
+      "reached_before_close_stop": 430,
+      "pct_reached": 54.99,
+      "reached_after_entry_slippage": 419,
+      "not_reached": 352,
+      "illustrative_net_pts": -97293.44
+    },
+    {
+      "target_pts": 200,
+      "volume_filter": "vol_off",
+      "volatility_filter": "atr_off",
+      "period": "22_months",
+      "trades": 782,
+      "reached_before_close_stop": 299,
+      "pct_reached": 38.24,
+      "reached_after_entry_slippage": 296,
+      "not_reached": 483,
+      "illustrative_net_pts": -94266.21
+    },
+    {
+      "target_pts": 500,
+      "volume_filter": "vol_off",
+      "volatility_filter": "atr_off",
+      "period": "22_months",
+      "trades": 782,
+      "reached_before_close_stop": 171,
+      "pct_reached": 21.87,
+      "reached_after_entry_slippage": 169,
+      "not_reached": 611,
+      "illustrative_net_pts": -87440.71
+    },
+    {
+      "target_pts": 1000,
+      "volume_filter": "vol_off",
+      "volatility_filter": "atr_off",
+      "period": "22_months",
+      "trades": 782,
+      "reached_before_close_stop": 92,
+      "pct_reached": 11.76,
+      "reached_after_entry_slippage": 92,
+      "not_reached": 690,
+      "illustrative_net_pts": -91502.32
+    }
+  ],
+  "entry": "15m ST(10,3) bullish support first eligible touch, one per cycle",
+  "exit": "15m prior closed Supertrend support closing breach, exit next 1m open",
+  "first_passage": "1m high AFTER entry minute >= entry-mid + target BEFORE 15m close-stop",
+  "slippage_points_each_side": 5.0,
+  "fees": "0.05% per side plus 18% GST",
+  "caveats": [
+    "No fixed hard SL; compare to 1:1 study separately",
+    "No entry-minute favorable exit from ambiguous OHLC",
+    "Overlapping filter combinations, counts non-additive",
+    "Historical 1m OHLC not true bid/ask or limit fill sequence",
+    "Funding, leverage, margin, and exchange queue absent",
+    "No untouched out of sample"
+  ]
+}
