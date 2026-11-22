@@ -1,0 +1,33 @@
+name: Frozen 4H Ichimoku BTC2026 Jan-Oct evaluation
+on:
+  push:
+    branches:
+      - research/ichimoku-btc2026-frozen-replay-20261122
+    paths:
+      - .github/workflows/ichimoku-btc2026-frozen.yml
+      - scripts/trend_family_ichimoku_frozen_btc2026.py
+      - scripts/trend_family_ichimoku_frozen_btc2026.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  historical-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned analysis dependencies
+        run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'numba==0.61.2' 'tabulate==0.9.0'
+      - name: Execute frozen 4H Ichimoku on genuine BTC Jan-Oct 2026 minute history
+        run: python scripts/trend_family_ichimoku_frozen_btc2026.py
+      - name: Archive all actual output including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ichimoku-frozen-btc2026-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: analysis/ichimoku_btc2026_frozen_20261122/
