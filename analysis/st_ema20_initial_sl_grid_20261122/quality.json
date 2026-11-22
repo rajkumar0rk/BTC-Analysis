@@ -1,0 +1,114 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "entry_count": {
+    "touch": 52,
+    "reclaim": 62
+  },
+  "timeframe": "1h signal + 1m stop/lock replay",
+  "fee_side_with_gst": 0.00059,
+  "slippage_points_each_side": 5.0,
+  "quantity_btc": 0.001,
+  "validated_no_stop_baselines": {
+    "touch_open_high_low_close": [
+      50,
+      0.725036
+    ],
+    "touch_open_low_high_close": [
+      50,
+      0.723046
+    ],
+    "reclaim_open_high_low_close": [
+      62,
+      11.498422
+    ],
+    "reclaim_open_low_high_close": [
+      62,
+      11.72255
+    ]
+  },
+  "stop_specs": [
+    {
+      "label": "OFF",
+      "unit": "off",
+      "value": 0.0
+    },
+    {
+      "label": "100pts",
+      "unit": "pts",
+      "value": 100.0
+    },
+    {
+      "label": "200pts",
+      "unit": "pts",
+      "value": 200.0
+    },
+    {
+      "label": "300pts",
+      "unit": "pts",
+      "value": 300.0
+    },
+    {
+      "label": "500pts",
+      "unit": "pts",
+      "value": 500.0
+    },
+    {
+      "label": "800pts",
+      "unit": "pts",
+      "value": 800.0
+    },
+    {
+      "label": "1000pts",
+      "unit": "pts",
+      "value": 1000.0
+    },
+    {
+      "label": "1500pts",
+      "unit": "pts",
+      "value": 1500.0
+    },
+    {
+      "label": "2000pts",
+      "unit": "pts",
+      "value": 2000.0
+    },
+    {
+      "label": "0.25%",
+      "unit": "pct",
+      "value": 0.25
+    },
+    {
+      "label": "0.5%",
+      "unit": "pct",
+      "value": 0.5
+    },
+    {
+      "label": "1%",
+      "unit": "pct",
+      "value": 1.0
+    },
+    {
+      "label": "2%",
+      "unit": "pct",
+      "value": 2.0
+    },
+    {
+      "label": "3%",
+      "unit": "pct",
+      "value": 3.0
+    }
+  ],
+  "caveats": [
+    "Intraminute OHLC high/low order unresolved: both plausible paths modeled",
+    "No order book, fill latency, stop amendment latency, funding, liquidation or margin",
+    "Realized drawdown only; floating equity risk may be much greater",
+    "Historical configurations selected after observing full 2025-26 dataset",
+    "Initial stop starts at fill-relative price; locks tighten stop only when price reaches next rung",
+    "One entry filled per ST cycle, as in preserved source engine",
+    "No forward validation, no guarantee of monthly profits"
+  ]
+}
