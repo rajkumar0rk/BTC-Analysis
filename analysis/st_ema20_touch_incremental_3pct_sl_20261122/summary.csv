@@ -1,0 +1,5 @@
+strategy,stop,path,trades,wins,losses,win_rate_pct,total_net_usd,total_gross_usd,total_fees_usd,profitable_months,losing_months,flat_months,max_realized_dd_pct,stopped_trades,profit_lock_exits,st_flip_exits,open_trades,profitable_2025,profitable_2026,losing_2025,losing_2026,net_2025,net_2026,variant,profit_lock_ladder_pct
+touch,3%,open_high_low_close,50,50,0,100.0,0.725036,5.954099,5.229061,21,0,1,0.0,0,50,0,0,11,10,0,0,0.46296,0.26208,single_0p14,0.14%
+touch,3%,open_high_low_close,50,50,0,100.0,2.085741,7.314,5.228258,21,0,1,0.0,0,50,0,0,11,10,0,0,1.59866,0.48708,increment_0p14_0p50_1_2_5,0.14% -> 0.5% -> 1% -> 2% -> 5%
+touch,3%,open_low_high_close,50,50,0,100.0,0.723046,5.952107,5.229058,21,0,1,0.0,0,50,0,0,11,10,0,0,0.46334,0.2597,single_0p14,0.14%
+touch,3%,open_low_high_close,50,50,0,100.0,1.425514,6.654161,5.228643,21,0,1,0.0,0,50,0,0,11,10,0,0,1.16581,0.2597,increment_0p14_0p50_1_2_5,0.14% -> 0.5% -> 1% -> 2% -> 5%

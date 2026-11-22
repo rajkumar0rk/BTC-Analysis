@@ -1,0 +1,36 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m native OHLCV",
+  "completed_months": "2025-01 through 2026-10 (22)",
+  "total_archive_minutes": 992160,
+  "source_files": 23,
+  "timeframe": "1H signal, 1m entry and stop updates",
+  "initial_stop_pct": 3.0,
+  "volume_ratio_min": 1.25,
+  "volume_ratio_max": 2.5,
+  "profit_lock_ladders": {
+    "single_0p14": [
+      0.14
+    ],
+    "increment_0p14_0p50_1_2_5": [
+      0.14,
+      0.5,
+      1.0,
+      2.0,
+      5.0
+    ]
+  },
+  "stop_update": "Raise stop to each attained positive entry-relative milestone; never loosen",
+  "quantity_btc": 0.001,
+  "roundtrip_fees_with_GST": "0.059% per side",
+  "slippage_btc_points_per_leg": 5.0,
+  "stop_gap_policy": "Fill at actual minute open if market gaps beyond active stop",
+  "excludes": [
+    "Exchange funding",
+    "liquidation",
+    "margin",
+    "order-book depth",
+    "actual exchange ticks / amend latency"
+  ],
+  "validation": "Single 0.14% baseline matches separately backtested 3% initial SL",
+  "note": "Historical intraminute order ambiguity simulated separately in both paths; not live fills"
+}
