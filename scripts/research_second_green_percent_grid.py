@@ -107,7 +107,7 @@ def test_synthetic():
     # If lower gap below hard stop, stop exit at opening gap, not SL level.
     op[1]=970.;hi[1]=985.;lo[1]=960.
     mid,idx,reason,amb=market_ohlc_precompute(1000.,0,10,hi,lo,op,cl)
-    assert reason[0,tidx]==1 and mid[0,tidx]==970.
+    assert reason[SL_PCT.index(.12),tidx]==1 and mid[SL_PCT.index(.12),tidx]==970.
     print("SYNTHETIC_PERCENT_STOP_FIRST_TESTS_PASS",flush=True)
 
 def run_grid(entries,stopbars,minute,months_arr,filtername,atrname,mode):
@@ -324,8 +324,10 @@ def main():
     # Long-form percentage matrix for each method with same previously
     # highlighted filter. Top SL=5% may be data-end dominated; warn.
     def table(mode):
-        a=default[default.entry_type==mode]
+        a=default[default.entry_type==mode].copy()
+        a["sl_pct"]=a.sl_pct.astype(str)
         piv=a.pivot(index="sl_pct",columns="tp_pct",values="net_pts_per_trade")
+        piv=piv.reindex([str(x) for x in SL_PCT[:-1]]+["none"])
         return piv.to_markdown(floatfmt=".1f")
     base_profiles=[]
     for mode in KINDS:
