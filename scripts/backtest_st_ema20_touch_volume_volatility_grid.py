@@ -60,7 +60,10 @@ def load_trades(h):
             assert t.entry_ts.is_unique and t.exit_ts.ge(t.entry_ts).all()
             hh=h.reindex(pd.DatetimeIndex(t.signal_ts))
             features=hh[["vol_ratio","atr_pct","atr_expand"]].to_numpy(float)
-            assert np.isfinite(features).all() and (features>0).all(),"Missing/invalid causal signal feature"
+            # Relative volume may legitimately be zero on a low-activity signal candle.
+            # Other malformed values are invalid for ACTIVE filters only; an OFF
+            # filter must preserve the exact, unfiltered baseline trade ledger.
+            assert (np.isfinite(features[:,1:]) & (features[:,1:]>0)).all(), "Invalid ATR features"
             ref=comparison.loc[(comparison.entry_mode=="touch")&
                  (comparison.ladder==ladder)&(comparison.intraminute_path==path)]
             assert len(ref)==1 and abs(float(ref.net_usd.iloc[0])-t.net_usd.sum())<0.002
@@ -79,8 +82,13 @@ def cat(config):
 
 def metric(label,path,record,config):
     vmin,vmax,amin,amax,emin=config
-    mask=(record["vol"]>=vmin)&(record["vol"]<=vmax)&(
-        record["atr"]>=amin)&(record["atr"]<=amax)&(record["exp"]>=emin)
+    vol_filter = np.ones(len(record["vol"]),dtype=bool) if (vmin==0 and np.isinf(vmax)) else (
+        np.isfinite(record["vol"]) & (record["vol"]>=vmin) & (record["vol"]<=vmax))
+    atr_filter = np.ones(len(record["atr"]),dtype=bool) if (amin==0 and np.isinf(amax)) else (
+        np.isfinite(record["atr"]) & (record["atr"]>=amin) & (record["atr"]<=amax))
+    exp_filter = np.ones(len(record["exp"]),dtype=bool) if emin==0 else (
+        np.isfinite(record["exp"]) & (record["exp"]>=emin))
+    mask=vol_filter & atr_filter & exp_filter
     t=record["ledger"].loc[mask].copy()
     t=t.sort_values("exit_ts")
     a=t.net.to_numpy(float)
@@ -155,6 +163,7 @@ def main():
     baseline=r.loc[r.category=="unfiltered"]
     assert len(baseline)==len(records),"Baseline setup differs from prior history"
     baseline.to_csv(OUT/"baseline.csv",index=False)
+    assert (baseline.trades.max()==253), "Baseline candidate count drift"
     winners=top.loc[top.both_paths_positive]
     consistent=winners.loc[winners.both_years_positive]
     best=top.iloc[0] if len(top) else None
