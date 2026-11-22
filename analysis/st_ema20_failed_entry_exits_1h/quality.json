@@ -1,0 +1,55 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "initial_cash_usd": 100.0,
+  "quantity_btc": 0.001,
+  "fee_plus_GST_per_side": 0.00059,
+  "slippage_points_per_side": 5.0,
+  "baseline_ladder": [
+    100,
+    500,
+    1000
+  ],
+  "baseline_first_lock_trigger": 500,
+  "baseline_first_lock_points": 100,
+  "no_fixed_take_profit": true,
+  "strategies": [
+    "baseline",
+    "hard300",
+    "hard500",
+    "hard800",
+    "hard1200",
+    "hard2000",
+    "time120_mfe200",
+    "time240_mfe200",
+    "time240_mfe300",
+    "time240_mfe500",
+    "time480_mfe200",
+    "time480_mfe300",
+    "time480_mfe500",
+    "hourly_ema1",
+    "hourly_ema2",
+    "hybrid_hard800_time240mfe300",
+    "hybrid_hard800_ema1",
+    "hybrid_time240mfe300_ema1"
+  ],
+  "entry_modes": [
+    "touch",
+    "reclaim",
+    "combined"
+  ],
+  "lookahead_safe": true,
+  "one_filled_trade_per_supertrend_cycle": true,
+  "caveats": [
+    "Exploratory only; baseline 61 failures were known in advance, not an untouched holdout",
+    "No funding, liquidation, mark price, real bid-ask, latency or broker margin modeling",
+    "A fixed stop can gap through the stop price. Entry-bar stop touch is conservatively executed",
+    "Time/EMA stop only when no profit lock already activated",
+    "Monthly P&L is assigned to IST EXIT month, November 2026 partial"
+  ]
+}

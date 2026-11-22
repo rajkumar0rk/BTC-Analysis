@@ -1,0 +1,2974 @@
+{
+  "touch_baseline": {
+    "closed_trades": 253,
+    "wins": 126,
+    "losses": 127,
+    "win_rate_pct": 49.802,
+    "gross_usd": 27.6815,
+    "fees_usd": 26.4288,
+    "realized_net_usd": 1.2527,
+    "ending_closed_equity_usd": 101.2527,
+    "profit_factor": 1.014,
+    "realized_max_drawdown_usd": 16.9159,
+    "realized_max_drawdown_pct": 16.771,
+    "winning_trades_gross_usd": 90.8115,
+    "losing_trades_gross_usd": 89.5588,
+    "avg_win_usd": 0.7207,
+    "avg_loss_usd": -0.7052,
+    "max_trade_adverse_points": 4246.0,
+    "max_trade_favorable_points": 4078.0,
+    "config": "baseline",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 192,
+      "supertrend_flip": 61
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 83.5251,
+    "max_excursion_below_previous_realized_peak_usd": 17.3409,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 9,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -88.033,
+        "improvement_usd": 0.0,
+        "improved_count": 0,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 89.2857,
+        "improvement_usd": 0.0,
+        "improved_count": 0,
+        "worsened_count": 0
+      }
+    }
+  },
+  "touch_hard300": {
+    "closed_trades": 253,
+    "wins": 65,
+    "losses": 188,
+    "win_rate_pct": 25.692,
+    "gross_usd": 14.0105,
+    "fees_usd": 26.4391,
+    "realized_net_usd": -12.4286,
+    "ending_closed_equity_usd": 87.5714,
+    "profit_factor": 0.7961,
+    "realized_max_drawdown_usd": 14.8187,
+    "realized_max_drawdown_pct": 14.75,
+    "winning_trades_gross_usd": 48.5234,
+    "losing_trades_gross_usd": 60.952,
+    "avg_win_usd": 0.7465,
+    "avg_loss_usd": -0.3242,
+    "max_trade_adverse_points": 299.5,
+    "max_trade_favorable_points": 4078.0,
+    "config": "hard300",
+    "rule": {
+      "hard_stop_points": 300,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "hard_stop": 147,
+      "profit_lock": 106
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 85.6372,
+    "max_excursion_below_previous_realized_peak_usd": 14.829,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -24.7626,
+        "improvement_usd": 63.2703,
+        "improved_count": 60,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 12.334,
+        "improvement_usd": -76.9516,
+        "improved_count": 0,
+        "worsened_count": 86
+      }
+    }
+  },
+  "touch_hard500": {
+    "closed_trades": 253,
+    "wins": 83,
+    "losses": 170,
+    "win_rate_pct": 32.806,
+    "gross_usd": 11.6105,
+    "fees_usd": 26.4346,
+    "realized_net_usd": -14.8241,
+    "ending_closed_equity_usd": 85.1759,
+    "profit_factor": 0.7978,
+    "realized_max_drawdown_usd": 17.2607,
+    "realized_max_drawdown_pct": 17.215,
+    "winning_trades_gross_usd": 58.4895,
+    "losing_trades_gross_usd": 73.3137,
+    "avg_win_usd": 0.7047,
+    "avg_loss_usd": -0.4313,
+    "max_trade_adverse_points": 499.5,
+    "max_trade_favorable_points": 4078.0,
+    "config": "hard500",
+    "rule": {
+      "hard_stop_points": 500,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 134,
+      "hard_stop": 118,
+      "supertrend_flip": 1
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 82.4988,
+    "max_excursion_below_previous_realized_peak_usd": 17.7675,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -36.7622,
+        "improvement_usd": 51.2708,
+        "improved_count": 55,
+        "worsened_count": 5
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 21.938,
+        "improvement_usd": -67.3476,
+        "improved_count": 0,
+        "worsened_count": 58
+      }
+    }
+  },
+  "touch_hard800": {
+    "closed_trades": 253,
+    "wins": 107,
+    "losses": 146,
+    "win_rate_pct": 42.292,
+    "gross_usd": 19.092,
+    "fees_usd": 26.4375,
+    "realized_net_usd": -7.3455,
+    "ending_closed_equity_usd": 92.6545,
+    "profit_factor": 0.9075,
+    "realized_max_drawdown_usd": 11.0825,
+    "realized_max_drawdown_pct": 10.987,
+    "winning_trades_gross_usd": 72.0875,
+    "losing_trades_gross_usd": 79.433,
+    "avg_win_usd": 0.6737,
+    "avg_loss_usd": -0.5441,
+    "max_trade_adverse_points": 799.5,
+    "max_trade_favorable_points": 4078.0,
+    "config": "hard800",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 164,
+      "hard_stop": 80,
+      "supertrend_flip": 9
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 89.2767,
+    "max_excursion_below_previous_realized_peak_usd": 11.5892,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -52.6802,
+        "improvement_usd": 35.3528,
+        "improved_count": 44,
+        "worsened_count": 8
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 45.3347,
+        "improvement_usd": -43.9509,
+        "improved_count": 0,
+        "worsened_count": 28
+      }
+    }
+  },
+  "touch_hard1200": {
+    "closed_trades": 253,
+    "wins": 118,
+    "losses": 135,
+    "win_rate_pct": 46.64,
+    "gross_usd": 23.0185,
+    "fees_usd": 26.4352,
+    "realized_net_usd": -3.4167,
+    "ending_closed_equity_usd": 96.5833,
+    "profit_factor": 0.9607,
+    "realized_max_drawdown_usd": 12.6823,
+    "realized_max_drawdown_pct": 12.573,
+    "winning_trades_gross_usd": 83.5915,
+    "losing_trades_gross_usd": 87.0082,
+    "avg_win_usd": 0.7084,
+    "avg_loss_usd": -0.6445,
+    "max_trade_adverse_points": 1199.0,
+    "max_trade_favorable_points": 4078.0,
+    "config": "hard1200",
+    "rule": {
+      "hard_stop_points": 1200,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 178,
+      "hard_stop": 49,
+      "supertrend_flip": 26
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 87.7587,
+    "max_excursion_below_previous_realized_peak_usd": 13.1073,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -67.2415,
+        "improvement_usd": 20.7915,
+        "improved_count": 27,
+        "worsened_count": 8
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 63.8248,
+        "improvement_usd": -25.4608,
+        "improved_count": 0,
+        "worsened_count": 14
+      }
+    }
+  },
+  "touch_hard2000": {
+    "closed_trades": 253,
+    "wins": 123,
+    "losses": 130,
+    "win_rate_pct": 48.617,
+    "gross_usd": 23.897,
+    "fees_usd": 26.4352,
+    "realized_net_usd": -2.5382,
+    "ending_closed_equity_usd": 97.4618,
+    "profit_factor": 0.9721,
+    "realized_max_drawdown_usd": 19.9035,
+    "realized_max_drawdown_pct": 19.733,
+    "winning_trades_gross_usd": 88.2914,
+    "losing_trades_gross_usd": 90.8297,
+    "avg_win_usd": 0.7178,
+    "avg_loss_usd": -0.6987,
+    "max_trade_adverse_points": 1998.5,
+    "max_trade_favorable_points": 4078.0,
+    "config": "hard2000",
+    "rule": {
+      "hard_stop_points": 2000,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 189,
+      "supertrend_flip": 47,
+      "hard_stop": 17
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 80.5375,
+    "max_excursion_below_previous_realized_peak_usd": 20.3285,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 10,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -82.9617,
+        "improvement_usd": 5.0713,
+        "improved_count": 11,
+        "worsened_count": 3
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 80.4234,
+        "improvement_usd": -8.8622,
+        "improved_count": 0,
+        "worsened_count": 3
+      }
+    }
+  },
+  "touch_time120_mfe200": {
+    "closed_trades": 253,
+    "wins": 86,
+    "losses": 167,
+    "win_rate_pct": 33.992,
+    "gross_usd": 17.2855,
+    "fees_usd": 26.4366,
+    "realized_net_usd": -9.1511,
+    "ending_closed_equity_usd": 90.8489,
+    "profit_factor": 0.8748,
+    "realized_max_drawdown_usd": 13.5462,
+    "realized_max_drawdown_pct": 13.219,
+    "winning_trades_gross_usd": 63.9389,
+    "losing_trades_gross_usd": 73.0901,
+    "avg_win_usd": 0.7435,
+    "avg_loss_usd": -0.4377,
+    "max_trade_adverse_points": 3643.5,
+    "max_trade_favorable_points": 4000.5,
+    "config": "time120_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 120,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 137,
+      "no_progress_timeout": 87,
+      "supertrend_flip": 29
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 87.999,
+    "max_excursion_below_previous_realized_peak_usd": 13.7558,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 9,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -52.985,
+        "improvement_usd": 35.0479,
+        "improved_count": 32,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 43.8339,
+        "improvement_usd": -45.4518,
+        "improved_count": 3,
+        "worsened_count": 52
+      }
+    }
+  },
+  "touch_time240_mfe200": {
+    "closed_trades": 253,
+    "wins": 100,
+    "losses": 153,
+    "win_rate_pct": 39.526,
+    "gross_usd": 14.5715,
+    "fees_usd": 26.4334,
+    "realized_net_usd": -11.8619,
+    "ending_closed_equity_usd": 88.1381,
+    "profit_factor": 0.8611,
+    "realized_max_drawdown_usd": 18.6669,
+    "realized_max_drawdown_pct": 17.798,
+    "winning_trades_gross_usd": 73.5555,
+    "losing_trades_gross_usd": 85.4174,
+    "avg_win_usd": 0.7356,
+    "avg_loss_usd": -0.5583,
+    "max_trade_adverse_points": 3643.5,
+    "max_trade_favorable_points": 4078.0,
+    "config": "time240_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 158,
+      "no_progress_timeout": 58,
+      "supertrend_flip": 37
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 85.9897,
+    "max_excursion_below_previous_realized_peak_usd": 18.8915,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 9,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -68.7057,
+        "improvement_usd": 19.3273,
+        "improved_count": 23,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 56.8438,
+        "improvement_usd": -32.4418,
+        "improved_count": 1,
+        "worsened_count": 33
+      }
+    }
+  },
+  "touch_time240_mfe300": {
+    "closed_trades": 253,
+    "wins": 94,
+    "losses": 159,
+    "win_rate_pct": 37.154,
+    "gross_usd": 12.361,
+    "fees_usd": 26.4396,
+    "realized_net_usd": -14.0786,
+    "ending_closed_equity_usd": 85.9214,
+    "profit_factor": 0.824,
+    "realized_max_drawdown_usd": 19.0082,
+    "realized_max_drawdown_pct": 18.454,
+    "winning_trades_gross_usd": 65.9277,
+    "losing_trades_gross_usd": 80.0062,
+    "avg_win_usd": 0.7014,
+    "avg_loss_usd": -0.5032,
+    "max_trade_adverse_points": 3094.0,
+    "max_trade_favorable_points": 4078.0,
+    "config": "time240_mfe300",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 139,
+      "no_progress_timeout": 85,
+      "supertrend_flip": 29
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 83.773,
+    "max_excursion_below_previous_realized_peak_usd": 19.2329,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 10,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -60.9532,
+        "improvement_usd": 27.0798,
+        "improved_count": 30,
+        "worsened_count": 2
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 46.8746,
+        "improvement_usd": -42.4111,
+        "improved_count": 4,
+        "worsened_count": 49
+      }
+    }
+  },
+  "touch_time240_mfe500": {
+    "closed_trades": 253,
+    "wins": 93,
+    "losses": 160,
+    "win_rate_pct": 36.759,
+    "gross_usd": 2.9445,
+    "fees_usd": 26.4471,
+    "realized_net_usd": -23.5026,
+    "ending_closed_equity_usd": 76.4974,
+    "profit_factor": 0.6849,
+    "realized_max_drawdown_usd": 26.5196,
+    "realized_max_drawdown_pct": 26.233,
+    "winning_trades_gross_usd": 51.0845,
+    "losing_trades_gross_usd": 74.5871,
+    "avg_win_usd": 0.5493,
+    "avg_loss_usd": -0.4662,
+    "max_trade_adverse_points": 3094.0,
+    "max_trade_favorable_points": 4000.5,
+    "config": "time240_mfe500",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 500,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "no_progress_timeout": 127,
+      "profit_lock": 114,
+      "supertrend_flip": 12
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 74.3489,
+    "max_excursion_below_previous_realized_peak_usd": 26.7442,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 6,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -47.3371,
+        "improvement_usd": 40.6959,
+        "improved_count": 47,
+        "worsened_count": 2
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 23.8345,
+        "improvement_usd": -65.4512,
+        "improved_count": 11,
+        "worsened_count": 67
+      }
+    }
+  },
+  "touch_time480_mfe200": {
+    "closed_trades": 253,
+    "wins": 111,
+    "losses": 142,
+    "win_rate_pct": 43.874,
+    "gross_usd": 20.224,
+    "fees_usd": 26.4282,
+    "realized_net_usd": -6.2042,
+    "ending_closed_equity_usd": 93.7958,
+    "profit_factor": 0.9293,
+    "realized_max_drawdown_usd": 16.7636,
+    "realized_max_drawdown_pct": 15.491,
+    "winning_trades_gross_usd": 81.5034,
+    "losing_trades_gross_usd": 87.7076,
+    "avg_win_usd": 0.7343,
+    "avg_loss_usd": -0.6177,
+    "max_trade_adverse_points": 3643.5,
+    "max_trade_favorable_points": 4078.0,
+    "config": "time480_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 171,
+      "supertrend_flip": 48,
+      "no_progress_timeout": 34
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 87.3059,
+    "max_excursion_below_previous_realized_peak_usd": 17.4939,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 10,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -77.2861,
+        "improvement_usd": 10.7468,
+        "improved_count": 13,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 71.0819,
+        "improvement_usd": -18.2037,
+        "improved_count": 1,
+        "worsened_count": 20
+      }
+    }
+  },
+  "touch_time480_mfe300": {
+    "closed_trades": 253,
+    "wins": 110,
+    "losses": 143,
+    "win_rate_pct": 43.478,
+    "gross_usd": 24.848,
+    "fees_usd": 26.4301,
+    "realized_net_usd": -1.5821,
+    "ending_closed_equity_usd": 98.4179,
+    "profit_factor": 0.9805,
+    "realized_max_drawdown_usd": 13.8251,
+    "realized_max_drawdown_pct": 12.58,
+    "winning_trades_gross_usd": 79.5798,
+    "losing_trades_gross_usd": 81.1618,
+    "avg_win_usd": 0.7235,
+    "avg_loss_usd": -0.5676,
+    "max_trade_adverse_points": 3105.5,
+    "max_trade_favorable_points": 4078.0,
+    "config": "time480_mfe300",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 164,
+      "no_progress_timeout": 48,
+      "supertrend_flip": 41
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 89.9879,
+    "max_excursion_below_previous_realized_peak_usd": 14.5554,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 11,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -70.3833,
+        "improvement_usd": 17.6497,
+        "improved_count": 20,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 68.8012,
+        "improvement_usd": -20.4844,
+        "improved_count": 1,
+        "worsened_count": 27
+      }
+    }
+  },
+  "touch_time480_mfe500": {
+    "closed_trades": 253,
+    "wins": 104,
+    "losses": 149,
+    "win_rate_pct": 41.107,
+    "gross_usd": 9.8415,
+    "fees_usd": 26.4362,
+    "realized_net_usd": -16.5947,
+    "ending_closed_equity_usd": 83.4053,
+    "profit_factor": 0.8035,
+    "realized_max_drawdown_usd": 19.5573,
+    "realized_max_drawdown_pct": 19.389,
+    "winning_trades_gross_usd": 67.8694,
+    "losing_trades_gross_usd": 84.4641,
+    "avg_win_usd": 0.6526,
+    "avg_loss_usd": -0.5669,
+    "max_trade_adverse_points": 3105.5,
+    "max_trade_favorable_points": 4000.5,
+    "config": "time480_mfe500",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 500,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 142,
+      "no_progress_timeout": 82,
+      "supertrend_flip": 29
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 80.5784,
+    "max_excursion_below_previous_realized_peak_usd": 20.2875,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -64.2211,
+        "improvement_usd": 23.8118,
+        "improved_count": 32,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 47.6264,
+        "improvement_usd": -41.6592,
+        "improved_count": 5,
+        "worsened_count": 45
+      }
+    }
+  },
+  "touch_hourly_ema1": {
+    "closed_trades": 253,
+    "wins": 84,
+    "losses": 169,
+    "win_rate_pct": 33.202,
+    "gross_usd": 7.6845,
+    "fees_usd": 26.4406,
+    "realized_net_usd": -18.7561,
+    "ending_closed_equity_usd": 81.2439,
+    "profit_factor": 0.7489,
+    "realized_max_drawdown_usd": 21.546,
+    "realized_max_drawdown_pct": 21.361,
+    "winning_trades_gross_usd": 55.932,
+    "losing_trades_gross_usd": 74.6882,
+    "avg_win_usd": 0.6659,
+    "avg_loss_usd": -0.4419,
+    "max_trade_adverse_points": 2706.5,
+    "max_trade_favorable_points": 4000.5,
+    "config": "hourly_ema1",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "profit_lock": 132,
+      "hourly_ema_invalidation": 116,
+      "supertrend_flip": 5
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 79.1364,
+    "max_excursion_below_previous_realized_peak_usd": 21.7296,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -45.0207,
+        "improvement_usd": 43.0123,
+        "improved_count": 56,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 26.2645,
+        "improvement_usd": -63.0211,
+        "improved_count": 0,
+        "worsened_count": 60
+      }
+    }
+  },
+  "touch_hourly_ema2": {
+    "closed_trades": 253,
+    "wins": 97,
+    "losses": 156,
+    "win_rate_pct": 38.34,
+    "gross_usd": 15.063,
+    "fees_usd": 26.4332,
+    "realized_net_usd": -11.3702,
+    "ending_closed_equity_usd": 88.6298,
+    "profit_factor": 0.857,
+    "realized_max_drawdown_usd": 14.8201,
+    "realized_max_drawdown_pct": 14.693,
+    "winning_trades_gross_usd": 68.1317,
+    "losing_trades_gross_usd": 79.5019,
+    "avg_win_usd": 0.7024,
+    "avg_loss_usd": -0.5096,
+    "max_trade_adverse_points": 3094.0,
+    "max_trade_favorable_points": 4078.0,
+    "config": "hourly_ema2",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 2
+    },
+    "exit_counts": {
+      "profit_lock": 150,
+      "hourly_ema_invalidation": 89,
+      "supertrend_flip": 14
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 85.5497,
+    "max_excursion_below_previous_realized_peak_usd": 15.3163,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -53.8952,
+        "improvement_usd": 34.1378,
+        "improved_count": 47,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 42.5251,
+        "improvement_usd": -46.7606,
+        "improved_count": 0,
+        "worsened_count": 42
+      }
+    }
+  },
+  "touch_hybrid_hard800_time240mfe300": {
+    "closed_trades": 253,
+    "wins": 86,
+    "losses": 167,
+    "win_rate_pct": 33.992,
+    "gross_usd": 10.839,
+    "fees_usd": 26.4448,
+    "realized_net_usd": -15.6058,
+    "ending_closed_equity_usd": 84.3942,
+    "profit_factor": 0.7857,
+    "realized_max_drawdown_usd": 18.3956,
+    "realized_max_drawdown_pct": 18.238,
+    "winning_trades_gross_usd": 57.2041,
+    "losing_trades_gross_usd": 72.8099,
+    "avg_win_usd": 0.6652,
+    "avg_loss_usd": -0.436,
+    "max_trade_adverse_points": 799.5,
+    "max_trade_favorable_points": 4078.0,
+    "config": "hybrid_hard800_time240mfe300",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 128,
+      "no_progress_timeout": 59,
+      "hard_stop": 59,
+      "supertrend_flip": 7
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 82.2458,
+    "max_excursion_below_previous_realized_peak_usd": 18.6202,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 5,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -43.012,
+        "improvement_usd": 45.021,
+        "improved_count": 51,
+        "worsened_count": 3
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 27.4062,
+        "improvement_usd": -61.8794,
+        "improved_count": 4,
+        "worsened_count": 60
+      }
+    }
+  },
+  "touch_hybrid_hard800_ema1": {
+    "closed_trades": 253,
+    "wins": 80,
+    "losses": 173,
+    "win_rate_pct": 31.621,
+    "gross_usd": 8.361,
+    "fees_usd": 26.4447,
+    "realized_net_usd": -18.0837,
+    "ending_closed_equity_usd": 81.9163,
+    "profit_factor": 0.7439,
+    "realized_max_drawdown_usd": 20.8736,
+    "realized_max_drawdown_pct": 20.694,
+    "winning_trades_gross_usd": 52.5297,
+    "losing_trades_gross_usd": 70.6134,
+    "avg_win_usd": 0.6566,
+    "avg_loss_usd": -0.4082,
+    "max_trade_adverse_points": 799.5,
+    "max_trade_favorable_points": 4000.5,
+    "config": "hybrid_hard800_ema1",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "profit_lock": 127,
+      "hourly_ema_invalidation": 88,
+      "hard_stop": 38
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 79.8088,
+    "max_excursion_below_previous_realized_peak_usd": 21.0572,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -36.4946,
+        "improvement_usd": 51.5384,
+        "improved_count": 60,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 18.4109,
+        "improvement_usd": -70.8748,
+        "improved_count": 0,
+        "worsened_count": 65
+      }
+    }
+  },
+  "touch_hybrid_time240mfe300_ema1": {
+    "closed_trades": 253,
+    "wins": 80,
+    "losses": 173,
+    "win_rate_pct": 31.621,
+    "gross_usd": 4.253,
+    "fees_usd": 26.4453,
+    "realized_net_usd": -22.1923,
+    "ending_closed_equity_usd": 77.8077,
+    "profit_factor": 0.6936,
+    "realized_max_drawdown_usd": 24.9821,
+    "realized_max_drawdown_pct": 24.768,
+    "winning_trades_gross_usd": 50.2438,
+    "losing_trades_gross_usd": 72.4361,
+    "avg_win_usd": 0.628,
+    "avg_loss_usd": -0.4187,
+    "max_trade_adverse_points": 2706.5,
+    "max_trade_favorable_points": 4000.5,
+    "config": "hybrid_time240mfe300_ema1",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "profit_lock": 119,
+      "hourly_ema_invalidation": 94,
+      "no_progress_timeout": 35,
+      "supertrend_flip": 5
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 75.7002,
+    "max_excursion_below_previous_realized_peak_usd": 25.1658,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 6,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 61,
+        "original_net_usd": -88.033,
+        "new_net_usd": -42.651,
+        "improvement_usd": 45.382,
+        "improved_count": 56,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 192,
+        "original_net_usd": 89.2857,
+        "new_net_usd": 20.4586,
+        "improvement_usd": -68.827,
+        "improved_count": 4,
+        "worsened_count": 69
+      }
+    }
+  },
+  "reclaim_baseline": {
+    "closed_trades": 227,
+    "wins": 104,
+    "losses": 123,
+    "win_rate_pct": 45.815,
+    "gross_usd": 8.51,
+    "fees_usd": 23.8608,
+    "realized_net_usd": -15.3508,
+    "ending_closed_equity_usd": 84.6492,
+    "profit_factor": 0.8244,
+    "realized_max_drawdown_usd": 16.8722,
+    "realized_max_drawdown_pct": 16.749,
+    "winning_trades_gross_usd": 72.0692,
+    "losing_trades_gross_usd": 87.42,
+    "avg_win_usd": 0.693,
+    "avg_loss_usd": -0.7107,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4091.0,
+    "config": "baseline",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 160,
+      "supertrend_flip": 67
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 83.4514,
+    "max_excursion_below_previous_realized_peak_usd": 17.286,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 10,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -86.2259,
+        "improvement_usd": 0.0,
+        "improved_count": 0,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 70.875,
+        "improvement_usd": 0.0,
+        "improved_count": 0,
+        "worsened_count": 0
+      }
+    }
+  },
+  "reclaim_hard300": {
+    "closed_trades": 227,
+    "wins": 56,
+    "losses": 171,
+    "win_rate_pct": 24.67,
+    "gross_usd": 3.56,
+    "fees_usd": 23.8639,
+    "realized_net_usd": -20.3039,
+    "ending_closed_equity_usd": 79.6961,
+    "profit_factor": 0.6541,
+    "realized_max_drawdown_usd": 21.4478,
+    "realized_max_drawdown_pct": 21.448,
+    "winning_trades_gross_usd": 38.3956,
+    "losing_trades_gross_usd": 58.6994,
+    "avg_win_usd": 0.6856,
+    "avg_loss_usd": -0.3433,
+    "max_trade_adverse_points": 299.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hard300",
+    "rule": {
+      "hard_stop_points": 300,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "hard_stop": 142,
+      "profit_lock": 85
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 78.192,
+    "max_excursion_below_previous_realized_peak_usd": 21.808,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 4,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -27.3706,
+        "improvement_usd": 58.8552,
+        "improved_count": 66,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 7.0667,
+        "improvement_usd": -63.8083,
+        "improved_count": 0,
+        "worsened_count": 75
+      }
+    }
+  },
+  "reclaim_hard500": {
+    "closed_trades": 227,
+    "wins": 72,
+    "losses": 155,
+    "win_rate_pct": 31.718,
+    "gross_usd": 5.174,
+    "fees_usd": 23.8625,
+    "realized_net_usd": -18.6885,
+    "ending_closed_equity_usd": 81.3115,
+    "profit_factor": 0.7305,
+    "realized_max_drawdown_usd": 21.5194,
+    "realized_max_drawdown_pct": 21.08,
+    "winning_trades_gross_usd": 50.661,
+    "losing_trades_gross_usd": 69.3495,
+    "avg_win_usd": 0.7036,
+    "avg_loss_usd": -0.4474,
+    "max_trade_adverse_points": 499.5,
+    "max_trade_favorable_points": 4091.0,
+    "config": "hard500",
+    "rule": {
+      "hard_stop_points": 500,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 114,
+      "hard_stop": 111,
+      "supertrend_flip": 2
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 80.1509,
+    "max_excursion_below_previous_realized_peak_usd": 21.9332,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -40.4579,
+        "improvement_usd": 45.768,
+        "improved_count": 64,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 21.7694,
+        "improvement_usd": -49.1056,
+        "improved_count": 0,
+        "worsened_count": 46
+      }
+    }
+  },
+  "reclaim_hard800": {
+    "closed_trades": 227,
+    "wins": 91,
+    "losses": 136,
+    "win_rate_pct": 40.088,
+    "gross_usd": 8.555,
+    "fees_usd": 23.8587,
+    "realized_net_usd": -15.3037,
+    "ending_closed_equity_usd": 84.6963,
+    "profit_factor": 0.811,
+    "realized_max_drawdown_usd": 18.6911,
+    "realized_max_drawdown_pct": 18.335,
+    "winning_trades_gross_usd": 65.666,
+    "losing_trades_gross_usd": 80.9697,
+    "avg_win_usd": 0.7216,
+    "avg_loss_usd": -0.5954,
+    "max_trade_adverse_points": 799.0,
+    "max_trade_favorable_points": 4091.0,
+    "config": "hard800",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 136,
+      "hard_stop": 80,
+      "supertrend_flip": 11
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 82.8349,
+    "max_excursion_below_previous_realized_peak_usd": 19.1048,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 9,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -58.0789,
+        "improvement_usd": 28.147,
+        "improved_count": 46,
+        "worsened_count": 10
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 42.7752,
+        "improvement_usd": -28.0999,
+        "improved_count": 0,
+        "worsened_count": 24
+      }
+    }
+  },
+  "reclaim_hard1200": {
+    "closed_trades": 227,
+    "wins": 95,
+    "losses": 132,
+    "win_rate_pct": 41.85,
+    "gross_usd": -0.1575,
+    "fees_usd": 23.8576,
+    "realized_net_usd": -24.0151,
+    "ending_closed_equity_usd": 75.9849,
+    "profit_factor": 0.7357,
+    "realized_max_drawdown_usd": 26.2035,
+    "realized_max_drawdown_pct": 25.908,
+    "winning_trades_gross_usd": 66.8645,
+    "losing_trades_gross_usd": 90.8796,
+    "avg_win_usd": 0.7038,
+    "avg_loss_usd": -0.6885,
+    "max_trade_adverse_points": 1199.5,
+    "max_trade_favorable_points": 4091.0,
+    "config": "hard1200",
+    "rule": {
+      "hard_stop_points": 1200,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 147,
+      "hard_stop": 49,
+      "supertrend_flip": 31
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 74.5233,
+    "max_excursion_below_previous_realized_peak_usd": 26.6173,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -72.6919,
+        "improvement_usd": 13.534,
+        "improved_count": 28,
+        "worsened_count": 8
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 48.6768,
+        "improvement_usd": -22.1982,
+        "improved_count": 0,
+        "worsened_count": 13
+      }
+    }
+  },
+  "reclaim_hard2000": {
+    "closed_trades": 227,
+    "wins": 104,
+    "losses": 123,
+    "win_rate_pct": 45.815,
+    "gross_usd": 10.3415,
+    "fees_usd": 23.8597,
+    "realized_net_usd": -13.5182,
+    "ending_closed_equity_usd": 86.4818,
+    "profit_factor": 0.8421,
+    "realized_max_drawdown_usd": 16.1301,
+    "realized_max_drawdown_pct": 15.841,
+    "winning_trades_gross_usd": 72.0692,
+    "losing_trades_gross_usd": 85.5874,
+    "avg_win_usd": 0.693,
+    "avg_loss_usd": -0.6958,
+    "max_trade_adverse_points": 1998.0,
+    "max_trade_favorable_points": 4091.0,
+    "config": "hard2000",
+    "rule": {
+      "hard_stop_points": 2000,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 160,
+      "supertrend_flip": 57,
+      "hard_stop": 10
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 85.284,
+    "max_excursion_below_previous_realized_peak_usd": 16.5439,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 9,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -84.3932,
+        "improvement_usd": 1.8327,
+        "improved_count": 5,
+        "worsened_count": 5
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 70.875,
+        "improvement_usd": 0.0,
+        "improved_count": 0,
+        "worsened_count": 0
+      }
+    }
+  },
+  "reclaim_time120_mfe200": {
+    "closed_trades": 227,
+    "wins": 73,
+    "losses": 154,
+    "win_rate_pct": 32.159,
+    "gross_usd": -2.799,
+    "fees_usd": 23.8677,
+    "realized_net_usd": -26.6667,
+    "ending_closed_equity_usd": 73.3333,
+    "profit_factor": 0.6478,
+    "realized_max_drawdown_usd": 26.6667,
+    "realized_max_drawdown_pct": 26.667,
+    "winning_trades_gross_usd": 49.0375,
+    "losing_trades_gross_usd": 75.7042,
+    "avg_win_usd": 0.6717,
+    "avg_loss_usd": -0.4916,
+    "max_trade_adverse_points": 3553.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time120_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 120,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 112,
+      "no_progress_timeout": 87,
+      "supertrend_flip": 28
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 73.0934,
+    "max_excursion_below_previous_realized_peak_usd": 26.9066,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -57.8457,
+        "improvement_usd": 28.3801,
+        "improved_count": 39,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 31.179,
+        "improvement_usd": -39.696,
+        "improved_count": 0,
+        "worsened_count": 48
+      }
+    }
+  },
+  "reclaim_time240_mfe200": {
+    "closed_trades": 227,
+    "wins": 83,
+    "losses": 144,
+    "win_rate_pct": 36.564,
+    "gross_usd": -5.4645,
+    "fees_usd": 23.8678,
+    "realized_net_usd": -29.3323,
+    "ending_closed_equity_usd": 70.6677,
+    "profit_factor": 0.6449,
+    "realized_max_drawdown_usd": 29.3323,
+    "realized_max_drawdown_pct": 29.332,
+    "winning_trades_gross_usd": 53.2665,
+    "losing_trades_gross_usd": 82.5988,
+    "avg_win_usd": 0.6418,
+    "avg_loss_usd": -0.5736,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time240_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 125,
+      "no_progress_timeout": 61,
+      "supertrend_flip": 41
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 70.4401,
+    "max_excursion_below_previous_realized_peak_usd": 29.5599,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -68.6694,
+        "improvement_usd": 17.5565,
+        "improved_count": 26,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 39.3371,
+        "improvement_usd": -31.5379,
+        "improved_count": 1,
+        "worsened_count": 34
+      }
+    }
+  },
+  "reclaim_time240_mfe300": {
+    "closed_trades": 227,
+    "wins": 73,
+    "losses": 154,
+    "win_rate_pct": 32.159,
+    "gross_usd": -8.587,
+    "fees_usd": 23.8736,
+    "realized_net_usd": -32.4606,
+    "ending_closed_equity_usd": 67.5394,
+    "profit_factor": 0.5821,
+    "realized_max_drawdown_usd": 32.4606,
+    "realized_max_drawdown_pct": 32.461,
+    "winning_trades_gross_usd": 45.2134,
+    "losing_trades_gross_usd": 77.674,
+    "avg_win_usd": 0.6194,
+    "avg_loss_usd": -0.5044,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time240_mfe300",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 111,
+      "no_progress_timeout": 86,
+      "supertrend_flip": 30
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 67.3118,
+    "max_excursion_below_previous_realized_peak_usd": 32.6882,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -60.0158,
+        "improvement_usd": 26.2101,
+        "improved_count": 37,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 27.5552,
+        "improvement_usd": -43.3199,
+        "improved_count": 1,
+        "worsened_count": 48
+      }
+    }
+  },
+  "reclaim_time240_mfe500": {
+    "closed_trades": 227,
+    "wins": 72,
+    "losses": 155,
+    "win_rate_pct": 31.718,
+    "gross_usd": -7.276,
+    "fees_usd": 23.8724,
+    "realized_net_usd": -31.1484,
+    "ending_closed_equity_usd": 68.8516,
+    "profit_factor": 0.5382,
+    "realized_max_drawdown_usd": 31.1484,
+    "realized_max_drawdown_pct": 31.148,
+    "winning_trades_gross_usd": 36.3027,
+    "losing_trades_gross_usd": 67.4511,
+    "avg_win_usd": 0.5042,
+    "avg_loss_usd": -0.4352,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time240_mfe500",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 500,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "no_progress_timeout": 126,
+      "profit_lock": 84,
+      "supertrend_flip": 17
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 68.6239,
+    "max_excursion_below_previous_realized_peak_usd": 31.3761,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 6,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -46.326,
+        "improvement_usd": 39.8998,
+        "improved_count": 50,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 15.1776,
+        "improvement_usd": -55.6974,
+        "improved_count": 6,
+        "worsened_count": 70
+      }
+    }
+  },
+  "reclaim_time480_mfe200": {
+    "closed_trades": 227,
+    "wins": 94,
+    "losses": 133,
+    "win_rate_pct": 41.41,
+    "gross_usd": -0.242,
+    "fees_usd": 23.8653,
+    "realized_net_usd": -24.1073,
+    "ending_closed_equity_usd": 75.8927,
+    "profit_factor": 0.7153,
+    "realized_max_drawdown_usd": 24.1073,
+    "realized_max_drawdown_pct": 24.107,
+    "winning_trades_gross_usd": 60.5811,
+    "losing_trades_gross_usd": 84.6884,
+    "avg_win_usd": 0.6445,
+    "avg_loss_usd": -0.6368,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time480_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 140,
+      "supertrend_flip": 49,
+      "no_progress_timeout": 38
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 75.5369,
+    "max_excursion_below_previous_realized_peak_usd": 24.4631,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -75.4832,
+        "improvement_usd": 10.7427,
+        "improved_count": 17,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 51.3758,
+        "improvement_usd": -19.4992,
+        "improved_count": 0,
+        "worsened_count": 20
+      }
+    }
+  },
+  "reclaim_time480_mfe300": {
+    "closed_trades": 227,
+    "wins": 92,
+    "losses": 135,
+    "win_rate_pct": 40.529,
+    "gross_usd": -0.3775,
+    "fees_usd": 23.8688,
+    "realized_net_usd": -24.2463,
+    "ending_closed_equity_usd": 75.7537,
+    "profit_factor": 0.7011,
+    "realized_max_drawdown_usd": 24.9704,
+    "realized_max_drawdown_pct": 24.97,
+    "winning_trades_gross_usd": 56.8703,
+    "losing_trades_gross_usd": 81.1166,
+    "avg_win_usd": 0.6182,
+    "avg_loss_usd": -0.6009,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time480_mfe300",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 133,
+      "no_progress_timeout": 53,
+      "supertrend_flip": 41
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 74.5088,
+    "max_excursion_below_previous_realized_peak_usd": 25.4912,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -67.9154,
+        "improvement_usd": 18.3105,
+        "improved_count": 25,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 43.6691,
+        "improvement_usd": -27.206,
+        "improved_count": 0,
+        "worsened_count": 27
+      }
+    }
+  },
+  "reclaim_time480_mfe500": {
+    "closed_trades": 227,
+    "wins": 90,
+    "losses": 137,
+    "win_rate_pct": 39.648,
+    "gross_usd": -5.3305,
+    "fees_usd": 23.8708,
+    "realized_net_usd": -29.2013,
+    "ending_closed_equity_usd": 70.7987,
+    "profit_factor": 0.6126,
+    "realized_max_drawdown_usd": 29.2013,
+    "realized_max_drawdown_pct": 29.201,
+    "winning_trades_gross_usd": 46.1708,
+    "losing_trades_gross_usd": 75.3721,
+    "avg_win_usd": 0.513,
+    "avg_loss_usd": -0.5502,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time480_mfe500",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 500,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 109,
+      "no_progress_timeout": 88,
+      "supertrend_flip": 30
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 70.464,
+    "max_excursion_below_previous_realized_peak_usd": 29.536,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -58.1116,
+        "improvement_usd": 28.1143,
+        "improved_count": 36,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 28.9103,
+        "improvement_usd": -41.9648,
+        "improved_count": 5,
+        "worsened_count": 46
+      }
+    }
+  },
+  "reclaim_hourly_ema1": {
+    "closed_trades": 227,
+    "wins": 60,
+    "losses": 167,
+    "win_rate_pct": 26.432,
+    "gross_usd": -6.608,
+    "fees_usd": 23.8702,
+    "realized_net_usd": -30.4782,
+    "ending_closed_equity_usd": 69.5218,
+    "profit_factor": 0.5545,
+    "realized_max_drawdown_usd": 31.3139,
+    "realized_max_drawdown_pct": 31.054,
+    "winning_trades_gross_usd": 37.9329,
+    "losing_trades_gross_usd": 68.4111,
+    "avg_win_usd": 0.6322,
+    "avg_loss_usd": -0.4096,
+    "max_trade_adverse_points": 1579.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hourly_ema1",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "hourly_ema_invalidation": 132,
+      "profit_lock": 92,
+      "supertrend_flip": 3
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 69.3382,
+    "max_excursion_below_previous_realized_peak_usd": 31.4975,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 5,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -36.1298,
+        "improvement_usd": 50.0961,
+        "improved_count": 63,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 5.6515,
+        "improvement_usd": -65.2235,
+        "improved_count": 0,
+        "worsened_count": 68
+      }
+    }
+  },
+  "reclaim_hourly_ema2": {
+    "closed_trades": 227,
+    "wins": 73,
+    "losses": 154,
+    "win_rate_pct": 32.159,
+    "gross_usd": -0.3755,
+    "fees_usd": 23.87,
+    "realized_net_usd": -24.2455,
+    "ending_closed_equity_usd": 75.7545,
+    "profit_factor": 0.6687,
+    "realized_max_drawdown_usd": 24.9786,
+    "realized_max_drawdown_pct": 24.797,
+    "winning_trades_gross_usd": 48.9473,
+    "losing_trades_gross_usd": 73.1928,
+    "avg_win_usd": 0.6705,
+    "avg_loss_usd": -0.4753,
+    "max_trade_adverse_points": 3553.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hourly_ema2",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 2
+    },
+    "exit_counts": {
+      "profit_lock": 116,
+      "hourly_ema_invalidation": 92,
+      "supertrend_flip": 19
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 75.4988,
+    "max_excursion_below_previous_realized_peak_usd": 25.2342,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -51.5296,
+        "improvement_usd": 34.6963,
+        "improved_count": 47,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 27.2841,
+        "improvement_usd": -43.591,
+        "improved_count": 0,
+        "worsened_count": 44
+      }
+    }
+  },
+  "reclaim_hybrid_hard800_time240mfe300": {
+    "closed_trades": 227,
+    "wins": 68,
+    "losses": 159,
+    "win_rate_pct": 29.956,
+    "gross_usd": -8.571,
+    "fees_usd": 23.8666,
+    "realized_net_usd": -32.4376,
+    "ending_closed_equity_usd": 67.5624,
+    "profit_factor": 0.563,
+    "realized_max_drawdown_usd": 32.4376,
+    "realized_max_drawdown_pct": 32.438,
+    "winning_trades_gross_usd": 41.7899,
+    "losing_trades_gross_usd": 74.2274,
+    "avg_win_usd": 0.6146,
+    "avg_loss_usd": -0.4668,
+    "max_trade_adverse_points": 797.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hybrid_hard800_time240mfe300",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 102,
+      "no_progress_timeout": 65,
+      "hard_stop": 55,
+      "supertrend_flip": 5
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 67.3348,
+    "max_excursion_below_previous_realized_peak_usd": 32.6652,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 4,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -45.0525,
+        "improvement_usd": 41.1733,
+        "improved_count": 59,
+        "worsened_count": 3
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 12.615,
+        "improvement_usd": -58.26,
+        "improved_count": 1,
+        "worsened_count": 57
+      }
+    }
+  },
+  "reclaim_hybrid_hard800_ema1": {
+    "closed_trades": 227,
+    "wins": 60,
+    "losses": 167,
+    "win_rate_pct": 26.432,
+    "gross_usd": -5.839,
+    "fees_usd": 23.869,
+    "realized_net_usd": -29.708,
+    "ending_closed_equity_usd": 70.292,
+    "profit_factor": 0.5608,
+    "realized_max_drawdown_usd": 30.9292,
+    "realized_max_drawdown_pct": 30.556,
+    "winning_trades_gross_usd": 37.9329,
+    "losing_trades_gross_usd": 67.6409,
+    "avg_win_usd": 0.6322,
+    "avg_loss_usd": -0.405,
+    "max_trade_adverse_points": 799.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hybrid_hard800_ema1",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "hourly_ema_invalidation": 109,
+      "profit_lock": 92,
+      "hard_stop": 25,
+      "supertrend_flip": 1
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 70.1084,
+    "max_excursion_below_previous_realized_peak_usd": 31.1128,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 5,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -35.1646,
+        "improvement_usd": 51.0612,
+        "improved_count": 64,
+        "worsened_count": 2
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 5.4566,
+        "improvement_usd": -65.4184,
+        "improved_count": 0,
+        "worsened_count": 68
+      }
+    }
+  },
+  "reclaim_hybrid_time240mfe300_ema1": {
+    "closed_trades": 227,
+    "wins": 56,
+    "losses": 171,
+    "win_rate_pct": 24.67,
+    "gross_usd": -6.097,
+    "fees_usd": 23.8673,
+    "realized_net_usd": -29.9643,
+    "ending_closed_equity_usd": 70.0357,
+    "profit_factor": 0.5378,
+    "realized_max_drawdown_usd": 30.7335,
+    "realized_max_drawdown_pct": 30.499,
+    "winning_trades_gross_usd": 34.864,
+    "losing_trades_gross_usd": 64.8283,
+    "avg_win_usd": 0.6226,
+    "avg_loss_usd": -0.3791,
+    "max_trade_adverse_points": 1356.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hybrid_time240mfe300_ema1",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "hourly_ema_invalidation": 110,
+      "profit_lock": 86,
+      "no_progress_timeout": 29,
+      "supertrend_flip": 2
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 69.8521,
+    "max_excursion_below_previous_realized_peak_usd": 30.9171,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 5,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 67,
+        "original_net_usd": -86.2259,
+        "new_net_usd": -33.8069,
+        "improvement_usd": 52.419,
+        "improved_count": 65,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 160,
+        "original_net_usd": 70.875,
+        "new_net_usd": 3.8426,
+        "improvement_usd": -67.0324,
+        "improved_count": 1,
+        "worsened_count": 73
+      }
+    }
+  },
+  "combined_baseline": {
+    "closed_trades": 297,
+    "wins": 149,
+    "losses": 148,
+    "win_rate_pct": 50.168,
+    "gross_usd": 20.159,
+    "fees_usd": 31.331,
+    "realized_net_usd": -11.172,
+    "ending_closed_equity_usd": 88.828,
+    "profit_factor": 0.9012,
+    "realized_max_drawdown_usd": 20.7601,
+    "realized_max_drawdown_pct": 20.582,
+    "winning_trades_gross_usd": 101.9514,
+    "losing_trades_gross_usd": 113.1235,
+    "avg_win_usd": 0.6842,
+    "avg_loss_usd": -0.7643,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4091.0,
+    "config": "baseline",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 220,
+      "supertrend_flip": 77
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 78.9388,
+    "max_excursion_below_previous_realized_peak_usd": 21.9272,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 10,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -111.5018,
+        "improvement_usd": 0.0,
+        "improved_count": 0,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 100.3298,
+        "improvement_usd": 0.0,
+        "improved_count": 0,
+        "worsened_count": 0
+      }
+    }
+  },
+  "combined_hard300": {
+    "closed_trades": 297,
+    "wins": 73,
+    "losses": 224,
+    "win_rate_pct": 24.579,
+    "gross_usd": 1.6855,
+    "fees_usd": 31.3395,
+    "realized_net_usd": -29.654,
+    "ending_closed_equity_usd": 70.346,
+    "profit_factor": 0.6103,
+    "realized_max_drawdown_usd": 32.044,
+    "realized_max_drawdown_pct": 31.895,
+    "winning_trades_gross_usd": 46.4433,
+    "losing_trades_gross_usd": 76.0973,
+    "avg_win_usd": 0.6362,
+    "avg_loss_usd": -0.3397,
+    "max_trade_adverse_points": 299.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hard300",
+    "rule": {
+      "hard_stop_points": 300,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "hard_stop": 183,
+      "profit_lock": 114
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 68.4119,
+    "max_excursion_below_previous_realized_peak_usd": 32.0543,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 4,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -31.5824,
+        "improvement_usd": 79.9194,
+        "improved_count": 76,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 1.9284,
+        "improvement_usd": -98.4013,
+        "improved_count": 0,
+        "worsened_count": 106
+      }
+    }
+  },
+  "combined_hard500": {
+    "closed_trades": 297,
+    "wins": 94,
+    "losses": 203,
+    "win_rate_pct": 31.65,
+    "gross_usd": -0.703,
+    "fees_usd": 31.335,
+    "realized_net_usd": -32.038,
+    "ending_closed_equity_usd": 67.962,
+    "profit_factor": 0.6557,
+    "realized_max_drawdown_usd": 34.4747,
+    "realized_max_drawdown_pct": 34.383,
+    "winning_trades_gross_usd": 61.0139,
+    "losing_trades_gross_usd": 93.0519,
+    "avg_win_usd": 0.6491,
+    "avg_loss_usd": -0.4584,
+    "max_trade_adverse_points": 499.5,
+    "max_trade_favorable_points": 4091.0,
+    "config": "hard500",
+    "rule": {
+      "hard_stop_points": 500,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "hard_stop": 149,
+      "profit_lock": 146,
+      "supertrend_flip": 2
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 65.2848,
+    "max_excursion_below_previous_realized_peak_usd": 34.9815,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 5,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -46.6717,
+        "improvement_usd": 64.8301,
+        "improved_count": 72,
+        "worsened_count": 3
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 14.6337,
+        "improvement_usd": -85.6961,
+        "improved_count": 0,
+        "worsened_count": 74
+      }
+    }
+  },
+  "combined_hard800": {
+    "closed_trades": 297,
+    "wins": 123,
+    "losses": 174,
+    "win_rate_pct": 41.414,
+    "gross_usd": 9.6465,
+    "fees_usd": 31.3354,
+    "realized_net_usd": -21.6889,
+    "ending_closed_equity_usd": 78.3111,
+    "profit_factor": 0.7904,
+    "realized_max_drawdown_usd": 26.9821,
+    "realized_max_drawdown_pct": 26.677,
+    "winning_trades_gross_usd": 81.7758,
+    "losing_trades_gross_usd": 103.4646,
+    "avg_win_usd": 0.6648,
+    "avg_loss_usd": -0.5946,
+    "max_trade_adverse_points": 799.5,
+    "max_trade_favorable_points": 4091.0,
+    "config": "hard800",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 182,
+      "hard_stop": 106,
+      "supertrend_flip": 9
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 73.5562,
+    "max_excursion_below_previous_realized_peak_usd": 27.5865,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -67.5238,
+        "improvement_usd": 43.978,
+        "improved_count": 59,
+        "worsened_count": 9
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 45.8349,
+        "improvement_usd": -54.4949,
+        "improved_count": 0,
+        "worsened_count": 38
+      }
+    }
+  },
+  "combined_hard1200": {
+    "closed_trades": 297,
+    "wins": 135,
+    "losses": 162,
+    "win_rate_pct": 45.455,
+    "gross_usd": 9.722,
+    "fees_usd": 31.3334,
+    "realized_net_usd": -21.6114,
+    "ending_closed_equity_usd": 78.3886,
+    "profit_factor": 0.8101,
+    "realized_max_drawdown_usd": 27.6011,
+    "realized_max_drawdown_pct": 27.169,
+    "winning_trades_gross_usd": 92.2037,
+    "losing_trades_gross_usd": 113.8151,
+    "avg_win_usd": 0.683,
+    "avg_loss_usd": -0.7026,
+    "max_trade_adverse_points": 1199.5,
+    "max_trade_favorable_points": 4091.0,
+    "config": "hard1200",
+    "rule": {
+      "hard_stop_points": 1200,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 201,
+      "hard_stop": 67,
+      "supertrend_flip": 29
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 73.3843,
+    "max_excursion_below_previous_realized_peak_usd": 28.2055,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -87.3379,
+        "improvement_usd": 24.1639,
+        "improved_count": 36,
+        "worsened_count": 12
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 65.7265,
+        "improvement_usd": -34.6033,
+        "improved_count": 0,
+        "worsened_count": 19
+      }
+    }
+  },
+  "combined_hard2000": {
+    "closed_trades": 297,
+    "wins": 147,
+    "losses": 150,
+    "win_rate_pct": 49.495,
+    "gross_usd": 19.103,
+    "fees_usd": 31.3347,
+    "realized_net_usd": -12.2317,
+    "ending_closed_equity_usd": 87.7683,
+    "profit_factor": 0.8907,
+    "realized_max_drawdown_usd": 21.6302,
+    "realized_max_drawdown_pct": 21.444,
+    "winning_trades_gross_usd": 99.6814,
+    "losing_trades_gross_usd": 111.9131,
+    "avg_win_usd": 0.6781,
+    "avg_loss_usd": -0.7461,
+    "max_trade_adverse_points": 1998.5,
+    "max_trade_favorable_points": 4091.0,
+    "config": "hard2000",
+    "rule": {
+      "hard_stop_points": 2000,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 218,
+      "supertrend_flip": 58,
+      "hard_stop": 21
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 78.0686,
+    "max_excursion_below_previous_realized_peak_usd": 22.7973,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 11,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -106.0576,
+        "improvement_usd": 5.4442,
+        "improved_count": 13,
+        "worsened_count": 6
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 93.8259,
+        "improvement_usd": -6.5038,
+        "improved_count": 0,
+        "worsened_count": 2
+      }
+    }
+  },
+  "combined_time120_mfe200": {
+    "closed_trades": 297,
+    "wins": 104,
+    "losses": 193,
+    "win_rate_pct": 35.017,
+    "gross_usd": 9.42,
+    "fees_usd": 31.3387,
+    "realized_net_usd": -21.9187,
+    "ending_closed_equity_usd": 78.0813,
+    "profit_factor": 0.7649,
+    "realized_max_drawdown_usd": 24.5676,
+    "realized_max_drawdown_pct": 24.391,
+    "winning_trades_gross_usd": 71.3112,
+    "losing_trades_gross_usd": 93.2299,
+    "avg_win_usd": 0.6857,
+    "avg_loss_usd": -0.4831,
+    "max_trade_adverse_points": 3643.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time120_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 120,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 157,
+      "no_progress_timeout": 109,
+      "supertrend_flip": 31
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 75.9176,
+    "max_excursion_below_previous_realized_peak_usd": 24.8075,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -68.5666,
+        "improvement_usd": 42.9352,
+        "improved_count": 46,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 46.6479,
+        "improvement_usd": -53.6818,
+        "improved_count": 2,
+        "worsened_count": 61
+      }
+    }
+  },
+  "combined_time240_mfe200": {
+    "closed_trades": 297,
+    "wins": 116,
+    "losses": 181,
+    "win_rate_pct": 39.057,
+    "gross_usd": -3.324,
+    "fees_usd": 31.3403,
+    "realized_net_usd": -34.6643,
+    "ending_closed_equity_usd": 65.3357,
+    "profit_factor": 0.6905,
+    "realized_max_drawdown_usd": 37.4541,
+    "realized_max_drawdown_pct": 37.133,
+    "winning_trades_gross_usd": 77.3308,
+    "losing_trades_gross_usd": 111.9951,
+    "avg_win_usd": 0.6666,
+    "avg_loss_usd": -0.6188,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time240_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 176,
+      "no_progress_timeout": 74,
+      "supertrend_flip": 47
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 63.1843,
+    "max_excursion_below_previous_realized_peak_usd": 37.6817,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 9,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -90.095,
+        "improvement_usd": 21.4068,
+        "improved_count": 29,
+        "worsened_count": 1
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 55.4308,
+        "improvement_usd": -44.899,
+        "improved_count": 2,
+        "worsened_count": 42
+      }
+    }
+  },
+  "combined_time240_mfe300": {
+    "closed_trades": 297,
+    "wins": 108,
+    "losses": 189,
+    "win_rate_pct": 36.364,
+    "gross_usd": -9.158,
+    "fees_usd": 31.3484,
+    "realized_net_usd": -40.5064,
+    "ending_closed_equity_usd": 59.4936,
+    "profit_factor": 0.6189,
+    "realized_max_drawdown_usd": 43.2962,
+    "realized_max_drawdown_pct": 42.925,
+    "winning_trades_gross_usd": 65.7926,
+    "losing_trades_gross_usd": 106.2991,
+    "avg_win_usd": 0.6092,
+    "avg_loss_usd": -0.5624,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time240_mfe300",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 157,
+      "no_progress_timeout": 104,
+      "supertrend_flip": 36
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 57.3421,
+    "max_excursion_below_previous_realized_peak_usd": 43.5239,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 10,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -80.7872,
+        "improvement_usd": 30.7147,
+        "improved_count": 39,
+        "worsened_count": 2
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 40.2807,
+        "improvement_usd": -60.049,
+        "improved_count": 4,
+        "worsened_count": 59
+      }
+    }
+  },
+  "combined_time240_mfe500": {
+    "closed_trades": 297,
+    "wins": 104,
+    "losses": 193,
+    "win_rate_pct": 35.017,
+    "gross_usd": -19.4495,
+    "fees_usd": 31.3529,
+    "realized_net_usd": -50.8024,
+    "ending_closed_equity_usd": 49.1976,
+    "profit_factor": 0.5007,
+    "realized_max_drawdown_usd": 53.5923,
+    "realized_max_drawdown_pct": 53.132,
+    "winning_trades_gross_usd": 50.9411,
+    "losing_trades_gross_usd": 101.7435,
+    "avg_win_usd": 0.4898,
+    "avg_loss_usd": -0.5272,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time240_mfe500",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 500,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "no_progress_timeout": 152,
+      "profit_lock": 122,
+      "supertrend_flip": 23
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 47.0461,
+    "max_excursion_below_previous_realized_peak_usd": 53.8199,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 6,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -66.9461,
+        "improvement_usd": 44.5557,
+        "improved_count": 52,
+        "worsened_count": 2
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 16.1437,
+        "improvement_usd": -84.1861,
+        "improved_count": 10,
+        "worsened_count": 88
+      }
+    }
+  },
+  "combined_time480_mfe200": {
+    "closed_trades": 297,
+    "wins": 131,
+    "losses": 166,
+    "win_rate_pct": 44.108,
+    "gross_usd": 4.5705,
+    "fees_usd": 31.3332,
+    "realized_net_usd": -26.7627,
+    "ending_closed_equity_usd": 73.2373,
+    "profit_factor": 0.761,
+    "realized_max_drawdown_usd": 29.5525,
+    "realized_max_drawdown_pct": 29.299,
+    "winning_trades_gross_usd": 85.2181,
+    "losing_trades_gross_usd": 111.9807,
+    "avg_win_usd": 0.6505,
+    "avg_loss_usd": -0.6746,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time480_mfe200",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 200,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 192,
+      "supertrend_flip": 61,
+      "no_progress_timeout": 44
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 70.9788,
+    "max_excursion_below_previous_realized_peak_usd": 29.8872,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 8,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -98.647,
+        "improvement_usd": 12.8548,
+        "improved_count": 16,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 71.8844,
+        "improvement_usd": -28.4454,
+        "improved_count": 1,
+        "worsened_count": 27
+      }
+    }
+  },
+  "combined_time480_mfe300": {
+    "closed_trades": 297,
+    "wins": 128,
+    "losses": 169,
+    "win_rate_pct": 43.098,
+    "gross_usd": 5.7755,
+    "fees_usd": 31.3378,
+    "realized_net_usd": -25.5623,
+    "ending_closed_equity_usd": 74.4377,
+    "profit_factor": 0.7622,
+    "realized_max_drawdown_usd": 28.3521,
+    "realized_max_drawdown_pct": 28.109,
+    "winning_trades_gross_usd": 81.9504,
+    "losing_trades_gross_usd": 107.5127,
+    "avg_win_usd": 0.6402,
+    "avg_loss_usd": -0.6362,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time480_mfe300",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 183,
+      "no_progress_timeout": 61,
+      "supertrend_flip": 53
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 72.1791,
+    "max_excursion_below_previous_realized_peak_usd": 28.6868,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 9,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -90.9295,
+        "improvement_usd": 20.5723,
+        "improved_count": 24,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 65.3671,
+        "improvement_usd": -34.9626,
+        "improved_count": 1,
+        "worsened_count": 36
+      }
+    }
+  },
+  "combined_time480_mfe500": {
+    "closed_trades": 297,
+    "wins": 119,
+    "losses": 178,
+    "win_rate_pct": 40.067,
+    "gross_usd": -8.1345,
+    "fees_usd": 31.3444,
+    "realized_net_usd": -39.4789,
+    "ending_closed_equity_usd": 60.5211,
+    "profit_factor": 0.6413,
+    "realized_max_drawdown_usd": 42.2687,
+    "realized_max_drawdown_pct": 41.906,
+    "winning_trades_gross_usd": 70.5834,
+    "losing_trades_gross_usd": 110.0622,
+    "avg_win_usd": 0.5931,
+    "avg_loss_usd": -0.6183,
+    "max_trade_adverse_points": 4233.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "time480_mfe500",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 480,
+      "min_favorable_points": 500,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 157,
+      "no_progress_timeout": 99,
+      "supertrend_flip": 41
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 58.2626,
+    "max_excursion_below_previous_realized_peak_usd": 42.6034,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -82.945,
+        "improvement_usd": 28.5568,
+        "improved_count": 36,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 43.4661,
+        "improvement_usd": -56.8637,
+        "improved_count": 4,
+        "worsened_count": 59
+      }
+    }
+  },
+  "combined_hourly_ema1": {
+    "closed_trades": 297,
+    "wins": 92,
+    "losses": 205,
+    "win_rate_pct": 30.976,
+    "gross_usd": -7.441,
+    "fees_usd": 31.3434,
+    "realized_net_usd": -38.7844,
+    "ending_closed_equity_usd": 61.2156,
+    "profit_factor": 0.5985,
+    "realized_max_drawdown_usd": 41.5742,
+    "realized_max_drawdown_pct": 41.217,
+    "winning_trades_gross_usd": 57.8069,
+    "losing_trades_gross_usd": 96.5913,
+    "avg_win_usd": 0.6283,
+    "avg_loss_usd": -0.4712,
+    "max_trade_adverse_points": 2706.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hourly_ema1",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "hourly_ema_invalidation": 149,
+      "profit_lock": 141,
+      "supertrend_flip": 7
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 59.1081,
+    "max_excursion_below_previous_realized_peak_usd": 41.7579,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 4,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -54.7511,
+        "improvement_usd": 56.7507,
+        "improved_count": 70,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 15.9667,
+        "improvement_usd": -84.3631,
+        "improved_count": 0,
+        "worsened_count": 79
+      }
+    }
+  },
+  "combined_hourly_ema2": {
+    "closed_trades": 297,
+    "wins": 109,
+    "losses": 188,
+    "win_rate_pct": 36.7,
+    "gross_usd": -5.871,
+    "fees_usd": 31.3445,
+    "realized_net_usd": -37.2155,
+    "ending_closed_equity_usd": 62.7845,
+    "profit_factor": 0.6477,
+    "realized_max_drawdown_usd": 40.0053,
+    "realized_max_drawdown_pct": 39.662,
+    "winning_trades_gross_usd": 68.4067,
+    "losing_trades_gross_usd": 105.6222,
+    "avg_win_usd": 0.6276,
+    "avg_loss_usd": -0.5618,
+    "max_trade_adverse_points": 3553.0,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hourly_ema2",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 2
+    },
+    "exit_counts": {
+      "profit_lock": 165,
+      "hourly_ema_invalidation": 107,
+      "supertrend_flip": 25
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 60.605,
+    "max_excursion_below_previous_realized_peak_usd": 40.261,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 7,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -73.0555,
+        "improvement_usd": 38.4463,
+        "improved_count": 52,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 35.84,
+        "improvement_usd": -64.4897,
+        "improved_count": 0,
+        "worsened_count": 55
+      }
+    }
+  },
+  "combined_hybrid_hard800_time240mfe300": {
+    "closed_trades": 297,
+    "wins": 98,
+    "losses": 199,
+    "win_rate_pct": 32.997,
+    "gross_usd": -10.2795,
+    "fees_usd": 31.3459,
+    "realized_net_usd": -41.6254,
+    "ending_closed_equity_usd": 58.3746,
+    "profit_factor": 0.5765,
+    "realized_max_drawdown_usd": 44.4152,
+    "realized_max_drawdown_pct": 44.034,
+    "winning_trades_gross_usd": 56.6662,
+    "losing_trades_gross_usd": 98.2916,
+    "avg_win_usd": 0.5782,
+    "avg_loss_usd": -0.4939,
+    "max_trade_adverse_points": 799.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hybrid_hard800_time240mfe300",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": null
+    },
+    "exit_counts": {
+      "profit_lock": 141,
+      "hard_stop": 81,
+      "no_progress_timeout": 70,
+      "supertrend_flip": 5
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 56.2231,
+    "max_excursion_below_previous_realized_peak_usd": 44.6429,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 4,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -56.1551,
+        "improvement_usd": 55.3467,
+        "improved_count": 69,
+        "worsened_count": 3
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 14.5297,
+        "improvement_usd": -85.8,
+        "improved_count": 4,
+        "worsened_count": 75
+      }
+    }
+  },
+  "combined_hybrid_hard800_ema1": {
+    "closed_trades": 297,
+    "wins": 89,
+    "losses": 208,
+    "win_rate_pct": 29.966,
+    "gross_usd": -6.5205,
+    "fees_usd": 31.3446,
+    "realized_net_usd": -37.8651,
+    "ending_closed_equity_usd": 62.1349,
+    "profit_factor": 0.5907,
+    "realized_max_drawdown_usd": 40.8085,
+    "realized_max_drawdown_pct": 40.397,
+    "winning_trades_gross_usd": 54.6545,
+    "losing_trades_gross_usd": 92.5196,
+    "avg_win_usd": 0.6141,
+    "avg_loss_usd": -0.4448,
+    "max_trade_adverse_points": 799.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hybrid_hard800_ema1",
+    "rule": {
+      "hard_stop_points": 800,
+      "timeout_minutes": null,
+      "min_favorable_points": null,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "profit_lock": 137,
+      "hourly_ema_invalidation": 110,
+      "hard_stop": 49,
+      "supertrend_flip": 1
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 60.0275,
+    "max_excursion_below_previous_realized_peak_usd": 40.9921,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 5,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -47.1641,
+        "improvement_usd": 64.3377,
+        "improved_count": 74,
+        "worsened_count": 2
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 9.299,
+        "improvement_usd": -91.0307,
+        "improved_count": 0,
+        "worsened_count": 83
+      }
+    }
+  },
+  "combined_hybrid_time240mfe300_ema1": {
+    "closed_trades": 297,
+    "wins": 89,
+    "losses": 208,
+    "win_rate_pct": 29.966,
+    "gross_usd": -10.38,
+    "fees_usd": 31.3456,
+    "realized_net_usd": -41.7256,
+    "ending_closed_equity_usd": 58.2744,
+    "profit_factor": 0.5565,
+    "realized_max_drawdown_usd": 44.5154,
+    "realized_max_drawdown_pct": 44.133,
+    "winning_trades_gross_usd": 52.3652,
+    "losing_trades_gross_usd": 94.0908,
+    "avg_win_usd": 0.5884,
+    "avg_loss_usd": -0.4524,
+    "max_trade_adverse_points": 2706.5,
+    "max_trade_favorable_points": 4011.5,
+    "config": "hybrid_time240mfe300_ema1",
+    "rule": {
+      "hard_stop_points": null,
+      "timeout_minutes": 240,
+      "min_favorable_points": 300,
+      "ema_fail_closes": 1
+    },
+    "exit_counts": {
+      "profit_lock": 128,
+      "hourly_ema_invalidation": 128,
+      "no_progress_timeout": 35,
+      "supertrend_flip": 6
+    },
+    "open_trade": null,
+    "worst_open_mark_equity_usd": 56.1669,
+    "max_excursion_below_previous_realized_peak_usd": 44.699,
+    "note": "Only new exits prior to first profit-lock; 1m price execution, historical no funding/liquidation",
+    "profitable_full_months": 3,
+    "total_full_months": 22,
+    "impacts_vs_prior": {
+      "original_flip_group": {
+        "n": 77,
+        "original_net_usd": -111.5018,
+        "new_net_usd": -51.9822,
+        "improvement_usd": 59.5196,
+        "improved_count": 71,
+        "worsened_count": 0
+      },
+      "original_lock_group": {
+        "n": 220,
+        "original_net_usd": 100.3298,
+        "new_net_usd": 10.2565,
+        "improvement_usd": -90.0732,
+        "improved_count": 4,
+        "worsened_count": 88
+      }
+    }
+  }
+}
