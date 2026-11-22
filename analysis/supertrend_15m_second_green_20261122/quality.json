@@ -1,0 +1,31 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual archived 1m candles",
+  "observed_1m": 993600,
+  "observed_15m": 66240,
+  "completed_ist_months": "2025-01 through 2026-10",
+  "entry_types": {
+    "touch_immediate": "First 1m low crossing previous complete bullish Supertrend support, buy limit hypothetical mid",
+    "second_green_after_touch": "First support touch 15m candle as candle1; next candle green and ST stays bullish; market entry candle3 1m open",
+    "second_green_after_flip": "First bullish flip 15m candle as candle1; next candle green and ST stays bullish; market entry candle3 1m open"
+  },
+  "hard_sl_tp": "12 user SL:TP pairs in 100-point units, stop-first if both hit 1m",
+  "protections": [
+    "off",
+    "be_200",
+    "lock_500_200"
+  ],
+  "filters": "42 causal volume/ATR regimes from previous experiments",
+  "result_rows": 4536,
+  "first_passage_rows": 504,
+  "prior_parity": "First-passage +100/+200/+500/+1000=430/299/171/92 and 1:1 TP exits 325 all PASS",
+  "cost": "0.05% taker per side \u00d7 1.18 GST, 5 adverse price points per side",
+  "limitations": [
+    "No tick-level ordering within 1m bar; choose pessimistic stop-first",
+    "Original support-touch limit assumed filled upon 1m low touch (no orderbook queue)",
+    "Delayed entries modeled as market at first-minute open, adverse slip 5 points",
+    "No funding, spread, actual orderbook fill, margin, liquidation or leverage",
+    "No independent historical holdout; hindsight filter selection risk",
+    "Long only; user short mirror not assessed",
+    "Entry signal frequency changes; compare avg points/trade as well as totals"
+  ]
+}
