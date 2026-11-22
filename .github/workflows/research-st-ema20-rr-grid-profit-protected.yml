@@ -1,0 +1,46 @@
+name: BTC 1H ST EMA20 12 RR ratios with profit protection
+on:
+  push:
+    branches:
+      - research/st-ema20-rr-grid-profit-protected-20261122
+    paths:
+      - scripts/backtest_supertrend_ema20_rr_grid_profit_lock.py
+      - .github/workflows/research-st-ema20-rr-grid-profit-protected.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-st-ema20-rr-grid-profit-protected
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy
+      - name: Syntax validation
+        run: python -m py_compile scripts/backtest_supertrend_ema20_rr_grid_profit_lock.py
+      - name: Run 108 historical scenarios with one-minute stop-first replay
+        run: python scripts/backtest_supertrend_ema20_rr_grid_profit_lock.py
+      - name: Upload trades monthly results and quality metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-st-ema20-rr-grid-profit-protection
+          path: analysis/ema20_st_rr_grid_protected_1h/
+          if-no-files-found: warn
+      - name: Persist successful results on separate research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+rajkumar0rk@users.noreply.github.com"
+          git add analysis/ema20_st_rr_grid_protected_1h/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save EMA20 Supertrend RR grid profit protection results"
+            git pull --rebase origin research/st-ema20-rr-grid-profit-protected-20261122
+            git push origin HEAD:research/st-ema20-rr-grid-profit-protected-20261122
+          fi
