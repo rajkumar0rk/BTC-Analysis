@@ -198,7 +198,7 @@ def main():
       priority_modes={k:list(v) for k,v in PRIORITIES.items()},
       original_supertrend_exit=True,
       portfolio_exclusive=True,one_trade_per_ST_bull_cycle=True,
-      2025_and_2026_actual_exit_month_used=True,
+      actual_exit_month_used_for_2025_and_2026=True,
       pnl_units="BTC price points per 1 BTC equivalent",
       liquidation_and_funding_not_modeled=True,
       forward_tested=False),indent=2)+"\n")
