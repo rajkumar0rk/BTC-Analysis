@@ -106,7 +106,7 @@
     "slippage_points_each_side": 5.0
   },
   "simultaneous_exit_policy": "protective stop wins over fixed TP in same 1m OHLC bar",
-  "protective_arming_policy": "using current 1m high+low; simultaneous new protection and touch resolves at stop as pessimistic assumption; count flagged in result",
+  "protective_arming_policy": "using current 1m high+low; simultaneous new protection and touch assumes high-then-low, fills newly armed stop (NOT pre-activation open); when TP <= activation, TP precedes protection; count flagged in result",
   "gap_policy": "protective stop gap down exits at min(stop, 1m open)",
   "entry_minute": "No stop or favorable TP credited within entry minute",
   "stop_15m": "15m close below last closed bullish support or bearish flip; exit next 1m open",
