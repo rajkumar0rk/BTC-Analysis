@@ -13,7 +13,7 @@ MONTHS=pd.period_range("2025-01","2026-10",freq="M").astype(str).tolist()
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     raw,starts,ends,quality=read_archive()
-    raw=raw.loc[raw.index<pd.Timestamp("2026-11-01",tz="UTC")].copy()
+    raw=raw.loc[raw.index<pd.Timestamp("2026-11-01",tz="Asia/Kolkata").tz_convert("UTC")].copy()
     # Left-labelled 5m bars: signal from bar ending at timestamp+5m, never its start.
     bars=raw.resample("5min",label="left",closed="left").agg(
         {"open":"first","high":"max","low":"min","close":"last","volume":"sum","time":"count"})
