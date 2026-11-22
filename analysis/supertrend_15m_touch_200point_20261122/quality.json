@@ -1,0 +1,16 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m, archived Jan2025-Nov2026",
+  "observed_minutes": 993600,
+  "complete_15m": 66240,
+  "complete_ist_months": "2025-01 through 2026-10",
+  "period_by": "IST month of entry",
+  "lookahead_prevention": "All filters last closed 15m; 1m TP after entry minute; stop at 15m close",
+  "counts_are_non_additive": "42 filtered variants overlap",
+  "model_target": "gross 200 points above mid-entry before closing stop",
+  "model_costs": "0.05% taker per side +18% GST + 5 points adverse slip per side",
+  "limitations": [
+    "1m does not resolve same-minute order or limit-fill queue",
+    "No funding/spread/depth/liquidation/account return modeled",
+    "Historical research-exposed dates not untouched OOS"
+  ]
+}
