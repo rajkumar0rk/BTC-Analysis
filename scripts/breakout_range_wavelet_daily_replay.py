@@ -103,7 +103,10 @@ def replay(minute,daily,sig,name):
             elif side==-1 and row.high>=stop:close(t,max(price,stop),"stop")
         mark=cash+(side*qty*(last_close-entry) if side else 0)
         equity.append((t,mark))
-    if side:close(last_t,last_close,"end_of_data")
+    if side:
+        close(last_t,last_close,"end_of_data")
+        # Terminal mark must include the actual final liquidation fee.
+        equity[-1]=(last_t,cash)
     eq=pd.DataFrame(equity,columns=["t","nav"]).set_index("t")
     ist=eq.tz_convert("Asia/Kolkata")
     monthly=ist.nav.resample("MS").agg(["first","last"])
