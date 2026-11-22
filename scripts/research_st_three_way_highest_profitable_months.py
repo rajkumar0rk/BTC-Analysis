@@ -101,4 +101,3 @@ print("MAX_POSITIVE_MONTHS_SAME_FILTERS\n"+same[cols].to_string(index=False),flu
 print("MAX_POSITIVE_MONTHS_ALL_FILTERS_50\n"+all50[cols].to_string(index=False),flush=True)
 print("POSITIVE_MONTH_AUDIT_COMPLETED",len(df),flush=True)
 
-if __name__=="__main__":main()
