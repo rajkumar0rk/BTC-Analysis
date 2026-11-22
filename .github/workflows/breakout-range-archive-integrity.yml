@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/breakout-range-archive-integrity.yml'
       - 'scripts/breakout_range_validate_delta_1m_20261121.py'
+      - 'scripts/breakout_range_wavelet_daily_replay.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,3 +26,20 @@ jobs:
         with:
           name: breakout-range-btc-1m-integrity
           path: analysis/breakout_range_20261121/archive_validation_20261121.json
+
+  wavelet_daily_replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas PyWavelets
+      - name: Historical BTC 1m Wavelet-2B versus TwoB replay
+        run: python scripts/breakout_range_wavelet_daily_replay.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: breakout-range-wavelet-daily-evidence
+          path: analysis/breakout_range_wavelet_daily/
