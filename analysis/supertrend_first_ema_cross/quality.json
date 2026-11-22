@@ -1,0 +1,132 @@
+{
+  "source": "Authentic Delta Exchange India BTCUSD perpetual 1-minute candles",
+  "start_utc": "2025-01-01 00:00:00+00:00",
+  "end_utc": "2026-10-31 18:29:00+00:00",
+  "1m_candles": 963030,
+  "missing_candle_gaps": [],
+  "entries": "ST trend must be positive for previous AND current completed bar; EMA9 then crosses EMA21 on current completed bar; inverse for short",
+  "unit_tests": "PASSED explicit prior-ST, simultaneous flip exclusion, already-aligned exclusion, symmetric short tests",
+  "ratio_1_to_3": [
+    [
+      100,
+      300
+    ],
+    [
+      150,
+      450
+    ],
+    [
+      200,
+      600
+    ],
+    [
+      300,
+      900
+    ],
+    [
+      400,
+      1200
+    ],
+    [
+      500,
+      1500
+    ],
+    [
+      600,
+      1800
+    ],
+    [
+      800,
+      2400
+    ],
+    [
+      1000,
+      3000
+    ]
+  ],
+  "ratio_1_to_4": [
+    [
+      100,
+      400
+    ],
+    [
+      200,
+      800
+    ],
+    [
+      300,
+      1200
+    ],
+    [
+      400,
+      1600
+    ],
+    [
+      500,
+      2000
+    ],
+    [
+      600,
+      2400
+    ],
+    [
+      800,
+      3200
+    ],
+    [
+      1000,
+      4000
+    ]
+  ],
+  "other_pairs": [
+    [
+      100,
+      200
+    ],
+    [
+      200,
+      2000
+    ],
+    [
+      1000,
+      2000
+    ]
+  ],
+  "independent_timeframes_minutes": [
+    5,
+    15,
+    60
+  ],
+  "variants": 60,
+  "fee_including_gst_per_side": 0.00059,
+  "adverse_slippage_points_each_side": 5.0,
+  "signal_event_counts": {
+    "5": {
+      "timeframe_minutes": 5,
+      "completed_bars": 192606,
+      "raw_crossover_long": 1822,
+      "raw_crossover_short": 1716,
+      "valid_event_count": 3538,
+      "rejected_at_edge_or_unavailable_close": 0
+    },
+    "15": {
+      "timeframe_minutes": 15,
+      "completed_bars": 64202,
+      "raw_crossover_long": 556,
+      "raw_crossover_short": 561,
+      "valid_event_count": 1117,
+      "rejected_at_edge_or_unavailable_close": 0
+    },
+    "60": {
+      "timeframe_minutes": 60,
+      "completed_bars": 16050,
+      "raw_crossover_long": 120,
+      "raw_crossover_short": 131,
+      "valid_event_count": 251,
+      "rejected_at_edge_or_unavailable_close": 0
+    }
+  },
+  "data_caveat": "IST January 2025 first 330 minutes unavailable; other 21 IST months complete",
+  "validation_caveat": "Historical data used previously; 2026 not blind out-of-sample; no funding, order book or liquidation",
+  "drawdown_measure": "Peak to trough only at closed trades, not open-equity maximum"
+}
