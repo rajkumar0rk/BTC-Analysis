@@ -1,0 +1,48 @@
+{
+  "source": "Existing full 1m BTCUSD Reclaim baseline trade ledger, independently verified",
+  "original_profit_months_by_path": {
+    "open_high_low_close": 14,
+    "open_low_high_close": 15
+  },
+  "original_losing_months_by_path": {
+    "open_high_low_close": 8,
+    "open_low_high_close": 7
+  },
+  "entries_considered": 62,
+  "candidate_causal_gates": 139,
+  "distinct_masks_evaluated": 6768,
+  "strict_status_improvers": 330,
+  "strict_status_and_dollar_improvers": 62,
+  "signal_filters": "only completed 1h hour data, no month-name rules",
+  "baseline": "2% initial SL, 2-3-5% profit lock, volume >=1.25x",
+  "month_window_IST": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10"
+  ],
+  "limitations": [
+    "Search overfits 2025-26 data; 2026 not pristine unseen holdout",
+    "Skipping entry never creates a later substitute within ST cycle",
+    "Intra-minute paths assumed not tick reconstructed",
+    "No exchange funding, liquidation, margin or amendment latency"
+  ]
+}

@@ -1,0 +1,1101 @@
+filter_name,path,month_ist,baseline_usd,baseline_status,filtered_usd,filtered_status,original_profitable_month_preserved,profit_usd_not_decreased,trade_count_selected
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-07,3.199484,profit,0.991543,profit,True,False,4
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-09,-2.911479,loss,-0.879983,loss,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-07,4.284009,profit,2.076068,profit,True,False,4
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-09,-2.911479,loss,-0.879983,loss,True,True,1
+IST 12-24 AND adx14 <= 35 AND ema_slope_pct <= 0.1,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,1.987385,profit,True,True,3
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,1.987385,profit,True,True,3
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 30 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,-0.862445,loss,True,True,3
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,1.987385,profit,True,True,3
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,-0.862445,loss,True,True,3
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,1.987385,profit,True,True,3
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 30 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-04,-0.984376,loss,-0.862445,loss,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-05,0.988585,profit,0.548403,profit,True,False,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-10,-1.319047,loss,-1.319047,loss,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-04,-0.984376,loss,-0.862445,loss,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-05,0.988585,profit,0.548403,profit,True,False,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-10,-1.319047,loss,-1.319047,loss,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-04,-0.984376,loss,-0.862445,loss,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-05,0.988585,profit,0.548403,profit,True,False,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_high_low_close,2026-10,-1.319047,loss,-1.319047,loss,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-04,-0.984376,loss,-0.862445,loss,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-05,0.988585,profit,0.548403,profit,True,False,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 30 AND ema_slope_pct >= -0.2 AND volume_ratio <= 4,open_low_high_close,2026-10,-1.319047,loss,-1.319047,loss,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,1.500537,profit,True,False,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,5.307351,profit,True,True,4
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,0.0,flat,False,False,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,-3.733151,loss,True,True,3
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,2.21495,profit,True,True,3
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,0.0,flat,False,False,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,1.500537,profit,True,False,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,6.391876,profit,True,True,4
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-2.099171,loss,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,0.0,flat,False,False,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,-3.733151,loss,True,True,3
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,2.21495,profit,True,True,3
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,0.0,flat,False,False,0
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,-0.500903,loss,False,False,1
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND atr_expansion <= 1.1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-07,3.199484,profit,0.991543,profit,True,False,4
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-07,4.284009,profit,2.076068,profit,True,False,4
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct <= 0.1,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,-0.871563,loss,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,-0.871563,loss,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 60 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,-1.586429,loss,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,-1.586429,loss,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-06,4.923339,profit,2.997157,profit,True,False,4
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-07,3.199484,profit,0.991543,profit,True,False,4
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-06,3.851001,profit,1.924819,profit,True,False,4
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-07,4.284009,profit,2.076068,profit,True,False,4
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct <= 0.1,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,2.997157,profit,True,False,4
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,-0.871563,loss,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,1.924819,profit,True,False,4
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,-0.871563,loss,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 0.75 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-07,3.199484,profit,0.991543,profit,True,False,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-07,4.284009,profit,2.076068,profit,True,False,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.1,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct <= 0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-05,0.988585,profit,1.29343,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-05,0.988585,profit,1.29343,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND hourly_range_atr <= 2.5,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2025-12,-0.434855,loss,2.047661,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-05,0.988585,profit,1.262489,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-08,0.714602,profit,1.215505,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2025-12,0.4366,profit,2.919116,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-05,0.988585,profit,1.262489,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-08,0.714602,profit,1.215505,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND supertrend_gap_pct >= 0.5,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-05,0.988585,profit,1.29343,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-05,0.988585,profit,1.29343,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_gap_pct <= 1 AND volume_ratio <= 4,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-06,4.923339,profit,2.997157,profit,True,False,4
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-07,3.199484,profit,0.991543,profit,True,False,4
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2025-12,-0.434855,loss,2.722861,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-02,5.987289,profit,2.343431,profit,True,False,3
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-06,3.851001,profit,1.924819,profit,True,False,4
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-07,4.284009,profit,2.076068,profit,True,False,4
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2025-12,0.4366,profit,3.594316,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-04,-0.984376,loss,0.587044,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct <= 0.1 AND hourly_body_atr <= 1.5,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-06,4.923339,profit,2.997157,profit,True,False,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-04,-0.984376,loss,-0.871563,loss,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-06,3.851001,profit,1.924819,profit,True,False,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-04,-0.984376,loss,-0.871563,loss,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-06,0.986303,profit,0.504321,profit,True,False,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_body_atr <= 1.5,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-06,4.923339,profit,2.997157,profit,True,False,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-04,-0.984376,loss,-0.871563,loss,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-05,0.988585,profit,1.29343,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-06,3.851001,profit,1.924819,profit,True,False,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-04,-0.984376,loss,-0.871563,loss,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-05,0.988585,profit,1.29343,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-05,0.988585,profit,1.29343,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_high_low_close,2026-10,-1.319047,loss,-1.319047,loss,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-05,0.988585,profit,1.29343,profit,True,True,4
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-06,0.986303,profit,1.878465,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+adx14 <= 35 AND ema_slope_pct >= -0.2 AND hourly_range_atr <= 2.5,open_low_high_close,2026-10,-1.319047,loss,-1.319047,loss,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.405523,profit,True,True,3
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,-1.717326,loss,True,True,2
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-1.602894,loss,True,True,3
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,-0.434855,loss,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-2.911479,loss,True,True,3
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.405523,profit,True,True,3
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,-1.717326,loss,True,True,2
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-1.602894,loss,True,True,3
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,0.4366,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-2.911479,loss,True,True,3
+adx14 <= 40 AND dir_rsi14 <= 65 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-08,0.405523,profit,0.405523,profit,True,True,3
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-09,-1.717326,loss,-0.130897,loss,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-10,-1.602894,loss,-1.602894,loss,True,True,3
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2025-12,-0.434855,loss,-0.434855,loss,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-09,-2.911479,loss,-2.911479,loss,True,True,3
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-01,-2.187642,loss,0.0,flat,True,True,0
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-08,0.405523,profit,0.405523,profit,True,True,3
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-09,-1.717326,loss,-0.130897,loss,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-10,-1.602894,loss,-1.602894,loss,True,True,3
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2025-12,0.4366,profit,0.4366,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-09,-2.911479,loss,-2.911479,loss,True,True,3
+adx14 <= 40 AND ema_gap_pct <= 1 AND ema_slope_pct >= -0.2,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+all,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+all,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+all,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+all,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+all,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+all,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+all,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+all,open_high_low_close,2025-08,0.405523,profit,0.405523,profit,True,True,3
+all,open_high_low_close,2025-09,-1.717326,loss,-1.717326,loss,True,True,2
+all,open_high_low_close,2025-10,-1.602894,loss,-1.602894,loss,True,True,3
+all,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+all,open_high_low_close,2025-12,-0.434855,loss,-0.434855,loss,True,True,5
+all,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+all,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+all,open_high_low_close,2026-03,-1.421728,loss,-1.421728,loss,True,True,1
+all,open_high_low_close,2026-04,-0.984376,loss,-0.984376,loss,True,True,5
+all,open_high_low_close,2026-05,0.988585,profit,0.988585,profit,True,True,6
+all,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+all,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+all,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+all,open_high_low_close,2026-09,-2.911479,loss,-2.911479,loss,True,True,3
+all,open_high_low_close,2026-10,-1.319047,loss,-1.319047,loss,True,True,1
+all,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+all,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+all,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+all,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+all,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+all,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+all,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+all,open_low_high_close,2025-08,0.405523,profit,0.405523,profit,True,True,3
+all,open_low_high_close,2025-09,-1.717326,loss,-1.717326,loss,True,True,2
+all,open_low_high_close,2025-10,-1.602894,loss,-1.602894,loss,True,True,3
+all,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+all,open_low_high_close,2025-12,0.4366,profit,0.4366,profit,True,True,5
+all,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+all,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+all,open_low_high_close,2026-03,-1.421728,loss,-1.421728,loss,True,True,1
+all,open_low_high_close,2026-04,-0.984376,loss,-0.984376,loss,True,True,5
+all,open_low_high_close,2026-05,0.988585,profit,0.988585,profit,True,True,6
+all,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+all,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+all,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+all,open_low_high_close,2026-09,-2.911479,loss,-2.911479,loss,True,True,3
+all,open_low_high_close,2026-10,-1.319047,loss,-1.319047,loss,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-06,4.923339,profit,4.923339,profit,True,True,5
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-07,3.199484,profit,3.199484,profit,True,True,5
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2025-12,-0.434855,loss,1.400823,profit,True,True,4
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-07,2.237246,profit,2.237246,profit,True,True,3
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_high_low_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-01,-2.187642,loss,-2.187642,loss,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-02,5.987289,profit,5.987289,profit,True,True,5
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-03,1.651791,profit,1.651791,profit,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-04,0.312497,profit,0.312497,profit,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-05,0.104966,profit,0.104966,profit,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-06,3.851001,profit,3.851001,profit,True,True,5
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-07,4.284009,profit,4.284009,profit,True,True,5
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-08,0.405523,profit,0.415725,profit,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-09,-1.717326,loss,0.0,flat,True,True,0
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-10,-1.602894,loss,-3.709218,loss,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-11,1.625956,profit,1.625956,profit,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2025-12,0.4366,profit,2.272278,profit,True,True,4
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-01,1.657403,profit,1.657403,profit,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-02,1.306978,profit,1.306978,profit,True,True,1
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-03,-1.421728,loss,0.0,flat,True,True,0
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-04,-0.984376,loss,-2.321052,loss,True,True,4
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-05,0.988585,profit,2.732412,profit,True,True,5
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-06,0.986303,profit,0.986303,profit,True,True,4
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-07,1.577732,profit,1.577732,profit,True,True,3
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-08,0.714602,profit,0.714602,profit,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-09,-2.911479,loss,-1.611877,loss,True,True,2
+ema_gap_pct <= 1 AND adx14 <= 35,open_low_high_close,2026-10,-1.319047,loss,0.0,flat,True,True,0
