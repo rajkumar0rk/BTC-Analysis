@@ -1,0 +1,59 @@
+{
+  "run": "BTCUSD 15m Supertrend second green percentage SL TP grid",
+  "all_configurations": 16380,
+  "entry_methods": [
+    "after_line_touch",
+    "after_bullish_flip"
+  ],
+  "filter_combinations": 42,
+  "sl_percentages": [
+    0.1,
+    0.12,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.4,
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    5.0,
+    "none"
+  ],
+  "tp_percentages": [
+    0.1,
+    0.12,
+    0.15,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    5.0
+  ],
+  "source_1m_candles": 993600,
+  "fifteen_min_bars": 66240,
+  "period": "22 completed IST entry months Jan2025-Oct2026",
+  "same_filter_fixed_point_reference": "previous 300-point SL/1200-point TP entry cohort 108 touch vs 197 flip PARITY PASS",
+  "total_net_positive_configs": 1063,
+  "net_positive_configs_min60trades": 147,
+  "model": "third 15m candle open, buy fill mid+5 pt slip, TP & SL levels as percent of simulated fill, 1m high/low stop-first on simultaneous hit, 15m ST close-stop next 1m open",
+  "fee": "0.05% taker each direction with 18% GST on fee",
+  "units": "1 BTC-equivalent profit in BTCUSD price points, NOT leverage or account return",
+  "absent": [
+    "funding",
+    "bid/ask book",
+    "fill queue",
+    "dynamic spread",
+    "margin",
+    "liquidation"
+  ],
+  "note": "Hindsight grid; years 2025 and 2026 already used for prior research. No untouched out-of-sample or forward validation."
+}
