@@ -138,3 +138,9 @@
 - Canonical owner `NicolasBohn/VAMOStrategy` replaces redirected `TPTBusiness/VAMOStrategy`; exact ROC14/ATR14 oscillator, EMA9 crossover, ATR14/ATR28 filter, close-anchored 1ATR/2ATR brackets recovered. Unused riskPerTrade input and actual 100%-equity default sizing identified. LICENSE is standard MIT but Strategy.pine explicitly adds no-selling prohibition: HOLD licensing review. Reported publisher PF1.301/660 trades is NOT local evidence.
 - Other sources screened: 1xBear RSI/Stoch volume trailing (trend overlap), ben-eastwest S&P daily weakening momentum (not continuation). Both SKIP pending any renewed source-fidelity case.
 - Actual branch Actions GET: nine runs, latest M14 historical run `45008927897` completed success. New distinct authentic historical baselines **0**, variants **0**, new Actions **0**, no local P&L; next resolve license and find lower-turnover complete acceleration rules. No unrelated writes.
+
+
+### M26 — 2026-11-23 IST — VAMO fee reproducibility gate, no historical replay
+- Source pinned NicolasBohn/VAMOStrategy 96da7a5; Pine strategy declares **no commission_type/value** and publisher README gives no commission/slippage settings. Published 660 trades/PF1.301/+5.65% and 594 trades/PF1.146/+1.48% are NOT Delta net results.
+- Mandated 0.118% roundtrip fee+GST implies 77.88% and 70.092% initial-equity-equivalent **constant-notional** costs respectively, NOT actual NAV loss. Original 100%-equity sizing and potential reversals require real leg-by-leg replay. High turnover ~94–99 trades/day. License conflict remains HOLD.
+- [M26_VAMO_FEE_REPRODUCIBILITY_GATE.md](M26_VAMO_FEE_REPRODUCIBILITY_GATE.md) commit 651a6cd86b3680b90291d847d4b25a73b7c0b758. Nine prior Actions runs confirmed, latest 45008927897 SUCCESS. New distinct historical backtests 0, variants 0, launches 0, new verified P&L none. Next: move to distinct licensed lower-turnover momentum source; no unrelated writes.
