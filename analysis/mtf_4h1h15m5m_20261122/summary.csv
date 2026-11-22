@@ -1,0 +1,5 @@
+asset,data_period_utc,slippage_usd_per_market_or_stop_fill,initial_equity_usd,ending_equity_usd,net_usd,return_pct,trades,longs,shorts,win_rate_pct,profit_factor,max_closed_trade_drawdown_pct,stops,targets,profitable_months,losing_months,no_trade_months,year2025_net_usd,year2026_jan_oct_net_usd,scenario,candidate_5m_signals,observed_one_minute_candles
+BTCUSD,2025-01-01 through 2026-10-31,2.0,10000.0,6346.7632,-3653.2368,-36.5324,370,158,212,25.6757,0.6576,37.1327,275,95,4,17,1,-2156.7826,-1496.4543,reference_2usd,1026,963360
+BTCUSD,2025-01-01 through 2026-10-31,5.0,10000.0,6222.415,-3777.585,-37.7758,370,158,212,25.6757,0.6475,38.2167,275,95,4,17,1,-2221.0476,-1556.5374,stress_5usd,1026,963360
+ETHUSD,2025-01-01 through 2026-10-31,2.0,10000.0,5864.6057,-4135.3943,-41.3539,403,204,199,32.0099,0.7008,41.3918,274,129,7,14,1,-2420.8339,-1714.5607,reference_2usd,1092,963360
+ETHUSD,2025-01-01 through 2026-10-31,5.0,10000.0,3202.1269,-6797.873,-67.9787,403,204,199,32.0099,0.5049,67.9787,274,129,0,21,1,-4187.6205,-2610.2526,stress_5usd,1092,963360
