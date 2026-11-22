@@ -1,0 +1,36 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "qty_btc": 0.001,
+  "initial_account_usd": 100.0,
+  "side_taker_fee_including_gst": 0.00059,
+  "slippage_btc_price_points_per_side": 5.0,
+  "entry_methods": [
+    "touch",
+    "reclaim",
+    "combined"
+  ],
+  "target_scenarios_points": [
+    200,
+    500,
+    1000
+  ],
+  "fallback_exit": "next minute open after confirmed completed 1H Supertrend reversal",
+  "max_one_fill_per_supertrend_cycle": true,
+  "protective_stop_enabled": false,
+  "trailing_enabled": false,
+  "caveats": [
+    "WITHOUT a protective stop, a real margin position can liquidate before profit target or trend flip",
+    "TP on entry minute is NOT assumed since OHLC does not reveal whether entry preceded high/low",
+    "Profit target executed at exact level minus 5 price points exit slippage; no positive-gap improvement",
+    "No funding, bid-ask spread/depth, exchange latency, liquidation or capital feasibility model",
+    "No untouched out-of-sample holdout; 200/500/1000 came from past losing-trade MFE study",
+    "November 2026 partial; months in IST booked by EXIT time",
+    "No artificial close of still-open position at end of data"
+  ]
+}
