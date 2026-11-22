@@ -245,3 +245,5 @@ if __name__=="__main__":
     p.add_argument("--donchian",type=Path,required=True)
     p.add_argument("--out",type=Path,default=Path(DNAME))
     run(p.parse_args())
+
+# Research replay trigger: 50x cross budget fixed at $500 notional.
