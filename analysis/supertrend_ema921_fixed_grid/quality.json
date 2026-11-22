@@ -1,0 +1,169 @@
+{
+  "source": "Delta India BTCUSD 1m authentic OHLCV",
+  "start_utc": "2025-01-01 00:00:00+00:00",
+  "end_utc": "2026-10-31 18:29:00+00:00",
+  "source_candles": 963030,
+  "gaps": [],
+  "SL_points": [
+    100,
+    200,
+    300,
+    500,
+    800,
+    1000
+  ],
+  "TP_points": [
+    100,
+    200,
+    300,
+    500,
+    800,
+    1000,
+    1500,
+    2000,
+    3000
+  ],
+  "timeframes_minutes": [
+    5,
+    15,
+    60
+  ],
+  "variants": 162,
+  "fee_gst_each_side": 0.00059,
+  "slippage_price_points_each_side": 5.0,
+  "source_coverage_IST": {
+    "2025-01": {
+      "expected": 44640,
+      "observed": 44310,
+      "complete": false
+    },
+    "2025-02": {
+      "expected": 40320,
+      "observed": 40320,
+      "complete": true
+    },
+    "2025-03": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2025-04": {
+      "expected": 43200,
+      "observed": 43200,
+      "complete": true
+    },
+    "2025-05": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2025-06": {
+      "expected": 43200,
+      "observed": 43200,
+      "complete": true
+    },
+    "2025-07": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2025-08": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2025-09": {
+      "expected": 43200,
+      "observed": 43200,
+      "complete": true
+    },
+    "2025-10": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2025-11": {
+      "expected": 43200,
+      "observed": 43200,
+      "complete": true
+    },
+    "2025-12": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2026-01": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2026-02": {
+      "expected": 40320,
+      "observed": 40320,
+      "complete": true
+    },
+    "2026-03": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2026-04": {
+      "expected": 43200,
+      "observed": 43200,
+      "complete": true
+    },
+    "2026-05": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2026-06": {
+      "expected": 43200,
+      "observed": 43200,
+      "complete": true
+    },
+    "2026-07": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2026-08": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    },
+    "2026-09": {
+      "expected": 43200,
+      "observed": 43200,
+      "complete": true
+    },
+    "2026-10": {
+      "expected": 44640,
+      "observed": 44640,
+      "complete": true
+    }
+  },
+  "signal_stats": {
+    "5": {
+      "tf_minutes": 5,
+      "higher_bars": 192606,
+      "aligned_long_bars": 83020,
+      "aligned_short_bars": 79961
+    },
+    "15": {
+      "tf_minutes": 15,
+      "higher_bars": 64202,
+      "aligned_long_bars": 26752,
+      "aligned_short_bars": 26251
+    },
+    "60": {
+      "tf_minutes": 60,
+      "higher_bars": 16050,
+      "aligned_long_bars": 6616,
+      "aligned_short_bars": 6863
+    }
+  },
+  "baseline_100_200_parity": "PASSED for trades, wins and compounded returns",
+  "multiple_testing_warning": "Historical data already researched, no blind holdout",
+  "drawdown_measure": "Trade-close peak-to-trough, excludes intratrade margin risks"
+}
