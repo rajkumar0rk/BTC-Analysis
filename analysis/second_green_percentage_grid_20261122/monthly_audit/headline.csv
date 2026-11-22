@@ -1,0 +1,4 @@
+scenario,trades,winners,winrate_pct,positive_months,losing_months,total_net_pts,net_pts_2025,net_pts_2026,highest_month,highest_month_pts,worst_month,worst_month_pts
+line_touch_sl1_tp1p5,108,37,34.26,13,9,8822.33,8534.87,287.46,2025-10,4378.16,2026-03,-1852.88
+line_touch_sl0p4_tp1p5,108,31,28.7,13,9,3740.01,2624.29,1115.72,2026-09,2487.2,2026-03,-2343.3
+bullish_flip_sl1_tp1p5,197,68,34.52,9,13,-24633.67,-8823.11,-15810.59,2025-10,3747.8,2025-02,-8674.09
