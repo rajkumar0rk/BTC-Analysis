@@ -1,0 +1,44 @@
+name: BTC second green entry percentage SL TP grid through 5 pct
+on:
+  push:
+    branches:
+      - research/second-green-percentage-grid-20261122
+    paths:
+      - scripts/research_second_green_percent_grid.py
+      - .github/workflows/research-second-green-percent-grid.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-second-green-percent-grid-20261122
+  cancel-in-progress: false
+jobs:
+  grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install vectorized backtest dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Run 16380 percent risk reward combinations
+        run: python -u scripts/research_second_green_percent_grid.py
+      - name: Save all results and test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: second-green-percent-sl-tp-16380
+          path: analysis/second_green_percentage_grid_20261122/
+          if-no-files-found: warn
+      - name: Commit results only to research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/second_green_percentage_grid_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: publish 16380 green candle percentage exit backtests"
+            git push origin HEAD:research/second-green-percentage-grid-20261122
+          fi
