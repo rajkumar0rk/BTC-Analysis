@@ -1,4 +1,4 @@
-name: Mean Reversion MR002 BTC 1m historical baseline
+name: Mean Reversion MR003 Keltner BTC 1m historical baseline
 on:
   push:
     branches:
@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/mean-reversion-mr002.yml
       - scripts/research_mean_reversion_mr002_20261121.py
+      - scripts/research_mean_reversion_mr003_20261122.py
   workflow_dispatch:
 jobs:
   replay:
@@ -28,12 +29,12 @@ jobs:
           paths=sorted(glob.glob('data/delta_india/BTCUSD/1m/20??-??.csv.gz'))
           print(json.dumps({p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in paths},indent=2))
           PY
-      - name: Run source-derived zero-slippage BTC 1m replay with fees and GST
-        run: python scripts/research_mean_reversion_mr002_20261121.py
+      - name: Run MR003 source-defined Keltner fade zero-slippage BTC 1m replay
+        run: python scripts/research_mean_reversion_mr003_20261122.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mr002-btc-1m-zero-slippage-baseline
-          path: analysis/mean_reversion_research/MR002/results/
+          name: mr003-keltner-btc-1m-baseline
+          path: analysis/mean_reversion_research/MR003/results/
           if-no-files-found: warn
           retention-days: 90
