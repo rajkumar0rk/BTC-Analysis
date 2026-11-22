@@ -247,7 +247,7 @@ def smoke_test():
                    LADDERS["100_200_400_800"],True)
     assert r["exit_mid"]==80100 and r["rungs"]==(100,),r
     # SHORT adverse vs favorable path symmetry.
-    r=simulate_bar((80000,80100,79780,79800),-1,80000,80000,None,
+    r=simulate_bar((80000,80100,79780,79790),-1,80000,80000,None,
                    LADDERS["100_200_400_800"],False)
     assert r["exit_mid"] is None and r["stop"]==79800,r
     r=simulate_bar((80000,79780,80100,80090),-1,80000,80000,None,
