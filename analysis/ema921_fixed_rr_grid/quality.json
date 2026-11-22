@@ -1,0 +1,235 @@
+{
+  "candle_count": 992160,
+  "source": "Delta Exchange India BTCUSD 1m",
+  "data_start_utc": "2025-01-01 00:00:00+00:00",
+  "data_end_utc": "2026-11-20 23:59:00+00:00",
+  "source_gaps": [],
+  "month_coverage_IST": {
+    "2025-01": {
+      "expected": 44640,
+      "observed": 44310,
+      "missing": 330
+    },
+    "2025-02": {
+      "expected": 40320,
+      "observed": 40320,
+      "missing": 0
+    },
+    "2025-03": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-04": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2025-05": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-06": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2025-07": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-08": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-09": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2025-10": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-11": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2025-12": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-01": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-02": {
+      "expected": 40320,
+      "observed": 40320,
+      "missing": 0
+    },
+    "2026-03": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-04": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2026-05": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-06": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2026-07": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-08": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-09": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2026-10": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    }
+  },
+  "signal_stats": {
+    "complete_5m_bars": 198412,
+    "candidate_5m_crosses": 1643,
+    "long_candidates": 827,
+    "short_candidates": 816
+  },
+  "pairs_checked": [
+    [
+      50,
+      100
+    ],
+    [
+      50,
+      150
+    ],
+    [
+      50,
+      200
+    ],
+    [
+      75,
+      150
+    ],
+    [
+      75,
+      225
+    ],
+    [
+      100,
+      150
+    ],
+    [
+      100,
+      200
+    ],
+    [
+      100,
+      300
+    ],
+    [
+      100,
+      400
+    ],
+    [
+      100,
+      500
+    ],
+    [
+      150,
+      300
+    ],
+    [
+      150,
+      450
+    ],
+    [
+      150,
+      600
+    ],
+    [
+      200,
+      300
+    ],
+    [
+      200,
+      400
+    ],
+    [
+      200,
+      600
+    ],
+    [
+      200,
+      800
+    ],
+    [
+      250,
+      500
+    ],
+    [
+      250,
+      750
+    ],
+    [
+      250,
+      1000
+    ],
+    [
+      300,
+      600
+    ],
+    [
+      300,
+      900
+    ],
+    [
+      300,
+      1200
+    ],
+    [
+      400,
+      800
+    ],
+    [
+      400,
+      1200
+    ],
+    [
+      400,
+      1600
+    ]
+  ],
+  "baseline_parity": "PASS",
+  "slippage_each_side_points": 5.0,
+  "fee_each_side_with_GST_fraction": 0.00059,
+  "caveats": "OHLC only, no live bids/asks, funding, slippage distribution or liquidation. 2026 already researched."
+}
