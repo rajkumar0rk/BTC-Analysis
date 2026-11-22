@@ -1,0 +1,28 @@
+{
+  "base_ladder_entry_pct": [
+    0.16,
+    0.2,
+    0.3,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "initial_SL_pct": 3.0,
+  "qualifying_touch_entries": 52,
+  "completed_ist_months": [
+    "2025-01",
+    "2026-10"
+  ],
+  "baseline_no_trade_month": "2025-07",
+  "candidate_lock_schedules": 805,
+  "path_level_tests": 1610,
+  "strict_no_month_dollar_decrease_while_improving_worstpath_net": 98,
+  "all_profitable_months_preserved_higher_worstpath_net": 245,
+  "basis": "historical BTCUSD 1-minute OHLC 1H signals two alternative within-minute paths",
+  "limitations": [
+    "Overfit in-sample; not forward validated",
+    "Underlying 3% initial SL is not account risk",
+    "Additional slippage sensitivity approximates without rerunning order fills",
+    "No funding, liquidation, orderbook, live amendment latency"
+  ]
+}
