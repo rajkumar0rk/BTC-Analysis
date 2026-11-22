@@ -20,6 +20,10 @@ assert ((f.high>=f[["open","close","low"]].max(axis=1))&(f.low<=f[["open","close
 local=f.index.tz_convert("Asia/Kolkata")
 daily=f.assign(day=local.floor("D")).groupby("day").agg(close=("close","last"),n=("close","size"))
 daily["valid"]=daily.n.eq(1440)
+# UTC archive begins 2025-01-01 00:00: Jan 1 IST lacks its first 330 minutes.
+# Exclude this boundary day from signal formation, never label it testable.
+assert daily.iloc[0].n==1110, "Unexpected first-day boundary; inspect source"
+daily=daily.iloc[1:].copy()
 assert daily.valid.all(), "Incomplete IST daily source candle; fail closed"
 c=daily.close.to_numpy(dtype=float)
 k=np.full(len(c),np.nan)
