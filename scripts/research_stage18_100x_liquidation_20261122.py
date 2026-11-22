@@ -283,3 +283,5 @@ if __name__=="__main__":
     p.add_argument("--out",type=Path,
       default=Path("analysis/stage18_100x_liquidation_20261122"))
     run(p.parse_args())
+
+# Repeatable push run after workflow registration; unchanged algorithm.
