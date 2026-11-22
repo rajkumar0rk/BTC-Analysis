@@ -158,3 +158,11 @@
 - Freqtrade Strategy004: CCI/Stochastic oversold reversion rather than impulse acceleration. SKIP.
 - PineGen-AI market-open EMA/RSI/ATR: no complete immutable executable source/parameters recovered; NOT REPRODUCIBLE and trend-crossover overlap.
 - Actual branch Actions listing: 9 runs; historical M14 run 45008927897 completed SUCCESS. No pending repair claimed. Three distinct sources screened; zero new historical backtests, variants or workflow launches; no new P&L. Next: source-complete licensed acceleration mechanism and real BTC2025 replay. No changes to main, other families, VPS or trading.
+
+
+## 2026-11-23 05:16 IST — M29 source execution gate; no historical replay
+- Read codex novelty instructions, M28 handoff, and branch Actions list: nine existing runs, M14 45008927897 completed SUCCESS, no pending fix.
+- Screened ChaoZhang JiaYiBing FMZ Pine (commit 7853bb2; blob 1d9a556): advertised momentum14 and SMA50 filters are unused; actual entry is SMA23 price crossover + Bollinger breakout, default quantity ~2x equity rather than advertised 20%, overlapping Stage19/23/24. SKIP.
+- Screened NEOMA P-CAM Freqtrade (commit 86f6b90; blob 7bd5140): depends on unsaved remote physics/Ising outputs; archived OHLCV cannot reconstruct entries; NOT REPRODUCIBLE. Do not call untrusted external service.
+- Full immutable URLs, rule/exit/fee/causal/license caveats: [M29_EXECUTION_SOURCE_GATE.md](M29_EXECUTION_SOURCE_GATE.md), commit 035bd0cbe6d89cff9f9029402666541060568a84.
+- 2 newly screened sources, 0 eligible, 0 new authentic historical backtests, 0 variants, 0 workflow launches, 0 new P&L. Next source-complete licensed impulse acceleration baseline with novel mechanism and genuine BTC2025 replay. No unrelated writes.
