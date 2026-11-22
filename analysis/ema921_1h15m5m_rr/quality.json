@@ -1,0 +1,150 @@
+{
+  "data_source": "GitHub BTC-Analysis Delta Exchange India BTCUSD 1m OHLCV archive",
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "one_minute_rows": 992160,
+  "num_partitions": 23,
+  "gaps": [],
+  "coverage_ist": {
+    "2025-01": {
+      "observed_minutes": 44310,
+      "expected_minutes": 44640,
+      "complete_ist_month": false,
+      "missing_minutes": 330
+    },
+    "2025-02": {
+      "observed_minutes": 40320,
+      "expected_minutes": 40320,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-03": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-04": {
+      "observed_minutes": 43200,
+      "expected_minutes": 43200,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-05": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-06": {
+      "observed_minutes": 43200,
+      "expected_minutes": 43200,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-07": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-08": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-09": {
+      "observed_minutes": 43200,
+      "expected_minutes": 43200,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-10": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-11": {
+      "observed_minutes": 43200,
+      "expected_minutes": 43200,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2025-12": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-01": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-02": {
+      "observed_minutes": 40320,
+      "expected_minutes": 40320,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-03": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-04": {
+      "observed_minutes": 43200,
+      "expected_minutes": 43200,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-05": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-06": {
+      "observed_minutes": 43200,
+      "expected_minutes": 43200,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-07": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-08": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-09": {
+      "observed_minutes": 43200,
+      "expected_minutes": 43200,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    },
+    "2026-10": {
+      "observed_minutes": 44640,
+      "expected_minutes": 44640,
+      "complete_ist_month": true,
+      "missing_minutes": 0
+    }
+  },
+  "signals": {
+    "complete_5m_bars": 198412,
+    "candidate_5m_crosses": 1643,
+    "long_candidates": 827,
+    "short_candidates": 816
+  },
+  "full_2025_months": 11,
+  "full_2026_Jan_Oct_months": 10
+}
