@@ -275,7 +275,7 @@ def smoke_test():
     x=LADDERS["L01_0p12_0p20_0p30"]
     r=simulate_bar((100000,100210,99900,100150),1,100000,100000,None,x,False)
     assert abs(r["exit_mid"]-100200)<1e-7 and r["rungs"]==(0.12,0.20),r
-    r=simulate_bar((100000,100330,100300,100310),1,100000,100000,None,x,False)
+    r=simulate_bar((100000,100330,100305,100310),1,100000,100000,None,x,False)
     assert r["exit_mid"] is None and abs(r["stop"]-100300)<1e-7,r
 
     # Different entry prices must produce different number-of-points triggers.
