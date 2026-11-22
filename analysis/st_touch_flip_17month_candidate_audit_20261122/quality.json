@@ -1,0 +1,10 @@
+{
+  "independently_replayed_settings": 6,
+  "source_2025_selected_study": "analysis/st_touch_flip_causal_regime_filters_20261122",
+  "year_2026_was_examined_before_selection": true,
+  "full_period": "Jan 2025 to Oct 2026 IST",
+  "original_trade_exit_rules_preserved": true,
+  "per_strategy_filters_retained": true,
+  "exclusive_one_position": true,
+  "selected_by_2026_backtest_diagnostics": true
+}
