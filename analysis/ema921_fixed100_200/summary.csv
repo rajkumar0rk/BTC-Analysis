@@ -1,0 +1,3 @@
+case,trades,wins,losses,win_rate_pct,targets_hit,stops_hit,month_flat_exits,data_boundary_exits,gross_points_per_btc,total_fee_gst_per_btc,total_slippage_per_btc,net_points_per_btc,2025_return_pct,2026_JanOct_return_pct,total_1x_account_return_pct,max_trade_close_drawdown_pct,positive_months,overlap,weekend,out_of_period
+weekdays_IST_SL100_TP200,1130,359,771,31.76991150442478,359,771,0,0,293.5,120152.6993,11300.0,-131159.19689999998,-55.473194761236655,-48.20647265793481,-76.93799695411299,76.96696569435119,0,10,453,50
+all_days_SL100_TP200,1549,482,1067,31.116849580374435,482,1067,0,0,-2611.5,164320.6969,15490.0,-182422.1934,-67.31593404961775,-60.577371563995584,-87.11508212260217,87.13126717982543,0,44,0,50

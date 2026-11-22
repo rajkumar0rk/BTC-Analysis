@@ -1,0 +1,151 @@
+{
+  "candle_count": 992160,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "gaps": [],
+  "signal_stats": {
+    "complete_5m_bars": 198412,
+    "candidate_5m_crosses": 1643,
+    "long_candidates": 827,
+    "short_candidates": 816
+  },
+  "coverage": {
+    "2025-01": {
+      "actual": 44310,
+      "expected": 44640,
+      "missing": 330,
+      "complete": false
+    },
+    "2025-02": {
+      "actual": 40320,
+      "expected": 40320,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-03": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-04": {
+      "actual": 43200,
+      "expected": 43200,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-05": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-06": {
+      "actual": 43200,
+      "expected": 43200,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-07": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-08": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-09": {
+      "actual": 43200,
+      "expected": 43200,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-10": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-11": {
+      "actual": 43200,
+      "expected": 43200,
+      "missing": 0,
+      "complete": true
+    },
+    "2025-12": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-01": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-02": {
+      "actual": 40320,
+      "expected": 40320,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-03": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-04": {
+      "actual": 43200,
+      "expected": 43200,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-05": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-06": {
+      "actual": 43200,
+      "expected": 43200,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-07": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-08": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-09": {
+      "actual": 43200,
+      "expected": 43200,
+      "missing": 0,
+      "complete": true
+    },
+    "2026-10": {
+      "actual": 44640,
+      "expected": 44640,
+      "missing": 0,
+      "complete": true
+    }
+  },
+  "entry_fill_slip_usd": 5.0,
+  "exit_fill_slip_usd": 5.0,
+  "taker_fee_with_gst_each_side": 0.00059,
+  "fixed_sl_pts": 100.0,
+  "fixed_tp_pts": 200.0
+}
