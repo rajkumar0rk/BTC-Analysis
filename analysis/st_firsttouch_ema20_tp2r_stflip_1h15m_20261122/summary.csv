@@ -1,0 +1,9 @@
+symbol,timeframe,path_assumption,trades,winning_trades,losing_trades,win_rate_pct,tp_2r_exits,supertrend_flip_exits,supertrend_flip_losses,sample_end_forced_exits,profit_factor,net_profit_usd,net_return_pct,max_floating_drawdown_pct,min_floating_equity_usd,equity_at_or_below_zero,first_zero_equity_utc,profitable_months,losing_months,positive_2025_pct,return_2026_jan_oct_pct,longest_hold_hours,first_touch_epochs,invalid_first_touch_risk,supertrend_epochs,epochs_traded,fees_gst_usd
+BTCUSD,15m,O-H-L-C,1554,550,1004,35.393,522,1031,1001,1,0.6163,-935.3781,-93.5378,93.7421,64.0976,False,,1,21,-79.8964,-67.8555,42.48,1559,5,1563,1554,593.8167
+BTCUSD,15m,O-L-H-C,1554,549,1005,35.328,522,1031,1001,1,0.6162,-935.4414,-93.5441,93.7552,64.0348,False,,1,21,-79.9161,-67.8555,42.48,1559,5,1563,1554,593.7959
+BTCUSD,60m,O-H-L-C,396,152,244,38.384,143,252,243,1,0.6809,-643.5534,-64.3553,66.4537,355.2862,False,,9,13,-55.6589,-19.6126,87.25,396,0,396,396,258.0437
+BTCUSD,60m,O-L-H-C,396,152,244,38.384,144,251,242,1,0.6826,-640.4759,-64.0476,66.164,358.3536,False,,9,13,-55.276,-19.6126,87.25,396,0,396,396,258.7983
+ETHUSD,15m,O-H-L-C,1422,523,899,36.779,499,922,896,1,0.7367,-926.0314,-92.6031,93.0282,70.3419,False,,2,20,-73.7313,-71.8415,36.32,1425,3,1427,1422,590.2773
+ETHUSD,15m,O-L-H-C,1422,522,900,36.709,498,923,897,1,0.7362,-927.2677,-92.7268,93.1447,69.1662,False,,2,20,-73.7313,-72.3122,36.32,1425,3,1427,1422,589.6588
+ETHUSD,60m,O-H-L-C,381,138,243,36.22,134,246,241,1,0.7333,-728.3028,-72.8303,79.9016,245.7566,False,,8,14,-62.5975,-27.3585,90.23,382,1,382,381,225.2104
+ETHUSD,60m,O-L-H-C,381,138,243,36.22,134,246,241,1,0.7333,-728.3028,-72.8303,79.9016,245.7566,False,,8,14,-62.5975,-27.3585,90.23,382,1,382,381,225.2104
