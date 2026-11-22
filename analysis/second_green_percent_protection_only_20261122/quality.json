@@ -1,0 +1,110 @@
+{
+  "trade_logic": "ST10x3 entry only, 15m next-green confirmation, 1m market at third candle OPEN",
+  "exits": "ONLY trailing percent-based profit-protection STOP when activated; NO ST close exit, TP, hard SL, timeout",
+  "thresholds_pct": [
+    0.12,
+    0.2,
+    0.3,
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    5.0
+  ],
+  "standalone_locks_pct_of_activation": [
+    0,
+    50,
+    75,
+    100
+  ],
+  "ladders": {
+    "ladder_012_02_03_05_1_2_5": {
+      "activation_pct": [
+        0.12,
+        0.2,
+        0.3,
+        0.5,
+        1.0,
+        2.0,
+        5.0
+      ],
+      "locked_pct": [
+        0.0,
+        0.12,
+        0.2,
+        0.3,
+        0.5,
+        1.0,
+        2.0
+      ]
+    },
+    "ladder_02_03_05_1_2_5": {
+      "activation_pct": [
+        0.2,
+        0.3,
+        0.5,
+        1.0,
+        2.0,
+        5.0
+      ],
+      "locked_pct": [
+        0.0,
+        0.2,
+        0.3,
+        0.5,
+        1.0,
+        2.0
+      ]
+    },
+    "ladder_05_1_2_5": {
+      "activation_pct": [
+        0.5,
+        1.0,
+        2.0,
+        5.0
+      ],
+      "locked_pct": [
+        0.0,
+        0.5,
+        1.0,
+        2.0
+      ]
+    },
+    "ladder_1_2_5": {
+      "activation_pct": [
+        1.0,
+        2.0,
+        5.0
+      ],
+      "locked_pct": [
+        0.0,
+        1.0,
+        2.0
+      ]
+    }
+  },
+  "protective_activation_timing": "Observing 1m HIGH, stop working from NEXT 1m candle; no same-minute retrospective low",
+  "one_position_at_a_time": true,
+  "one_trade_per_ST_cycle": true,
+  "filters": 42,
+  "modes": 44,
+  "entry_variants": 2,
+  "tested": 3696,
+  "positions_still_open": 2497,
+  "positions_not_liquidated": true,
+  "status_convention": "If last-data open, report hypothetical close at end only as marked-to-market, NOT realized exit",
+  "model": "BTCUSD Delta India 1m Jan 2025-Nov 2026 archive, complete IST entry months Jan 2025-Oct 2026, one-BTC-equivalent",
+  "execution": "Taker entry +5 BTC pt, protect exit -5 pt, taker fee 0.05 percent each side with GST18",
+  "major_risk": "No hard stop or liquidation; price may move materially against entry before first protection is armed, causing huge drawdown",
+  "absence": [
+    "funding",
+    "margin",
+    "liquidation",
+    "tick-level intraminute ordering",
+    "bid/ask spread",
+    "forced close on ST flip"
+  ],
+  "note": "Previously exposed research data, all mined results in sample; no untouched validation"
+}
