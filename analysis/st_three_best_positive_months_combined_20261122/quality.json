@@ -1,0 +1,96 @@
+{
+  "data_files": 23,
+  "data_start": "2025-01-01 00:00:00+00:00",
+  "data_end": "2026-11-21 23:59:00+00:00",
+  "period": "2025-01 through 2026-10 entries in IST",
+  "standalone_parity_validated": [
+    {
+      "strategy": "line_touch",
+      "expected": {
+        "sl": 0.2,
+        "tp": 1.5,
+        "volume": "vol_ge_1p0",
+        "atr": "atrpct_ge_0p20",
+        "expected_n": 108,
+        "expected_w": 24,
+        "expected_net": 4060.14,
+        "expected_pos": 14,
+        "expected_loss": 8
+      },
+      "observed": {
+        "trades": 108,
+        "wins": 24,
+        "net_pts": 4060.1355090198185,
+        "profitable_months": 14
+      }
+    },
+    {
+      "strategy": "bullish_flip",
+      "expected": {
+        "sl": 3.0,
+        "tp": 0.5,
+        "volume": "vol_le_0p8",
+        "atr": "atrpct_ge_0p20",
+        "expected_n": 42,
+        "expected_w": 33,
+        "expected_net": 3401.08,
+        "expected_pos": 14,
+        "expected_loss": 5
+      },
+      "observed": {
+        "trades": 42,
+        "wins": 33,
+        "net_pts": 3401.084991699712,
+        "profitable_months": 14
+      }
+    },
+    {
+      "strategy": "flip_breakout",
+      "expected": {
+        "sl": 3.0,
+        "tp": 1.5,
+        "volume": "vol_le_0p8",
+        "atr": "atrpct_ge_0p20",
+        "expected_n": 34,
+        "expected_w": 19,
+        "expected_net": 8392.57,
+        "expected_pos": 12,
+        "expected_loss": 4
+      },
+      "observed": {
+        "trades": 34,
+        "wins": 19,
+        "net_pts": 8392.571641474866,
+        "profitable_months": 12
+      }
+    }
+  ],
+  "priority_default": [
+    "flip_breakout",
+    "line_touch",
+    "bullish_flip"
+  ],
+  "one_position_default": true,
+  "one_trade_per_ST_cycle_default": true,
+  "portfolio_variants": [
+    "standalone_line_touch",
+    "standalone_bullish_flip",
+    "standalone_flip_breakout",
+    "parallel_sum_not_executable_one_position",
+    "exclusive_touch_plus_flip",
+    "exclusive_touch_plus_breakout",
+    "exclusive_flip_plus_breakout",
+    "exclusive_all_three_default",
+    "exclusive_all_three_flip_first",
+    "exclusive_all_three_touch_first",
+    "exclusive_all_three_no_cycle_cap"
+  ],
+  "source_code_script": "/home/runner/work/BTC-Analysis/BTC-Analysis/scripts/research_st_three_best_combined_portfolio.py",
+  "finance_units": "1 BTC-equivalent price points",
+  "market_data": "Delta Exchange India BTCUSD 1-minute OHLC",
+  "cost_model": "0.05% fee per side +18% GST +5 price points slippage per side",
+  "margin_and_liquidation_model": false,
+  "funding_model": false,
+  "independent_out_of_sample": false,
+  "selected_after_lookback": true
+}
