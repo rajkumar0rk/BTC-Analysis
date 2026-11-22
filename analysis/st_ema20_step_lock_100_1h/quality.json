@@ -1,0 +1,50 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m traded price OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "entry_modes": [
+    "touch",
+    "reclaim",
+    "combined"
+  ],
+  "entry_counts": {
+    "touch": 253,
+    "reclaim": 227,
+    "combined": 297
+  },
+  "activation_points": [
+    150,
+    200,
+    300
+  ],
+  "initial_lock_points": 100,
+  "step_trigger_points": 100,
+  "step_lock_points": 100,
+  "target_cap_points": [
+    "uncapped",
+    1000
+  ],
+  "one_filled_trade_per_supertrend_cycle": true,
+  "initial_stop_loss": false,
+  "exit_rules": [
+    "step-profit-lock 1m after completed trigger",
+    "optional fixed TP 1000",
+    "confirmed 1H ST reversal"
+  ],
+  "quantity_btc": 0.001,
+  "starting_cash_usd": 100.0,
+  "fee_per_side_plus_gst": 0.00059,
+  "slippage_price_points_per_side": 5.0,
+  "caveats": [
+    "No initial stop: losses can exceed available margin or liquidate",
+    "No funding, liquidation, mark price, depth or actual spread model",
+    "Profit-lock updates only on next 1m candle; gap fills may be worse",
+    "No same-entry-minute TP or profit protection",
+    "Prior months researched, no untouched out-of-sample; November 2026 partial",
+    "Monthly realized net PnL booked by IST exit month"
+  ]
+}
