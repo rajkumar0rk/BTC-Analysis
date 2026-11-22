@@ -1,0 +1,71 @@
+{
+  "test_name": "1H ST EMA20 Touch vs ST flip next open and flip breakout",
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_month_files": 23,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "touch_entry_candidates": 253,
+  "flip_next_open_candidates": 405,
+  "flip_breakout_candidates": 268,
+  "filter_levels": {
+    "unfiltered": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "touch_balanced": [
+      null,
+      2.5,
+      null,
+      1.25
+    ],
+    "volume_0.5_to_2.5_ATR_max_1.25": [
+      0.5,
+      2.5,
+      null,
+      1.25
+    ],
+    "volume_min_1.25_ATR_max_1.75": [
+      1.25,
+      null,
+      null,
+      1.75
+    ]
+  },
+  "exit_ladders": {
+    "0.75%": [
+      0.75
+    ],
+    "1-2-5%": [
+      1.0,
+      2.0,
+      5.0
+    ],
+    "2-3-5%": [
+      2.0,
+      3.0,
+      5.0
+    ],
+    "5%": [
+      5.0
+    ]
+  },
+  "fee_plus_gst_per_side": 0.00059,
+  "adverse_slippage_points_per_side": 5.0,
+  "qty_btc": 0.001,
+  "no_initial_stop": true,
+  "theoretical_price_paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "complete_months": 22,
+  "known_limitations": [
+    "historical parameter selections were explored on known data",
+    "minute OHLC does not determine tick path",
+    "no live-order latency, funding, margin, liquidation or spreads beyond 5 point slippage each side",
+    "realized drawdown only; floating account drawdown excluded",
+    "Touch signal and Flip signal time differs by design",
+    "One candidate per ST cycle, rejected candidate never replaced by a later candidate"
+  ]
+}
