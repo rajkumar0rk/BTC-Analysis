@@ -302,7 +302,7 @@ def main():
     highlight.to_csv(OUT/"comparison_12_rr_with_best_protection.csv",index=False)
 
     counts=dict(variants=len(frame),net_profitable=int((frame.net_pts>0).sum()),
-                ratios=len(RATIOS),filter_combinations=42,
+                ratio_count=len(RATIOS),filter_combinations=42,
                 protection_modes=len(prot.MODES),total_trade_ledger_rows=written,
                 data_minutes=len(m),bar15=len(b))
     bestnet=frame.sort_values(["net_pts","profitable_months"],
