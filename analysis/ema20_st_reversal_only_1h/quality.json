@@ -1,0 +1,22 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m price OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "qty_btc": 0.001,
+  "initial_account_usd": 100.0,
+  "side_taker_fee_including_gst": 0.00059,
+  "slippage_btc_price_points_per_side": 5.0,
+  "exit_only_on_confirmed_supertrend_flip": true,
+  "max_one_fill_per_supertrend_cycle": true,
+  "caveats": [
+    "No stop or liquidation model: a real futures position could be liquidated before Supertrend reverses",
+    "No funding, spread, depth, exchange latency or actual execution validation",
+    "Unrealized open position is NOT forced closed at the archive boundary",
+    "No untouched out-of-sample holdout; historic periods previously researched",
+    "MAE/MFE and adverse marks exclude entry-minute OHLC ambiguity"
+  ]
+}
