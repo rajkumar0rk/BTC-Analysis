@@ -82,7 +82,7 @@ trades.to_csv(OUT/"trades.csv",index=False)
 months=[];last=10000.
 for m,nav in sorted(monthly.items()):
     if not m.startswith("2025"):continue
-    months.append(dict(month_ist=m,ending_nav=nav,net_return_pct=(nav/last-1)*100,trades_exited=int(trades.exit.str.startswith(m).sum()) if len(trades) else 0))
+    months.append(dict(month_ist=m,ending_nav=nav,net_return_pct=(nav/last-1)*100,trades_exited=int((pd.to_datetime(trades.exit,utc=True).dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")==m).sum()) if len(trades) else 0))
     last=nav
 assert len(months)==12
 pd.DataFrame(months).to_csv(OUT/"monthly_nav.csv",index=False)
