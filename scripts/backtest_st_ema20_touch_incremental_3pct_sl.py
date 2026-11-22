@@ -3,8 +3,8 @@
 
 Same 1H Supertrend(10,3) + EMA20 first-touch signals, ratio 1.25-2.5x,
 0.001 BTC, same next-hour entry, one fill per ST cycle.
-Profit locks: baseline [0.14%], [0.14,0.50,1,2,5%], and the exact requested
-[0.20,0.50,1,2%] plus a [0.20,0.50,1,2,5%] path comparison.
+Profit locks: prior baselines plus exact requested [0.16,0.30,0.50,1,2%]
+and [0.16,0.50,1,2%] variants. Each path is independently replayed.
 Prices are executed against both hypothetical 1m intrabar OHLC paths.
 """
 import json
@@ -20,6 +20,8 @@ LADDERS={
     "increment_0p14_0p50_1_2_5": (0.14,0.5,1.0,2.0,5.0),
     "exact_0p20_0p50_1_2": (0.20,0.50,1.0,2.0),
     "control_0p20_0p50_1_2_5": (0.20,0.50,1.0,2.0,5.0),
+    "exact_0p16_0p30_0p50_1_2": (0.16,0.30,0.50,1.0,2.0),
+    "exact_0p16_0p50_1_2": (0.16,0.50,1.0,2.0),
 }
 REFERENCE={
     "open_high_low_close": (50,0.725036,21),
@@ -106,7 +108,7 @@ def main():
     (OUT/"RESEARCH_REPORT.md").write_text(
       "# EMA20 Touch: 3% initial stop plus incremental profit protection\n\n"
       "BTCUSD 1H ST(10,3) first EMA20 Touch, volume ratio 1.25-2.5x; 1m stop updates.\n"
-      "Comparison: single 0.14% lock vs 0.14% -> 0.50% -> 1% -> 2% -> 5% locks.\n"
+      "Comparison includes exact 0.16% -> 0.30% -> 0.50% -> 1% -> 2% and 0.16% -> 0.50% -> 1% -> 2% ladders.\n"
       "The stop starts at -3% from entry and moves to the highest reached positive lock.\n"
       "The Supertrend flip remains a fallback exit; one fill per ST cycle.\n\n"
       "## Side-by-side across two simulated price paths\n\n"
