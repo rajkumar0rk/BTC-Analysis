@@ -1,0 +1,23 @@
+{
+  "touch": {
+    "all_days_fills": 253,
+    "all_days_weekend_IST_fills": 55,
+    "weekday_only_fills": 217,
+    "excluded_cycles": 36,
+    "replacement_weekday_fills": 19
+  },
+  "reclaim": {
+    "all_days_fills": 227,
+    "all_days_weekend_IST_fills": 63,
+    "weekday_only_fills": 187,
+    "excluded_cycles": 40,
+    "replacement_weekday_fills": 23
+  },
+  "combined": {
+    "all_days_fills": 297,
+    "all_days_weekend_IST_fills": 63,
+    "weekday_only_fills": 264,
+    "excluded_cycles": 33,
+    "replacement_weekday_fills": 30
+  }
+}

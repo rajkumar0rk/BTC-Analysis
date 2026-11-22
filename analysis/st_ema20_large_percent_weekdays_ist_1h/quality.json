@@ -1,0 +1,184 @@
+{
+  "source": "Delta Exchange India BTCUSD perpetual 1m OHLCV",
+  "source_files": 23,
+  "minute_bars": 992160,
+  "hourly_bars": 16536,
+  "first_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-11-20 23:59:00+00:00",
+  "validated_consecutive_minutes": true,
+  "ladder_values_in_percent": {
+    "S01_only_0p14": [
+      0.14
+    ],
+    "S02_only_0p50": [
+      0.5
+    ],
+    "S03_only_0p75": [
+      0.75
+    ],
+    "S04_only_1": [
+      1.0
+    ],
+    "S05_only_1p5": [
+      1.5
+    ],
+    "S06_only_2": [
+      2.0
+    ],
+    "S07_only_3": [
+      3.0
+    ],
+    "S08_only_4": [
+      4.0
+    ],
+    "S09_only_5": [
+      5.0
+    ],
+    "S10_only_7p5": [
+      7.5
+    ],
+    "S11_only_10": [
+      10.0
+    ],
+    "L01_0p14_1_2_5": [
+      0.14,
+      1.0,
+      2.0,
+      5.0
+    ],
+    "L02_0p2_1_2_5": [
+      0.2,
+      1.0,
+      2.0,
+      5.0
+    ],
+    "L03_0p5_1_2_5": [
+      0.5,
+      1.0,
+      2.0,
+      5.0
+    ],
+    "L04_0p75_1_2_5": [
+      0.75,
+      1.0,
+      2.0,
+      5.0
+    ],
+    "L05_1_2_5": [
+      1.0,
+      2.0,
+      5.0
+    ],
+    "L06_1_1p5_2_3_5": [
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      5.0
+    ],
+    "L07_1_2_3_4_5": [
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0
+    ],
+    "L08_1_3_5": [
+      1.0,
+      3.0,
+      5.0
+    ],
+    "L09_1_2_4_8": [
+      1.0,
+      2.0,
+      4.0,
+      8.0
+    ],
+    "L10_2_3_5": [
+      2.0,
+      3.0,
+      5.0
+    ],
+    "L11_2_5_10": [
+      2.0,
+      5.0,
+      10.0
+    ],
+    "L12_0p5_1_1p5_2": [
+      0.5,
+      1.0,
+      1.5,
+      2.0
+    ],
+    "L13_0p14_0p5_1_2_5": [
+      0.14,
+      0.5,
+      1.0,
+      2.0,
+      5.0
+    ]
+  },
+  "definition": "0.12 is 0.12 percent of actual execution entry price (entry*0.0012)",
+  "paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "entry_modes": [
+    "touch",
+    "reclaim",
+    "combined"
+  ],
+  "entry_count": {
+    "touch": 217,
+    "reclaim": 187,
+    "combined": 264
+  },
+  "entry_calendar_IST": "Monday-Friday only; Saturday/Sunday new fills disabled",
+  "calendar_uses_actual_fill_minute": true,
+  "weekends_still_monitored_for_exit": true,
+  "no_forced_friday_liquidation": true,
+  "weekday_differential": {
+    "touch": {
+      "all_days_fills": 253,
+      "all_days_weekend_IST_fills": 55,
+      "weekday_only_fills": 217,
+      "excluded_cycles": 36,
+      "replacement_weekday_fills": 19
+    },
+    "reclaim": {
+      "all_days_fills": 227,
+      "all_days_weekend_IST_fills": 63,
+      "weekday_only_fills": 187,
+      "excluded_cycles": 40,
+      "replacement_weekday_fills": 23
+    },
+    "combined": {
+      "all_days_fills": 297,
+      "all_days_weekend_IST_fills": 63,
+      "weekday_only_fills": 264,
+      "excluded_cycles": 33,
+      "replacement_weekday_fills": 30
+    }
+  },
+  "prior_comparison_source": "analysis/st_ema20_large_percent_locks_1h/comparison.csv",
+  "qty_btc": 0.001,
+  "initial_cash_usd": 100.0,
+  "taker_fee_plus_GST_per_side": 0.00059,
+  "adverse_execution_slippage_btc_points_per_side": 5.0,
+  "min_no_slippage_taker_fee_break_even_pct": 0.11800000000000001,
+  "estimated_roundtrip_slippage_btc_points": 10.0,
+  "one_fill_per_ST_cycle": true,
+  "no_initial_SL": true,
+  "no_fixed_TP": true,
+  "instant_stop_update_same_1m_bar": true,
+  "entry_minute_modeling": "Follow hypothetical OHLC path after breakout, immediately on-touch activate profit lock",
+  "ladder_after_last_rung": "hold final rung; no invented extra percentage milestones",
+  "fallback_exit": "next 1m open after completed opposite 1H Supertrend flip",
+  "caveats": [
+    "OHLC 1m cannot resolve intraminute high/low sequence, two possible path models are replayed separately",
+    "No exchange tick sequence, order amendment latency, margin, funding, mark/index price or liquidation model",
+    "A 0.12 percent gross lock can be negative net after the fee, GST and slippage",
+    "No pristine out-of-sample, parameters are exploratory, November 2026 partial",
+    "Monthly realized cash PnL is booked by exit month in IST"
+  ]
+}
