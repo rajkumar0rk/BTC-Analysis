@@ -1,0 +1,46 @@
+name: BTC EMA20 Touch V2 preserve every profitable month
+on:
+  push:
+    branches:
+      - research/st-ema20-touch-v2-preserve-profitable-months-20261122
+    paths:
+      - scripts/research_st_ema20_touch_v2_preserve_monthly_profit.py
+      - .github/workflows/research-st-ema20-touch-v2-preserve-monthly-20261122.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-ema20-touch-v2-monthly-20261122
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - name: Validate Python syntax
+        run: python -m py_compile scripts/research_st_ema20_touch_v2_preserve_monthly_profit.py
+      - name: Run Touch candidate profit-lock monthly preservation replay
+        run: python scripts/research_st_ema20_touch_v2_preserve_monthly_profit.py
+      - name: Upload complete research
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-ema20-touch-v2-preserve-profitable-months
+          path: analysis/st_ema20_touch_v2_preserve_monthly_profit_20261122/
+          if-no-files-found: warn
+      - name: Commit results to research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_ema20_touch_v2_preserve_monthly_profit_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save Touch V2 preservation and execution sensitivity"
+            git pull --rebase origin research/st-ema20-touch-v2-preserve-profitable-months-20261122
+            git push origin HEAD:research/st-ema20-touch-v2-preserve-profitable-months-20261122
+          fi
