@@ -85,29 +85,28 @@ def market_ohlc_precompute(mid,j,end,high,low,opening,close):
     return exitmid,exitidx,reasons,ambiguous
 
 def test_synthetic():
-    op=np.full(50,1000.,float);lo=op.copy();hi=op.copy();cl=op.copy()
-    # BUY at 1005 assumed effective fill. +0.12% target => 1006.206
-    # -0.12% hard stop => 1003.794; both in same entry minute.
-    hi[0]=1010.;lo[0]=990.
-    mid,idx,reason,amb=market_ohlc_precompute(1000.,0,20,hi,lo,op,cl)
+    # Use a realistic BTC price relative to the 5-point entry slippage.
+    op=np.full(50,100000.,float);lo=op.copy();hi=op.copy();cl=op.copy()
+    # Effective entry fill 100005. SL .12% = 99884.994,
+    # TP .12% = 100125.006. Both hit on first minute => stop first.
+    hi[0]=100300.;lo[0]=99700.
+    mid,idx,reason,amb=market_ohlc_precompute(100000.,0,20,hi,lo,op,cl)
     sidx=SL_PCT.index(.12);tidx=TP_PCT.index(.12)
     assert reason[sidx,tidx]==1 and idx[sidx,tidx]==0 and amb[sidx,tidx],(
         mid[sidx,tidx],reason[sidx,tidx])
-    # With no SL, TP is eligible in entry 1m for market-open entry.
+    # No hard stop: market-open TP can hit on first 1m.
     assert reason[-1,tidx]==2 and idx[-1,tidx]==0
-    # Close-stop at j=10 open if neither percent barrier touched.
-    hi[0]=1000.;lo[0]=1000.
-    mid,idx,reason,amb=market_ohlc_precompute(1000.,0,10,hi,lo,op,cl)
+    # Supertrend close-stop next 1m OPEN when neither target nor SL hit.
+    hi[0]=100000.;lo[0]=100000.
+    mid,idx,reason,amb=market_ohlc_precompute(100000.,0,10,hi,lo,op,cl)
     assert reason[-1,TP_PCT.index(5.)]==3 and idx[-1,TP_PCT.index(5.)]==10
-    # Spike on last minute (minute 10) is after the close-stop exit,
-    # and must NOT be counted.
-    hi[10]=2000.
-    mid,idx,reason,amb=market_ohlc_precompute(1000.,0,10,hi,lo,op,cl)
+    hi[10]=200000.
+    mid,idx,reason,amb=market_ohlc_precompute(100000.,0,10,hi,lo,op,cl)
     assert reason[-1,TP_PCT.index(5.)]==3
-    # If lower gap below hard stop, stop exit at opening gap, not SL level.
-    op[1]=970.;hi[1]=985.;lo[1]=960.
-    mid,idx,reason,amb=market_ohlc_precompute(1000.,0,10,hi,lo,op,cl)
-    assert reason[SL_PCT.index(.12),tidx]==1 and mid[SL_PCT.index(.12),tidx]==970.
+    # 1m opens below a working percent SL: fill at lower opening.
+    op[1]=99700.;hi[1]=99750.;lo[1]=99600.
+    mid,idx,reason,amb=market_ohlc_precompute(100000.,0,10,hi,lo,op,cl)
+    assert reason[sidx,tidx]==1 and mid[sidx,tidx]==99700.
     print("SYNTHETIC_PERCENT_STOP_FIRST_TESTS_PASS",flush=True)
 
 def run_grid(entries,stopbars,minute,months_arr,filtername,atrname,mode):
