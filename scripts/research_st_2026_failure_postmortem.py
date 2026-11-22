@@ -43,9 +43,7 @@ def group_summary(data,cols):
           max_loss_trade_pts=round(float(g.net_pts.min()),2),
           max_win_trade_pts=round(float(g.net_pts.max()),2),
           profit_factor=round(pos/abs(neg),3) if neg<0 else None,
-          avg_hold_minutes=round(float(g.holding_minutes.mean()),2),
-          1 if False else "_dummy":None)
-        result.pop("_dummy")
+          avg_hold_minutes=round(float(g.holding_minutes.mean()),2))
         rows.append(result)
     return pd.DataFrame(rows)
 
