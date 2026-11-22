@@ -1,0 +1,18 @@
+# M28 — independent momentum source triage (2026-11-23 IST)
+
+## Recovery
+Read codex/AGENTS.md and codex/STRATEGY_NOVELTY_GATE.md and M27 source gate. The actual Actions branch runs collection returned 9 historical runs; latest M14 run 45008927897 completed SUCCESS at c71c783. No new historical execution is inferred.
+
+## Three distinct source screens
+
+1. **TheoBrigitte/freqtrade momentum** — Theo Brigitte; immutable repo commit c9def379b1036064d592c3a0518a07811f5a9a76 (2026-09-27); https://github.com/TheoBrigitte/freqtrade/blob/c9def379b1036064d592c3a0518a07811f5a9a76/strategies/momentum/momentum.py . Original 5m futures long/short; three consecutive bullish bars with higher closes or three bearish bars with lower closes; code sets long signal to **0**, short signal to **1**. Freqtrade requires 1 for an entry; therefore the published long setup is disabled, not a valid symmetric baseline. ROI 2% immediately, -10% stop, trailing disabled, exit signal method empty. Repository-root LICENSE fetch returned 404; license unverified. No credible publisher BTC period, trade count, PF, return, drawdown, fee or funding disclosure recovered. **SKIP**: candle-run persistence rather than accelerating impulse; overlaps Stage25 hourly price-action/momentum and existing candle sequences; the long-signal bug precludes advertised parity. No code executed.
+
+2. **Freqtrade Strategy004** — Gerald Lonlas; upstream GPL-3.0 repo pinned at f3340ce11f5bdf62f598522e64d1f5638eaa13f5; https://github.com/freqtrade/freqtrade-strategies/blob/f3340ce11f5bdf62f598522e64d1f5638eaa13f5/user_data/strategies/Strategy004.py . Original 5m spot long-only, CCI below -100, oversold stochastic crossover, ADX >50 or ADX35 >26, positive rolling 12-bar mean volume; exit when ADX35 <25, stochastic >70, price >EMA5, profit-only exit gating; ROI schedule 5% at entry, 4% after 20m, 3% after 30m, 1% after 60m; stop -10%; trailing disabled. No credible published BTC-only return/PF/DD/trades/costs. **SKIP**: primarily oversold reversion, assigned to another family. Volume condition is absolute >0.75 rather than a relative volume surge. Explicit rolling mean avoids the documented full-series lookahead pitfall.
+
+3. **PineGen-AI EMA/RSI/ATR market-open scalper** — https://github.com/PineGen-AI/ema-rsi-atr-market-open-scalper . Published description: EMA crossover, RSI directional filter, ATR stops and targets, 09:30–11:00 exchange-local open session, 1m–5m examples. The accessible repository description supplies no immutable executable Pine source or precise defaults sufficient for faithful reproduction, and no license or verifiable period/trades/PF/DD/costs. **NOT REPRODUCIBLE**; additionally a session EMA crossover is trend-following rather than independent acceleration. Never fabricate missing parameters.
+
+## Reproducibility and economics
+Prior-art closest Stage25 hourly momentum and Stage6–9 intraday candle/volume sequences; all three fail family/novelty or source-completeness gate. No same-close execution or source scripts run. Any eligible future study must use completed signal bars and next 1m open, conservative 1m stop-first/gap fills, NAV reconciliation, and 0.05% per side fee plus 18% GST (0.118% ordinary round trip); funding unmodeled. No new historical trades, PF, monthly NAV, or profitability verified. This is a negative source screen, not a backtest.
+
+## Counts / handoff
+3 distinct leads screened; 0 eligible new baselines; 0 new authentic Delta backtests; 0 variants; 0 workflow launches. Next work must prioritize a genuinely acceleration-specific, licensed strategy with source-defined executable exits, then launch an authentic BTC2025 replay rather than repeat candle persistence, trend crossover or reversion.
