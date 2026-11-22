@@ -1,0 +1,6 @@
+# Wavelet-2B daily differential — novelty authorization
+Source: https://github.com/zty05070242/wavelet-2b/tree/5d879b3d04031952f41d2b4d4c4a3cce43f04150 (MIT).
+Original: commodity futures daily, rolling db6 128 closes, 0.5 threshold, ATR14, fixed-lag 3-bar ATR-prominent pivots, 3-bar 2B reclaim, structural stop, opposite-signal exit. Original planned risk 2%; matched comparison risk 0.5%.
+Closest: scripts/research_failed_auction_stage24.py and analysis/institutional_discovery_stage24_failed_auction/RESEARCH_REPORT.md. Stage24 is hourly 12-hour channel rejection with ATR stop and 2R/3R/timeout; this experiment uses daily wavelet-prominent confirmed swing pivots and opposite-signal exit. PARTIAL OVERLAP — APPROVED DIFFERENTIAL, as established in analysis/breakout_range_source_audit/iteration24_wavelet_stage24_exact_novelty_20261123.md.
+BTC authentic 1m archive; UTC daily signal close, next UTC minute open; IST monthly NAV; Jan2025–Oct2026 where full warmup exists. Missing October31 UTC explicitly disclosed. 2025 selection only; 2026 chronological recheck, not pristine holdout. Zero slippage first, fee 0.05% per side and 18% GST; funding unavailable.
+Disproof: negative after-cost expectancy or material source semantic mismatch; preserve original baseline and TwoB comparator.
