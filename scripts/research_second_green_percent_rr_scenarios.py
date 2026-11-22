@@ -196,7 +196,7 @@ def main():
         full_cases=len(table),asked_cases=len(combos),
         profitable_asked=int((combos.net_pts>0).sum()),
         profitable_with_60_trades=int(((combos.net_pts>0)&
-                                  (combos.trades>=60)).sum())),flush=True)
+                                  (combos.trades>=60)).sum()))),flush=True)
     print("MATCHED_FILTERS\n"+matched_plain[cols].to_string(index=False),flush=True)
     print("TOP_REQUESTED_OVER60\n"+best[["vol_filter","atr_filter"]+cols].to_string(index=False),flush=True)
     print("DONE",OUT/"RESEARCH_REPORT.md",flush=True)
