@@ -1,0 +1,41 @@
+name: BTC 15m Supertrend count first 200-point targets
+on:
+  push:
+    branches:
+      - research/supertrend-15m-filters-20261122
+    paths:
+      - scripts/research_supertrend_15m_200point.py
+      - .github/workflows/research-supertrend-15m-200point.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  count-200point:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install backtest dependencies
+        run: python -m pip install pandas numpy tabulate
+      - name: Count +200 first-passage before closing Supertrend stop
+        run: python scripts/research_supertrend_15m_200point.py
+      - name: Upload full +200 results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: supertrend-15m-200point-results
+          path: analysis/supertrend_15m_touch_200point_20261122/
+          if-no-files-found: warn
+      - name: Save results on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/supertrend_15m_touch_200point_20261122
+          if ! git diff --cached --quiet; then
+            git commit -m "research: store 200-point reach counts by causal filter"
+            git push origin HEAD:research/supertrend-15m-filters-20261122
+          fi
