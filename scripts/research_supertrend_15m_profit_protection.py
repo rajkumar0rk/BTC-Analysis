@@ -79,15 +79,26 @@ def replay(entries, stopbar, minute, target, mode):
         final=(closing_bar+1)*15 if closing_bar>=0 else len(high)
         assert final>j
         start=j+1; end=min(final,len(high))
-        crossed_tp=False; crossed_lock=False; ambiguity=False
+        ambiguity=False
         if start<end:
             highs=high[start:end]
             lows=low[start:end]
             opens=op[start:end]
             peak=np.maximum.accumulate(highs)
             proposed=protection_series(peak,mid,MODES[mode])
+            previous=protection_series(
+                np.r_[-np.inf,peak[:-1]],mid,MODES[mode])
             target_hit=highs>=mid+target
-            protect_hit=lows<=proposed
+            existing_hit=lows<=previous
+            new_hit=(lows<=proposed)&(proposed>previous)
+            # A standing target *at or before* the initial protection
+            # activation is necessarily crossed first on the way UP;
+            # the protection wasn't yet active, so don't allow a same
+            # minute low to retroactively trigger it.
+            activation=MODES[mode][1]
+            if target<=activation and mode!="off":
+                new_hit=new_hit & ~target_hit
+            protect_hit=existing_hit | new_hit
             any_hit=np.flatnonzero(target_hit|protect_hit)
         else:
             any_hit=np.empty(0,dtype=int)
@@ -95,24 +106,21 @@ def replay(entries, stopbar, minute, target, mode):
             idx=int(any_hit[0])
             exit_j=start+idx
             if protect_hit[idx]:
-                # Stop-first if TP and protection trigger in same 1m candle.
-                # Treat simultaneous initial activation + stop touch as
-                # protective exit; this is a pessimistic OHLC convention.
-                last_peak=high[start:exit_j]
-                prevpeak=np.max(last_peak) if len(last_peak) else -np.inf
-                previous_stop=(
-                    protection_series(np.asarray([prevpeak]),mid,
-                                      MODES[mode])[0])
-                next_stop=float(proposed[idx])
-                ambiguity=bool(next_stop>previous_stop and
-                               lows[idx]<=next_stop)
-                exit_mid=float(min(opens[idx],next_stop))
+                if existing_hit[idx]:
+                    # Stop was already working at the 1m candle open.
+                    # If the opening price gapped below it, fill at open.
+                    exit_mid=float(min(opens[idx],previous[idx]))
+                else:
+                    # New protection activated after a favorable high
+                    # WITHIN this minute: pessimistically assume the low
+                    # followed the high, but NEVER fill at this minute's
+                    # earlier open, which could be below activation.
+                    exit_mid=float(proposed[idx])
+                ambiguity=bool(new_hit[idx] or target_hit[idx])
                 why="protective_stop"
-                crossed_lock=True
             else:
                 exit_mid=mid+target
                 why="target"
-                crossed_tp=True
         elif final<len(high):
             exit_j=final
             exit_mid=float(op[final])
@@ -300,7 +308,7 @@ def main():
         costs={"taker_side":0.0005,"gst_on_fee":0.18,
                "slippage_points_each_side":base.SLIP},
         simultaneous_exit_policy="protective stop wins over fixed TP in same 1m OHLC bar",
-        protective_arming_policy="using current 1m high+low; simultaneous new protection and touch resolves at stop as pessimistic assumption; count flagged in result",
+        protective_arming_policy="using current 1m high+low; simultaneous new protection and touch assumes high-then-low, fills newly armed stop (NOT pre-activation open); when TP <= activation, TP precedes protection; count flagged in result",
         gap_policy="protective stop gap down exits at min(stop, 1m open)",
         entry_minute="No stop or favorable TP credited within entry minute",
         stop_15m="15m close below last closed bullish support or bearish flip; exit next 1m open",
@@ -347,7 +355,7 @@ def main():
         "at or below the ratcheted stop. If target/stop are both reached in "
         "the same 1m, count **protective stop first**.",
         "- New arming and protective stop hit in one 1m is **ambiguous**; "
-        "a pessimistic stop-first outcome is chosen and flagged, but tick data "
+        "a pessimistic high-then-low outcome at the newly armed stop is chosen and flagged, but tick data "
         "could differ; do not call results live-executable.",
         "- Closing-stop remains next 1m open after 15m bearish/breach close.",
         "- Protected breakeven measured from pre-slippage entry; fee/GST and "
