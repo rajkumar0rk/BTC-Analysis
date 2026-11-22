@@ -144,7 +144,7 @@ def main():
     (OUT/"quality.json").write_text(json.dumps(dict(
       independently_replayed_settings=len(CHOICES),
       source_2025_selected_study=str(study.OUT),
-      2026_was_examined_before_selection=True,
+      year_2026_was_examined_before_selection=True,
       full_period="Jan 2025 to Oct 2026 IST",
       original_trade_exit_rules_preserved=True,
       per_strategy_filters_retained=True,
