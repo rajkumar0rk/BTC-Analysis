@@ -1,0 +1,27 @@
+{
+  "data_source": "Delta India BTCUSD 1m 2025-01 through 2026-11-21 UTC",
+  "minutes": 993600,
+  "complete_15m": 66240,
+  "complete_ist_months": "2025-01 through 2026-10",
+  "original_200_parity": {
+    "trades": 782,
+    "reached_200": 299,
+    "passed": true
+  },
+  "instrument": "BTCUSD perpetual long-only Supertrend(10,3) 15m first filtered line touch",
+  "thresholds": [
+    500.0,
+    1000.0
+  ],
+  "condition": "1m price high on later minute reaches entry-mid plus target, BEFORE 15m close stop",
+  "stop": "At 15m close below previously published Supertrend support, next 1m open",
+  "slippage": "5 points adverse at entry and exit",
+  "fees": "0.05% per side plus 18% GST",
+  "limitations": [
+    "1m OHLC does not resolve same-minute order; entry-minute target not counted",
+    "Missing order-book depth, maker/taker fill guarantees, funding and liquidation",
+    "These are 1BTC-equivalent price point first-passages, not account profit",
+    "All historical months are research-exposed, no independent holdout",
+    "Filters overlap: do NOT sum their trade counts"
+  ]
+}
