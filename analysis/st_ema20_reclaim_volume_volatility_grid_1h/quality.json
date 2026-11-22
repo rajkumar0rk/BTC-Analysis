@@ -1,0 +1,94 @@
+{
+  "status": "complete",
+  "historical_source_files": 23,
+  "source_first_utc": "2025-01-01 00:00:00+00:00",
+  "source_last_hour_utc": "2026-11-20 23:00:00+00:00",
+  "signal_features": "Completed 1H signal bar volume / previous 20h volume; ATR10 percent of close; ATR10 / previous 20h ATR10",
+  "signal_warmup_excludes_current_bar_from_rolling_denominators": true,
+  "entry_selection": "Retain original first-filled signal; if volume/volatility filter rejects it, skip rest of same ST cycle",
+  "filter_configurations": 1344,
+  "exit_ladders": [
+    "0.14%",
+    "0.50%",
+    "0.75%",
+    "1.00%",
+    "2.00%",
+    "5.00%",
+    "1-2-5%",
+    "2-3-5%"
+  ],
+  "two_intraminute_paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "total_scenarios": 21504,
+  "paired_scenarios": 10752,
+  "combined_eligible_count": 1792,
+  "both_paths_positive_count": 322,
+  "both_paths_and_years_positive_count": 84,
+  "best_combined_filter": {
+    "ladder": "2-3-5%",
+    "category": "both",
+    "vmin": 0.5,
+    "vmax": 2.5,
+    "amin": 0.0,
+    "amax": 2.5,
+    "emin": 0.0,
+    "trades_min": 149,
+    "net_worst": 17.0341,
+    "net_best": 17.919,
+    "year2025_worst": 18.9653,
+    "year2026_worst": -1.9796,
+    "months_min": 10,
+    "winrate_min": 46.98,
+    "dd_worst": 7.734,
+    "year2025_mintrades": 83,
+    "year2026_mintrades": 66,
+    "eligible": true,
+    "both_paths_positive": true,
+    "both_years_positive": false
+  },
+  "feature_quantiles": {
+    "vol": {
+      "0": 0.0682,
+      "0.1": 0.258,
+      "0.25": 0.424,
+      "0.5": 0.7802,
+      "0.75": 1.3031,
+      "0.9": 2.149,
+      "1": 5.69
+    },
+    "atr": {
+      "0": 0.1986,
+      "0.1": 0.3299,
+      "0.25": 0.431,
+      "0.5": 0.5682,
+      "0.75": 0.7215,
+      "0.9": 0.9508,
+      "1": 1.9875
+    },
+    "exp": {
+      "0": 0.5014,
+      "0.1": 0.7449,
+      "0.25": 0.8446,
+      "0.5": 0.952,
+      "0.75": 1.0796,
+      "0.9": 1.2701,
+      "1": 2.1742
+    }
+  },
+  "missing_signal_feature_counts": {
+    "vol": 0,
+    "atr": 0,
+    "exp": 0
+  },
+  "transfer_config_volume_max": 2.5,
+  "transfer_config_atr_max_pct": 1.25,
+  "transfer_reclaim_exit_ladder": "2-3-5%",
+  "exclusions": [
+    "Not a fresh holdout; user previously evaluated both 2025 and 2026",
+    "No funding, margin, liquidation, ticks, stop amendment latency",
+    "Realized-exit max DD only; excludes floating drawdown",
+    "Precomputed stop trade ledgers assume one of two hypothetical minute OHLC paths"
+  ]
+}
