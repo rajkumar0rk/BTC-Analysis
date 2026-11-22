@@ -131,6 +131,46 @@ def replay(minute,daily,sig,name):
     pf=float(trade.loc[trade.net>0,"net"].sum()/-trade.loc[trade.net<0,"net"].sum()) if len(trade) and (trade.net<0).any() else None
     return dict(name=name,trades=len(trade),net_trade_pnl=net,ending_cash=cash,nav_reconciliation_error=cash-10000-net,profit_factor=pf,max_drawdown_pct=float((eq.nav/eq.nav.cummax()-1).min()*100),positive_months=int(((monthly.net_pct>0)&(monthly.coverage=="complete")).sum()),negative_months=int(((monthly.net_pct<0)&(monthly.coverage=="complete")).sum()),flat_months=int(((monthly.net_pct==0)&(monthly.coverage=="complete")).sum()),monthly_rows=len(monthly),partial_months=int((monthly.coverage!="complete").sum()),fee_gst_total=float(trade.entry_fee.sum()+trade.exit_fee.sum()) if len(trade) else 0)
 
+
+def source_parity_reference(daily):
+    """Independent translation of pinned upstream WaveletTwoB pipeline; diagnostic only."""
+    h=daily.high.to_numpy(); l=daily.low.to_numpy(); c=daily.close.to_numpy()
+    tr=pd.concat([daily.high-daily.low,(daily.high-daily.close.shift()).abs(),(daily.low-daily.close.shift()).abs()],axis=1).max(axis=1)
+    atr=tr.rolling(14).mean().to_numpy()
+    den=np.full(len(c),np.nan)
+    for end in range(127,len(c)):
+        w=c[end-127:end+1]
+        level=max(pywt.dwt_max_level(128,pywt.Wavelet("db6").dec_len),1)
+        coeff=pywt.wavedec(w,"db6",level=level)
+        threshold=(np.median(np.abs(coeff[-1]))/.6745)*np.sqrt(2*np.log(128))*.5
+        den[end]=pywt.waverec([coeff[0]]+[pywt.threshold(x,threshold,mode="soft") for x in coeff[1:]],"db6")[-1]
+    valid=np.flatnonzero(np.isfinite(den)&np.isfinite(atr))
+    start=int(valid[0])
+    v=den[start:]; a=atr[start:]; hh=h[start:]; ll=l[start:]; cc=c[start:]
+    high_events={};low_events={};last_hi=-5;last_lo=-5
+    for k in range(1,max(len(v)-3,1)):
+        known=k+3
+        if known>=len(v):continue
+        left=v[max(0,k-5):k];right=v[k+1:known+1];prev=v[max(0,k-20):k]
+        if not len(left) or not len(right) or not len(prev):continue
+        if v[k]>np.max(left) and v[k]>np.max(right) and v[k]-max(np.min(prev),np.min(right))>=a[k] and k-last_hi>=5:
+            high_events[known]=hh[k];last_hi=k
+        if v[k]<np.min(left) and v[k]<np.min(right) and min(np.max(prev),np.max(right))-v[k]>=a[k] and k-last_lo>=5:
+            low_events[known]=ll[k];last_lo=k
+    sh=np.full(len(v),np.nan);sl=np.full(len(v),np.nan);curh=np.nan;curl=np.nan
+    for t in range(len(v)):
+        curh=high_events.get(t,curh);curl=low_events.get(t,curl);sh[t]=curh;sl[t]=curl
+    ref=np.zeros(len(v),dtype=int)
+    for b in range(len(v)):
+        for t in range(b,min(b+4,len(v))):
+            if hh[b]>sh[b] and cc[t]<sh[b]:ref[t]=-1;break
+        for t in range(b,min(b+4,len(v))):
+            if ll[b]<sl[b] and cc[t]>sl[b]:
+                if ref[t]==0:ref[t]=1
+                break
+    output=np.zeros(len(c),dtype=int);output[start:]=ref
+    return output
+
 def main():
     minute,hashes=load()
     daily=minute.resample("1D",origin="start_day",label="left",closed="left").agg({"open":"first","high":"max","low":"min","close":"last","volume":"sum"})
@@ -152,6 +192,12 @@ def main():
             prefix_checks.append(dict(strategy=kind,through=cut,bars=len(prefix),mismatches=0))
     OUT.mkdir(parents=True,exist_ok=True)
     (OUT/"causal_prefix_checks.json").write_text(json.dumps(prefix_checks,indent=2))
+    local_wavelet=signals(daily,"wavelet_two_b")
+    reference_wavelet=source_parity_reference(daily)
+    differences=np.flatnonzero(local_wavelet!=reference_wavelet)
+    parity={"upstream_commit":"5d879b3d04031952f41d2b4d4c4a3cce43f04150","mismatch_count":int(len(differences)),"first_mismatch_dates":[str(daily.index[i]) for i in differences[:20]],"reference_signals":int(np.count_nonzero(reference_wavelet)),"local_signals":int(np.count_nonzero(local_wavelet))}
+    (OUT/"source_parity_diagnostic.json").write_text(json.dumps(parity,indent=2))
+    print("SOURCE_PARITY",json.dumps(parity))
     output={"source_commit":"5d879b3d04031952f41d2b4d4c4a3cce43f04150","data_hashes":hashes,"fee_each_side_including_gst":FEE,"slippage":0,"funding":"unmodeled","daily_bars":len(daily),"results":[]}
     for name in ("two_b","wavelet_two_b"):
         sig=signals(daily,name)
