@@ -118,3 +118,12 @@
 - 90D long/short: **+6.724822%** net NAV, 7 positive / 2 negative / 3 flat IST months, max 1m-marked DD **5.385474%**, 274 rebalance orders.
 - 30D long/flat: **+1.163918%** net NAV, 3 positive / 7 negative / 2 flat IST months, max 1m-marked DD **5.385474%**, 167 rebalance orders.
 - **ONE distinct source-defined mechanism, THREE component variants**. These are NOT the source-faithful full 30/90/365 ensemble, and do not establish a robust edge. Outputs include orders, monthly NAV, summary, but lack closed-trade realized PF and detailed round-trip trade ledger. Thus NOT yet fully independently reconciled; do not mark a complete source-faithful study or risk-ready. Funding, spread, slippage and actual margin unmodeled. No 2026/ETH replay. Follow up: add round-trip ledger/PF, independently reconcile monthly NAV, inspect robustness and missing pre-2025 warmup; do not optimize on 2026.
+
+## 2026-11-22 — TF-TSMOM-90 frozen chronological BTC2026 Jan–Sep replay launched
+
+- Original BTC2025 90-day long/short component selection preserved; not a complete publisher 30/90/365 ensemble. This is a 2026 research-exposed chronological recheck, NOT a pristine holdout.
+- Pinned source: https://github.com/engineerinvestor/systematic-trend-following-with-managed-futures/blob/de27263d630303d32fe0df3d5b688e1b8a27350a/CRYPTO_SPEC.md ; original BTC2025 audited workflow https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/45038799747 .
+- Isolated code: scripts/trend_family_tsmom_frozen_2026.py, scripts/trend_family_tsmom_frozen_2026_audit.py, workflow .github/workflows/trend-family-tsmom-frozen-2026.yml. No 2026 parameter tuning. Source 2025 daily warmup retained, signals use completed prior daily candles and next eligible 1m open; 0 assumed slippage, 0.05% fee each side plus GST 18%; funding unmodeled.
+- Oct 2026 excluded due to documented 1m source gap; Jan–Sep 2026 targeted, 9 months only, no invented coverage. All positions closed at last September 1m close and audited.
+- GitHub Actions run https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/45050248407 at commit f7bc656512152f95d68d7cfdfcb0049b2cf7e455; job 137293551320. Status when logged: IN_PROGRESS, dependency installation. NO 2026 profit claim until completed job, logs, artifacts and reconciliation verified.
+- The previously registered 2025 workflow also received a frozen-2026 step integration at commit 2978d907f7e8c53678b0a0174c8099d9f7c39ea8; avoid double counting if it executes. No main/other-family changes.
