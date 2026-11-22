@@ -108,3 +108,13 @@
 
 - Confirmed branch historical Actions listing has 18 runs, latest successful historical run 44952126471 at d5c667b; baseline unchanged. Screened 3 public leads: Freqtrade triple-Supertrend (novelty pending), Freqtrade Heracles (reject outside trend family), xy3293 Supertrend/EMA/ADX catalog (duplicate/source pin pending). Source definitions, license caveats and links in `SOURCE_TRIAGE_20261122_RUN11.md` (commit a075844).
 - **0 new distinct historical strategy backtests; 0 variants; 0 new verified P&L.** Source commit/dependency pinning and authentic historical execution still required. No live trading or other-family changes.
+
+## 2026-11-22 — daily TSMOM component batch (new completed historical job)
+
+- Novelty: PARTIAL OVERLAP — approved differential for low-turnover daily TSMOM components; predeclared at commit 40faa111. Original source: Engineer Investor, MIT, CRYPTO_SPEC.md at de27263d630303d32fe0df3d5b688e1b8a27350a. No upstream scripts executed.
+- Code commit 156a3d3; isolated workflow commit 1b9190d. Actual completed **SUCCESS** historical BTC2025 Actions job: https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/45032990100 (job 137240476406). Actual artifact ID **14758697589**, 10 files, SHA256 zip f6b163b2be4da1e62656e2045b9a37d7de1bb0606060756a6d88813f73c906c3.
+- Authentic archive source reader reported 0 missing minutes; 1m completed daily signal next IST midnight open, zero assumed slippage, 0.05% fee per side plus 18% GST, 10% annual volatility target with 1x notional cap. No 2024 warmup, so early 2025 no eligible trades; all 12 monthly NAV rows exist but some are FLAT and not fully warmup-testable.
+- 30D long/short: **+4.768820%** net NAV, 7 positive / 4 negative / 1 flat IST months, max 1m-marked DD **5.744191%**, 334 rebalance orders.
+- 90D long/short: **+6.724822%** net NAV, 7 positive / 2 negative / 3 flat IST months, max 1m-marked DD **5.385474%**, 274 rebalance orders.
+- 30D long/flat: **+1.163918%** net NAV, 3 positive / 7 negative / 2 flat IST months, max 1m-marked DD **5.385474%**, 167 rebalance orders.
+- **ONE distinct source-defined mechanism, THREE component variants**. These are NOT the source-faithful full 30/90/365 ensemble, and do not establish a robust edge. Outputs include orders, monthly NAV, summary, but lack closed-trade realized PF and detailed round-trip trade ledger. Thus NOT yet fully independently reconciled; do not mark a complete source-faithful study or risk-ready. Funding, spread, slippage and actual margin unmodeled. No 2026/ETH replay. Follow up: add round-trip ledger/PF, independently reconcile monthly NAV, inspect robustness and missing pre-2025 warmup; do not optimize on 2026.
