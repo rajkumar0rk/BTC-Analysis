@@ -1,0 +1,29 @@
+{
+  "run": "BTC ST Touch+Flip exit/protection causal 1m grid",
+  "number_variants": 132,
+  "baseline_signal_parity_passed": 87,
+  "baseline_portfolio_parity_passed": true,
+  "base_net_points": 17963.15,
+  "base_winning_months": 17,
+  "train_2025_qualified": 124,
+  "retrospective_positive_both_years_activity": 117,
+  "retrospective_positive_four_timeblocks": 100,
+  "one_open_position": true,
+  "one_trade_per_ST_cycle": true,
+  "profit_lock_activation": "previous COMPLETED minute HIGH only",
+  "sl_and_tp_same_minute": "SL first",
+  "actual_realized_exit_month": true,
+  "funding_and_liquidation_modeled": false,
+  "independent_out_of_sample": false,
+  "historical_period": "Jan2025 to Oct2026",
+  "focus_profiles": [
+    "baseline",
+    "touch_trail_1.0_0.4",
+    "touch_trail_1.0_0.25",
+    "touch_lock_1.0_0.4",
+    "touch_lock_1.0_0.3",
+    "flip_SL_2.0",
+    "flip_SL_2.5",
+    "touchSL_0.75_flipSL_2.0"
+  ]
+}
