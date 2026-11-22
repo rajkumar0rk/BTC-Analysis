@@ -179,7 +179,7 @@ def impacts(old_trades,new_trades):
     old_flips=[v for v in original.values() if v.exit_reason=="supertrend_flip"]
     old_locks=[v for v in original.values() if v.exit_reason=="profit_lock"]
     def group(a):
-        usable=[(old,current[x.entry_utc]) for old in a if x_in_current(x=old,current=current)]
+        usable=[(old,current[old.entry_utc]) for old in a if x_in_current(x=old,current=current)]
         original_pnl=sum(float(p.net_usd) for p,_ in usable)
         new_pnl=sum(float(q.net_usd) for _,q in usable)
         improved=sum(float(q.net_usd)>float(p.net_usd)+1e-8 for p,q in usable)
