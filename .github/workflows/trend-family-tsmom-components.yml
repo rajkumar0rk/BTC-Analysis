@@ -6,6 +6,8 @@ on:
       - .github/workflows/trend-family-tsmom-components.yml
       - scripts/trend_family_tsmom_components_2025.py
       - scripts/trend_family_tsmom_accounting_audit.py
+      - scripts/trend_family_tsmom_frozen_2026.py
+      - scripts/trend_family_tsmom_frozen_2026_audit.py
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,6 +25,18 @@ jobs:
         run: python scripts/trend_family_tsmom_components_2025.py
       - name: Independent realized-PF and account NAV audit
         run: python scripts/trend_family_tsmom_accounting_audit.py
+      - name: Frozen BTC2026 Jan-Sep historical replay
+        run: python scripts/trend_family_tsmom_frozen_2026.py
+      - name: Independent frozen BTC2026 account reconciliation
+        run: python scripts/trend_family_tsmom_frozen_2026_audit.py
+      - name: Save frozen BTC2026 artifacts even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trend-tsmom-frozen-2026-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: analysis/trend_following_family_20261121/tsmom_frozen_2026_jan_sep/
       - name: Save real artifacts even on failure
         if: always()
         uses: actions/upload-artifact@v4
