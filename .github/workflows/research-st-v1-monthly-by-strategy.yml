@@ -1,0 +1,41 @@
+name: BTC ST locked V1 monthly Line Touch vs Bullish Flip
+on:
+  push:
+    branches:
+      - research/st-v1-locked-monthly-by-strategy-20261122
+    paths:
+      - scripts/research_st_v1_locked_monthly_by_strategy.py
+      - .github/workflows/research-st-v1-monthly-by-strategy.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Replay locked V1.0 and report monthly contributions by strategy
+        run: python -u scripts/research_st_v1_locked_monthly_by_strategy.py
+      - name: Archive reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: locked_st_v1_by_strategy_monthly
+          path: analysis/st_v1_locked_monthly_by_strategy_20261122/
+          if-no-files-found: warn
+      - name: Publish validated report to research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_v1_locked_monthly_by_strategy_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: verified Line Touch and Bullish Flip monthly contributions"
+            git push origin HEAD:research/st-v1-locked-monthly-by-strategy-20261122
+          fi
