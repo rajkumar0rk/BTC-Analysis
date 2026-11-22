@@ -1,0 +1,43 @@
+name: BTC 15m Supertrend volume volatility filter grid
+on:
+  push:
+    branches:
+      - research/supertrend-15m-filters-20261122
+    paths:
+      - scripts/research_supertrend_15m_filter_grid.py
+      - .github/workflows/research-supertrend-15m-filter-grid.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: supertrend-15m-filter-grid-20261122
+  cancel-in-progress: false
+jobs:
+  backtest-filters:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - name: Backtest all 210 causal filter combinations and enforce unfiltered parity
+        run: python scripts/research_supertrend_15m_filter_grid.py
+      - name: Preserve full results artifact for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: supertrend-15m-filter-grid
+          path: analysis/supertrend_15m_filter_grid_20261122/
+          if-no-files-found: warn
+      - name: Commit research result tables on isolated branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/supertrend_15m_filter_grid_20261122
+          if ! git diff --cached --quiet; then
+            git commit -m "research: record all Supertrend 15m volume volatility filter results"
+            git push origin HEAD:research/supertrend-15m-filters-20261122
+          fi
