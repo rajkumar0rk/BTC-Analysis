@@ -1,0 +1,10 @@
+{
+  "source": "all_36036_fixed_percent_combinations.csv.gz",
+  "configurations": 36036,
+  "monthly_attribution": "entry month IST not actual exit month",
+  "total_months": 22,
+  "from_month": "2025-01",
+  "to_month": "2026-10",
+  "methodology": "positive_months count from prior backtest; no new replay",
+  "no_untouched_out_of_sample": true
+}
