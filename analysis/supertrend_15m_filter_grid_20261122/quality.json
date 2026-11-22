@@ -1,0 +1,35 @@
+{
+  "data_source": "Delta Exchange India BTCUSD perpetual 1m",
+  "archived_months": 23,
+  "observed_minutes": 993600,
+  "complete_15m": 66240,
+  "sample_start": "2025-01-01 00:00:00+00:00",
+  "sample_end": "2026-11-21 23:59:00+00:00",
+  "touch_event_candidates_15m": 1683,
+  "stop_close_events_15m": 801,
+  "months": "22 complete IST Jan 2025\u2013Oct 2026, November excluded",
+  "universe": "Long-only Supertrend ATR(10) factor3, one fill per bullish cycle",
+  "volume_ratio": "last CLOSED 15m vol / mean 20 older complete 15m vols",
+  "atr14_pct": "last CLOSED 15m Wilder ATR14 / close * 100",
+  "atr14_relative": "last CLOSED ATR14 / mean previous 50 ATR14 values",
+  "filter_timing": "all at start of candidate 15m bar; latest fully closed 15m",
+  "target_values_pct": [
+    0.2,
+    0.4,
+    0.5,
+    0.6,
+    1.0
+  ],
+  "combinations": 210,
+  "assumptions": [
+    "Causal 1m touch limit first hit, gap at open no price improvement invented",
+    "No favorable same-entry-1m TP",
+    "15m close stop next 1m open",
+    "Per-side taker fee 0.05% + 18% GST",
+    "5 BTCUSD price points adverse slippage on each side",
+    "Funding, spread/queue, leverage and liquidation not modeled",
+    "BTC price-points per 1 BTC-equivalent hypothetical trade only",
+    "No independent untouched OOS; choosing top filter invites selection bias"
+  ],
+  "baseline_parity_passed": true
+}

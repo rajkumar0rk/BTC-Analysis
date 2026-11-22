@@ -1,0 +1,52 @@
+[
+  {
+    "tp_pct": 0.2,
+    "expected_trades": 782,
+    "found_trades": 782,
+    "expected_wins": 315,
+    "found_wins": 315,
+    "expected_net_pts": -95477.5,
+    "found_net_pts": -95477.5,
+    "passes": true
+  },
+  {
+    "tp_pct": 0.4,
+    "expected_trades": 782,
+    "found_trades": 782,
+    "expected_wins": 220,
+    "found_wins": 220,
+    "expected_net_pts": -87667.46,
+    "found_net_pts": -87667.46,
+    "passes": true
+  },
+  {
+    "tp_pct": 0.5,
+    "expected_trades": 782,
+    "found_trades": 782,
+    "expected_wins": 191,
+    "found_wins": 191,
+    "expected_net_pts": -86638.39,
+    "found_net_pts": -86638.39,
+    "passes": true
+  },
+  {
+    "tp_pct": 0.6,
+    "expected_trades": 781,
+    "found_trades": 781,
+    "expected_wins": 163,
+    "found_wins": 163,
+    "expected_net_pts": -88524.06,
+    "found_net_pts": -88524.06,
+    "passes": true
+  },
+  {
+    "tp_pct": 1.0,
+    "expected_trades": 781,
+    "found_trades": 781,
+    "expected_wins": 115,
+    "found_wins": 115,
+    "expected_net_pts": -88680.47,
+    "found_net_pts": -88680.47,
+    "passes": true
+  }
+]
