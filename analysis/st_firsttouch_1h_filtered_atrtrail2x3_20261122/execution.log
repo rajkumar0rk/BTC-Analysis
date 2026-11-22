@@ -1,0 +1,4 @@
+  File "/home/runner/work/BTC-Analysis/BTC-Analysis/scripts/research_st_firsttouch_1h_filtered_atrtrail2x3_20261122.py", line 147
+    atr_trail_multiplier=atr_multiple,initial_atr14=p["atr14"],
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: keyword argument repeated: atr_trail_multiplier
