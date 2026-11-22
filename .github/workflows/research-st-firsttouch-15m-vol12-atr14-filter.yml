@@ -1,0 +1,51 @@
+name: 15M BTC ETH first EMA touch Volume and ATR14 filter 2R
+on:
+  push:
+    branches: [research/st-firsttouch-15m-vol12-atr14-filter-20261122]
+    paths:
+      - scripts/research_st_firsttouch_15m_vol12_atr14_filter_20261122.py
+      - .github/workflows/research-st-firsttouch-15m-vol12-atr14-filter.yml
+      - analysis/st_firsttouch_15m_vol12_atr14_filter_20261122/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: st-firsttouch-15m-vol12-atr14-filter
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numpy pandas
+        run: python -m pip install numpy pandas
+      - name: Backtest BTC and ETH 15M 22 months, two 1-minute execution hypotheses
+        shell: bash
+        run: |
+          mkdir -p analysis/st_firsttouch_15m_vol12_atr14_filter_20261122/
+          set -o pipefail
+          python -u scripts/research_st_firsttouch_15m_vol12_atr14_filter_20261122.py 2>&1 | tee analysis/st_firsttouch_15m_vol12_atr14_filter_20261122/execution.log
+      - name: Upload reports even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-15m-first-touch-volume-atr14-filter-results
+          path: analysis/st_firsttouch_15m_vol12_atr14_filter_20261122/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Save study to research branch
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_firsttouch_15m_vol12_atr14_filter_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive first touch 15M volume and ATR filter backtest"
+            git push origin HEAD:research/st-firsttouch-15m-vol12-atr14-filter-20261122
+          fi
