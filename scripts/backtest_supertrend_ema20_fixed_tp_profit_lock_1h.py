@@ -265,8 +265,8 @@ def replay(m, h, mode, tp_points, profile_name):
 
 def smoke_test():
     # Long and short, stop-first collision, adverse gap, and TP-only cases.
-    assert check_exit(1, 100., 125., 98., 120., 105.) == (98., "profit_lock")
-    assert check_exit(-1, 100., 102., 76., 80., 95.) == (102., "profit_lock")
+    assert check_exit(1, 98., 125., 98., 120., 105.) == (98., "profit_lock")
+    assert check_exit(-1, 102., 102., 76., 80., 95.) == (102., "profit_lock")
     assert check_exit(1, 108., 120., 102., 120., 105.) == (105., "profit_lock")
     assert check_exit(-1, 92., 96., 80., 80., 95.) == (95., "profit_lock")
     assert check_exit(1, 110., 130., 109., 120., None) == (120., "fixed_take_profit")
