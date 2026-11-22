@@ -1,0 +1,4 @@
+period,bullish_ST_flips,flips_shorter_than_or_eq_1hr,flips_shorter_than_or_eq_4hr,flips_shorter_than_or_eq_8hr,pct_flips_revert_within_1hr,pct_flips_revert_within_4hr,pct_flips_revert_within_8hr,median_bull_run_15m_bars
+2025_full,439,12,111,215,2.73,25.28,48.97,33.0
+2025_JanOct,406,12,105,199,2.96,25.86,49.01,33.0
+2026_JanOct,363,18,101,191,4.96,27.82,52.62,31.0

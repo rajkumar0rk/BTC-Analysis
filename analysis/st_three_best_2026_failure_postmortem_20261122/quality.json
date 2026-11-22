@@ -1,0 +1,22 @@
+{
+  "source_trade_ledger": "analysis/st_three_best_positive_months_combined_20261122/selected_positions_by_policy.csv.gz",
+  "linked_policies": [
+    "standalone_line_touch",
+    "standalone_bullish_flip",
+    "standalone_flip_breakout",
+    "exclusive_all_three_default",
+    "exclusive_all_three_flip_first",
+    "exclusive_touch_plus_flip",
+    "exclusive_touch_plus_breakout"
+  ],
+  "periods": [
+    "2025_full",
+    "2025_JanOct",
+    "2026_JanOct"
+  ],
+  "verified_baseline_default_143_trades": true,
+  "no_changes_to_trade_fills": true,
+  "attribution": "actual_exit_month_IST",
+  "market_regime": "15m ST bullish cycle survival distribution",
+  "interpreted_without_funding_liquidation": true
+}
