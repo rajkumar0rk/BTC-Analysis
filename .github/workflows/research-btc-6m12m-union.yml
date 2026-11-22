@@ -1,0 +1,44 @@
+name: Backtest combined 6M and 12M BTC protected strategy single account
+on:
+  push:
+    branches: [research/btc-6m12m-union-portfolio-20261122]
+    paths:
+      - scripts/research_btc_6m12m_union_20261122.py
+      - analysis/btc_6m12m_union_20261122/NOVELTY_CHECK.md
+      - .github/workflows/research-btc-6m12m-union.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-6m12m-union-20261122
+  cancel-in-progress: false
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numeric dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Calculate actual combined account and full 22-month results
+        run: python scripts/research_btc_6m12m_union_20261122.py
+      - name: Preserve all accounts and event provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-6m12m-union-20261122
+          path: analysis/btc_6m12m_union_20261122/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Commit research report on branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc_6m12m_union_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: actual BTC combined 6m 12m portfolio monthly report"
+            git push origin HEAD:research/btc-6m12m-union-portfolio-20261122
+          fi
