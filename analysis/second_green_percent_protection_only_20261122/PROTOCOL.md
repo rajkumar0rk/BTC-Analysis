@@ -1,0 +1,13 @@
+# Corrected experiment: percentage profit protection ONLY
+- BTCUSD perpetual, 15m ST (ATR10 ×3) used for **entry eligibility only**. No Supertrend exit, fixed take profit, fixed hard SL, time stop, or price point protections.
+- Entry: second 15m GREEN candle after original bullish Supertrend support touch vs after bullish flip; market buy at third 15m candle open, 1m execution.
+- Only exit: a percentage-based **protective stop** once an unrealized profit activation threshold has been observed. Any untriggered position remains OPEN until historical data ends, with unrealized P&L marked to market separately.
+- **NO simultaneous open positions**, even if multiple Supertrend cycles produce entry signals. Skip signals while the first trade is still open; do not force-close or reset on a Supertrend flip.
+- Single lock triggers: activate at [0.12,0.20,0.30,0.50,0.75,1,1.5,2,3,5]% increase in BTC price from simulated entry fill. For each test, move stop to +[0,50%,75%,100%] of activation threshold above entry fill (40 variants).
+- Multi-step escalating ladders: [0.12,0.2,0.3,0.5,1,2,5]%, [0.2,0.3,0.5,1,2,5]%, [0.5,1,2,5]%, [1,2,5]% steps, locks previous stage (at first activation, entry breakeven). This never takes profit at an upper rung; it only moves the stop upward. (4 variants)
+- **Causal 1-minute OHLC**: activation after observing a minute HIGH, protective stop active from NEXT 1m candle (never apply same-minute low retrospectively). If price opens beyond stop, fill at actual opening price, not stop. This avoids unobservable same-minute sequence assumptions. For live systems, actual tick-level stop placement could be faster.
+- If new buy price higher, market fill=third-candle opening mid+5 price-points adverse slip. Protective exit midpoint then minus 5 points slip, taker fee each side 0.05% plus 18% GST on fee.
+- 42 preexisting causal volume/volatility filters, 2 entries ×44 protection modes ×42 filter regimes = **3696 configs**; full 22 complete IST entry months Jan2025-Oct2026. Data loaded from archive through Nov 2026; exits can occur after Oct for open October entries. No invented end-of-study forced exit.
+- Distinguish settled NET realized P&L from open/unrealized mark-to-market and from number of skipped signals (no overlap). Report days/months of unclosed trades; largest adverse excursion and number of months with no closed trade.
+- Critical: because without hard SL positions can stay deeply underwater, **liquidation and insufficient margin are NOT modeled**. Positive realized-only P&L alone can be misleading; give mark-to-market inclusive view.
+- No merge to master/live. This is research. Previous percent TP/SL results invalid for this question, do not reuse.
