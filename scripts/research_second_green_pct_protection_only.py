@@ -31,7 +31,7 @@ LADDERS={
  "ladder_1_2_5": ((1.,2.,5.),(0.,1.,2.)),
 }
 MODES=[(f"arm_{arm:g}_lock_{int(fr*100)}pct_of_arm","single",arm,fr)
-       for arm in ARM_PCT for fr in LOCK_FR]
+       for arm in ARM_PCT for fr in LOCK_FRAC]
 MODES += [(name,"ladder",ts,locks) for name,(ts,locks) in LADDERS.items()]
 MODE_KEYS=[m[0] for m in MODES]
 assert len(MODES)==44 and len(set(MODE_KEYS))==44
