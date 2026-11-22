@@ -1,0 +1,43 @@
+{
+  "variants": 5040,
+  "net_profitable": 0,
+  "ratio_count": 12,
+  "filter_combinations": 42,
+  "protection_modes": 10,
+  "total_trade_ledger_rows": 1299120,
+  "data_minutes": 993600,
+  "bar15": 66240,
+  "ratios": [
+    "1:1",
+    "1:2",
+    "1:3",
+    "1:4",
+    "2:2",
+    "2:4",
+    "2:6",
+    "2:8",
+    "3:3",
+    "3:6",
+    "3:9",
+    "3:12"
+  ],
+  "ratio_unit_points": 100,
+  "complete_months": "2025-01 through 2026-10",
+  "entry": "first qualified bullish 15m Supertrend(10,3) line touch per cycle",
+  "fixed_hard_stop": "raw entry midpoint - absolute risk points, 1m monitor including entry minute",
+  "tp": "raw entry midpoint + absolute target points, 1m monitor after entry minute",
+  "alternate_stop": "15m close under prior closed bullish support or bearish reversal, next 1m open",
+  "filters": "previous complete 15m volume/ATR only",
+  "secondary_exits": "10 protection modes from previous study",
+  "simultaneous_ohlc_policy": "active stops pessimistically before TP; newly active protection assumes high then low, flags ambiguity",
+  "fees": "0.05% each side plus 18% GST on fee",
+  "adverse_slippage_points_each_side": 5.0,
+  "month_pnl_allocation": "IST entry month to preserve complete Jan2025-Oct2026 cohort sum",
+  "limitations": [
+    "OHLC ambiguity for same-minute stop/target and new activation",
+    "Missing exchange order book fill uncertainty",
+    "No funding, leverage, liquidation, spread or capital sizing",
+    "No independent out-of-sample historical data",
+    "Hindsight selection bias across 5040 variants"
+  ]
+}
