@@ -215,8 +215,8 @@ def main():
       selection_uses_2026=False,selected_by_2025_months=best_month.model,
       selected_by_2025_net=best_profit.model,
       baseline_parity=baseline_stats,
-      2025_gate_min_trades=35,2025_gate_min_profitable_months=6,
-      2025_gate_positive_both_halves=True,
+      gate_2025_min_trades=35,gate_2025_min_profitable_months=6,
+      gate_2025_positive_both_halves=True,
       closed_htf_candles_only=True,original_ST_close_exit_unchanged=True,
       independent_future_validation=False,
       original_settings_preselected_with_2025_2026_data=True)
