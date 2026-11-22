@@ -1,0 +1,33 @@
+{
+  "instrument": "Delta Exchange India BTCUSD perpetual futures",
+  "data_start_utc": "2025-01-01 00:00:00+00:00",
+  "data_end_utc": "2026-11-21 23:59:00+00:00",
+  "archive_months": 23,
+  "observed_1m": 993600,
+  "complete_15m": 66240,
+  "minute_gaps": 0,
+  "fixed_indicator": "Supertrend Wilder ATR(10) multiplier 3; bullish cycle",
+  "entry": "first 1m low touching previous completed bullish 15m ST line, one fill per cycle",
+  "tp_pct": [
+    0.2,
+    0.4,
+    0.5,
+    0.6,
+    1.0
+  ],
+  "tp_execution": "subsequent 1m high >= target, skip entry minute ambiguity",
+  "stop": "15m close below previous completed bullish ST support or bearish flip; next 1m open",
+  "fee_rate_each_side": 0.00059,
+  "slippage_points_per_side": 5.0,
+  "monthly_assignment": "IST month of exit",
+  "completed_months": "2025-01 to 2026-10",
+  "incomplete_month": "2026-11 excluded from headline",
+  "limits": [
+    "One BTC-equivalent price-unit ledger, not leveraged account equity",
+    "Monthly PNL assigned on exit; not unrealized MTM",
+    "No book spread, maker queue or funding charges",
+    "Same-minute TP ignored on entry; conservative but cannot reconstruct ticks",
+    "All periods previously used in research; no untouched holdout",
+    "Five target variants compared with correlated trades"
+  ]
+}
