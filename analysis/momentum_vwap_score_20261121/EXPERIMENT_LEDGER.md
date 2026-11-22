@@ -131,3 +131,10 @@
 - ChaoZhang FMZ Momentum and Volume Bot (source commit 7853bb2): daily BTCUSDT momentum sign-cross with >2x volume; published Pine exit uses `strategy.exit(profit=close*0.8/100, loss=close*0.5/100)`, whose profit/loss units are ticks, not advertised percentages. License unresolved; source baseline cannot be silently repaired. Novelty overlap with volume stages 6–9. SKIP.
 - ChaoZhang/Peter_O Momentum-based ZigZag (same source commit): MPL-2.0 indicator with directional labels but no complete executable strategy, NOT REPRODUCIBLE as trading system. No invented exits.
 - Source detail: [M24_SOURCE_GATE.md](M24_SOURCE_GATE.md), commit 3e1ae80d1f66b1a69d7afb3933d567251e60a0d9. Two screened, zero eligible baselines, zero variants, zero Actions launches; no new P&L. Research must prioritize authentic replay once genuinely novel executable source passes gate.
+
+
+### M25 — 2026-11-23 IST — VAMO canonical source recovered, licensing conflict found
+- Evidence: [M25_VAMO_RECOVERY_GATE.md](M25_VAMO_RECOVERY_GATE.md), source commit `96da7a5aa4c03c83d55b019760e66bc91d6120b0`, Pine blob `276c3ec7068c44e370377c8d730c627971aa19c1`.
+- Canonical owner `NicolasBohn/VAMOStrategy` replaces redirected `TPTBusiness/VAMOStrategy`; exact ROC14/ATR14 oscillator, EMA9 crossover, ATR14/ATR28 filter, close-anchored 1ATR/2ATR brackets recovered. Unused riskPerTrade input and actual 100%-equity default sizing identified. LICENSE is standard MIT but Strategy.pine explicitly adds no-selling prohibition: HOLD licensing review. Reported publisher PF1.301/660 trades is NOT local evidence.
+- Other sources screened: 1xBear RSI/Stoch volume trailing (trend overlap), ben-eastwest S&P daily weakening momentum (not continuation). Both SKIP pending any renewed source-fidelity case.
+- Actual branch Actions GET: nine runs, latest M14 historical run `45008927897` completed success. New distinct authentic historical baselines **0**, variants **0**, new Actions **0**, no local P&L; next resolve license and find lower-turnover complete acceleration rules. No unrelated writes.
