@@ -1,0 +1,51 @@
+name: BTC ETH 1H 15M First EMA Touch ST Flip Stop TP2R
+on:
+  push:
+    branches: [research/st-firsttouch-ema20-tp2r-flip-1h15m-20261122]
+    paths:
+      - scripts/research_st_firsttouch_ema20_tp2r_stflip_1h15m.py
+      - .github/workflows/research-st-firsttouch-ema20-tp2r-flip-1h15m.yml
+      - analysis/st_firsttouch_ema20_tp2r_stflip_1h15m_20261122/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: st-firsttouch-ema20-tp2r-flip-1h15m
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pandas numpy
+        run: python -m pip install numpy pandas
+      - name: Run independent BTC and ETH 1H and 15M 22-month replay
+        shell: bash
+        run: |
+          mkdir -p analysis/st_firsttouch_ema20_tp2r_stflip_1h15m_20261122
+          set -o pipefail
+          python -u scripts/research_st_firsttouch_ema20_tp2r_stflip_1h15m.py 2>&1 | tee analysis/st_firsttouch_ema20_tp2r_stflip_1h15m_20261122/execution.log
+      - name: Upload reports or failure log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: st-firsttouch-ema20-tp2r-flip-1h15m-btc-eth
+          path: analysis/st_firsttouch_ema20_tp2r_stflip_1h15m_20261122/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Archive results only on research branch
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_firsttouch_ema20_tp2r_stflip_1h15m_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive first-touch 1H 15M 2R/ST-flip historical results"
+            git push origin HEAD:research/st-firsttouch-ema20-tp2r-flip-1h15m-20261122
+          fi
