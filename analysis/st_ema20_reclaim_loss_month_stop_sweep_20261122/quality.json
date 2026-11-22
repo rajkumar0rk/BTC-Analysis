@@ -1,0 +1,53 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m OHLC",
+  "month_range": [
+    "2025-01",
+    "2026-10"
+  ],
+  "initial_sl_grid_pct": [
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    1.75,
+    2.0,
+    2.25,
+    2.5,
+    2.75,
+    3.0,
+    4.0
+  ],
+  "profit_lock_ladders": {
+    "L235": [
+      2.0,
+      3.0,
+      5.0
+    ],
+    "L22535": [
+      2.0,
+      2.5,
+      3.0,
+      5.0
+    ],
+    "L175235": [
+      1.75,
+      2.0,
+      3.0,
+      5.0
+    ]
+  },
+  "causal_filter_names": [
+    "baseline",
+    "ema_gap_le_0p75",
+    "hourly_range_le_2atr",
+    "ema_gap_le_0p75__slope_ge_minus0p2",
+    "adx_ge_15__slope_le_0p1",
+    "adx_le_30__rsi_le_60__slope_ge_minus0p2",
+    "adx_le_30__slope_ge_minus0p2__volume_le_4",
+    "ema_gap_le_0p75__slope_ge_minus0p2__range_le_2atr"
+  ],
+  "total_scenarios": 528,
+  "entry_count": 62,
+  "validated_baseline": "2% SL, 2-3-5 profit lock exactly matched",
+  "limit": "historical optimization, not true forward testing"
+}
