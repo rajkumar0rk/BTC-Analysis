@@ -107,7 +107,14 @@ def replay(minute,daily,sig,name):
     eq=pd.DataFrame(equity,columns=["t","nav"]).set_index("t")
     ist=eq.tz_convert("Asia/Kolkata")
     monthly=ist.nav.resample("MS").agg(["first","last"])
-    monthly["net_pct"]=(monthly["last"]/monthly["first"]-1)*100
+    # Monthly NAV returns use previous month-end, not first bar of current month.
+    monthly["prior_nav"]=monthly["last"].shift(1).fillna(10000.)
+    monthly["net_pct"]=(monthly["last"]/monthly["prior_nav"]-1)*100
+    monthly["coverage"]="complete"
+    monthly.loc[monthly.index[0],"coverage"]="partial_start_utc_archive"
+    monthly.loc[monthly.index[-1],"coverage"]="partial_end_utc_archive"
+    # Last row may be November IST (UTC Oct31 after 18:30); never label it October.
+    monthly["month_ist"]=monthly.index.strftime("%Y-%m")
     trade=pd.DataFrame(trades)
     if len(trade):
         trade["exit_ist_month"]=pd.to_datetime(trade.exit_time,utc=True).dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")
@@ -119,7 +126,7 @@ def replay(minute,daily,sig,name):
     monthly.to_csv(OUT/(name+"_monthly.csv"))
     net=trade.net.sum() if len(trade) else 0
     pf=float(trade.loc[trade.net>0,"net"].sum()/-trade.loc[trade.net<0,"net"].sum()) if len(trade) and (trade.net<0).any() else None
-    return dict(name=name,trades=len(trade),net_trade_pnl=net,ending_cash=cash,nav_reconciliation_error=cash-10000-net,profit_factor=pf,max_drawdown_pct=float((eq.nav/eq.nav.cummax()-1).min()*100),positive_months=int((monthly.net_pct>0).sum()),negative_months=int((monthly.net_pct<0).sum()),flat_months=int((monthly.net_pct==0).sum()),monthly_rows=len(monthly),fee_gst_total=float(trade.entry_fee.sum()+trade.exit_fee.sum()) if len(trade) else 0)
+    return dict(name=name,trades=len(trade),net_trade_pnl=net,ending_cash=cash,nav_reconciliation_error=cash-10000-net,profit_factor=pf,max_drawdown_pct=float((eq.nav/eq.nav.cummax()-1).min()*100),positive_months=int(((monthly.net_pct>0)&(monthly.coverage=="complete")).sum()),negative_months=int(((monthly.net_pct<0)&(monthly.coverage=="complete")).sum()),flat_months=int(((monthly.net_pct==0)&(monthly.coverage=="complete")).sum()),monthly_rows=len(monthly),partial_months=int((monthly.coverage!="complete").sum()),fee_gst_total=float(trade.entry_fee.sum()+trade.exit_fee.sum()) if len(trade) else 0)
 
 def main():
     minute,hashes=load()
