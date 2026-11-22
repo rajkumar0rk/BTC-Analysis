@@ -1,0 +1,21 @@
+{
+  "variants": 7827,
+  "strict_satisfy_count": 140,
+  "strict_reduced_losses_to_profit": 0,
+  "strict_max_losing_months_turned_positive": 0,
+  "baseline_17_month_positive_profit_maintained_as_hard_constraint": true,
+  "touch_profit_lock_arm_pct": 1.0,
+  "touch_profit_lock_pct": 0.4,
+  "baseline_profit_19099p62_verified": true,
+  "baseline_five_losing_months": [
+    "2025-06",
+    "2025-08",
+    "2025-12",
+    "2026-03",
+    "2026-10"
+  ],
+  "all_22_months_previously_seen": true,
+  "retrospective_multiple_testing": true,
+  "original_full_trade_execution_preserved": true,
+  "independent_out_of_sample": false
+}
