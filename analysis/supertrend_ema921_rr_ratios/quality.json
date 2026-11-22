@@ -1,0 +1,106 @@
+{
+  "source": "Delta India BTCUSD perpetual 1m historical OHLCV",
+  "earliest_utc": "2025-01-01 00:00:00+00:00",
+  "latest_utc": "2026-10-31 18:29:00+00:00",
+  "raw_candles": 963030,
+  "gaps": [],
+  "pairs_three": [
+    [
+      100,
+      300
+    ],
+    [
+      150,
+      450
+    ],
+    [
+      200,
+      600
+    ],
+    [
+      300,
+      900
+    ],
+    [
+      400,
+      1200
+    ],
+    [
+      500,
+      1500
+    ],
+    [
+      600,
+      1800
+    ],
+    [
+      800,
+      2400
+    ],
+    [
+      1000,
+      3000
+    ]
+  ],
+  "pairs_four": [
+    [
+      100,
+      400
+    ],
+    [
+      200,
+      800
+    ],
+    [
+      300,
+      1200
+    ],
+    [
+      400,
+      1600
+    ],
+    [
+      500,
+      2000
+    ],
+    [
+      600,
+      2400
+    ],
+    [
+      800,
+      3200
+    ],
+    [
+      1000,
+      4000
+    ]
+  ],
+  "total_combinations": 51,
+  "reused_combinations": 15,
+  "fresh_combinations": 36,
+  "signal_stats": {
+    "5": {
+      "tf_minutes": 5,
+      "higher_bars": 192606,
+      "aligned_long_bars": 83020,
+      "aligned_short_bars": 79961
+    },
+    "15": {
+      "tf_minutes": 15,
+      "higher_bars": 64202,
+      "aligned_long_bars": 26752,
+      "aligned_short_bars": 26251
+    },
+    "60": {
+      "tf_minutes": 60,
+      "higher_bars": 16050,
+      "aligned_long_bars": 6616,
+      "aligned_short_bars": 6863
+    }
+  },
+  "fee_with_gst_per_side": 0.00059,
+  "adverse_slippage_points_per_side": 5.0,
+  "only_new_ledger": "Prior pair ledgers preserved in original analysis/supertrend_ema921_fixed_grid/trade_ledger.csv.gz",
+  "historical_exposure_warning": "Data already studied; this is sensitivity analysis, NOT a blind out-of-sample validation"
+}
