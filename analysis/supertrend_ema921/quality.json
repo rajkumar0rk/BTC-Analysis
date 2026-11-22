@@ -1,0 +1,142 @@
+{
+  "source": "Delta India BTCUSD authentic 1m OHLCV",
+  "start_utc": "2025-01-01 00:00:00+00:00",
+  "last_utc": "2026-10-31 18:29:00+00:00",
+  "candles": 963030,
+  "gaps": [],
+  "fees_each_side_including_GST": 0.00059,
+  "slippage_points_per_side": 5.0,
+  "coverage_IST": {
+    "2025-01": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44310,
+      "complete": false
+    },
+    "2025-02": {
+      "expected_minutes": 40320,
+      "observed_minutes": 40320,
+      "complete": true
+    },
+    "2025-03": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2025-04": {
+      "expected_minutes": 43200,
+      "observed_minutes": 43200,
+      "complete": true
+    },
+    "2025-05": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2025-06": {
+      "expected_minutes": 43200,
+      "observed_minutes": 43200,
+      "complete": true
+    },
+    "2025-07": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2025-08": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2025-09": {
+      "expected_minutes": 43200,
+      "observed_minutes": 43200,
+      "complete": true
+    },
+    "2025-10": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2025-11": {
+      "expected_minutes": 43200,
+      "observed_minutes": 43200,
+      "complete": true
+    },
+    "2025-12": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2026-01": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2026-02": {
+      "expected_minutes": 40320,
+      "observed_minutes": 40320,
+      "complete": true
+    },
+    "2026-03": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2026-04": {
+      "expected_minutes": 43200,
+      "observed_minutes": 43200,
+      "complete": true
+    },
+    "2026-05": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2026-06": {
+      "expected_minutes": 43200,
+      "observed_minutes": 43200,
+      "complete": true
+    },
+    "2026-07": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2026-08": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    },
+    "2026-09": {
+      "expected_minutes": 43200,
+      "observed_minutes": 43200,
+      "complete": true
+    },
+    "2026-10": {
+      "expected_minutes": 44640,
+      "observed_minutes": 44640,
+      "complete": true
+    }
+  },
+  "signals": {
+    "5": {
+      "tf_minutes": 5,
+      "higher_bars": 192606,
+      "aligned_long_bars": 83020,
+      "aligned_short_bars": 79961
+    },
+    "15": {
+      "tf_minutes": 15,
+      "higher_bars": 64202,
+      "aligned_long_bars": 26752,
+      "aligned_short_bars": 26251
+    },
+    "60": {
+      "tf_minutes": 60,
+      "higher_bars": 16050,
+      "aligned_long_bars": 6616,
+      "aligned_short_bars": 6863
+    }
+  },
+  "note": "No funding, live spreads, or liquidation. Drawdown at trade closes. 2026 previously researched."
+}
