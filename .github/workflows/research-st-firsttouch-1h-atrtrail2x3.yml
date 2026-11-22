@@ -1,0 +1,51 @@
+name: BTC ETH 1H first EMA20 touch ATR14 trail 2x and 3x no TP
+on:
+  push:
+    branches: [research/st-firsttouch-1h-filtered-atrtrail2x3-20261122]
+    paths:
+      - scripts/research_st_firsttouch_1h_filtered_atrtrail2x3_20261122.py
+      - .github/workflows/research-st-firsttouch-1h-atrtrail2x3.yml
+      - analysis/st_firsttouch_1h_filtered_atrtrail2x3_20261122/NOVELTY_CHECK.md
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: st-firsttouch-1h-atrtrail2x3-20261122
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical libraries
+        run: python -m pip install numpy pandas
+      - name: Backtest BTC and ETH, 1H 2xATR14 and 3xATR14 trailing with 1m replay
+        shell: bash
+        run: |
+          mkdir -p analysis/st_firsttouch_1h_filtered_atrtrail2x3_20261122
+          set -o pipefail
+          python -u scripts/research_st_firsttouch_1h_filtered_atrtrail2x3_20261122.py 2>&1 | tee analysis/st_firsttouch_1h_filtered_atrtrail2x3_20261122/execution.log
+      - name: Upload study artifacts even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-eth-1h-filtered-atrtrail-2x-3x
+          path: analysis/st_firsttouch_1h_filtered_atrtrail2x3_20261122/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Archive verified results on research branch only
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_firsttouch_1h_filtered_atrtrail2x3_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive first-touch 1H 2x vs 3x ATR14 trailing results"
+            git push origin HEAD:research/st-firsttouch-1h-filtered-atrtrail2x3-20261122
+          fi
