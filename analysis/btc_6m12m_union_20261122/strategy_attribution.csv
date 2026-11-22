@@ -1,0 +1,9 @@
+state,strategy,executed,positive_trades,account_net_pnl_usd,model
+breakout_down,structured_breakout,28,14,723.4693517635759,six_only
+shock,shock_breakout,27,8,-241.93406607456137,six_only
+breakout_down,structured_breakout,22,12,804.4003701140676,twelve_only
+shock,shock_breakout,29,11,116.30335490223453,twelve_only
+breakout_down,structured_breakout,28,14,731.0921338077171,union_6m12m
+shock,shock_breakout,33,11,-116.15269545767839,union_6m12m
+breakout_down,structured_breakout,22,12,796.5580131465201,intersection_6m12m
+shock,shock_breakout,23,8,-13.101159425071167,intersection_6m12m

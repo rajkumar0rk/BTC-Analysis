@@ -1,0 +1,9 @@
+model,year,months,trades,profitable_months,losing_months,idle_months,compounded_net_pct
+six_only,2025,12,10,0,2,10,-2.79986
+six_only,2026,10,45,7,3,0,7.83457
+twelve_only,2025,12,0,0,0,12,0.0
+twelve_only,2026,10,51,7,3,0,9.20704
+union_6m12m,2025,12,10,0,2,10,-2.79986
+union_6m12m,2026,10,51,7,3,0,9.20704
+intersection_6m12m,2025,12,0,0,0,12,0.0
+intersection_6m12m,2026,10,45,7,3,0,7.83457

@@ -1,0 +1,5 @@
+model,candidate_events,exclusive_position_rejections,entry_unavailable,executed_trades,trades_activated,post_bar_stop_updates,trades,wins,win_rate_pct,profit_factor,net_return_pct,net_profit_usd,ending_equity_usd,max_trade_close_drawdown_pct,fees_gst_usd,slippage_usd,profitable_months,losing_months,idle_months,passes_22_22
+six_only,85,30,0,55,23,23,55,22,40.0,1.2833,4.8154,481.54,10481.54,4.864,324.72,36.22,7,5,10,False
+twelve_only,80,29,0,51,23,23,51,23,45.098,1.6135,9.207,920.7,10920.7,4.864,311.42,35.93,7,3,12,False
+union_6m12m,95,34,0,61,25,25,61,25,40.984,1.327,6.1494,614.94,10614.94,4.864,359.89,39.73,7,5,10,False
+intersection_6m12m,70,25,0,45,21,21,45,20,44.444,1.596,7.8346,783.46,10783.46,4.864,275.24,32.32,7,3,12,False

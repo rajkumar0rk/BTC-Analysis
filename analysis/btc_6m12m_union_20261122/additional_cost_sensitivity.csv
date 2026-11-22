@@ -1,0 +1,17 @@
+model,extra_roundtrip_bps,net_account_return_pct,additional_spread_like_cost_usd,profitable_months,losing_months,no_trade_months
+six_only,0,4.8154,0.0,7,5,10
+six_only,2,4.2504,54.99,7,5,10
+six_only,5,3.4085,136.93,7,5,10
+six_only,10,2.0201,272.04,7,5,10
+twelve_only,0,9.207,0.0,7,3,12
+twelve_only,2,8.6652,52.78,7,3,12
+twelve_only,5,7.8573,131.45,7,3,12
+twelve_only,10,6.524,261.3,7,3,12
+union_6m12m,0,6.1494,0.0,7,5,10
+union_6m12m,2,5.5187,60.94,7,5,10
+union_6m12m,5,4.5796,151.69,7,5,10
+union_6m12m,10,3.0326,301.14,7,5,10
+intersection_6m12m,0,7.8346,0.0,7,3,12
+intersection_6m12m,2,7.359,46.65,7,3,12
+intersection_6m12m,5,6.6495,116.24,7,3,12
+intersection_6m12m,10,5.4772,231.22,7,3,12

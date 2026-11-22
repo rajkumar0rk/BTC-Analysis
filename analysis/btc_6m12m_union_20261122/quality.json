@@ -1,0 +1,32 @@
+{
+  "models": [
+    "six_only",
+    "twelve_only",
+    "union_6m12m",
+    "intersection_6m12m"
+  ],
+  "complete_IST_months": 22,
+  "source": "Delta India BTCUSD SHA256 verified native 1M",
+  "native_1m_candles": 992160,
+  "source_partitions": 23,
+  "confirmed_first_15m_events": 513,
+  "six_month_eligible_unique_signals": 85,
+  "twelve_month_eligible_unique_signals": 80,
+  "common_signals_deduplicated": 70,
+  "union_eligible_unique_signals": 95,
+  "union_equals_set_sum_minus_intersection": true,
+  "standalone_six_month_protected_trade_parity": true,
+  "standalone_twelve_month_protected_trade_parity": true,
+  "two_filters_enter_once_when_same_signal": true,
+  "independent_single_combined_account": true,
+  "one_position_globally_at_a_time": true,
+  "original_fixed_15m_confirmation_and_next_1m_entry": true,
+  "no_synthetic_signal_from_future_month_pnl": true,
+  "same_protected_stop_exit_rules_for_all_variants": true,
+  "native_1m_stop_first_and_next_bar_stop_updates": true,
+  "fees_GST_slippage_accounted_as_original_assumptions": true,
+  "actual_funding_cash_or_historical_orderbook_spread_present": false,
+  "liquidation_or_contract_rounding_modelled": false,
+  "external_untouched_prospective_holdout": false,
+  "approved_for_live_trading": false
+}
