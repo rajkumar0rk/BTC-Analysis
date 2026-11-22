@@ -3,7 +3,8 @@
 
 Same 1H Supertrend(10,3) + EMA20 first-touch signals, ratio 1.25-2.5x,
 0.001 BTC, same next-hour entry, one fill per ST cycle.
-Profit locks: baseline [0.14%] vs increment [0.14,0.50,1,2,5%].
+Profit locks: baseline [0.14%], [0.14,0.50,1,2,5%], and the exact requested
+[0.20,0.50,1,2%] plus a [0.20,0.50,1,2,5%] path comparison.
 Prices are executed against both hypothetical 1m intrabar OHLC paths.
 """
 import json
@@ -17,6 +18,8 @@ OUT=Path("analysis/st_ema20_touch_incremental_3pct_sl_20261122")
 LADDERS={
     "single_0p14": (0.14,),
     "increment_0p14_0p50_1_2_5": (0.14,0.5,1.0,2.0,5.0),
+    "exact_0p20_0p50_1_2": (0.20,0.50,1.0,2.0),
+    "control_0p20_0p50_1_2_5": (0.20,0.50,1.0,2.0,5.0),
 }
 REFERENCE={
     "open_high_low_close": (50,0.725036,21),
