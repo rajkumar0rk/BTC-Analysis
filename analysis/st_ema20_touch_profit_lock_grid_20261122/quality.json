@@ -1,0 +1,46 @@
+{
+  "source": "Delta Exchange India BTCUSD 1-minute OHLCV",
+  "signal": "1H Supertrend(10,3) + 1H first EMA20 Touch",
+  "entry_volume_ratio": "1.25 through 2.5 on signal hour",
+  "quantity_btc": 0.001,
+  "initial_sl_pct": 3.0,
+  "slippage_points_per_side": 5.0,
+  "taker_fee_with_gst_per_side": 0.00059,
+  "simulated_intraminute_paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "candidate_ladders": 337,
+  "path_tests": 674,
+  "completed_months": [
+    "2025-01",
+    "2025-02",
+    "2025-03",
+    "2025-04",
+    "2025-05",
+    "2025-06",
+    "2025-07",
+    "2025-08",
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09",
+    "2026-10"
+  ],
+  "validation": "Frozen 0.14% and 0.14/0.5/1/2/5 ladder baselines match",
+  "caveats": [
+    "No stop execution latency or true tick sequence",
+    "No liquidation, funding, margin or forced unwind",
+    "Monthly counts are historic outcomes not guarantees",
+    "Return and zero closed-equity DD exclude intratrade unrealized drawdown"
+  ]
+}
