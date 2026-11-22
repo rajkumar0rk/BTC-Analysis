@@ -204,7 +204,8 @@ def smoke_confirmation():
 
 from bisect import bisect_right
 
-# Explicit percentages, e.g. 0.12 means 0.12% of the ELADDERS = {
+# Exact selected percent-of-entry stop protection levels.
+LADDERS = {
     "S01_0p14": (0.14,),
     "S02_0p50": (0.50,),
     "S03_0p75": (0.75,),
@@ -214,8 +215,6 @@ from bisect import bisect_right
     "L01_0p5_1_2_5": (0.5, 1.0, 2.0, 5.0),
     "L02_1_2_5": (1.0, 2.0, 5.0),
     "L03_2_3_5": (2.0, 3.0, 5.0),
-}
-.0, 5.0),
 }
 
 PATHS = ("open_high_low_close", "open_low_high_close")
