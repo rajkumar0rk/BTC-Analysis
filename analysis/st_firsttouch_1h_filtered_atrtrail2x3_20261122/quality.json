@@ -1,0 +1,62 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "research_rules": {
+    "entry": "FIRST distinct signal-timeframe EMA20 touch after confirmed opposite ST flip",
+    "ignore_flip_candle": true,
+    "signal_timeframes": [
+      60
+    ],
+    "atr_trailing_multipliers": [
+      2.0,
+      3.0
+    ],
+    "volume_filter": "previous completed 1H volume > 1.2 times its 20-candle SMA",
+    "volatility_filter": "previous completed 1H Wilder ATR14 > 20-candle SMA of ATR14",
+    "first_touch_filter_failure": "reject entire current ST direction cycle, no second-touch substitute",
+    "volume_multiplier": 1.2,
+    "volume_lookback": 20,
+    "volatility_atr_period": 14,
+    "volatility_average_period": 20,
+    "indicator_supertrend_atr_period": 10,
+    "indicator_supertrend_factor": 3.0,
+    "atr_smoothing": "Wilder RMA seeded at SMA of first 10 true ranges",
+    "signal_ema_period": 20,
+    "risk_reference": "executed EMA20 entry to previous completed ST line, R=side*(entry-ST)",
+    "take_profit": null,
+    "fixed_take_profit_enabled": false,
+    "initial_trailing_stop": "entry +/- multiplier * ATR14 from last fully closed 1H bar",
+    "trailing_atr14_distance": "FIXED at entry, multiplier 2 or 3 x prior closed 1H Wilder ATR14",
+    "trailing_monitoring": "1m chronological hypothetical OHLC path; on favorable move ratchet stop by same distance; stop never retreats",
+    "stop_loss": "FIRST of ATR14 trailing stop breach on 1m path or opposite confirmed 1H Supertrend flip at next 1H open",
+    "no_exit_on_st_line_touch": true,
+    "no_profit_lock": true,
+    "trade_reentry": "max one entry per ST regime",
+    "intraminute_assumptions": [
+      "O-H-L-C",
+      "O-L-H-C"
+    ],
+    "actual_tick_data_available": false,
+    "timeframe_backtest_data": "1m OHLC Delta India 2025Jan through 2026Oct",
+    "initial_equity_usd": 1000.0,
+    "leverage_notional": 1,
+    "maker_or_taker": "taker",
+    "fee_each_side": 0.0005,
+    "fee_GST": 0.18,
+    "adverse_slippage_each_side": 0.0002,
+    "margin_liquidation_funding_depth_spread_not_modelled": true,
+    "historical_2026_not_pristine_oos": true
+  }
+}
