@@ -176,8 +176,8 @@ def selftest():
                      400,500,"lock_200_100")
     assert a.iloc[0].reason=="profit_protect_new_same_minute",a.iloc[0].to_dict()
     # Existing protective stop gap fill must use low open, not stop price.
-    h[1]=1250.;lo[1]=1175.
-    h[2]=1190.;lo[2]=1150.;op[2]=1050.
+    h[1]=1250.;lo[1]=1175.;op[1]=1200.;c[1]=1200.
+    h[2]=1190.;lo[2]=1000.;op[2]=1050.
     a=replay_entries(sel,np.array([],dtype=int),(h,lo,op,c,times),
                      400,500,"lock_200_100")
     assert a.iloc[0].reason.startswith("profit_protect"),a.iloc[0].to_dict()
