@@ -1,0 +1,41 @@
+name: BTC 15m Touch Flip Breakout most profitable months
+on:
+  push:
+    branches:
+      - research/st-second-green-flip-breakout-comparison-20261122
+    paths:
+      - scripts/research_st_three_way_highest_profitable_months.py
+      - .github/workflows/research-st-three-way-highest-months.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  monthly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pandas and tabulate
+        run: python -m pip install pandas numpy tabulate
+      - name: Audit maximum profitable months against complete historic grid
+        run: python -u scripts/research_st_three_way_highest_profitable_months.py
+      - name: Save report artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-st-three-way-highest-profitable-months
+          path: analysis/st_touch_flip_breakout_three_way_20261122/monthly_win_maximizers/
+          if-no-files-found: warn
+      - name: Commit results to research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_touch_flip_breakout_three_way_20261122/monthly_win_maximizers/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: verified monthly win count three ST strategies"
+            git push origin HEAD:research/st-second-green-flip-breakout-comparison-20261122
+          fi
