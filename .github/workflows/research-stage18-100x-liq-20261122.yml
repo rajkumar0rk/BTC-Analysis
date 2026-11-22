@@ -1,4 +1,4 @@
-name: BTCUSD $100/$10/100x liquidation-aware replay
+name: BTCUSD $100 $10 isolated 100x replay
 on:
   push:
     branches:
@@ -25,8 +25,10 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install backtest dependencies
+        id: deps
         run: python -m pip install --disable-pip-version-check pandas numpy numba tabulate
-      - name: Download previously verified core and Donchian 1m trade ledgers
+      - name: Download previously completed 1-minute historical ledgers
+        id: source
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -37,27 +39,52 @@ jobs:
           test -s "$RUNNER_TEMP/don/donchian_real_1m_trade_ledgers.csv.gz"
           test -s "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-10.csv.gz"
           test -s "data/delta_india/BTCUSD/1m/2026-10.csv.gz"
-      - name: Validate and run every minute of 22-month BTCUSD simulation
+      - name: Run 22-month backtest with mark-price liquidation
+        id: backtest
         run: |
           python -m py_compile scripts/research_stage18_100x_liquidation_20261122.py
           python scripts/research_stage18_100x_liquidation_20261122.py \
             --core "$RUNNER_TEMP/core/core_all_trades.csv.gz" \
             --donchian "$RUNNER_TEMP/don/donchian_real_1m_trade_ledgers.csv.gz"
-      - name: Upload all monthly, daily, trade and liquidation evidence
+          test -s "analysis/stage18_100x_liquidation_20261122/summary.json"
+          test -s "analysis/stage18_100x_liquidation_20261122/monthly.csv"
+          test -s "analysis/stage18_100x_liquidation_20261122/daily.csv"
+          test -s "analysis/stage18_100x_liquidation_20261122/trades.csv"
+      - name: Upload ledger and result
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: stage18-100x-liquidation-evidence-20261122
+          name: stage18-100x-liquidation-evidence-${{ github.run_attempt }}
           path: analysis/stage18_100x_liquidation_20261122/
           if-no-files-found: warn
           retention-days: 30
-      - name: Commit completed standalone research reports on research branch
-        if: success()
+      - name: Write back run ID and status to the research branch even on failure
+        if: always()
+        env:
+          DEPS: ${{ steps.deps.outcome }}
+          SOURCE: ${{ steps.source.outcome }}
+          BACKTEST: ${{ steps.backtest.outcome }}
         run: |
+          mkdir -p analysis/stage18_100x_liquidation_20261122
+          python - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path("analysis/stage18_100x_liquidation_20261122/runner_status.json")
+          status=dict(
+             run_id=os.environ["GITHUB_RUN_ID"],
+             attempt=os.environ["GITHUB_RUN_ATTEMPT"],
+             url=f'https://github.com/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{os.environ["GITHUB_RUN_ID"]}',
+             branch=os.environ["GITHUB_REF_NAME"],
+             deps=os.environ.get("DEPS","unknown"),
+             source_download=os.environ.get("SOURCE","unknown"),
+             backtest=os.environ.get("BACKTEST","unknown"),
+             result_file_present=pathlib.Path("analysis/stage18_100x_liquidation_20261122/summary.json").exists())
+          p.write_text(json.dumps(status,indent=2)+"\n")
+          print(json.dumps(status))
+          PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add analysis/stage18_100x_liquidation_20261122/
           if ! git diff --cached --quiet; then
-            git commit -m "research: archive complete $100 100x BTCUSD liquidation replay outputs"
+            git commit -m "research: record 100x liquidation Actions outcome"
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
