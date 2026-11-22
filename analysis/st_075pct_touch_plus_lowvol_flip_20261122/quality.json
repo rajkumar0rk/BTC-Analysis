@@ -1,0 +1,68 @@
+{
+  "source_repo": "rajkumar0rk/BTC-Analysis",
+  "executed_status": "passed_standalone_parity_and_exclusive_portfolio_checks",
+  "specs": {
+    "line_touch": {
+      "sl": 0.75,
+      "tp": 1.5,
+      "volume": "vol_ge_1p0",
+      "atr": "atrpct_ge_0p20",
+      "expected_n": 108,
+      "expected_w": 36,
+      "expected_net": 7928.77,
+      "expected_pos": 12,
+      "expected_loss": 10
+    },
+    "bullish_flip": {
+      "sl": 3.0,
+      "tp": 0.5,
+      "volume": "vol_le_0p8",
+      "atr": "atrpct_ge_0p20",
+      "expected_n": 42,
+      "expected_w": 33,
+      "expected_net": 3401.08,
+      "expected_pos": 14,
+      "expected_loss": 5
+    }
+  },
+  "standalone_parity": [
+    {
+      "strategy": "line_touch",
+      "trade_count": 108,
+      "winning_trades": 36,
+      "net_pts": 7928.77,
+      "positive_months": 12,
+      "profit_2025": 7039.37,
+      "profit_2026_JanOct": 889.4
+    },
+    {
+      "strategy": "bullish_flip",
+      "trade_count": 42,
+      "winning_trades": 33,
+      "net_pts": 3401.08,
+      "positive_months": 14,
+      "profit_2025": 3394.93,
+      "profit_2026_JanOct": 6.15
+    }
+  ],
+  "time_period": "2025Jan through 2026Oct IST",
+  "signal_rule": "third 15m candle long entry; original ST close exit",
+  "strategy_filters_distinct_and_preserved": true,
+  "priority_modes": {
+    "combined_touch_priority": [
+      "line_touch",
+      "bullish_flip"
+    ],
+    "combined_flip_priority": [
+      "bullish_flip",
+      "line_touch"
+    ]
+  },
+  "original_supertrend_exit": true,
+  "portfolio_exclusive": true,
+  "one_trade_per_ST_bull_cycle": true,
+  "actual_exit_month_used_for_2025_and_2026": true,
+  "pnl_units": "BTC price points per 1 BTC equivalent",
+  "liquidation_and_funding_not_modeled": true,
+  "forward_tested": false
+}

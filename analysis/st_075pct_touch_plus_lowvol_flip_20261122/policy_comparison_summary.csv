@@ -1,0 +1,8 @@
+policy,trades,wins,losses,win_rate_pct,net_pts,trade_cost_pts,max_realized_trade_equity_drawdown_pts,profitable_entry_months,losing_entry_months,flat_entry_months,profitable_realized_exit_months,losing_realized_exit_months,flat_realized_exit_months,profitable_mark_to_market_months,losing_mark_to_market_months,flat_mark_to_market_months,ending_oct_equity_mtm_pts,oct_end_open_positions,post_oct_exit_trades,max_entry_held_days,blocked_overlaps,blocked_one_cycle,input_signals,accepted
+standalone_line_touch,108,36,72,33.33,7928.77,11122.37,4505.01,12,10,0,12,10,0,12,10,0,7928.77,0,0,1.015,0,0,108,108
+standalone_bullish_flip,42,33,9,78.57,3401.08,4563.29,2556.04,14,5,3,14,5,3,14,5,3,3401.08,0,0,0.75,0,0,42,42
+parallel_both_not_one_position,150,69,81,46.0,11329.86,15685.66,4845.13,13,9,0,13,9,0,13,9,0,11329.86,0,0,1.015,0,0,150,150
+combined_touch_priority,143,67,76,46.85,10608.58,14957.94,5192.53,13,9,0,13,9,0,13,9,0,10608.58,0,0,1.015,4,3,150,143
+combined_touch_priority_no_cycle_cap,146,67,79,45.89,9524.06,15249.45,5767.53,12,10,0,12,10,0,12,10,0,9524.06,0,0,1.015,4,0,150,146
+combined_flip_priority,143,67,76,46.85,10608.58,14957.94,5192.53,13,9,0,13,9,0,13,9,0,10608.58,0,0,1.015,4,3,150,143
+combined_flip_priority_no_cycle_cap,146,67,79,45.89,9524.06,15249.45,5767.53,12,10,0,12,10,0,12,10,0,9524.06,0,0,1.015,4,0,150,146
