@@ -46,7 +46,6 @@ def load():
         assert all(rows.signal_signal_utc.astype(str)==f.signal_utc.astype(str))
         mat=np.zeros((62,22),float)
         for x in rows.itertuples():
-            mat[month_to_i[x.month_ist]][0] if False else None
             mat[int(x.signal_entry_id),month_to_i[x.month_ist]]=float(x.net_usd)
         baseline=mat.sum(axis=0)
         positive=int((baseline>EPS).sum())
@@ -142,8 +141,8 @@ def score(key,mask,P,track):
 
     obj.update(all_prior_profitable_months_preserved=all(aliveStatus),
       all_prior_profitable_month_dollars_preserved=all(aliveDollars),
-      2025_original_profit_months_preserved=all(alive25),
-      2026_original_profit_months_preserved=all(alive26),
+      original_2025_profit_months_preserved=all(alive25),
+      original_2026_profit_months_preserved=all(alive26),
       reduced_losing_months_min=min(reduction),
       reduced_losing_months_max=max(reduction),
       reduced_losing_2025_min=min(red25),
@@ -194,7 +193,7 @@ def main():
     strict=filtered[(filtered.all_prior_profitable_months_preserved)&
        (filtered.both_years_positive)&(filtered.reduced_losing_months_min>0)]
     dollar=strict[strict.all_prior_profitable_month_dollars_preserved]
-    keep2025=filtered[(filtered["2025_original_profit_months_preserved"])&
+    keep2025=filtered[(filtered["original_2025_profit_months_preserved"])&
             (filtered.net_2025_worst>0)]
     strictRank=strict.sort_values(["reduced_losing_months_min","losing_months_worst",
                                   "net_22_worst","selected_trades","complexity"],
