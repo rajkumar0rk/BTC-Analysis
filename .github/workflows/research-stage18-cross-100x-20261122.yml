@@ -1,0 +1,85 @@
+name: BTCUSD $100 cross margin 100x full replay
+on:
+  push:
+    branches:
+      - research/stage18-21-profit-robustness-20261122-v1
+    paths:
+      - scripts/research_stage18_100x_cross_margin_20261122.py
+      - .github/workflows/research-stage18-cross-100x-20261122.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: stage18-100x-cross-20261122
+  cancel-in-progress: false
+jobs:
+  cross-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install historical replay requirements
+        id: deps
+        run: python -m pip install --disable-pip-version-check numpy pandas numba tabulate
+      - name: Download original core and Donchian executed historical trades
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/core" "$RUNNER_TEMP/don"
+          gh run download 44889747997 -n stage18-core-standalone-20261121 -D "$RUNNER_TEMP/core" --repo "$GITHUB_REPOSITORY"
+          gh run download 44889747997 -n stage18-donchian-standalone-20261121 -D "$RUNNER_TEMP/don" --repo "$GITHUB_REPOSITORY"
+          test -s "$RUNNER_TEMP/core/core_all_trades.csv.gz"
+          test -s "$RUNNER_TEMP/don/donchian_real_1m_trade_ledgers.csv.gz"
+          test -s "data/delta_india/BTCUSD/institutional/history/mark_1m/2026-10.csv.gz"
+          test -s "data/delta_india/BTCUSD/1m/2026-10.csv.gz"
+      - name: Run cross-wallet BTCUSD mark-price liquidation replay
+        id: backtest
+        run: |
+          python -m py_compile scripts/research_stage18_100x_cross_margin_20261122.py
+          python scripts/research_stage18_100x_cross_margin_20261122.py \
+            --core "$RUNNER_TEMP/core/core_all_trades.csv.gz" \
+            --donchian "$RUNNER_TEMP/don/donchian_real_1m_trade_ledgers.csv.gz"
+          test -s "analysis/stage18_100x_cross_20261122/summary.json"
+          test -s "analysis/stage18_100x_cross_20261122/monthly.csv"
+          test -s "analysis/stage18_100x_cross_20261122/daily.csv"
+          test -s "analysis/stage18_100x_cross_20261122/trades.csv"
+      - name: Upload result artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-cross-100x-result-${{ github.run_attempt }}
+          path: analysis/stage18_100x_cross_20261122/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Commit success/failure status and source evidence to research branch
+        if: always()
+        env:
+          DEPS: ${{ steps.deps.outcome }}
+          SOURCE: ${{ steps.source.outcome }}
+          REPLAY: ${{ steps.backtest.outcome }}
+        run: |
+          mkdir -p analysis/stage18_100x_cross_20261122
+          python - <<'PY'
+          import os,json,pathlib
+          p=pathlib.Path("analysis/stage18_100x_cross_20261122/runner_status.json")
+          d=dict(run_id=os.environ["GITHUB_RUN_ID"],attempt=os.environ["GITHUB_RUN_ATTEMPT"],
+                 url="https://github.com/"+os.environ["GITHUB_REPOSITORY"]+"/actions/runs/"+os.environ["GITHUB_RUN_ID"],
+                 deps=os.environ["DEPS"],source=os.environ["SOURCE"],replay=os.environ["REPLAY"],
+                 completed_result=pathlib.Path("analysis/stage18_100x_cross_20261122/summary.json").exists())
+          p.write_text(json.dumps(d,indent=2)+"\n")
+          print(json.dumps(d))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/stage18_100x_cross_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive BTCUSD $100 cross 100x wallet backtest"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
