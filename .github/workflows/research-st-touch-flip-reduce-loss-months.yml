@@ -1,0 +1,41 @@
+name: BTC 15m ST Touch Flip reduce losing months 2025 2026
+on:
+  push:
+    branches:
+      - research/st-touch-flip-reduce-loss-months-20261122
+    paths:
+      - scripts/research_st_touch_flip_reduce_loss_months.py
+      - .github/workflows/research-st-touch-flip-reduce-loss-months.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Test causal filter-pair grids against full 1-minute BTC archive
+        run: python -u scripts/research_st_touch_flip_reduce_loss_months.py
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-15m-st-touch-flip-loss-month-improvements
+          path: analysis/st_touch_flip_reduce_losing_months_20261122/
+          if-no-files-found: warn
+      - name: Publish successful research results to working branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_touch_flip_reduce_losing_months_20261122/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: retrospective 2025-2026 month consistency filter grid"
+            git push origin HEAD:research/st-touch-flip-reduce-loss-months-20261122
+          fi
