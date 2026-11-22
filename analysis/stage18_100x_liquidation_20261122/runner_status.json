@@ -1,10 +1,10 @@
 {
-  "run_id": "44995084982",
+  "run_id": "44995673074",
   "attempt": "1",
-  "url": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44995084982",
+  "url": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/44995673074",
   "branch": "research/stage18-21-profit-robustness-20261122-v1",
   "deps": "success",
   "source_download": "success",
-  "backtest": "failure",
-  "result_file_present": false
+  "backtest": "success",
+  "result_file_present": true
 }

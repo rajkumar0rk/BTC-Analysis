@@ -1,0 +1,88 @@
+{
+  "status": "MODEL_1M_LIQUIDATION_AWARE_NOT_EXCHANGE_FILLED",
+  "starting_balance": 100.0,
+  "margin_limit_per_trade": 10.0,
+  "leverage": 100.0,
+  "lot_size_btc": 0.001,
+  "fee_taker_plus_gst": 0.00059,
+  "liquidation_penalty_plus_gst": 0.00059,
+  "maintenance_margin": 0.0025,
+  "one_shared_position": true,
+  "auto_margin_topup": false,
+  "target_source_event_counts": {
+    "core": 63,
+    "donchian": 20,
+    "hourly_exits_in_22mo": 197,
+    "hourly_source_expected_exits": 196,
+    "hourly_source_count_parity": false,
+    "hourly_entries": 197
+  },
+  "total_source_events": 280,
+  "historical_minutes": 963030,
+  "final_account_equity": 8.86336943000105,
+  "net_profit": -91.13663056999894,
+  "trades_executed": 140,
+  "wins": 57,
+  "losses": 83,
+  "liquidations": 34,
+  "skipped_busy": 20,
+  "skipped_funds": 120,
+  "skipped_min_lot": 0,
+  "profitable_months": 5,
+  "losing_months": 7,
+  "flat_months": 10,
+  "entry_fees": 78.20344685000005,
+  "exit_fees": 78.23374815184168,
+  "liquidation_penalties": 19.078339334591718,
+  "total_fees": 175.51553433643346,
+  "worst_calendar_day": {
+    "day_ist": "2025-10-07",
+    "start_equity": 172.25980459959055,
+    "end_equity": 136.34690017303052,
+    "net_pnl": -35.91290442656003,
+    "daily_return_pct": -20.848104704424696,
+    "intraday_drawdown_pct": 24.81150744625661
+  },
+  "worst_month": {
+    "month_ist": "2025-11",
+    "start_equity": 118.52500508472576,
+    "end_equity": 49.30222450504385,
+    "net_pnl": -69.22278057968191,
+    "return_pct": -58.403524665701624
+  },
+  "maximum_daily_intraday_drawdown_pct": 53.0743081878884,
+  "maximum_daily_drawdown_date": "2025-12-24",
+  "maximum_account_drawdown_pct": 95.06585394399343,
+  "maximum_account_drawdown_utc": "2025-12-25 20:29:00+00:00",
+  "by_strategy": [
+    {
+      "strategy": "core",
+      "n": 37,
+      "liquidations": 0,
+      "net_pnl": 65.82614821578872
+    },
+    {
+      "strategy": "donchian",
+      "n": 10,
+      "liquidations": 8,
+      "net_pnl": -11.673387193090743
+    },
+    {
+      "strategy": "hourly",
+      "n": 93,
+      "liquidations": 26,
+      "net_pnl": -145.28939159269683
+    }
+  ],
+  "has_position_at_cutoff": false,
+  "limitations": [
+    "Hourly source count does not exactly reproduce archived monthly ledger (197 replay vs 196); audit version divergence",
+    "Uses frozen independent source strategy event streams; post-liquidation re-entry signals are not regenerated",
+    "Single BTCUSD position shared across three signal families; old 73.5/22.5/4 monthly NAV weights cannot be applied to one $10 fixed-margin position",
+    "1m mark OHLC used for liquidation; exact intraminute chronology and liquidation execution price not available",
+    "Conservatively charges ordinary exit taker fee AND liquidation penalty, each incl GST, when liquidation is triggered",
+    "Liquidation recovery modeled at threshold or gap mark with 5 BTC price points adverse slip, not actual Delta IOC liquidation fills",
+    "No historical funding cashflows or realistic spread/depth, orderqueue, INR conversion, or exchange ADL behavior",
+    "No independent prospective validation of 2025\u20132026 hindsight-exposed signals"
+  ]
+}
