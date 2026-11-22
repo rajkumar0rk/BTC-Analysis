@@ -1,0 +1,47 @@
+name: BTC EMA20 Touch vs Supertrend Flip Comparison
+on:
+  push:
+    branches:
+      - research/st-ema20-touch-vs-flip-20261122
+    paths:
+      - scripts/backtest_st_ema20_touch_vs_flip.py
+      - .github/workflows/research-st-ema20-touch-vs-flip.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-touch-vs-flip-20261122
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas
+      - name: Validate Python
+        run: python -m py_compile scripts/backtest_st_ema20_touch_vs_flip.py
+      - name: Replay ST Flip and compare EMA20 Touch
+        run: python scripts/backtest_st_ema20_touch_vs_flip.py
+      - name: Upload complete comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-ema20-touch-vs-flip-comparison
+          path: analysis/st_ema20_touch_vs_flip_1h/
+          if-no-files-found: warn
+      - name: Persist results to research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_ema20_touch_vs_flip_1h/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist touch vs flip comparison with monthly PnL"
+            git pull --rebase origin research/st-ema20-touch-vs-flip-20261122
+            git push origin HEAD:research/st-ema20-touch-vs-flip-20261122
+          fi
