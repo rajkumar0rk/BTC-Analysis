@@ -119,7 +119,7 @@ def microtests():
     # placed stop, even if its LOW was earlier/lower in that same minute.
     op=np.array([100000.,100100.,100200.,100200.,100200.,100200.])
     hi=np.array([100200.,100250.,100250.,100250.,100250.,100250.])
-    lo=np.array([99950.,100080.,100150.,100190.,100190.,100190.])
+    lo=np.array([99950.,99700.,100150.,100190.,100190.,100190.])
     cl=np.array([100100.,100200.,100200.,100200.,100200.,100200.])
     x=eval_candidate(0,100000.,hi,lo,op,cl)
     assert x["arm_0.12_lock_0pct_of_arm"][0]==1,x
