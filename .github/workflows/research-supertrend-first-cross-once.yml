@@ -1,0 +1,39 @@
+name: BTC Supertrend FIRST EMA crossover ONE trade per regime
+on:
+  push:
+    branches:
+      - research/supertrend-first-cross-once-20261122
+    paths:
+      - scripts/research_supertrend_first_cross_once.py
+      - .github/workflows/research-supertrend-first-cross-once.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-supertrend-first-cross-once-20261122
+  cancel-in-progress: false
+jobs:
+  first_cross_once:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research requirements
+        run: python -m pip install --disable-pip-version-check numpy pandas numba tabulate
+      - name: Confirm pre-registered one-trade-per-regime audit
+        run: test -s analysis/supertrend_first_cross_once/NOVELTY_CHECK.md
+      - name: Test signal logic and run 60 actual 1-minute replays
+        run: python scripts/research_supertrend_first_cross_once.py
+      - name: Save complete backtest artifacts on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/supertrend_first_cross_once/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: publish first-crossover one-per-supertrend backtest"
+            git push origin HEAD:research/supertrend-first-cross-once-20261122
+          fi
