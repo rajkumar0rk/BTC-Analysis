@@ -46,8 +46,9 @@ def prepare_entries(engine,minutes,hourly,mode):
             selected.append(e)
     return selected
 
-def run(engine, m, h, entries, mode, path, stop_id, kind, stop_value):
-    ladder=(0.14,) if mode=="touch" else (2.0,3.0,5.0)
+def run(engine, m, h, entries, mode, path, stop_id, kind, stop_value, ladder_override=None):
+    ladder=tuple(ladder_override) if ladder_override is not None else ((0.14,) if mode=="touch" else (2.0,3.0,5.0))
+    assert ladder and all(0 < x <= 10 for x in ladder) and all(a < b for a,b in zip(ladder,ladder[1:]))
     op=m.open.to_numpy(float); hi=m.high.to_numpy(float)
     lo=m.low.to_numpy(float); close=m.close.to_numpy(float)
     hside=h.side.to_numpy(); times=m.index; total=len(op)
