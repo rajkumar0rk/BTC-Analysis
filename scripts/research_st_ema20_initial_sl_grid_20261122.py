@@ -185,7 +185,7 @@ def main():
           source_files=nfiles,minute_bars=len(m),first_utc=str(m.index.min()),last_utc=str(m.index.max()),
           entry_count={k:len(v) for k,v in configs.items()},timeframe="1h signal + 1m stop/lock replay",
           fee_side_with_gst=engine.FEE,slippage_points_each_side=engine.SLIP,quantity_btc=engine.QTY,
-          validated_no_stop_baselines=EXPECTED, stop_specs=[dict(label=a,unit=b,value=c) for a,b,c in STOPS],
+          validated_no_stop_baselines={f'{k[0]}_{k[1]}':list(v) for k,v in EXPECTED.items()}, stop_specs=[dict(label=a,unit=b,value=c) for a,b,c in STOPS],
           caveats=["Intraminute OHLC high/low order unresolved: both plausible paths modeled",
                    "No order book, fill latency, stop amendment latency, funding, liquidation or margin",
                    "Realized drawdown only; floating equity risk may be much greater",
