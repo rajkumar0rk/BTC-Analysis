@@ -245,7 +245,7 @@ def run():
        purpose="Check every completed 5m event rather than 18h 19h 20h checkpoints; mandatory 21h fallback",
        full_notional_1x=True,
        exactly_477_weekday_trades=True,
-       2025_train_only=True,
+       selected_on_2025_only=True,
        research_exposed_2026_not_blind=True,
        configurations=EXPECTED,
        both_fee_scenarios=len(df),
