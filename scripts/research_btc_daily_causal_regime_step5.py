@@ -46,7 +46,7 @@ RECIPES={
 EVENT_EXIT=("lock050","lock075","lock100","trail050")
 FALL_EXIT=("lock050","lock075","trail050","trail075","static075")
 EXPECTED=len(RULES)*len(FALLBACK_HOURS)*len(EVENT_EXIT)*len(FALL_EXIT)*len(FALL_EXIT)*len(REGIMES)*len(MODES)
-assert EXPECTED==13200
+assert EXPECTED==26400
 YEAR_TRAIN=base.NTRAIN
 
 def build_cfg():
@@ -277,7 +277,7 @@ def run():
         variants=len(frame),fallback_signals=217,volume_signals=260,
         cost="taker 0.05% per leg + GST 18%, adverse 5 price points slippage per side, hypothetical preactivated regular 30m Scalper Offer closing fee waiver",
         verified_baselines=baselines,
-        2025_selected_result=comparisons,
+        selected_2025_result=comparisons,
         limitations=["2026 previously exposed to research, NOT truly independent OOS",
           "13,200 multiple comparisons can overfit 2025 too",
           "November already inspected for B and A, do not select using November",
