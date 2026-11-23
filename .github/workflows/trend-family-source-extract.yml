@@ -1,0 +1,53 @@
+name: Trend family pinned notebook provenance extraction
+on:
+  push:
+    branches: [research/trend-following-family-20261121]
+    paths: [.github/workflows/trend-family-source-extract.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinned-source-static-extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download pinned upstream notebook as data, never execute
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p analysis/trend_following_family_20261121/upstream_source_extract
+          curl --fail --location --retry 3 --max-time 120 --silent --show-error \
+            'https://api.github.com/repos/Kali-Uga/trend-following-futures/git/blobs/c9807559e76cdc0267142916dff0adc8f5019f55' \
+            -H 'Accept: application/vnd.github.raw+json' \
+            -o analysis/trend_following_family_20261121/upstream_source_extract/notebook_payload
+          python - <<'PY'
+          import base64, hashlib, json, pathlib, re
+          d=pathlib.Path('analysis/trend_following_family_20261121/upstream_source_extract')
+          raw=(d/'notebook_payload').read_bytes()
+          try:
+              obj=json.loads(raw)
+              if isinstance(obj,dict) and obj.get('encoding')=='base64':
+                  raw=base64.b64decode(obj['content'])
+          except (ValueError,KeyError,TypeError):
+              pass
+          notebook=json.loads(raw)
+          assert isinstance(notebook.get('cells'),list), 'not a notebook'
+          code=[''.join(c.get('source',[])) for c in notebook['cells'] if c.get('cell_type')=='code']
+          lines=['# Immutable upstream code cells; DO NOT EXECUTE',f'# raw_sha256={hashlib.sha256(raw).hexdigest()}',f'# code_cells={len(code)}']
+          for i,c in enumerate(code):
+              lines += [f'\n# ===== CODE CELL {i} =====',c]
+          (d/'source_code_cells.txt').write_text('\n'.join(lines))
+          (d/'manifest.json').write_text(json.dumps({'source_url':'https://github.com/Kali-Uga/trend-following-futures','blob_sha':'c9807559e76cdc0267142916dff0adc8f5019f55','raw_sha256':hashlib.sha256(raw).hexdigest(),'code_sha256':hashlib.sha256('\n'.join(code).encode()).hexdigest(),'code_cells':len(code),'raw_bytes':len(raw)},indent=2))
+          (d/'parameters_hits.txt').write_text('\n'.join(f'{i+1}: {line[:350]}' for i,line in enumerate('\n'.join(code).splitlines()) if re.search(r'ema|span|volatility|position|leverage|scale|clip|cap|limit|signal|window|lookback|smooth|rebalance',line,re.I))[:100000])
+          (d/'notebook_payload').unlink()
+          print((d/'manifest.json').read_text())
+          PY
+      - name: Preserve immutable source extraction evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trend-source-extract-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: analysis/trend_following_family_20261121/upstream_source_extract/
