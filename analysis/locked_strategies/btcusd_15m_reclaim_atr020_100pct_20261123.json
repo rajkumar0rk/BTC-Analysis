@@ -1,0 +1,89 @@
+{
+  "profile_id": "LOCKED_BTCUSD_15M_RECLAIM_ATR020_FULL_EXPOSURE_20261123",
+  "status": "LOCKED_RESEARCH_CONFIGURATION",
+  "locked_on": "2026-11-23",
+  "revision_policy": "Preserve this exact configuration as benchmark; do not modify or deploy without separate instruction.",
+  "market": {
+    "instrument": "BTCUSD futures",
+    "signal_timeframe": "15m",
+    "execution_timeframe": "1m",
+    "reporting_month_timezone": "Asia/Kolkata"
+  },
+  "signal": {
+    "supertrend": {
+      "atr_length": 10,
+      "multiplier": 3
+    },
+    "ema_length": 20,
+    "pattern": "Post-Supertrend-flip EMA20 interaction must close on wrong side, then a subsequent completed 15m candle reclaims the trend side; first accepted signal per Supertrend cycle",
+    "reclaim_wait_15m_bars": 4,
+    "entry_execution": "Next 1m open after confirmed signal",
+    "entry_filter": {
+      "metric": "ATR(10) / completed 15m close * 100",
+      "comparison": ">=",
+      "threshold_percent": 0.2
+    },
+    "max_simultaneous_positions": 1
+  },
+  "exit": {
+    "initial_stop_loss_percent_of_filled_entry_price": 3,
+    "take_profit_percent_of_filled_entry_price": 9,
+    "exit_on_supertrend_reversal": false,
+    "protection": {
+      "activation_favorable_market_move_percent": 8,
+      "first_locked_favorable_market_move_percent": 2,
+      "additional_favorable_market_move_step_percent": 1,
+      "additional_locked_profit_increment_percent": 0.25,
+      "never_loosen_stop": true
+    },
+    "execution": "One-minute OHLC path modeled, not live ticks"
+  },
+  "exposure": {
+    "maximum_initial_notional_as_percent_of_current_account_equity": 100,
+    "leverage_assumed_for_study": "Maximum 1x notional/equity",
+    "monthly_realized_net_losing_exits_to_next_entry_exposure_percent": {
+      "0": 100,
+      "1": 100,
+      "2": 30,
+      "3": 25,
+      "4": 10,
+      "5_or_more": 0
+    },
+    "pause_after_fifth_realized_net_loss_until_next_IST_month": true
+  },
+  "historical_backtest": {
+    "start_month": "2025-01",
+    "end_month": "2026-10",
+    "completed_months": 22,
+    "trades": 73,
+    "net_compounded_return_percent": 266.1034,
+    "max_floating_drawdown_percent": 12.916,
+    "profitable_months": 18,
+    "losing_months": 4,
+    "worst_month_return_percent": -6.33599508231153,
+    "both_intraminute_price_path_assumptions_passed": true,
+    "starting_equity_usd": 1000,
+    "costs": {
+      "taker_fee_percent_per_side": 0.05,
+      "gst_on_fee_percent": 18,
+      "adverse_price_slippage_percent_per_side": 0.02
+    },
+    "excluded": [
+      "realized funding costs",
+      "orderbook spread/depth market impact",
+      "exchange live latency",
+      "liquidation and margin engine"
+    ]
+  },
+  "validity": {
+    "backtest_in_sample": true,
+    "independent_forward_validation": false,
+    "warning": "ATR minimum filter around 0.20% is sensitive to nearby thresholds. Locked for research comparison, not certified for live deployment."
+  },
+  "evidence": {
+    "branch": "research/btc15m-atr-lossstage-fine-dd-20261123",
+    "ranked_csv": "analysis/btc15m_atr_lossstage_fine_dd_20261123/profile_100.csv",
+    "matched_rule": "T1000x300x250x100",
+    "report": "analysis/btc15m_atr_lossstage_fine_dd_20261123/RESEARCH_REPORT.md"
+  }
+}
