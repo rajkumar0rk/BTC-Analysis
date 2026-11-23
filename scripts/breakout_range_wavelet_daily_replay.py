@@ -117,6 +117,14 @@ def replay(minute,daily,sig,name,risk_fraction=.005,leverage_cap=3.,slippage_poi
     monthly["coverage"]="complete"
     monthly.loc[monthly.index[0],"coverage"]="partial_start_utc_archive"
     monthly.loc[monthly.index[-1],"coverage"]="partial_end_utc_archive"
+    # A calendar month is complete only when every IST minute is observed.
+    # Missing UTC 2026-10-31 can truncate October IST without creating a November row.
+    observed=ist.nav.resample("MS").count()
+    for month,count in observed.items():
+        next_month=month+pd.DateOffset(months=1)
+        expected=int((next_month-month)/pd.Timedelta(minutes=1))
+        if count!=expected:
+            monthly.loc[month,"coverage"]="partial_missing_ist_minutes"
     # Last row may be November IST (UTC Oct31 after 18:30); never label it October.
     monthly["month_ist"]=monthly.index.strftime("%Y-%m")
     trade=pd.DataFrame(trades)
