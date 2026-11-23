@@ -1,0 +1,31 @@
+name: BTCUSD Step 9 - 5m event scanning, mandatory weekday trade
+on:
+  push:
+    branches:
+      - research/btc-daily-five-minute-event-step9
+    paths:
+      - scripts/research_btc_daily_five_min_event_step9.py
+      - .github/workflows/research-btc-daily-five-minute-event-step9.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical tools
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Replay all 384 first 5m BTC volume signals with compulsory daily fallback
+        run: python scripts/research_btc_daily_five_min_event_step9.py
+      - name: Archive every net variant and selected 477 weekday trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step9-5m-scan-mandatory-weekday
+          path: analysis/btc_daily_five_min_event_step9/
+          if-no-files-found: warn
