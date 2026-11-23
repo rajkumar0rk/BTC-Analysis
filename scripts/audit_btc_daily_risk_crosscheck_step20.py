@@ -183,7 +183,7 @@ def main():
         "Ten combined stop variants not tested forward; best full-history model is overfit-prone",
         "Real historical scalper opt-in, fills, bid-ask, funding, market depth, latency, liquidation unverified"
       ])
-    (OUT/"summary.json").write_text(json.dumps(result,indent=2)+"\n")
+    (OUT/"summary.json").write_text(json.dumps(result,indent=2,default=lambda o:o.item() if isinstance(o,np.generic) else str(o))+"\n")
     readme=[
        "# BTCUSD Step20 — Verified risk-rule monthly audit",
        "",
