@@ -1,0 +1,31 @@
+name: BTCUSD Step15 - Paired Monthly Exit Regimes 477 Weekdays
+on:
+  push:
+    branches:
+      - research/btc-daily-two-leg-monthly-overlay-step15
+    paths:
+      - scripts/research_btc_daily_monthly_two_regime_step15.py
+      - .github/workflows/research-btc-monthly-paired-step15.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Replay 144 causal monthly regime exit pairs for all BTC weekdays
+        run: python scripts/research_btc_daily_monthly_two_regime_step15.py
+      - name: Publish chosen 477 trades 22 months and every fee-repriced candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step15-paired-monthly-exits-477-weekdays
+          path: analysis/btc_daily_two_regime_step15/
+          if-no-files-found: warn
