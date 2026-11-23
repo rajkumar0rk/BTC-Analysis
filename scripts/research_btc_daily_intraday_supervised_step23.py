@@ -169,7 +169,7 @@ def main():
     print("STEP23_FROZEN_BASELINE "+json.dumps(baseline,sort_keys=True),flush=True)
     sample_times,X,returns=full_minute_training_catalog(m,indices)
     print("STEP23_SAMPLE_CATALOG "+json.dumps(dict(
-        30min_history_samples=len(sample_times),
+        half_hour_historical_samples=len(sample_times),
         prior_training_labels_complete_before_each_current_entry=True,
         earliest_archive_utc=str(m.index[0]),
         last_archive_utc=str(m.index[-1])
