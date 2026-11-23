@@ -252,3 +252,9 @@
 ## 2026-11-23 21:xx IST — M43 three-source signal gate (NO NEW BACKTEST)
 - Screened pinned ms-tristan/trading ROC12/EMA50/200/ADX14 strategy (velocity/trend overlap; external regime gate; no root license; third-party Freqle reports -89.9% and PF 0.58, not our P&L), TheoBrigitte/freqtrade 3-candle momentum (long enter_long explicitly set to 0; source defect, no license), and GPL-3.0 freqtrade Strategy003 (oversold RSI/MFI recovery, mean reversion). Source/novelty and causal audit M43_SOURCE_SIGNAL_GATE.md, commit d1edc913ec554cf1b27a85a47bbd4510e574019b.
 - Canonical branch Actions query 11 earlier runs; latest 45141426585 is old M14. 3 source gates; new distinct authentic Delta historical backtests=0, variants=0, workflow launches=0, verified new P&L=0. No main/other family/VPS/live changes. Continue to genuinely source-complete acceleration and actual BTC2025 replay.
+
+
+## 2026-11-23 22:xx IST — M44 three actual-source-code gates (NO NEW BACKTEST)
+- Inspected exact GitHub source blobs of Or-Harari/OGAYN MACD momentum, burakkalpak95-prog MomentumMacdRsi and win-boom/BTCquant SimpleMomentumStrategy; see M44_THREE_SOURCE_CODE_AUDIT.md commit 29c7a0440c4875f7105421a1eaa9919b3c8f7696.
+- Concrete source defect: OGAYN enters SHORT on bullish MACD/EMA/RSI conditions and its ROI comments disagree with minute-based keys. MACD/RSI source has unverified mixin parity and possible M14 overlap; BTCquant is a persistent-direction high-turnover composite with external PF 1.0, not an acceleration strategy. None cleared novelty+source parity.
+- Canonical branch Actions GET still 11 historical runs, latest historical success 45141426585 on older M14 commit; no M44 workflow. New eligible protocols 0, distinct Delta backtests 0, variants 0, launches 0, verified new P&L 0. No main, other-family, VPS or live trading changes.
