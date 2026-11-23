@@ -194,7 +194,7 @@ def run():
     df.to_csv(OUT/"all_36_online_structure_models_plus_baseline_two_fees.csv",index=False)
     print("STEP11_GRID "+json.dumps(dict(
         policies=EXPECTED+1,fee_scenarios=len(df),daily_entries=477,
-        2025_days=TRAIN,2026_days=N-TRAIN),sort_keys=True),flush=True)
+        train_2025_days=TRAIN,check_2026_days=N-TRAIN),sort_keys=True),flush=True)
     offer=df[df.cost_model=="scalper_offer"].copy()
     qualified=offer[(offer.profitable_days_2025>=147)&
         (offer.return_2025_pct>=8.10265)&(offer.max_dd_2025<=3.00875)]
