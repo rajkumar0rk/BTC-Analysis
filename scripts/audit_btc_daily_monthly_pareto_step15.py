@@ -136,7 +136,6 @@ def november_audit(policies,ids):
     raw=bar.replay_with_nextbar_exits(
         m.open.to_numpy(float),m.high.to_numpy(float),m.low.to_numpy(float),
         m.close.to_numpy(float),idx,side,cfg,policies,base.COST,base.SLIP)
-    )
     records=[]
     rows=[]
     for label,params in CASES.items():
