@@ -1,0 +1,31 @@
+name: BTCUSD Step14 - Monthly Equity Giveback, 477 Weekday Trades
+on:
+  push:
+    branches:
+      - research/btc-daily-monthly-equity-regime-step14
+    paths:
+      - scripts/research_btc_daily_monthly_equity_step14.py
+      - .github/workflows/research-btc-daily-monthly-equity-step14.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Test 300 causal monthly-equity early exit overlays on fixed 477 weekday trades
+        run: python scripts/research_btc_daily_monthly_equity_step14.py
+      - name: Upload full 22-month after-cost audit and daily trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step14-monthly-peak-equity
+          path: analysis/btc_daily_monthly_equity_step14/
+          if-no-files-found: warn
