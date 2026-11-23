@@ -1,0 +1,31 @@
+name: BTCUSD Step7 — early invalidation 477 weekday trades
+on:
+  push:
+    branches:
+      - research/btc-daily-exit-invalidation-step7
+    paths:
+      - scripts/research_btc_daily_exit_invalidation_step7.py
+      - .github/workflows/research-btc-daily-exit-invalidation-step7.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Test next-1m open exit invalidation with 477 unchanged entry signals
+        run: python scripts/research_btc_daily_exit_invalidation_step7.py
+      - name: Publish all early-exit experiments, 477 daily ledgers and 22 month reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step7-prior-minute-invalidation
+          path: analysis/btc_daily_exit_invalidation_step7/
+          if-no-files-found: warn
