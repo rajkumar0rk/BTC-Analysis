@@ -1,0 +1,31 @@
+name: BTCUSD Step18 — Preentry Volatility Risk, 477 Weekdays
+on:
+  push:
+    branches:
+      - research/btc-daily-preentry-risk-step18
+    paths:
+      - scripts/research_btc_daily_preentry_risk_step18.py
+      - .github/workflows/research-btc-daily-preentry-risk-step18.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Replay 540 causal volatility-volume SL caps across all weekday BTC entries
+        run: python scripts/research_btc_daily_preentry_risk_step18.py
+      - name: Publish all policies and 477-day 22-month audits
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step18-preentry-risk-477-weekdays
+          path: analysis/btc_daily_preentry_risk_step18/
+          if-no-files-found: warn
