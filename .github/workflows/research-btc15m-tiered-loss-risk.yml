@@ -1,0 +1,70 @@
+name: BTCUSD 15M Tiered Loss Position Risk Search
+on:
+  push:
+    branches: [research/btc15m-tiered-loss-risk-20261123]
+    paths:
+      - scripts/research_btc15m_tiered_loss_risk_20261123.py
+      - .github/workflows/research-btc15m-tiered-loss-risk.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  simulate:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7]
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    env:
+      SHARD_COUNT: '8'
+      SHARD_INDEX: ${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - run: python scripts/research_btc15m_tiered_loss_risk_20261123.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: btc15m-tiered-shard-${{ matrix.shard }}
+          path: analysis/btc15m_tiered_loss_risk_20261123/shard_${{ matrix.shard }}/
+          retention-days: 30
+          if-no-files-found: error
+  combine:
+    needs: simulate
+    runs-on: ubuntu-latest
+    env:
+      SHARD_COUNT: '8'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: btc15m-tiered-shard-*
+          path: _shards
+      - run: |
+          mkdir -p analysis/btc15m_tiered_loss_risk_20261123
+          for i in 0 1 2 3 4 5 6 7; do
+            mkdir -p analysis/btc15m_tiered_loss_risk_20261123/shard_$i
+            cp _shards/btc15m-tiered-shard-$i/* analysis/btc15m_tiered_loss_risk_20261123/shard_$i/
+          done
+          python scripts/research_btc15m_tiered_loss_risk_20261123.py aggregate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: btc15m-tiered-loss-risk-full
+          path: analysis/btc15m_tiered_loss_risk_20261123/
+          retention-days: 30
+          if-no-files-found: error
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc15m_tiered_loss_risk_20261123/RESEARCH_REPORT.md analysis/btc15m_tiered_loss_risk_20261123/ranked.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive 22-month tiered position risk sweep"
+            git push origin HEAD:research/btc15m-tiered-loss-risk-20261123
+          fi
