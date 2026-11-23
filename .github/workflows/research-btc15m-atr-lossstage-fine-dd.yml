@@ -1,0 +1,70 @@
+name: BTCUSD 15M ATR Loss-Stage Fine Drawdown Reduction
+on:
+  push:
+    branches: [research/btc15m-atr-lossstage-fine-dd-20261123]
+    paths:
+      - scripts/research_btc15m_atr_lossstage_fine_dd_20261123.py
+      - .github/workflows/research-btc15m-atr-lossstage-fine-dd.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  simulate:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+    runs-on: ubuntu-latest
+    timeout-minutes: 85
+    env:
+      SHARD_COUNT: '16'
+      SHARD_INDEX: ${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - run: python scripts/research_btc15m_atr_lossstage_fine_dd_20261123.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atr-lossfine-shard-${{ matrix.shard }}
+          path: analysis/btc15m_atr_lossstage_fine_dd_20261123/shard_${{ matrix.shard }}/
+          retention-days: 30
+          if-no-files-found: error
+  aggregate:
+    needs: simulate
+    runs-on: ubuntu-latest
+    env:
+      SHARD_COUNT: '16'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas numpy tabulate
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: atr-lossfine-shard-*
+          path: _shards
+      - run: |
+          mkdir -p analysis/btc15m_atr_lossstage_fine_dd_20261123
+          for i in {0..15}; do
+            mkdir -p analysis/btc15m_atr_lossstage_fine_dd_20261123/shard_$i
+            cp _shards/atr-lossfine-shard-$i/* analysis/btc15m_atr_lossstage_fine_dd_20261123/shard_$i/
+          done
+          python scripts/research_btc15m_atr_lossstage_fine_dd_20261123.py aggregate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atr-lossfine-full
+          path: analysis/btc15m_atr_lossstage_fine_dd_20261123/
+          retention-days: 30
+          if-no-files-found: error
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc15m_atr_lossstage_fine_dd_20261123/RESEARCH_REPORT.md analysis/btc15m_atr_lossstage_fine_dd_20261123/ranked.csv analysis/btc15m_atr_lossstage_fine_dd_20261123/profile_80.csv analysis/btc15m_atr_lossstage_fine_dd_20261123/profile_100.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save drawdown-focused fine stage sizing results"
+            git push origin HEAD:research/btc15m-atr-lossstage-fine-dd-20261123
+          fi
