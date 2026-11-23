@@ -435,7 +435,7 @@ def main():
         unique_candidates=816,with_baseline=817,both_cost_rows=1634,
         qualified_2025_only_12_month_models=int(len(eligible)),
         selected_using_only_2025=winner,
-        2026_research_exposed_result=dict(
+        check_2026_research_exposed_result=dict(
             profitable_months_2026=winner["win_months_2026"],
             return_2026_pct=winner["return_2026_pct"],
             overall_win_months=winner["win_months_all"],
