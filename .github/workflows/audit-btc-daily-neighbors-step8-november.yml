@@ -1,0 +1,31 @@
+name: BTCUSD Step8 - Frozen November nearest neighbors audit
+on:
+  push:
+    branches:
+      - research/btc-daily-causal-neighbors-step8
+    paths:
+      - scripts/audit_btc_daily_causal_neighbors_step8_november.py
+      - .github/workflows/audit-btc-daily-neighbors-step8-november.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Audit frozen Step8 on complete November BTC weekdays
+        run: python scripts/audit_btc_daily_causal_neighbors_step8_november.py
+      - name: Publish November baseline and nearest neighbor trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step8-neighbor-november-frozen
+          path: analysis/btc_daily_causal_neighbors_step8/november_audit/
+          if-no-files-found: warn
