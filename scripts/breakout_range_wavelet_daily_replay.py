@@ -73,7 +73,7 @@ def signals(daily,kind):
                 break
     return sig
 
-def replay(minute,daily,sig,name):
+def replay(minute,daily,sig,name,risk_fraction=.005,leverage_cap=3.):
     # UTC day D signal only becomes tradable at D+1 00:00 UTC.
     action={daily.index[i]+pd.Timedelta(days=1):int(v) for i,v in enumerate(sig) if v}
     cash=10000.;qty=0.;entry=0.;stop=0.;side=0;entry_t=None;entry_fee=0.
@@ -93,7 +93,7 @@ def replay(minute,daily,sig,name):
                 d=daily.loc[prior];sl=float(d.low if direction==1 else d.high)
                 dist=direction*(price-sl)
                 if dist>0:
-                    size=min(cash*.005/dist,cash*3/price)
+                    size=min(cash*risk_fraction/dist,cash*leverage_cap/price)
                     fee=size*price*FEE
                     if size>0 and fee<cash:
                         cash-=fee;qty=size;entry=price;stop=sl;side=direction;entry_t=t;entry_fee=fee
@@ -202,6 +202,9 @@ def main():
     for name in ("two_b","wavelet_two_b"):
         sig=signals(daily,name)
         output["results"].append(replay(minute,daily,sig,name))
+        # Source sizing parity: upstream defaults risk 2% NAV and leverage cap 20x.
+        # Preserve original matched-risk screening outputs separately, never overwrite.
+        output["results"].append(replay(minute,daily,sig,name+"_source_sizing",risk_fraction=.02,leverage_cap=20.))
     (OUT/"summary.json").write_text(json.dumps(output,indent=2))
     print(json.dumps(output["results"],indent=2))
 if __name__=="__main__":main()
