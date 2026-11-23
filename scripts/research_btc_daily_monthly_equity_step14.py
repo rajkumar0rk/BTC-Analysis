@@ -225,7 +225,7 @@ def run():
         topic="Improve BTC daily strategy 19/22 monthly win frequency using causal monthly peak loss regime",
         selection="2025-only, 2026 already researched and not genuine untouched OOS",
         mandatory_weekdays=477,
-        100_percent_daily_notional=True if False else True,
+        full_notional_1x=True,
         original_step11_parity=priorstep11,
         original_step13_verified=baseline,
         candidate_models=301,scenarios_with_cost_sensitivity=602,
