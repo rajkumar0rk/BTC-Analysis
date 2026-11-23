@@ -1,0 +1,31 @@
+name: EMA9/21 BTCUSD 1m weekday quality optimization
+on:
+  push:
+    branches:
+      - research/ema9-21-daily-1m
+    paths:
+      - scripts/research_ema9_21_quality_upgrade.py
+      - .github/workflows/research-ema9-21-quality-upgrade.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Backtest 32 preregistered variants, select on 2025, audit 2026
+        run: python scripts/research_ema9_21_quality_upgrade.py
+      - name: Upload detailed findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ema9-21-weekday-quality-upgrade
+          path: analysis/ema9_21_quality_upgrade/
+          if-no-files-found: warn
