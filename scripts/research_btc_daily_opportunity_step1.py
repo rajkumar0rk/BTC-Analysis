@@ -172,7 +172,7 @@ def daily_and_fixed_clock(m):
     assert (clock[clock.horizon=="30m"].groupby("day_ist").size()==24).all()
     assert (clock[clock.horizon=="120m"].groupby("day_ist").size()==23).all()
     assert (clock[clock.horizon=="eod"].groupby("day_ist").size()==24).all()
-    assert (clock.offer_path_either_possible | ~clock.standard_either_possible).all() is False if False else True
+    assert (clock.offer_path_either_possible | ~clock.standard_either_possible).all()
     return daily, clock
 
 
