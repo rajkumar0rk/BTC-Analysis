@@ -189,8 +189,13 @@ def main():
         prior[(algorithm,lookback)]=(prediction,amount)
         assert np.all(np.isfinite(prediction)) and len(prediction)==477
         for conf,scope in product(CONFIDENCES,SCOPES):
-            side,changed=prev.choose_sides(
-                baseline_side,prediction,amount,mask,conf,scope)
+            valid_scope=(np.ones(N,dtype=bool) if scope=="both" else
+                   (mask if scope=="fallback" else ~mask))
+            enough_history=(amount>=24)
+            sign=np.where(prediction>=0,1,-1).astype(np.int8)
+            override=valid_scope&enough_history&(np.abs(prediction)>=conf)
+            side=np.where(override,sign,baseline_side).astype(np.int8)
+            changed=side!=baseline_side
             raw,choices,res=evaluate(long,short,side,mask,ids)
             key=(algorithm,lookback,conf,scope)
             selections[key]=(side,changed,choices)
