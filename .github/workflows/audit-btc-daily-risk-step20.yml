@@ -1,0 +1,31 @@
+name: BTCUSD Step20 - Independent Daily Audit of Previously Overlooked Stop Models
+on:
+  push:
+    branches:
+      - research/btc-daily-risk-crosscheck-step20
+    paths:
+      - scripts/audit_btc_daily_risk_crosscheck_step20.py
+      - .github/workflows/audit-btc-daily-risk-step20.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Independently audit ten BTC preentry SL scenarios and all 477 trades
+        run: python scripts/audit_btc_daily_risk_crosscheck_step20.py
+      - name: Archive all daily trade ledgers and 22-month after-cost results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step20-risk-crosscheck-477-daily
+          path: analysis/btc_daily_risk_crosscheck_step20/
+          if-no-files-found: warn
