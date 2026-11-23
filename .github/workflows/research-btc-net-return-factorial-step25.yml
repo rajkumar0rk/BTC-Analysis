@@ -1,0 +1,33 @@
+name: BTCUSD Step25 - Net Profit Factorial with Daily Full-Notional Entries
+on:
+  push:
+    branches:
+      - research/btc-net-return-factorial-step25
+    paths:
+      - scripts/research_btc_net_return_factorial_step25.py
+      - .github/workflows/research-btc-net-return-factorial-step25.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install simulation dependencies
+        run: python -m pip install pandas numpy numba scikit-learn tabulate
+      - name: Check Python syntax before expensive one-minute replay
+        run: python -m py_compile scripts/research_btc_net_return_factorial_step25.py
+      - name: Compare 672 BTC net-profit models using same 477 weekday trades
+        run: python scripts/research_btc_net_return_factorial_step25.py
+      - name: Publish all 1344 fee comparisons, 477-day and 22-month reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step25-net-return-factorial-477-weekdays
+          path: analysis/btc_net_return_factorial_step25/
+          if-no-files-found: warn
