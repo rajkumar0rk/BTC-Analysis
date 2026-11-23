@@ -284,3 +284,8 @@
 ## 2026-11-24 02:16 IST — M48B BTC MACD source execution-parity audit
 - Read pinned `iamrichardD/tradingview` BTC MACD 5m Pine source, blob `e383ce23a06c43d2ae2076c283fb75ec5b38b35a`; audit `M48B_BTC_MACD_SOURCE_CAUSAL_AUDIT.md`, commit `f9ec94464c12c3c22b071eb4bf1535fa77b82b3e`.
 - Source sets entryPrice to 5m OPEN but fills at bar CLOSE; source trailing uses current-bar HIGH to update stop without known OHLC path; calc_on_every_tick live/historical parity absent. Default early momentum OFF; MACD cross with volume/trend filter overlaps earlier research. Publisher 21 trades/PF2.687 and conflicting win-rate descriptions NOT verified on Delta. SKIP unchanged as acceleration candidate; no new backtest or P&L.
+
+
+## 2026-11-24 03:15 IST — M49 three source-defined acceleration gates (NO BACKTEST)
+- Read codex research/novelty instructions and canonical branch Actions runs: 11 earlier runs, latest successful 45141426585 old M14. Screened tjgus108 MACD histogram slope+acceleration (genuine signal but no executable exits/sizing, no root license), workforakng alpha-backtester (MACD acceleration only 1/30 composite score; cross-family duplicate), oniz93 crypto_backtest (indicator framework, full-history VPVR bins risk lookahead, no trading protocol). Exact immutable source URLs and disproof: `M49_THREE_SOURCE_ACCELERATION_GATE.md` commit `229cd2b5ade393393d641dab6fd00c8938f752dc`.
+- Distinct newly eligible baselines=0, completed authentic Delta backtests=0, variants=0, Actions launches=0, new verified P&L=0. Next seek licensed full-entry-and-exit acceleration strategy; do not invent missing rules. No other branches/schedules/VPS/live changes.
