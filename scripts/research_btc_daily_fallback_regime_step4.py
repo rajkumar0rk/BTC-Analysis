@@ -299,7 +299,7 @@ def run():
     (OUT/"summary.json").write_text(json.dumps(dict(
         purpose="Improve 477-trade mandatory BTC daily strategy without removing days",
         daily_entries_exact=477,volume_triggered_entries=260,mandatory_fallback_entries=217,
-        2025_selection_only=True,research_exposed_2026_not_blind=True,
+        selection_2025_only=True,research_exposed_2026_not_blind=True,
         exit_recipes=list(cfg_names),
         fallback_direction_candidates=list(FALLBACK_RULES),
         fallback_hours_ist=list(FALLBACK_HOURS),
