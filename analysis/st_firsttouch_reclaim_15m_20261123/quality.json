@@ -1,0 +1,44 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "strategy_rules": {
+    "signal_tf": "15m",
+    "execution_tf": "1m",
+    "supertrend": "Wilder ATR10 factor3",
+    "EMA": 20,
+    "flip_bar_excluded": true,
+    "entry_at": "next 15m candle open after confirmation",
+    "first_touch": "15m high-low intersects frozen prior closed 15m EMA20",
+    "touch_confirmation": "touch candle closes on trend side of both prior and finished EMA20",
+    "reclaim_confirmation": "first touch candle closes on wrong side of both prior and finished EMA20; subsequent bar closes back on trend side",
+    "reclaim_window": "4 or 8 subsequent completed 15m candles",
+    "one_trade_per_ST_cycle": true,
+    "st_flip_exit": "next 15m candle open",
+    "initial_stop": "1x frozen entry-to-completed-ST reference R",
+    "fixed_profit_target": "2R or 3R",
+    "optional_1h_alignment": "last completed 1h Supertrend trend same direction",
+    "initial_capital_usd": 1000.0,
+    "leverage": "1x evolving equity notional",
+    "paths": [
+      "O-H-L-C",
+      "O-L-H-C"
+    ],
+    "slippage_each_side": 0.0002,
+    "fee_including_GST_each_side": 0.00059,
+    "no_volume_or_volatility_filter": true,
+    "excludes": "funding, liquidation, depth, spread, tick order, live latency",
+    "all_data_in_sample": true
+  }
+}
