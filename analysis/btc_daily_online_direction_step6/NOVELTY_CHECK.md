@@ -1,0 +1,35 @@
+# Step 6 — online, prior-days-only selection of daily BTCUSD trade direction
+
+**Novelty gate: PARTIAL OVERLAP — approved differential with a genuine causal learning constraint.**
+
+## Problem and closest prior research
+The user requires **one trade each Monday–Friday**, with improvements in net return, profitable days, profitable months and drawdown after fees. Historic research on BTC-Analysis has already tested tens of thousands of static entry/exit combinations:
+- `scripts/research_btc_every_weekday_reset_step1.py`: 51,840 static fixed-time models, exactly 477 trades.
+- `scripts/research_btc_every_weekday_adaptive_step2.py`: earliest completed 5m volume trigger with 21h compulsory fallback; 477 trades.
+- `scripts/research_btc_every_weekday_exit_protection_step3.py`: protected exit models, 265 profitable weekdays / +6.79% scalper model.
+- `scripts/research_btc_daily_fallback_regime_step4.py`: 8,064 side/exit static variants, B 271 profitable / +15.52%, A 274 / +14.43%, all 477 trades.
+- `scripts/research_btc_daily_causal_regime_step5.py`: 26,400 feature-conditioned fallback exit variants, E 273 / +17.22% / 5.74% DD / 15/22 months and variants C/D. Still substantially researched on 2026.
+- Nov 2–20 2026 15-day follow-up: E and B were ~+0.019% during 15 days, insufficient evidence of robustness.
+
+This experiment does **not** select a single static parameter combination using the full history. Its new hypothesis is **online counterfactual/shadow learning**: choose LONG/SHORT (and fallback clock) using only the realized prices of **earlier completed trading days**, optionally among earlier days in the same causal volume/momentum context. No future day's price or outcome may affect any selection.
+
+## Immutable trading rules
+- Delta India BTCUSD futures, genuine continuous 1m archive. Test every full IST weekday **2025-01-02 to 2026-10-30** = 477 entries, with exactly one each trading day. No Sat/Sun and no skipped weekday.
+- Event entry unchanged: first completed-5m volume >=1.5x prior 20x5m mean at 18:00, 19:00, 20:00 IST; enter at that minute OPEN. Event direction algorithm may choose either **FADE5 (default)** or **FOLLOW5**, strictly based on causal online past event-day returns, or fixed FADE5.
+- When no event, fallback MUST enter once, either at 21:00 or 22:00 IST. Candidate arms fixed by this preregistration: hour(21,22) × direction(FOLLOW5, FADE5, FOLLOW60, FADE60), with all signals known strictly before the chosen hour's OPEN. Default fallback arm is 21:00 FOLLOW5. Dynamic arm choice is decided using **past fallback days ONLY**, at the latest by 21:00 (no information from 22:00 of the same day is consulted when choosing the clock).
+- For shadow evaluation, replay both hypothetical directions and both future fallback hours from PRIOR days only; those historic counterfactual returns become known after the prior day closes. Online selection for day index `d` may use **only `i<d`**; assert that condition and save audit record. No future-training, no per-year retrospectively selected arms.
+- Event contextual switches: fixed, global prior event performance, event's pre-entry volume>=2.0x conditional group, or previous 5m movement magnitude>=0.15% conditional group. Fallback contextual switches: fixed, global prior fallback performance, 5m vs 60m sign alignment at 21:00, or 21:00 pre-entry 5m volume>=1.25x. Must have >=12 prior outcomes of same group before adaptation; otherwise use baseline default. All context derived from completed pre-entry candles.
+- Candidate fixed online lookbacks = last 30, 60, 120 previous **same-event-type** sessions (not calendar days) and evaluation score = average account net return, profitable-day fraction, or average return minus 0.3x downside deviation. Baseline preference margin: none or conservative (0.03 percentage points mean return / 5 percentage points win fraction). To preserve a single 2025-selection grid, these hyperparameters are fixed in advance. Each policy must trade all 477 days.
+- Event exit (same for both potential sides) is **SL0.50% gross**, TP3% gross, 30m maximum, profit lock activates after +0.25% completed-1m favorable movement and locks +0.10% gross from next minute only.
+- Two fallback exit schedules frozen from earlier studies: **B** = SL0.50%, 3% gross TP, trail activates +0.35%, distance0.20%, max30m; **E** = B for low-volume (<1.25x) fallback, otherwise trail SL0.75% with identical activation/distance. Volume regime measured from last completed 5m at the selected hour, causally prior to order entry. Both schedules share exact old event exit.
+- Cost models: standard taker both legs 0.05% fee each leg +18% GST; hypothetical previously activated regular Scalper Offer, closing taker fee waived only if closed within 30min, opening fee unchanged. Always include 5 BTC quote points adverse slippage per leg. 1× account notional, no leverage, no liquidation. Actual historical offer activation, bid/ask depth, funding, tick chronology omitted.
+- Execution: reuse existing Numba 1-minute stop-first simulator; pessimistic same-bar double-touch STOP first, gap-worse stop, take-profit at exact threshold, protective stop only tightens **after** completed 1-minute bar and cannot be triggered within the same bar that sets it. Forced 30min exit at 1m OPEN.
+
+## Fixed grid/validation
+- 4 event direction selectors (fixed plus 3 adaptive contexts) ×4 fallback arm selectors (fixed plus 3 adaptive contexts) ×3 lookback windows ×3 scoring criteria ×2 margins ×2 protected exit schedules ×2 fee models = **576 models** (duplicate fixed modes kept for traceability). Baseline B and E must reproduce earlier exact 477-day returns and wins (B 271/+15.522477, E 273/+17.215989) on event fixed/fallback fixed.
+- Main metrics daily profitable weekdays by year (2025 260, 2026 217), net compounded return by year, 22 months, worst loss/month, max closed DD, max consecutive losing days, number of event/fallback trades always 260+217. Fees and slippage included. Variants with fewer trades are disqualified.
+- Choose 2025 only (train) among models with 2025 net>0 and max 2025 DD <=8%, rank by winning days in 2025, then net 2025 return, then DD; freeze choice and report 2026 comparison. 2026 has been repeatedly researched, NOT an untouched OOS holdout. Report if no improvement over baseline E in **both** daily frequency and net return under same fees, with drawdown reported. Results of 576-model search highly prone to overfit. Do not claim live-ready performance.
+- Also publish strictly chronological monthly cumulative returns and the complete selected 477-trade ledger; include proportion of days selected without adequate history. An "online" backtest only means strategy learns from hypothetical settled prior trades; it is not actual out-of-sample evidence in a previously researched time window.
+
+## Excluded
+No extra weekend trades, martingale, leverage, use of future highs to decide current entry, artificial skipping of negative days, force +0.2% profit target, post-entry selection of best arm, or future-data selection of a current-day order time.
