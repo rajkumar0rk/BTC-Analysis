@@ -271,7 +271,7 @@ def run():
       benchmark_step8=baseline,
       exact_daily_trades=477,
       models=85,
-      2025_eligible_models=int(len(eligible)),
+      eligible_2025_models=int(len(eligible)),
       chosen_by_2025_only=chosen,
       chosen_per_cost=summary,
       historical_pareto_better_than_step8_hindsight=int(strictly.sum()),
