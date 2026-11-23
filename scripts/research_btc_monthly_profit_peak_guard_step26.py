@@ -291,7 +291,7 @@ def run():
             January_2026_net_pct=original_january),
         exactly_one_full_1x_notional_trade_every_477_ist_weekday=True,
         grid_models=109,fee_mode_results=218,
-        2025_only_qualified_count=int(len(qualified)),
+        training_2025_only_qualified_count=int(len(qualified)),
         selected_2025_only=winner,
         selected_report=selected_result["selected_by_2025_only"],
         hindsight_best_January2026_NOT_SELECTED=retrospect,
