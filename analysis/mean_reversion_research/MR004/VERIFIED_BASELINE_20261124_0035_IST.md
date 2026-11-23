@@ -1,0 +1,15 @@
+# MR004 completed replay verification — 2026-11-24 00:35 IST
+
+Supersedes the earlier PENDING handoff status; that handoff was written before GitHub Actions eventually registered the push workflow. Do not edit or erase earlier chronological entries.
+
+- Branch: research/mean-reversion-bb-rsi-source-audit-20261121
+- Executed SHA: 4aceb2c8b168dd625a4682422fb082bd4e66ef9c
+- Completed successful Actions run: https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/45244913332
+- Job: 137939023233; completed successful. Job log shows authentic 2025-01 and 2026-10 Delta BTC 1m archive file checks and real replay, not merely unit tests.
+- Archived artifact ID 14853476462; https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/45244913332/artifacts/14853476462 . Artifact ZIP SHA256 from uploader 1641035857e0f52e23ca0e7fad815ea2abbcb627da3c5b96d3d86706959193af . Files: minute_nav.csv.gz, summary.json, monthly_ist_nav.csv, trade_ledger.csv.
+- Independently extracted archive, parsed 10 complete trades and 22 monthly IST NAV rows; sequential ledger net sum +0.028907264999761935 NAV units reconciles final NAV 1.0289072649997621 to floating-point precision. Gross PnL +0.03130632936124412 NAV; entry+exit fee/GST 0.00239906436148193 NAV; net +0.028907264999762. Zero execution slippage; funding UNMODELED.
+- 2025 Jan-Dec compound +1.5521301624%; 2026 Jan-Oct chronological recheck +1.3181371335%; all-period +2.8907265%; minute-close maximum DD 1.09402858%. Net PF 142.4492, **statistically misleading** with only one tiny losing trade; 9 winners, 1 loser. 8 positive, 0 negative, **14 flat** IST months. 10 trades total, 2 largest trades contribute 68.12% of net profit. No 22/22 profitability and insufficient sample for robust expectancy.
+- Monthly IST net returns / entries: Jan25 +0.009965%/1; Feb25 +0.101256%/2; Mar25 +0.076655%/1; Apr-Jul25 0/0 each; Aug25 +0.061730%/1; Sep25 0/0; Oct25 +1.299067%/2; Nov-Dec25 0/0; Jan26 0/0; Feb26 +0.975810%/1; Mar26 +0.164899%/1; Apr-May26 0/0; Jun26 +0.173833%/1; Jul-Oct26 0/0.
+- Source original: Freqtrade CombinedBinHAndCluc 5m crypto spot, GPL-3.0 source SHA eff78d3ce3456b52c68a4e9a33cc055a56b801ff. This is an independently authored futures signal-transfer, not a source-identical Freqtrade backtest. Exact original Freqtrade ROI/exit arbitration and qtpylib std convention need parity verification.
+- Integrity warnings: October 2026 missing 1440 UTC 1m bars; 2026 is research-exposed chronology, not pristine holdout. 2025-10-10 and 2026-02-06 5% ROI exits account for most gains; inspect authentic 1m high/low excursions and any stop/target same-bar collision before treating as reliable. No L2/spread/funding/margin model.
+- Decision: **COMPLETED BASELINE, NOT PROMISING ENOUGH TO FREEZE OR SLIPPAGE-STRESS** under adequate-observation criterion (10 trades / 22 months; 14 flat). Keep source and unmodified original ledger. Do not optimize this tiny sample to force profitable months. Move to another independent mechanism. No trading or deployment.
