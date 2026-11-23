@@ -1,0 +1,31 @@
+name: BTCUSD Step 4 — frozen November 2026 daily audit
+on:
+  push:
+    branches:
+      - research/btc-daily-fallback-regime-exit-step4
+    paths:
+      - scripts/audit_btc_daily_fallback_regime_november_2026.py
+      - .github/workflows/audit-btc-daily-fallback-november-2026.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Evaluate two frozen models and two baselines on November 2026
+        run: python scripts/audit_btc_daily_fallback_regime_november_2026.py
+      - name: Publish complete 15 weekday trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-daily-fallback-November-audit
+          path: analysis/btc_daily_fallback_regime_step4/november_audit/
+          if-no-files-found: warn
