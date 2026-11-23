@@ -84,7 +84,9 @@ def replay(m,ind,slip):
     i=0;n=len(m);used=set();rows=[]
     while i<n-1:
         day=dates[i]
-        if day[:7] not in MONTHS or day in used or not (ls[i] or ss[i]):
+        if (day[:7] not in MONTHS or pd.Timestamp(day).weekday() >= 5 or
+                pd.Timestamp(dates[i+1]).weekday() >= 5 or day in used or
+                not (ls[i] or ss[i])):
             i+=1;continue
         side=1 if ls[i] else -1
         stop=float(long_st[i] if side>0 else short_st[i])
@@ -162,7 +164,7 @@ def score(ledger,m,slip,raw):
         winning_months=int((monthly.net_account_return_pct>0).sum()),
         losing_months=int((monthly.net_account_return_pct<0).sum()),
         flat_months=int((monthly.net_account_return_pct==0).sum()),
-        average_trades_per_ist_day=round(len(ledger)/669,3),
+        average_trades_per_ist_day=round(len(ledger)/sum(x.weekday()<5 for x in pd.date_range("2025-01-01","2026-10-31",freq="D")),3),
         stop_exits=int(ledger.reason.eq("stop").sum()),
         target_exits=int(ledger.reason.eq("target").sum()),
         **raw)
