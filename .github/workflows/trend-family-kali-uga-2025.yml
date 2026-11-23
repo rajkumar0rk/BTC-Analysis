@@ -1,0 +1,30 @@
+name: Trend family Kali-Uga continuous BTC2025
+on:
+  push:
+    branches: [research/trend-following-family-20261121]
+    paths:
+      - scripts/trend_family_kali_uga_2025.py
+      - .github/workflows/trend-family-kali-uga-2025.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  btc2025-source-anchor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.2.6' 'pandas==2.2.3' 'numba==0.61.2' 'tabulate==0.9.0'
+      - name: Authentic minute replay and account NAV reconciliation
+        run: python scripts/trend_family_kali_uga_2025.py
+      - name: Preserve original results even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trend-kali-uga-btc2025-${{ github.run_id }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: analysis/trend_following_family_20261121/kali_uga_btc2025/
