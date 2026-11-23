@@ -284,7 +284,7 @@ def run():
                 adjacent_configs=len(nearest),
                 adjacent_positive_2025=int((nearest.return_2025_pct>0).sum()),
                 adjacent_positive_2026=int((nearest.return_2026_pct>0).sum()),
-                2025_selected_winning_months=int((monthly.monthly_net_pct>0).sum()),
+                selected_winning_months_2025=int((monthly.monthly_net_pct>0).sum()),
                 selected_2025_profitable_days=int((p[:base.NTRAIN]>0).sum()),
                 selected_2026_profitable_days=int((p[base.NTRAIN:]>0).sum()))
             comparisons[fname]=block
