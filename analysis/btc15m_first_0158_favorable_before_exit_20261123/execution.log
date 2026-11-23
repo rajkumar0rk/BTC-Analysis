@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/runner/work/BTC-Analysis/BTC-Analysis/scripts/research_btc15m_first_0158_mfe_20261123.py", line 184, in <module>
+    main()
+  File "/home/runner/work/BTC-Analysis/BTC-Analysis/scripts/research_btc15m_first_0158_mfe_20261123.py", line 100, in main
+    assert (t[subset.e_idx.to_numpy()]==subset.e_sec.to_numpy()).all()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
