@@ -1,0 +1,23 @@
+# Mean reversion batch source and causal gate — 2026-11-23 19:32 IST
+
+Scope: research-only, branch research/mean-reversion-bb-rsi-source-audit-20261121. Read codex/AGENTS.md, codex/STRATEGY_NOVELTY_GATE.md and 18:28 source gate. Queried branch Actions collection: 8 runs, newest successful historical replay MR003 run 45036174691 at commit 1656866d6234032a6d19d3a2bc1692807667efcd. No new historical replay this session; no fabricated performance.
+
+## A. Adi-2403 / Liquidity-Sweep-Backtester — two conflicting implementations
+Pinned repository commit 02d5955e1fe795f90453df2794ed5410fcb77dd3 (2026-08-31); files backtester.py (blob 62150a6379b53cf8ba0596c5dcbc4a4b39462057) and main.py (blob 8966f180064e0f584c65427a2f8c19a385ba3689).
+URLs:
+- https://github.com/Adi-2403/Liquidity-Sweep-Backtester/blob/02d5955e1fe795f90453df2794ed5410fcb77dd3/backtester.py
+- https://github.com/Adi-2403/Liquidity-Sweep-Backtester/blob/02d5955e1fe795f90453df2794ed5410fcb77dd3/main.py
+
+Original intended market Yahoo BTC-USD/ETH-USD/PAXG-USD, default 1h, not Delta BTC futures. backtester.py uses prior 30-bar swing extrema shifted 1, prior 5-bar displacement bounds shifted 1, ATR14, 200EMA, volume SMA20, wick ratio >=35%; 0.5ATR wick stop buffer, 1.5R target, +1R breakeven, 30-bar timeout, 1% NAV risk. Its friction config 0.05% fee + 0.02% slippage each side, **no GST**. It enters at signal-bar close (line 380), then only walks forward from subsequent bars. Intra-bar reversal is only knowable at candle close; causal Delta implementation must enter next eligible minute open, label derivative, and gap-fill at opening price. Stop-first both-hit logic is present, but opening gaps and breakeven ordering require repair. main.py instead uses 20-bar prior extrema, EMA200, close reclaim, 2R target and 24-bar timeout; its entry is also signal-bar close. Do not conflate these two different source baselines. Main.py header says MIT, but repository root has no LICENSE and API metadata license=null: distribution grant unresolved. Publisher's reported results not independently recovered; no BTC-only trade count/PF/return/DD established. NOVELTY PARTIAL OVERLAP with Stage19 and prior MayurMalgear sweep review, but prior-window extrema with causal shift is a different implementation. **HOLD** pending repository license and documented differential from Stage19. Not eligible for source-faithful claimed BTC result.
+
+## B. zevrichards / MeanReversion.py + regime_filter.py
+Pinned commit 9dc9ef238325c4d29fa0b8e64346db96fe96343c (2026-08-20).
+- https://github.com/zevrichards/freqtrade-strategies/blob/9dc9ef238325c4d29fa0b8e64346db96fe96343c/MeanReversion.py
+- https://github.com/zevrichards/freqtrade-strategies/blob/9dc9ef238325c4d29fa0b8e64346db96fe96343c/regime_filter.py
+Original Freqtrade 4h spot, long only. BB20/2, RSI14 <32, volume >SMA20, ADX14 12..25, abs(close-EMA200)/EMA200 <15%, regime=RANGING; regime classifier marks RANGING when ADX<20 OR distance to EMA200<3%, with subsequent bull/bear/early-bull overrides. ROI time tiers 3% at t=0, 2% at 60m, 1% at 180m, 0.5% at 360m, hard -5% stop, no exit signal. README header reports **publisher** bear-window -5.3%, 7.77% DD Oct2025-Jun2026 across 18 pairs, bull version not profitable; no verified PF, trades, fees or BTC-only outcome. License absent in root/API metadata; cannot assume rights. **DUPLICATE / SKIP**: core BB/RSI oversold long with ADX/range and EMA distance filters overlaps prior BB/RSI, ADX-gated Ali Diallo and MR001; hyperopt parameter changes do not confer novelty. No new backtest.
+
+## Economic and execution checks
+At required 0.05% notional fee each side plus 18% GST, nominal round-trip fee+GST is 0.118% notional before spread, funding and slippage. The 1m Delta India source archive is not present in this tool runtime; the historical runner exists in GitHub Actions but no eligible novel source has passed novelty+license gate here. Source original vs execution-corrected derivatives must be separately labeled. Missing 1440 UTC minutes on 2026-10-31 cannot be counted as complete October validation.
+
+## Session ledger / handoff
+New sources examined: 2; newly eligible distinct baseline: 0; completed new historical backtests: 0; variants: 0; new Actions launches: 0. No code fixes, no claims FIXED_AND_VERIFIED. Latest historical evidence remains rejected MR003 https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/45036174691 (6550 trades, PF 0.534, -99.92% NAV), not re-run. Next: prioritize a source-complete novel bounded-risk non-BB mechanism, write pre-run novelty record, then execute archived authentic BTC1m workflow and verify monthly NAV artifacts. Never mutate main/master, other family branches or trading systems.
