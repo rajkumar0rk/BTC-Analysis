@@ -190,7 +190,7 @@ def score(raw,choices,mode_idx):
     path=step15.getout(raw,choices,mode_idx)
     return step15.score(path)
 
-def generate_ledger(model_name,model,side,mask,indices,hours,fee,raw):
+def generate_ledger(tag,model_name,model,side,mask,indices,hours,fee,raw):
     choices,mtd,giveback,loss_streak,_,_=model
     mi=base.MODES.index(fee)
     return_path=step15.getout(raw,choices,mi)
@@ -202,8 +202,8 @@ def generate_ledger(model_name,model,side,mask,indices,hours,fee,raw):
     assert len(daily)==477 and daily.day_ist.nunique()==477 and (
         pd.to_datetime(daily.day_ist).dt.dayofweek<5).all()
     assert len(monthly)==22 and monthly.trade_days.sum()==477
-    daily.to_csv(OUT/(model_name+"_"+fee+"_477_daily.csv"),index=False)
-    monthly.to_csv(OUT/(model_name+"_"+fee+"_22_months.csv"),index=False)
+    daily.to_csv(OUT/(tag+"_"+fee+"_477_daily.csv"),index=False)
+    monthly.to_csv(OUT/(tag+"_"+fee+"_22_months.csv"),index=False)
     z=step15.score(return_path)
     assert z["win_months_all"]==int(np.sum(monthly.net_compounded_pct>0))
     return z,monthly
