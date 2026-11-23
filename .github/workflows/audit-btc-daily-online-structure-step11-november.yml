@@ -1,0 +1,31 @@
+name: BTCUSD Step11 — frozen November structural fallback audit
+on:
+  push:
+    branches:
+      - research/btc-daily-online-structure-ensemble-step11
+    paths:
+      - scripts/audit_btc_daily_online_structure_step11_november.py
+      - .github/workflows/audit-btc-daily-online-structure-step11-november.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install data dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Audit frozen Step11 versus Step8 across all 15 November weekdays
+        run: python scripts/audit_btc_daily_online_structure_step11_november.py
+      - name: Publish all audit trade ledgers and fee sensitivities
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step11-frozen-november-audit
+          path: analysis/btc_daily_online_structure_step11/november_audit/
+          if-no-files-found: warn
