@@ -1,0 +1,33 @@
+name: BTCUSD Step27 - Monthly High-Water Stop and Exit Combinations
+on:
+  push:
+    branches:
+      - research/btc-month-guard-exit-combinations-step27
+    paths:
+      - scripts/research_btc_month_guard_exits_step27.py
+      - .github/workflows/research-btc-month-guard-exits-step27.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install backtest dependencies
+        run: python -m pip install numpy pandas numba scikit-learn tabulate
+      - name: Verify code syntax
+        run: python -m py_compile scripts/research_btc_month_guard_exits_step27.py
+      - name: Backtest 324 combined month-guard + early-exit policies, every BTC weekday
+        run: python scripts/research_btc_month_guard_exits_step27.py
+      - name: Upload 648 cost scenarios and full 477-day trade and monthly reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step27-monthly-guard-exit-477-weekdays
+          path: analysis/btc_month_guard_exits_step27/
+          if-no-files-found: warn
