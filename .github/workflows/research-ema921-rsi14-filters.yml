@@ -1,0 +1,41 @@
+name: BTCUSD EMA9-21 1H 15M RSI14 filter backtest
+on:
+  push:
+    branches:
+      - research/ema921-rsi14-mtf-filters-20261123
+    paths:
+      - scripts/research_ema921_rsi14_filters.py
+      - .github/workflows/research-ema921-rsi14-filters.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ema921-rsi14-filters-20261123
+  cancel-in-progress: false
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --disable-pip-version-check pandas numpy tabulate
+      - name: Check novelty gate and compile
+        run: |
+          test -s analysis/ema921_rsi14_filters/NOVELTY_CHECK.md
+          python -m py_compile scripts/research_ema921_rsi14_filters.py
+      - name: Run RSI14 historical 1m replay and baseline parity
+        run: python scripts/research_ema921_rsi14_filters.py
+      - name: Publish results on research branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/ema921_rsi14_filters/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist EMA9-21 RSI14 higher timeframe filter results"
+            git push origin HEAD:research/ema921-rsi14-mtf-filters-20261123
+          fi
