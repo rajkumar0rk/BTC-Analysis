@@ -1,0 +1,74 @@
+name: BTCUSD 15M Worst Month Loss-Pause Risk Rules
+on:
+  push:
+    branches: [research/btc15m-worst-month-loss-pause-20261123]
+    paths:
+      - scripts/research_btc15m_worst_month_pause_aggregate_20261123.py
+      - .github/workflows/research-btc15m-worst-month-loss-pause.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Run assigned loss-pause risk variants
+        env:
+          SHARD_INDEX: ${{ matrix.shard }}
+          SHARD_COUNT: "8"
+        shell: bash
+        run: |
+          mkdir -p analysis/btc15m_worst_month_loss_pause_20261123
+          set -o pipefail
+          python -u scripts/research_btc15m_worst_month_pause_shard_20261123.py 2>&1 | tee shard-${{ matrix.shard }}.log
+          mkdir -p analysis/btc15m_worst_month_loss_pause_20261123/shard_${{ matrix.shard }}
+          cp shard-${{ matrix.shard }}.log analysis/btc15m_worst_month_loss_pause_20261123/shard_${{ matrix.shard }}/execution.log
+      - name: Upload shard results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: worst-month-shard-${{ matrix.shard }}
+          path: analysis/btc15m_worst_month_loss_pause_20261123/
+          retention-days: 30
+  aggregate:
+    needs: [shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install numpy pandas tabulate
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: worst-month-shard-*
+          merge-multiple: true
+          path: analysis/btc15m_worst_month_loss_pause_20261123/
+      - name: Aggregate 58 configurations; verify strict profit preservation
+        run: python -u scripts/research_btc15m_worst_month_pause_aggregate_20261123.py
+      - name: Archive validated results on research branch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc15m_worst_month_loss_pause_20261123/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive 58 BTC15m worst-month loss-pause risk variants"
+            git pull --rebase origin research/btc15m-worst-month-loss-pause-20261123
+            git push origin HEAD:research/btc15m-worst-month-loss-pause-20261123
+          fi
