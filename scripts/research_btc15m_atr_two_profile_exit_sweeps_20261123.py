@@ -109,7 +109,10 @@ def aggregate(count):
             allsummary.append(pd.read_csv(p/"summary.csv"))
             allmonths.append(pd.read_csv(p/"monthly.csv"))
     s=pd.concat(allsummary,ignore_index=True)
+    # CSV inference converts string profile labels '80'/'100' to ints; normalize before grouping.
+    s['exposure_profile']=s['exposure_profile'].astype(str)
     months=pd.concat(allmonths,ignore_index=True)
+    months['exposure_profile']=months['exposure_profile'].astype(str)
     s.to_csv(OUT/"all_summaries.csv",index=False)
     months.to_csv(OUT/"all_months.csv",index=False)
     score=s.groupby(["sweep","exposure_profile","rule","stop_pct","tp_pct",
