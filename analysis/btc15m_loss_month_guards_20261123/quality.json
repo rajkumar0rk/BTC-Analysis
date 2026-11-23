@@ -1,0 +1,613 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "configurations": {
+    "reclaim_NOFLIP_SL300_NONE_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP2_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP3_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP4_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP5_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP6_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP8_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP10_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP12_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_MCAP15_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_NOFLIP_LATE_A200_L000_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:2:0:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A200_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:2:0:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A200_L050_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:2:0.5:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A200_L050_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:2:0.5:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A200_L100_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:2:1:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A200_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:2:1:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A300_L000_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:0:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A300_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:0:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A300_L050_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:0.5:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A300_L050_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:0.5:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A300_L100_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:1:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A300_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:1:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A400_L000_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:0:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A400_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:0:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A400_L050_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:0.5:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A400_L050_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:0.5:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A400_L100_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:1:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A400_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:1:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A500_L000_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:0:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A500_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:0:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A500_L050_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:0.5:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A500_L050_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:0.5:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A500_L100_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:1:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A500_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:1:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A600_L000_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:6:0:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A600_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:6:0:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A600_L050_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:6:0.5:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A600_L050_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:6:0.5:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A600_L100_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:6:1:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A600_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:6:1:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A700_L000_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:7:0:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A700_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:7:0:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A700_L050_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:7:0.5:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A700_L050_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:7:0.5:2:1"
+    ],
+    "reclaim_NOFLIP_LATE_A700_L100_I050_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:7:1:2:0.5"
+    ],
+    "reclaim_NOFLIP_LATE_A700_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:7:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP4_LATE_A300_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP4_LATE_A300_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP4_LATE_A400_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP4_LATE_A400_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP4_LATE_A500_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP4_LATE_A500_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP6_LATE_A300_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP6_LATE_A300_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP6_LATE_A400_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP6_LATE_A400_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP6_LATE_A500_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP6_LATE_A500_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP8_LATE_A300_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP8_LATE_A300_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP8_LATE_A400_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP8_LATE_A400_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP8_LATE_A500_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP8_LATE_A500_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP10_LATE_A300_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP10_LATE_A300_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:3:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP10_LATE_A400_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP10_LATE_A400_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:4:1:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP10_LATE_A500_L000_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:0:2:1"
+    ],
+    "reclaim_NOFLIP_MCAP10_LATE_A500_L100_I100_SL300_TP3R": [
+      4,
+      "any",
+      "PCT",
+      3.0,
+      3.0,
+      "LATE:5:1:2:1"
+    ]
+  },
+  "strict_16_profit_months_preserved_requirement": true,
+  "historical_monthly_source": "analysis/btc15m_reclaim_sl3_tp9_monthly_20261123/monthly_ohlc.csv",
+  "original_net_return_pct": 97.5183,
+  "original_win_months": 16,
+  "original_sum_loss_months_pct": -45.25226248180426,
+  "trading_cost_model": {
+    "taker_each_side": 0.05,
+    "gst_on_fee": 0.18,
+    "slippage_each_side": 0.02
+  },
+  "monthly_circuit_breakers_pct": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    10,
+    12,
+    15
+  ],
+  "delayed_lock_activation_pct": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "future_data_used": false,
+  "signal_timeframe": "15m",
+  "execution_timeframe": "1m",
+  "supertrend_reverse_exit": false,
+  "initial_SL_pct": 3,
+  "TP_pct": 9,
+  "exclusions": [
+    "funding",
+    "orderbook",
+    "real fills",
+    "liquidation"
+  ],
+  "known_optimization_limitation": "these 22 months previously explored extensively"
+}
