@@ -73,14 +73,14 @@ def signals(daily,kind):
                 break
     return sig
 
-def replay(minute,daily,sig,name,risk_fraction=.005,leverage_cap=3.,slippage_points=0.):
+def replay(minute,daily,sig,name,risk_fraction=.005,leverage_cap=3.,slippage_points=0.,slippage_bps=0.):
     # UTC day D signal only becomes tradable at D+1 00:00 UTC.
     action={daily.index[i]+pd.Timedelta(days=1):int(v) for i,v in enumerate(sig) if v}
     cash=10000.;qty=0.;entry=0.;stop=0.;side=0;entry_t=None;entry_fee=0.
     trades=[];equity=[];previous_day=None;last_t=None;last_close=None
     def close(t,price,reason):
         nonlocal cash,qty,entry,stop,side,entry_t,entry_fee
-        price=price-side*slippage_points
+        price=price-side*(slippage_points+price*slippage_bps/10000.)
         fee=qty*price*FEE;gross=side*qty*(price-entry)
         cash+=gross-fee
         trades.append(dict(strategy=name,entry_time=entry_t.isoformat(),exit_time=t.isoformat(),side=side,entry=entry,exit=price,qty=qty,gross=gross,entry_fee=entry_fee,exit_fee=fee,net=gross-entry_fee-fee,reason=reason))
@@ -89,7 +89,7 @@ def replay(minute,daily,sig,name,risk_fraction=.005,leverage_cap=3.,slippage_poi
         price=float(row.open); last_t=t;last_close=float(row.close)
         if side and t in action and action[t]==-side:close(t,price,"opposite_signal")
         if not side and t in action:
-            direction=action[t]; price=price+direction*slippage_points; prior=t-pd.Timedelta(days=1)
+            direction=action[t]; price=price+direction*(slippage_points+price*slippage_bps/10000.); prior=t-pd.Timedelta(days=1)
             if prior in daily.index:
                 d=daily.loc[prior];sl=float(d.low if direction==1 else d.high)
                 dist=direction*(price-sl)
@@ -211,6 +211,9 @@ def main():
                 for risk,cap,label in ((.005,3.,"matched"),(.02,20.,"source")):
                     suffix=str(slip).replace(".","p")
                     output["results"].append(replay(minute,daily,sig,f"{name}_{label}_slip_{suffix}",risk_fraction=risk,leverage_cap=cap,slippage_points=slip))
+            # Preregistered adverse price-scaled stress; distinct from fixed-point slippage.
+            for bps in (10.,25.):
+                output["results"].append(replay(minute,daily,sig,f"{name}_matched_slip_{int(bps)}bps",risk_fraction=.005,leverage_cap=3.,slippage_bps=bps))
     (OUT/"summary.json").write_text(json.dumps(output,indent=2))
     print(json.dumps(output["results"],indent=2))
 if __name__=="__main__":main()
