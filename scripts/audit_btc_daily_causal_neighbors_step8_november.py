@@ -178,7 +178,7 @@ def run():
                     arm=int(fallback_choice[d]) if version=="STEP8_kNN" else 0
                     sd=int(pricesides[d,arm])
                     recipe="trail075" if thresholds[d]>=1.25 else "trail050"
-                    name=old.FALL_ARMS[arm]
+                    name=online.FALL_ARMS[arm]
                 p,c,g,w,t=exact(d,sd,recipe,fee_mode)
                 daily_returns.append(p)
                 allrows.append(dict(
