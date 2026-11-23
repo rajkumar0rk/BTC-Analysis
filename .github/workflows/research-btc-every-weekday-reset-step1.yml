@@ -1,0 +1,31 @@
+name: BTCUSD One Trade Every IST Weekday Reset Step1
+on:
+  push:
+    branches:
+      - research/btc-every-weekday-daily-reset-step1
+    paths:
+      - scripts/research_btc_every_weekday_reset_step1.py
+      - .github/workflows/research-btc-every-weekday-reset-step1.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Assert one entry every weekday and backtest 51840 risk reward combinations
+        run: python scripts/research_btc_every_weekday_reset_step1.py
+      - name: Publish full daily, monthly, variant and cost breakdown
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-one-every-weekday-reset-step1-51840
+          path: analysis/btc_every_weekday_reset_step1/
+          if-no-files-found: warn
