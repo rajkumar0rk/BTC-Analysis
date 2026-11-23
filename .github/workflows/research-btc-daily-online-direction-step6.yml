@@ -22,7 +22,7 @@ jobs:
         run: python -m pip install numpy pandas numba tabulate
       - name: Test strictly prior-day online direction and clock selection
         run: python scripts/research_btc_daily_online_direction_step6.py
-      - name: Upload full 576 models, daily trades and 22 monthly results
+      - name: Upload full 1152 models, daily trades and 22 monthly results
         if: always()
         uses: actions/upload-artifact@v4
         with:
