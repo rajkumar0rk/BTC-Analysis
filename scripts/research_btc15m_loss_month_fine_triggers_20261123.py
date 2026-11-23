@@ -502,7 +502,7 @@ def main():
       "Taker fees 0.05% per side+18% GST, 0.02% adverse slippage each side.",
       "Strict pass: each of the 16 historically positive monthly percent returns MUST remain at least as high as baseline. A new worse month also counts against improved losing-month consistency.",
       "Loss-month interventions are determined only by prices and account equity OBSERVED SO FAR, not hindsight.",
-      "Tests monthly drawdown circuit breaker at 2-15% of equity from previous month's close, delayed activation locks at +2 to +7% raw price move, or combination.",
+      "Tests later profit-lock starts +6.8% to +8.5% with first locks -1.0%, -0.5% or 0%, and +0.5 percentage-point stop increases for each further +2% favorable move. No monthly risk cap in this sweep.",
       "Original 3%/9% model reverified against archived exact 22 monthly results.",
       "Stop-limit guards assume ideal trigger fills at 1m OHLC interpolation, but market gaps filled at bar open; real execution could be worse.",
       "Historical sample has already been repeatedly optimized; any selected threshold is IN-SAMPLE and unproven prospectively.",
