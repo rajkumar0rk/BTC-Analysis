@@ -332,7 +332,7 @@ def main():
     audited={}
     for tag,(cfg_key,decision,baseline,alternative) in records_for_audit.items():
         audited[tag]=detail_csv(
-            cfg_key,tag,decision,baseline,alternative,
+            tag,tag,decision,baseline,alternative,
             sides,idx,hour,mask,cfg_key[1])
         print("STEP27_RESULT_"+tag.upper()+" "+
             json.dumps(audited[tag],sort_keys=True),flush=True)
