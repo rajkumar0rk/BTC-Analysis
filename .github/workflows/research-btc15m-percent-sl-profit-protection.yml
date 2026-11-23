@@ -1,0 +1,51 @@
+name: BTCUSD 15M Percent Stop Loss x Immediate Profit Protection
+on:
+  push:
+    branches: [research/btc15m-percent-sl-profit-protection-20261123]
+    paths:
+      - scripts/research_btc15m_percent_sl_profit_protection_20261123.py
+      - .github/workflows/research-btc15m-percent-sl-profit-protection.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc15m-percent-sl-profit-protection
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install requirements
+        run: python -m pip install numpy pandas tabulate
+      - name: BTCUSD only 15M percent SL and first +0.15 percent lock backtest
+        shell: bash
+        run: |
+          mkdir -p analysis/btc15m_percent_sl_profit_protection_20261123
+          set -o pipefail
+          python -u scripts/research_btc15m_percent_sl_profit_protection_20261123.py 2>&1 | tee analysis/btc15m_percent_sl_profit_protection_20261123/execution.log
+      - name: Upload artifacts and error logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc15m-percent-sl-profit-protection
+          path: analysis/btc15m_percent_sl_profit_protection_20261123/
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Commit report on research branch only
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc15m_percent_sl_profit_protection_20261123/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: archive BTCUSD 15m percent SL and profit protection results"
+            git push origin HEAD:research/btc15m-percent-sl-profit-protection-20261123
+          fi
