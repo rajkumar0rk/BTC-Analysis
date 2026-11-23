@@ -1,0 +1,31 @@
+name: BTCUSD Step13 - frozen November monthly-winning early-exit audit
+on:
+  push:
+    branches:
+      - research/btc-daily-monthly-exit-protection-step13
+    paths:
+      - scripts/audit_btc_daily_monthly_exit_step13_november.py
+      - .github/workflows/audit-btc-daily-monthly-exit-step13-november.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Audit frozen 19-month winner versus Step11 on fifteen November BTC weekdays
+        run: python scripts/audit_btc_daily_monthly_exit_step13_november.py
+      - name: Publish 15 November trade ledgers and fee comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step13-frozen-Nov2026-monthly-win-audit
+          path: analysis/btc_daily_monthly_exit_step13/november_audit/
+          if-no-files-found: warn
