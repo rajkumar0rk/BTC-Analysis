@@ -293,7 +293,7 @@ def run():
             monthrows.append(monthly)
             print("VARIANT "+json.dumps(stat,sort_keys=True),flush=True)
     allv=pd.DataFrame(variants)
-    allmonths=pd.concat(monthrows if False else monthrows,ignore_index=True)
+    allmonths=pd.concat(monthrows,ignore_index=True)
     allv.to_csv(OUT/"all_variants.csv",index=False)
     allmonths.to_csv(OUT/"all_months.csv",index=False)
     selected={}
