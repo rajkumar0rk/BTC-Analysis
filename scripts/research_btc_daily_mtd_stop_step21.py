@@ -233,7 +233,7 @@ def main():
                     rows.append(z)
             print("STEP21_CAP_COMPLETED "+json.dumps(dict(
               family=family,cap=cap,
-              scenarios_completed=int(sum(1 for k in choices if k[0]==family and k[1]!="none"))),flush=True)
+              scenarios_completed=int(sum(1 for k in choices if k[0]==family and k[1]!="none")))),flush=True)
     df=pd.DataFrame(rows)
     if len(df)!=304 or not df.trades.eq(477).all():
         raise AssertionError("Invalid preregistered scenario or weekday count")
