@@ -32,7 +32,7 @@ EXIT_PROFILES=("B","E")
 FALL_ARMS=tuple(f"{hour}_{rule}" for hour in (21,22) for rule in
                 ("follow5","fade5","follow60","fade60"))
 EXPECTED=len(EVENT_MODES)*len(FALLBACK_MODES)*len(WINDOWS)*len(SCORES)*len(MARGINS)*len(EXIT_PROFILES)*len(MODES)
-assert EXPECTED==576 and NUM_DAYS==477
+assert EXPECTED==1152 and NUM_DAYS==477
 
 def retrieve(m):
     starts,_,_=base.prepare(m)
@@ -290,7 +290,7 @@ def run():
     tab=pd.DataFrame(rows)
     if len(tab)!=EXPECTED or not tab.trades.eq(477).all():
         raise AssertionError("Wrong grid/forced weekday coverage")
-    tab.to_csv(OUT/"all_576_prior_day_learning_models.csv",index=False)
+    tab.to_csv(OUT/"all_1152_prior_day_learning_models.csv",index=False)
     print("STEP6_GRID "+json.dumps(dict(models=len(tab),mandatory_trades=int(tab.trades.min()),
         events=260,fallbacks=217)),flush=True)
     reported={}
