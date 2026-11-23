@@ -1,0 +1,33 @@
+{
+  "source": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "symbol": "BTCUSD",
+  "signal_tf": "15m",
+  "execution_tf": "1m",
+  "input_trade_file": "O-L-H-C",
+  "input_trade_rows": 13534,
+  "analyzed_trade_rows": 13534,
+  "original_configs": [
+    "touch_close_2R",
+    "touch_close_3R",
+    "reclaim4_2R",
+    "reclaim4_3R",
+    "combined4_2R",
+    "combined4_3R",
+    "reclaim8_3R",
+    "combined8_3R"
+  ],
+  "paths": [
+    "O-H-L-C",
+    "O-L-H-C"
+  ],
+  "nominal_raw_market_threshold_pct": 0.158,
+  "fee_including_GST_per_side": 0.00059,
+  "slippage_per_side": 0.0002,
+  "limitations": "1m assumed O-H-L-C/O-L-H-C price path, not ticks; before original exit not alternative TP backtest"
+}
