@@ -1,0 +1,36 @@
+# Step 21 — month-to-date protective-stop cap on mandatory weekday BTC positions
+
+**Novelty: PARTIAL OVERLAP (monthly state×initial SL cap), research-only**. Steps 13–15 tested monthly equity state on *early exit* rules. Steps 16,18,20 tested fixed initial SL caps based on calendar day and contemporaneous volatility. This precommits a different combination: dynamically cap the **initial protective stop on a currently weak month**, computed only using PREVIOUS COMPLETED actual trade outcomes. It tests one policy uniformly over all months, never a January-2025-specific override. No new performance claim or live validation.
+
+## Frozen historical comparison
+- Step20 **B_with60_plus_counter5**, hindsight-selected: one BTCUSD Delta India 1m trade on **each of 477 full Asia/Kolkata Mon–Fri trading dates Jan2 2025–Oct30 2026**. Historical modeled assumed-Scalper net **+25.423847%**, **21/22 positive months** (2025 11/12, 2026 Jan–Oct 10/10), **292/477 winning days**, **max closed DD2.617670%**, worst month Jan2025 **−1.047101%**, worst day −0.575922%. Two static preentry risk caps: fallback where previously completed 60m price move aligns with chosen trade side ≥+0.15%, initial SL min(original,0.40%); and fallback where previously completed 5m signed move opposes chosen trade side ≥0.05%, cap0.25%. These are fixed/ex ante, but were **identified after examining all 22 months**.
+- Step20 **A_tight60_only**, another hindsight reference: 21/22 months, +25.973352% net, 292 win days, DD2.715507%, worst January2025 −1.450594%. Before entry and on either event/fallback, prior60m range fraction <=0.50% caps initial SL0.40%.
+- Step20 direct 477-daily ledger / 22 monthly parity verified against earlier Step15/18; only the assumed Scalper Offer makes net positive. With standard fees, B_static −5.332682%, A_static −4.918185%. Risk is not resolved.
+- Step20 prior overlap audited 10 static stop variants, all still 21/22 months. Steps 16–19 static first-weekday caps, direction and timing did not produce 22/22. Only remaining losing month for B/A historical profile Jan2025. This study may NOT target January by identity.
+
+## Immutable risk / trading requirements
+- One BTCUSD futures position at **full 1× account notional EVERY IST Mon–Fri** (all 477/477), no weekday skipping, no zero-size trades, no weekends, no multiple trades/day, no change of leverage.
+- Entry timestamp and direction EXACT frozen Step11 selection: first qualified 18:00/19:00/20:00 IST completed 5m volume>=1.5×previous20 completed 5m mean, otherwise mandatory 21:00 fallback side from previous completed fallback results. Preexisting Step13/Step15 B/A conditional previous-month-PnL early exits unchanged.
+- Base TP3% gross, event SL0.5% gross and lock+0.10% following +0.25% favorable completed 1m; fallback original SL0.5%/0.75% by preentry5m RVOL>=1.25 and trailing activates+0.35% with distance0.20%; plus frozen risk caps above, 30m max hold, 1m OPEN fills, stop-first same-bar and gap-worse stop, profit/abort exits only at NEXT 1m OPEN after completed candle.
+- SL new option must **only decrease** initial mid stop using min(existing, new cap). It may not widen, alter trailing, adjust trade direction, pick future entry timing, or change no-trade risk.
+- Economics modeled 5 BTC quote price points adverse per leg, standard taker0.05% each side+GST18%, alternative hypothetical preactivated regular <=30m Scalper closing-fee waiver. SAME chosen exits/positions repriced under standard fee assumptions; no independent knowledge of historical Scalper activation, orderbook spread/depth/latency, funding or liquidation.
+
+## Frozen 150 risk-state variants + two baselines
+- **Two distinct prior Step20 base families** B_risk and A_tight, selected retrospectively (not independent).
+- The extra initial SL cap may be **0.12%, 0.18%, 0.22%, 0.28%, or 0.35%**.
+- Scope: `fallback`, `event`, or `both` (three).
+- MTD-state triggers before current entry, using **only previous closed trades in SAME IST calendar month**, reset current month equity=1, peak=1 and prior loss streak=0 on first trading day. Five conditions:
+  1. `mtd_nonpositive`: previously completed compounded monthly net<=0%.
+  2. `mtd_below_minus025`: previous monthly net<=−0.25%.
+  3. `mtd_below_minus050`: previous monthly net<=−0.50%.
+  4. `giveback_ge050`: prior month peak equity minus previous day-end equity >=0.50 percentage points.
+  5. `prior_two_losses`: immediately preceding two completed weekday trades in current month had negative account net returns.
+- **5 caps ×3 scopes ×5 triggers =75 per family; total 150 extra configurations + original two family baselines**, each with hypothetical Scalper and standard fees (304 evaluated scenario rows). No other triggers, dates, cap values or special calendars.
+- Exact replay construction: for each baseline family and cap, precompute two arrays of exit outcomes using identical 1m stop-first replay (base/capped) at all 477 fixed entries. For each precommitted configuration and IST day, compute month-state ONLY from previously completed actual assumed-offer trades, choose base or capped initial stop using that day's preentry rule, choose Step15 B/A extra early-exit policy based on same preentry month equity/peak, and only AFTER deciding today's exit update month equity for the NEXT weekday. Under standard fee sensitivity, use same choices from offer path, not fee-dependent re-selection.
+- Validate per-day exact original B/A Step20 daily account return parity and 22-month results under both costs. Every row 477 trades, exact weekday dates, 22 months.
+- **2025-only qualification** to improve monthly consistency within family: must reach **12/12 profitable 2025 months**, 2025 cumulative net >= its own original 2025 net, 2025 winning weekdays >=original 2025 count, 2025 maximum closed DD<= original 2025 DD+0.0001%. If no model qualifies retain original base unchanged. Freeze if qualified and then recheck on Jan–Oct2026 without post hoc tuning. Total 22-month promotion requires **22/22 months**, net no worse than historical family base, DD no worse, no loss of 2026 profitable months, all 477 full-size weekdays. This is still not truly independent because A/B base configurations AND 2026 have been researched many times. Report any trade-off.
+- Publish full grid, each model monthly performance including 2025/2026 split, worst month/day, drawdown, total compounded PnL, 477 trades, win-days; selected 477 daily trade ledgers and 22 monthly CSV; also any all-history 22/22 model explicitly labeled hindsight-only (never promoted unless already 2025-selected). Do not make a new model based on inspecting losses after this run.
+- Even 22 historical profitable months would not guarantee future results because of extensive prior selection. Do not change master or trade real money.
+
+## Why this is worth checking but not promising
+Month-to-date stop tightening is distinct from the Step13/14 monthly **early exit** logic and from Step18 fixed market-condition SL rules. It is causal and compatible with mandatory daily trading, but risks whipsaws and more losing days. Fee cost reliance, lack of proper independent holdout and multiple testing may overwhelm the apparent historical edge.
