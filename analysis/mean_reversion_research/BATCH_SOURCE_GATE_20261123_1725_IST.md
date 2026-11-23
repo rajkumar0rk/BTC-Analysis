@@ -1,0 +1,18 @@
+# Mean reversion source and execution gate — 2026-11-23 17:25 IST
+
+Scope: research-only, no trading, no changes to other families. Read codex/AGENTS.md, codex/STRATEGY_NOVELTY_GATE.md and 16:29 IST gate. Queried actual branch Actions runs: latest completed historical replay remains MR003 run 45036174691, successful execution but rejected economic result. MR002 vaultik is previously tested and rejected, not a new candidate.
+
+## Source A — Mark Omelyanenko, daily rolling price z-score
+Pinned source: https://github.com/MarkOmelyanenko/python-mean-reversion-backtester/blob/44a3997eaefa0c857f4d5fef9ddf8171cc5d9ada/src/backtester.py ; original data: Yahoo Finance daily adjusted close, default SPY (not Delta BTC). Source file defines rolling sample mean/std, z=(price-mean)/std, long at z<=-2, short at z>=2, flat at |z|<=0.5, default lookback 20, next-day position via shift(1), 1 bp turnover cost default; grid search on train. Publisher trade count/PF/return/DD for BTC not supplied. License file not found at root (GitHub contents 404); permission unresolved. Crucial gap: **NO stop-loss, no gap-sensitive execution, no OHLC intrabar path**, and it may reverse directly from long to short. Its return model assumes continuous close-to-close log returns, not realizable next-minute fills. Rolling z-score is a distinct statistic from MR002 volume-weighted z-score, but unbounded adverse loss fails structural risk gate. **NOT ELIGIBLE** to reproduce as bounded-risk original; adding a stop creates a derivative, not source-faithful original. Do not claim profits.
+
+## Source B — Viprasol Tech, RSI threshold spot strategy
+Pinned source: https://github.com/Viprasol-Tech/crypto-trading-bot/blob/7e0de7d6478759cc4321a3a05140989b920bbccc/src/crypto_trading_bot/strategies/mean_reversion.py . Defaults: RSI14 <=30 buys 1 base unit if not holding, RSI>=70 sells only if holding and sufficient spot balance. Price-update based, no time-bar semantics specified in the strategy, no protective stop in strategy itself; no short signal. Publisher BTC trades/PF/return/DD not verified. License not verified in this inspection. **DUPLICATE** of established RSI extreme family and structurally unprotected at strategy level. SKIP under novelty gate.
+
+## Source C — zodboy Freqtrade BB/RSI
+https://github.com/zodboy/freqtrade-simple-mean-reversion ; 1h BB20/2 lower band and RSI14<35, tiered ROI and 15% stop; MIT stated by author. Already reviewed in prior 16:29 IST gate. **DUPLICATE** of MR001; not a new discovery or backtest. Included solely as a control to avoid accidental re-implementation.
+
+## Causal / cost review
+Research fee+GST is 0.059% notional each executed side, ~0.118% round trip before slippage, spread, funding. Mark's default 1 bp per turnover side is less than 5.9 bp fee+GST per side; therefore its default cost model materially understates the requested research assumption. Neither A nor B has a source-faithful stop-first 1m replay suitable for honest bounded-loss evaluation. No observed NAV/22-month monthly statistics generated this iteration.
+
+## Execution and handoff
+New distinct eligible candidates: 0; new source code inspected: 2; previously audited control: 1; new completed BTC 1m backtests: 0; variants: 0; new workflow runs: 0. Existing historical MR003 successful run: https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/45036174691 (strategy rejected). Next: source-search for a licensed *distinct* bounded-risk excursion or standardized-oscillator reversal with complete deterministic entry/stop/exit; compare Stage19 and family ledgers, commit NOVELTY_CHECK before any authentic archived replay. Do not retrofit original Mark model with an invented stop and call it reproduced.
