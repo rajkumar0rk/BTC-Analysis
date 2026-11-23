@@ -1,0 +1,321 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "asset": "BTCUSD",
+  "timeframe": "15m",
+  "other_timeframes": [],
+  "execution_timeframe": "1m",
+  "configurations": {
+    "original_ST_3R": [
+      4,
+      "any",
+      "ST",
+      1,
+      3,
+      "none"
+    ],
+    "ST075_TP2": [
+      4,
+      "any",
+      "ST",
+      0.75,
+      2,
+      "none"
+    ],
+    "ST075_TP3": [
+      4,
+      "any",
+      "ST",
+      0.75,
+      3,
+      "none"
+    ],
+    "ST1_TP1": [
+      4,
+      "any",
+      "ST",
+      1,
+      1,
+      "none"
+    ],
+    "ST1_TP15": [
+      4,
+      "any",
+      "ST",
+      1,
+      1.5,
+      "none"
+    ],
+    "ST1_TP2": [
+      4,
+      "any",
+      "ST",
+      1,
+      2,
+      "none"
+    ],
+    "ST1_TP25": [
+      4,
+      "any",
+      "ST",
+      1,
+      2.5,
+      "none"
+    ],
+    "ST1_TP35": [
+      4,
+      "any",
+      "ST",
+      1,
+      3.5,
+      "none"
+    ],
+    "ST1_TP4": [
+      4,
+      "any",
+      "ST",
+      1,
+      4,
+      "none"
+    ],
+    "ST1_TP5": [
+      4,
+      "any",
+      "ST",
+      1,
+      5,
+      "none"
+    ],
+    "ST125_TP15": [
+      4,
+      "any",
+      "ST",
+      1.25,
+      1.5,
+      "none"
+    ],
+    "ST125_TP2": [
+      4,
+      "any",
+      "ST",
+      1.25,
+      2,
+      "none"
+    ],
+    "ST125_TP25": [
+      4,
+      "any",
+      "ST",
+      1.25,
+      2.5,
+      "none"
+    ],
+    "ST125_TP3": [
+      4,
+      "any",
+      "ST",
+      1.25,
+      3,
+      "none"
+    ],
+    "ST125_TP4": [
+      4,
+      "any",
+      "ST",
+      1.25,
+      4,
+      "none"
+    ],
+    "ST15_TP1": [
+      4,
+      "any",
+      "ST",
+      1.5,
+      1,
+      "none"
+    ],
+    "ST15_TP2": [
+      4,
+      "any",
+      "ST",
+      1.5,
+      2,
+      "none"
+    ],
+    "ST15_TP3": [
+      4,
+      "any",
+      "ST",
+      1.5,
+      3,
+      "none"
+    ],
+    "ST15_TP4": [
+      4,
+      "any",
+      "ST",
+      1.5,
+      4,
+      "none"
+    ],
+    "ST2_TP1": [
+      4,
+      "any",
+      "ST",
+      2,
+      1,
+      "none"
+    ],
+    "ST2_TP2": [
+      4,
+      "any",
+      "ST",
+      2,
+      2,
+      "none"
+    ],
+    "ST2_TP3": [
+      4,
+      "any",
+      "ST",
+      2,
+      3,
+      "none"
+    ],
+    "ST1_TP25_BE1": [
+      4,
+      "any",
+      "ST",
+      1,
+      2.5,
+      "BE1"
+    ],
+    "ST1_TP4_BE1": [
+      4,
+      "any",
+      "ST",
+      1,
+      4,
+      "BE1"
+    ],
+    "ST1_TP3_BE1": [
+      4,
+      "any",
+      "ST",
+      1,
+      3,
+      "BE1"
+    ],
+    "ST1_TP3_STEP2": [
+      4,
+      "any",
+      "ST",
+      1,
+      3,
+      "STEP2"
+    ],
+    "ST125_TP3_BE1": [
+      4,
+      "any",
+      "ST",
+      1.25,
+      3,
+      "BE1"
+    ],
+    "ST125_TP3_STEP2": [
+      4,
+      "any",
+      "ST",
+      1.25,
+      3,
+      "STEP2"
+    ],
+    "slope4_ST1_TP2": [
+      4,
+      "slope4",
+      "ST",
+      1,
+      2,
+      "none"
+    ],
+    "slope4_ST1_TP25": [
+      4,
+      "slope4",
+      "ST",
+      1,
+      2.5,
+      "none"
+    ],
+    "slope4_ST1_TP3": [
+      4,
+      "slope4",
+      "ST",
+      1,
+      3,
+      "none"
+    ],
+    "slope4_ST125_TP3": [
+      4,
+      "slope4",
+      "ST",
+      1.25,
+      3,
+      "none"
+    ],
+    "slope4_ST15_TP3": [
+      4,
+      "slope4",
+      "ST",
+      1.5,
+      3,
+      "none"
+    ],
+    "slope4_ST1_TP3_BE1": [
+      4,
+      "slope4",
+      "ST",
+      1,
+      3,
+      "BE1"
+    ],
+    "slope8_ST125_TP3": [
+      4,
+      "slope8",
+      "ST",
+      1.25,
+      3,
+      "none"
+    ],
+    "body35_ST125_TP3": [
+      4,
+      "body35",
+      "ST",
+      1.25,
+      3,
+      "none"
+    ],
+    "margin10_ST125_TP3": [
+      4,
+      "margin10",
+      "ST",
+      1.25,
+      3,
+      "none"
+    ]
+  },
+  "time_window": "2025Jan-2026Oct inclusive IST 22 months",
+  "estimated_fees_gst_per_side": 0.00059,
+  "slippage_per_side": 0.0002,
+  "notional": 1.0,
+  "path_sensitivity": [
+    "O-H-L-C",
+    "O-L-H-C"
+  ],
+  "min_trades_each_case": 300,
+  "retrospective_optimisation": true
+}
