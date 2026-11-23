@@ -1,0 +1,31 @@
+name: BTCUSD Step7 — November frozen early exit audit
+on:
+  push:
+    branches:
+      - research/btc-daily-exit-invalidation-step7
+    paths:
+      - scripts/audit_btc_daily_exit_invalidation_step7_november.py
+      - .github/workflows/audit-btc-daily-invalidation-november-step7.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Backtest frozen 291 and 286 day candidates on November with no retuning
+        run: python scripts/audit_btc_daily_exit_invalidation_step7_november.py
+      - name: Archive all 15-day ledgers and comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step7-november-frozen-early-exits
+          path: analysis/btc_daily_exit_invalidation_step7/november_check/
+          if-no-files-found: warn
