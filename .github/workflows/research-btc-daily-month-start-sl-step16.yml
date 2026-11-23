@@ -1,0 +1,31 @@
+name: BTCUSD Step16 — Month Start Stop Caps, 477 Weekdays
+on:
+  push:
+    branches:
+      - research/btc-daily-month-start-stop-step16
+    paths:
+      - scripts/research_btc_daily_month_start_sl_step16.py
+      - .github/workflows/research-btc-daily-month-start-sl-step16.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Evaluate 168 early-month initial stop caps, full 477 weekday positions
+        run: python scripts/research_btc_daily_month_start_sl_step16.py
+      - name: Publish all model comparisons, 477 daily ledgers, 22 monthly outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step16-month-start-stop-caps
+          path: analysis/btc_daily_month_start_stop_step16/
+          if-no-files-found: warn
