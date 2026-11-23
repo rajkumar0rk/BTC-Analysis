@@ -1,0 +1,33 @@
+name: BTCUSD Step28 - Causal Monthly Guarded Trailing Optimization
+on:
+  push:
+    branches:
+      - research/btc-monthly-guard-trailing-step28
+    paths:
+      - scripts/research_btc_month_guard_trailing_step28.py
+      - .github/workflows/research-btc-month-guard-trailing-step28.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install historical simulation packages
+        run: python -m pip install numpy pandas numba scikit-learn tabulate
+      - name: Verify script syntax
+        run: python -m py_compile scripts/research_btc_month_guard_trailing_step28.py
+      - name: Backtest 180 monthly guarded trailing policies with 477 BTC weekdays
+        run: python scripts/research_btc_month_guard_trailing_step28.py
+      - name: Upload 360 after-cost model comparisons and complete daily / monthly ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step28-month-guard-trailing-477-weekdays
+          path: analysis/btc_month_guard_trailing_step28/
+          if-no-files-found: warn
