@@ -1,0 +1,28 @@
+# Mean-reversion source and execution triage — 2026-11-24 02:32 IST
+
+## Recovery and scope
+Read codex/AGENTS.md, codex/STRATEGY_NOVELTY_GATE.md, prior 01:32 source gate, and family EXPERIMENT_LEDGER.md. Queried the actual isolated-branch Actions runs list: newest completed run 45244913332 (success, head SHA 4aceb2c8b168dd625a4682422fb082bd4e66ef9c), MR004. No new workflow run or verified historical backtest in this iteration. MR004 has ten trades and cannot establish durable profitability. Historical BTC data are not mounted in this connector session; only a source-pinned approved candidate should be implemented in the existing authenticated Actions archive runner. Do not confuse source code review with a BTC replay.
+
+## Source A — Puller28/trading-framework Strategy05
+- Exact executable: https://github.com/Puller28/trading-framework/blob/main/user_data/strategies/Strategy05.py ; blob SHA 47d2aa0751c952a6e4d65088bf6c6a5a906c01b3. Repository default main; no GitHub repository license metadata returned, so redistribution permission unresolved.
+- Original: 5m crypto USDT spot, can_short=False. EMA20 mid; EMA-smoothed true range 10; Keltner +/-1.5 ATR; long on close below lower channel; source *also emits* short on close above upper channel, but can_short=False prevents those short signals from being tradable in original spot configuration. Exit when close reaches EMA20, 1.5% fixed stop, 120 five-minute-candle time exit, ROI effectively disabled (99).
+- Important: stop and mean exit are different execution paths; next-1m open signal exits and conservative stop-first gap handling are required for BTC futures adaptation. Indicator EMA warmup must be explicit; no guaranteed backtest period, trade count, PF, return, DD, or fees from original executable.
+- Prior art: existing family KeltnerBounceV1 and keltner_btc_transfer already cover channel stretch and bounce. Core thesis duplicate/partial overlap, not new just because ATR smoothing differs. **SKIP** pending a material differential and source license verification. No BTC test.
+- Independent third-party Freqle listing https://freqle.org/strategy/677897e62990ce86 reports -90% and PF 0.35 for its own league context; not publisher or local Delta BTC P&L, and not transferable.
+
+## Source B — freqtrade/freqtrade-strategies CCIStrategy
+- Exact source https://github.com/freqtrade/freqtrade-strategies/blob/main/user_data/strategies/berlinguyinca/CCIStrategy.py ; blob SHA b3f17834e1905d6037de54ffdc2341e1067a3d60 ; repository GPL-3.0 metadata.
+- Original nominal 1m spot. Entry requires CCI170<-100, CCI34<-100, CMF20<-0.1, MFI<25, plus 5m resampled SMA50>SMA25 and SMA200<close. Exit CCI170>100, CCI34>100, CMF>0.3, SMA100<SMA50<SMA25. Fixed stop -2%, ROI +10%. This is multi-indicator oversold mean-reversion, economically distinct from plain BB+RSI.
+- **Causal integrity failure**: resample() computes 5m aggregated OHLC with label='right', then resamples indicators back to 1m and calls interpolate(method='time'). This can interpolate between completed future 5m indicator points into earlier 1m rows, leaking future information. Original resample also does not explicitly restrict incomplete higher-timeframe bars. This requires a source-faithful baseline to be clearly separated from a *causal repair* using only last completed 5m values (forward-fill after close). Historical original apparent edge is not trustworthy until leak tested.
+- The original source calls pandas resample using the string '1min' for the final interpolation; compatibility with pandas and original Freqtrade version is unverified. No authentic Delta BTC trades or performance are claimed. **HOLD — interesting distinct mechanism but requires a preregistered causal adaptation and GPL compliance before replay**. No untrusted code executed.
+
+## Source C — frank-quant/ai-trading-videos MyMeanReversion
+- Exact source https://github.com/frank-quant/ai-trading-videos/blob/main/EP001_claude-freqtrade-bot/strategy/MyMeanReversion.py ; blob SHA 9571d9d9f774a5a61ac5f6cc610ff1f15ab13b8f ; repo MIT metadata.
+- Original 5m spot long: typical-price BB20 +/-2 standard deviations, RSI14<30, close>EMA200, volume>0. Exit on close>BB middle; 2% stop; ROI effectively disabled at +1000%. Entry and exit limit orders may not fill; naive next-open fills would be an *execution adaptation*. No publisher-verified 22-month BTC trade count/PF/DD/return.
+- Economically overlapping previously audited BB+RSI MR001 and other Bollinger+trend-filter research. **SKIP duplicate**, despite smaller stop and EMA filter; do not spend compute on renamed equivalent.
+
+## Execution economics and next action
+- Minimum modeled round-trip fee+GST on constant notional = 2 * 0.05% * 1.18 = 0.118%, zero slippage first screen; funding UNMODELED. A signal's average gross bounce must exceed this and adverse stop/gap losses.
+- Counts: 3 source implementations independently read; 1 materially distinct but currently HOLD due to causality; 2 novelty skips; 0 new distinct BTC backtests, 0 variants, 0 Actions launches, 0 fixes claimed verified.
+- Next actionable work: inspect the CCIStrategy resampling leak with a deterministic prefix-invariance unit check on genuine archived candles; if it fails, implement an explicitly labeled causal adaptation using completed 5m indicators, preserving immutable original source. First commit novelty check and settings; run authenticated Delta BTC 1m historical workflow, poll completion, retrieve trades/monthly NAV and reconcile. If source license/correctness prevents this, move to a different clearly licensed structural range-rejection source rather than repeatedly tuning BB/RSI.
+- No protected branch, unrelated family ledger, VPS, trading or deployment changed.
