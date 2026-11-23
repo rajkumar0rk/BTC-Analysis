@@ -36,7 +36,9 @@ def preentry_x(t,o,h,l,c,v):
     """All features use strictly candles before t. No current ohlc labels."""
     i=int(t)
     last=float(c[i-1])
-    op=float(o[i])
+    # Normalize exclusively by the previous COMPLETED close, not by the
+    # still-opening trade candle; the signal is fully formed preentry.
+    op=last
     r5=last/o[i-5]-1.
     r15=last/o[i-15]-1.
     r60=last/o[i-60]-1.
