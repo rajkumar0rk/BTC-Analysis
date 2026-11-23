@@ -1,0 +1,31 @@
+name: BTCUSD 15m compression 5m momentum daily >0.2pct test
+on:
+  push:
+    branches:
+      - research/btc-compression-momentum-daily-2026
+    paths:
+      - scripts/research_btc_15m_compression_5m_momentum_daily.py
+      - .github/workflows/research-btc-15m-compression-5m-momentum-daily.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install pandas numpy tabulate
+      - name: Backtest 32 compression breakout configurations on 2025-2026 1m data
+        run: python scripts/research_btc_15m_compression_5m_momentum_daily.py
+      - name: Publish daily monthly and trade breakdowns
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btcusd-compression-breakout-daily-account-0p2
+          path: analysis/btc_15m_compression_5m_momentum_daily/
+          if-no-files-found: warn
