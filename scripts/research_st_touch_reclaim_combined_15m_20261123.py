@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""BTC/ETH ST(10,3) 15m: first EMA20 touch-close versus break-and-reclaim entry.
+"""BTCUSD-only ST(10,3) 15m: first EMA20 touch-close versus break-and-reclaim entry.
 
 Touch-close: first later 15m candle TOUCHES prior completed EMA20 and closes
   above it (long) / below it (short). Entry at NEXT 15m open.
@@ -17,7 +17,7 @@ import pandas as pd
 from research_ema20_second_touch import read_source, MONTHS, FEE, SLIP
 from research_st_firsttouch_ema20_tp2r_stflip_1h15m import st_and_ema, ts_iso
 
-OUT=Path("analysis/st_touch_reclaim_combined_15m_20261123")
+OUT=Path("analysis/st_touch_reclaim_btc_only_15m_20261123")
 INITIAL=1000.
 TF=15
 PATHS=("O-H-L-C","O-L-H-C")
@@ -251,7 +251,7 @@ def main():
     OUT.mkdir(parents=True,exist_ok=True)
     assert len(MONTHS)==22
     summaries=[];months=[];trades=[];quality={}
-    for symbol in ("BTCUSD","ETHUSD"):
+    for symbol in ("BTCUSD",):
         df,q=read_source(symbol)
         quality[symbol]=q
         ema,line,trend,valid=st_and_ema(df,15)
@@ -301,7 +301,7 @@ def main():
     table=sdf[sdf.path_assumption=="O-H-L-C"][
         ["symbol","config","trades","win_rate_pct","profit_factor","net_return_pct","profitable_months","return_2025_pct","return_2026_pct","max_floating_dd_pct"]]
     report=[
-        "# Touch-close vs break-and-reclaim vs combined entry (15M Supertrend + EMA20)",
+        "# BTCUSD ONLY — Touch-close vs break-and-reclaim vs combined entry (15M Supertrend + EMA20)",
         "",
         "First touch only per ST cycle, flip candle excluded. Entry at next 15m open AFTER closed confirmation. "
         "Fixed 1R stop and 2R/3R targets; 1m stop/TP simulation. Includes both long and short; weekends on.",
