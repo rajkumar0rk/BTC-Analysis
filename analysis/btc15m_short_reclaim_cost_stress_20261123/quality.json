@@ -1,0 +1,57 @@
+{
+  "source_quality": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "configurations": {
+    "volume120_SHORT": [
+      4,
+      "volume120+shortonly",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "volume150_SHORT": [
+      4,
+      "volume150+shortonly",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ]
+  },
+  "costs": {
+    "base_taker05_slip02": [
+      0.00059,
+      0.0002
+    ],
+    "same_fee_slip04": [
+      0.00059,
+      0.0004
+    ],
+    "same_fee_slip06": [
+      0.00059,
+      0.0006
+    ],
+    "taker075_slip04": [
+      0.0008849999999999999,
+      0.0004
+    ]
+  },
+  "asset": "BTCUSD",
+  "signal_tf": "15m",
+  "higher_tf_signals": false,
+  "execution_tf": "1m",
+  "paths": [
+    "O-H-L-C",
+    "O-L-H-C"
+  ],
+  "notional_multiplier": 1,
+  "initial_equity_usd": 1000,
+  "holdout_status": "already-examined research data; overfitting risk",
+  "funding_and_liquidation": false
+}
