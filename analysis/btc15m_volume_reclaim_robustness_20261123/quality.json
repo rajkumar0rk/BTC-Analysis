@@ -1,0 +1,298 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "configurations": {
+    "vol120_ST_3R": [
+      4,
+      "volume120",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_ST_3R": [
+      4,
+      "volume150",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol120_ST_2R": [
+      4,
+      "volume120",
+      "ST",
+      1.0,
+      2.0,
+      "none"
+    ],
+    "vol120_ST_2p5R": [
+      4,
+      "volume120",
+      "ST",
+      1.0,
+      2.5,
+      "none"
+    ],
+    "vol120_ST_3p5R": [
+      4,
+      "volume120",
+      "ST",
+      1.0,
+      3.5,
+      "none"
+    ],
+    "vol120_ST_4R": [
+      4,
+      "volume120",
+      "ST",
+      1.0,
+      4.0,
+      "none"
+    ],
+    "vol150_ST_2R": [
+      4,
+      "volume150",
+      "ST",
+      1.0,
+      2.0,
+      "none"
+    ],
+    "vol150_ST_2p5R": [
+      4,
+      "volume150",
+      "ST",
+      1.0,
+      2.5,
+      "none"
+    ],
+    "vol150_ST_3p5R": [
+      4,
+      "volume150",
+      "ST",
+      1.0,
+      3.5,
+      "none"
+    ],
+    "vol150_ST_4R": [
+      4,
+      "volume150",
+      "ST",
+      1.0,
+      4.0,
+      "none"
+    ],
+    "vol150_ST_5R": [
+      4,
+      "volume150",
+      "ST",
+      1.0,
+      5.0,
+      "none"
+    ],
+    "vol120_ST_0p75risk_3R": [
+      4,
+      "volume120",
+      "ST",
+      0.75,
+      3.0,
+      "none"
+    ],
+    "vol120_ST_1p25risk_3R": [
+      4,
+      "volume120",
+      "ST",
+      1.25,
+      3.0,
+      "none"
+    ],
+    "vol150_ST_0p75risk_3R": [
+      4,
+      "volume150",
+      "ST",
+      0.75,
+      3.0,
+      "none"
+    ],
+    "vol150_ST_1p25risk_3R": [
+      4,
+      "volume150",
+      "ST",
+      1.25,
+      3.0,
+      "none"
+    ],
+    "vol120_ST_3R_BE1": [
+      4,
+      "volume120",
+      "ST",
+      1.0,
+      3.0,
+      "BE1"
+    ],
+    "vol120_ST_3R_STEP2": [
+      4,
+      "volume120",
+      "ST",
+      1.0,
+      3.0,
+      "STEP2"
+    ],
+    "vol150_ST_3R_BE1": [
+      4,
+      "volume150",
+      "ST",
+      1.0,
+      3.0,
+      "BE1"
+    ],
+    "vol150_ST_3R_STEP2": [
+      4,
+      "volume150",
+      "ST",
+      1.0,
+      3.0,
+      "STEP2"
+    ],
+    "vol120_slope4_ST_3R": [
+      4,
+      "volume120+slope4",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_slope4_ST_3R": [
+      4,
+      "volume150+slope4",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol120_body35_ST_3R": [
+      4,
+      "volume120+body35",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_body35_ST_3R": [
+      4,
+      "volume150+body35",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol120_margin10_ST_3R": [
+      4,
+      "volume120+margin10",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_margin10_ST_3R": [
+      4,
+      "volume150+margin10",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol120_LONG_ST_3R": [
+      4,
+      "volume120+longonly",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol120_SHORT_ST_3R": [
+      4,
+      "volume120+shortonly",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_LONG_ST_3R": [
+      4,
+      "volume150+longonly",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_SHORT_ST_3R": [
+      4,
+      "volume150+shortonly",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_wait1_ST_3R": [
+      1,
+      "volume150",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_wait2_ST_3R": [
+      2,
+      "volume150",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol150_wait8_ST_3R": [
+      8,
+      "volume150",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "vol120_CAP2ATR_3R": [
+      4,
+      "volume120",
+      "CAP",
+      2.0,
+      3.0,
+      "none"
+    ],
+    "vol150_CAP2ATR_3R": [
+      4,
+      "volume150",
+      "CAP",
+      2.0,
+      3.0,
+      "none"
+    ]
+  },
+  "asset": "BTCUSD",
+  "signal_timeframe": "15m",
+  "other_signal_timeframes": [],
+  "execution_timeframe": "1m",
+  "indicators": "ST Wilder 10x3, EMA20, ATR10, optional 15m candle/vol data",
+  "fee_incl_GST_per_side": 0.00059,
+  "adverse_slippage_per_side": 0.0002,
+  "initial_capital": 1000.0,
+  "leverage_notional": 1.0,
+  "hypothetical_1min_paths": [
+    "O-H-L-C",
+    "O-L-H-C"
+  ],
+  "selection_limitation": "All test months have been examined, not true out-of-sample; cannot infer profitability after tuning",
+  "excluded": "spread, funding, liquidation, leverage risk, depth, latency"
+}
