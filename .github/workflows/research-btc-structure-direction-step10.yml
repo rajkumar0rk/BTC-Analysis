@@ -1,0 +1,31 @@
+name: BTCUSD Step 10 - causal structure direction overlay mandatory weekdays
+on:
+  push:
+    branches:
+      - research/btc-daily-structure-overlay-step10
+    paths:
+      - scripts/research_btc_daily_structure_step10.py
+      - .github/workflows/research-btc-structure-direction-step10.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Audit 85 causal structure direction overrides on all 477 BTC weekdays
+        run: python scripts/research_btc_daily_structure_step10.py
+      - name: Publish all variants and selected daily and monthly comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step10-structure-overlay-477-weekdays
+          path: analysis/btc_daily_structure_step10/
+          if-no-files-found: warn
