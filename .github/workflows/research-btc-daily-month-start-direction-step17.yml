@@ -1,0 +1,31 @@
+name: BTCUSD Step17 — Causal Month-Start Direction, 477 Weekdays
+on:
+  push:
+    branches:
+      - research/btc-daily-month-start-direction-step17
+    paths:
+      - scripts/research_btc_daily_month_start_direction_step17.py
+      - .github/workflows/research-btc-daily-month-start-direction-step17.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical analysis libraries
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Simulate 126 preentry month-start directional policies, all full weekday trades
+        run: python scripts/research_btc_daily_month_start_direction_step17.py
+      - name: Publish full 477-trade and monthly analytics per family and cost scenario
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step17-month-start-causal-direction
+          path: analysis/btc_daily_month_start_direction_step17/
+          if-no-files-found: warn
