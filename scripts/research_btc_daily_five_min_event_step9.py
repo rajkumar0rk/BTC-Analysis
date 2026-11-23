@@ -243,7 +243,7 @@ def run():
         offer.max_closed_dd_pct<=baseline["scalper_offer"]["max_closed_dd_pct"])
     summary=dict(
        purpose="Check every completed 5m event rather than 18h 19h 20h checkpoints; mandatory 21h fallback",
-       1x_account_notional=True if False else True,
+       full_notional_1x=True,
        exactly_477_weekday_trades=True,
        2025_train_only=True,
        research_exposed_2026_not_blind=True,
