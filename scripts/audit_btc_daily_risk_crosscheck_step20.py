@@ -126,9 +126,7 @@ def main():
             stat=account_stats(path,monthly)
             stat.update(model=label,fee_schedule=mode,
                 family=fam,stop_rules="+".join(parts) if parts else "unchanged",
-                stop_narrowed_trades=changed,
-                2025_win_days=int(np.sum(path[0][:TRAIN]>0)) if False else 0)
-            del stat["2025_win_days"]
+                stop_narrowed_trades=changed)
             summary.append(stat)
             print("STEP20_MODEL "+json.dumps({
                 "model":label,"fee":mode,"months":stat["win_months_all"],
