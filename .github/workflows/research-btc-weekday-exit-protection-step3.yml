@@ -1,0 +1,31 @@
+name: BTCUSD Mandatory Daily Exit Protection Step 3
+on:
+  push:
+    branches:
+      - research/btc-daily-exit-protection-step3
+    paths:
+      - scripts/research_btc_every_weekday_exit_protection_step3.py
+      - .github/workflows/research-btc-weekday-exit-protection-step3.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Backtest fixed entries with causally updated exits for ALL 477 weekdays
+        run: python scripts/research_btc_every_weekday_exit_protection_step3.py
+      - name: Publish after-cost trade, daily and 22-month results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-mandatory-daily-exit-protection-step3
+          path: analysis/btc_every_weekday_exit_protection_step3/
+          if-no-files-found: warn
