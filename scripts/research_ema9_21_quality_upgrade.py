@@ -113,6 +113,7 @@ def sim(m,mask,atr5,session,stop_mult,rr,slip=SLIP):
     last_exit=-1;last_day=""
     trades=[]
     for signal in candidates:
+        if days[signal]<"2025-01-01" or days[signal]>="2026-11-01":continue
         if signal<=last_exit or days[signal]==last_day:continue
         entryi=signal+1
         if entryi>=len(m):break
@@ -150,6 +151,12 @@ def sim(m,mask,atr5,session,stop_mult,rr,slip=SLIP):
             entry_fill=float(fillin),gross_points=float(gross),
             fee_gst_points=float(FEE*(fillin+fillout)),slippage_points=float(2*slip),
             net_points=float(net),account_return=float(ALLOCATION*net/fillin)))
+    if len({row['signal_day_ist'] for row in trades})!=len(trades):
+        raise AssertionError('More than one entry on an IST calendar day')
+    if any(row['signal_day_ist']>='2026-11-01' for row in trades):
+        raise AssertionError('Partial November entries contaminated 22-month evaluation')
+    if len(trades)>sum(z.weekday()<5 for z in pd.date_range('2025-01-01','2026-10-31')):
+        raise AssertionError('Trade count exceeds eligible weekdays')
     return pd.DataFrame.from_records(trades,columns=[
         "signal_utc","entry_utc","exit_utc","signal_day_ist","exit_month_ist",
         "side","exit_reason","risk_points","hold_mins","entry_fill",
@@ -184,7 +191,8 @@ def summarize(df):
             account_return_pct=round(100*(equity/start-1),6)))
     monthly=pd.DataFrame(months)
     x=metrics(df)
-    x.update(net_return_pct=round((equity-1)*100,5),
+    x.update(weekday_coverage_pct=round(100*len(df)/sum(z.weekday()<5 for z in pd.date_range("2025-01-01","2026-10-31")),2),
+       net_return_pct=round((equity-1)*100,5),
        return_2025_pct=round((annual_equity["2025"]-1)*100,5),
        return_2026_pct=round((annual_equity["2026"]-1)*100,5),
        positive_2025=int((monthly.iloc[:12].account_return_pct>0).sum()),
