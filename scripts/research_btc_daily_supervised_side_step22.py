@@ -325,7 +325,7 @@ def main():
         count_models=109,fee_scenarios=218,
         exact_trades=477,frozen_original=baseline,
         eligible_2025_training_models=int(len(eligible)),
-        2025_selected_best=best if False else None,
+        selected_training_year_2025=best,
         candidate_selected_by_2025_only=best,
         full_22months_recheck=chosen_fee,
         hindsight_22_profitable_month_variants=int(len(full22)),
