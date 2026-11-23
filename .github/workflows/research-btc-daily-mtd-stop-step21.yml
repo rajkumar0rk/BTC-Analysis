@@ -1,0 +1,31 @@
+name: BTCUSD Step21 - Causal Monthly Stop Cap, Every IST Weekday
+on:
+  push:
+    branches:
+      - research/btc-daily-mtd-stop-switch-step21
+    paths:
+      - scripts/research_btc_daily_mtd_stop_step21.py
+      - .github/workflows/research-btc-daily-mtd-stop-step21.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Verify monthly-state stop policies on every 477 IST weekday
+        run: python scripts/research_btc_daily_mtd_stop_step21.py
+      - name: Upload 150 policy grid, full 477-trade and monthly ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step21-monthly-mtd-stop-477-weekdays
+          path: analysis/btc_daily_mtd_stop_step21/
+          if-no-files-found: warn
