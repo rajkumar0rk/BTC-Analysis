@@ -1,0 +1,25 @@
+{
+  "shard": 1,
+  "shard_count": 7,
+  "models": 10,
+  "results": 20,
+  "configs": [
+    "reclaim_NOFLIP_MCAP2_SL300_TP3R",
+    "reclaim_NOFLIP_MCAP12_SL300_TP3R",
+    "reclaim_NOFLIP_LATE_A200_L100_I100_SL300_TP3R",
+    "reclaim_NOFLIP_LATE_A400_L000_I050_SL300_TP3R",
+    "reclaim_NOFLIP_LATE_A500_L000_I100_SL300_TP3R",
+    "reclaim_NOFLIP_LATE_A600_L050_I050_SL300_TP3R",
+    "reclaim_NOFLIP_LATE_A700_L050_I100_SL300_TP3R",
+    "reclaim_NOFLIP_MCAP4_LATE_A500_L000_I100_SL300_TP3R",
+    "reclaim_NOFLIP_MCAP6_LATE_A500_L100_I100_SL300_TP3R",
+    "reclaim_NOFLIP_MCAP10_LATE_A300_L000_I100_SL300_TP3R"
+  ],
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  }
+}

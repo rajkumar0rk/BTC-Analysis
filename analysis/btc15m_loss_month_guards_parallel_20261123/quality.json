@@ -1,0 +1,18 @@
+{
+  "configurations": 70,
+  "results": 140,
+  "original_months_exact_match": true,
+  "original_16_profitable_months": 16,
+  "original_6_losing_months": 6,
+  "strict_matching_non_baseline_count": 0,
+  "missing_time_data": null,
+  "run_source": "7 parallel GitHub Actions shards",
+  "unmodeled": [
+    "funding",
+    "real spreads",
+    "market impact",
+    "liquidation",
+    "latency"
+  ],
+  "in_sample_only": true
+}
