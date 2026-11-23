@@ -1,0 +1,31 @@
+name: BTCUSD Step6 — frozen November online-direction audit
+on:
+  push:
+    branches:
+      - research/btc-daily-online-direction-step6
+    paths:
+      - scripts/audit_btc_daily_online_direction_step6_november.py
+      - .github/workflows/audit-btc-daily-online-step6-november.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Frozen 15-weekday November audit of prior-days-only strategy
+        run: python scripts/audit_btc_daily_online_direction_step6_november.py
+      - name: Publish November full 15-trade ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step6-online-november-audit
+          path: analysis/btc_daily_online_direction_step6/november_audit/
+          if-no-files-found: warn
