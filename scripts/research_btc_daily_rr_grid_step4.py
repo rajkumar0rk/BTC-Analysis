@@ -265,7 +265,7 @@ def run():
         selections[mode]=dict(
            chosen_2025_only=best,positive_2025_screen_count=int(len(valid)),
            eligible_train_count=int(len(eligible)),
-           2025_2026_positive_screen_count=int(np.sum((subset.net_return_2025_pct>0)&(subset.net_return_2026_pct>0))),
+           positive_both_years_screen_count=int(np.sum((subset.net_return_2025_pct>0)&(subset.net_return_2026_pct>0))),
            neighbor_stability=stable,
            total_cost_fee_gst_points=round(float(np.sum(costpoints)),2),
            total_gross_points=round(float(np.sum(grosspts)),2),
