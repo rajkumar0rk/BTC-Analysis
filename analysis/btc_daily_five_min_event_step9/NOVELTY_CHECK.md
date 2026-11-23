@@ -1,0 +1,25 @@
+# Step 9 — 5-minute cadence entry-event search with mandatory daily fallback
+
+**Novelty gate: PARTIAL OVERLAP — approved change to causal event detection cadence.**
+
+Previous:
+- `scripts/research_btc_every_weekday_adaptive_step2.py`, `research_btc_daily_online_direction_step6.py`, and `research_btc_daily_causal_neighbors_step8.py` inspect 5m volume only at the **hourly** 18:00, 19:00, 20:00 IST checkpoints. In practice 5-minute price/volume impulses often occur between these hours. Fixed-hour only misses them.
+- `scripts/research_btc_every_weekday_reset_step1.py`: fixed 24 hourly entry clocks with full daily coverage but no within-hour signal detection.
+- `scripts/research_btc_daily_exit_invalidation_step7.py`: tested early-exit rules, no modification of event detection times; 291-day historical candidate failed the brief Nov check.
+- The newly completed Step 8: selected using 2025 only, 277/477 positive days, +21.4233% after hypothetical Scalper Offer, 3.008746% DD, 15/22 profitable months, but **2026 unchanged** from Step 6. This is still an in-sample/research-exposed study.
+
+**New causal hypothesis:** Checking the latest COMPLETED 5m bar every 5 minutes (not just once each hour) may lead to a more meaningful 5m volume/price event entry. **Every model is forced to trade once on all 477 full IST weekdays** and takes the earliest permitted event, with 21:00 fallback if no event.
+
+## Frozen inputs before computation
+- BTCUSD Delta India authentic 1m archive, 2025-01 through 2026-10 UTC. Full IST Monday–Friday days 2025-01-02 through 2026-10-30 inclusive (477), no Sat/Sun, no missing trades.
+- Use 1m OPEN price at every fixed 5-minute IST checkpoint, and only OHLCV from previous *completed* 5m candle [i-5,i) plus prior twenty completed 5m volume bars [i-105,i-5). Relative volume = volume last completed 5m / mean volume prior 20 completed 5m. Return/side signals computed using last 1m close at i-1 and previous 5m/15m/1h OPEN strictly before i. Never know future price before entering.
+- Four event-search windows in IST: **17:00–20:55**, **18:00–20:55**, **19:00–20:55**, **18:00–19:55**, checking every 5 minutes inclusively in those windows. As soon as a condition matches, enter immediately; never choose after seeing later potential setups.
+- Volume thresholds `1.25x / 1.5x / 2.0x` and minimum absolute completed-5m return `0%, 0.05%, 0.10%, 0.20%`. Both jointly required.
+- Fixed causal event LONG/SHORT rules: (a) FADE completed 5m direction, (b) FOLLOW completed 5m direction, (c) FOLLOW prior completed 60m direction, (d) FOLLOW 5m when preceding 5m and 15m signs agree, otherwise FADE 5m. No direction guessed with future.
+- If no event before window closes, **MUST enter 21:00 IST**, with one of two fixed preentry sides: FOLLOW5 or FADE5. Exactly one entry/day whether market is quiet or volatile.
+- **384 candidate strategies** (4 search windows ×3 RVOL ×4 min 5m return ×4 event sides ×2 fallback sides). No change to exits, leverage, trade count, weekend rule.
+- Frozen exits from existing Step6 E: event **SL0.5%**, TP3% gross, 30min timeout, profit lock activates at +0.25% favorable and locks +0.10% valid following 1m; fallback SL0.5% if its prior completed 5m relative volume <1.25 else SL0.75%, trailing activates at +0.35%, distance 0.20%, TP3% gross, 30min maximum. Stop-first if stop and target touch within same 1m candle; stop worsens on price gaps; timeout at 1m OPEN 30mins later; no crossing IST day boundary.
+- Every trade at 1× BTC account notional; 5 BTCUSD quote points adverse slippage on each leg; standard taker 0.05% per leg+18% GST; historical **hypothetically preactivated** regular Scalper Offer waives closing taker fee if exit within <=30m, opening charged. Do not infer actual historical Scalper eligibility, actual L1/L2 market impact, funding, margin/leverage or liquidation from OHLCV.
+- Select candidates **based on 2025 only**: require >=145 winning weekdays and >=+3% compounded 2025 net account profit with <=4% 2025 max closed DD. Rank eligible by 2025 winning weekdays then 2025 net profit, then 2025 drawdown. If none eligible, declare failure. Freeze selection and report unchanged Jan–Oct 2026. Same candidate actual decisions repriced under standard fees without cost-dependent re-selection.
+- Compare to verified Step6 prior-only online direction baseline (275/477 winning, +17.7862% total modeled offer net, 16/22 profitable months, DD3.265838) and Step8 selected outcome (277/477 winning, +21.423313% net, 15/22 profitable months, DD3.008746). Report year-by-year trade count/profit, total profitable-day count, 22 individual month returns, max DD/worst month/day, max losing streak, fees, proportion of 5m event versus 21h fallback, time-to-entry, sensitivity under normal fees.
+- Any best chosen on all 22 months is *hindsight only*, not a recommended profitable strategy. 2026 and November were already researched in earlier studies: cannot claim truly independent validation. No additional optimization after 2026 outcomes and no combining two newly best models without new holdout data.
