@@ -1,0 +1,31 @@
+name: BTCUSD Step 5 — B C D E November frozen audit
+on:
+  push:
+    branches:
+      - research/btc-daily-causal-regime-step5
+    paths:
+      - scripts/audit_btc_daily_causal_regime_step5_november.py
+      - .github/workflows/audit-btc-daily-regime-november-step5.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Recheck frozen four mandatory BTC daily variants on November candles
+        run: python scripts/audit_btc_daily_causal_regime_step5_november.py
+      - name: Publish all 15 daily entries per variant and cost model
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step5-november-frozen-daily-audit
+          path: analysis/btc_daily_causal_regime_step5/november_audit/
+          if-no-files-found: warn
