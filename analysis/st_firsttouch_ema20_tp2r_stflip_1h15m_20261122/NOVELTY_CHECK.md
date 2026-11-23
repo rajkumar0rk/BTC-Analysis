@@ -23,3 +23,8 @@ User-requested fixed logic, 2026-11-22. Run both BTCUSD/ETHUSD independently on 
 - Prior `analysis/ema20_second_touch_20261121/`: 15M+1H SECOND EMA20 touch, ATR2 stop, breakeven and trailing, no ST flip exit.
 - Prior `analysis/ema20_second_touch_1h_step200_flip_exit_20261121/`: SECOND touch, step lock, ST flip.
 **PARTIAL OVERLAP, approved distinct entry and TP/SL definition, no optimization sweep.**
+
+## Reproduction replay — 2026-11-23
+- User requested an exact repeat of the published BTCUSD/ETHUSD 15M first-touch Supertrend-flip/2R historical test.
+- Trigger the existing workflow on the same research branch using this documentation-only change; leave strategy code, data window, 1-minute execution assumptions, costs, and output calculation unchanged.
+- Do not interpret the archived report as a newly completed run until workflow completion and result revision are independently verified.
