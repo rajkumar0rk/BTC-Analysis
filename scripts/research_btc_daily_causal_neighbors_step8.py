@@ -32,7 +32,7 @@ FALL_OPTIONS=("fixed","neighbors")
 ARM_SPACES=("21_only","21_or_22")
 MODES=base.MODES
 EXPECTED=len(WINDOWS)*len(K_NEIGHBORS)*len(SCORES)*len(MARGINS)*len(FEATURES)*len(EVENT_OPTIONS)*len(FALL_OPTIONS)*len(ARM_SPACES)
-assert EXPECTED==432 and N==477 and TRAIN==260
+assert EXPECTED==864 and N==477 and TRAIN==260
 
 def compute_preentry_context(m,starts,hours,day_signs):
     """Pure past-minute features evaluated at a planned minute OPEN."""
@@ -288,7 +288,7 @@ def run():
     tab=pd.DataFrame(rows)
     if len(tab)!=EXPECTED*2 or not tab.trades.eq(477).all():
         raise AssertionError("Wrong candidate count or trade coverage")
-    tab.to_csv(OUT/"all_432_policies_two_fee_models.csv",index=False)
+    tab.to_csv(OUT/"all_864_policies_two_fee_models.csv",index=False)
     print("STEP8_GRID "+json.dumps(dict(
         actual_fee_scenarios=len(tab),policies=EXPECTED,
         exact_trade_days_per_policy=int(tab.trades.min()),
@@ -352,7 +352,7 @@ def run():
         full_sample_highest_net_hindsight_NOT_selected=allbest,
         finance_assumptions="1x account notional, 5 BTC price points adverse each side, 0.05% taker each side+18% GST; alternative assumes previously activated regular Scalper Offer <=30min closing waiver",
         limitations=["2026 has repeatedly been researched and is NOT pristine forward validation",
-            "432 parameter combinations create severe multiple-comparison optimism",
+            "864 parameter combinations create severe multiple-comparison optimism",
             "Historical scalper activation cannot be verified from OHLCV",
             "No actual spread/orderbook depth, latency, funding, liquidations or tick-level intrabar ordering",
             "A mandatory trade each weekday does not guarantee a profitable day"])
