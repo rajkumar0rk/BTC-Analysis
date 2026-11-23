@@ -38,17 +38,5 @@ RUN BTCUSD combined8_3R_1hST O-H-L-C
 RESULT {"config": "combined8_3R_1hST", "expired_reclaim_windows": 36, "fees_gst_usd": 434.1815, "first_touches": 1501, "flip_exits": 178, "invalid_R": 0, "invalid_first_touches": 0, "losses": 480, "max_floating_dd_pct": 69.266, "min_equity": 329.75, "net_profit_usd": -670.2501, "net_return_pct": -67.025, "path_assumption": "O-H-L-C", "profit_factor": 0.6225, "profitable_2025_months": 1, "profitable_2026_months": 1, "profitable_months": 2, "rejected_1h_filter": 664, "return_2025_pct": -52.104, "return_2026_pct": -31.152, "signals": 1302, "signals_used": 638, "stop_exits": 349, "symbol": "BTCUSD", "tp_exits": 111, "trades": 638, "valid_reclaims": 493, "win_rate_pct": 24.765, "wins": 158}
 RUN BTCUSD combined8_3R_1hST O-L-H-C
 RESULT {"config": "combined8_3R_1hST", "expired_reclaim_windows": 36, "fees_gst_usd": 434.1815, "first_touches": 1501, "flip_exits": 178, "invalid_R": 0, "invalid_first_touches": 0, "losses": 480, "max_floating_dd_pct": 69.266, "min_equity": 329.75, "net_profit_usd": -670.2501, "net_return_pct": -67.025, "path_assumption": "O-L-H-C", "profit_factor": 0.6225, "profitable_2025_months": 1, "profitable_2026_months": 1, "profitable_months": 2, "rejected_1h_filter": 664, "return_2025_pct": -52.104, "return_2026_pct": -31.152, "signals": 1302, "signals_used": 638, "stop_exits": 349, "symbol": "BTCUSD", "tp_exits": 111, "trades": 638, "valid_reclaims": 493, "win_rate_pct": 24.765, "wins": 158}
-Traceback (most recent call last):
-  File "/home/runner/work/BTC-Analysis/BTC-Analysis/scripts/research_st_touch_reclaim_combined_15m_20261123.py", line 325, in <module>
-    main()
-  File "/home/runner/work/BTC-Analysis/BTC-Analysis/scripts/research_st_touch_reclaim_combined_15m_20261123.py", line 278, in main
-    rr=sdf[(sdf.symbol==sym)&(sdf.config==cfg)&(sdf.path_assumption=="O-H-L-C")].iloc[0]
-       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/core/indexing.py", line 1342, in __getitem__
-    return self._getitem_axis(maybe_callable, axis=axis)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/core/indexing.py", line 2432, in _getitem_axis
-    self._validate_integer(key, axis)
-  File "/opt/hostedtoolcache/Python/3.12.16/x64/lib/python3.12/site-packages/pandas/core/indexing.py", line 2365, in _validate_integer
-    raise IndexError("single positional indexer is out-of-bounds")
-IndexError: single positional indexer is out-of-bounds
+BASELINE_PARITY_OK
+BACKTEST_DONE 20
