@@ -71,7 +71,7 @@ def retrieve(m):
     arms_meta=[]
     for di in range(NUM_DAYS):
         h=event_hours[di]
-        evt=features[(DAYS[di].strftime("%Y-%m-%d"),int(h))]
+        evt=features[(di,int(h))]
         eventvol[di]=evt["volume5_ratio"]>=2.0
         eventimpulse[di]=abs(evt["r5"])>=.0015
         cur21=f21[di,21]
