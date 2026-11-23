@@ -1,0 +1,412 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "configurations": {
+    "touch_ST1R_3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "touch_stop0p30_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.66666667,
+      "none"
+    ],
+    "touch_stop0p30_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.0,
+      "none"
+    ],
+    "touch_stop0p30_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none"
+    ],
+    "touch_stop0p30_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      2.0,
+      "none"
+    ],
+    "touch_stop0p30_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      2.66666667,
+      "none"
+    ],
+    "touch_stop0p50_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.4,
+      "none"
+    ],
+    "touch_stop0p50_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.6,
+      "none"
+    ],
+    "touch_stop0p50_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.8,
+      "none"
+    ],
+    "touch_stop0p50_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      1.2,
+      "none"
+    ],
+    "touch_stop0p50_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      1.6,
+      "none"
+    ],
+    "touch_stop0p75_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.26666667,
+      "none"
+    ],
+    "touch_stop0p75_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.4,
+      "none"
+    ],
+    "touch_stop0p75_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.53333333,
+      "none"
+    ],
+    "touch_stop0p75_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.8,
+      "none"
+    ],
+    "touch_stop0p75_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      1.06666667,
+      "none"
+    ],
+    "reclaim_ST1R_3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_stop0p30_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.66666667,
+      "none"
+    ],
+    "reclaim_stop0p30_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.0,
+      "none"
+    ],
+    "reclaim_stop0p30_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none"
+    ],
+    "reclaim_stop0p30_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      2.0,
+      "none"
+    ],
+    "reclaim_stop0p30_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      2.66666667,
+      "none"
+    ],
+    "reclaim_stop0p50_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.4,
+      "none"
+    ],
+    "reclaim_stop0p50_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.6,
+      "none"
+    ],
+    "reclaim_stop0p50_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.8,
+      "none"
+    ],
+    "reclaim_stop0p50_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      1.2,
+      "none"
+    ],
+    "reclaim_stop0p50_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      1.6,
+      "none"
+    ],
+    "reclaim_stop0p75_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.26666667,
+      "none"
+    ],
+    "reclaim_stop0p75_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.4,
+      "none"
+    ],
+    "reclaim_stop0p75_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.53333333,
+      "none"
+    ],
+    "reclaim_stop0p75_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.8,
+      "none"
+    ],
+    "reclaim_stop0p75_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      1.06666667,
+      "none"
+    ],
+    "combined_ST1R_3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "combined_stop0p30_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.66666667,
+      "none"
+    ],
+    "combined_stop0p30_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.0,
+      "none"
+    ],
+    "combined_stop0p30_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none"
+    ],
+    "combined_stop0p30_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      2.0,
+      "none"
+    ],
+    "combined_stop0p30_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      2.66666667,
+      "none"
+    ],
+    "combined_stop0p50_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.4,
+      "none"
+    ],
+    "combined_stop0p50_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.6,
+      "none"
+    ],
+    "combined_stop0p50_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      0.8,
+      "none"
+    ],
+    "combined_stop0p50_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      1.2,
+      "none"
+    ],
+    "combined_stop0p50_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.005,
+      1.6,
+      "none"
+    ],
+    "combined_stop0p75_tp0p20": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.26666667,
+      "none"
+    ],
+    "combined_stop0p75_tp0p30": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.4,
+      "none"
+    ],
+    "combined_stop0p75_tp0p40": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.53333333,
+      "none"
+    ],
+    "combined_stop0p75_tp0p60": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      0.8,
+      "none"
+    ],
+    "combined_stop0p75_tp0p80": [
+      4,
+      "any",
+      "PCT",
+      0.0075,
+      1.06666667,
+      "none"
+    ]
+  },
+  "signal_timeframe": "15m",
+  "higher_timeframe_features": false,
+  "execution_timeframe": "1m",
+  "pct_targets_after_costs": "gross target 0.20%\u20130.80% of entry, fees+GST+slippage deducted from every trade",
+  "supertrend_ATR10_multiplier3": true,
+  "ema20": true,
+  "stop_on_opposite_confirmed_ST_flip": true,
+  "one_trade_per_cycle": true,
+  "first_touch_must_close_wrong_side": true,
+  "then_later_15m_close_reclaims": true,
+  "flip_candle_excluded": true,
+  "entry_modes": "touch/reclaim/combined, each requires first eligible 15m EMA20 interaction after ST flip",
+  "fee_incl_GST_per_side": 0.00059,
+  "slippage_per_side": 0.0002,
+  "notional": "1x evolving $1000 equity",
+  "no_volume_filter_baseline": true,
+  "limitations": "2026 is already inspected, no genuine fresh out-of-sample; no tick execution, spread, liquidity, funding, leverage, or liquidation"
+}
