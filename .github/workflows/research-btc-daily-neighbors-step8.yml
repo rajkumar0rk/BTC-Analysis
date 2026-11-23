@@ -1,0 +1,31 @@
+name: BTCUSD Step 8 - Causal Nearest Neighbors Every Weekday
+on:
+  push:
+    branches:
+      - research/btc-daily-causal-neighbors-step8
+    paths:
+      - scripts/research_btc_daily_causal_neighbors_step8.py
+      - .github/workflows/research-btc-daily-neighbors-step8.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Run causal prior-day-neighbor BTC mandatory 477-trade study
+        run: python scripts/research_btc_daily_causal_neighbors_step8.py
+      - name: Archive all models, baseline, selected daily and monthly trades
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step8-daily-causal-nearest-neighbors
+          path: analysis/btc_daily_causal_neighbors_step8/
+          if-no-files-found: warn
