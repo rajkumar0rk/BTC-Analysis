@@ -1,0 +1,31 @@
+name: BTCUSD Step15 - Frozen 20 and 21 Month Candidates Audit
+on:
+  push:
+    branches:
+      - research/btc-daily-two-leg-monthly-overlay-step15
+    paths:
+      - scripts/audit_btc_daily_monthly_pareto_step15.py
+      - .github/workflows/audit-btc-monthly-pareto-step15.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install audit dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Verify frozen 20/22 and 21/22 monthly models and November replays
+        run: python scripts/audit_btc_daily_monthly_pareto_step15.py
+      - name: Publish all 22 months and 477 daily trade ledgers plus November audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step15-monthly-pareto-frozen-audit
+          path: analysis/btc_daily_two_regime_step15/frozen_candidate_audit/
+          if-no-files-found: warn
