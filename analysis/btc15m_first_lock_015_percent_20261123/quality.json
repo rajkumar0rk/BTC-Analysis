@@ -1,0 +1,1053 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "configurations": {
+    "touch_BASE_ST3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "touch_020_030_050_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_PREV"
+    ],
+    "touch_020_030_050_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_PREV"
+    ],
+    "touch_020_030_050_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP005"
+    ],
+    "touch_020_030_050_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP005"
+    ],
+    "touch_020_030_050_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP010"
+    ],
+    "touch_020_030_050_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP010"
+    ],
+    "touch_020_030_050_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT005"
+    ],
+    "touch_020_030_050_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT005"
+    ],
+    "touch_020_030_050_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT010"
+    ],
+    "touch_020_030_050_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT010"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_PREV"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_PREV"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP005"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP005"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP010"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP010"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT005"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT005"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT010"
+    ],
+    "touch_018_030_050_1_2_3_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT010"
+    ],
+    "touch_020_050_1_3_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_PREV"
+    ],
+    "touch_020_050_1_3_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_PREV"
+    ],
+    "touch_020_050_1_3_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP005"
+    ],
+    "touch_020_050_1_3_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP005"
+    ],
+    "touch_020_050_1_3_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP010"
+    ],
+    "touch_020_050_1_3_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP010"
+    ],
+    "touch_020_050_1_3_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT005"
+    ],
+    "touch_020_050_1_3_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT005"
+    ],
+    "touch_020_050_1_3_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT010"
+    ],
+    "touch_020_050_1_3_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT010"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_PREV"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_PREV"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP005"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP005"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP010"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP010"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT005"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT005"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT010"
+    ],
+    "touch_018_025_040_060_1_2_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT010"
+    ],
+    "reclaim_BASE_ST3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "reclaim_020_030_050_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_PREV"
+    ],
+    "reclaim_020_030_050_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_PREV"
+    ],
+    "reclaim_020_030_050_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP005"
+    ],
+    "reclaim_020_030_050_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP005"
+    ],
+    "reclaim_020_030_050_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP010"
+    ],
+    "reclaim_020_030_050_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP010"
+    ],
+    "reclaim_020_030_050_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT005"
+    ],
+    "reclaim_020_030_050_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT005"
+    ],
+    "reclaim_020_030_050_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT010"
+    ],
+    "reclaim_020_030_050_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT010"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_PREV"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_PREV"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP005"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP005"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP010"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP010"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT005"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT005"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT010"
+    ],
+    "reclaim_018_030_050_1_2_3_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT010"
+    ],
+    "reclaim_020_050_1_3_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_PREV"
+    ],
+    "reclaim_020_050_1_3_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_PREV"
+    ],
+    "reclaim_020_050_1_3_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP005"
+    ],
+    "reclaim_020_050_1_3_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP005"
+    ],
+    "reclaim_020_050_1_3_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP010"
+    ],
+    "reclaim_020_050_1_3_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP010"
+    ],
+    "reclaim_020_050_1_3_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT005"
+    ],
+    "reclaim_020_050_1_3_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT005"
+    ],
+    "reclaim_020_050_1_3_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT010"
+    ],
+    "reclaim_020_050_1_3_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT010"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_PREV"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_PREV"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP005"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP005"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP010"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP010"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT005"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT005"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT010"
+    ],
+    "reclaim_018_025_040_060_1_2_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT010"
+    ],
+    "combined_BASE_ST3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none"
+    ],
+    "combined_020_030_050_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_PREV"
+    ],
+    "combined_020_030_050_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_PREV"
+    ],
+    "combined_020_030_050_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP005"
+    ],
+    "combined_020_030_050_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP005"
+    ],
+    "combined_020_030_050_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP010"
+    ],
+    "combined_020_030_050_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_STEP010"
+    ],
+    "combined_020_030_050_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT005"
+    ],
+    "combined_020_030_050_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT005"
+    ],
+    "combined_020_030_050_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT010"
+    ],
+    "combined_020_030_050_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.3,0.5:FIRST015_TIGHT010"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_PREV"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_PREV"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP005"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP005"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP010"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_STEP010"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT005"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT005"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT010"
+    ],
+    "combined_018_030_050_1_2_3_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.3,0.5,1,2,3:FIRST015_TIGHT010"
+    ],
+    "combined_020_050_1_3_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_PREV"
+    ],
+    "combined_020_050_1_3_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_PREV"
+    ],
+    "combined_020_050_1_3_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP005"
+    ],
+    "combined_020_050_1_3_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP005"
+    ],
+    "combined_020_050_1_3_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP010"
+    ],
+    "combined_020_050_1_3_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_STEP010"
+    ],
+    "combined_020_050_1_3_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT005"
+    ],
+    "combined_020_050_1_3_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT005"
+    ],
+    "combined_020_050_1_3_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT010"
+    ],
+    "combined_020_050_1_3_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.2,0.5,1,3:FIRST015_TIGHT010"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_PREV_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_PREV"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_PREV_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_PREV"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_STEP005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP005"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_STEP005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP005"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_STEP010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP010"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_STEP010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_STEP010"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_TIGHT005_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT005"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_TIGHT005_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT005"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_TIGHT010_TP3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT010"
+    ],
+    "combined_018_025_040_060_1_2_FIRST015_TIGHT010_TP_OFF": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      0.0,
+      "LADDER:0.18,0.25,0.4,0.6,1,2:FIRST015_TIGHT010"
+    ]
+  },
+  "signal_timeframe": "15m",
+  "higher_timeframe_features": false,
+  "execution_timeframe": "1m",
+  "supertrend": "Wilder ATR10 factor3",
+  "ema20": true,
+  "one_trade_per_cycle": true,
+  "flip_candle_excluded": true,
+  "initial_stop": "1R entry-to-previous-closed-Supertrend-line",
+  "TP": "3R fixed or truly disabled with sign-correct infinite target; both LONG and SHORT retained",
+  "stop_on_confirmed_15m_ST_flip": true,
+  "milestone_sequences_pct": {
+    "020_030_050": [
+      0.2,
+      0.3,
+      0.5
+    ],
+    "018_030_050_1_2_3": [
+      0.18,
+      0.3,
+      0.5,
+      1,
+      2,
+      3
+    ],
+    "020_050_1_3": [
+      0.2,
+      0.5,
+      1,
+      3
+    ],
+    "018_025_040_060_1_2": [
+      0.18,
+      0.25,
+      0.4,
+      0.6,
+      1,
+      2
+    ]
+  },
+  "protection_methods": [
+    "FIRST015_PREV",
+    "FIRST015_STEP005",
+    "FIRST015_STEP010",
+    "FIRST015_TIGHT005",
+    "FIRST015_TIGHT010"
+  ],
+  "profit_lock_activation_pct": "first milestone reached by favorable market move from raw entry open",
+  "profit_lock_pct": "all first lock exactly +0.15% from raw entry; later locks previous milestone or +0.05/+0.10 step or new rung minus .05/.10%",
+  "after_final_rung": "continue increasing at interval between final two milestones",
+  "target_execution": "no lookahead; update only after favorable 1m OHLC subsegment, then check subsequent path; gap stop checked first",
+  "separate_paths_compared": true,
+  "stop_never_loosen": true,
+  "minute_path_model": "O-H-L-C and O-L-H-C hypothetical monotone segments; activation never before favorable segment; stop can be touched later in same minute",
+  "fee_incl_GST_per_side": 0.00059,
+  "slippage_per_side": 0.0002,
+  "notional": "1x evolving $1000 equity",
+  "no_volume_filter": true,
+  "limitations": "22 months already used for research; historical in-sample optimized, no external OOS, no funding, tick data, spread, depth, margin/liquidation or latency"
+}
