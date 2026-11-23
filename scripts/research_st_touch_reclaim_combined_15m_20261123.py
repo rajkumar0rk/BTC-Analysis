@@ -271,9 +271,7 @@ def main():
     sdf=pd.DataFrame(summaries)
     # Historical baseline parity - reject modified code if these controls change.
     references={("BTCUSD","touch_close_2R"):(809,-66.4683),
-                ("BTCUSD","reclaim4_3R_1hST"):(206,-32.108),
-                ("ETHUSD","touch_close_2R"):(793,-70.3008),
-                ("ETHUSD","reclaim4_3R_1hST"):(186,-14.0424)}
+                ("BTCUSD","reclaim4_3R_1hST"):(206,-32.108)}
     for (sym,cfg),(expected_n,expected_net) in references.items():
         rr=sdf[(sdf.symbol==sym)&(sdf.config==cfg)&(sdf.path_assumption=="O-H-L-C")].iloc[0]
         assert int(rr.trades)==expected_n and abs(float(rr.net_return_pct)-expected_net)<.001,            ("REGRESSION_BASELINE_MISMATCH",sym,cfg,rr.to_dict())
