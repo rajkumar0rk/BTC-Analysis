@@ -93,8 +93,10 @@ def main():
     assert len(t)==963030 and len(trades)>0
     arrays=tuple(df[k].to_numpy(float) for k in ("open","high","low","close"))
     subset=trades[trades.config.isin(STRATEGIES)].copy()
-    subset["e_sec"]=pd.to_datetime(subset.entry_time_utc,utc=True).astype("int64")//(10**9)
-    subset["x_sec"]=pd.to_datetime(subset.exit_time_utc,utc=True).astype("int64")//(10**9)
+    # pandas 3 can parse timezone-aware timestamps at microsecond/second resolution;
+    # explicitly cast to seconds rather than assuming nanosecond integer units.
+    subset["e_sec"]=pd.to_datetime(subset.entry_time_utc,utc=True).dt.as_unit("s").astype("int64")
+    subset["x_sec"]=pd.to_datetime(subset.exit_time_utc,utc=True).dt.as_unit("s").astype("int64")
     subset["e_idx"]=np.searchsorted(t,subset.e_sec.to_numpy(np.int64),side="left")
     subset["x_idx"]=np.searchsorted(t,subset.x_sec.to_numpy(np.int64),side="left")
     assert (t[subset.e_idx.to_numpy()]==subset.e_sec.to_numpy()).all()
