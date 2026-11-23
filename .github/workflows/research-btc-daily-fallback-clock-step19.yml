@@ -1,0 +1,31 @@
+name: BTCUSD Step19 — Mandatory 21h Fallback Microdelay 477 Weekdays
+on:
+  push:
+    branches:
+      - research/btc-daily-fallback-clock-step19
+    paths:
+      - scripts/research_btc_daily_fallback_clock_step19.py
+      - .github/workflows/research-btc-daily-fallback-clock-step19.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas numba tabulate
+      - name: Audit 119 prior-bar fallback delays against all 477 mandatory BTC weekday trades
+        run: python scripts/research_btc_daily_fallback_clock_step19.py
+      - name: Publish full daily and monthly comparison under both fee models
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step19-fallback-clock-477-weekdays
+          path: analysis/btc_daily_fallback_clock_step19/
+          if-no-files-found: warn
