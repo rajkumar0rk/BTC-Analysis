@@ -173,3 +173,7 @@
 - Screened three pinned sources: knacker65 MACD histogram acceleration plus volume ignition (MIT repository; shared execution semantics missing; PARTIAL OVERLAP/HOLD), freshmanshuai BTC composite acceleration (large dependency graph, source-incomplete; NOT REPRODUCIBLE), joeldg MACD crossover (not acceleration; SKIP).
 - Source rules, hashes and novelty: [M30_ACCELERATION_SOURCE_GATE.md](M30_ACCELERATION_SOURCE_GATE.md), commit 515b0e5b33ad12149d6bb9764f7af9c84ac8e4de.
 - Three source screens, zero eligible complete new baselines, zero authentic historical replays, zero variants, zero launches, no new P&L. Next inspect knacker65 shared engine/indicators and licensing or select different source. No main/other-family/live writes.
+
+
+### M31 — 2026-11-23 07:13 IST — source execution parity / novelty HOLD
+- Source: knacker65/v5-crypto-scalper MIT @ eafcdbbdcc60d8b1ac3b7377c5220e886a1fc3d6; source execution modules audited read-only. Recovered TP1 half-close, breakeven shift, 1.5R-triggered ATR trail, broker fallback and ticker-poll exit semantics; 5m signal and 1m next-open replay not source-equivalent. Partial overlap with Stage25. New generic GitHub catalog lead screened, not eligible. Evidence: M31_EXECUTION_PARITY_GATE.md commit 4bfef81e5d3c3477d097d8440766053ae82d4283. New distinct authentic historical baselines 0; variants 0; launches 0; no verified new P&L. Prior successful run 45008927897 is not M31 validation.
