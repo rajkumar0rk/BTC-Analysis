@@ -1,0 +1,31 @@
+name: BTCUSD EMA9/21 Scalper Offer trade-ledger repricing
+on:
+  push:
+    branches:
+      - research/ema9-21-daily-1m
+    paths:
+      - scripts/research_ema9_21_scalper_offer.py
+      - .github/workflows/research-ema9-21-scalper-offer.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reprice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Reprice 44 variants and baseline with Delta BTCUSD Scalper Offer
+        run: python scripts/research_ema9_21_scalper_offer.py
+      - name: Archive cost-model sensitivity and 22 monthly tables
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btcusd-ema9-21-scalper-offer
+          path: analysis/ema9_21_scalper_offer/
+          if-no-files-found: warn
