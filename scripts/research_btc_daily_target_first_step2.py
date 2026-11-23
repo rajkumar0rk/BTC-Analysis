@@ -85,6 +85,8 @@ def run_all(m):
             if first+hour*60+hold>last:
                 raise AssertionError("Holding interval crosses day end")
             x=simulate_one(op,hi,lo,first,hour,side,stop,target,hold)
+            x["entry_utc"]=str(m.index[first+hour*60])
+            x["exit_utc"]=str(m.index[first+hour*60+x["hold_minutes"]])
             x.update(day_ist=ds,year=int(day.year),hour_ist=int(hour),
                      direction="LONG" if side>0 else "SHORT",
                      stop_pct=float(stop),target_mode=target,
