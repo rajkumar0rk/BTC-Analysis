@@ -289,7 +289,7 @@ def main():
                 cap_activated_days=int(np.sum(dec[0])),
                 truly_narrowed_days=int(ledger.stop_narrowed.sum()))
         selected[fam]=dict(
-            2025_eligible_models=int(len(eligible)) if False else len(eligible),
+            eligible_2025_models=int(len(eligible)),
             frozen_2025_rule=dict(trigger=rule[0],scope=rule[1],
                                   max_stop_pct=rule[2] if rule[0]!="none" else None),
             same_policy_repriced_under_two_fee_models=fee_reports
