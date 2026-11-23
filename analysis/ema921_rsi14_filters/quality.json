@@ -1,0 +1,194 @@
+{
+  "data_rows": 992160,
+  "data_start": "2025-01-01 00:00:00+00:00",
+  "data_end": "2026-11-20 23:59:00+00:00",
+  "gaps": [],
+  "source_coverage": {
+    "2025-01": {
+      "expected": 44640,
+      "observed": 44310,
+      "missing": 330
+    },
+    "2025-02": {
+      "expected": 40320,
+      "observed": 40320,
+      "missing": 0
+    },
+    "2025-03": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-04": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2025-05": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-06": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2025-07": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-08": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-09": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2025-10": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2025-11": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2025-12": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-01": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-02": {
+      "expected": 40320,
+      "observed": 40320,
+      "missing": 0
+    },
+    "2026-03": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-04": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2026-05": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-06": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2026-07": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-08": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    },
+    "2026-09": {
+      "expected": 43200,
+      "observed": 43200,
+      "missing": 0
+    },
+    "2026-10": {
+      "expected": 44640,
+      "observed": 44640,
+      "missing": 0
+    }
+  },
+  "baseline_signal_stats": {
+    "complete_5m_bars": 198412,
+    "candidate_5m_crosses": 1643,
+    "long_candidates": 827,
+    "short_candidates": 816
+  },
+  "rsi_implementation": "Wilder RMA14 seeded SMA of first 14 close differences",
+  "rsi_only_on_closed_1h_15m": true,
+  "rsi_conditions": [
+    [
+      "NO_RSI",
+      null,
+      null
+    ],
+    [
+      "BOTH_50",
+      50,
+      50
+    ],
+    [
+      "BOTH_55",
+      55,
+      55
+    ],
+    [
+      "BOTH_60",
+      60,
+      60
+    ],
+    [
+      "H1_55_ONLY",
+      55,
+      null
+    ],
+    [
+      "M15_55_ONLY",
+      null,
+      55
+    ],
+    [
+      "H1_60_ONLY",
+      60,
+      null
+    ],
+    [
+      "M15_60_ONLY",
+      null,
+      60
+    ],
+    [
+      "H1_55_M15_50",
+      55,
+      50
+    ],
+    [
+      "H1_50_M15_55",
+      50,
+      55
+    ]
+  ],
+  "fixed_exit_pairs": [
+    [
+      100,
+      200
+    ],
+    [
+      400,
+      1200
+    ]
+  ],
+  "weekdays_entry_only_IST": true,
+  "weekend_exit_permitted": true,
+  "baseline_parity": "PASS",
+  "fees_each_side_with_GST_fraction": 0.00059,
+  "slippage_each_side_price_points": 5,
+  "risk_disclaimers": "Historical already researched, 2026 not unseen holdout. No funding, true spread, marginal liquidation modeling."
+}
