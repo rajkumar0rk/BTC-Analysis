@@ -166,3 +166,10 @@
 - Screened NEOMA P-CAM Freqtrade (commit 86f6b90; blob 7bd5140): depends on unsaved remote physics/Ising outputs; archived OHLCV cannot reconstruct entries; NOT REPRODUCIBLE. Do not call untrusted external service.
 - Full immutable URLs, rule/exit/fee/causal/license caveats: [M29_EXECUTION_SOURCE_GATE.md](M29_EXECUTION_SOURCE_GATE.md), commit 035bd0cbe6d89cff9f9029402666541060568a84.
 - 2 newly screened sources, 0 eligible, 0 new authentic historical backtests, 0 variants, 0 workflow launches, 0 new P&L. Next source-complete licensed impulse acceleration baseline with novel mechanism and genuine BTC2025 replay. No unrelated writes.
+
+
+## 2026-11-23 06:20 IST — M30 acceleration source batch, NO NEW BACKTEST
+- Read codex novelty/agent rules, M29 handoff and Stage25 2880-configuration hourly acceleration research (zero 22/22 winners).
+- Screened three pinned sources: knacker65 MACD histogram acceleration plus volume ignition (MIT repository; shared execution semantics missing; PARTIAL OVERLAP/HOLD), freshmanshuai BTC composite acceleration (large dependency graph, source-incomplete; NOT REPRODUCIBLE), joeldg MACD crossover (not acceleration; SKIP).
+- Source rules, hashes and novelty: [M30_ACCELERATION_SOURCE_GATE.md](M30_ACCELERATION_SOURCE_GATE.md), commit 515b0e5b33ad12149d6bb9764f7af9c84ac8e4de.
+- Three source screens, zero eligible complete new baselines, zero authentic historical replays, zero variants, zero launches, no new P&L. Next inspect knacker65 shared engine/indicators and licensing or select different source. No main/other-family/live writes.
