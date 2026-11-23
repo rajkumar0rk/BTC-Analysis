@@ -1,0 +1,28 @@
+name: Breakout Range Dual Thrust Causal Historical Replay
+on:
+  push:
+    branches:
+      - research/breakout-range-source-audit-20261121
+    paths:
+      - 'scripts/breakout_range_dual_thrust_causal_20261124.py'
+      - '.github/workflows/breakout-range-dual-thrust-causal.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas PyWavelets
+      - name: Causal NY session breakout replay on authentic Delta BTC 1m
+        run: python scripts/breakout_range_dual_thrust_causal_20261124.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: breakout-range-dual-thrust-causal-evidence
+          path: analysis/breakout_range_dual_thrust_causal_20261124/
