@@ -1,0 +1,31 @@
+name: BTCUSD Step13 - Monthly State Conditional Exits One Trade Every Weekday
+on:
+  push:
+    branches:
+      - research/btc-daily-monthly-exit-protection-step13
+    paths:
+      - scripts/research_btc_daily_monthly_exit_step13.py
+      - .github/workflows/research-btc-daily-monthly-exit-step13.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install 1m replay dependencies
+        run: python -m pip install pandas numpy numba tabulate
+      - name: Audit 133 monthly state conditional 1m exit policies on 477 BTC weekday positions
+        run: python scripts/research_btc_daily_monthly_exit_step13.py
+      - name: Publish audit of all monthly results and per-day full-size trades
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step13-monthly-state-early-exits-477-days
+          path: analysis/btc_daily_monthly_exit_step13/
+          if-no-files-found: warn
