@@ -1,0 +1,29 @@
+name: Mean Reversion MR004 CombinedBinHAndCluc BTC 1m baseline
+on:
+  push:
+    branches: [research/mean-reversion-bb-rsi-source-audit-20261121]
+    paths: [scripts/research_mean_reversion_mr004_20261124.py, .github/workflows/mean-reversion-mr004.yml]
+  workflow_dispatch:
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install numpy pandas numba
+      - name: Verify genuine archived BTC 1m partitions
+        run: |
+          test -f data/delta_india/BTCUSD/1m/2025-01.csv.gz
+          test -f data/delta_india/BTCUSD/1m/2026-10.csv.gz
+      - name: Run MR004 causal historical replay
+        run: python scripts/research_mean_reversion_mr004_20261124.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mr004-btc-1m-baseline
+          path: analysis/mean_reversion_research/MR004/results/
+          if-no-files-found: warn
+          retention-days: 90
