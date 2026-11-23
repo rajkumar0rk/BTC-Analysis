@@ -1,0 +1,126 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "ETHUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "rules": {
+    "signal_tf": 15,
+    "execution_tf": 1,
+    "supertrend": "Wilder ATR 10, multiplier 3",
+    "ema": 20,
+    "first_touch_only": true,
+    "flip_candle_excluded": true,
+    "no_volume_or_volatility_filter": true,
+    "one_trade_per_st_epoch": true,
+    "stop_touched_using_1m_path": true,
+    "stop_gap_filled_at_open": true,
+    "flip_exit_at_next_15m_open": true,
+    "take_profit_fixed_R": true,
+    "risk_reference": "entry_fill to completed ST line, frozen",
+    "slippage_each_side": 0.0002,
+    "fee_plus_GST_each_side": 0.00059,
+    "one_x_notional": true,
+    "months": "2025-01 through 2026-10 IST",
+    "both_1m_paths": [
+      "O-H-L-C",
+      "O-L-H-C"
+    ],
+    "candidate_configs": {
+      "original_2R_flip": [
+        null,
+        2,
+        null,
+        null,
+        "none"
+      ],
+      "stop1R_tp2R": [
+        1,
+        2,
+        null,
+        null,
+        "none"
+      ],
+      "stop1R_tp3R": [
+        1,
+        3,
+        null,
+        null,
+        "none"
+      ],
+      "stop1R_tp4R": [
+        1,
+        4,
+        null,
+        null,
+        "none"
+      ],
+      "stop1p5R_tp3R": [
+        1.5,
+        3,
+        null,
+        null,
+        "none"
+      ],
+      "stop1R_tp2R_BE1R": [
+        1,
+        2,
+        1,
+        null,
+        "none"
+      ],
+      "stop1R_tp3R_BE1R": [
+        1,
+        3,
+        1,
+        null,
+        "none"
+      ],
+      "stop1R_tp3R_lock0p5R_at2R": [
+        1,
+        3,
+        1,
+        2,
+        "none"
+      ],
+      "stop1R_tp2R_1hST": [
+        1,
+        2,
+        null,
+        null,
+        "1h"
+      ],
+      "stop1R_tp3R_1hST": [
+        1,
+        3,
+        null,
+        null,
+        "1h"
+      ],
+      "stop1R_tp3R_EMAslope": [
+        1,
+        3,
+        null,
+        null,
+        "slope"
+      ],
+      "stop1R_tp3R_both": [
+        1,
+        3,
+        null,
+        null,
+        "both"
+      ]
+    },
+    "selection_warning": "In-sample candidate comparison, not a fresh 2026 out-of-sample; no forward edge established"
+  }
+}
