@@ -155,7 +155,7 @@ def rung_lock_pct(favorable_pct,levels,method):
     elif method=="FIRST015_STEP005":
         locked=0.15+0.05*(n-1)
     elif method=="FIRST015_STEP010":
-        locked=0.15+0.10*(n-1)
+        locked=0.15 if n==1 else 0.20+0.10*(n-2)
     elif method=="FIRST015_TIGHT005":
         locked=reached-0.05
     elif method=="FIRST015_TIGHT010":
@@ -164,6 +164,8 @@ def rung_lock_pct(favorable_pct,levels,method):
         raise AssertionError(("Unknown protection method",method))
     # Do not allow the lock to exceed reached favorable movement.
     # Stop only moves in favorable direction, so small steps are fine.
+    # Stop must never be above currently observed favorable raw price.
+    locked=min(locked,reached)
     assert locked<=reached+1e-9,(locked,reached,method)
     return locked
 
