@@ -1,0 +1,31 @@
+name: BTCUSD Step 3 — pre-entry direction predictor search
+on:
+  push:
+    branches:
+      - research/btc-daily-opportunity-map-step1
+    paths:
+      - scripts/research_btc_daily_direction_step3.py
+      - .github/workflows/research-btc-daily-direction-step3.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Evaluate 17 causal long short predictors at fixed BTC hours
+        run: python scripts/research_btc_daily_direction_step3.py
+      - name: Publish complete predictor comparison and daily ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-daily-direction-predictor-step3
+          path: analysis/btc_daily_direction_step3/
+          if-no-files-found: warn
