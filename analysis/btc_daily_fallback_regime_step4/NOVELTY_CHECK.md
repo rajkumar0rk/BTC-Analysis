@@ -25,8 +25,8 @@
 - Use previously verified **1-minute causal stop-first exit engine** `scripts/research_btc_every_weekday_exit_protection_step3.py` unchanged. Stops tightened only after the minute closes, never retroactively. Gap-worse stop fills, TP at target, forced timeout at max30m. No overnight exposures.
 - Choose separate predefined exit recipes for event and fallback (12 in total):
   - static: SL1%/TP3%/hold30; SL0.75%/TP3%/hold30; SL0.50%/TP3%/hold30.
-  - 1-step lock: SL0.50% or 0.75% or 1%/TP3%/hold30, activate +0.25% and lock +0.10%; SL0.75%/TP3% activate +0.35% lock +0.10%; SL1%/TP3% activate +0.40% lock +0.10%; SL1%/TP3% activate +0.60% lock +0.20%.
-  - trailing: SL0.75%/TP3% activate +0.35%, trail distance 0.20% from best favorable after bar close.
+  - 1-step lock: SL0.50% or 0.75% or 1%/TP3%/hold30, activate +0.25% and lock +0.10%; SL0.75%/TP3% activate +0.40% lock +0.10%; SL1%/TP3% activate +0.40% lock +0.10%; SL1%/TP3% activate +0.60% lock +0.20%.
+  - trailing: SL0.75% or 0.50%/TP3% activate +0.35%, trail distance 0.20% from best favorable after bar close.
   - stepped lock: SL0.50%/TP3%, activate +0.35%, 0.20% step, +0.10% initial lock.
   - keep 30m hold and 3% gross target for all, the original 1%/3% static and new protected 0.5%/3% locked baseline are included and asserted equal to historical net results (8.222995%, 6.786696%) to detect replay regressions.
 - Matrix = 14 fallback side rules × 2 fallback clock hours × 12 event exit recipes × 12 fallback exit recipes × 2 fee schedules = **8064 configurations** (actual count asserted). Entry count per variation EXACTLY 477.
