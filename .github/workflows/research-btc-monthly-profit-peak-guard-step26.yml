@@ -1,0 +1,33 @@
+name: BTCUSD Step26 - January 2026 Profit Protection with General Month-Equity Guard
+on:
+  push:
+    branches:
+      - research/btc-monthly-profit-peak-guard-step26
+    paths:
+      - scripts/research_btc_monthly_profit_peak_guard_step26.py
+      - .github/workflows/research-btc-monthly-profit-peak-guard-step26.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install research dependencies
+        run: python -m pip install numpy pandas numba scikit-learn tabulate
+      - name: Verify syntax before replay
+        run: python -m py_compile scripts/research_btc_monthly_profit_peak_guard_step26.py
+      - name: Replay 108 predeclared month-equity stop guards plus Step25 benchmark
+        run: python scripts/research_btc_monthly_profit_peak_guard_step26.py
+      - name: Upload full January and 22-month audit under both fee schedules
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-step26-January2026-month-profit-peak-guard
+          path: analysis/btc_monthly_profit_peak_guard_step26/
+          if-no-files-found: warn
