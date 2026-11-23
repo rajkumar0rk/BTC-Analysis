@@ -1,0 +1,54 @@
+{
+  "name": "BTCUSD 15M ATR >= 0.20% research shortlist",
+  "updated_on": "2026-11-23",
+  "ranked_status_note": "Statuses reflect user selections, not statistically validated live safety or a profit ranking.",
+  "candidates": [
+    {
+      "id": "BTCUSD_15M_ATR020_100_EXPOSURE",
+      "status": "LOCKED",
+      "max_exposure_percent": 100,
+      "net_compounded_backtest_return_percent": 266.1034,
+      "max_floating_drawdown_percent": 12.916,
+      "profitable_months": 18,
+      "total_months": 22,
+      "trades": 73,
+      "monthly_losing_trades_to_next_entry_exposure_percent": {
+        "0": 100,
+        "1": 100,
+        "2": 30,
+        "3": 25,
+        "4": 10,
+        "5_or_more": 0
+      },
+      "source": "analysis/locked_strategies/btcusd_15m_reclaim_atr020_100pct_20261123.json"
+    },
+    {
+      "id": "BTCUSD_15M_ATR020_80_EXPOSURE",
+      "status": "SHORTLISTED_NOT_LOCKED",
+      "max_exposure_percent": 80,
+      "net_compounded_backtest_return_percent": 185.0292,
+      "max_floating_drawdown_percent": 10.465,
+      "profitable_months": 18,
+      "total_months": 22,
+      "trades": 73,
+      "monthly_losing_trades_to_next_entry_exposure_percent": {
+        "0": 80,
+        "1": 80,
+        "2": 28,
+        "3": 24,
+        "4": 8,
+        "5_or_more": 0
+      },
+      "sizing_rule": "T1000x350x300x100",
+      "source": "analysis/btc15m_atr_lossstage_fine_dd_20261123/profile_80.csv",
+      "source_ref": "research/btc15m-atr-lossstage-fine-dd-20261123"
+    }
+  ],
+  "shared_strategy": {
+    "entry": "15m ST(10,3)/EMA20 reclaim, ATR10 >=0.20% of price at completed entry signal",
+    "exit": "3% SL / 9% TP, arm protective stop on +8% favorable movement and initially lock +2%, then increase lock by 0.25% per 1% favorable move",
+    "execution": "1-minute intrabar modeled",
+    "risk_limit": "New entries paused after 5 net losing trades in IST month"
+  },
+  "caveats": "Historical in-sample Jan 2025–Oct 2026. Real funding, liquidity, liquidation and live execution not accounted for. Neither candidate deployed."
+}
