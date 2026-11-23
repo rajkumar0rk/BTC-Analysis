@@ -1,0 +1,51 @@
+BEGIN O-H-L-C
+MONTHLY_RESULT O-H-L-C
+path_assumption symbol                         config month_ist  equity_usd  position_open  monthly_return_pct  exits  winning_exits  losing_exits  realized_net_usd  fee_gst_usd
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-01  979.829931           True           -2.017007      5              1             4          -41.7878       5.8523
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-02 1010.486359          False            3.128750      2              1             1           52.2741       2.1597
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-03  875.793002           True          -13.329557      8              1             7         -130.4545       9.1560
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-04  921.684959           True            5.240046      6              2             4           37.9245       6.6762
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-05  866.700520           True           -5.965644      5              1             4          -38.3593       5.6329
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-06  925.089508           True            6.736928      2              1             1           47.9854       1.9825
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-07  961.064882           True            3.888853      3              1             2           19.7142       3.2602
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-08 1003.044949           True            4.368078      2              1             1           51.6295       2.1688
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-09 1044.175125           True            4.100532      0              0             0            0.0000       0.0000
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-10 1166.830897           True           11.746667      4              2             2          111.6736       4.9774
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-11 1232.062066           True            5.590456      5              2             3           85.6351       6.9834
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-12 1043.314538           True          -15.319644      4              0             4         -143.2305       5.3835
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-01 1134.162112          False            8.707592      5              2             3           81.1577       6.8061
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-02 1372.968611          False           21.055764      5              3             2          238.8065       7.1455
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-03 1466.603408           True            6.819879      3              1             2           29.2492       5.1638
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-04 1395.085482           True           -4.876433      1              0             1          -44.0350       1.6796
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-05 1592.496432           True           14.150456      2              2             0          251.3908       3.3408
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-06 1617.859390           True            1.592654      8              2             6          -33.9153      16.2150
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-07 1557.287094           True           -3.743978      1              0             1          -49.4817       1.8874
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-08 1695.076710           True            8.848055      1              1             0          135.1415       1.8817
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-09 1837.420001           True            8.397454      1              1             0          147.1081       2.0484
+        O-H-L-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-10 1975.183008           True            7.497633      2              2             0          166.7569       4.3664
+BEGIN O-L-H-C
+MONTHLY_RESULT O-L-H-C
+path_assumption symbol                         config month_ist  equity_usd  position_open  monthly_return_pct  exits  winning_exits  losing_exits  realized_net_usd  fee_gst_usd
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-01  979.829931           True           -2.017007      5              1             4          -41.7878       5.8523
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-02 1010.486359          False            3.128750      2              1             1           52.2741       2.1597
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-03  875.793002           True          -13.329557      8              1             7         -130.4545       9.1560
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-04  921.684959           True            5.240046      6              2             4           37.9245       6.6762
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-05  866.700520           True           -5.965644      5              1             4          -38.3593       5.6329
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-06  925.089508           True            6.736928      2              1             1           47.9854       1.9825
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-07  961.064882           True            3.888853      3              1             2           19.7142       3.2602
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-08 1003.044949           True            4.368078      2              1             1           51.6295       2.1688
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-09 1044.175125           True            4.100532      0              0             0            0.0000       0.0000
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-10 1166.830897           True           11.746667      4              2             2          111.6736       4.9774
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-11 1232.062066           True            5.590456      5              2             3           85.6351       6.9834
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2025-12 1043.314538           True          -15.319644      4              0             4         -143.2305       5.3835
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-01 1134.162112          False            8.707592      5              2             3           81.1577       6.8061
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-02 1372.968611          False           21.055764      5              3             2          238.8065       7.1455
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-03 1466.603408           True            6.819879      3              1             2           29.2492       5.1638
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-04 1395.085482           True           -4.876433      1              0             1          -44.0350       1.6796
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-05 1592.496432           True           14.150456      2              2             0          251.3908       3.3408
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-06 1617.859390           True            1.592654      8              2             6          -33.9153      16.2150
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-07 1557.287094           True           -3.743978      1              0             1          -49.4817       1.8874
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-08 1695.076710           True            8.848055      1              1             0          135.1415       1.8817
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-09 1837.420001           True            8.397454      1              1             0          147.1081       2.0484
+        O-L-H-C BTCUSD reclaim_NOFLIP_SL300_NONE_TP3R   2026-10 1975.183008           True            7.497633      2              2             0          166.7569       4.3664
+EXACT_MONTHLY_PARITY_OK 22
