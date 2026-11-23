@@ -379,7 +379,7 @@ def main():
                out["selected_using_2025_only"]["results"]["scalper_offer"]["metrics"]["net_total_pct"]>26.468595),
            all_22month_months_21plus=(
                out["selected_using_2025_only"]["results"]["scalper_offer"]["metrics"]["win_months_all"]>=21),
-           2026_months_10of10=(
+           check_2026_months_10of10=(
                out["selected_using_2025_only"]["results"]["scalper_offer"]["metrics"]["win_months_2026"]>=10),
            drawdown_no_worse_2p61767=(
                out["selected_using_2025_only"]["results"]["scalper_offer"]["metrics"]["max_closed_dd_pct"]<=2.617670+1.e-4)),
