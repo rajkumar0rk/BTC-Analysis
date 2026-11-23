@@ -106,10 +106,12 @@ def save_full(family_label,raw,choice,idx,base_idx,hh,sd,mask):
         p=step15.getout(raw,choice[0],mi)
         # Save entry minute, explicit year month and exit timeline, no
         # skipped dates permitted.
+        shifted_minutes=(idx-base_idx).astype(int)
+        actual_hours=hh+shifted_minutes//60
         led,month=step15.saved_ledger(
-           p,choice[0],choice[1],choice[2],idx,hh,sd,mask,mode
+           p,choice[0],choice[1],choice[2],idx,actual_hours,sd,mask,mode
         )
-        led["entry_minute_ist"]=np.where(mask,(idx-base_idx).astype(int),0)
+        led["entry_minute_ist"]=(shifted_minutes%60).astype(int)
         led["delayed_fallback_entry"]=mask&(idx!=base_idx)
         if len(led)!=477 or led.day_ist.nunique()!=477:
             raise AssertionError("Missing daily trade")
