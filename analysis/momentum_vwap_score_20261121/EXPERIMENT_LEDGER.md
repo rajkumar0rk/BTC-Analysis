@@ -187,3 +187,9 @@
 ## 2026-11-23 09:18 IST — M33 three-source momentum gate / HOLD and SKIP
 - Screened three distinct GitHub source mechanisms: wentixiaogege MomentumTrendStrategy (blob 13eafdb; HOLD license/overlap), He1met ATR-volume 15m (blob 4e64097; SKIP volatility-gated EMA trend), xenoxavier EMA9/VWAP (SKIP overlap; source not fully pinned). Exact rules, exits, license gaps, source links and third-party claims documented in `M33_THREE_SOURCE_GATE.md`, commit 27492b86a0a5fe82dbe8d9d7002cb74bcdc28f79.
 - Novelty gate and prior momentum/Stage25 comparisons performed; none qualified for new authentic replay. Actions branch history 9 runs, latest previous successful 45008927897, no new run. Distinct baselines completed 0; variants 0; verified new P&L 0. No live changes.
+
+
+## 2026-11-23 10:10 IST — M34 three-source causal/novelty screening (NO BACKTEST)
+- Three distinct immutable source leads inspected: VedantA2006 XAUUSD swing-sweep + MACD histogram acceleration (SKIP: liquidity sweep/reversal hybrid, prior-art overlap, BTC execution non-equivalence); sh20022002 StockScanner engine (SKIP: same-close fill and in-sample best-strategy selection); HCH725 strategy003 record / Gerald Lonlas original (SKIP: RSI/Fisher/MFI washout mean reversion). See `M34_THREE_SOURCE_GATE.md`, commit `ce37bd77ac64e3840b9c8a566c0ce32aeff1d04d` for exact source commits, rules, limitations and fee screen.
+- Verified GitHub Actions branch GET: 9 historical runs; latest success 45008927902 at c71c783, unrelated to M34. No new historical replay or workflow launch, 0 new distinct baselines, 0 variants, 0 new verified profitability; no changes to main/other families/VPS/live trading.
+- Next: locate license-clear complete low-turnover primary acceleration signal; perform novelty pre-run gate and real BTC2025 1m archived workflow, reconcile trade ledger/monthly IST NAV before any success claim.
