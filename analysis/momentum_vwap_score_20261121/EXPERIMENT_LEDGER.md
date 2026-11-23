@@ -177,3 +177,8 @@
 
 ### M31 — 2026-11-23 07:13 IST — source execution parity / novelty HOLD
 - Source: knacker65/v5-crypto-scalper MIT @ eafcdbbdcc60d8b1ac3b7377c5220e886a1fc3d6; source execution modules audited read-only. Recovered TP1 half-close, breakeven shift, 1.5R-triggered ATR trail, broker fallback and ticker-poll exit semantics; 5m signal and 1m next-open replay not source-equivalent. Partial overlap with Stage25. New generic GitHub catalog lead screened, not eligible. Evidence: M31_EXECUTION_PARITY_GATE.md commit 4bfef81e5d3c3477d097d8440766053ae82d4283. New distinct authentic historical baselines 0; variants 0; launches 0; no verified new P&L. Prior successful run 45008927897 is not M31 validation.
+
+
+## 2026-11-23 08:19 IST — M32 independent source audit / SKIP
+- Source: Suyyash-aroraa/ForexBacktesting `backtest.py` pinned commit `9e8943334d28527461f91e54fd62b10e27d66b82`, GPL-3-or-later file header; repository license metadata NOASSERTION. EURUSD 15m nine-indicator consensus uses MACD histogram sign, RSI/Williams reversal, SMA/ADX/SAR trend and volume. Same-close synthetic entries and close-only stops; price-scale-specific ATR/adjustment. **SKIP** as non-novel momentum acceleration. Evidence: `M32_FOREX_CONSENSUS_GATE.md`.
+- GitHub Actions branch query: nine existing runs, latest successful 45008927897 is historical, not M32. New authentic Delta backtests 0; variants 0; new workflow launches 0; no new P&L. Continue distinct source search and real replay when novelty passes.
