@@ -257,7 +257,7 @@ def run():
                 event_change_days_2025=int((switched[:TRAIN]&(~mask[:TRAIN])).sum()),
                 fallback_change_days_2025=int((switched[:TRAIN]&mask[:TRAIN]).sum()),
                 event_change_days_2026=int((switched[TRAIN:]&(~mask[TRAIN:])).sum()),
-                fallback_change_days_2026=int((switched[TRAIN:]&mask[TRAIN:]).sum())
+                fallback_change_days_2026=int((switched[TRAIN:]&mask[TRAIN:]).sum()))
             rows.append(score)
     frame=pd.DataFrame(rows)
     if len(frame)!=242 or not frame.trades.eq(477).all():
