@@ -185,7 +185,7 @@ def run():
     df.to_csv(OUT/"all_300_peak_equity_exit_overlays_two_fee_schedules.csv",index=False)
     print("STEP14_GRID "+json.dumps(dict(
         scenarios=301,fee_schedules=602,trades_each=477,
-        train_months=12,2026_months=10)),flush=True)
+        train_months=12,check_2026_months=10)),flush=True)
     offer=df[df.cost_model=="scalper_offer"]
     qualified=offer[(offer.win_months_2025>=11)&
                     (offer.return_2025_pct>=9.5)&
