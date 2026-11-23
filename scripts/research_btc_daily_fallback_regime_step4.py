@@ -221,7 +221,7 @@ def run():
     print("STEP4_FALLBACK_GRID "+json.dumps(dict(
         models=len(result),weekday_days=len(base.DAYS),signal_days=int(eventmask.sum()),
         forced_fallback_days=int(fallbackmask.sum()),exit_recipes=len(cfg),
-        fallback_rules=len(FALLBACK_RULES),fallback_hours=list(FALLBACK_HOURS)),flush=True)
+        fallback_rules=len(FALLBACK_RULES),fallback_hours=list(FALLBACK_HOURS))),flush=True)
     # Mandatory parity with BOTH previous reported benchmarks.
     old_static=cfg_names.index("static__sl1__tp3__hold30__activation0__value0__step0")
     old_lock=cfg_names.index("lock__sl0.5__tp3__hold30__activation0.25__value0.1__step0")
