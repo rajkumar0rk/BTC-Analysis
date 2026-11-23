@@ -207,6 +207,8 @@ def main():
     parity={"upstream_commit":"5d879b3d04031952f41d2b4d4c4a3cce43f04150","mismatch_count":int(len(differences)),"first_mismatch_dates":[str(daily.index[i]) for i in differences[:20]],"reference_signals":int(np.count_nonzero(reference_wavelet)),"local_signals":int(np.count_nonzero(local_wavelet))}
     (OUT/"source_parity_diagnostic.json").write_text(json.dumps(parity,indent=2))
     print("SOURCE_PARITY",json.dumps(parity))
+    # Fail closed: an upstream signal mismatch invalidates the historical replay.
+    assert parity["mismatch_count"] == 0, ("SOURCE_PARITY_MISMATCH", parity)
     output={"source_commit":"5d879b3d04031952f41d2b4d4c4a3cce43f04150","data_hashes":hashes,"fee_each_side_including_gst":FEE,"slippage":0,"funding":"unmodeled","daily_bars":len(daily),"results":[]}
     for name in ("two_b","wavelet_two_b"):
         sig=signals(daily,name)
