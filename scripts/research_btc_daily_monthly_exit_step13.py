@@ -90,7 +90,7 @@ def monthly_metrics(returns):
 def simulate_policy(raw,mask,month_trigger,scope,rule_index):
     # Only 2025 and past days drive state for first 2026, then only prior
     # 2026 days are appended. No same-day future information.
-    if scope not in SCOPES:raise KeyError(scope)
+    if scope not in SCOPES and scope!="none":raise KeyError(scope)
     selected=np.zeros(N,dtype=np.int8)
     mtd_before=np.zeros(N,dtype=np.float64)
     month=None
