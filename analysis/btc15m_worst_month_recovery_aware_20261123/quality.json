@@ -1,0 +1,16 @@
+{
+  "models": 70,
+  "simulations": 140,
+  "months": 22,
+  "strict_count": 0,
+  "baseline_monthly_parity": true,
+  "original_profitable_months": 16,
+  "original_net_return_pct": 97.5183,
+  "unmodelled": [
+    "funding",
+    "real fills",
+    "orderbook impact",
+    "liquidation"
+  ],
+  "in_sample_optimization": true
+}

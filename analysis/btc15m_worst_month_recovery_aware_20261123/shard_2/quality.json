@@ -1,0 +1,22 @@
+{
+  "shard": 2,
+  "count": 18,
+  "config_names": [
+    "reclaim_NOFLIP_ORIG_MLOSSDDN2D4_PMUP0_SL300_TP3R",
+    "reclaim_NOFLIP_ORIG_MLOSSDDN2D5_PMUP3_SL300_TP3R",
+    "reclaim_NOFLIP_ORIG_MLOSSDDN2D7_PMUP1_SL300_TP3R",
+    "reclaim_NOFLIP_ORIG_MLOSSDDN2D8_PMUP5_SL300_TP3R",
+    "reclaim_NOFLIP_ORIG_MLOSSDDN3D4_PMUP2_SL300_TP3R",
+    "reclaim_NOFLIP_LATE825_MLOSSDDN2D5_PMUP1_SL300_TP3R",
+    "reclaim_NOFLIP_LATE825_MLOSSDDN2D6_PMUP5_SL300_TP3R",
+    "reclaim_NOFLIP_LATE825_MLOSSDDN2D8_PMUP2_SL300_TP3R",
+    "reclaim_NOFLIP_LATE825_MLOSSDDN3D2_PMUP3_SL300_TP3R"
+  ],
+  "quality": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  }
+}
