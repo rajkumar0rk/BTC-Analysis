@@ -199,3 +199,9 @@
 - Source-screened three distinct repositories at immutable source commits: surendra2304/Stratex `75cc239` (MACD histogram expansion + volume but partial overlap and licensing unresolved); mackr0/Quantops `571dc64` (strict close > rolling high including current candle and close < rolling low including current candle are mathematically impossible; other signals incomplete/overlapping); jmtisi/BigJohns `3f529b9` (configurable platform, not a fixed source-defined momentum strategy). Root LICENSE endpoints returned 404 for all three; no rights inferred.
 - Full audit: `analysis/momentum_vwap_score_20261121/M35_THREE_SOURCE_DISPROOF.md`. No novel source-faithful eligible baseline; zero new real backtests, zero variants, zero launches, zero new profits. No source execution, main/other branch/VPS/live changes.
 - Next: prioritize a fully specified license-clear distinct impulse mechanism, then actual BTC2025 Delta 1m historical execution and reconciliation.
+
+
+## 2026-11-23 12:11 IST — M36 cinar/indicator three-example source gate, NO REPLAY
+- Source pinned cinar/indicator @ 5c05d1e9396288243abc36f643a99fced0ccf139, GNU AGPLv3 source headers. Awesome Oscillator and Coppock Curve examples use indicator sign rather than impulse acceleration; Elder Ray is pullback power recovery, not a novel acceleration continuation. All three lack specified complete risk/exit/fill protocol. SKIP for source-faithful BTC execution and family novelty.
+- Source URLs, blob hashes, exact signal conditions, causal caveats, publisher-stat gaps, fee assumptions: `M36_CINAR_MOMENTUM_GATE.md`, commit 5c7225c0b481c5b2584d241467028d393ccb2f1d.
+- Queried actual branch Actions list: 9 previous runs; prior 45008927902 completed SUCCESS, not M36. Three examples screened; 0 eligible new protocols; 0 new Delta historical backtests; 0 variants; 0 launches; 0 new verified P&L. Continue independent source discovery and actual replay only after novelty and full exit gate.
