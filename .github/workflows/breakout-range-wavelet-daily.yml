@@ -5,6 +5,7 @@ on:
       - research/breakout-range-source-audit-20261121
     paths:
       - 'scripts/breakout_range_wavelet_daily_replay.py'
+      - 'scripts/breakout_range_dual_thrust_causal_20261124.py'
       - '.github/workflows/breakout-range-wavelet-daily.yml'
   workflow_dispatch:
 permissions:
@@ -12,7 +13,7 @@ permissions:
 jobs:
   replay:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,8 +22,12 @@ jobs:
       - run: python -m pip install numpy pandas PyWavelets
       - name: Replay source-pinned Wavelet-2B and TwoB on authentic BTC minute archive
         run: python scripts/breakout_range_wavelet_daily_replay.py
+      - name: Replay causal NY Dual Thrust adaptation on authentic BTC minute archive
+        run: python scripts/breakout_range_dual_thrust_causal_20261124.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: breakout-range-wavelet-daily-evidence
-          path: analysis/breakout_range_wavelet_daily/
+          name: breakout-range-wavelet-and-dual-thrust-evidence
+          path: |
+            analysis/breakout_range_wavelet_daily/
+            analysis/breakout_range_dual_thrust_causal_20261124/
