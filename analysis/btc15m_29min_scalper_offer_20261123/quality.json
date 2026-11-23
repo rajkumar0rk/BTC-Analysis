@@ -1,0 +1,420 @@
+{
+  "BTCUSD": {
+    "rows": 963030,
+    "first_utc": "2025-01-01 00:00:00+00:00",
+    "last_utc": "2026-10-31 18:29:00+00:00",
+    "partitions_sha256_verified": 22,
+    "missing_minutes": 0
+  },
+  "configurations": {
+    "touch_ORIGINAL_ST_3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none",
+      false,
+      false
+    ],
+    "touch_SL0p30_TP0p15_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.5,
+      "none",
+      false,
+      true
+    ],
+    "touch_SL0p30_TP0p15_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.5,
+      "none",
+      true,
+      true
+    ],
+    "touch_SL0p30_TP0p25_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.83333333,
+      "none",
+      false,
+      true
+    ],
+    "touch_SL0p30_TP0p25_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.83333333,
+      "none",
+      true,
+      true
+    ],
+    "touch_SL0p30_TP0p40_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none",
+      false,
+      true
+    ],
+    "touch_SL0p30_TP0p40_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none",
+      true,
+      true
+    ],
+    "touch_SL0p60_TP0p15_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.25,
+      "none",
+      false,
+      true
+    ],
+    "touch_SL0p60_TP0p15_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.25,
+      "none",
+      true,
+      true
+    ],
+    "touch_SL0p60_TP0p25_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.41666667,
+      "none",
+      false,
+      true
+    ],
+    "touch_SL0p60_TP0p25_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.41666667,
+      "none",
+      true,
+      true
+    ],
+    "touch_SL0p60_TP0p40_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.66666667,
+      "none",
+      false,
+      true
+    ],
+    "touch_SL0p60_TP0p40_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.66666667,
+      "none",
+      true,
+      true
+    ],
+    "reclaim_ORIGINAL_ST_3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none",
+      false,
+      false
+    ],
+    "reclaim_SL0p30_TP0p15_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.5,
+      "none",
+      false,
+      true
+    ],
+    "reclaim_SL0p30_TP0p15_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.5,
+      "none",
+      true,
+      true
+    ],
+    "reclaim_SL0p30_TP0p25_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.83333333,
+      "none",
+      false,
+      true
+    ],
+    "reclaim_SL0p30_TP0p25_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.83333333,
+      "none",
+      true,
+      true
+    ],
+    "reclaim_SL0p30_TP0p40_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none",
+      false,
+      true
+    ],
+    "reclaim_SL0p30_TP0p40_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none",
+      true,
+      true
+    ],
+    "reclaim_SL0p60_TP0p15_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.25,
+      "none",
+      false,
+      true
+    ],
+    "reclaim_SL0p60_TP0p15_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.25,
+      "none",
+      true,
+      true
+    ],
+    "reclaim_SL0p60_TP0p25_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.41666667,
+      "none",
+      false,
+      true
+    ],
+    "reclaim_SL0p60_TP0p25_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.41666667,
+      "none",
+      true,
+      true
+    ],
+    "reclaim_SL0p60_TP0p40_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.66666667,
+      "none",
+      false,
+      true
+    ],
+    "reclaim_SL0p60_TP0p40_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.66666667,
+      "none",
+      true,
+      true
+    ],
+    "combined_ORIGINAL_ST_3R": [
+      4,
+      "any",
+      "ST",
+      1.0,
+      3.0,
+      "none",
+      false,
+      false
+    ],
+    "combined_SL0p30_TP0p15_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.5,
+      "none",
+      false,
+      true
+    ],
+    "combined_SL0p30_TP0p15_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.5,
+      "none",
+      true,
+      true
+    ],
+    "combined_SL0p30_TP0p25_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.83333333,
+      "none",
+      false,
+      true
+    ],
+    "combined_SL0p30_TP0p25_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      0.83333333,
+      "none",
+      true,
+      true
+    ],
+    "combined_SL0p30_TP0p40_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none",
+      false,
+      true
+    ],
+    "combined_SL0p30_TP0p40_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.003,
+      1.33333333,
+      "none",
+      true,
+      true
+    ],
+    "combined_SL0p60_TP0p15_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.25,
+      "none",
+      false,
+      true
+    ],
+    "combined_SL0p60_TP0p15_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.25,
+      "none",
+      true,
+      true
+    ],
+    "combined_SL0p60_TP0p25_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.41666667,
+      "none",
+      false,
+      true
+    ],
+    "combined_SL0p60_TP0p25_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.41666667,
+      "none",
+      true,
+      true
+    ],
+    "combined_SL0p60_TP0p40_CAP29_NOOFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.66666667,
+      "none",
+      false,
+      true
+    ],
+    "combined_SL0p60_TP0p40_CAP29_OFFER": [
+      4,
+      "any",
+      "PCT",
+      0.006,
+      0.66666667,
+      "none",
+      true,
+      true
+    ]
+  },
+  "signal_timeframe": "15m",
+  "higher_timeframe_features": false,
+  "execution_timeframe": "1m",
+  "pct_targets_after_costs": "gross TP 0.15%\u20130.40%, SL 0.30% or 0.60%; fees+GST+0.02% per-side slippage applied",
+  "scalper_offer_model": "hypothetical opted-in eligible position closed within 29 minutes => closing fee waived; NO fee voucher, opening fee paid",
+  "max_hold_minutes": 29,
+  "supertrend_ATR10_multiplier3": true,
+  "ema20": true,
+  "stop_on_opposite_confirmed_ST_flip": true,
+  "one_trade_per_cycle": true,
+  "first_touch_must_close_wrong_side": true,
+  "then_later_15m_close_reclaims": true,
+  "flip_candle_excluded": true,
+  "entry_modes": "touch/reclaim/combined, each requires first eligible 15m EMA20 interaction after ST flip",
+  "fee_incl_GST_per_side": 0.00059,
+  "slippage_per_side": 0.0002,
+  "notional": "1x evolving $1000 equity",
+  "no_volume_filter_baseline": true,
+  "limitations": "2026 is already inspected, no genuine fresh out-of-sample; no tick execution, spread, liquidity, funding, leverage, or liquidation"
+}
