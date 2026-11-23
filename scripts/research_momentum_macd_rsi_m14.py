@@ -85,9 +85,17 @@ for m,nav in sorted(monthly.items()):
     months.append(dict(month_ist=m,ending_nav=nav,net_return_pct=(nav/last-1)*100,trades_exited=int((pd.to_datetime(trades.exit,utc=True).dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")==m).sum()) if len(trades) else 0))
     last=nav
 assert len(months)==12
+# December IST checkpoint is before the final UTC bar (which falls on Jan 1 IST).
+# Keep monthly mark-to-market and post-liquidation cash as distinct valuation dates.
+last_checkpoint_ts = next(ts for ts in reversed(raw.index) if (ts+pd.Timedelta(minutes=1)).tz_convert("Asia/Kolkata").strftime("%Y-%m") != ts.tz_convert("Asia/Kolkata").strftime("%Y-%m"))
+assert last_checkpoint_ts < raw.index[-1]
+assert abs(months[-1]["ending_nav"] - equity_path[raw.index.get_loc(last_checkpoint_ts)]) < 1e-6
+final_mark_nav = equity_path[-1]
+final_liquidation_fee = 0.0 if not len(trades) or trades.iloc[-1]["reason"] != "end_of_utc_data" else float(trades.iloc[-1]["qty"]*trades.iloc[-1]["exit_price"]*FEE)
+assert abs(final_mark_nav - final_liquidation_fee - cash) < 1e-6
 pd.DataFrame(months).to_csv(OUT/"monthly_nav.csv",index=False)
 w=trades.net_usd[trades.net_usd>0].sum();l=-trades.net_usd[trades.net_usd<0].sum()
 ep=np.asarray(equity_path);dd=float((ep/np.maximum.accumulate(ep)-1).min()*100)
-summary=dict(source="Roshan7869/algotrading@72a67c4",engine_parity="UNVERIFIED Freqtrade exit approximation; not source-faithful until checked",data_sha256=hashes,minute_count=len(raw),entry_signal_count=int(h.entry.sum()),trades=len(trades),net_return_pct=(cash/10000-1)*100,ending_nav=cash,profit_factor=float(w/l) if l else None,max_drawdown_pct=dd,positive_months=sum(x["net_return_pct"]>0 for x in months),negative_months=sum(x["net_return_pct"]<0 for x in months),flat_months=sum(x["net_return_pct"]==0 for x in months),monthly_ist=months,jan_ist_partial=True,funding="UNMODELED",slippage="zero",fee_per_side_with_gst=FEE,avg_hold_minutes=float(trades.minutes_held.mean()) if len(trades) else None)
+summary=dict(last_ist_month_checkpoint_utc=str(last_checkpoint_ts),last_ist_month_checkpoint_nav=float(months[-1]["ending_nav"]),final_utc_bar=str(raw.index[-1]),final_pre_liquidation_mark_nav=float(final_mark_nav),final_liquidation_fee=float(final_liquidation_fee),final_cash_reconciled=bool(abs(final_mark_nav-final_liquidation_fee-cash)<1e-6),source="Roshan7869/algotrading@72a67c4",engine_parity="UNVERIFIED Freqtrade exit approximation; not source-faithful until checked",data_sha256=hashes,minute_count=len(raw),entry_signal_count=int(h.entry.sum()),trades=len(trades),net_return_pct=(cash/10000-1)*100,ending_nav=cash,profit_factor=float(w/l) if l else None,max_drawdown_pct=dd,positive_months=sum(x["net_return_pct"]>0 for x in months),negative_months=sum(x["net_return_pct"]<0 for x in months),flat_months=sum(x["net_return_pct"]==0 for x in months),monthly_ist=months,jan_ist_partial=True,funding="UNMODELED",slippage="zero",fee_per_side_with_gst=FEE,avg_hold_minutes=float(trades.minutes_held.mean()) if len(trades) else None)
 (OUT/"summary.json").write_text(json.dumps(summary,indent=2))
 print(json.dumps({k:v for k,v in summary.items() if k not in ("data_sha256","monthly_ist")},indent=2),flush=True)
