@@ -276,7 +276,7 @@ def run():
     OUT.mkdir(parents=True,exist_ok=True)
     m=load()
     q=features(m)
-    variants=[];monthrows=[];candidate_data={}
+    variants=[];monthly_tables=[];candidate_data={}
     for (n,ratio),vol,trend,mult,rr in product(COMP,VOLS,TRENDS,STOPS,TARGETS):
         name=f"c{n}x{ratio:g}_v{vol:g}_{trend}_stop{mult:g}_rr{rr:g}"
         ledger=sim(m,q,n,vol,trend,mult,rr)
@@ -290,10 +290,10 @@ def run():
             variants.append(stat)
             monthly["variant"]=name
             monthly["cost_model"]=mode
-            monthrows.append(monthly)
+            monthly_tables.append(monthly)
             print("VARIANT "+json.dumps(stat,sort_keys=True),flush=True)
     allv=pd.DataFrame(variants)
-    allmonths=pd.concat(monthrows,ignore_index=True)
+    allmonths=pd.concat(monthly_tables,ignore_index=True)
     allv.to_csv(OUT/"all_variants.csv",index=False)
     allmonths.to_csv(OUT/"all_months.csv",index=False)
     selected={}
