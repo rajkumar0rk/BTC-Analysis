@@ -1,5 +1,5 @@
 {
-  "round": 284,
+  "round": 285,
   "history": [
     {
       "round": 1,
@@ -3388,9 +3388,21 @@
       "errors": 0,
       "recovered": 0,
       "remaining": 25580
+    },
+    {
+      "round": 285,
+      "utc": "2026-11-24T16:28:31.018081+00:00",
+      "window": 360,
+      "offset_seconds": 11700,
+      "alignment_mode": 0,
+      "workers": 3,
+      "requests": 77,
+      "errors": 0,
+      "recovered": 0,
+      "remaining": 25580
     }
   ],
-  "no_progress": 43,
+  "no_progress": 44,
   "complete": false,
   "remaining": 25580,
   "status": "no_progress"
