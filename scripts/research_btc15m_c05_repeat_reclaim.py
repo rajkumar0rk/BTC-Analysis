@@ -140,6 +140,11 @@ def engine():
     anchor='                    assert sig["epoch"] not in seen_epochs, "Cycle duplicate"'
     assert src.count(anchor)==1
     src=src.replace(anchor,'                    if REPEAT==1:assert sig["epoch"] not in seen_epochs, "Cycle duplicate"')
+    anchor='    assert not ledger.epoch.duplicated().any()'
+    assert src.count(anchor)==1
+    src=src.replace(anchor,'''    if REPEAT==1:assert not ledger.epoch.duplicated().any()
+    assert not ledger.entry_time_utc.duplicated().any(), "Duplicate entry timestamp"
+    assert all(a<=b for a,b in zip(ledger.exit_time_utc.iloc[:-1],ledger.entry_time_utc.iloc[1:])), "Overlapping positions"''')
     # Lock is measured in entry-time R, not subsequent ATR.
     # Update only after observing a favorable price; check old stop first.
     anchor='        # An overnight/minute opening price may already cross a rung.'
