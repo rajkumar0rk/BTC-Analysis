@@ -1,0 +1,141 @@
+{
+  "schema_version": "research-profile-1.0",
+  "id": "BTCUSD_EMA20_RECLAIM_V2_MONTHLY_WIN_CANDIDATE_20261124",
+  "status": "RESEARCH_CANDIDATE_NOT_LOCKED_NOT_LIVE_APPROVED",
+  "note": "Research comparison profile; may not be a directly importable strategy schema for the trading application.",
+  "parent_locked_profile": {
+    "branch": "locked/btc-ema20-reclaim-v1-20261122",
+    "path": "strategy-locks/btcusd_ema20_reclaim_v1_20261122.json",
+    "unchanged": true
+  },
+  "symbol": "BTCUSD",
+  "venue": "Delta Exchange India",
+  "signal": {
+    "timeframe": "1h",
+    "completed_bar_only": true,
+    "supertrend": {
+      "atr_period": 10,
+      "multiplier": 3
+    },
+    "ema_period": 20,
+    "pattern": "EMA20 RECLAIM after a prior adverse EMA close within current ST cycle",
+    "fill_timing": "Breakout of completed signal candle extreme on following hour, monitored with 1m OHLC",
+    "one_filled_entry_per_supertrend_cycle": true,
+    "volume_ratio": {
+      "min": 1.25,
+      "max": null,
+      "reference": "previous 20 completed signal-hour volumes"
+    },
+    "baseline_locked_filters": {
+      "directional_ema_gap_pct_max": 1,
+      "directional_ema_slope_pct_over_four_hours_min": -0.2,
+      "directional_supertrend_gap_pct_min": 0.5
+    },
+    "additional_causal_filter": {
+      "logic": "(ADX14 <= 20 OR candle_range_over_ST_ATR10 <= 1 OR directional_EMA20_gap_pct >= 0.15) AND directional_RSI14 <= 60",
+      "all": [
+        {
+          "any": [
+            {
+              "indicator": "ADX14",
+              "operator": "<=",
+              "value": 20
+            },
+            {
+              "indicator": "H1 candle high-low divided by ST ATR10",
+              "operator": "<=",
+              "value": 1
+            },
+            {
+              "indicator": "direction adjusted close distance from EMA20 (%)",
+              "operator": ">=",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "indicator": "directional RSI14",
+          "operator": "<=",
+          "value": 60
+        }
+      ],
+      "directional_rsi14_definition": "Long: RSI14; Short: 100 - RSI14",
+      "no_month_name_or_future_PnL_features": true,
+      "skipped_entry_policy": "Do not replace a skipped candidate with a later fill in same ST cycle"
+    }
+  },
+  "exit": {
+    "initial_stop_underlying_pct": 2,
+    "profit_lock_levels_underlying_pct": [
+      2,
+      3,
+      5
+    ],
+    "tighten_only": true,
+    "opposite_supertrend_flip_exit": true,
+    "monitor_timeframe": "1m"
+  },
+  "evidence": {
+    "sample": "2025-01 through 2026-10 IST (22 completed months)",
+    "qualifying_locked_v1_trades": 55,
+    "candidate_trades": 47,
+    "two_simulated_intraminute_paths": [
+      "open_high_low_close",
+      "open_low_high_close"
+    ],
+    "profitable_months": 17,
+    "losing_months": 2,
+    "flat_months": [
+      "2025-01",
+      "2025-09",
+      "2026-10"
+    ],
+    "remaining_loss_months": [
+      "2026-03",
+      "2026-09"
+    ],
+    "promoted_months": [
+      "2025-10",
+      "2026-04"
+    ],
+    "net_profit_usd_range_for_0p001_btc": [
+      25.609247,
+      25.833375
+    ],
+    "locked_v1_net_profit_usd_range": [
+      20.037378,
+      20.261506
+    ],
+    "realized_closed_equity_max_drawdown_pct_worst": 3.04,
+    "winning_trades": 28,
+    "losing_trades": 19,
+    "all_22_original_monthly_net_values_preserved_or_increased_on_both_paths": true,
+    "cost_model": {
+      "quantity_btc": 0.001,
+      "taker_fee_with_GST_fraction_per_side": 0.00059,
+      "slippage_btc_points_per_leg": 5
+    },
+    "additional_slippage_stress": {
+      "maximum_extra_points_per_side_tested_while_maintaining_17_positive_months": 20,
+      "basis": "approximate net profit deduction without recalculating fills; not proof of execution robustness"
+    },
+    "verification_workflow_run_url": "https://github.com/rajkumar0rk/BTC-Analysis/actions/runs/45299595468",
+    "reproduced_from_source_archive": true,
+    "report_path": "analysis/reclaim_v2_shortlist_validation_20261124/RESEARCH_REPORT.md",
+    "detailed_monthly": "analysis/reclaim_v2_shortlist_validation_20261124/verified_22_month_audit.csv",
+    "detailed_trades": "analysis/reclaim_v2_shortlist_validation_20261124/verified_trade_ledger.csv",
+    "full_filter_search": "analysis/reclaim_v2_causal_entry_filter_20261124/RESEARCH_REPORT.md"
+  },
+  "limitations": [
+    "In-sample parameter optimization on all 2025-26 months: strong multiple-testing overfit risk",
+    "Not forward validated; simulated within-minute OHLC order, not actual tick-level execution",
+    "Model excludes funding, order-book depth, stop amendment latency, margin, liquidation",
+    "Initial 2% BTC price stop is not a guarantee of exit before liquidation at leverage",
+    "V1 remains locked; do not deploy candidate without independent testing"
+  ],
+  "research_governance": {
+    "do_not_modify_locked_v1": true,
+    "master_unchanged": true,
+    "candidate_requires_forward_validation": true
+  }
+}
