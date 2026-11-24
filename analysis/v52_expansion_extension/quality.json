@@ -1,0 +1,17 @@
+{
+  "baseline_parity": true,
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "new_configurations": 1,
+  "control_profiles": [
+    "V42",
+    "V50",
+    "V51"
+  ],
+  "min_expansion_atr": 1.25,
+  "max_extension_atr": 2.0,
+  "risk_pct": 0.03,
+  "exposure_cap": 3.0,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
