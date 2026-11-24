@@ -1,0 +1,92 @@
+{
+  "candidate": 5,
+  "config": {
+    "sl": 2.0,
+    "rr": 3.0,
+    "flip": false,
+    "filter": "any"
+  },
+  "control_candidate": 8,
+  "passes_training_gate": false,
+  "selection": "Training only, both years and baseline/stressed costs. Same previous minimum return, DD, trade and positive neighbor score gates plus majority-positive adjacent configs. If none qualifies, top candidate diagnostic only.",
+  "training_periods": [
+    "2024-09..12",
+    "2025-01..12"
+  ],
+  "prior_2026_exposure": true,
+  "grid": [
+    {
+      "sl": 1.5,
+      "rr": 1.5,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 1.5,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 1.5,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 1.5,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 1.5,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 1.5,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    }
+  ],
+  "training_sha256": "fddf509b4b216e1a2b11c22fd5235b615ecc785e0c78f09e684fe54dd266b3b5"
+}
