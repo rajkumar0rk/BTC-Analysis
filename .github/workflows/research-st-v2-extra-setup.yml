@@ -1,0 +1,39 @@
+name: BTC ST V2 extra setup monthly preservation
+on:
+  push:
+    branches:
+      - research/st-v2-extra-setup-month-preservation-20261124
+    paths:
+      - scripts/research_st_v2_extra_setup.py
+      - .github/workflows/research-st-v2-extra-setup.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas tabulate
+      - name: Replay additional setups, freeze all 108 original trades
+        run: python -u scripts/research_st_v2_extra_setup.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: st-v2-extra-setup-monthly-preservation
+          path: analysis/st_v2_extra_setup_month_preservation_20261124/
+          if-no-files-found: warn
+      - name: Publish verified results
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_v2_extra_setup_month_preservation_20261124/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: monthly preservation screening of extra ST setups"
+            git push origin HEAD:research/st-v2-extra-setup-month-preservation-20261124
+          fi
