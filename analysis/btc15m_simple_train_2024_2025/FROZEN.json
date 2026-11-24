@@ -1,0 +1,163 @@
+{
+  "candidate": 13,
+  "config": {
+    "sl": 3.0,
+    "rr": 3.0,
+    "flip": false,
+    "filter": "slope4"
+  },
+  "passes_training_gate": false,
+  "selection": "Fixed training-only robust score; both years positive, >=8 trades each, <=25% floating DD, positive median neighbor score. If none qualifies, top candidate diagnostic only.",
+  "training_periods": [
+    "2024-09..12",
+    "2025-01..12"
+  ],
+  "prior_2026_exposure": true,
+  "grid": [
+    {
+      "sl": 2.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 2.0,
+      "rr": 2.0,
+      "flip": true,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 2.0,
+      "flip": true,
+      "filter": "slope4"
+    },
+    {
+      "sl": 2.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 2.0,
+      "rr": 3.0,
+      "flip": true,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 3.0,
+      "flip": true,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.0,
+      "flip": true,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.0,
+      "flip": true,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": true,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": true,
+      "filter": "slope4"
+    },
+    {
+      "sl": 4.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 4.0,
+      "rr": 2.0,
+      "flip": true,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 2.0,
+      "flip": true,
+      "filter": "slope4"
+    },
+    {
+      "sl": 4.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 4.0,
+      "rr": 3.0,
+      "flip": true,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 3.0,
+      "flip": true,
+      "filter": "slope4"
+    }
+  ],
+  "training_sha256": "0c7817207d85e78df856e51bdff4cd5d1200495ebef47270460098b4b46ecbe8"
+}
