@@ -1,0 +1,46 @@
+name: Reclaim V2 causal entry filters preserve all monthly profit
+on:
+  push:
+    branches:
+      - research/reclaim-v2-monthly-wins-no-profit-sacrifice-20261124
+    paths:
+      - scripts/research_reclaim_v2_entry_filter_logic_20261124.py
+      - .github/workflows/reclaim-v2-causal-entry-filter-20261124.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btc-reclaim-v2-20261124-causal-filter-selection
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas tabulate
+      - name: Validate syntax
+        run: python -m py_compile scripts/research_reclaim_v2_entry_filter_logic_20261124.py
+      - name: Search causal entry filters and verify locked baseline monthly profit
+        run: python scripts/research_reclaim_v2_entry_filter_logic_20261124.py
+      - name: Upload research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-reclaim-v2-causal-entry-filters
+          path: analysis/reclaim_v2_causal_entry_filter_20261124/
+          if-no-files-found: warn
+      - name: Save verified outputs to research branch only
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/reclaim_v2_causal_entry_filter_20261124/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: save Reclaim V2 causal entry gates with strict monthly net preservation"
+            git pull --rebase origin research/reclaim-v2-monthly-wins-no-profit-sacrifice-20261124
+            git push origin HEAD:research/reclaim-v2-monthly-wins-no-profit-sacrifice-20261124
+          fi
