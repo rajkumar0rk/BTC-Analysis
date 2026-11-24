@@ -1,0 +1,53 @@
+name: Scheduled BTCUSD 2024 gap recovery
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: btcusd-2024-gap-retry
+  cancel-in-progress: false
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/btcusd-2024-gap-retry-20261124
+      - name: Check native archive coverage
+        id: coverage
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          manifest = json.loads(Path("data/delta_india/BTCUSD/2024_verified_archive/manifest.json").read_text())
+          missing = int(manifest["totals"]["trade_1m"]["missing"])
+          print("Remaining native BTCUSD candles:", missing)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"missing={missing}\n")
+          PY
+      - uses: actions/setup-python@v5
+        if: steps.coverage.outputs.missing != '0'
+        with:
+          python-version: '3.11'
+      - name: Retry missing candles
+        if: steps.coverage.outputs.missing != '0'
+        run: |
+          set -euo pipefail
+          python -m pip install pandas numpy
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for i in $(seq 1 3); do
+            if python -c 'import json; assert json.load(open("data/delta_india/BTCUSD/2024_verified_archive/manifest.json"))["totals"]["trade_1m"]["missing"]==0' 2>/dev/null; then
+              break
+            fi
+            python -u scripts/retry_btcusd_2024_gaps.py
+            git add data/delta_india/BTCUSD/2024_verified_archive analysis/btcusd_2024_gap_retry
+            if ! git diff --cached --quiet; then
+              git commit -m "Checkpoint scheduled native BTCUSD gap recovery"
+              git push origin HEAD:research/btcusd-2024-gap-retry-20261124
+            fi
+            if [ "$i" -lt 3 ]; then sleep 60; fi
+          done
