@@ -1,0 +1,76 @@
+{
+  "config": {
+    "family": "trend_rsi_pullback",
+    "timeframe": 30,
+    "lookback": 40,
+    "stop_fraction": 2.5,
+    "rr": 2.0
+  },
+  "training_metrics": {
+    "config": 42,
+    "valid": false,
+    "min_profit": -56.75783859488866,
+    "worst_dd": 58.04979015323571,
+    "min_month_fraction": 0.0,
+    "mean_month_fraction": 0.1519323671497585,
+    "positive_fold_fraction": 0.1,
+    "continuous_month_min": 0.043478260869565216,
+    "continuous_positive_min": 0.13043478260869565,
+    "continuous_trades_min": 103,
+    "min_year_profit": -35.2899061309816,
+    "score": -0.7797193101437166,
+    "neighbor_q25": -0.9287287682852297,
+    "neighbor_valid_fraction": 0.0,
+    "robust_score": -0.9287287682852297
+  },
+  "grid_size": 48,
+  "training_period": "2024-02 through 2025-12",
+  "folds": [
+    [
+      "2024_H1",
+      "2024-02-01",
+      "2024-07-01"
+    ],
+    [
+      "2024_H2",
+      "2024-07-01",
+      "2025-01-01"
+    ],
+    [
+      "2025_H1",
+      "2025-01-01",
+      "2025-07-01"
+    ],
+    [
+      "2025_H2",
+      "2025-07-01",
+      "2026-01-01"
+    ]
+  ],
+  "risk_pct": 0.03,
+  "max_effective_exposure": 3.0,
+  "max_hold_minutes": 10080,
+  "stop_definition": "1H ATR14 from last completed 1H candle at entry",
+  "exit_definition": "2R fixed target or same-distance ratcheting stop",
+  "weekdays_only": true,
+  "one_position": true,
+  "no_monthly_gates": true,
+  "no_daily_limit": true,
+  "no_leverage_tuning": true,
+  "training_pass": false,
+  "promotion_gate": {
+    "min_net_usd_exclusive": 6.669577955892976,
+    "min_months_ge_1pct_exclusive": 3,
+    "max_closed_dd_pct": 9.151042470129736
+  },
+  "holdout_previously_examined": true,
+  "regime_filter": {
+    "timeframe": 240,
+    "ema": 100,
+    "slope_bars": 5,
+    "h1_rsi_pullback_lookback": 4
+  },
+  "research_batch": "V35; fixed H4 trend and H1 pullback, 15/30m entry, H1 ATR, 48 configurations, training-only V33 promotion gate",
+  "warmup_limited": true,
+  "warmup_start": "2024-01-30 00:00:00+00:00"
+}
