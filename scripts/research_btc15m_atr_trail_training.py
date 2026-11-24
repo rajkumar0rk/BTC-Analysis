@@ -107,7 +107,7 @@ def engine():
                 else:
                     p["stop"]=candidate;p["active"]=True
         # An overnight/minute opening price may already cross a rung.""")
-    anchor='                mark(dest)\\n        if i in monthends:'
+    anchor='                mark(dest)\n        if i in monthends:'
     assert src.count(anchor)==1
     src=src.replace(anchor, """                if TRAIL>0 and side*(dest-float(path[k]))>0:
                     p["best"]=max(p.get("best",side*p["entry"]),side*dest)
@@ -170,6 +170,7 @@ def freeze():
     scores=dict(zip(a.candidate,a.score));positive=dict(zip(a.candidate,a.min_net>0))
     def neighbors(i):
         c=GRID[i];out=[]
+        if i==control:return [i]
         for j,d in enumerate(GRID):
             diff=[k for k in c if c[k]!=d[k]]
             if len(diff)!=1:continue
@@ -177,7 +178,7 @@ def freeze():
             if k=="filter":out.append(j)
             elif k in ("atr","trail"):
                 if c[k]==0 or d[k]==0:continue
-                values=sorted(set(g[k] for g in GRID))
+                values=sorted(set(g[k] for g in GRID[:-1]))
                 if abs(values.index(c[k])-values.index(d[k]))==1:out.append(j)
         return out or [i]
     a["neighbor_median"]=a.candidate.map(lambda i:float(np.median([scores[j] for j in neighbors(i)])))
