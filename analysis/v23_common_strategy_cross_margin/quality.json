@@ -1,0 +1,14 @@
+{
+  "common_profile_sha256": "4d24be271e2050bcfafd3a7b36842386de4c794a3cd05353dbb017c323ce9341",
+  "scenario_rows": 2240,
+  "starting_equity_usd_equivalent": 100.0,
+  "margin_sizing_budget_usd": 10.0,
+  "contract_lot_btc": 0.001,
+  "all_leverage_same_signals_and_stops": true,
+  "cross_imr_assumed": 0.005,
+  "actual_account_model": "single position, constant FX, no external deposits, realized balance carries continuously",
+  "funding": "historical proxy only",
+  "liquidation": "conservative full collateral loss proxy, exact exchange settlement unverified",
+  "historical_data": "known development through Nov17 UTC",
+  "untouched_forward": false
+}

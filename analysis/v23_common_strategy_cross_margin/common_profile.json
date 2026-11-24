@@ -1,0 +1,101 @@
+{
+  "source": "v19_leverage_local_recovery",
+  "reference_leverage": 50,
+  "profile": {
+    "leverage": 50,
+    "track": "known_november_development",
+    "rank": [
+      1,
+      22,
+      484,
+      1,
+      1508.3932575673932,
+      2760.8385538743346,
+      57715.84251661501,
+      -5677.812221765171,
+      0
+    ],
+    "evaluations": 1298442,
+    "legs": [
+      {
+        "group": "EMA20_ADX_reclaim_confirm1",
+        "filter": "all",
+        "stop_fraction": 0.7,
+        "tp_pct": 3,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 1e+30
+      },
+      {
+        "group": "M5_EMA50",
+        "filter": "high_ATR_ratio",
+        "stop_fraction": 0.5,
+        "tp_pct": 3,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 1e+30
+      },
+      {
+        "group": "RSI_reversal",
+        "filter": "H4_not_aligned",
+        "stop_fraction": 0.7,
+        "tp_pct": 3.5,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 1000
+      },
+      {
+        "group": "M15_squeeze24",
+        "filter": "high_ATR_ratio",
+        "stop_fraction": 0.35,
+        "tp_pct": 6,
+        "max_minutes": 2880,
+        "trail_fraction": 1.5,
+        "mtd_gate": 1e+30
+      },
+      {
+        "group": "H1_Donchian72",
+        "filter": "long_ADX32",
+        "stop_fraction": 0.7,
+        "tp_pct": 10,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 0
+      },
+      {
+        "group": "M60_squeeze24",
+        "filter": "long_ADX28",
+        "stop_fraction": 0.6,
+        "tp_pct": 2,
+        "max_minutes": 1440,
+        "trail_fraction": 0,
+        "mtd_gate": 1e+30
+      },
+      {
+        "group": "H1_RSI30_reversal_confirm5",
+        "filter": "high_ATR_ratio",
+        "stop_fraction": 0.15,
+        "tp_pct": 4,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 500
+      },
+      {
+        "group": "M60_squeeze24_confirm1",
+        "filter": "H4_long",
+        "stop_fraction": 0.7,
+        "tp_pct": 3,
+        "max_minutes": 1440,
+        "trail_fraction": 0,
+        "mtd_gate": 1000
+      }
+    ],
+    "month_ceiling": 1500,
+    "daily_limit": 2,
+    "loss_guard": 6000
+  },
+  "stop_formula": "entry * (1/50 - .00059 - .0025)/(1-side*.0025)*stop_fraction",
+  "filter_reference_leverage": 50,
+  "signal_count": 1355,
+  "position_limit": 1
+}
