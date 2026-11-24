@@ -345,7 +345,7 @@ def main():
         positive_January2025_hindsight_candidates=int(len(january_positive)),
         positive_all_12_months_in_2025_candidates=int(len(training12)),
         qualified_2025_only_rules=int(len(strict)),
-        22_out_of_22_all_history_hindsight_candidate_count=int(len(retrospective22)),
+        full_22_out_of_22_hindsight_candidate_count=int(len(retrospective22)),
         selected_using_2025_only=audited["selected_from_2025_only"],
         meets_all_full_year_month_profit_drawdown_conditions=bool(target),
         best_January2025_hindsight_UNSELECTED=audited["hindsight_January2025_NOT_SELECTED"],
