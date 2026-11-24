@@ -1,0 +1,22 @@
+{
+  "frozen_profiles_sha256": "04c3821d44eeb47c7d16cd4d35f2a1d5a7ebdae4f2b8de86f2e9ea228d7db282",
+  "completed_leverages": [
+    50,
+    100,
+    200
+  ],
+  "summary_parity_pass": true,
+  "ledger_parity_pass": true,
+  "prefix_signal_audit_pass": true,
+  "parity_cases": 156,
+  "scenario_rows": 342,
+  "independent_exit_replay": true,
+  "raw_trade_ledger_used_for_acceptance": false,
+  "drawdown": "Conservative adverse/favorable mark extremes incl. exit minute, not exact tick ordering; normalized points",
+  "fee_and_mmr": "Historical exact tiers/settlement records not verified; base 0.059% per side and 0.25% maintenance assumption",
+  "november": "Known development data, no untouched holdout",
+  "forward_validation": "pending new data after freeze",
+  "actual_account_margin_availability": "not modeled, fixed per-BTC normalized points",
+  "exact_exchange_liquidation": "unverified",
+  "demo_live": "pending"
+}
