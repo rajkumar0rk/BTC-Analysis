@@ -1,0 +1,225 @@
+{
+  "profiles": [
+    {
+      "leverage": 100,
+      "track": "known_november_development",
+      "rank": [
+        1,
+        22,
+        484,
+        1,
+        1282.3489582925404,
+        3587.3395925000004,
+        56910.698967467775,
+        -3572.218533573353,
+        0
+      ],
+      "evaluations": 2464982,
+      "legs": [
+        {
+          "group": "M30_RSI25",
+          "filter": "short_ADX40",
+          "stop_fraction": 0.5,
+          "tp_pct": 3.3,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "range_ADX20",
+          "stop_fraction": 0.5,
+          "tp_pct": 2.15,
+          "max_minutes": 4320,
+          "trail_fraction": 2,
+          "mtd_gate": 500
+        },
+        {
+          "group": "M15_squeeze24_pull1",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.35,
+          "tp_pct": 6,
+          "max_minutes": 4380,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "M60_squeeze24_confirm1",
+          "filter": "short_ADX18",
+          "stop_fraction": 0.15,
+          "tp_pct": 6.5,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "line_touch",
+          "filter": "ADX_between_10_25",
+          "stop_fraction": 0.3,
+          "tp_pct": 3,
+          "max_minutes": 1080,
+          "trail_fraction": 0,
+          "mtd_gate": 1000
+        },
+        {
+          "group": "M15_sweep12_confirm1",
+          "filter": "long_ADX32",
+          "stop_fraction": 0.2,
+          "tp_pct": 9,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": -1000
+        },
+        {
+          "group": "H1_RSI30_reversal_confirm1",
+          "filter": "quiet20_counter_0.25",
+          "stop_fraction": 0.7,
+          "tp_pct": 7.0,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": -1000
+        },
+        {
+          "group": "BB_stretch_pull3",
+          "filter": "entry_quiet_0.5",
+          "stop_fraction": 0.5,
+          "tp_pct": 10.0,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 1000
+        }
+      ],
+      "month_ceiling": 1500.0,
+      "daily_limit": 2,
+      "loss_guard": 4000.0
+    },
+    {
+      "leverage": 200,
+      "track": "known_november_development",
+      "rank": [
+        1,
+        19,
+        451,
+        0,
+        -3126.0496559484673,
+        -1443.68458,
+        49301.72364242543,
+        -3126.0496559484673,
+        0
+      ],
+      "evaluations": 3135552,
+      "legs": [
+        {
+          "group": "line_touch_confirm1",
+          "filter": "quiet20_trend_1.25",
+          "stop_fraction": 0.35,
+          "tp_pct": 2,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "EMA20_touch",
+          "filter": "quiet20_h4",
+          "stop_fraction": 0.3,
+          "tp_pct": 3,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 500
+        },
+        {
+          "group": "M5_EMA50",
+          "filter": "quiet20_counter_0.25",
+          "stop_fraction": 0.22,
+          "tp_pct": 4,
+          "max_minutes": 7200,
+          "trail_fraction": 0,
+          "mtd_gate": 500.0
+        },
+        {
+          "group": "BB_stretch_confirm3",
+          "filter": "quiet_reclaim_0.5",
+          "stop_fraction": 0.135,
+          "tp_pct": 6,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 0.0
+        },
+        {
+          "group": "M30_RSI25_confirm3",
+          "filter": "short_ADX40",
+          "stop_fraction": 0.6,
+          "tp_pct": 9,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "H1_RSI40_reversal",
+          "filter": "short_ADX40",
+          "stop_fraction": 0.15,
+          "tp_pct": 6.4,
+          "max_minutes": 7200,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "M15_squeeze24_pull3",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.62,
+          "tp_pct": 6,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "RSI_cross20",
+          "filter": "quiet20_counter_0.25",
+          "stop_fraction": 0.3,
+          "tp_pct": 4.1,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": -1000
+        },
+        {
+          "group": "M60_squeeze24_latepull20",
+          "filter": "quiet_align_0.5",
+          "stop_fraction": 0.5,
+          "tp_pct": 4.0,
+          "max_minutes": 4320,
+          "trail_fraction": 0.0,
+          "mtd_gate": 0.0
+        },
+        {
+          "group": "BB_stretch_latepull7",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.3,
+          "tp_pct": 6.0,
+          "max_minutes": 4320,
+          "trail_fraction": 0.0,
+          "mtd_gate": 500.0
+        },
+        {
+          "group": "EMA20_ADX_reclaim_latepull12",
+          "filter": "quiet20_0.5",
+          "stop_fraction": 0.5,
+          "tp_pct": 4.0,
+          "max_minutes": 4320,
+          "trail_fraction": 0.0,
+          "mtd_gate": 0.0
+        }
+      ],
+      "month_ceiling": 1000,
+      "daily_limit": 1,
+      "loss_guard": 3000
+    }
+  ],
+  "baseline_preserved": "V19 50x locked and unchanged; only 100x and 200x searched",
+  "funding": "observed-rate proxies only, signed and debit-only",
+  "margin": "exact isolated 1/leverage; 0.25% MMR, no extra collateral",
+  "stop_fill": "adverse-first mark and trade OHLC",
+  "november": "Previously examined partial month; all selected V20 profiles are development-optimized, not holdout",
+  "genuine_forward": "not available",
+  "return_units": "normalized points, not account returns",
+  "candle_count": 963030
+}
