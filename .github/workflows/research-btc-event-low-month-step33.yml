@@ -1,0 +1,25 @@
+name: BTCUSD Step33 - weak month event overlay
+on:
+  push:
+    branches: [research/btc-event-low-month-step33]
+    paths: [scripts/research_btc_event_low_month_step33.py, .github/workflows/research-btc-event-low-month-step33.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_event_low_month_step33.py
+      - run: python scripts/research_btc_event_low_month_step33.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-step33-weak-month-event-overlay
+          path: analysis/btc_event_low_month_step33/
