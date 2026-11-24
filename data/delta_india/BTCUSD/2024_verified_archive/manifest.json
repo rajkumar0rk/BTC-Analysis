@@ -24,10 +24,10 @@
     },
     "trade_1m": {
       "expected": 527040,
-      "observed": 500478,
-      "missing": 26562,
-      "complete_months": 10,
-      "recovered_this_run": 246,
+      "observed": 500735,
+      "missing": 26305,
+      "complete_months": 11,
+      "recovered_this_run": 257,
       "requests_this_run": 17,
       "request_errors": 0
     }
@@ -39,10 +39,10 @@
       "expected": 44640,
       "original": 13124,
       "recovered": 1748,
-      "observed": 18171,
-      "missing": 26469,
+      "observed": 18335,
+      "missing": 26305,
       "requests": 891,
-      "sha256": "55757697ea3c18127a70a1e49d3355cbc9ec7c8d44d345eaee39c76697befd94",
+      "sha256": "97e8daa3a4028526f3621aaadbadf0c81a58d3b00723234964f83fa6d9b4d4c8",
       "errors": [],
       "gaps": [
         [
@@ -52,10 +52,6 @@
         [
           1705072260,
           1705394640
-        ],
-        [
-          1705470960,
-          1705480740
         ],
         [
           1705590840,
@@ -135,17 +131,12 @@
       "expected": 41760,
       "original": 41189,
       "recovered": 378,
-      "observed": 41667,
-      "missing": 93,
+      "observed": 41760,
+      "missing": 0,
       "requests": 23,
-      "sha256": "a033ff236d2b23d38f981a58d1ad717089ef693ff3bd68d998390b5d16992704",
+      "sha256": "362686fe69d17209716246d0e8afae4fa836b59cf50432f6695ed783bcce4d08",
       "errors": [],
-      "gaps": [
-        [
-          1706774280,
-          1706779800
-        ]
-      ],
+      "gaps": [],
       "passes": [
         {
           "width": 1998,
