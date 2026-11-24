@@ -75,7 +75,7 @@ def load(stage):
         z=pd.concat(parts).sort_index()
         # Prior funding observation for the first execution hour.
         a=start-pd.Timedelta(hours=1) if step==3600 else start
-        z=z.loc[(z.index>=a)&(z.index<end)]
+        z=z.loc[(z.index>=a)&(z.index<(end.floor("h") if step==3600 else end))]
         # End of IST year is half-hour UTC; funding needs only prior hours.
         expected=pd.date_range(a,end-pd.Timedelta(seconds=step),freq="min" if step==60 else "h")
         if step==3600:expected=pd.date_range(a,end.floor("h")-pd.Timedelta(hours=1),freq="h")
