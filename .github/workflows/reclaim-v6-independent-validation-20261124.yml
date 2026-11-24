@@ -1,0 +1,271 @@
+name: Reclaim V6 independent full validation
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-v6-independent-validation-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load updated November archive from main only
+        run: |
+          git fetch --depth=1 origin main
+          git restore --source=FETCH_HEAD -- data/delta_india/BTCUSD/1m/2026-11.csv.gz
+          git hash-object data/delta_india/BTCUSD/1m/2026-11.csv.gz
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas
+      - name: Independently regenerate signals and replay both paths
+        shell: bash
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import json, pathlib
+          import pandas as pd
+          import numpy as np
+          from research_st_ema20_initial_sl_grid_20261122 import eng, run, MONTHS, PATHS
+          from research_st_ema20_reclaim_loss_months_20261122 import indicator_features, signal_table
+          e=eng()
+          e.smoke_test()
+          m,h,nfiles=e.load()
+          print("ARCHIVE_COVERAGE",m.index.min(),m.index.max(),flush=True)
+          h=indicator_features(e.features(h))
+          entries=e.entry_candidates(m,h,"reclaim")
+          f=signal_table(entries,h)
+          ref=pd.read_csv("analysis/st_ema20_reclaim_loss_months_20261122/signal_entry_features.csv")
+          eligible=f.volume_ratio.ge(1.25)
+          ff=f.loc[eligible & f.entry_utc.map(lambda x: pd.Timestamp(x)<pd.Timestamp('2026-11-21T00:00:00Z'))].reset_index(drop=True)
+          assert len(ff)==len(ref)==62
+          assert ff.entry_utc.tolist()==ref.entry_utc.tolist()
+          assert ff.side.tolist()==ref.side.tolist()
+          for col in ["volume_ratio","adx14","dir_rsi14","ema_gap_pct","ema_slope_pct","supertrend_gap_pct","atr_pct","atr_expansion","hourly_body_atr","hourly_range_atr"]:
+              np.testing.assert_allclose(ff[col],ref[col],rtol=1e-8,atol=1e-8)
+          print("SOURCE CHECK",len(m),len(h),nfiles,"ALL CANDIDATES",len(entries),"FEATURES MATCH",len(ff),flush=True)
+          def v4(r):
+              v1=r.ema_gap_pct<=1 and r.ema_slope_pct>=-.2 and r.supertrend_gap_pct>=.5
+              v2=v1 and (r.adx14<=20 or r.hourly_range_atr<=1 or r.ema_gap_pct>=.15) and r.dir_rsi14<=60
+              g3=r.adx14>=35 and r.ema_slope_pct<=.1
+              g4=r.adx14>=25 and r.supertrend_gap_pct>=1.5
+              if not (v2 or (v1 and g3) or g4): return 0
+              if r.dir_rsi14>=52 and r.hourly_body_atr<=.25: return .26
+              if r.adx14>=35 and r.atr_pct<=.75: return .9
+              if r.adx14<=30 and r.atr_pct<=.3: return .55
+              if g4: return .18
+              if g3: return .3
+              return None
+          def v5(r):
+              if r.volume_ratio<1.25:
+                  if r.volume_ratio<=.45 and r.atr_pct>=.4 and r.atr_expansion<=.85: return 1.
+                  if r.volume_ratio>=.8 and .6<=r.atr_pct<=.8: return 2.
+                  return 0
+              if not np.isfinite(r.volume_ratio): return 0
+              x=v4(r)
+              if x!=0 and r.adx14<=15 and r.ema_slope_pct<=.05: x=.38
+              if x!=0 and r.adx14>=25 and r.supertrend_age_hours<=6: x=0
+              if x!=0 and r.volume_ratio>=1.5 and r.adx14>=40: x=1.9
+              if r.dir_rsi14>=60 or r.supertrend_gap_pct<=.5: x=.33
+              if x!=0 and r.ema_slope_pct<=-.1 and r.atr_expansion<=.8: x=.185
+              return x
+          def v6(r):
+              x=v5(r)
+              if x!=0 and r.dir_rsi14>=55 and r.hourly_range_atr>=1.5:x=.3
+              if r.atr_pct<=.55 and r.supertrend_gap_pct>=1.:x=.7
+              if x==0 and r.atr_pct>=.45 and r.atr_expansion>=1.2:x=.55
+              if x!=0 and .55<=r.volume_ratio<=.8:x=1.2
+              return x
+          op,hi,lo,cl=(m[k].to_numpy(float) for k in ["open","high","low","close"])
+          hs=h.side.to_numpy()
+          def replay(ev,path,tp):
+              side=int(ev["side"]); j0=int(ev["entry_j"]); entry=float(ev["entry"]); mid=entry-side*e.SLIP
+              stop=entry-side*entry*.02
+              target=None if tp is None else entry+side*entry*tp/100
+              flips=np.flatnonzero(hs[j0//60:]!=side)
+              end=min((j0//60+int(flips[0])+1)*60,len(m)) if len(flips) else len(m)
+              def finish(j,x,reason):
+                  fill=x-side*e.SLIP
+                  gross=e.QTY*side*(fill-entry)
+                  fees=e.QTY*e.FEE*(entry+fill)
+                  return dict(entry_utc=m.index[j0],exit_utc=m.index[j],side=side,entry_price=entry,exit_price=fill,net_usd=round(gross-fees,6),fees_usd=fees,reason=reason,tp=tp,cycle=ev["cycle"])
+              for j in range(j0,end):
+                  nodes=e.bar_path(op[j],hi[j],lo[j],cl[j],path)
+                  active=j!=j0 or side*(nodes[0]-mid)>=-1e-9
+                  if j!=j0 and side*(nodes[0]-stop)<-1e-9: return finish(j,nodes[0],"stop_gap")
+                  if active and target is not None and side*(nodes[0]-target)>=-1e-9: return finish(j,target,"fixed_tp")
+                  for a,b in zip(nodes,nodes[1:]):
+                      if not active:
+                          if side*(b-a)<=0 or side*(b-mid)<-1e-9: continue
+                          assert side*(a-mid)<=1e-9
+                          a=mid; active=True
+                      if target is not None and side*(b-a)>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:
+                          return finish(j,target,"fixed_tp")
+                      reached,stop,_,hit=e.next_stop_on_segment(side,entry,a,b,stop,(2.,3.,5.))
+                      if hit: return finish(j,reached,"stop")
+                  assert active
+              if end<len(m): return finish(end,op[end],"supertrend_flip")
+              return None
+          # Compare the independently regenerated baseline entries against both archived paths.
+          audit=pd.read_csv("analysis/st_ema20_reclaim_loss_months_20261122/baseline_trade_feature_audit.csv")
+          for path in PATHS:
+              for k,i in enumerate(np.flatnonzero(eligible & f.entry_utc.map(lambda x: pd.Timestamp(x)<pd.Timestamp('2026-11-21T00:00:00Z')))):
+                  z=replay(entries[i],path,None)
+                  old=audit[(audit.path==path)&(audit.signal_entry_id==k)].iloc[0]
+                  assert abs(z["net_usd"]-old.net_usd)<1e-6+1e-10
+                  assert z["exit_utc"]==pd.Timestamp(old.exit_utc)
+          print("BASELINE 124 TRADE PATHS MATCH",flush=True)
+          out=pathlib.Path("analysis/reclaim_v6_independent_validation_20261124");out.mkdir(parents=True,exist_ok=True)
+          expected=[2.838769,7.327540,2.392312,1.045083,4.006163,5.844546,5.701332,3.384115,1.125638,6.226084,1.625956,3.752333,1.657403,1.397768,1.803957,2.100859,3.235262,1.517107,3.264914,2.797761,1.031891,1.616864]
+          summaries=[]; monthly=[]; alltrades=[]
+          for name in ["V5","V6"]:
+              for path in PATHS:
+                  trades=[]; open_count=0
+                  for i,ev in enumerate(entries):
+                      r=f.iloc[i]
+                      if name=="V4":
+                          tp=v4(r) if r.volume_ratio>=1.25 else 0
+                      else:
+                          tp=v6(r) if name=="V6" else v5(r)
+                      if tp==0: continue
+                      if name=="V5_WEEKDAYS" and m.index[ev["entry_j"]].tz_convert("Asia/Kolkata").dayofweek>=5: continue
+                      z=replay(ev,path,tp)
+                      if z is None: open_count+=1; continue
+                      trades.append(z)
+                  t=pd.DataFrame(trades).sort_values("exit_utc")
+                  t["month"]=t.exit_utc.dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")
+                  t["weekend_entry"]=t.entry_utc.dt.tz_convert("Asia/Kolkata").dt.dayofweek>=5
+                  t["profile"]=name;t["path"]=path
+                  alltrades.append(t)
+                  if name=="V5":
+                      print("NOVEMBER_TRADES",path, t.loc[t.month=="2026-11",["entry_utc","exit_utc","side","entry_price","exit_price","net_usd","tp","reason","weekend_entry"]].to_json(orient="records",date_format="iso"),flush=True)
+                  a=t[t.month.isin(MONTHS)].copy()
+                  mon=a.groupby("month").net_usd.sum().reindex(MONTHS,fill_value=0.)
+                  eq=100+np.cumsum(a.net_usd.to_numpy())
+                  peaks=np.maximum.accumulate(np.r_[100.,eq])[1:]
+                  dd=float(np.max(100*(peaks-eq)/peaks))
+                  chronological=t.sort_values("entry_utc")
+                  overlap=int((chronological.entry_utc<chronological.exit_utc.shift()).sum())
+                  row=dict(profile=name,path=path,net=float(mon.sum()),min_month=float(mon.min()),months_pos=int((mon>0).sum()),months_ge_1=int((mon>=1).sum()),trades=len(a),wins=int((a.net_usd>0).sum()),losses=int((a.net_usd<0).sum()),dd=dd,weekend_trades=int(a.weekend_entry.sum()),overlaps=overlap,november=float(t.loc[t.month=="2026-11","net_usd"].sum()),still_open=open_count)
+                  if name=="V5" and path==PATHS[0]:row["max_abs_monthly_difference_vs_claim"]=float(np.max(np.abs(mon.to_numpy()-np.array(expected))))
+                  if name=="V6":
+                      assert row["months_ge_1"]==22 and row["overlaps"]==0
+                  summaries.append(row)
+                  print("SUMMARY",json.dumps(row),flush=True)
+                  for mo,pnl in mon.items():
+                      monthly.append(dict(profile=name,path=path,month=mo,net_usd=float(pnl)))
+                      print("MONTH",name,path,mo,round(float(pnl),6),flush=True)
+          pd.DataFrame(summaries).to_csv(out/"summary.csv",index=False)
+          pd.DataFrame(monthly).to_csv(out/"monthly.csv",index=False)
+          pd.concat(alltrades).to_csv(out/"trades.csv",index=False)
+          print("FUNDING ARCHIVE COLUMNS",pd.read_csv("data/delta_india/BTCUSD/institutional/history/funding_1h/2025-01.csv.gz",nrows=3).to_string(index=False),flush=True)
+          # Advanced historical checks; November is explicitly excluded from acceptance.
+          original_tp = v6
+          def run_advanced(path,slip=5,fee=.00059,tp_scale=1.,sl_pct=.02,feature_shift=0.,delay=0):
+              trades=[]; events=[]; balance=100.; peak=100.; dd=0.; min_equity=100.; min_margin_buffer=1e9; max_mae=0.; active_until=-1; blocked=0
+              for i,ev in enumerate(entries):
+                  r=f.iloc[i].copy()
+                  if feature_shift:
+                      for col in ["volume_ratio","atr_pct","atr_expansion","adx14","dir_rsi14","ema_gap_pct","supertrend_gap_pct","hourly_body_atr","hourly_range_atr"]:
+                          r[col]*=1+feature_shift
+                  tp=original_tp(r)
+                  if tp==0: continue
+                  if tp is not None: tp*=tp_scale
+                  side=int(ev["side"]); j0=int(ev["entry_j"])+delay
+                  if j0>=len(m): continue
+                  if m.index[j0].tz_convert("Asia/Kolkata").strftime("%Y-%m")>"2026-10": continue
+                  if j0<=active_until: blocked+=1; continue
+                  mid=float(ev["entry"])-side*e.SLIP if not delay else op[j0]
+                  entry=mid+side*slip; stop=entry-side*entry*sl_pct
+                  target=None if tp is None else entry+side*entry*tp/100
+                  flips=np.flatnonzero(hs[j0//60:]!=side)
+                  end=min((j0//60+int(flips[0])+1)*60,len(m)) if len(flips) else len(m)
+                  mae=0.; mfe=0.
+                  def mark(px):
+                      nonlocal peak,dd,min_equity,min_margin_buffer,mae,mfe
+                      pnl=e.QTY*side*(px-entry)
+                      equity=balance+pnl-e.QTY*fee*(entry+px)-e.QTY*slip
+                      peak=max(peak,equity);dd=max(dd,100*(peak-equity)/peak);min_equity=min(min_equity,equity)
+                      min_margin_buffer=min(min_margin_buffer,equity-e.QTY*px*.005)
+                      mae=max(mae,-pnl);mfe=max(mfe,pnl)
+                  def close(j,px,reason):
+                      nonlocal balance,peak,dd,active_until,max_mae
+                      mark(px); fill=px-side*slip
+                      net=e.QTY*side*(fill-entry)-e.QTY*fee*(entry+fill)
+                      balance+=net;peak=max(peak,balance);dd=max(dd,100*(peak-balance)/peak)
+                      active_until=j;max_mae=max(max_mae,mae)
+                      trades.append(dict(entry_utc=m.index[j0],exit_utc=m.index[j],side=side,entry_price=entry,exit_price=fill,net_usd=net,mae=mae,mfe=mfe,reason=reason,tp=tp))
+                  done=False
+                  for j in range(j0,end):
+                      nodes=e.bar_path(op[j],hi[j],lo[j],cl[j],path)
+                      active=j!=j0 or delay>0 or side*(nodes[0]-mid)>=-1e-9
+                      if j!=j0 and side*(nodes[0]-stop)<-1e-9: close(j,nodes[0],"stop_gap");done=True;break
+                      if active and target is not None and side*(nodes[0]-target)>=-1e-9: close(j,target,"fixed_tp");done=True;break
+                      if active: mark(nodes[0])
+                      for a,b in zip(nodes,nodes[1:]):
+                          if not active:
+                              if side*(b-a)<=0 or side*(b-mid)<-1e-9: continue
+                              if side*(a-mid)>1e-9: raise AssertionError("entry traversal")
+                              a=mid;active=True
+                          mark(a)
+                          if target is not None and side*(b-a)>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:
+                              close(j,target,"fixed_tp");done=True;break
+                          reached,stop,_,hit=e.next_stop_on_segment(side,entry,a,b,stop,(2.,3.,5.))
+                          if hit: close(j,reached,"stop");done=True;break
+                          mark(reached)
+                      if done:break
+                      assert active
+                  if not done and end<len(m):close(end,op[end],"supertrend_flip")
+              t=pd.DataFrame(trades);t["month"]=t.exit_utc.dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")
+              t=t[t.month.isin(MONTHS)].copy()
+              mon=t.groupby("month").net_usd.sum().reindex(MONTHS,fill_value=0.)
+              return t,dict(net=float(mon.sum()),min_month=float(mon.min()),months_pos=int((mon>0).sum()),months_ge_1=int((mon>=1).sum()),trades=len(t),floating_dd_pct=dd,min_equity=min_equity,max_trade_mae_usd=max_mae,illustrative_buffer_at_half_percent_maintenance=min_margin_buffer,blocked=blocked)
+          # Funding observations are not settled payment records. Use explicitly labelled proxies.
+          def load_series(folder,col):
+              files=sorted(pathlib.Path(folder).glob("20??-??.csv.gz"))
+              frames=[]
+              for p in files:
+                  x=pd.read_csv(p,usecols=["time",col]);x.index=pd.to_datetime(x.time,unit="s",utc=True);frames.append(x[col])
+              return pd.concat(frames).sort_index().loc[lambda x:~x.index.duplicated(keep="last")]
+          funding=load_series("data/delta_india/BTCUSD/institutional/history/funding_1h","close")
+          mark_series=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","open")
+          advanced=[]; fund_rows=[]
+          for path in PATHS:
+              t,stats=run_advanced(path)
+              assert abs(stats["net"]-(63.417334 if path==PATHS[0] else 63.641463))<1e-4
+              print("ADVANCED_BASE",path,json.dumps(stats),flush=True)
+              # Payment-time scenarios are not asserted as exchange settlement history.
+              for interval in [1,8]:
+                  for convention in ["prior","at"]:
+                      rows=[];missing=0;payments=0
+                      for z in t.itertuples():
+                          times=pd.date_range(z.entry_utc.ceil("h"),z.exit_utc.floor("h"),freq="h")
+                          times=times[(times>z.entry_utc)&(times<z.exit_utc)&(times.hour%interval==0)]
+                          rates=funding.reindex(times-pd.Timedelta(hours=1) if convention=="prior" else times).to_numpy()
+                          prices=mark_series.reindex(times).to_numpy()
+                          valid=np.isfinite(rates)&np.isfinite(prices)
+                          missing+=int((~valid).sum());payments+=len(times)
+                          # API historical rate observations are in percent. No fill for missing observations.
+                          estimated=-z.side*e.QTY*float(np.sum(rates[valid]*prices[valid]/100))
+                          rows.append(dict(month=z.month,raw=z.net_usd,funding_proxy=estimated,net=z.net_usd+estimated,missing=int((~valid).sum())))
+                      q=pd.DataFrame(rows);mon=q.groupby("month").net.sum().reindex(MONTHS,fill_value=0.)
+                      result=dict(path=path,interval_hours=interval,observation=convention,settlements=payments,missing=missing,funding_proxy=float(q.funding_proxy.sum()),net=float(mon.sum()),min_month=float(mon.min()),months_pos=int((mon>0).sum()),months_ge_1=int((mon>=1).sum()),weak_months={k:round(float(v),6) for k,v in mon.items() if v<1})
+                      print("FUNDING_PROXY",json.dumps(result),flush=True);fund_rows.append(result)
+              for label,kwargs in [("slip_10",dict(slip=10)),("slip_15",dict(slip=15)),("slip_25",dict(slip=25)),("fee_plus_20pct",dict(fee=.00059*1.2)),("fee_plus_50pct",dict(fee=.00059*1.5)),("tp_minus_5pct",dict(tp_scale=.95)),("tp_plus_5pct",dict(tp_scale=1.05)),("sl_minus_10pct",dict(sl_pct=.018)),("sl_plus_10pct",dict(sl_pct=.022)),("features_minus_1pct",dict(feature_shift=-.01)),("features_plus_1pct",dict(feature_shift=.01)),("entry_delay_1m",dict(delay=1))]:
+                  _,q=run_advanced(path,**kwargs)
+                  row=dict(path=path,scenario=label,**q);advanced.append(row)
+                  assert q["months_ge_1"]==22, (path,label,q)
+                  print("ADVANCED_STRESS",json.dumps(row),flush=True)
+          pd.DataFrame(advanced).to_csv(out/"advanced_stress.csv",index=False)
+          pd.DataFrame(fund_rows).to_csv(out/"funding_proxy.csv",index=False)
+          print("ADVANCED_VERIFICATION_COMPLETE",flush=True)
+          print("VERIFICATION_COMPLETE",flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reclaim-v6-independent-validation
+          path: analysis/reclaim_v6_independent_validation_20261124/
+          if-no-files-found: warn
