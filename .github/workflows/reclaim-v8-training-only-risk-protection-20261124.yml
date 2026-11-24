@@ -461,9 +461,9 @@ jobs:
                       row=evaluate(yr,ids,sc,cfg,collect=True)
                       trades=row.pop("trade_ledger")
                       losers=[z for z in trades if z["net"]<0]
-                      print("TRADE_LOSS_DIAGNOSTIC",json.dumps(dict(label=label,year=yr,scenario=sc,losers=len(losers),initial_stop_losses=sum(z["initial_stop"] for z in losers),losses_reaching_1R=sum(z["mfe_r"]>=1 for z in losers),losses_reaching_1_5R=sum(z["mfe_r"]>=1.5 for z in losers),losses_reaching_2R=sum(z["mfe_r"]>=2 for z in losers),median_loss_mfe_r=float(np.median([z["mfe_r"] for z in losers])) if losers else 0.,net_loss=sum(z["net"] for z in losers))),flush=True)
+                      print("TRADE_LOSS_DIAGNOSTIC",json.dumps(dict(label=label,year=yr,scenario=sc,losers=len(losers),initial_stop_losses=int(sum(z["initial_stop"] for z in losers)),losses_reaching_1R=int(sum(z["mfe_r"]>=1 for z in losers)),losses_reaching_1_5R=int(sum(z["mfe_r"]>=1.5 for z in losers)),losses_reaching_2R=int(sum(z["mfe_r"]>=2 for z in losers)),median_loss_mfe_r=float(np.median([z["mfe_r"] for z in losers])) if losers else 0.,net_loss=float(sum(z["net"] for z in losers)))),flush=True)
                       ledgers.extend(dict(label=label,year=yr,scenario=list(sc),**z) for z in trades)
-          (out/"trade_ledger.json").write_text(json.dumps(ledgers,indent=2))
+          (out/"trade_ledger.json").write_text(json.dumps(ledgers,indent=2,default=lambda x:x.item() if isinstance(x,np.generic) else (_ for _ in ()).throw(TypeError(type(x).__name__))))
           print("RISK_PROTECTION_OPT_COMPLETE",flush=True)
           PY
       - uses: actions/upload-artifact@v4
