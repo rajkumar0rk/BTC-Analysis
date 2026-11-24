@@ -1,0 +1,47 @@
+name: V14 causal chronological BTCUSD replay
+on:
+  push:
+    branches: ['research/v14-chronological-candle-replay-20261124']
+    paths:
+      - 'scripts/research_v14_chronological_candle_replay.py'
+      - '.github/workflows/research-v14-chronological-replay.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Load source engines and immutable archive
+        run: |
+          git fetch --depth=1 origin main research/st-ema20-reclaim-loss-month-filters-20261122-v1 research/btc-shock-only-donchian-20261121 research/st-ema20-1h-reversal-only-20261122
+          git checkout origin/main -- data/delta_india/BTCUSD/1m
+          git checkout origin/research/st-ema20-reclaim-loss-month-filters-20261122-v1 -- scripts/backtest_st_ema20_large_percent_locks.py scripts/research_st_ema20_reclaim_loss_months_20261122.py scripts/research_st_ema20_initial_sl_grid_20261122.py
+          git checkout origin/research/btc-shock-only-donchian-20261121 -- scripts/research_btc_regime_attribution_20261121.py
+          git checkout origin/research/st-ema20-1h-reversal-only-20261122 -- scripts/backtest_st_ema20_reversal_only.py
+          git reset
+          python -m pip install numpy pandas tabulate
+      - name: Compile and run chronological replay
+        run: |
+          python -m py_compile scripts/research_v14_chronological_candle_replay.py
+          python -u scripts/research_v14_chronological_candle_replay.py
+      - name: Publish only replay reports
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/v14_chronological_candle_replay
+          git commit -m 'Report chronological BTCUSD candle replay'
+          git push origin HEAD:research/v14-chronological-candle-replay-20261124
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v14-causal-replay
+          path: analysis/v14_chronological_candle_replay/
