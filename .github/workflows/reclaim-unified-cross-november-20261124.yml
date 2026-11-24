@@ -207,14 +207,19 @@ jobs:
                           prices=mark_series.reindex(times).to_numpy(float)
                           cash=-z.side*.001*rates*prices*np.r_[np.full(len(pre),1./480),np.ones(len(post))]/100
                           adverse=(mark_lo if z.side==1 else mark_hi).reindex(idx).to_numpy(float)
-                          missing+=int((~np.isfinite(cash)).sum()+(~np.isfinite(adverse)).sum())
-                          assert np.isfinite(cash).all() and np.isfinite(adverse).all()
-                          debit=float(np.minimum(cash,0).sum());n=.001*z.entry_price;shock=adverse*(1-z.side*.005)
-                          equity=wallet-n*fee+debit+.001*z.side*(shock-z.entry_price)
-                          maint=.001*shock*(mm+fee+mm*penalty*1.18)
-                          bad=int((equity<=maint).any() or n*(1+fee)>wallet)
+                          # Pre-November wallet reconstruction requires funding and trade cash only.
+                          # Do not assert historical mark coverage outside the requested risk window.
+                          assert np.isfinite(cash).all(), ("funding coverage",str(z.entry_utc),str(z.exit_utc))
+                          debit=float(np.minimum(cash,0).sum());n=.001*z.entry_price
                           if z.exit_utc>=november_start:
-                              risk+=bad;min_buffer=min(min_buffer,float((equity-maint).min()))
+                              missing+=int((~np.isfinite(adverse)).sum())
+                              if np.isfinite(adverse).all():
+                                  shock=adverse*(1-z.side*.005)
+                                  equity=wallet-n*fee+debit+.001*z.side*(shock-z.entry_price)
+                                  maint=.001*shock*(mm+fee+mm*penalty*1.18)
+                                  risk+=int((equity<=maint).any() or n*(1+fee)>wallet)
+                                  min_buffer=min(min_buffer,float((equity-maint).min()))
+                              else:print("NOVEMBER_MARK_MISSING",str(z.entry_utc),str(z.exit_utc),flush=True)
                           for mo,g in pd.Series(cash,index=times).groupby(times.tz_convert("Asia/Kolkata").strftime("%Y-%m")):
                               if mo=="2026-11":nov_debit+=float(g.clip(upper=0).sum())
                           if z.month=="2026-11":
@@ -223,7 +228,7 @@ jobs:
                           elif z.exit_utc<november_start:prior_pnl+=z.net_usd+debit
                           wallet+=z.net_usd+debit
                       net=float(nov.net_usd.sum())+nov_debit
-                      row=dict(mode=mode,path=path,scenario=label,start=str(november_start),end_exclusive=str(data_end),closed=len(nov),wins=win,losses=loss,net_after_fees=float(nov.net_usd.sum()),november_estimated_funding_debit=nov_debit,net_after_estimated_funding=net,prior_realized_wallet=100+prior_pnl,ending_realized_wallet=wallet,risk=risk,missing=missing,overlaps=st["blocked"],guard_skips=st["guard_skips"],open_positions=st["open_positions"],status="PARTIAL_MONTH_TARGET_MET" if net>=1 and risk==0 else "PARTIAL_MONTH_TARGET_NOT_MET")
+                      row=dict(mode=mode,path=path,scenario=label,start=str(november_start),end_exclusive=str(data_end),closed=len(nov),wins=win,losses=loss,net_after_fees=float(nov.net_usd.sum()),november_estimated_funding_debit=nov_debit,net_after_estimated_funding=net,prior_realized_wallet=100+prior_pnl,ending_realized_wallet=wallet,risk=risk,missing=missing,overlaps=st["blocked"],guard_skips=st["guard_skips"],open_positions=st["open_positions"],status="MISSING_MARK_DATA" if missing else "PARTIAL_MONTH_TARGET_MET" if net>=1 and risk==0 else "PARTIAL_MONTH_TARGET_NOT_MET")
                       results.append(row)
                       print("NOVEMBER_RESULT",json.dumps(row),flush=True)
                       if label=="base": print("NOVEMBER_TRADES",json.dumps(dict(mode=mode,path=path,trades=details)),flush=True)
