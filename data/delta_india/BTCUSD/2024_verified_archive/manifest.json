@@ -24,11 +24,11 @@
     },
     "trade_1m": {
       "expected": 527040,
-      "observed": 497079,
-      "missing": 29961,
+      "observed": 498641,
+      "missing": 28399,
       "complete_months": 10,
-      "recovered_this_run": 2126,
-      "requests_this_run": 914,
+      "recovered_this_run": 1562,
+      "requests_this_run": 22,
       "request_errors": 0
     }
   },
@@ -39,10 +39,10 @@
       "expected": 44640,
       "original": 13124,
       "recovered": 1748,
-      "observed": 14872,
-      "missing": 29768,
+      "observed": 16334,
+      "missing": 28306,
       "requests": 891,
-      "sha256": "485515db4f6cbf9bd1f26cbc85c2b4f13e16e2fc5ad2877ca1284aec466b3f7a",
+      "sha256": "b3e5891b817473626896c7f8f3b49685fa1dd50cb4820e68e4a596ec9cea37ea",
       "errors": [],
       "gaps": [
         [
@@ -50,28 +50,20 @@
           1704881940
         ],
         [
-          1704934440,
-          1704953880
-        ],
-        [
           1705054320,
           1705394640
         ],
         [
-          1705449600,
+          1705456260,
           1705480740
         ],
         [
-          1705554000,
+          1705576080,
           1705642680
         ],
         [
           1705708800,
           1706008140
-        ],
-        [
-          1706253120,
-          1706292540
         ],
         [
           1706373000,
@@ -143,14 +135,14 @@
       "expected": 41760,
       "original": 41189,
       "recovered": 378,
-      "observed": 41567,
-      "missing": 193,
+      "observed": 41667,
+      "missing": 93,
       "requests": 23,
-      "sha256": "fc204561724bb87110c40dd705c24db103eece78cf69892f0c6a8d9f24ad10fc",
+      "sha256": "a033ff236d2b23d38f981a58d1ad717089ef693ff3bd68d998390b5d16992704",
       "errors": [],
       "gaps": [
         [
-          1706768280,
+          1706774280,
           1706779800
         ]
       ],

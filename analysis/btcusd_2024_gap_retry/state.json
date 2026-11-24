@@ -1,0 +1,19 @@
+{
+  "round": 1,
+  "history": [
+    {
+      "round": 1,
+      "utc": "2026-11-24T11:02:36.475608+00:00",
+      "window": 1997,
+      "offset_seconds": 58140,
+      "requests": 22,
+      "errors": 0,
+      "recovered": 1562,
+      "remaining": 28399
+    }
+  ],
+  "no_progress": 0,
+  "complete": false,
+  "remaining": 28399,
+  "status": "retryable"
+}
