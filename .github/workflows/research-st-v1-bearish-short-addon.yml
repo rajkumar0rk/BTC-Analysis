@@ -1,0 +1,41 @@
+name: BTC ST V1 keep both long legs and test bearish short add-on
+on:
+  push:
+    branches:
+      - research/st-v1-short-complement-preserve-both-20261124
+    paths:
+      - scripts/research_st_v1_bearish_short_addon.py
+      - .github/workflows/research-st-v1-bearish-short-addon.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Backtest short add-on while strictly preserving both locked long strategies
+        run: python -u scripts/research_st_v1_bearish_short_addon.py
+      - name: Archive all backtest output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-st-v1-bearish-short-addon-monthly-test
+          path: analysis/st_v1_bearish_short_addon_preserve_both_20261124/
+          if-no-files-found: warn
+      - name: Commit verified research to working branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_v1_bearish_short_addon_preserve_both_20261124/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: causal bearish short complement core-preservation audit"
+            git push origin HEAD:research/st-v1-short-complement-preserve-both-20261124
+          fi
