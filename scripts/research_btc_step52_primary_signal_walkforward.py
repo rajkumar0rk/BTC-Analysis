@@ -233,7 +233,7 @@ def main():
                 if psignal=="extension":
                     side[i]=-shock if extended else revert
                 elif psignal=="trend_conditioned":
-                    side[i]=-shock if extended and shock!=trend else trend
+                    side[i]=-shock if extended and shock==trend else trend
                 elif psignal=="confirmed":
                     # Wait for the next completed five minutes; enter
                     # at its successor open, never the confirmation close.
