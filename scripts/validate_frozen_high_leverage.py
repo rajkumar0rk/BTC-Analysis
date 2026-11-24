@@ -140,7 +140,7 @@ def main():
             del short
         folder=Path("analysis")/source
         reference=pd.read_csv(folder/"summary.csv");ledger=pd.read_csv(folder/"trades_200.csv")
-        reference=reference[reference.track=="known_november_development"];ledger=ledger[ledger.track=="known_november_development"]
+        reference=reference[(reference.track=="known_november_development")&(reference.leverage==lev)];ledger=ledger[(ledger.track=="known_november_development")&(ledger.leverage==lev)]
         for period,first,last,oldperiod in (("train",0,te,"train"),("november",te,end,"november_known_development")):
             for mode in (0,1):
                 label="signed_proxy" if mode==0 else "debit_only"
