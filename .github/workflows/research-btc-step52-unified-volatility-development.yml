@@ -1,0 +1,37 @@
+name: BTC Step52 unified volatility development
+on:
+  push:
+    branches: [research/btc-step52-unified-volatility-development]
+    paths:
+      - scripts/research_btc_step52_unified_volatility_development.py
+      - .github/workflows/research-btc-step52-unified-volatility-development.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load verified recovered archive and record snapshot
+        run: |
+          git fetch --depth=1 origin research/btcusd-2024-gap-retry-20261124
+          git rev-parse FETCH_HEAD
+          git checkout FETCH_HEAD -- data/delta_india/BTCUSD/2024_verified_archive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_step52_unified_volatility_development.py
+      - run: python scripts/research_btc_step52_unified_volatility_development.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: step52-unified-volatility-development
+          path: analysis/btc_step52_unified_volatility_development/
