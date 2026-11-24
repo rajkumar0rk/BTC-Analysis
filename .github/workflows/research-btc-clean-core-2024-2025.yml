@@ -1,0 +1,35 @@
+name: BTC clean core 2024 and 2025
+on:
+  push:
+    branches: [research/btc-clean-core-2024-2025]
+    paths:
+      - scripts/research_btc_clean_core_2024_2025.py
+      - .github/workflows/research-btc-clean-core-2024-2025.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        year: [2024, 2025]
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_clean_core_2024_2025.py
+      - run: python scripts/research_btc_clean_core_2024_2025.py --year ${{ matrix.year }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: clean-core-${{ matrix.year }}
+          path: analysis/btc_clean_core/
