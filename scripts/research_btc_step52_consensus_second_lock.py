@@ -765,8 +765,8 @@ def main():
     print("SECOND_LOCK_REFERENCE",json.dumps(dict(base=base,**ref)),flush=True)
     # The new engine with unreachable second activation must reproduce
     # the original first-lock engine exactly for every trade.
-    baseparams=np.column_stack([np.ones(n),risk,4*risk,np.minimum(holding[base],300-(st-anchors)),activation_multiple(base)*risk,lock_multiple(base)*risk,np.zeros(n)])
-    h0,g0,w0=replay_second(o,h,l,st,sd,baseparams,baseparams[:,3].astype(np.int64),np.full(n,100.),np.zeros(n))
+    baseparams=np.column_stack([np.ones(len(st)),risk,4*risk,np.minimum(holding[base],300-(st-anchors)),activation_multiple(base)*risk,lock_multiple(base)*risk,np.zeros(len(st))])
+    h0,g0,w0=replay_second(o,h,l,st,sd,baseparams,baseparams[:,3].astype(np.int64),np.full(len(st),100.),np.zeros(len(st)))
     assert np.array_equal(h0,hh) and np.array_equal(g0,gg)
     for cfg in settings:
         base,mode,look,cut=cfg
@@ -778,7 +778,7 @@ def main():
         multiple=lock_multiple(base)
         # If the reference never reached second activation before exit,
         # its entire path must be unchanged.
-        same=np.ones(n,bool)
+        same=np.ones(len(st),bool)
         if mode=="second":
             for i,j in enumerate(st):
                 end=j+bh[i]
