@@ -1,0 +1,14 @@
+{
+  "baseline_parity": true,
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "thresholds_prior_atr": [
+    0.5,
+    1.0,
+    2.0
+  ],
+  "risk_pct": 0.03,
+  "exposure_cap": 3.0,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
