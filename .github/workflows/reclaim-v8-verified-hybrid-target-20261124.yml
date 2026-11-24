@@ -282,9 +282,9 @@ jobs:
               return mon,counts,wins,losses,flat,dd,skips,overlaps,boundary,missing,markmissing,funding,fees,marginrisk,cash,peak
           # Check that an original target is unchanged unless the extension can protect profit.
           def smoke_hybrid():
-              o=np.array([100.,101.5]);h=np.array([101.8,102.5]);l=np.array([99.9,101.]);c=np.array([101.5,102.])
+              o=np.array([100.,101.5]);h=np.array([101.8,102.5]);l=np.array([99.9,101.4]);c=np.array([101.5,102.])
               empty=np.empty(0,dtype=float)
-              args=(o,h,l,c,0,1,100.,2,2.,1.,0,0.,empty,0.,.5)
+              args=(o,h,l,c,0,1,100.,2,2.,1.,1,0.,empty,0.,.5)
               baseline=replay(*args,0.,0.,0.,False)
               extended=replay(*args,1.,1.,2.,False)
               blocked=replay(*args,4.,1.,2.,False)
