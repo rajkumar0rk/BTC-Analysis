@@ -176,7 +176,7 @@ jobs:
                           if q.index[k]<eligible or pd.Timestamp(v["signal"])<eligible:continue
                           sd=int(v["side"]);f=np.flatnonzero(hs[k//60:]!=sd)
                           endj=min((k//60+int(f[0])+1)*60,len(q)) if len(f) else len(q)
-                      if v.get("extra",0):endj=min(k+24*60,len(q))
+                          if v.get("extra",0):endj=min(k+24*60,len(q))
                           j.append(k);s.append(sd);mid.append(float(v["entry"])-sd*e.SLIP);ends.append(endj);cycles.append(v["cycle"])
                           row=h.loc[pd.Timestamp(v["signal"])]
                           features.append([float(row[x]) for x in feature_names[:-2]]+[float(v.get("extra",0)),float(v.get("mean_distance_pct",0))])
