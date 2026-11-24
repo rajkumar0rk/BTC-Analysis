@@ -43,7 +43,11 @@ def train():
         for label,a,b in v.FOLDS+[("continuous","2024-02-01","2026-01-01")]:
             p=v.period(m,ctx,events,a,b)
             for lev,(sc,mode) in itertools.product((20,50,200),((v.SC[0],0),(v.SC[1],1))):
-                r=v.run(ctx,p,dict(CFG,early_hours=hours,hold_minutes=days*1440),lev,sc,mode)
+                r=v.run(ctx,p,dict(CFG,early_hours=hours,hold_minutes=days*1440),lev,sc,mode,audit=True)
+                ledger=r.pop("ledger")
+                executed=ledger[ledger[:,0]==3]
+                durations=executed[:,2]-executed[:,1]+1
+                r.update(trades_held_7d=int((durations>=7*1440).sum()),holding_limit_exits=int(((executed[:,10]==3)&(durations>=days*1440)).sum()))
                 us=r.pop("monthly_usd");re=r.pop("monthly_returns");r.pop("monthly_points")
                 if label=="continuous":
                     r.update(year2024_usd=float(us[:11].sum()),year2025_usd=float(us[11:].sum()))
@@ -66,7 +70,7 @@ def train():
     for name,threshold,cap,hours,days in CAPS:
         x=result(name,"base");y=result(name,"combined");a=df[df.profile==name]
         passed=bool(name.startswith("V58") and x.net_usd>=high.net_usd and x.positive_months>base.positive_months and x.months_ge_1pct>=base.months_ge_1pct and x.closed_dd_pct<=high.closed_dd_pct and x.mark_dd_upper_pct<=high.mark_dd_upper_pct and x.year2024_usd>=base.year2024_usd and x.year2025_usd>=base.year2025_usd and y.net_usd>=stress.net_usd and (a.net_usd>0).all() and (a.liquidations==0).all())
-        ranking.append(dict(profile=name,min_expansion_atr=threshold,max_extension_atr=cap,contraction_delay_hours=hours,max_hold_days=days,net_usd=x.net_usd,positive_months=x.positive_months,months_ge_1pct=x.months_ge_1pct,closed_dd_pct=x.closed_dd_pct,mark_dd_upper_pct=x.mark_dd_upper_pct,year2024_usd=x.year2024_usd,year2025_usd=x.year2025_usd,stress_net_usd=y.net_usd,trades=x.trades,signals=x.signal_count,training_pass=passed))
+        ranking.append(dict(profile=name,min_expansion_atr=threshold,max_extension_atr=cap,contraction_delay_hours=hours,max_hold_days=days,net_usd=x.net_usd,positive_months=x.positive_months,months_ge_1pct=x.months_ge_1pct,closed_dd_pct=x.closed_dd_pct,mark_dd_upper_pct=x.mark_dd_upper_pct,year2024_usd=x.year2024_usd,year2025_usd=x.year2025_usd,stress_net_usd=y.net_usd,trades=x.trades,signals=x.signal_count,trades_held_7d=x.trades_held_7d,holding_limit_exits=x.holding_limit_exits,training_pass=passed))
     pd.DataFrame(ranking).to_csv(OUT/"training_ranking.csv",index=False)
     (OUT/"quality.json").write_text(json.dumps(dict(baseline_parity=True,training_period="2024-02 to 2025-12",validation_2026_run=False,new_configurations=2,control_profiles=['V42','V53'],hold_days=[7,10,14],contraction_delay_hours=48,min_expansion_atr=1.25,max_extension_atr=2.,risk_pct=v.RISK,exposure_cap=v.CAP,holdout_previously_examined=True,selection_bias_possible=True),indent=2))
     print(pd.DataFrame(ranking).to_string(index=False),flush=True)
