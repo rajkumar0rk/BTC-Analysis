@@ -1,0 +1,1410 @@
+{
+  "single_tests": 48940,
+  "portfolio_tests": 1077122,
+  "groups": 27,
+  "raw_signals": 12859,
+  "candles": 963030,
+  "source": "SHA-verified Delta BTCUSD 1m",
+  "result": "PASS",
+  "selected": {
+    "score": [
+      22,
+      242,
+      2011.9113267224566,
+      75282.7685501421,
+      -6215.182492665128
+    ],
+    "legs": [
+      {
+        "group": "H1_RSI30_reversal",
+        "filter": "short_ADX25",
+        "exit_spec": [
+          2,
+          4,
+          4320,
+          0,
+          0.0,
+          0
+        ],
+        "recovery_mtd_ceiling": 1e+30
+      },
+      {
+        "group": "Shock_Donchian",
+        "filter": "long_ADX25",
+        "exit_spec": [
+          1.8,
+          3.0,
+          1440,
+          1,
+          0.0,
+          0
+        ],
+        "recovery_mtd_ceiling": 1e+30
+      },
+      {
+        "group": "EMA20_ADX_reclaim",
+        "filter": "all",
+        "exit_spec": [
+          1.75,
+          6.0,
+          4320,
+          0,
+          0.0,
+          0
+        ],
+        "recovery_mtd_ceiling": 1e+30
+      },
+      {
+        "group": "H1_Donchian12",
+        "filter": "range_ADX20",
+        "exit_spec": [
+          1.8,
+          3.5,
+          1440,
+          1,
+          0.0,
+          0
+        ],
+        "recovery_mtd_ceiling": -1000.0
+      }
+    ],
+    "ceiling": 2000.0,
+    "daily_limit": 1,
+    "month_loss_guard": 8000.0
+  },
+  "top20": [
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 1e+30
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 1e+30
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 1e+30
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 1e+30
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    },
+    {
+      "score": [
+        22,
+        242,
+        2011.9113267224566,
+        75282.7685501421,
+        -6215.182492665128
+      ],
+      "legs": [
+        {
+          "group": "H1_RSI30_reversal",
+          "filter": "short_ADX25",
+          "exit_spec": [
+            2,
+            4,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "long_ADX25",
+          "exit_spec": [
+            1.8,
+            3.0,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "all",
+          "exit_spec": [
+            1.75,
+            6.0,
+            4320,
+            0,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": 1e+30
+        },
+        {
+          "group": "H1_Donchian12",
+          "filter": "range_ADX20",
+          "exit_spec": [
+            1.8,
+            3.5,
+            1440,
+            1,
+            0.0,
+            0
+          ],
+          "recovery_mtd_ceiling": -1000.0
+        }
+      ],
+      "ceiling": 2000.0,
+      "daily_limit": 1,
+      "month_loss_guard": 8000.0
+    }
+  ],
+  "fee_per_side": 0.00059,
+  "slippage_per_side": 5.0,
+  "extra_cost_per_roundtrip": true,
+  "entry_weekdays": "Mon-Fri IST",
+  "single_position": true,
+  "stop_first": true,
+  "trail_activation": "next minute",
+  "trigger_fill": "next minute open after confirmed intraminute trigger",
+  "funding": "not modeled",
+  "liquidation": "not modeled",
+  "unseen_holdout": false,
+  "trade_ledger_inputs": false,
+  "notes": "All raw signals and independent OHLC fills regenerated. Scheduler never uses future PnL to accept or reject an entry. No named-month gates. In-sample optimization, not a claim of future profits."
+}
