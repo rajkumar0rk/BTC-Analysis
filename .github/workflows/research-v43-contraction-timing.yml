@@ -1,0 +1,89 @@
+name: V43 clean 2024-2025 training and frozen 2026 validation
+on:
+  push:
+    branches: [research/v43-contraction-timing-20261124]
+    paths:
+      - scripts/research_v43_contraction_timing.py
+      - .github/workflows/research-v43-contraction-timing.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: v43-contraction-timing
+  cancel-in-progress: false
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      training_pass: ${{ steps.gate.outputs.pass }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Load historical training archive only
+        run: |
+          git fetch --depth=1 origin main research/btcusd-2024-gap-retry-20261124
+          git checkout origin/research/btcusd-2024-gap-retry-20261124 -- data/delta_india/BTCUSD/2024_verified_archive
+          git checkout origin/main -- 'data/delta_india/BTCUSD/1m/2025-*.csv.gz' 'data/delta_india/BTCUSD/institutional/history/mark_1m/2025-*.csv.gz' 'data/delta_india/BTCUSD/institutional/history/funding_1h/2025-*.csv.gz'
+          git reset
+          python -m pip install 'numpy<2.3' pandas numba tabulate
+      - name: Select single setup on 2024 and 2025 chronological folds only
+        run: |
+          python -m py_compile scripts/research_v43_contraction_timing.py
+          python -u scripts/research_v43_contraction_timing.py train
+      - name: Check training promotion gate
+        id: gate
+        run: |
+          python -c 'import json; print("pass="+str(json.load(open("analysis/v43_contraction_timing/frozen.json"))["training_pass"]).lower())' >> "$GITHUB_OUTPUT"
+      - name: Commit frozen configuration before validation
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/v43_contraction_timing
+          if ! git diff --cached --quiet; then
+            git commit -m 'Freeze V43 selection using only 2024 and 2025 training'
+            git push origin HEAD:research/v43-contraction-timing-20261124
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v43-frozen-training
+          path: analysis/v43_contraction_timing/
+          if-no-files-found: error
+  validate:
+    needs: train
+    if: needs.train.outputs.training_pass == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/v43-contraction-timing-20261124
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen config then load 2026 validation candles
+        run: |
+          test -s analysis/v43_contraction_timing/frozen.json
+          git fetch --depth=1 origin main
+          git checkout origin/main -- 'data/delta_india/BTCUSD/1m/2025-12.csv.gz' 'data/delta_india/BTCUSD/1m/2026-*.csv.gz' 'data/delta_india/BTCUSD/institutional/history/mark_1m/2025-12.csv.gz' 'data/delta_india/BTCUSD/institutional/history/mark_1m/2026-*.csv.gz' 'data/delta_india/BTCUSD/institutional/history/funding_1h/2025-12.csv.gz' 'data/delta_india/BTCUSD/institutional/history/funding_1h/2026-*.csv.gz'
+          git reset
+          python -m pip install 'numpy<2.3' pandas numba tabulate
+      - name: Run one frozen 2026 replay without search
+        run: python -u scripts/research_v43_contraction_timing.py validate
+      - name: Publish validation without changing frozen configuration
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git diff --exit-code -- analysis/v43_contraction_timing/frozen.json
+          git add analysis/v43_contraction_timing/validation*
+          if ! git diff --cached --quiet; then
+            git commit -m 'Report frozen V43 2026 validation without retuning'
+            git push origin HEAD:research/v43-contraction-timing-20261124
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v43-frozen-2026-validation
+          path: analysis/v43_contraction_timing/
+          if-no-files-found: error
