@@ -1,0 +1,359 @@
+[
+  {
+    "source": "v19_leverage_local_recovery",
+    "leverage": 50,
+    "profile": {
+      "leverage": 50,
+      "track": "known_november_development",
+      "rank": [
+        1,
+        22,
+        484,
+        1,
+        1508.3932575673932,
+        2760.8385538743346,
+        57715.84251661501,
+        -5677.812221765171,
+        0
+      ],
+      "evaluations": 1298442,
+      "legs": [
+        {
+          "group": "EMA20_ADX_reclaim_confirm1",
+          "filter": "all",
+          "stop_fraction": 0.7,
+          "tp_pct": 3,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "M5_EMA50",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.5,
+          "tp_pct": 3,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "RSI_reversal",
+          "filter": "H4_not_aligned",
+          "stop_fraction": 0.7,
+          "tp_pct": 3.5,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 1000
+        },
+        {
+          "group": "M15_squeeze24",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.35,
+          "tp_pct": 6,
+          "max_minutes": 2880,
+          "trail_fraction": 1.5,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "H1_Donchian72",
+          "filter": "long_ADX32",
+          "stop_fraction": 0.7,
+          "tp_pct": 10,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "M60_squeeze24",
+          "filter": "long_ADX28",
+          "stop_fraction": 0.6,
+          "tp_pct": 2,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "H1_RSI30_reversal_confirm5",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.15,
+          "tp_pct": 4,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 500
+        },
+        {
+          "group": "M60_squeeze24_confirm1",
+          "filter": "H4_long",
+          "stop_fraction": 0.7,
+          "tp_pct": 3,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 1000
+        }
+      ],
+      "month_ceiling": 1500,
+      "daily_limit": 2,
+      "loss_guard": 6000
+    }
+  },
+  {
+    "source": "v20_leverage_recovery",
+    "leverage": 100,
+    "profile": {
+      "leverage": 100,
+      "track": "known_november_development",
+      "rank": [
+        1,
+        22,
+        484,
+        1,
+        1282.3489582925404,
+        3587.3395925000004,
+        56910.698967467775,
+        -3572.218533573353,
+        0
+      ],
+      "evaluations": 2464982,
+      "legs": [
+        {
+          "group": "M30_RSI25",
+          "filter": "short_ADX40",
+          "stop_fraction": 0.5,
+          "tp_pct": 3.3,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "EMA20_ADX_reclaim",
+          "filter": "range_ADX20",
+          "stop_fraction": 0.5,
+          "tp_pct": 2.15,
+          "max_minutes": 4320,
+          "trail_fraction": 2,
+          "mtd_gate": 500
+        },
+        {
+          "group": "M15_squeeze24_pull1",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.35,
+          "tp_pct": 6,
+          "max_minutes": 4380,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "M60_squeeze24_confirm1",
+          "filter": "short_ADX18",
+          "stop_fraction": 0.15,
+          "tp_pct": 6.5,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "line_touch",
+          "filter": "ADX_between_10_25",
+          "stop_fraction": 0.3,
+          "tp_pct": 3,
+          "max_minutes": 1080,
+          "trail_fraction": 0,
+          "mtd_gate": 1000
+        },
+        {
+          "group": "M15_sweep12_confirm1",
+          "filter": "long_ADX32",
+          "stop_fraction": 0.2,
+          "tp_pct": 9,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": -1000
+        },
+        {
+          "group": "H1_RSI30_reversal_confirm1",
+          "filter": "quiet20_counter_0.25",
+          "stop_fraction": 0.7,
+          "tp_pct": 7,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": -1000
+        },
+        {
+          "group": "BB_stretch_pull3",
+          "filter": "entry_quiet_0.5",
+          "stop_fraction": 0.5,
+          "tp_pct": 10,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 1000
+        }
+      ],
+      "month_ceiling": 1500,
+      "daily_limit": 2,
+      "loss_guard": 4000
+    }
+  },
+  {
+    "source": "v21_200x_recovery",
+    "leverage": 200,
+    "profile": {
+      "leverage": 200,
+      "track": "known_november_development",
+      "rank": [
+        1,
+        23,
+        506,
+        1,
+        1032.3860807887518,
+        0,
+        3165.1984539000064,
+        51757.07817460291,
+        -2965.659345259015,
+        0
+      ],
+      "rank_definition": "zero_liq, worst historical months plus Nov pass, total scenario month hits including Nov, Nov pass, worst monthly points, deficit score, worst Nov points, min net, negative DD, negative liq",
+      "development_pass": true,
+      "evaluations": 20418974,
+      "legs": [
+        {
+          "group": "line_touch_confirm1",
+          "filter": "quiet20_trend_1.25",
+          "stop_fraction": 0.35,
+          "tp_pct": 2,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "EMA20_touch",
+          "filter": "quiet20_h4",
+          "stop_fraction": 0.3,
+          "tp_pct": 3,
+          "max_minutes": 180,
+          "trail_fraction": 0,
+          "mtd_gate": 500
+        },
+        {
+          "group": "M5_EMA50",
+          "filter": "quiet20_counter_0.25",
+          "stop_fraction": 0.22,
+          "tp_pct": 4.25,
+          "max_minutes": 7200,
+          "trail_fraction": 0,
+          "mtd_gate": 500
+        },
+        {
+          "group": "BB_stretch_confirm3",
+          "filter": "session_us_quiet_0.6",
+          "stop_fraction": 0.135,
+          "tp_pct": 6,
+          "max_minutes": 1440,
+          "trail_fraction": 0.5,
+          "mtd_gate": 0
+        },
+        {
+          "group": "M30_RSI25_confirm3",
+          "filter": "short_ADX40",
+          "stop_fraction": 0.64,
+          "tp_pct": 9,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "H1_RSI40_reversal",
+          "filter": "short_ADX40",
+          "stop_fraction": 0.11,
+          "tp_pct": 6.4,
+          "max_minutes": 7200,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "M15_squeeze24_pull3",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.54,
+          "tp_pct": 6,
+          "max_minutes": 1440,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "RSI_cross20",
+          "filter": "quiet20_counter_0.25",
+          "stop_fraction": 0.24,
+          "tp_pct": 4.1,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": -1000
+        },
+        {
+          "group": "M60_squeeze24_latepull20",
+          "filter": "strict_basis_0.4",
+          "stop_fraction": 0.35,
+          "tp_pct": 4,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "BB_stretch_latepull7",
+          "filter": "high_ATR_ratio",
+          "stop_fraction": 0.35,
+          "tp_pct": 6,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 500
+        },
+        {
+          "group": "EMA20_ADX_reclaim_latepull12",
+          "filter": "quiet20_0.5",
+          "stop_fraction": 0.5,
+          "tp_pct": 4.075,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "BB_stretch_lateconfirm12",
+          "filter": "session_us_quiet_1.0",
+          "stop_fraction": 0.15,
+          "tp_pct": 6,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 0
+        },
+        {
+          "group": "M30_RSI25_latepull7",
+          "filter": "session_overnight_quiet_1.0",
+          "stop_fraction": 0.5,
+          "tp_pct": 6,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": -500
+        },
+        {
+          "group": "H1_RSI30_reversal_confirm3",
+          "filter": "session_early_quiet_0.35",
+          "stop_fraction": 0.15,
+          "tp_pct": 6,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": -1000
+        },
+        {
+          "group": "M15_sweep12_latepull2",
+          "filter": "session_us_quiet_0.35",
+          "stop_fraction": 0.3,
+          "tp_pct": 4,
+          "max_minutes": 4320,
+          "trail_fraction": 0,
+          "mtd_gate": 250
+        }
+      ],
+      "month_ceiling": 1000,
+      "daily_limit": 1,
+      "loss_guard": 3000
+    }
+  }
+]
