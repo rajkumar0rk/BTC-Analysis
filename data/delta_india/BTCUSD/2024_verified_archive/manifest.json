@@ -1,0 +1,555 @@
+{
+  "source": "Delta Exchange India public REST native instrument series",
+  "partition_timezone": "Asia/Kolkata (funding UTC-hour boundaries)",
+  "synthetic_rows": 0,
+  "original_trade_rows_preserved": true,
+  "totals": {
+    "funding_1h": {
+      "expected": 8785,
+      "original": 0,
+      "recovered": 8785,
+      "observed": 8785,
+      "missing": 0,
+      "requests": 17,
+      "complete_months": 12,
+      "request_errors": 0
+    },
+    "mark_1m": {
+      "expected": 527040,
+      "original": 0,
+      "recovered": 526960,
+      "observed": 526960,
+      "missing": 80,
+      "requests": 308,
+      "complete_months": 11,
+      "request_errors": 0
+    },
+    "trade_1m": {
+      "expected": 527040,
+      "original": 488268,
+      "recovered": 6685,
+      "observed": 494953,
+      "missing": 32087,
+      "requests": 132,
+      "complete_months": 10,
+      "request_errors": 0
+    }
+  },
+  "months": [
+    {
+      "series": "trade_1m",
+      "month": "2024-01",
+      "expected": 44640,
+      "original": 7514,
+      "recovered": 5610,
+      "observed": 13124,
+      "missing": 31516,
+      "requests": 119,
+      "sha256": "d6a9ba0e07afc87bc8dd8e30d506895b7ad94ba1215c9d136690aca87bd9fa36",
+      "errors": [],
+      "gaps": [
+        [
+          1704047400,
+          1704881940
+        ],
+        [
+          1704931200,
+          1704953880
+        ],
+        [
+          1705017600,
+          1705394640
+        ],
+        [
+          1705449600,
+          1705480740
+        ],
+        [
+          1705554000,
+          1705642680
+        ],
+        [
+          1705708800,
+          1706008140
+        ],
+        [
+          1706227200,
+          1706292540
+        ],
+        [
+          1706351400,
+          1706505720
+        ],
+        [
+          1706670000,
+          1706687340
+        ]
+      ]
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-02",
+      "expected": 41760,
+      "original": 40121,
+      "recovered": 1068,
+      "observed": 41189,
+      "missing": 571,
+      "requests": 10,
+      "sha256": "688bc6dff6083390496afa340dffc97ce98b55acff80f3e5461d416629e2df97",
+      "errors": [],
+      "gaps": [
+        [
+          1706745600,
+          1706779800
+        ]
+      ]
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-03",
+      "expected": 44640,
+      "original": 44636,
+      "recovered": 4,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 2,
+      "sha256": "ad8a3b514b49f46612cf5565936c9a5e41acee93ba12e33d171d590b10eabb7d",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-04",
+      "expected": 43200,
+      "original": 43200,
+      "recovered": 0,
+      "observed": 43200,
+      "missing": 0,
+      "requests": 0,
+      "sha256": "e0901b878110c33e88ab39a285f68835d5723a9d8074a3573e5ee4b07aa33506",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-05",
+      "expected": 44640,
+      "original": 44640,
+      "recovered": 0,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 0,
+      "sha256": "5ed767d54046d321812a6d35c71a8a8319237bc0c182a6ae19c7da5872ba5d6c",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-06",
+      "expected": 43200,
+      "original": 43197,
+      "recovered": 3,
+      "observed": 43200,
+      "missing": 0,
+      "requests": 1,
+      "sha256": "d84d53592458f05492301b24e7a17c398d76a6ecd487f7606915b8d967401fd3",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-07",
+      "expected": 44640,
+      "original": 44640,
+      "recovered": 0,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 0,
+      "sha256": "ab7794dd7fc8d7470e3e2db8ba59c19a018955ce41f413f777848bd1df469e10",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-08",
+      "expected": 44640,
+      "original": 44640,
+      "recovered": 0,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 0,
+      "sha256": "7ff6643fad3630d5bc2ad95642bbce20f687e4c2d00546a605ac0283cd97a420",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-09",
+      "expected": 43200,
+      "original": 43200,
+      "recovered": 0,
+      "observed": 43200,
+      "missing": 0,
+      "requests": 0,
+      "sha256": "88834908cde205a46e26cb5b221458a5a809a66c599c46b4cdcd7f987bee57ed",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-10",
+      "expected": 44640,
+      "original": 44640,
+      "recovered": 0,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 0,
+      "sha256": "c65d7d00bfd3728393323f522fdb3879779d0f278a5eefc9f0e447ccae93813b",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-11",
+      "expected": 43200,
+      "original": 43200,
+      "recovered": 0,
+      "observed": 43200,
+      "missing": 0,
+      "requests": 0,
+      "sha256": "2631e10da8fcafd407991bf0a417dd7fdacb51cf12954b5db756e96863144f0f",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "trade_1m",
+      "month": "2024-12",
+      "expected": 44640,
+      "original": 44640,
+      "recovered": 0,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 0,
+      "sha256": "7fb73275adfe0f7153fb41987e51d802367c789f42a75f58373f4910040f5d2c",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-01",
+      "expected": 44640,
+      "original": 0,
+      "recovered": 44640,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 26,
+      "sha256": "919669169c4c08aa5dc03a8145c2f4215efb43505954e647289e3c368018bfa8",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-02",
+      "expected": 41760,
+      "original": 0,
+      "recovered": 41760,
+      "observed": 41760,
+      "missing": 0,
+      "requests": 24,
+      "sha256": "37f38cc1fa1d68c2b849481c3cfe3bbc1d5bcd73b5362e871945a50271221557",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-03",
+      "expected": 44640,
+      "original": 0,
+      "recovered": 44560,
+      "observed": 44560,
+      "missing": 80,
+      "requests": 28,
+      "sha256": "0ffe3dce3ef393e3a0690690d94df0874af92372d96fa18549a35d190cf901c1",
+      "errors": [],
+      "gaps": [
+        [
+          1711368000,
+          1711372740
+        ]
+      ]
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-04",
+      "expected": 43200,
+      "original": 0,
+      "recovered": 43200,
+      "observed": 43200,
+      "missing": 0,
+      "requests": 25,
+      "sha256": "a7dddccb9e07980aac074da56fc55597314246406aacd457cbaced6bdc2a77f2",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-05",
+      "expected": 44640,
+      "original": 0,
+      "recovered": 44640,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 25,
+      "sha256": "30c366791347d6bf8cf757739cfab61e7319b4ddb46cb601376e0296a37c4d93",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-06",
+      "expected": 43200,
+      "original": 0,
+      "recovered": 43200,
+      "observed": 43200,
+      "missing": 0,
+      "requests": 25,
+      "sha256": "766b6b5495725d230dafe3ed4ce81e943136d8e9e1127d93ae828c8f1a8aaa36",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-07",
+      "expected": 44640,
+      "original": 0,
+      "recovered": 44640,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 26,
+      "sha256": "217c1a61379cba16c5003cee1abf74b331e4939bc2d7488d8a198d4352c848f5",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-08",
+      "expected": 44640,
+      "original": 0,
+      "recovered": 44640,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 27,
+      "sha256": "8edb59756a6f40ed665be394e8dec69fca85994a708b48bd548c00500b747ed0",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-09",
+      "expected": 43200,
+      "original": 0,
+      "recovered": 43200,
+      "observed": 43200,
+      "missing": 0,
+      "requests": 25,
+      "sha256": "4980a2af83689521b22856dfa3cd8be009909123b16fac9126ee799eed8fe5d9",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-10",
+      "expected": 44640,
+      "original": 0,
+      "recovered": 44640,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 26,
+      "sha256": "864c254af3684cb415f4337298f92d364275ad038c8d98c127ec158964dba57a",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-11",
+      "expected": 43200,
+      "original": 0,
+      "recovered": 43200,
+      "observed": 43200,
+      "missing": 0,
+      "requests": 25,
+      "sha256": "e59804049a909bba3eb2bc04631d641c9c9aa9673c85b6a103a304548233ca99",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-12",
+      "expected": 44640,
+      "original": 0,
+      "recovered": 44640,
+      "observed": 44640,
+      "missing": 0,
+      "requests": 26,
+      "sha256": "6ff41ce261deec34db3495ffd9e1c8df1b3cc258ace70f79c371587b669c52d3",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-01",
+      "expected": 745,
+      "original": 0,
+      "recovered": 745,
+      "observed": 745,
+      "missing": 0,
+      "requests": 2,
+      "sha256": "fb0744c6981c90caf2f337043a3865d0f8ee74bf7c2d766e61aeda86e3930b1c",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-02",
+      "expected": 696,
+      "original": 0,
+      "recovered": 696,
+      "observed": 696,
+      "missing": 0,
+      "requests": 1,
+      "sha256": "121926d4c87665b83b35ab2ece01cdcce61b4bf7b322ef71b81d330a7fb04237",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-03",
+      "expected": 744,
+      "original": 0,
+      "recovered": 744,
+      "observed": 744,
+      "missing": 0,
+      "requests": 2,
+      "sha256": "a49ad8a79f0c34bc08418a85196bd938e764213d61f437e76a597a647bbc309f",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-04",
+      "expected": 720,
+      "original": 0,
+      "recovered": 720,
+      "observed": 720,
+      "missing": 0,
+      "requests": 1,
+      "sha256": "5c3a5c6180ecdb777804053147464477c9bd806e17b6dc4ad3a06a53a94354ce",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-05",
+      "expected": 744,
+      "original": 0,
+      "recovered": 744,
+      "observed": 744,
+      "missing": 0,
+      "requests": 1,
+      "sha256": "665db482a831cb219c86824adf3406ab9ee212218a78f0c85cd1b70a233b4926",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-06",
+      "expected": 720,
+      "original": 0,
+      "recovered": 720,
+      "observed": 720,
+      "missing": 0,
+      "requests": 2,
+      "sha256": "9c6523d5968310bd82a501186692a9b2f05b853512d9157f727cbf485b3cb6f0",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-07",
+      "expected": 744,
+      "original": 0,
+      "recovered": 744,
+      "observed": 744,
+      "missing": 0,
+      "requests": 1,
+      "sha256": "26d87637de115916a7623080d1bd08defb8f173f1a2a39d7cba30a2b1a2a2b34",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-08",
+      "expected": 744,
+      "original": 0,
+      "recovered": 744,
+      "observed": 744,
+      "missing": 0,
+      "requests": 2,
+      "sha256": "f756b96570730b8580cb4344e747381c9be35a4542facdf9d22f441ac426eda3",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-09",
+      "expected": 720,
+      "original": 0,
+      "recovered": 720,
+      "observed": 720,
+      "missing": 0,
+      "requests": 1,
+      "sha256": "172a0381b43d2b1d4c42770f823c77f78c8987f0c7134f206f832b7632d66e64",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-10",
+      "expected": 744,
+      "original": 0,
+      "recovered": 744,
+      "observed": 744,
+      "missing": 0,
+      "requests": 2,
+      "sha256": "bb984807afa69ddf3e61217d3b471c2a233db3f9c2a9f8e9c2e9871742381255",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-11",
+      "expected": 720,
+      "original": 0,
+      "recovered": 720,
+      "observed": 720,
+      "missing": 0,
+      "requests": 1,
+      "sha256": "d60a7066ae2366f7f52fdc00447eaaadfce3a839d2815cda37d17769b43638db",
+      "errors": [],
+      "gaps": []
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-12",
+      "expected": 744,
+      "original": 0,
+      "recovered": 744,
+      "observed": 744,
+      "missing": 0,
+      "requests": 1,
+      "sha256": "fd2ad835bc185757eb6af9e4bfa76bf3d5d0cbdb2fc531ca6324ebd86648b41c",
+      "errors": [],
+      "gaps": []
+    }
+  ]
+}
