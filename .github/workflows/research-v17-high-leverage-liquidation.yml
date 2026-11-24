@@ -1,0 +1,45 @@
+name: V17 high leverage liquidation research
+on:
+  push:
+    branches: ['research/v17-high-leverage-liquidation-20261124']
+    paths:
+      - 'scripts/research_v17_high_leverage_liquidation.py'
+      - '.github/workflows/research-v17-high-leverage-liquidation.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Load immutable OHLC archive and original source engines
+        run: |
+          git fetch --depth=1 origin main research/st-ema20-reclaim-loss-month-filters-20261122-v1 research/btc-shock-only-donchian-20261121 research/st-ema20-1h-reversal-only-20261122
+          git checkout origin/main -- data/delta_india/BTCUSD/1m data/delta_india/BTCUSD/institutional/history data/delta_india/BTCUSD/institutional/history_manifest.json
+          git checkout origin/research/st-ema20-reclaim-loss-month-filters-20261122-v1 -- scripts/backtest_st_ema20_large_percent_locks.py scripts/research_st_ema20_reclaim_loss_months_20261122.py scripts/research_st_ema20_initial_sl_grid_20261122.py
+          git checkout origin/research/btc-shock-only-donchian-20261121 -- scripts/research_btc_regime_attribution_20261121.py
+          git checkout origin/research/st-ema20-1h-reversal-only-20261122 -- scripts/backtest_st_ema20_reversal_only.py
+          git reset
+          python -m pip install 'numpy<2.3' pandas numba tabulate
+      - name: Search chronological simulated entry and exit configurations
+        run: |
+          python -m py_compile scripts/research_v17_high_leverage_liquidation.py
+          python -u scripts/research_v17_high_leverage_liquidation.py
+      - name: Publish results
+        if: success()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/v17_high_leverage_liquidation
+          git commit -m 'Report V16 causal entry and exit optimization'
+          git push origin HEAD:research/v17-high-leverage-liquidation-20261124
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v17-high-leverage-liquidation
+          path: analysis/v17_high_leverage_liquidation/
