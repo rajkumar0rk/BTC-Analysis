@@ -1,0 +1,34 @@
+{
+  "frozen_source": "V23/V19 50x common profile, no V25 results used",
+  "same_config_all_leverage": true,
+  "no_2024_tuning": true,
+  "prior_2024_research_exists": true,
+  "full_year": false,
+  "data_sources": {
+    "trade": {
+      "rows": 490110,
+      "sha256": "21889e60b6a5451ea3f4cfb295407ec9a3e6d993fec3176c13b5ae8663295380"
+    },
+    "mark_1m": {
+      "rows": 545416,
+      "sha256": "92c511e9d3122885de121f0c9b68bcc3b84e136b0831b8d106dad1cb20c578e6"
+    },
+    "funding_1h": {
+      "rows": 9107,
+      "sha256": "d27cf8e91dd66f664f37574f758b3dfcab1d6c42c140cac0645a827f5ef830ac"
+    }
+  },
+  "exact_exchange_liquidation": false,
+  "exact_funding": false,
+  "status": "completed",
+  "scored_months": [
+    "2024-10",
+    "2024-11",
+    "2024-12"
+  ],
+  "indicator_warmup_start": "2024-08-05 09:00:00+00:00",
+  "scored_start": "2024-09-30 18:30:00+00:00",
+  "scored_end_exclusive": "2024-12-31 18:30:00+00:00",
+  "signal_count": 342,
+  "scenario_rows": 560
+}
