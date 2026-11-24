@@ -1,0 +1,191 @@
+name: Native leverage frontier feasibility
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-native-leverage-frontier-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scipy
+      - name: Run robust optimization on all historical stress cases
+        shell: bash
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          NUMBA_NUM_THREADS: '2'
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import json, pathlib, itertools, time
+          import numpy as np
+          import pandas as pd
+          from numba import njit, prange
+          from research_st_ema20_initial_sl_grid_20261122 import eng, MONTHS, PATHS
+          from research_st_ema20_reclaim_loss_months_20261122 import indicator_features, signal_table
+          e=eng();m,h,n=e.load();h=indicator_features(e.features(h))
+          entries=e.entry_candidates(m,h,"reclaim");f=signal_table(entries,h)
+          # Use only opportunities whose entry precedes the November cutoff.
+          use=np.array([m.index[x["entry_j"]].tz_convert("Asia/Kolkata").strftime("%Y-%m")<="2026-10" for x in entries])
+          entries=[x for x,keep in zip(entries,use) if keep];f=f.loc[use].reset_index(drop=True)
+          N=len(entries);print("DATA",len(m),N,flush=True)
+          # Frozen V5 policy from the successfully verified workflow.
+          def v4(r):
+              v1=r.ema_gap_pct<=1 and r.ema_slope_pct>=-.2 and r.supertrend_gap_pct>=.5
+              v2=v1 and (r.adx14<=20 or r.hourly_range_atr<=1 or r.ema_gap_pct>=.15) and r.dir_rsi14<=60
+              g3=r.adx14>=35 and r.ema_slope_pct<=.1
+              g4=r.adx14>=25 and r.supertrend_gap_pct>=1.5
+              if not (v2 or (v1 and g3) or g4): return 0.
+              if r.dir_rsi14>=52 and r.hourly_body_atr<=.25:return .26
+              if r.adx14>=35 and r.atr_pct<=.75:return .9
+              if r.adx14<=30 and r.atr_pct<=.3:return .55
+              if g4:return .18
+              if g3:return .3
+              return -1.
+          def v5(r):
+              if not np.isfinite(r.volume_ratio):return 0.
+              if r.volume_ratio<1.25:
+                  if r.volume_ratio<=.45 and r.atr_pct>=.4 and r.atr_expansion<=.85:return 1.
+                  if r.volume_ratio>=.8 and .6<=r.atr_pct<=.8:return 2.
+                  return 0.
+              x=v4(r)
+              if x!=0 and r.adx14<=15 and r.ema_slope_pct<=.05:x=.38
+              if x!=0 and r.adx14>=25 and r.supertrend_age_hours<=6:x=0.
+              if x!=0 and r.volume_ratio>=1.5 and r.adx14>=40:x=1.9
+              if r.dir_rsi14>=60 or r.supertrend_gap_pct<=.5:x=.33
+              if x!=0 and r.ema_slope_pct<=-.1 and r.atr_expansion<=.8:x=.185
+              return x
+          def v6(r):
+              x=v5(r)
+              if x!=0 and r.dir_rsi14>=55 and r.hourly_range_atr>=1.5:x=.3
+              if r.atr_pct<=.55 and r.supertrend_gap_pct>=1.:x=.7
+              if x==0 and r.atr_pct>=.45 and r.atr_expansion>=1.2:x=.55
+              if x!=0 and .55<=r.volume_ratio<=.8:x=1.2
+              return x
+          cols=["volume_ratio","atr_pct","atr_expansion","adx14","dir_rsi14","ema_gap_pct","supertrend_gap_pct","hourly_body_atr","hourly_range_atr"]
+          variants=[f.copy() for _ in range(3)]
+          for k,shift in [(1,-.01),(2,.01)]:variants[k][cols]*=1+shift
+          levels=np.array(sorted(set([-1.,0.,.14,.16,.18,.185,.2,.23,.26,.28,.3,.33,.35,.38,.4,.45,.5,.55,.6,.65,.7,.75,.8,.9,1.,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.,2.2,2.5,3.])))
+          A=len(levels);skip=int(np.flatnonzero(levels==0)[0])
+          scenarios=[("base",5,.00059,1.,.02,0,0),("slip10",10,.00059,1.,.02,0,0),("slip15",15,.00059,1.,.02,0,0),("slip25",25,.00059,1.,.02,0,0),("fee20",5,.00059*1.2,1.,.02,0,0),("fee50",5,.00059*1.5,1.,.02,0,0),("tp95",5,.00059,.95,.02,0,0),("tp105",5,.00059,1.05,.02,0,0),("sl18",5,.00059,1.,.018,0,0),("sl22",5,.00059,1.,.022,0,0),("feature99",5,.00059,1.,.02,1,0),("feature101",5,.00059,1.,.02,2,0),("delay1",5,.00059,1.,.02,0,1)]
+          scenarios += [("moderate_cost",10,.00059*1.2,1.,.02,0,0),("severe_cost",25,.00059*1.5,1.,.02,0,0),("delay_cost",10,.00059*1.2,1.,.02,0,1),("tp_low_cost",25,.00059*1.5,.95,.018,1,0),("tp_high_cost",25,.00059*1.5,1.05,.022,2,0),("combined_low_delay",25,.00059*1.5,.95,.018,1,1),("combined_high_delay",25,.00059*1.5,1.05,.022,2,1)]
+          S=len(scenarios)*2;group=np.array([x[5] for x in scenarios for p in range(2)],np.int64)
+          o,hi,lo,c=(m[k].to_numpy(float) for k in ["open","high","low","close"]);hs=h.side.to_numpy()
+          month_idx=np.array([MONTHS.index(x) if x in MONTHS else -1 for x in m.index.tz_convert("Asia/Kolkata").strftime("%Y-%m")],np.int64)
+          j0=np.array([x["entry_j"] for x in entries],np.int64);sd=np.array([x["side"] for x in entries],np.int64);mid=np.array([x["entry"]-x["side"]*5 for x in entries]);ends=[]
+          for j,side in zip(j0,sd):
+              z=np.flatnonzero(hs[j//60:]!=side);ends.append(min((j//60+int(z[0])+1)*60,len(m)) if len(z) else len(m))
+          ends=np.array(ends,np.int64)
+          @njit
+          def replay(jstart,end,side,mid,slip,fee,tp,sl,path,delay,o,hi,lo,c):
+              jstart+=delay
+              if jstart>=end:return -1,0.
+              if delay:mid=o[jstart]
+              entry=mid+side*slip;stop=entry-side*entry*sl
+              target=entry+side*entry*tp/100
+              for j in range(jstart,end):
+                  first=hi[j] if path==0 else lo[j];second=lo[j] if path==0 else hi[j]
+                  nodes=(o[j],first,second,c[j])
+                  active=j!=jstart or delay>0 or side*(o[j]-mid)>=-1e-9
+                  ex=0.;hit=False
+                  if j!=jstart and side*(o[j]-stop)<-1e-9:ex=o[j];hit=True
+                  elif active and tp>0 and side*(o[j]-target)>=-1e-9:ex=target;hit=True
+                  if not hit:
+                      for k in range(3):
+                          a,b=nodes[k],nodes[k+1]
+                          if not active:
+                              if side*(b-a)<=0 or side*(b-mid)<-1e-9:continue
+                              a=mid;active=True
+                          if side*(b-a)>0:
+                              if tp>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:ex=target;hit=True;break
+                              for rung in (2.,3.,5.):
+                                  z=entry+side*entry*rung/100
+                                  if side*(a-z)<-1e-9 and side*(b-z)>=-1e-9 and side*(z-stop)>1e-9:stop=z
+                          else:
+                              if side*(a-stop)<-1e-9:ex=a;hit=True;break
+                              if side*(a-stop)>=-1e-9 and side*(b-stop)<=1e-9:ex=stop;hit=True;break
+                  if hit:
+                      fill=ex-side*slip
+                      return j,.001*side*(fill-entry)-.001*fee*(entry+fill)
+              if end<len(o):
+                  fill=o[end]-side*slip
+                  return end,.001*side*(fill-entry)-.001*fee*(entry+fill)
+              return -1,0.
+          # Optimistic oracle envelope, NOT a tradable strategy: permits retrospective independent choice
+          # of exit action for every trade/scenario/month, while imposing the exact same conservative margin screen.
+          # If even this envelope fails, changing the feature gates cannot solve the problem within this grid.
+          def load_series(folder,col):
+              frames=[]
+              for p in sorted(pathlib.Path(folder).glob("20??-??.csv.gz")):
+                  x=pd.read_csv(p,usecols=["time",col]);x.index=pd.to_datetime(x.time,unit="s",utc=True);frames.append(x[col])
+              return pd.concat(frames).sort_index().loc[lambda x:~x.index.duplicated(keep="last")]
+          marklo=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","low").reindex(m.index).to_numpy(float)
+          markhi=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","high").reindex(m.index).to_numpy(float)
+          markopen=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","open").reindex(m.index).to_numpy(float)
+          funding=load_series("data/delta_india/BTCUSD/institutional/history/funding_1h","close")
+          rate=funding.reindex(m.index.floor("h")-pd.Timedelta(hours=1)).to_numpy(float)
+          pre=m.index<pd.Timestamp("2025-09-08T16:00:00Z")
+          weight=np.where(pre,1/480,np.where((m.index.minute==0)&(m.index.hour%8==0),1.,0.))
+          flow=np.where(weight==0,0.,rate*markopen*weight*.001/100)
+          missing=~np.isfinite(flow)
+          debitlong=np.r_[0.,np.cumsum(np.where(missing,0.,np.maximum(flow,0.)))]
+          debitshort=np.r_[0.,np.cumsum(np.where(missing,0.,np.maximum(-flow,0.)))]
+          invalid=np.r_[0,np.cumsum(missing|~np.isfinite(marklo)|~np.isfinite(markhi))]
+          caps=np.array([.0005,.001,.0015,.002,.0025,.003,.004,.005,.006,.007,.008,.009,.01,.012,.015,.018,.02])
+          # All 37 nonzero TP actions, 17 stop caps, both directions of stress.
+          @njit(parallel=True)
+          def oracle(lev,slip,fee,scale,sl,delay,j0,ends,sd,mid,levels,caps,o,hi,lo,c,month_idx,marklo,markhi,debitlong,debitshort,invalid):
+              best=np.zeros((S,N,22));safe_count=np.zeros((S,N),np.int32)
+              robust_possible=np.zeros((S,N,len(caps),A),np.uint8)
+              # Save returns and exit month for optimization if the optimistic upper bound passes.
+              for si in prange(S):
+                  for i in range(N):
+                      start=j0[i]+delay[si]
+                      if start>=ends[i]:continue
+                      entry=(mid[i] if delay[si]==0 else o[start])+sd[i]*slip[si]
+                      notional=.001*entry
+                      reserve=.0025+fee[si]+.0025*.5*1.18
+                      for b in range(len(caps)):
+                          for a in range(A):
+                              if levels[a]==0:continue
+                              j,p=replay(j0[i],ends[i],sd[i],mid[i],slip[si],fee[si],levels[a]*scale[si],min(sl[si],caps[b]*(sl[si]/.02)),si%2,delay[si],o,hi,lo,c)
+                              if j<start or invalid[j+1]-invalid[start]>0:continue
+                              if sd[i]==1:
+                                  adverse=np.min(marklo[start:j+1])*.995
+                                  debit=debitlong[j+1]-debitlong[start]
+                              else:
+                                  adverse=np.max(markhi[start:j+1])*1.005
+                                  debit=debitshort[j+1]-debitshort[start]
+                              buf=notional/lev-notional*fee[si]-debit+.001*sd[i]*(adverse-entry)-.001*adverse*reserve
+                              if buf<=0:continue
+                              safe_count[si,i]+=1;robust_possible[si,i,b,a]=1
+                              mo=month_idx[j]
+                              # Ignore funding costs in return bound; keep funding debits in safety check.
+                              # Ignore wallet, shared policy and overlap constraints, allowing overly optimistic outcomes.
+                              if mo>=0:best[si,i,mo]=max(best[si,i,mo],p)
+              return best,safe_count,robust_possible
+          params=[x for x in scenarios for p in range(2)]
+          out=pathlib.Path("analysis/reclaim_native_leverage_frontier_20261124");out.mkdir(parents=True,exist_ok=True)
+          args=[np.array([x[k] for x in params],dtype=np.int64 if k==6 else float) for k in [1,2,3,4,6]]
+          for lev in [60,65,70,75,80,85,90,95]:
+              best,counts,mask=oracle(lev,*args,j0,ends,sd,mid,levels,caps,o,hi,lo,c,month_idx,marklo,markhi,debitlong,debitshort,invalid)
+              upper=best.sum(axis=1)
+              allpass=int((upper>=1).sum())
+              summary=dict(leverage=lev,optimistic_pass_cells=allpass,total_cells=S*22,worst_upper_bound=float(upper.min()),failed_months={MONTHS[i]:round(float(upper[:,i].min()),6) for i in range(22) if upper[:,i].min()<1},min_safe_opportunities=int((counts>0).sum(axis=1).min()),robust_action_counts=[int(np.all(mask[group==g],axis=0).sum()) for g in range(3)])
+              print("ORACLE_BOUND",json.dumps(summary),flush=True)
+              pd.DataFrame(upper,index=[f"{x[0]}_{p}" for x in scenarios for p in range(2)],columns=MONTHS).to_csv(out/f"upper_{lev}.csv")
+              # Save upper-bound results only; the oracle itself is not a causal strategy.
+          print("ORACLE_COMPLETE",flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reclaim-native-leverage-frontier
+          path: analysis/reclaim_native_leverage_frontier_20261124/
+          if-no-files-found: warn
