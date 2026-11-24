@@ -73,7 +73,7 @@ def sim_factory():
     s=inspect.getsource(base.simulate)
     patches=[("if not check_filter(fil,side,j,ema,ind):","if not filter_entry(fil,side,j,ema,ind,name,losses_this_month):"),
         ("if not (np.isfinite(R) and R>0 and stop>0 and valid_target and R_ST>0):",
-         "fraction=exposure(name,losses_this_month,cash,eq_high,side,entry,stop)\\n                if not (np.isfinite(R) and R>0 and stop>0 and valid_target and R_ST>0 and fraction>=minimum(name)):"),
+         "fraction=exposure(name,losses_this_month,cash,eq_high,side,entry,stop)\n                if not (np.isfinite(R) and R>0 and stop>0 and valid_target and R_ST>0 and fraction>=minimum(name)):"),
         ("qty=cash/entry","qty=(cash/entry)*fraction"),
         ("entry=raw_open*(1+side*SLIP)","riskmult,tpR,late=choose(name,losses_this_month,cash,month_reference)\n                entry=raw_open*(1+side*SLIP)")]
     for a,b in patches:
