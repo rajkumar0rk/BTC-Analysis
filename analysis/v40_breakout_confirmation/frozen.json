@@ -1,0 +1,88 @@
+{
+  "config": {
+    "family": "expansion_breakout",
+    "timeframe": 240,
+    "lookback": 20,
+    "stop_fraction": 3.0,
+    "rr": 0.0,
+    "exit_kind": "breakeven_1r",
+    "hold_minutes": 10080,
+    "activation_r": 1.0,
+    "lock_r": 0.0
+  },
+  "training_metrics": {
+    "config": 0,
+    "valid": false,
+    "min_profit": 0.310673831293542,
+    "worst_dd": 10.081638678023657,
+    "min_month_fraction": 0.16666666666666666,
+    "mean_month_fraction": 0.3515942028985507,
+    "positive_fold_fraction": 1.0,
+    "continuous_month_min": 0.30434782608695654,
+    "continuous_positive_min": 0.43478260869565216,
+    "continuous_trades_min": 39,
+    "min_year_profit": 4.609376776689292,
+    "base50_net": 29.42003425286552,
+    "base50_positive": 14,
+    "base50_ge1": 11,
+    "base50_dd": 5.735264695984537,
+    "base50_2024": 15.994656693528352,
+    "base50_2025": 13.425377559337225,
+    "stress50_net": 14.544228663318464,
+    "score": 3.8617174526329254,
+    "neighbor_q25": 3.8617174526329254,
+    "neighbor_valid_fraction": 0.0,
+    "robust_score": 3.8617174526329254,
+    "profitable_neighbor_fraction": 0.0
+  },
+  "grid_size": 7,
+  "training_period": "2024-02 through 2025-12",
+  "folds": [
+    [
+      "2024_H1",
+      "2024-02-01",
+      "2024-07-01"
+    ],
+    [
+      "2024_H2",
+      "2024-07-01",
+      "2025-01-01"
+    ],
+    [
+      "2025_H1",
+      "2025-01-01",
+      "2025-07-01"
+    ],
+    [
+      "2025_H2",
+      "2025-07-01",
+      "2026-01-01"
+    ]
+  ],
+  "risk_pct": 0.03,
+  "max_effective_exposure": 3.0,
+  "max_hold_minutes": 10080,
+  "stop_definition": "ATR14 from last completed signal-timeframe candle",
+  "exit_definition": "breakeven_1r",
+  "weekdays_only": true,
+  "one_position": true,
+  "no_monthly_gates": true,
+  "no_daily_limit": true,
+  "no_leverage_tuning": true,
+  "training_pass": false,
+  "promotion_gate": {
+    "min_net_usd": 29.42003425286552,
+    "min_months_ge_1pct_exclusive": 11,
+    "min_positive_months_exclusive": 14,
+    "max_closed_dd_pct": 5.735264695984537,
+    "min_2024_usd": 15.994656693528352,
+    "min_2025_usd": 13.425377559337225,
+    "min_stress_debit_usd": 14.544228663318464,
+    "min_profitable_neighbor_fraction": 0.5
+  },
+  "holdout_previously_examined": true,
+  "regime_filter": null,
+  "research_batch": "V40; baseline plus retest and follow-through confirmation within 1/2/3 completed 4H candles; fixed V38 exits and unchanged training gate",
+  "warmup_limited": true,
+  "warmup_start": "2024-01-30 00:00:00+00:00"
+}
