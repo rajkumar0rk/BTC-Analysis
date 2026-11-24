@@ -1,0 +1,5 @@
+range_tf,range_n,independent_pass,combined_tested,min_fold_profit,min_fold_trades
+60,20,False,False,-56.92995367734459,20
+60,40,False,False,-61.84384348293412,40
+240,20,False,False,-22.122568682603813,5
+240,40,False,False,-15.997489906516506,6
