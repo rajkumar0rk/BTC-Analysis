@@ -165,15 +165,22 @@ def main():
             for sd in (-1,1):
                 a=s.early.replay_with_nextbar_exits(o,h,l,c,j,np.full(n,sd,dtype=np.int8),recipe,policies,s.base.COST,5.)
                 raw[sd]=a
+            # Reuse both independently simulated directions across every
+            # direction rule; only direction selection varies.
+            priced={}
+            for sd in (-1,1):
+                elapsed0=raw[sd][4];gross0=raw[sd][2]
+                cube=np.empty((n,len(policies),len(SC),3))
+                for p in range(len(policies)):
+                    for k,(mode,slip) in enumerate(SC):
+                        risk.mode=mode;risk.slip=slip
+                        cube[:,p,k]=scenario_path(risk,j,elapsed0[:,p],np.full(n,sd),gross0[:,p])
+                priced[sd]=cube
             for direction,side in directions.items():
                 elapsed=np.where(side[:,None]>0,raw[1][4],raw[-1][4])
                 gross=np.where(side[:,None]>0,raw[1][2],raw[-1][2])
                 for p in range(len(policies)):
-                    results=[]
-                    for mode,slip in SC:
-                        risk.mode=mode;risk.slip=slip
-                        results.append(scenario_path(risk,j,elapsed[:,p],side,gross[:,p]))
-                    candidates.append(np.stack(results,axis=1))
+                    candidates.append(np.where((side>0)[:,None,None],priced[1][:,p],priced[-1][:,p]))
                     specs.append(dict(delay=delay,direction=direction,cap=cap,policy=policies[p].tolist()))
                     ctags.append(np.column_stack((j,side,elapsed[:,p],gross[:,p])))
         print("STEP56_CANDIDATES",delay,len(candidates),flush=True)
