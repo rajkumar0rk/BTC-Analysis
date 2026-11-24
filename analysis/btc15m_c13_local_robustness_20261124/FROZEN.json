@@ -1,0 +1,182 @@
+{
+  "candidate": 12,
+  "config": {
+    "sl": 3.0,
+    "rr": 3.0,
+    "flip": false,
+    "filter": "slope3"
+  },
+  "control_candidate": 13,
+  "passes_training_gate": false,
+  "selection": "Training only, both years and baseline/stressed costs. Same previous minimum return, DD, trade and positive neighbor score gates plus majority-positive adjacent configs. If none qualifies, top candidate diagnostic only.",
+  "training_periods": [
+    "2024-09..12",
+    "2025-01..12"
+  ],
+  "prior_2026_exposure": true,
+  "grid": [
+    {
+      "sl": 2.5,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 2.5,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 2.5,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope5"
+    },
+    {
+      "sl": 2.5,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 2.5,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 2.5,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope5"
+    },
+    {
+      "sl": 2.5,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 2.5,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 2.5,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope5"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope5"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope5"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope5"
+    },
+    {
+      "sl": 3.5,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 3.5,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.5,
+      "rr": 2.5,
+      "flip": false,
+      "filter": "slope5"
+    },
+    {
+      "sl": 3.5,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 3.5,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.5,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope5"
+    },
+    {
+      "sl": 3.5,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope3"
+    },
+    {
+      "sl": 3.5,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.5,
+      "rr": 3.5,
+      "flip": false,
+      "filter": "slope5"
+    }
+  ],
+  "training_sha256": "a21a541468896735282ec833f37e85d56eb6e42db6aeb4a990be1cebec16583d"
+}
