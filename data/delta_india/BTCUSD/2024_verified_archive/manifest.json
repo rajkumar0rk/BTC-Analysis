@@ -24,11 +24,11 @@
     },
     "trade_1m": {
       "expected": 527040,
-      "observed": 501321,
-      "missing": 25719,
+      "observed": 501353,
+      "missing": 25687,
       "complete_months": 11,
-      "recovered_this_run": 0,
-      "requests_this_run": 23,
+      "recovered_this_run": 32,
+      "requests_this_run": 18,
       "request_errors": 0
     }
   },
@@ -39,10 +39,10 @@
       "expected": 44640,
       "original": 13124,
       "recovered": 1748,
-      "observed": 18921,
-      "missing": 25719,
+      "observed": 18953,
+      "missing": 25687,
       "requests": 891,
-      "sha256": "d564e48298a82d795c6b4b03799d4939e2d6836d36075bfec6011e69c54c70f8",
+      "sha256": "7bfbf151f8d2d57a0bd05fbfdbe7305ce8a5cb4539f4b86bc8253459d110439d",
       "errors": [],
       "gaps": [
         [
@@ -58,7 +58,7 @@
           1705642680
         ],
         [
-          1705759800,
+          1705761720,
           1706008140
         ],
         [
