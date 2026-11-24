@@ -1,0 +1,65 @@
+{
+  "config": {
+    "family": "trend_rsi_pullback",
+    "timeframe": 240,
+    "lookback": 40,
+    "stop_fraction": 2.5,
+    "rr": 0.0
+  },
+  "training_metrics": {
+    "config": 43,
+    "valid": false,
+    "min_profit": -5.091451636733211,
+    "worst_dd": 13.101075056701108,
+    "min_month_fraction": 0.0,
+    "mean_month_fraction": 0.12608695652173915,
+    "positive_fold_fraction": 0.6,
+    "score": 1.2702486461091351,
+    "neighbor_q25": 0.9260684696298738,
+    "neighbor_valid_fraction": 0.0,
+    "robust_score": 0.9260684696298738
+  },
+  "grid_size": 48,
+  "training_period": "2024-02 through 2025-12",
+  "folds": [
+    [
+      "2024_H1",
+      "2024-02-01",
+      "2024-07-01"
+    ],
+    [
+      "2024_H2",
+      "2024-07-01",
+      "2025-01-01"
+    ],
+    [
+      "2025_H1",
+      "2025-01-01",
+      "2025-07-01"
+    ],
+    [
+      "2025_H2",
+      "2025-07-01",
+      "2026-01-01"
+    ]
+  ],
+  "risk_pct": 0.03,
+  "max_effective_exposure": 3.0,
+  "max_hold_minutes": 10080,
+  "stop_definition": "ATR14 from last completed signal candle",
+  "exit_definition": "2R fixed target or same-distance ratcheting stop",
+  "weekdays_only": true,
+  "one_position": true,
+  "no_monthly_gates": true,
+  "no_daily_limit": true,
+  "no_leverage_tuning": true,
+  "training_pass": false,
+  "holdout_previously_examined": true,
+  "regime_filter": {
+    "ema": 100,
+    "slope_bars": 5
+  },
+  "research_batch": "V33; predeclared ATR-scaled exits, continuous and four-block training, no validation-driven selection",
+  "warmup_limited": true,
+  "warmup_start": "2024-01-30 00:00:00+00:00"
+}
