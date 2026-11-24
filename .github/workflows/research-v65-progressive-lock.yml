@@ -1,0 +1,47 @@
+name: V65 causal progressive profit lock training only
+on:
+  push:
+    branches: [research/v65-progressive-lock-20261124]
+    paths:
+      - scripts/research_v65_progressive_lock.py
+      - .github/workflows/research-v65-progressive-lock.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: v65-progressive-lock
+  cancel-in-progress: false
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Load historical training archive only
+        run: |
+          git fetch --depth=1 origin main research/btcusd-2024-gap-retry-20261124
+          git checkout origin/research/btcusd-2024-gap-retry-20261124 -- data/delta_india/BTCUSD/2024_verified_archive
+          git checkout origin/main -- 'data/delta_india/BTCUSD/1m/2025-*.csv.gz' 'data/delta_india/BTCUSD/institutional/history/mark_1m/2025-*.csv.gz' 'data/delta_india/BTCUSD/institutional/history/funding_1h/2025-*.csv.gz'
+          git reset
+          python -m pip install 'numpy<2.3' pandas numba tabulate
+      - name: Select single setup on 2024 and 2025 chronological folds only
+        run: |
+          python -m py_compile scripts/research_v65_execution.py scripts/research_v65_progressive_lock.py
+          python -u scripts/research_v65_progressive_lock.py
+      - name: Commit training results
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/v65_progressive_lock
+          if ! git diff --cached --quiet; then
+            git commit -m 'Report V65 progressive profit lock using only 2024 and 2025 training'
+            git push origin HEAD:research/v65-progressive-lock-20261124
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v65-training
+          path: analysis/v65_progressive_lock/
+          if-no-files-found: error
