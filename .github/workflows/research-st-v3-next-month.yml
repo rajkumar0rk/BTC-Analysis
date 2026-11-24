@@ -1,0 +1,39 @@
+name: BTC ST V3 next monthly consistency improvement
+on:
+  push:
+    branches:
+      - research/st-v3-next-month-improvement-20261124
+    paths:
+      - scripts/research_st_v3_next_month.py
+      - .github/workflows/research-st-v3-next-month.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas tabulate
+      - name: Replay V3 plus additional independent causal setups
+        run: python -u scripts/research_st_v3_next_month.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: st-v3-next-month-consistency
+          path: analysis/st_v3_next_month_improvement_20261124/
+          if-no-files-found: warn
+      - name: Publish research
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_v3_next_month_improvement_20261124/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: next V3 monthly consistency experiment"
+            git push origin HEAD:research/st-v3-next-month-improvement-20261124
+          fi
