@@ -1,0 +1,12 @@
+{
+  "tested": 12404,
+  "unique_entry_masks": 443,
+  "strict_new_trade_profiles": 194,
+  "strict_more_positive_months": 0,
+  "strict_no_month_degraded": 194,
+  "best_strict_months": 18,
+  "baseline_108_trades": 108,
+  "baseline_net": 22633.9,
+  "baseline_dd": 2642.53,
+  "independent_forward_validation": false
+}
