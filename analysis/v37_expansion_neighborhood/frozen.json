@@ -1,0 +1,84 @@
+{
+  "config": {
+    "family": "expansion_breakout",
+    "timeframe": 240,
+    "lookback": 24,
+    "stop_fraction": 3.0,
+    "rr": 0.0
+  },
+  "training_metrics": {
+    "config": 16,
+    "valid": false,
+    "min_profit": -3.0367391806391737,
+    "worst_dd": 11.449282918073067,
+    "min_month_fraction": 0.16666666666666666,
+    "mean_month_fraction": 0.2939130434782609,
+    "positive_fold_fraction": 0.6,
+    "continuous_month_min": 0.30434782608695654,
+    "continuous_positive_min": 0.30434782608695654,
+    "continuous_trades_min": 35,
+    "min_year_profit": 2.1922714705335276,
+    "base50_net": 28.691734760616697,
+    "base50_positive": 11,
+    "base50_ge1": 10,
+    "base50_dd": 6.009940741606287,
+    "base50_2024": 13.22057551363282,
+    "base50_2025": 15.471159246983952,
+    "stress50_net": 11.89774041716268,
+    "score": 2.7445987256022715,
+    "neighbor_q25": 1.9463216482333885,
+    "neighbor_valid_fraction": 0.0,
+    "robust_score": 1.9463216482333885,
+    "profitable_neighbor_fraction": 0.2
+  },
+  "grid_size": 27,
+  "training_period": "2024-02 through 2025-12",
+  "folds": [
+    [
+      "2024_H1",
+      "2024-02-01",
+      "2024-07-01"
+    ],
+    [
+      "2024_H2",
+      "2024-07-01",
+      "2025-01-01"
+    ],
+    [
+      "2025_H1",
+      "2025-01-01",
+      "2025-07-01"
+    ],
+    [
+      "2025_H2",
+      "2025-07-01",
+      "2026-01-01"
+    ]
+  ],
+  "risk_pct": 0.03,
+  "max_effective_exposure": 3.0,
+  "max_hold_minutes": 10080,
+  "stop_definition": "ATR14 from last completed signal-timeframe candle",
+  "exit_definition": "2R fixed target or same-distance ratcheting stop",
+  "weekdays_only": true,
+  "one_position": true,
+  "no_monthly_gates": true,
+  "no_daily_limit": true,
+  "no_leverage_tuning": true,
+  "training_pass": false,
+  "promotion_gate": {
+    "min_net_usd": 28.593738751052797,
+    "min_months_ge_1pct_exclusive": 11,
+    "min_positive_months_exclusive": 14,
+    "max_closed_dd_pct": 5.746481897124092,
+    "min_2024_usd": 15.593781037717392,
+    "min_2025_usd": 12.999957713335451,
+    "min_stress_debit_usd": 11.644146151902717,
+    "min_profitable_neighbor_fraction": 0.5
+  },
+  "holdout_previously_examined": true,
+  "regime_filter": null,
+  "research_batch": "V37; 27 neighboring V36 expansion configurations, no new rules, strict V36 profit and monthly preservation gate",
+  "warmup_limited": true,
+  "warmup_start": "2024-01-30 00:00:00+00:00"
+}
