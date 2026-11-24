@@ -285,7 +285,7 @@ jobs:
                   risk_points=entry*local_sl/100
                   mfe=max(0.,side*((high if side==1 else low)-entry))
                   mae=max(0.,-side*((low if side==1 else high)-entry))
-                  ledger[i,0]=k;ledger[i,1]=x;ledger[i,2]=side;ledger[i,3]=entry;ledger[i,4]=fill;ledger[i,5]=net;ledger[i,6]=f;ledger[i,7]=debit;ledger[i,8]=risk_points;ledger[i,9]=mfe;ledger[i,10]=mae;ledger[i,11]=attempts;ledger[i,12]=month[x]+1;ledger[i,13]=float(initial_stop);ledger[i,14]=local_tp
+                  ledger[i,0]=k;ledger[i,1]=x;ledger[i,2]=side;ledger[i,3]=entry;ledger[i,4]=fill;ledger[i,5]=net;ledger[i,6]=f;ledger[i,7]=debit;ledger[i,8]=risk_points;ledger[i,9]=mfe;ledger[i,10]=mae;ledger[i,11]=attempts;ledger[i,12]=month[x]+1;ledger[i,13]=(1.0 if initial_stop else 0.0);ledger[i,14]=local_tp
                   # Conservative floating DD bound: allow favorable peak before adverse low/high.
                   good=high if side==1 else low;bad=low if side==1 else high
                   peak=max(peak,cash+.001*side*(good-entry)-.001*fee*(entry+good))
