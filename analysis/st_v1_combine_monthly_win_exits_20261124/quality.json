@@ -1,0 +1,19 @@
+{
+  "total_tests": 7104,
+  "touch_exit_tests": 0,
+  "flip_exit_tests": 0,
+  "baseline_line_touch_monthly_wins": 14,
+  "baseline_flip_monthly_wins": 12,
+  "baseline_line_touch_points": 13816.06,
+  "baseline_flip_points": 5283.56,
+  "baseline_combined_points": 19099.62,
+  "hard_constraints_pass": 225,
+  "month_win_improvers_by_leg": {
+    "line_touch": 0,
+    "bullish_flip": 0
+  },
+  "all_22_historical_months_seen": true,
+  "untouched_holdout": false,
+  "original_signals_and_fees_retained": true,
+  "one_position_one_supertrend_cycle": true
+}
