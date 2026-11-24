@@ -1,0 +1,29 @@
+{
+  "funding_1h": {
+    "expected": 8785,
+    "observed": 8785,
+    "missing": 0,
+    "complete_months": 12,
+    "recovered_this_run": 0,
+    "requests_this_run": 0,
+    "request_errors": 0
+  },
+  "mark_1m": {
+    "expected": 527040,
+    "observed": 527040,
+    "missing": 0,
+    "complete_months": 12,
+    "recovered_this_run": 80,
+    "requests_this_run": 1,
+    "request_errors": 0
+  },
+  "trade_1m": {
+    "expected": 527040,
+    "observed": 497079,
+    "missing": 29961,
+    "complete_months": 10,
+    "recovered_this_run": 2126,
+    "requests_this_run": 914,
+    "request_errors": 0
+  }
+}
