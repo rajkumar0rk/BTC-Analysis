@@ -1,0 +1,97 @@
+name: Unified cross demo read-only execution evidence
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-unified-cross-demo-evidence-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Read demo fills and wallet funding records without placing orders
+        env:
+          DEMO_KEY: ${{ secrets.DELTA_DEMO_API_KEY }}
+          DEMO_SECRET: ${{ secrets.DELTA_DEMO_API_SECRET }}
+        shell: bash
+        run: |
+          python -u - <<'PY'
+          import os,json,pathlib,time,hmac,hashlib,urllib.request,urllib.parse,urllib.error,datetime
+          from decimal import Decimal
+          out=pathlib.Path("analysis/reclaim_unified_demo_evidence");out.mkdir(parents=True,exist_ok=True)
+          config=json.loads(pathlib.Path("strategy-candidates/btcusd_ema20_reclaim_unified_cross_frozen_20261124.json").read_text())
+          host="https://cdn-ind.testnet.deltaex.org"
+          key=os.environ.get("DEMO_KEY","");secret=os.environ.get("DEMO_SECRET","")
+          summary={"execution":"UNVERIFIED","funding":"UNVERIFIED","environment":"DEMO","read_only":True,"order_writes":0}
+          def finish():
+              (out/"summary.json").write_text(json.dumps(summary,indent=2))
+              print("DEMO_EVIDENCE",json.dumps(summary),flush=True)
+          def get(path,params=None,auth=True):
+              query=urllib.parse.urlencode(params or {})
+              suffix="?"+query if query else ""
+              headers={"User-Agent":"BTC-Analysis/demo-read-only-audit","Accept":"application/json"}
+              if auth:
+                  ts=str(int(time.time()))
+                  sig=hmac.new(secret.encode(),("GET"+ts+path+suffix).encode(),hashlib.sha256).hexdigest()
+                  headers.update({"api-key":key,"timestamp":ts,"signature":sig})
+              request=urllib.request.Request(host+path+suffix,headers=headers,method="GET")
+              with urllib.request.urlopen(request,timeout=20) as resp: payload=json.load(resp)
+              if not payload.get("success"):raise RuntimeError("API rejected request")
+              return payload
+          try:
+              p=get("/v2/products/BTCUSD",auth=False)["result"]
+              summary["demo_product_reachable"]=True
+              summary["contract_value"]=str(p.get("contract_value"))
+              pid=int(p["id"])
+          except Exception as ex:
+              summary["demo_product_reachable"]=False
+              summary["public_error_type"]=type(ex).__name__
+              finish();raise SystemExit(0)
+          if not key or not secret:
+              summary["execution"]="BLOCKED_NO_DEMO_READ_CREDENTIALS"
+              summary["funding"]="BLOCKED_NO_DEMO_READ_CREDENTIALS"
+              finish();raise SystemExit(0)
+          start=int(datetime.datetime.fromisoformat(config["forward_start_utc"].replace("Z","+00:00")).timestamp()*1000000)
+          end=int(time.time()*1000000)
+          if end<=start:
+              summary["execution"]="NO_FORWARD_PERIOD_YET";summary["funding"]="NO_FORWARD_PERIOD_YET"
+              finish();raise SystemExit(0)
+          def pages(path,params):
+              result=[];seen=set()
+              for _ in range(100):
+                  r=get(path,params);result.extend(r.get("result",[]))
+                  after=r.get("meta",{}).get("after")
+                  if not after:return result
+                  if after in seen:raise RuntimeError("cursor repeated")
+                  seen.add(after);params=dict(params,after=after)
+              raise RuntimeError("pagination limit reached")
+          try:
+              orders=pages("/v2/orders/history",{"product_ids":str(pid),"start_time":start,"end_time":end,"page_size":100})
+              fills=pages("/v2/fills",{"product_ids":str(pid),"start_time":start,"end_time":end,"page_size":100})
+              tx=pages("/v2/wallet/transactions",{"start_time":start,"end_time":end,"page_size":100,"transaction_types":"funding"})
+              # No private account data or identifiers are written to logs or artifacts.
+              # Only explicitly strategy-tagged orders can be treated as evidence; no inference from unrelated trades.
+              tagged={str(o["id"]) for o in orders if str(o.get("client_order_id","")).startswith("rcux26-")}
+              related=[f for f in fills if str(f.get("order_id","")) in tagged]
+              funding=[t for t in tx if str(t.get("product_id"))==str(pid) and t.get("transaction_type")=="funding"]
+              summary.update({"account_read_verified":True,"tagged_order_count":len(tagged),"tagged_fill_count":len(related),"product_funding_record_count":len(funding)})
+              summary["execution"]="EVIDENCE_PRESENT_NEEDS_SIGNAL_FILL_RECONCILIATION" if related else "NO_TAGGED_STRATEGY_FILLS"
+              summary["funding"]="EVIDENCE_PRESENT_NEEDS_POSITION_SETTLEMENT_RECONCILIATION" if funding else "NO_PRODUCT_FUNDING_RECORDS"
+          except Exception as ex:
+              summary["execution"]="BLOCKED_ACCOUNT_READ_FAILED";summary["funding"]="BLOCKED_ACCOUNT_READ_FAILED"
+              summary["error_type"]=type(ex).__name__
+              if isinstance(ex,urllib.error.HTTPError):summary["http_status"]=ex.code
+          finish()
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unified-cross-demo-evidence
+          path: analysis/reclaim_unified_demo_evidence/summary.json
+          if-no-files-found: error
