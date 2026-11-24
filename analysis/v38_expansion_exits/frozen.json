@@ -1,0 +1,86 @@
+{
+  "config": {
+    "family": "expansion_breakout",
+    "timeframe": 240,
+    "lookback": 20,
+    "stop_fraction": 3.0,
+    "rr": 0.0,
+    "exit_kind": "dynamic_atr",
+    "hold_minutes": 20160
+  },
+  "training_metrics": {
+    "config": 5,
+    "valid": false,
+    "min_profit": 3.3848875315476192,
+    "worst_dd": 10.637619444600762,
+    "min_month_fraction": 0.16666666666666666,
+    "mean_month_fraction": 0.3889855072463767,
+    "positive_fold_fraction": 1.0,
+    "continuous_month_min": 0.4782608695652174,
+    "continuous_positive_min": 0.5217391304347826,
+    "continuous_trades_min": 53,
+    "min_year_profit": 10.376310000374582,
+    "base50_net": 32.80971276648435,
+    "base50_positive": 13,
+    "base50_ge1": 11,
+    "base50_dd": 6.546285331106311,
+    "base50_2024": 22.43340276610983,
+    "base50_2025": 10.376310000374582,
+    "stress50_net": 30.041004251184773,
+    "score": 4.454134331597851,
+    "neighbor_q25": 4.424785770858559,
+    "neighbor_valid_fraction": 0.0,
+    "robust_score": 4.424785770858559,
+    "profitable_neighbor_fraction": 1.0
+  },
+  "grid_size": 18,
+  "training_period": "2024-02 through 2025-12",
+  "folds": [
+    [
+      "2024_H1",
+      "2024-02-01",
+      "2024-07-01"
+    ],
+    [
+      "2024_H2",
+      "2024-07-01",
+      "2025-01-01"
+    ],
+    [
+      "2025_H1",
+      "2025-01-01",
+      "2025-07-01"
+    ],
+    [
+      "2025_H2",
+      "2025-07-01",
+      "2026-01-01"
+    ]
+  ],
+  "risk_pct": 0.03,
+  "max_effective_exposure": 3.0,
+  "max_hold_minutes": 20160,
+  "stop_definition": "ATR14 from last completed signal-timeframe candle",
+  "exit_definition": "dynamic_atr",
+  "weekdays_only": true,
+  "one_position": true,
+  "no_monthly_gates": true,
+  "no_daily_limit": true,
+  "no_leverage_tuning": true,
+  "training_pass": false,
+  "promotion_gate": {
+    "min_net_usd": 28.593738751052797,
+    "min_months_ge_1pct_exclusive": 11,
+    "min_positive_months_exclusive": 14,
+    "max_closed_dd_pct": 5.746481897124092,
+    "min_2024_usd": 15.593781037717392,
+    "min_2025_usd": 12.999957713335451,
+    "min_stress_debit_usd": 11.644146151902717,
+    "min_profitable_neighbor_fraction": 0.5
+  },
+  "holdout_previously_examined": true,
+  "regime_filter": null,
+  "research_batch": "V38; 18 exit-only variants, fixed V36 entries and initial stop, identical promotion requirements",
+  "warmup_limited": true,
+  "warmup_start": "2024-01-30 00:00:00+00:00"
+}
