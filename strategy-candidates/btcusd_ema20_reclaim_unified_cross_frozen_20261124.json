@@ -1,0 +1,334 @@
+{
+  "strategy": "BTCUSD EMA20 Reclaim unified cross",
+  "frozen_utc": "2026-11-24",
+  "forward_start_utc": "2026-11-25T00:00:00Z",
+  "initial_wallet_usd": 100,
+  "quantity_btc": 0.001,
+  "margin_mode": "cross",
+  "signal_timeframe": "1h",
+  "execution_timeframe": "1m",
+  "base_fee_per_side_incl_gst": 0.00059,
+  "slippage_points_per_side": 5,
+  "profit_locks_pct": [
+    2,
+    3,
+    5
+  ],
+  "one_trade_per_st_cycle": true,
+  "common_wallet_guard": "one-contract notional plus entry fee <= current wallet",
+  "rules": [
+    {
+      "gate": "volume_ratio <= 1.0 AND hourly_body_atr >= 1.0",
+      "target": 1.2,
+      "stop_cap_pct": 0.8,
+      "mode": "override"
+    },
+    {
+      "gate": "adx14 <= 20 AND supertrend_gap_pct >= 1.5",
+      "target": 0.9,
+      "stop_cap_pct": 0.4,
+      "mode": "new_only"
+    },
+    {
+      "gate": "volume_ratio >= 1.5 AND hourly_range_atr <= 1.0",
+      "target": 1.5,
+      "stop_cap_pct": 0.7000000000000001,
+      "mode": "new_only"
+    },
+    {
+      "gate": "atr_pct <= 0.45 AND hourly_range_atr >= 1.5",
+      "target": 1.5,
+      "stop_cap_pct": 0.6,
+      "mode": "override"
+    },
+    {
+      "gate": "adx14 <= 15 AND supertrend_gap_pct >= 0.75",
+      "target": 0.5,
+      "stop_cap_pct": 0.4,
+      "mode": "new_only"
+    },
+    {
+      "gate": "atr_expansion >= 1.05 AND ema_slope_pct <= -0.1",
+      "target": 0.38,
+      "stop_cap_pct": 0.3,
+      "mode": "override"
+    },
+    {
+      "gate": "supertrend_gap_pct <= 1.0 AND hourly_body_atr >= 1.0",
+      "target": 0.5,
+      "stop_cap_pct": 0.8,
+      "mode": "new_only"
+    },
+    {
+      "gate": "volume_ratio >= 1.5 AND adx14 <= 20",
+      "target": 1.9,
+      "stop_cap_pct": 0.8,
+      "mode": "new_only"
+    },
+    {
+      "gate": "adx14 >= 20 AND ema_gap_pct <= 0.4",
+      "target": 1.9,
+      "stop_cap_pct": 0.6,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "volume_ratio <= 0.15 AND ema_gap_pct <= 0.1",
+      "target": 0.65,
+      "stop_cap_pct": 0.8,
+      "mode": "new_only"
+    },
+    {
+      "gate": "atr_pct >= 0.7 AND supertrend_gap_pct <= 1.0",
+      "target": 0.65,
+      "stop_cap_pct": 0.5,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_expansion <= 0.75 AND ema_gap_pct >= 0.2",
+      "target": 0.9,
+      "stop_cap_pct": 0.2,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_pct >= 1.0 AND atr_pct <= 1.25",
+      "target": 0.26,
+      "stop_cap_pct": 0.3,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "atr_pct >= 0.6 AND adx14 >= 25",
+      "target": 1.2,
+      "stop_cap_pct": 0.2,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "supertrend_age_hours <= 12 AND supertrend_age_hours >= 12",
+      "target": 0.9,
+      "stop_cap_pct": 0.7000000000000001,
+      "mode": "new_only"
+    },
+    {
+      "gate": "atr_expansion <= 0.85 AND ema_gap_pct >= 0.1",
+      "target": 0.26,
+      "stop_cap_pct": 0.6,
+      "mode": "new_only"
+    },
+    {
+      "gate": "ema_gap_pct >= 0.1 AND hourly_range_atr <= 0.75",
+      "target": 0.5,
+      "stop_cap_pct": 0.2,
+      "mode": "new_only"
+    },
+    {
+      "gate": "volume_ratio >= 0.8 AND hourly_range_atr <= 0.75",
+      "target": 0.38,
+      "stop_cap_pct": 0.6,
+      "mode": "override"
+    },
+    {
+      "gate": "volume_ratio <= 0.45 AND adx14 >= 30",
+      "target": 0,
+      "stop_cap_pct": 0,
+      "mode": "override"
+    },
+    {
+      "gate": "hourly_body_atr >= 0.5 AND hourly_range_atr <= 0.75",
+      "target": 0.65,
+      "stop_cap_pct": 0.4,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "volume_ratio <= 0.45 AND atr_pct <= 0.6",
+      "target": 2.5,
+      "stop_cap_pct": 0.2,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "adx14 >= 25 AND ema_slope_pct <= 0",
+      "target": 2.5,
+      "stop_cap_pct": 0.8999999999999999,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "hourly_body_atr >= 0.5 AND hourly_range_atr <= 0.75",
+      "target": 2.5,
+      "stop_cap_pct": 0.7000000000000001,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "adx14 >= 20 AND ema_gap_pct <= 0.05",
+      "target": 3,
+      "stop_cap_pct": 0.6,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "hourly_range_atr <= 0.75 AND supertrend_age_hours <= 12",
+      "target": 2.5,
+      "stop_cap_pct": 0.6,
+      "mode": "new_only"
+    },
+    {
+      "gate": "atr_expansion <= 0.75 AND hourly_body_atr >= 0.5",
+      "target": 2.5,
+      "stop_cap_pct": 0.8,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "volume_ratio >= 2.0 AND ema_slope_pct >= 0",
+      "target": 3,
+      "stop_cap_pct": 0.3,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "ema_gap_pct >= 0.2 AND ema_slope_pct >= 0.1",
+      "target": 1.9,
+      "stop_cap_pct": 0.4,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "adx14 <= 15 AND ema_gap_pct <= 0.05",
+      "target": 0,
+      "stop_cap_pct": 0,
+      "mode": "override"
+    },
+    {
+      "gate": "volume_ratio >= 0.25 AND volume_ratio <= 0.35",
+      "target": 2.5,
+      "stop_cap_pct": 1,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "volume_ratio >= 3.0 AND hourly_body_atr <= 0.75",
+      "target": 2.5,
+      "stop_cap_pct": 0.4,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_pct >= 0.8 AND atr_expansion <= 0.85",
+      "target": 2.5,
+      "stop_cap_pct": 0.7000000000000001,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "volume_ratio >= 1.5 AND adx14 >= 35",
+      "target": 1.2,
+      "stop_cap_pct": 0.3,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "atr_pct >= 1.0 AND ema_gap_pct <= 0.1",
+      "target": 1.2,
+      "stop_cap_pct": 0.8,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "ema_gap_pct <= 0.4 AND hourly_range_atr >= 1.5",
+      "target": 3,
+      "stop_cap_pct": 0.6,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "atr_pct <= 0.35 AND ema_slope_pct >= 0",
+      "target": 1.5,
+      "stop_cap_pct": 0.2,
+      "mode": "new_only"
+    },
+    {
+      "gate": "atr_expansion >= 1.05 AND adx14 <= 15",
+      "target": 0,
+      "stop_cap_pct": 0,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_expansion <= 0.95 AND ema_slope_pct >= 0.1",
+      "target": 0,
+      "stop_cap_pct": 0,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_pct <= 0.35 AND hourly_range_atr <= 0.75",
+      "target": 2.5,
+      "stop_cap_pct": 0.2,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "volume_ratio <= 1.0 AND hourly_body_atr >= 1.0 AND supertrend_gap_pct <= 1.5",
+      "target": 2.5,
+      "stop_cap_pct": 0.8,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_expansion <= 0.85 AND ema_gap_pct >= 0.1 AND ema_slope_pct <= 0",
+      "target": 3,
+      "stop_cap_pct": 0.8,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_pct >= 0.7 AND supertrend_gap_pct <= 1.0 AND volume_ratio >= 1.25",
+      "target": 2.5,
+      "stop_cap_pct": 0.2,
+      "mode": "override"
+    },
+    {
+      "gate": "volume_ratio <= 0.65 AND supertrend_gap_pct >= 2.0",
+      "target": 2.5,
+      "stop_cap_pct": 0.3,
+      "mode": "new_only"
+    },
+    {
+      "gate": "ema_gap_pct >= 0.1 AND hourly_range_atr <= 0.75 AND atr_expansion >= 0.95",
+      "target": 2.5,
+      "stop_cap_pct": 0.8999999999999999,
+      "mode": "new_only"
+    },
+    {
+      "gate": "volume_ratio <= 0.45 AND atr_pct <= 0.6 AND supertrend_gap_pct >= 1.0",
+      "target": 0.9,
+      "stop_cap_pct": 0.8,
+      "mode": "new_only"
+    },
+    {
+      "gate": "atr_expansion <= 0.75 AND supertrend_age_hours >= 48",
+      "target": 2.5,
+      "stop_cap_pct": 0.8,
+      "mode": "new_only"
+    },
+    {
+      "gate": "atr_pct <= 0.35 AND hourly_range_atr <= 0.75 AND side == -1",
+      "target": 0.26,
+      "stop_cap_pct": 0.2,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_expansion <= 0.95 AND supertrend_age_hours <= 12",
+      "target": 0.9,
+      "stop_cap_pct": 0.7000000000000001,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "atr_pct >= 1.25",
+      "target": 0,
+      "stop_cap_pct": 0,
+      "mode": "override"
+    }
+  ],
+  "overlay": {
+    "gate": "atr_pct >= 0.55 AND ema_slope_pct <= 0",
+    "target": 0,
+    "stop_cap_pct": 0,
+    "wallet_cap": 102,
+    "mode": "selected_only"
+  },
+  "validation_runs": [
+    45345149330,
+    45360519269,
+    45360597720
+  ],
+  "forward_criteria": {
+    "minimum_calendar_days": 90,
+    "minimum_closed_trades": 30,
+    "full_ist_month_return_pct": 1,
+    "zero_overlaps": true,
+    "zero_margin_breaches": true
+  }
+}
