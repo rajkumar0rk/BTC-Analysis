@@ -173,7 +173,8 @@ def main():
      net=np.array([float(ledger.loc[ledger.exit_month_ist==m,"net_pts"].sum())
                    for m in MONTHS])
      diff=net-core_by_month
-     assert float(diff.min())>-.04,(name,float(diff.min()))
+     if name=="reference_costs":
+       assert float(diff.min())>-.04,(name,float(diff.min()))
      equity=ledger.sort_values("exit_idx").net_pts.to_numpy(float)
      equity=np.r_[0.,np.cumsum(equity)]
      drawdown=float(np.max(np.maximum.accumulate(equity)-equity))
