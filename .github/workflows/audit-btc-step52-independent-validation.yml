@@ -1,0 +1,29 @@
+name: BTCUSD Step52 independent execution audit
+on:
+  push:
+    branches: [research/btc-step52-independent-validation]
+    paths:
+      - scripts/audit_step52_frozen_strategy.py
+      - scripts/step52_validation_engine.py
+      - .github/workflows/audit-btc-step52-independent-validation.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/audit_step52_frozen_strategy.py scripts/step52_validation_engine.py
+      - run: python scripts/audit_step52_frozen_strategy.py
+      - run: STRICT_PREENTRY=1 python scripts/audit_step52_frozen_strategy.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-step52-independent-validation
+          path: analysis/btc_step52_independent_validation/
