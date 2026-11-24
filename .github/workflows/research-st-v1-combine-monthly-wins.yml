@@ -1,0 +1,41 @@
+name: BTC ST V1 combine separate winning months without profit harm
+on:
+  push:
+    branches:
+      - research/st-v1-combine-monthly-wins-20261124
+    paths:
+      - scripts/research_st_v1_combine_monthly_win_exits.py
+      - .github/workflows/research-st-v1-combine-monthly-wins.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install analysis libraries
+        run: python -m pip install numpy pandas tabulate
+      - name: Joint 1-minute replay of independent exit variants
+        run: python -u scripts/research_st_v1_combine_monthly_win_exits.py
+      - name: Archive reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-st-v1-combined-monthly-win-research
+          path: analysis/st_v1_combine_monthly_win_exits_20261124/
+          if-no-files-found: warn
+      - name: Commit successful research results
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_v1_combine_monthly_win_exits_20261124/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: combined win-month exits with profit-preservation audit"
+            git push origin HEAD:research/st-v1-combine-monthly-wins-20261124
+          fi
