@@ -1,0 +1,186 @@
+name: Reclaim fixed common settings 2024 2025
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-fixed-common-2024-2025-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  fixed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore native 2024 data
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download 45363730365 --repo rajkumar0rk/BTC-Analysis --name delta-india-btcusd-2024-native --dir research-data-2024
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas numba
+      - name: Fixed grid 2025 then frozen 2024 test
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import json,pathlib,itertools
+          import numpy as np,pandas as pd
+          from numba import njit
+          from research_st_ema20_initial_sl_grid_20261122 import eng
+          e=eng();e.smoke_test()
+          root=pathlib.Path("data/delta_india/BTCUSD")
+          out=pathlib.Path("analysis/reclaim_common_fixed_2024_2025");out.mkdir(parents=True,exist_ok=True)
+          def load(folder,years,cols):
+              frames=[]
+              for p in sorted(pathlib.Path(folder).glob("20??-??.csv.gz")):
+                  if p.name[:4] not in years:continue
+                  x=pd.read_csv(p,usecols=["time"]+cols);x.index=pd.to_datetime(x.pop("time"),unit="s",utc=True);frames.append(x)
+              if not frames:raise RuntimeError(str(folder))
+              x=pd.concat(frames).sort_index()
+              assert not x.index.has_duplicates
+              return x
+          cols=["open","high","low","close","volume"]
+          m=pd.concat([load("research-data-2024/1m",["2023","2024"],cols),load(root/"1m",["2025"],cols)]).sort_index()
+          assert not m.index.has_duplicates and np.isfinite(m[cols]).all().all()
+          assert (m.low<=m[["open","close"]].min(axis=1)).all() and (m.high>=m[["open","close"]].max(axis=1)).all()
+          def joined(label,cols):
+              return pd.concat([load("research-data-2024/"+label,["2023","2024"],cols),load(root/"institutional/history"/label,["2025"],cols)]).sort_index()
+          fund=joined("funding_1h",["close"]).close
+          mark=joined("mark_1m",["open","low","high"])
+          # Separate each contiguous segment. Seven days of indicator warmup, never bridge data gaps.
+          segments={}
+          coverage=[]
+          for yr in [2024,2025]:
+              start=pd.Timestamp(str(yr)+"-01-01",tz="UTC");end=pd.Timestamp(str(yr+1)+"-01-01",tz="UTC")
+              raw=m.loc[(m.index>=start-pd.Timedelta(days=7))&(m.index<end)]
+              grp=raw.index.to_series().diff().ne(pd.Timedelta(minutes=1)).cumsum()
+              segments[yr]=[]; used=0
+              for _,q in raw.groupby(grp):
+                  a=q.index.min().ceil("h");b=(q.index.max()+pd.Timedelta(minutes=1)).floor("h")
+                  q=q.loc[(q.index>=a)&(q.index<b)]
+                  if len(q)<8*24*60:continue
+                  eligible=max(start,q.index.min()+pd.Timedelta(days=7))
+                  if eligible>=q.index.max():continue
+                  assert q.close.resample("1h").count().eq(60).all()
+                  h=e.features(q.resample("1h").agg(dict(open="first",high="max",low="min",close="last",volume="sum")))
+                  events=e.entry_candidates(q,h,"reclaim")
+                  j=[];s=[];mid=[];ends=[]
+                  hs=h.side.to_numpy()
+                  for v in events:
+                      k=int(v["entry_j"])
+                      if q.index[k]<eligible or pd.Timestamp(v["signal"])<eligible:continue
+                      sd=int(v["side"]);f=np.flatnonzero(hs[k//60:]!=sd)
+                      endj=min((k//60+int(f[0])+1)*60,len(q)) if len(f) else len(q)
+                      j.append(k);s.append(sd);mid.append(float(v["entry"])-sd*e.SLIP);ends.append(endj)
+                  idx=q.index
+                  rates=fund.reindex(idx.floor("h")-pd.Timedelta(hours=1)).to_numpy(float)
+                  mk=mark.reindex(idx)
+                  weight=np.where(idx<pd.Timestamp("2025-09-08T16:00:00Z"),1/480,np.where((idx.minute==0)&(idx.hour%8==0),1.,0.))
+                  flow=np.where(weight==0,0.,rates*mk.open.to_numpy()*weight*.001/100)
+                  missing=~np.isfinite(flow)
+                  def prefix(x):return np.r_[0.,np.cumsum(x)]
+                  month=idx.month.to_numpy(np.int64)-1
+                  n=int((idx>=eligible).sum());used+=n
+                  coverage.append(dict(year=yr,start=str(eligible),end=str(idx[-1]),used_minutes=n,signals=len(j)))
+                  segments[yr].append((*(q[k].to_numpy(float) for k in ["open","high","low","close"]),np.array(j,np.int64),np.array(s,np.int64),np.array(mid,float),np.array(ends,np.int64),month,prefix(np.where(missing,0.,np.maximum(flow,0.))),prefix(np.where(missing,0.,np.maximum(-flow,0.))),prefix(missing),mk.low.to_numpy(float),mk.high.to_numpy(float)))
+              print("COVERAGE",yr,used,int((end-start).total_seconds()/60),flush=True)
+          (out/"coverage.json").write_text(json.dumps(coverage,indent=2))
+          @njit
+          def replay(o,h,l,c,j,sd,mid,end,sl,tp,path,slip):
+              entry=mid+sd*slip;stop=entry*(1-sd*sl/100);target=entry*(1+sd*tp/100)
+              lo=entry;hi=entry
+              for k in range(j,end):
+                  nodes=(o[k],h[k],l[k],c[k]) if path==0 else (o[k],l[k],h[k],c[k])
+                  active=k!=j or sd*(nodes[0]-mid)>=0
+                  if active:
+                      lo=min(lo,nodes[0]);hi=max(hi,nodes[0])
+                      if sd*(nodes[0]-stop)<0:return k,nodes[0]-sd*slip,lo,hi,0
+                      if tp>0 and sd*(nodes[0]-target)>=0:return k,nodes[0]-sd*slip,lo,hi,0
+                  for z in range(3):
+                      a,b=nodes[z],nodes[z+1]
+                      if not active:
+                          if sd*(b-a)<=0 or sd*(b-mid)<0:continue
+                          a=mid;active=True
+                      lo=min(lo,a);hi=max(hi,a)
+                      if sd*(b-a)>0:
+                          if tp>0 and sd*(a-target)<=0 and sd*(b-target)>=0:
+                              lo=min(lo,target);hi=max(hi,target)
+                              return k,target-sd*slip,lo,hi,0
+                          for rung in (2.,3.,5.):
+                              v=entry*(1+sd*rung/100)
+                              if sd*(a-v)<0 and sd*(b-v)>=0 and sd*(v-stop)>0:stop=v
+                      elif sd*(b-stop)<=0:
+                          x=a if sd*(a-stop)<0 else stop
+                          lo=min(lo,x);hi=max(hi,x)
+                          return k,x-sd*slip,lo,hi,0
+                      lo=min(lo,b);hi=max(hi,b)
+              if end<len(o):return end,o[end]-sd*slip,min(lo,o[end]),max(hi,o[end]),0
+              return end-1,c[end-1]-sd*slip,min(lo,c[end-1]),max(hi,c[end-1]),1
+          @njit
+          def batch(o,h,l,c,j,sd,mid,ends,month,fl,fs,fmissing,ml,mh,sl,tp,path,slip,fee,cash,peak):
+              mon=np.zeros(12);counts=np.zeros(12);wins=0;losses=0;flat=0;dd=0.;skips=0;overlaps=0;boundary=0;missing=0;markmissing=0;funding=0.;fees=0.;marginrisk=0;active=-1
+              for i in range(len(j)):
+                  k=j[i];side=sd[i];entry=mid[i]+side*slip
+                  if k<=active:overlaps+=1;continue
+                  if entry*.001*(1+fee)>cash:skips+=1;continue
+                  x,fill,low,high,bd=replay(o,h,l,c,k,side,mid[i],ends[i],sl,tp,path,slip)
+                  active=x;boundary+=bd
+                  fp=fl if side==1 else fs
+                  debit=fp[x+1]-fp[k];funding+=debit;missing+=fmissing[x+1]-fmissing[k]
+                  f=.001*fee*(entry+fill);fees+=f
+                  net=.001*side*(fill-entry)-f-debit
+                  # Conservative floating DD bound: allow favorable peak before adverse low/high.
+                  good=high if side==1 else low;bad=low if side==1 else high
+                  peak=max(peak,cash+.001*side*(good-entry)-.001*fee*(entry+good))
+                  loweq=cash+.001*side*(bad-entry)-.001*fee*(entry+bad)-debit-.001*slip
+                  dd=max(dd,100*(peak-loweq)/peak)
+                  ma=ml[k:x+1] if side==1 else mh[k:x+1]
+                  if not np.isfinite(ma).all():markmissing+=1
+                  else:
+                      adverse=np.min(ma)*.995 if side==1 else np.max(ma)*1.005
+                      equity=cash+.001*side*(adverse-entry)-f-debit
+                      if equity<=.001*adverse*(.0025+fee+.0025*.5*1.18):marginrisk+=1
+                  cash+=net;peak=max(peak,cash);dd=max(dd,100*(peak-cash)/peak)
+                  mon[month[x]]+=net;counts[month[x]]+=1
+                  if net>0:wins+=1
+                  elif net<0:losses+=1
+                  else:flat+=1
+              return mon,counts,wins,losses,flat,dd,skips,overlaps,boundary,missing,markmissing,funding,fees,marginrisk,cash,peak
+          def evaluate(yr,sl,tp,path,slip,fee):
+              mon=np.zeros(12);counts=np.zeros(12);cash=100.;peak=100.;dd=0.;v=np.zeros(10);marginrisk=0
+              for seg in segments[yr]:
+                  r=batch(*seg,sl,tp,path,slip,fee,cash,peak)
+                  mon+=r[0];counts+=r[1];dd=max(dd,r[5]);cash,peak=r[-2:]
+                  v+=np.array([*r[2:5],*r[6:13]]);marginrisk+=r[13]
+                  # marginrisk separately
+              return dict(year=yr,sl=sl,tp=tp,path=path,slip=slip,fee=fee,net=float(mon.sum()),positive_months=int((mon>0).sum()),negative_months=int((mon<0).sum()),flat_months=int((mon==0).sum()),trades=int(counts.sum()),wins=int(v[0]),losses=int(v[1]),breakeven=int(v[2]),dd_bound=dd,wallet_skips=int(v[3]),overlaps=int(v[4]),boundary_exits=int(v[5]),missing_funding_minutes=int(v[6]),trades_missing_mark=int(v[7]),funding_debit=float(v[8]),fees=float(v[9]),marginrisk=marginrisk,monthly=mon.tolist(),monthly_trades=counts.astype(int).tolist())
+          # fixed values only; no date/time, indicator gate, directional override or balance-based TP/SL.
+          grid=list(itertools.product([.2,.3,.5,.75,1.,1.25,1.5,2.,3.],[.26,.38,.5,.65,.8,1.2,1.5,2.,2.5,3.,-1.]))
+          scenarios=[(p,slip,fee) for p in [0,1] for slip,fee in [(5.,.00059),(25.,.00059*1.5)]]
+          train=[];validation=[]
+          for sl,tp in grid:
+              a=[evaluate(2025,sl,tp,*sc) for sc in scenarios];train.extend(a)
+          def aggregate(rows):
+              return dict(sl=rows[0]["sl"],tp=rows[0]["tp"],base_net=min(x["net"] for x in rows if x["slip"]==5),stress_net=min(x["net"] for x in rows),positive_months=min(x["positive_months"] for x in rows),worst_dd=max(x["dd_bound"] for x in rows),min_trades=min(x["trades"] for x in rows),max_wallet_skips=max(x["wallet_skips"] for x in rows),max_overlap=max(x["overlaps"] for x in rows))
+          rank=[aggregate(train[i:i+len(scenarios)]) for i in range(0,len(train),len(scenarios))]
+          rank.sort(key=lambda a:(a["stress_net"]>0,a["positive_months"],a["stress_net"],a["base_net"],-a["worst_dd"]),reverse=True)
+          chosen=rank[0]
+          print("TRAIN_SELECTED",json.dumps(chosen),flush=True)
+          # Freeze selection before looking at 2024 results. Only selected common settings plus fixed baseline.
+          for sl,tp in [(chosen["sl"],chosen["tp"]),(2.,-1.)]:
+              if any(x["sl"]==sl and x["tp"]==tp for x in validation):continue
+              validation.extend(evaluate(2024,sl,tp,*sc) for sc in scenarios)
+          for x in validation: print("HOLDOUT_FIXED",json.dumps(x),flush=True)
+          print("TRAIN_FIXED",json.dumps([x for x in train if (x["sl"],x["tp"]) in [(chosen["sl"],chosen["tp"]),(2.,-1.)]]),flush=True)
+          (out/"train_grid.json").write_text(json.dumps(train,indent=2))
+          (out/"train_rank.json").write_text(json.dumps(rank,indent=2))
+          (out/"holdout.json").write_text(json.dumps(validation,indent=2))
+          (out/"selected.json").write_text(json.dumps(chosen,indent=2))
+          print("COMMON_FIXED_COMPLETE",flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reclaim-common-fixed-2024-2025
+          path: analysis/reclaim_common_fixed_2024_2025/
