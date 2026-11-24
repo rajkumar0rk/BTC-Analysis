@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "name": "BTCUSD EMA20 Reclaim V7",
+  "status": "historical_research_candidate_not_live_approved",
+  "parent": "V6",
+  "instrument": "BTCUSD",
+  "exchange": "Delta Exchange India",
+  "signal_timeframe": "1h",
+  "execution_timeframe": "1m",
+  "weekends_enabled": true,
+  "signal_engine": "scripts/backtest_st_ema20_large_percent_locks.py",
+  "base_policy": ".github/workflows/reclaim-v6-independent-validation-20261124.yml",
+  "starting_balance_usd": 100,
+  "quantity_btc": 0.001,
+  "initial_sl_percent": 2,
+  "profit_lock_rungs_percent": [
+    2,
+    3,
+    5
+  ],
+  "baseline_fee_per_side_including_gst": 0.00059,
+  "baseline_slippage_points_per_side": 5,
+  "training_start": "2025-01-01",
+  "training_end": "2026-10-31",
+  "monthly_return_denominator": "initial_capital",
+  "policy_rules_in_order": [
+    {
+      "start": "V6"
+    },
+    {
+      "gate": "atr_expansion <= 0.85 AND ema_gap_pct >= 0.1",
+      "target": 0.65,
+      "mode": "override"
+    },
+    {
+      "gate": "atr_pct <= 0.45 AND ema_slope_pct >= -0.1",
+      "target": 1.5,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "hourly_body_atr <= 0.25 AND supertrend_age_hours <= 24",
+      "target": 0.65,
+      "mode": "new_only"
+    },
+    {
+      "gate": "volume_ratio <= 0.65 AND adx14 >= 25",
+      "target": 2,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "atr_pct <= 0.6 AND ema_slope_pct <= -0.1",
+      "target": 0.5,
+      "mode": "override"
+    },
+    {
+      "gate": "volume_ratio <= 3.0 AND hourly_range_atr >= 2.0",
+      "target": 0,
+      "mode": "override"
+    },
+    {
+      "gate": "volume_ratio <= 1.0 AND atr_expansion <= 0.85",
+      "target": 0.9,
+      "mode": "selected_only"
+    },
+    {
+      "gate": "volume_ratio <= 0.35 AND ema_gap_pct >= 0.05",
+      "target": -1,
+      "mode": "selected_only"
+    }
+  ],
+  "rule_target_semantics": {
+    "0": "skip entry",
+    "-1": "no fixed take-profit; retain profit locks and reversal exit",
+    "positive": "fixed take-profit percentage; original stops remain active"
+  },
+  "optimization_evidence": {
+    "run_id": 45332130457,
+    "commit": "ce1a02a408cca591ab527e7361b8fb35f49d42a4",
+    "passed": 880,
+    "total": 880,
+    "worst_month": 1.1001275294774957,
+    "conservative_net": 73.392684
+  },
+  "independent_validation_run": 45332295204,
+  "limitations": [
+    "Historical in-sample optimization, not an untouched test.",
+    "No verified actual funding cash settlement.",
+    "No actual historical liquidation ledger or live order fills."
+  ]
+}
