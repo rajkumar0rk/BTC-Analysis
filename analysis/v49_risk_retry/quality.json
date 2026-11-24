@@ -1,0 +1,11 @@
+{
+  "baseline_parity": true,
+  "training_period": "2024-02 through 2025-12",
+  "validation_2026_run": false,
+  "risk_pct": 0.03,
+  "whole_lot_btc": 0.001,
+  "exposure_cap": 3.0,
+  "retry_rule": "one attempt after 4h or 8h; still beyond original breakout; any newer fresh signal cancels; only risk-budget rejection qualifies",
+  "cost_model": "inherited V48",
+  "historical_2026_previously_examined": true
+}
