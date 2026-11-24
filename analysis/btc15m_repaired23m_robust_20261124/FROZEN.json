@@ -1,0 +1,129 @@
+{
+  "candidate": 10,
+  "config": {
+    "sl": 3.0,
+    "rr": 3.0,
+    "flip": false,
+    "filter": "slope4"
+  },
+  "control_candidate": 9,
+  "passes_training_gate": false,
+  "selection": "Training only, both years and baseline/stressed costs. Same previous minimum return, DD, trade and positive neighbor score gates plus majority-positive adjacent configs. If none qualifies, top candidate diagnostic only.",
+  "archive_commit": "edcf60fa0a229108d09772dc6cbe04eb15476291",
+  "training_periods": [
+    "2024-02..12 (first 2 days warmup)",
+    "2025-01..12"
+  ],
+  "prior_2026_exposure": true,
+  "grid": [
+    {
+      "sl": 2.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 2.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "body35"
+    },
+    {
+      "sl": 2.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 2.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 2.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "body35"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "body35"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 3.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "body35"
+    },
+    {
+      "sl": 4.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 4.0,
+      "rr": 2.0,
+      "flip": false,
+      "filter": "body35"
+    },
+    {
+      "sl": 4.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "sl": 4.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "slope4"
+    },
+    {
+      "sl": 4.0,
+      "rr": 3.0,
+      "flip": false,
+      "filter": "body35"
+    }
+  ],
+  "training_sha256": "6c3db1b9552bd321292c25cdd724d030385b26b4e082735e9b9eecec14ee2a5d"
+}
