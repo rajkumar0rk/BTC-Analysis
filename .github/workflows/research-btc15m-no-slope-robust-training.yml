@@ -1,0 +1,108 @@
+name: BTCUSD core-only train 2024-25 validate 2026
+on:
+  push:
+    branches: [research/btc15m-no-slope-robust-training-20261124]
+    paths:
+      - scripts/research_btc15m_no_slope_robust_training.py
+      - .github/workflows/research-btc15m-no-slope-robust-training.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5]
+    env:
+      SHARD_INDEX: ${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==3.1.1 numpy==2.5.5 tabulate==0.10.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: x180-2024-data-*
+          path: _validation_data
+          merge-multiple: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 45374768673
+      - run: python scripts/research_btc15m_no_slope_robust_training.py train
+      - uses: actions/upload-artifact@v4
+        with:
+          name: no-slope-train-shard-${{ matrix.shard }}
+          path: analysis/btc15m_no_slope_robust_training_20261124/shard_${{ matrix.shard }}/
+          if-no-files-found: error
+  freeze:
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==3.1.1 numpy==2.5.5 tabulate==0.10.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: no-slope-train-shard-*
+          path: _shards
+      - run: |
+          mkdir -p analysis/btc15m_no_slope_robust_training_20261124
+          for i in {0..5}; do
+            cp -r "_shards/no-slope-train-shard-$i" "analysis/btc15m_no_slope_robust_training_20261124/shard_$i"
+          done
+          python scripts/research_btc15m_no_slope_robust_training.py freeze
+      - uses: actions/upload-artifact@v4
+        with:
+          name: no-slope-frozen-selection
+          path: |
+            analysis/btc15m_no_slope_robust_training_20261124/FROZEN.json
+            analysis/btc15m_no_slope_robust_training_20261124/training.csv
+            analysis/btc15m_no_slope_robust_training_20261124/training_ranked.csv
+            analysis/btc15m_no_slope_robust_training_20261124/training_monthly.csv
+          if-no-files-found: error
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc15m_no_slope_robust_training_20261124/{FROZEN.json,training.csv,training_ranked.csv,training_monthly.csv}
+          git commit -m "research: freeze core-only training selection before validation"
+          git push origin HEAD:research/btc15m-no-slope-robust-training-20261124
+  validate:
+    needs: freeze
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==3.1.1 numpy==2.5.5 tabulate==0.10.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: x180-2024-data-*
+          path: _validation_data
+          merge-multiple: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: 45374768673
+      - uses: actions/download-artifact@v4
+        with:
+          name: no-slope-frozen-selection
+          path: analysis/btc15m_no_slope_robust_training_20261124/
+      - run: python scripts/research_btc15m_no_slope_robust_training.py validate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: no-slope-frozen-validation-results
+          path: analysis/btc15m_no_slope_robust_training_20261124/
+          if-no-files-found: error
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc15m_no_slope_robust_training_20261124/
+          git commit -m "research: report frozen core-only validation"
+          git pull --rebase origin research/btc15m-no-slope-robust-training-20261124
+          git push origin HEAD:research/btc15m-no-slope-robust-training-20261124
