@@ -1,0 +1,56 @@
+{
+  "report_as_of_utc": "2026-11-24T05:00:00+00:00",
+  "source_first_utc": "2026-11-17T14:39:56.224000+00:00",
+  "source_last_utc": "2026-11-23T21:36:21.633000+00:00",
+  "days_with_data": 7,
+  "file_count": 8,
+  "unique_snapshots": 22,
+  "expected_15min_snapshots_approx": 634,
+  "snapshot_coverage_pct": 3.47,
+  "duplicate_timestamps": 0,
+  "gaps_over_35_minutes": 21,
+  "max_gap_minutes": 731.1657,
+  "valid_synchronized_quotes": 22,
+  "invalid_quote_reasons": {},
+  "public_endpoint_errors": {
+    "binance_usdm_btcusdt_published_funding_events": 22
+  },
+  "median_delta_spread_points": 0.5,
+  "median_binance_spot_spread_points": 0.01,
+  "median_indicative_delta_bid_minus_spot_ask_points": -29.39,
+  "indicative_positive_entry_premium_pct": 0.0,
+  "delta_funding_proxy_available": 22,
+  "binance_published_funding_available": 0,
+  "basis_pair_15m": {
+    "pairs": 0,
+    "positive_pairs": 0,
+    "positive_pct": null,
+    "mean_net_points_proxy": null,
+    "median_net_points_proxy": null,
+    "median_fee_points_proxy": null,
+    "mean_gross_points_proxy": null,
+    "example_first_pair": null
+  },
+  "basis_pair_60m": {
+    "pairs": 0,
+    "positive_pairs": 0,
+    "positive_pct": null,
+    "mean_net_points_proxy": null,
+    "median_net_points_proxy": null,
+    "median_fee_points_proxy": null,
+    "mean_gross_points_proxy": null,
+    "example_first_pair": null
+  },
+  "minimum_sample_goal_met": false,
+  "realized_pnl": null,
+  "market_making_profitability": null,
+  "cashflow_from_funding_verified": false,
+  "warnings": [
+    "Binance USDT and Delta USD prices are not fungible; quote basis results are NOT executable.",
+    "Fills, depth available at quoted size, Delta contracts, exchange access and capital transfer not verified.",
+    "Delta funding is an hourly rate proxy; account-level settlement data unavailable.",
+    "15-minute snapshots miss transient microstructure and maker order queue dynamics.",
+    "Per-side Binance spot taker fee assumed 0.10%; Delta taker 0.05% plus 18% GST; slippage assumes 5 price points per execution.",
+    "This analysis is only a first data-collection feasibility study; insufficient for claims of consistent monthly profits."
+  ]
+}
