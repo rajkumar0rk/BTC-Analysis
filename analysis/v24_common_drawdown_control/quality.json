@@ -1,0 +1,306 @@
+{
+  "configs_tested": 45,
+  "full_configs": 8,
+  "scenario_rows": 4080,
+  "common_profile": {
+    "leverage": 50,
+    "track": "known_november_development",
+    "rank": [
+      1,
+      22,
+      484,
+      1,
+      1508.3932575673932,
+      2760.8385538743346,
+      57715.84251661501,
+      -5677.812221765171,
+      0
+    ],
+    "evaluations": 1298442,
+    "legs": [
+      {
+        "group": "EMA20_ADX_reclaim_confirm1",
+        "filter": "all",
+        "stop_fraction": 0.7,
+        "tp_pct": 3,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 1e+30
+      },
+      {
+        "group": "M5_EMA50",
+        "filter": "high_ATR_ratio",
+        "stop_fraction": 0.5,
+        "tp_pct": 3,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 1e+30
+      },
+      {
+        "group": "RSI_reversal",
+        "filter": "H4_not_aligned",
+        "stop_fraction": 0.7,
+        "tp_pct": 3.5,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 1000
+      },
+      {
+        "group": "M15_squeeze24",
+        "filter": "high_ATR_ratio",
+        "stop_fraction": 0.35,
+        "tp_pct": 6,
+        "max_minutes": 2880,
+        "trail_fraction": 1.5,
+        "mtd_gate": 1e+30
+      },
+      {
+        "group": "H1_Donchian72",
+        "filter": "long_ADX32",
+        "stop_fraction": 0.7,
+        "tp_pct": 10,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 0
+      },
+      {
+        "group": "M60_squeeze24",
+        "filter": "long_ADX28",
+        "stop_fraction": 0.6,
+        "tp_pct": 2,
+        "max_minutes": 1440,
+        "trail_fraction": 0,
+        "mtd_gate": 1e+30
+      },
+      {
+        "group": "H1_RSI30_reversal_confirm5",
+        "filter": "high_ATR_ratio",
+        "stop_fraction": 0.15,
+        "tp_pct": 4,
+        "max_minutes": 4320,
+        "trail_fraction": 0,
+        "mtd_gate": 500
+      },
+      {
+        "group": "M60_squeeze24_confirm1",
+        "filter": "H4_long",
+        "stop_fraction": 0.7,
+        "tp_pct": 3,
+        "max_minutes": 1440,
+        "trail_fraction": 0,
+        "mtd_gate": 1000
+      }
+    ],
+    "month_ceiling": 1500,
+    "daily_limit": 2,
+    "loss_guard": 6000
+  },
+  "ranking": [
+    {
+      "config": "risk_0.075",
+      "controls": {
+        "risk_pct": 0.075
+      },
+      "rank": [
+        1,
+        19,
+        4362,
+        -51.18841250378871,
+        43.61695774599485
+      ],
+      "worst_dd": 51.18841250378871,
+      "worst_closed_dd": 49.61015896497991,
+      "min_profit": 43.61695774599485,
+      "max_liq": 0,
+      "min_trades": 82,
+      "min_months": 18,
+      "sum_months": 4162,
+      "base_profit_sum": 4335.1630193345745
+    },
+    {
+      "config": "exposure_1.5",
+      "controls": {
+        "max_eff": 1.5
+      },
+      "rank": [
+        1,
+        19,
+        4359,
+        -15.46683556360842,
+        35.12422124632411
+      ],
+      "worst_dd": 15.46683556360842,
+      "worst_closed_dd": 14.065729569872362,
+      "min_profit": 35.12422124632411,
+      "max_liq": 0,
+      "min_trades": 82,
+      "min_months": 18,
+      "sum_months": 4159,
+      "base_profit_sum": 1089.2373916732604
+    },
+    {
+      "config": "risk_0.05",
+      "controls": {
+        "risk_pct": 0.05
+      },
+      "rank": [
+        1,
+        19,
+        4355,
+        -36.706940193383645,
+        43.61695774599485
+      ],
+      "worst_dd": 36.706940193383645,
+      "worst_closed_dd": 34.98638822095299,
+      "min_profit": 43.61695774599485,
+      "max_liq": 0,
+      "min_trades": 82,
+      "min_months": 18,
+      "sum_months": 4155,
+      "base_profit_sum": 3236.0125596262264
+    },
+    {
+      "config": "exposure_3.0",
+      "controls": {
+        "max_eff": 3.0
+      },
+      "rank": [
+        1,
+        19,
+        4353,
+        -31.282604926506718,
+        43.61695774599485
+      ],
+      "worst_dd": 31.282604926506718,
+      "worst_closed_dd": 29.922573949922505,
+      "min_profit": 43.61695774599485,
+      "max_liq": 0,
+      "min_trades": 82,
+      "min_months": 18,
+      "sum_months": 4153,
+      "base_profit_sum": 2812.480708426596
+    },
+    {
+      "config": "risk_0.04",
+      "controls": {
+        "risk_pct": 0.04
+      },
+      "rank": [
+        1,
+        19,
+        4351,
+        -29.882533790820975,
+        43.61695774599485
+      ],
+      "worst_dd": 29.882533790820975,
+      "worst_closed_dd": 25.742475902482386,
+      "min_profit": 43.61695774599485,
+      "max_liq": 0,
+      "min_trades": 82,
+      "min_months": 18,
+      "sum_months": 4151,
+      "base_profit_sum": 2662.7989471311507
+    },
+    {
+      "config": "risk_0.02",
+      "controls": {
+        "risk_pct": 0.02
+      },
+      "rank": [
+        1,
+        18,
+        4293,
+        -14.895572887054456,
+        36.87220918563361
+      ],
+      "worst_dd": 14.895572887054456,
+      "worst_closed_dd": 12.68335916445494,
+      "min_profit": 36.87220918563361,
+      "max_liq": 0,
+      "min_trades": 82,
+      "min_months": 17,
+      "sum_months": 4093,
+      "base_profit_sum": 1059.1322784373822
+    },
+    {
+      "config": "hybrid_0.03_3.0",
+      "controls": {
+        "risk_pct": 0.03,
+        "max_eff": 3.0,
+        "throttle_at": 0.1,
+        "throttle_floor": 0.5
+      },
+      "rank": [
+        1,
+        13,
+        4108,
+        -17.91506805834462,
+        5.679367903529382
+      ],
+      "worst_dd": 17.91506805834462,
+      "worst_closed_dd": 17.115489470397517,
+      "min_profit": 5.679367903529382,
+      "max_liq": 0,
+      "min_trades": 79,
+      "min_months": 12,
+      "sum_months": 3908,
+      "base_profit_sum": 1644.8474069856966
+    },
+    {
+      "config": "baseline",
+      "controls": {},
+      "rank": [
+        0,
+        3,
+        4169,
+        -100.22273446369414,
+        -100.0
+      ],
+      "worst_dd": 100.22273446369414,
+      "worst_closed_dd": 100.0,
+      "min_profit": -100.0,
+      "max_liq": 1,
+      "min_trades": 15,
+      "min_months": 3,
+      "sum_months": 3980,
+      "base_profit_sum": 5148.763926351652
+    }
+  ],
+  "all_leverages_same_strategy": true,
+  "account_start": 100.0,
+  "margin_budget": 10.0,
+  "search_scenarios": [
+    "base",
+    "fill100",
+    "stop1",
+    "combined"
+  ],
+  "full_scenarios": [
+    "base",
+    "cash_0",
+    "cash_50",
+    "cash_100",
+    "cash_150",
+    "cash_250",
+    "fill10",
+    "fill25",
+    "fill50",
+    "fill100",
+    "cost200_fill25",
+    "entry1",
+    "entry2",
+    "stop1",
+    "shock25",
+    "shock50",
+    "mmr30",
+    "mmr35",
+    "fee07",
+    "combined"
+  ],
+  "funding_modes": [
+    0,
+    1
+  ],
+  "known_development_only": true,
+  "exact_exchange_liquidation_unverified": true
+}
