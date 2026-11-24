@@ -1,0 +1,38 @@
+name: BTC Step52 original frozen replay 2024
+on:
+  push:
+    branches: [research/btc-step52-frozen-2024]
+    paths:
+      - scripts/replay_step52_frozen_2024.py
+      - .github/workflows/replay-step52-frozen-2024.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: clean-core-2024
+          run-id: 45374511488
+          github-token: ${{ github.token }}
+          path: prior2024
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/replay_step52_frozen_2024.py
+      - run: python scripts/replay_step52_frozen_2024.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: step52-frozen-2024
+          path: analysis/btc_step52_frozen_2024/
