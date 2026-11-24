@@ -1,0 +1,44 @@
+name: V31 frozen February-December 2024 backtests
+on:
+  push:
+    branches: [research/v31-february-december-2024-replay-20261124]
+    paths:
+      - 'scripts/validate_v31_*.py'
+      - '.github/workflows/validate-v31-february-december-2024.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Load latest verified 2024 snapshot and unchanged original source
+        run: |
+          git fetch --depth=1 origin research/btcusd-2024-gap-retry-20261124 research/st-ema20-reclaim-loss-month-filters-20261122-v1 research/btc-shock-only-donchian-20261121 research/st-ema20-1h-reversal-only-20261122
+          git checkout origin/research/btcusd-2024-gap-retry-20261124 -- data/delta_india/BTCUSD/2024_verified_archive
+          git checkout origin/research/st-ema20-reclaim-loss-month-filters-20261122-v1 -- scripts/backtest_st_ema20_large_percent_locks.py scripts/research_st_ema20_reclaim_loss_months_20261122.py scripts/research_st_ema20_initial_sl_grid_20261122.py
+          git checkout origin/research/btc-shock-only-donchian-20261121 -- scripts/research_btc_regime_attribution_20261121.py
+          git checkout origin/research/st-ema20-1h-reversal-only-20261122 -- scripts/backtest_st_ema20_reversal_only.py
+          git reset
+          python -m pip install 'numpy<2.3' pandas numba tabulate
+      - name: Replay unchanged V23 benchmark
+        run: python -u scripts/validate_v31_frozen_v23_2024.py
+      - name: Replay frozen V28 and V29
+        run: python -u scripts/validate_v31_clean_frozen_2024.py
+      - name: Publish February-December reports
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add analysis/v31_february_december_2024
+          git commit -m 'Report frozen 2024 eleven-month replay'
+          git push origin HEAD:research/v31-february-december-2024-replay-20261124
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v31-february-december-2024
+          path: analysis/v31_february_december_2024/
