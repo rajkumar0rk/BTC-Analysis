@@ -1,0 +1,31 @@
+{
+  "unique_masks": 95597,
+  "never_worse_any_month": 2031,
+  "win_improvers": 1586,
+  "month_only_status_improvers": 1668,
+  "three_or_masks": 96233,
+  "three_plus_masks": 10605,
+  "primitive_1h_signal_gates": 173,
+  "original_trades": 55,
+  "original_month_win": 15,
+  "original_month_loss": 5,
+  "original_month_flat": 2,
+  "original_net_usd_per_path": {
+    "open_high_low_close": 20.037378,
+    "open_low_high_close": 20.261506
+  },
+  "initial_sl_pct": 2,
+  "profit_lock_ladder_pct": [
+    2,
+    3,
+    5
+  ],
+  "entry_frozen": "Base 1H Reclaim V1; skipped trade never replaced",
+  "causality": "completed H1 entry features only",
+  "source": "independently verified historical BTCUSD 1m trade ledger",
+  "backtest_price_paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "bias": "In-sample multiple testing over 2025-26; 2026 not untouched holdout"
+}

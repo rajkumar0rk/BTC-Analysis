@@ -1,0 +1,397 @@
+filter_name,path,month_ist,locked_v1_usd,candidate_usd,delta_usd,candidate_status
+locked_v1,open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+locked_v1,open_high_low_close,2025-02,5.987289,5.987289,0.0,PROFIT
+locked_v1,open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+locked_v1,open_high_low_close,2025-04,0.312497,0.312497,0.0,PROFIT
+locked_v1,open_high_low_close,2025-05,0.104966,0.104966,0.0,PROFIT
+locked_v1,open_high_low_close,2025-06,4.923339,4.923339,0.0,PROFIT
+locked_v1,open_high_low_close,2025-07,3.199484,3.199484,0.0,PROFIT
+locked_v1,open_high_low_close,2025-08,0.405523,0.405523,0.0,PROFIT
+locked_v1,open_high_low_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+locked_v1,open_high_low_close,2025-10,-1.602894,-1.602894,0.0,LOSS
+locked_v1,open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+locked_v1,open_high_low_close,2025-12,0.211983,0.211983,0.0,PROFIT
+locked_v1,open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+locked_v1,open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+locked_v1,open_high_low_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+locked_v1,open_high_low_close,2026-04,-0.984376,-0.984376,0.0,LOSS
+locked_v1,open_high_low_close,2026-05,1.262489,1.262489,0.0,PROFIT
+locked_v1,open_high_low_close,2026-06,0.986303,0.986303,0.0,PROFIT
+locked_v1,open_high_low_close,2026-07,2.237246,2.237246,0.0,PROFIT
+locked_v1,open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+locked_v1,open_high_low_close,2026-09,-2.911479,-2.911479,0.0,LOSS
+locked_v1,open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+locked_v1,open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+locked_v1,open_low_high_close,2025-02,5.987289,5.987289,0.0,PROFIT
+locked_v1,open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+locked_v1,open_low_high_close,2025-04,0.312497,0.312497,0.0,PROFIT
+locked_v1,open_low_high_close,2025-05,0.104966,0.104966,0.0,PROFIT
+locked_v1,open_low_high_close,2025-06,3.851001,3.851001,0.0,PROFIT
+locked_v1,open_low_high_close,2025-07,4.284009,4.284009,0.0,PROFIT
+locked_v1,open_low_high_close,2025-08,0.405523,0.405523,0.0,PROFIT
+locked_v1,open_low_high_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+locked_v1,open_low_high_close,2025-10,-1.602894,-1.602894,0.0,LOSS
+locked_v1,open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+locked_v1,open_low_high_close,2025-12,1.083438,1.083438,0.0,PROFIT
+locked_v1,open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+locked_v1,open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+locked_v1,open_low_high_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+locked_v1,open_low_high_close,2026-04,-0.984376,-0.984376,0.0,LOSS
+locked_v1,open_low_high_close,2026-05,1.262489,1.262489,0.0,PROFIT
+locked_v1,open_low_high_close,2026-06,0.986303,0.986303,0.0,PROFIT
+locked_v1,open_low_high_close,2026-07,1.577732,1.577732,0.0,PROFIT
+locked_v1,open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+locked_v1,open_low_high_close,2026-09,-2.911479,-2.911479,0.0,LOSS
+locked_v1,open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-02,5.987289,7.267806,1.280517,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-05,0.104966,1.803161,1.698195,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-06,4.923339,4.923339,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-07,3.199484,3.199484,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-08,0.405523,2.157406,1.751883,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-10,-1.602894,0.007153,1.610047,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2025-12,0.211983,3.369699,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-05,1.262489,1.262489,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-07,2.237246,2.237246,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-09,-2.911479,-1.611877,1.299602,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-02,5.987289,7.267806,1.280517,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-05,0.104966,1.803161,1.698195,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-06,3.851001,3.851001,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-07,4.284009,4.284009,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-08,0.405523,2.157406,1.751883,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-10,-1.602894,0.007153,1.610047,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2025-12,1.083438,4.241154,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-05,1.262489,1.262489,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-07,1.577732,1.577732,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-09,-2.911479,-1.611877,1.299602,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct >= 0.5 OR dir_rsi14 >= 54 OR supertrend_gap_pct <= 0.75)),open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-06,4.923339,5.39334,0.470001,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-07,3.199484,3.199484,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-10,-1.602894,2.106324,3.709218,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-12,0.211983,3.369699,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-05,1.262489,1.262489,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-07,2.237246,3.101634,0.864388,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-09,-2.911479,-0.879983,2.031496,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-06,3.851001,4.321002,0.470001,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-07,4.284009,4.284009,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-10,-1.602894,2.106324,3.709218,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-12,1.083438,4.241154,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-05,1.262489,1.262489,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-07,1.577732,2.44212,0.864388,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-09,-2.911479,-0.879983,2.031496,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-06,4.923339,5.39334,0.470001,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-07,3.199484,3.199484,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-10,-1.602894,2.106324,3.709218,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2025-12,0.211983,3.369699,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-04,-0.984376,1.299286,2.283662,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-05,1.262489,1.262489,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-07,2.237246,2.237246,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-09,-2.911479,-0.879983,2.031496,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-06,3.851001,4.321002,0.470001,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-07,4.284009,4.284009,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-10,-1.602894,2.106324,3.709218,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2025-12,1.083438,4.241154,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-04,-0.984376,1.299286,2.283662,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-05,1.262489,1.262489,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-07,1.577732,1.577732,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-09,-2.911479,-0.879983,2.031496,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_expansion >= 1.2 OR supertrend_gap_pct >= 1 OR hourly_range_atr <= 1.25)),open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-04,0.312497,0.312497,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-06,4.923339,4.923339,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-07,3.199484,3.199484,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-09,-0.130897,0.0,0.130897,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-10,-1.602894,2.106324,3.709218,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-12,0.211983,3.369699,3.157716,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-03,-1.421728,0.0,1.421728,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-05,1.262489,2.905176,1.642687,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-06,0.986303,0.986303,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-07,2.237246,2.237246,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-09,-2.911479,-0.731894,2.179585,LOSS
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-04,0.312497,0.312497,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-06,3.851001,3.851001,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-07,4.284009,4.284009,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-09,-0.130897,0.0,0.130897,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-10,-1.602894,2.106324,3.709218,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-12,1.083438,4.241154,3.157716,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-03,-1.421728,0.0,1.421728,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-05,1.262489,2.905176,1.642687,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-06,0.986303,0.986303,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-07,1.577732,1.577732,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-09,-2.911479,-0.731894,2.179585,LOSS
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-06,4.923339,4.923339,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-07,3.199484,3.199484,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-10,-1.602894,0.496277,2.099171,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2025-12,0.211983,3.369699,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-03,-1.421728,0.0,1.421728,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-05,1.262489,2.184009,0.92152,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-07,2.237246,2.237246,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-09,-2.911479,-0.731894,2.179585,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-06,3.851001,3.851001,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-07,4.284009,4.284009,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-10,-1.602894,0.496277,2.099171,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2025-12,1.083438,4.241154,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-03,-1.421728,0.0,1.421728,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-05,1.262489,2.184009,0.92152,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-07,1.577732,1.577732,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-09,-2.911479,-0.731894,2.179585,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (atr_pct <= 0.5 OR atr_expansion <= 0.9 OR hourly_body_atr >= 0.5)),open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-06,4.923339,6.512267,1.588928,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-07,3.199484,5.307351,2.107867,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-10,-1.602894,0.007153,1.610047,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2025-12,0.211983,3.369699,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-05,1.262489,1.262489,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-07,2.237246,2.237246,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-09,-2.911479,-1.611877,1.299602,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-04,0.312497,1.743018,1.430521,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-06,3.851001,5.439929,1.588928,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-07,4.284009,6.391876,2.107867,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-09,-0.130897,-0.130897,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-10,-1.602894,0.007153,1.610047,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2025-12,1.083438,4.241154,3.157716,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-05,1.262489,1.262489,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-06,0.986303,1.878465,0.892162,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-07,1.577732,1.577732,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-09,-2.911479,-1.611877,1.299602,LOSS
+((supertrend_age_hours <= 12 OR dir_rsi14 <= 54 OR supertrend_gap_pct <= 1.25) AND (volume_ratio <= 1.75 OR atr_expansion <= 1.1 OR supertrend_age_hours >= 12)),open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-04,0.312497,0.312497,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-06,4.923339,6.512267,1.588928,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-07,3.199484,5.307351,2.107867,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-09,-0.130897,0.0,0.130897,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-10,-1.602894,0.007153,1.610047,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2025-12,0.211983,3.369699,3.157716,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-04,-0.984376,1.92372,2.908096,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-05,1.262489,1.983656,0.721167,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-06,0.986303,0.986303,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-07,2.237246,2.237246,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-09,-2.911479,-1.611877,1.299602,LOSS
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-04,0.312497,0.312497,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-06,3.851001,5.439929,1.588928,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-07,4.284009,6.391876,2.107867,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-09,-0.130897,0.0,0.130897,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-10,-1.602894,0.007153,1.610047,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2025-12,1.083438,4.241154,3.157716,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-03,-1.421728,-1.421728,0.0,LOSS
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-04,-0.984376,1.92372,2.908096,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-05,1.262489,1.983656,0.721167,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-06,0.986303,0.986303,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-07,1.577732,1.577732,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-09,-2.911479,-1.611877,1.299602,LOSS
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (atr_pct <= 0.5 OR hourly_range_atr <= 1.5 OR supertrend_age_hours >= 12)),open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-01,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-04,0.312497,0.312497,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-06,4.923339,4.923339,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-07,3.199484,3.199484,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-09,-0.130897,0.0,0.130897,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-10,-1.602894,2.106324,3.709218,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2025-12,0.211983,3.369699,3.157716,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-03,-1.421728,0.0,1.421728,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-05,1.262489,1.983656,0.721167,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-06,0.986303,0.986303,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-07,2.237246,3.101634,0.864388,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-09,-2.911479,-0.879983,2.031496,LOSS
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_high_low_close,2026-10,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-01,0.0,0.0,0.0,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-02,5.987289,5.987289,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-03,1.651791,1.651791,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-04,0.312497,0.312497,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-05,0.104966,0.104966,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-06,3.851001,3.851001,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-07,4.284009,4.284009,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-08,0.405523,0.415725,0.010202,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-09,-0.130897,0.0,0.130897,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-10,-1.602894,2.106324,3.709218,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-11,1.625956,1.625956,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2025-12,1.083438,4.241154,3.157716,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-01,1.657403,1.657403,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-02,1.306978,1.306978,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-03,-1.421728,0.0,1.421728,FLAT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-04,-0.984376,0.474231,1.458607,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-05,1.262489,1.983656,0.721167,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-06,0.986303,0.986303,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-07,1.577732,2.44212,0.864388,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-08,1.215505,1.215505,0.0,PROFIT
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-09,-2.911479,-0.879983,2.031496,LOSS
+((atr_expansion >= 1.2 OR adx14 <= 30 OR hourly_range_atr <= 1) AND (ema_gap_pct >= 0.3 OR hourly_range_atr <= 1.25 OR ema_slope_pct >= -0.05)),open_low_high_close,2026-10,0.0,0.0,0.0,FLAT
