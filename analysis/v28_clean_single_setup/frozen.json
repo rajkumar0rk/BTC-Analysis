@@ -1,0 +1,56 @@
+{
+  "config": {
+    "family": "rsi_reversal",
+    "timeframe": 240,
+    "lookback": 30,
+    "stop_fraction": 1.15,
+    "rr": 1.5
+  },
+  "training_metrics": {
+    "config": 96,
+    "valid": false,
+    "min_profit": -20.829473141312263,
+    "worst_dd": 22.127754044431942,
+    "min_month_fraction": 0.0,
+    "mean_month_fraction": 0.2916666666666667,
+    "positive_fold_fraction": 0.5,
+    "score": 0.8620943948092246,
+    "neighbor_q25": 0.20632955543356346,
+    "neighbor_valid_fraction": 0.0,
+    "robust_score": 0.20632955543356346
+  },
+  "grid_size": 144,
+  "training_period": "2024-04 through 2025-12",
+  "folds": [
+    [
+      "2024_H1",
+      "2024-04-01",
+      "2024-07-01"
+    ],
+    [
+      "2024_H2",
+      "2024-07-01",
+      "2025-01-01"
+    ],
+    [
+      "2025_H1",
+      "2025-01-01",
+      "2025-07-01"
+    ],
+    [
+      "2025_H2",
+      "2025-07-01",
+      "2026-01-01"
+    ]
+  ],
+  "risk_pct": 0.03,
+  "max_effective_exposure": 3.0,
+  "max_hold_minutes": 4320,
+  "weekdays_only": true,
+  "one_position": true,
+  "no_monthly_gates": true,
+  "no_daily_limit": true,
+  "no_leverage_tuning": true,
+  "training_pass": false,
+  "holdout_previously_examined": true
+}
