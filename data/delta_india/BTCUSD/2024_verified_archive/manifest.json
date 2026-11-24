@@ -27,8 +27,8 @@
       "observed": 501185,
       "missing": 25855,
       "complete_months": 11,
-      "recovered_this_run": 24,
-      "requests_this_run": 19,
+      "recovered_this_run": 0,
+      "requests_this_run": 15,
       "request_errors": 0
     }
   },
