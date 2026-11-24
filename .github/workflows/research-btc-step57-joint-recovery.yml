@@ -1,0 +1,32 @@
+name: BTCUSD Step57 joint recovery non-regression
+on:
+  push:
+    branches: [research/btc-step57-joint-recovery]
+    paths:
+      - scripts/step56_baseline.py
+      - scripts/research_btc_step57_joint_recovery.py
+      - .github/workflows/research-btc-step57-joint-recovery.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/step56_baseline.py scripts/research_btc_step57_joint_recovery.py
+      - run: python scripts/research_btc_step57_joint_recovery.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: step57-joint-recovery
+          path: analysis/btc_step57_joint_recovery/
