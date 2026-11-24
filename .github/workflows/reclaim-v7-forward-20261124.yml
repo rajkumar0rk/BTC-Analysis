@@ -1,0 +1,152 @@
+name: Reclaim V7 frozen forward evaluation
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-v7-forward-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read newest archive without changing frozen strategy
+        run: |
+          git fetch --depth=1 origin main
+          git rev-parse FETCH_HEAD
+          git restore --source=FETCH_HEAD -- data/delta_india/BTCUSD/1m/
+          git status --short
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas
+      - name: Evaluate only signals after frozen holdout cutoff
+        shell: bash
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import json, pathlib
+          import pandas as pd
+          import numpy as np
+          from research_st_ema20_initial_sl_grid_20261122 import eng, run, MONTHS, PATHS
+          from research_st_ema20_reclaim_loss_months_20261122 import indicator_features, signal_table
+          e=eng()
+          e.smoke_test()
+          m,h,nfiles=e.load()
+          print("ARCHIVE_COVERAGE",m.index.min(),m.index.max(),flush=True)
+          h=indicator_features(e.features(h))
+          entries=e.entry_candidates(m,h,"reclaim")
+          f=signal_table(entries,h)
+          def v4(r):
+              v1=r.ema_gap_pct<=1 and r.ema_slope_pct>=-.2 and r.supertrend_gap_pct>=.5
+              v2=v1 and (r.adx14<=20 or r.hourly_range_atr<=1 or r.ema_gap_pct>=.15) and r.dir_rsi14<=60
+              g3=r.adx14>=35 and r.ema_slope_pct<=.1
+              g4=r.adx14>=25 and r.supertrend_gap_pct>=1.5
+              if not (v2 or (v1 and g3) or g4): return 0
+              if r.dir_rsi14>=52 and r.hourly_body_atr<=.25: return .26
+              if r.adx14>=35 and r.atr_pct<=.75: return .9
+              if r.adx14<=30 and r.atr_pct<=.3: return .55
+              if g4: return .18
+              if g3: return .3
+              return None
+          def v5(r):
+              if r.volume_ratio<1.25:
+                  if r.volume_ratio<=.45 and r.atr_pct>=.4 and r.atr_expansion<=.85: return 1.
+                  if r.volume_ratio>=.8 and .6<=r.atr_pct<=.8: return 2.
+                  return 0
+              if not np.isfinite(r.volume_ratio): return 0
+              x=v4(r)
+              if x!=0 and r.adx14<=15 and r.ema_slope_pct<=.05: x=.38
+              if x!=0 and r.adx14>=25 and r.supertrend_age_hours<=6: x=0
+              if x!=0 and r.volume_ratio>=1.5 and r.adx14>=40: x=1.9
+              if r.dir_rsi14>=60 or r.supertrend_gap_pct<=.5: x=.33
+              if x!=0 and r.ema_slope_pct<=-.1 and r.atr_expansion<=.8: x=.185
+              return x
+          def v6(r):
+              x=v5(r)
+              if x!=0 and r.dir_rsi14>=55 and r.hourly_range_atr>=1.5:x=.3
+              if r.atr_pct<=.55 and r.supertrend_gap_pct>=1.:x=.7
+              if x==0 and r.atr_pct>=.45 and r.atr_expansion>=1.2:x=.55
+              if x!=0 and .55<=r.volume_ratio<=.8:x=1.2
+              return x
+          config=json.loads(pathlib.Path("strategy-candidates/btcusd_ema20_reclaim_v7_combined_20261124.json").read_text())
+          rules=config["policy_rules_in_order"]
+          def v7(r):
+              x=v6(r) if not rules or rules[0].get("start")=="V6" else 0.
+              for rule in rules[1:]:
+                  hit=True
+                  if rule["gate"]!="ALL":
+                      for atom in rule["gate"].split(" AND "):
+                          k,op,v=atom.split();y=float(r[k]);v=float(v)
+                          hit=hit and (y<=v if op=="<=" else y>=v if op==">=" else y==v)
+                  if hit and (rule["mode"]=="override" or rule["mode"]=="selected_only" and x!=0 or rule["mode"]=="new_only" and x==0):
+                      x=rule["target"]
+              return None if x is not None and x<0 else x
+          op,hi,lo,cl=(m[k].to_numpy(float) for k in ["open","high","low","close"])
+          hs=h.side.to_numpy()
+          def replay(ev,path,tp):
+              side=int(ev["side"]); j0=int(ev["entry_j"]); entry=float(ev["entry"]); mid=entry-side*e.SLIP
+              stop=entry-side*entry*.02
+              target=None if tp is None else entry+side*entry*tp/100
+              flips=np.flatnonzero(hs[j0//60:]!=side)
+              end=min((j0//60+int(flips[0])+1)*60,len(m)) if len(flips) else len(m)
+              def finish(j,x,reason):
+                  fill=x-side*e.SLIP
+                  gross=e.QTY*side*(fill-entry)
+                  fees=e.QTY*e.FEE*(entry+fill)
+                  return dict(entry_utc=m.index[j0],exit_utc=m.index[j],side=side,entry_price=entry,exit_price=fill,net_usd=round(gross-fees,6),fees_usd=fees,reason=reason,tp=tp,cycle=ev["cycle"])
+              for j in range(j0,end):
+                  nodes=e.bar_path(op[j],hi[j],lo[j],cl[j],path)
+                  active=j!=j0 or side*(nodes[0]-mid)>=-1e-9
+                  if j!=j0 and side*(nodes[0]-stop)<-1e-9: return finish(j,nodes[0],"stop_gap")
+                  if active and target is not None and side*(nodes[0]-target)>=-1e-9: return finish(j,target,"fixed_tp")
+                  for a,b in zip(nodes,nodes[1:]):
+                      if not active:
+                          if side*(b-a)<=0 or side*(b-mid)<-1e-9: continue
+                          assert side*(a-mid)<=1e-9
+                          a=mid; active=True
+                      if target is not None and side*(b-a)>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:
+                          return finish(j,target,"fixed_tp")
+                      reached,stop,_,hit=e.next_stop_on_segment(side,entry,a,b,stop,(2.,3.,5.))
+                      if hit: return finish(j,reached,"stop")
+                  assert active
+              if end<len(m): return finish(end,op[end],"supertrend_flip")
+              return None
+          # No acceptance credit for previously inspected candles. No parameter selection here.
+          start=pd.Timestamp("2026-11-25T00:00:00Z")
+          end=m.index.max()+pd.Timedelta(minutes=1)
+          out=pathlib.Path("analysis/reclaim_v7_forward_20261124");out.mkdir(parents=True,exist_ok=True)
+          duration=max(0.,(end-start).total_seconds()/86400)
+          summary=[];trades=[]
+          for path in PATHS:
+              ledger=[];open_positions=0;skips=0;opportunities=0
+              for i,ev in enumerate(entries):
+                  signal=pd.Timestamp(ev["signal"])
+                  if signal<start or m.index[ev["entry_j"]]<start:continue
+                  opportunities+=1
+                  tp=v7(f.iloc[i])
+                  if tp==0:skips+=1;continue
+                  z=replay(ev,path,tp)
+                  if z is None:open_positions+=1;continue
+                  z["path"]=path;ledger.append(z);trades.append(z)
+              pnl=sum(z["net_usd"] for z in ledger)
+              months={}
+              # Calendar months in IST wholly contained in the untouched sample.
+              for month in pd.period_range(start.tz_convert("Asia/Kolkata").tz_localize(None),max(start,end).tz_convert("Asia/Kolkata").tz_localize(None),freq="M"):
+                  a=month.start_time.tz_localize("Asia/Kolkata").tz_convert("UTC")
+                  b=(month+1).start_time.tz_localize("Asia/Kolkata").tz_convert("UTC")
+                  if a>=start and b<=end:
+                      months[str(month)]=sum(z["net_usd"] for z in ledger if a<=z["exit_utc"]<b)
+              eligible=duration>=90 and len(ledger)>=30 and len(months)>0
+              result=dict(path=path,cutoff=str(start),archive_end_exclusive=str(end),untouched_days=duration,opportunities=opportunities,skipped=skips,closed=len(ledger),open=open_positions,net_before_funding=pnl,full_months=months,status="INSUFFICIENT_FORWARD_DATA" if not eligible else "OHLC_FORWARD_TARGET_PASS" if all(v>=1 for v in months.values()) else "OHLC_FORWARD_TARGET_FAIL")
+              summary.append(result);print("FORWARD_STATUS",json.dumps(result),flush=True)
+          (out/"summary.json").write_text(json.dumps(summary,indent=2))
+          pd.DataFrame(trades,columns=["entry_utc","exit_utc","side","entry_price","exit_price","net_usd","fees_usd","reason","tp","cycle","path"]).to_csv(out/"trades.csv",index=False)
+          print("FORWARD_COMPLETE",flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reclaim-v7-forward
+          path: analysis/reclaim_v7_forward_20261124/
