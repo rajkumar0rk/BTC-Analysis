@@ -1,0 +1,46 @@
+# BTCUSD 15m ATR >=0.20% — 15m EMA20 slope stability vs MONTHLY consistency
+
+40 profile/slope combinations, checked in both 1m price orderings; Jan 2025–Oct 2026 (22 IST months, in sample).
+Locked base profiles: 80% +185.0292% / 10.465% max floating DD / 18 months; 100% +266.1034% /12.916% DD/18 months.
+New prior slope16 candidates: 80% +194.215% /10.239% DD/19 months; 100% +284.004%/12.451% DD/19 months.
+All signals use 15m close and earlier only, 1m OHLC simulated two bar paths; fixed SL3% TP9%, +8% activate +2% lock, original tiered sizing.
+Trading fees 0.05% taker per side +GST18%, slippage 0.02% price per side. Not including funding/real depth/liquidation.
+HARD FLOORS: Never lower total compounded return or raise floating DD versus each original profile. Report separate harsher requirement to preserve the returns of EACH originally profitable month.
+Data mined repeatedly, so the tuned lookback values may be fitting specific past months. NOT a forward edge.
+
+## 80% maximum exposure separately
+
+>=20 profitable months and no overall profit/DD regression: 0
+**None**.
+>=19 profitable months and no profit/DD regression: 2
+|   profile | rule   | kind   |   parameter |   worst_dd |   min_profit |   min_profitable_months |   max_losing_months |   worst_month |   worst_sum_negative_months |   min_prev_winning_months_unreduced |   max_total_prev_winning_month_drop |   max_single_prev_winning_month_drop |   min_trades |   net_floor |   dd_ceiling | meets_locked_floor   | month_19   | month_20   | preserves_all_prev_good_months   | strict_all   | meets_prior_slope16_result   |
+|----------:|:-------|:-------|------------:|-----------:|-------------:|------------------------:|--------------------:|--------------:|----------------------------:|------------------------------------:|------------------------------------:|-------------------------------------:|-------------:|------------:|-------------:|:---------------------|:-----------|:-----------|:---------------------------------|:-------------|:-----------------------------|
+|        80 | S005   | slope  |           6 |      9.751 |      203.072 |                      19 |                   3 |      -5.56468 |                    -12.0985 |                                  14 |                             5.30412 |                              2.56013 |           70 |     185.029 |       10.465 | True                 | True       | False      | False                            | False        | True                         |
+|        80 | S014   | slope  |          16 |     10.239 |      194.215 |                      19 |                   3 |      -5.56468 |                    -13.2784 |                                  16 |                            17.8008  |                             16.2443  |           71 |     185.029 |       10.465 | True                 | True       | False      | False                            | False        | True                         |
+Preserves EVERY previously profitable month's absolute monthly return (>=18) while reaching >=19 and preserving total profit/DD: 0
+**None**.
+Better or equal to the slope16 candidate's new profit/DD, with >=19 months: 2
+|   profile | rule   | kind   |   parameter |   worst_dd |   min_profit |   min_profitable_months |   max_losing_months |   worst_month |   worst_sum_negative_months |   min_prev_winning_months_unreduced |   max_total_prev_winning_month_drop |   max_single_prev_winning_month_drop |   min_trades |   net_floor |   dd_ceiling | meets_locked_floor   | month_19   | month_20   | preserves_all_prev_good_months   | strict_all   | meets_prior_slope16_result   |
+|----------:|:-------|:-------|------------:|-----------:|-------------:|------------------------:|--------------------:|--------------:|----------------------------:|------------------------------------:|------------------------------------:|-------------------------------------:|-------------:|------------:|-------------:|:---------------------|:-----------|:-----------|:---------------------------------|:-------------|:-----------------------------|
+|        80 | S005   | slope  |           6 |      9.751 |      203.072 |                      19 |                   3 |      -5.56468 |                    -12.0985 |                                  14 |                             5.30412 |                              2.56013 |           70 |     185.029 |       10.465 | True                 | True       | False      | False                            | False        | True                         |
+|        80 | S014   | slope  |          16 |     10.239 |      194.215 |                      19 |                   3 |      -5.56468 |                    -13.2784 |                                  16 |                            17.8008  |                             16.2443  |           71 |     185.029 |       10.465 | True                 | True       | False      | False                            | False        | True                         |
+
+## 100% maximum exposure separately
+
+>=20 profitable months and no overall profit/DD regression: 0
+**None**.
+>=19 profitable months and no profit/DD regression: 2
+|   profile | rule   | kind   |   parameter |   worst_dd |   min_profit |   min_profitable_months |   max_losing_months |   worst_month |   worst_sum_negative_months |   min_prev_winning_months_unreduced |   max_total_prev_winning_month_drop |   max_single_prev_winning_month_drop |   min_trades |   net_floor |   dd_ceiling | meets_locked_floor   | month_19   | month_20   | preserves_all_prev_good_months   | strict_all   | meets_prior_slope16_result   |
+|----------:|:-------|:-------|------------:|-----------:|-------------:|------------------------:|--------------------:|--------------:|----------------------------:|------------------------------------:|------------------------------------:|-------------------------------------:|-------------:|------------:|-------------:|:---------------------|:-----------|:-----------|:---------------------------------|:-------------|:-----------------------------|
+|       100 | S005   | slope  |           6 |     12.09  |      297.775 |                      19 |                   3 |        -6.336 |                    -14.7225 |                                  14 |                             6.47584 |                              3.14776 |           70 |     266.103 |       12.916 | True                 | True       | False      | False                            | False        | True                         |
+|       100 | S014   | slope  |          16 |     12.451 |      284.004 |                      19 |                   3 |        -6.336 |                    -16.0772 |                                  16 |                            22.6599  |                             20.6785  |           71 |     266.103 |       12.916 | True                 | True       | False      | False                            | False        | True                         |
+Preserves EVERY previously profitable month's absolute monthly return (>=18) while reaching >=19 and preserving total profit/DD: 0
+**None**.
+Better or equal to the slope16 candidate's new profit/DD, with >=19 months: 2
+|   profile | rule   | kind   |   parameter |   worst_dd |   min_profit |   min_profitable_months |   max_losing_months |   worst_month |   worst_sum_negative_months |   min_prev_winning_months_unreduced |   max_total_prev_winning_month_drop |   max_single_prev_winning_month_drop |   min_trades |   net_floor |   dd_ceiling | meets_locked_floor   | month_19   | month_20   | preserves_all_prev_good_months   | strict_all   | meets_prior_slope16_result   |
+|----------:|:-------|:-------|------------:|-----------:|-------------:|------------------------:|--------------------:|--------------:|----------------------------:|------------------------------------:|------------------------------------:|-------------------------------------:|-------------:|------------:|-------------:|:---------------------|:-----------|:-----------|:---------------------------------|:-------------|:-----------------------------|
+|       100 | S005   | slope  |           6 |     12.09  |      297.775 |                      19 |                   3 |        -6.336 |                    -14.7225 |                                  14 |                             6.47584 |                              3.14776 |           70 |     266.103 |       12.916 | True                 | True       | False      | False                            | False        | True                         |
+|       100 | S014   | slope  |          16 |     12.451 |      284.004 |                      19 |                   3 |        -6.336 |                    -16.0772 |                                  16 |                            22.6599  |                             20.6785  |           71 |     266.103 |       12.916 | True                 | True       | False      | False                            | False        | True                         |
+
+## Caveat
+This is another parameter sweep on the same repeatedly reused 22 months. Use unseen forward validation, 1m path-sensitive fills and real fees/funding before real money.
