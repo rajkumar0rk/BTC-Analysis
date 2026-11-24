@@ -298,7 +298,7 @@ jobs:
                               sample=[z for z in ledger if z["month"] in MONTHS]
                               liq_count=sum(z["liquidation"] for z in sample);wins=sum(z["net"]>0 for z in sample);losses=sum(z["net"]<0 for z in sample)
                               row=dict(strategy=strategy,path=path,scenario=label,mode=mode,shock_pct=shock_pct*100,initial=100.,capital_per_trade=20.,leverage=100,net=float(mon.sum()),final=100.+float(mon.sum()),trades=len(sample),wins=wins,losses=losses,liquidations=liq_count,skips=skips,missing=missing,positive_months=int((mon>0).sum()),months_ge_1=int((mon>=1).sum()),min_month=float(mon.min()),realized_dd=realized_dd,floating_dd_envelope=floating_dd,minimum_wallet=minimum_wallet,minimum_buffer=minimum_buffer if ledger else None,max_contracts=max_contracts,total_fees=sum(z["entry_fee"]+z["exit_fee"] for z in sample),funding=sum(z["funding"] for z in sample),liquidation_penalties=sum(z["penalty"] for z in sample),monthly={k:round(float(v),6) for k,v in mon.items()})
-                              results.append(row);print("SIZE20_RESULT",json.dumps(row),flush=True)
+                              results.append(row);print("SIZE20_RESULT",json.dumps(row,default=lambda x:x.item() if isinstance(x,np.generic) else str(x)),flush=True)
                               for mo,v in mon.items():month_rows.append(dict(strategy=strategy,path=path,scenario=label,mode=mode,shock_pct=shock_pct*100,month=mo,net=v))
           pd.DataFrame(results).to_csv(out/"summary.csv",index=False);pd.DataFrame(all_trades).to_csv(out/"trades.csv",index=False);pd.DataFrame(month_rows).to_csv(out/"monthly.csv",index=False)
           print("SIZE20_COMPLETE",len(results),flush=True)
