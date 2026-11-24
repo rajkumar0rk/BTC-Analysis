@@ -1,0 +1,36 @@
+{
+  "baseline_parity": true,
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "new_configurations": 1,
+  "control_profiles": [
+    "V42",
+    "V53",
+    "V58",
+    "V60",
+    "V64_010",
+    "V64_025"
+  ],
+  "adaptive_rule": "clip(1.25 / (prior relative ATR / trailing 120-bar median), 1, 1.5)",
+  "prior_completed_only": true,
+  "activation_r": [
+    0.75,
+    1.0
+  ],
+  "lock_r": [
+    0.0,
+    0.1,
+    0.25
+  ],
+  "hold_days": [
+    7,
+    10
+  ],
+  "contraction_delay_hours": 48,
+  "min_expansion_atr": 1.25,
+  "max_extension_atr": 2.0,
+  "risk_pct": 0.03,
+  "exposure_cap": 3.0,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
