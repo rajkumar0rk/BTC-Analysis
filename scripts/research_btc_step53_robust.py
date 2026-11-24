@@ -117,12 +117,19 @@ def main():
     # Include 80 leading universal policies and 100 leading policies per
     # known event/fallback branch. Only these predeclared pairs are combined.
     top=np.argsort(rr)[-80:][::-1]
-    e=np.argsort(rank(Y,trainmask&event))[-100:][::-1]
-    f=np.argsort(rank(Y,trainmask&~event))[-100:][::-1]
+    # Event/fallback membership is not known at earlier fixed-hour clocks.
+    # Only the event clock (at first trigger or fallback) or 21:00 may
+    # branch on it; universal policies do not condition on membership.
+    allowed=np.array([i for i,p in enumerate(spec) if p[0] in ("event_or_21","hour_21")])
+    er=rank(Y[allowed],trainmask&event);fr=rank(Y[allowed],trainmask&~event)
+    e=allowed[np.argsort(er)[-100:][::-1]]
+    f=allowed[np.argsort(fr)[-100:][::-1]]
     candidates=[(int(i),int(i)) for i in top]
     candidates.extend((int(i),int(j)) for i in e for j in f)
     def path(pair):
-        i,j=pair;return np.where(event[:,None],Y[i],Y[j])
+        i,j=pair
+        if i==j:return Y[i]
+        return np.where(event[:,None],Y[i],Y[j])
     def train_key(y):
         r,d,mo=scores(y[:train],mi[:train])
         m=mo[:12,PRIMARY];r=r[PRIMARY];d=d[PRIMARY]
