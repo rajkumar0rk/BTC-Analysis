@@ -1,0 +1,18 @@
+{
+  "frozen_sha256": "6733d8eac99ceb0b393562ff6ec22774b1b2f892aa24611096708be5dfa1fc21",
+  "config": {
+    "family": "rsi_reversal",
+    "timeframe": 240,
+    "lookback": 30,
+    "stop_fraction": 1.15,
+    "rr": 1.5
+  },
+  "training_pass": false,
+  "validation_period": "2026-01-01 IST through 2026-11-17 UTC; November partial",
+  "validation_used_for_selection": false,
+  "prior_2026_research_exists": true,
+  "funding_proxy": true,
+  "liquidation_proxy": true,
+  "live_execution": false,
+  "scenario_rows": 280
+}
