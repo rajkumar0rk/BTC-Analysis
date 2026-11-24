@@ -1,0 +1,70 @@
+name: BTCUSD 15M - X094 Recovery Refinement
+on:
+  push:
+    branches: [research/btc15m-x094-recovery-refinement-20261124]
+    paths:
+      - scripts/research_btc15m_x094_recovery_refinement_20261124.py
+      - .github/workflows/research-btc15m-x094-recovery-refinement.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sweep:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    env:
+      SHARD_COUNT: '24'
+      SHARD_INDEX: ${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==3.1.1 numpy==2.5.5 tabulate==0.10.0
+      - run: python scripts/research_btc15m_x094_recovery_refinement_20261124.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: x094-refinement-shard-${{ matrix.shard }}
+          path: analysis/btc15m_x094_recovery_refinement_20261124/shard_${{ matrix.shard }}/
+          if-no-files-found: error
+          retention-days: 30
+  aggregate:
+    needs: sweep
+    runs-on: ubuntu-latest
+    env:
+      SHARD_COUNT: '24'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==3.1.1 numpy==2.5.5 tabulate==0.10.0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: x094-refinement-shard-*
+          path: _shards
+      - run: |
+          mkdir -p analysis/btc15m_x094_recovery_refinement_20261124
+          for i in {0..23}; do
+            mkdir -p analysis/btc15m_x094_recovery_refinement_20261124/shard_$i
+            cp _shards/x094-refinement-shard-$i/* analysis/btc15m_x094_recovery_refinement_20261124/shard_$i/
+          done
+          python scripts/research_btc15m_x094_recovery_refinement_20261124.py aggregate
+      - uses: actions/upload-artifact@v4
+        with:
+          name: btc15m-x094-refinement-full
+          path: analysis/btc15m_x094_recovery_refinement_20261124/
+          retention-days: 30
+          if-no-files-found: error
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc15m_x094_recovery_refinement_20261124/RESEARCH_REPORT.md analysis/btc15m_x094_recovery_refinement_20261124/ranked.csv analysis/btc15m_x094_recovery_refinement_20261124/profile_80.csv analysis/btc15m_x094_recovery_refinement_20261124/profile_100.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "research: report extra recovery entry month consistency"
+            git push origin HEAD:research/btc15m-x094-recovery-refinement-20261124
+          fi
