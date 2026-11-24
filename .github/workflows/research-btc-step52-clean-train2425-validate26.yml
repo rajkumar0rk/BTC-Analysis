@@ -1,0 +1,38 @@
+name: BTC Step52 clean volume core train 2024-2025 validate 2026
+on:
+  push:
+    branches: [research/btc-step52-clean-train2425-validate26]
+    paths:
+      - scripts/research_btc_step52_clean_train2425_validate26.py
+      - .github/workflows/research-btc-step52-clean-train2425-validate26.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: clean-core-2024
+          run-id: 45374511488
+          github-token: ${{ github.token }}
+          path: prior2024
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_step52_clean_train2425_validate26.py
+      - run: python scripts/research_btc_step52_clean_train2425_validate26.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: step52-clean-train2425-validate26
+          path: analysis/btc_step52_clean_train2425_validate26/
