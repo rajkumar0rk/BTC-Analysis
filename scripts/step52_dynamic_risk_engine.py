@@ -27,7 +27,7 @@ class Risk:
         self.rate=self.f.close.shift(1).reindex(m.index,method="ffill").to_numpy(float)/100
         # 8-Sep-2025 17:30 IST = 12:00 UTC; subsequent UTC 00/08/16.
         self.change=pd.Timestamp("2025-09-08T12:00Z")
-        self.upgrade=pd.Timestamp("2025-10-10T13:47Z")
+        self.upgrade=pd.Timestamp("2025-10-11T00:00:00+05:30")
         self.before=(m.index<self.change)
         self.boundary=(m.index.minute==0)&(m.index.hour%8==0)
         # Prior hourly observations approximate historical minute accrual; after
@@ -74,7 +74,7 @@ class Risk:
         fee=self.fee*(entry+exitfill*(~waive))
         fund=self.funding(starts2,holds,side,entry,adverse=True)
         trade=side*(exitfill-entry)
-        return (trade-fee-fund)/entry,fee,fund
+        return (trade-fee)/entry-fund,fee,fund
     def reprice(self,cache,starts):
         for (side,guard,cap),raw in list(cache.items()):
             pnl,fee,gross,reason,hold=raw
@@ -107,7 +107,7 @@ class Risk:
                 worst=min(worst,minmove)
             adverse=marklo.min() if side==1 else markhi.max()
             move=side*(adverse-entry)/entry
-            # Hypothetical isolated 0.25%/0.5% maintenance + fee reserve.
+            # Hypothetical isolated 0.5% maintenance + fee reserve.
             # This is not the historical exchange liquidation engine.
             for lev in (1,10,20,50,100):
                 if 1/lev+move-self.fee-fund[0,0]<=.005*adverse/entry+self.fee:
