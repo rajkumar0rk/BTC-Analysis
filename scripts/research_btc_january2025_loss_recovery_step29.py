@@ -403,7 +403,7 @@ def main():
        total_extra_candidates=1200,both_fee_rows=2402,
        positive_Jan2025_candidates_not_validated=int(len(all_january_positive)),
        full_2025_12_of_12_positive_month_candidates=int(len(train12)),
-       2025_only_strict_eligible_candidates=int(len(strict)),
+       training_year_2025_strict_eligible_candidates=int(len(strict)),
        selected_using_only_2025=audits["selected_2025_only"],
        proposed_22_of_22_full_period_goal_met_historically=bool(goal),
        retrospective_all_22_month_candidate_count=int(len(retrospect22)),
