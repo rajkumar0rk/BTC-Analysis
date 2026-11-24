@@ -29,7 +29,13 @@ def read_frame(p):
     z=pd.read_csv(p)
     t=z.pop("time")
     z.index=pd.to_datetime(t,unit="s",utc=True) if pd.api.types.is_numeric_dtype(t) else pd.to_datetime(t,utc=True)
-    assert not z.index.has_duplicates and np.isfinite(z.to_numpy(float)).all(),str(p)
+    # Native mark/funding archives can carry nullable optional volume or metadata.
+    # Only traded OHLCV and auxiliary OHLC are used; never drop required rows.
+    traded=(p.parent.name in ("1m","trade_1m"))
+    cols=["open","high","low","close"]+(["volume"] if traded else [])
+    z=z[cols].apply(pd.to_numeric,errors="raise")
+    assert not z.index.has_duplicates,(str(p),"duplicate timestamp")
+    assert np.isfinite(z.to_numpy(float)).all(),(str(p),"nonfinite required OHLCV",z.isna().sum().to_dict())
     return z.sort_index()
 def bridge(label,symbol,step):
     # IST archive ends 18:30 UTC; 2025 archive begins midnight UTC.
