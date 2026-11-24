@@ -1,0 +1,9 @@
+scenario,short_count,short_wins,short_losses,original_core_count,original_core_unchanged,short_net,combined_total,net_2025,net_2026,profitable_months,losing_months,original_profitable_months_degraded,improved_old_losing_months,max_closed_equity_drawdown,short_win_rate_pct,short_tp_exits,short_stops,short_st_close_exits,same_minute_sl_tp_conflicts
+reference_costs,23,23,0,85,True,3534.28,22633.9,16723.13,5910.76,18,4,0,1,2642.53,100.0,23,0,0,0
+higher_slippage_10pt,23,23,0,85,True,3419.0,22518.62,16662.99,5855.63,18,4,0,1,2652.56,100.0,23,0,0,0
+higher_slippage_20pt,23,23,0,85,True,3188.45,22288.07,16542.7,5745.37,18,4,0,1,2672.61,100.0,23,0,0,0
+higher_slippage_30pt,23,23,0,85,True,2957.89,22057.51,16422.41,5635.1,18,4,0,1,2692.66,100.0,23,0,0,0
+higher_fee_0p1pct,23,23,0,85,True,1173.99,20273.62,15280.96,4992.65,18,4,0,1,2811.7,100.0,23,0,0,0
+higher_fee_0p1pct_plus_10pt,23,23,0,85,True,1058.79,20158.41,15220.85,4937.55,18,4,0,1,2821.72,100.0,23,0,0,0
+stop_loss_0p75pct,23,22,1,85,True,2780.45,21880.07,16723.13,5156.94,18,4,1,1,2642.53,95.65,22,1,0,0
+stop_loss_1p5pct,23,23,0,85,True,3534.28,22633.9,16723.13,5910.76,18,4,0,1,2642.53,100.0,23,0,0,0
