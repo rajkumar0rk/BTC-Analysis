@@ -1,0 +1,311 @@
+name: Reclaim 100 USD wallet 20 USD margin 100x simulation
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-100usd-20margin-100x-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download frozen candidate from optimization run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run watch 45332130457 --repo rajkumar0rk/BTC-Analysis --exit-status --interval 10
+          gh run download 45332130457 --repo rajkumar0rk/BTC-Analysis --name reclaim-v7-combined-robustness --dir v7-frozen
+          cat v7-frozen/rules.json
+          gh run download 45334906393 --repo rajkumar0rk/BTC-Analysis --name reclaim-native-50x-causal --dir native-frozen
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas
+      - name: Independently regenerate signals and replay both paths
+        shell: bash
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import json, pathlib
+          import pandas as pd
+          import numpy as np
+          from research_st_ema20_initial_sl_grid_20261122 import eng, run, MONTHS, PATHS
+          from research_st_ema20_reclaim_loss_months_20261122 import indicator_features, signal_table
+          e=eng()
+          e.smoke_test()
+          m,h,nfiles=e.load()
+          print("ARCHIVE_COVERAGE",m.index.min(),m.index.max(),flush=True)
+          h=indicator_features(e.features(h))
+          entries=e.entry_candidates(m,h,"reclaim")
+          f=signal_table(entries,h)
+          ref=pd.read_csv("analysis/st_ema20_reclaim_loss_months_20261122/signal_entry_features.csv")
+          eligible=f.volume_ratio.ge(1.25)
+          ff=f.loc[eligible & f.entry_utc.map(lambda x: pd.Timestamp(x)<pd.Timestamp('2026-11-21T00:00:00Z'))].reset_index(drop=True)
+          assert len(ff)==len(ref)==62
+          assert ff.entry_utc.tolist()==ref.entry_utc.tolist()
+          assert ff.side.tolist()==ref.side.tolist()
+          for col in ["volume_ratio","adx14","dir_rsi14","ema_gap_pct","ema_slope_pct","supertrend_gap_pct","atr_pct","atr_expansion","hourly_body_atr","hourly_range_atr"]:
+              np.testing.assert_allclose(ff[col],ref[col],rtol=1e-8,atol=1e-8)
+          print("SOURCE CHECK",len(m),len(h),nfiles,"ALL CANDIDATES",len(entries),"FEATURES MATCH",len(ff),flush=True)
+          def v4(r):
+              v1=r.ema_gap_pct<=1 and r.ema_slope_pct>=-.2 and r.supertrend_gap_pct>=.5
+              v2=v1 and (r.adx14<=20 or r.hourly_range_atr<=1 or r.ema_gap_pct>=.15) and r.dir_rsi14<=60
+              g3=r.adx14>=35 and r.ema_slope_pct<=.1
+              g4=r.adx14>=25 and r.supertrend_gap_pct>=1.5
+              if not (v2 or (v1 and g3) or g4): return 0
+              if r.dir_rsi14>=52 and r.hourly_body_atr<=.25: return .26
+              if r.adx14>=35 and r.atr_pct<=.75: return .9
+              if r.adx14<=30 and r.atr_pct<=.3: return .55
+              if g4: return .18
+              if g3: return .3
+              return None
+          def v5(r):
+              if r.volume_ratio<1.25:
+                  if r.volume_ratio<=.45 and r.atr_pct>=.4 and r.atr_expansion<=.85: return 1.
+                  if r.volume_ratio>=.8 and .6<=r.atr_pct<=.8: return 2.
+                  return 0
+              if not np.isfinite(r.volume_ratio): return 0
+              x=v4(r)
+              if x!=0 and r.adx14<=15 and r.ema_slope_pct<=.05: x=.38
+              if x!=0 and r.adx14>=25 and r.supertrend_age_hours<=6: x=0
+              if x!=0 and r.volume_ratio>=1.5 and r.adx14>=40: x=1.9
+              if r.dir_rsi14>=60 or r.supertrend_gap_pct<=.5: x=.33
+              if x!=0 and r.ema_slope_pct<=-.1 and r.atr_expansion<=.8: x=.185
+              return x
+          def v6(r):
+              x=v5(r)
+              if x!=0 and r.dir_rsi14>=55 and r.hourly_range_atr>=1.5:x=.3
+              if r.atr_pct<=.55 and r.supertrend_gap_pct>=1.:x=.7
+              if x==0 and r.atr_pct>=.45 and r.atr_expansion>=1.2:x=.55
+              if x!=0 and .55<=r.volume_ratio<=.8:x=1.2
+              return x
+          rules=json.loads(pathlib.Path("v7-frozen/rules.json").read_text())
+          optimized=pd.read_csv("v7-frozen/monthly.csv",index_col=0)
+          def v7(r):
+              x=v6(r) if not rules or rules[0].get("start")=="V6" else 0.
+              for rule in rules[1:]:
+                  hit=True
+                  if rule["gate"]!="ALL":
+                      for atom in rule["gate"].split(" AND "):
+                          k,op,v=atom.split();y=float(r[k]);v=float(v)
+                          hit=hit and (y<=v if op=="<=" else y>=v if op==">=" else y==v)
+                  if hit and (rule["mode"]=="override" or rule["mode"]=="selected_only" and x!=0 or rule["mode"]=="new_only" and x==0):
+                      x=rule["target"]
+              return None if x is not None and x<0 else x
+          op,hi,lo,cl=(m[k].to_numpy(float) for k in ["open","high","low","close"])
+          hs=h.side.to_numpy()
+          def replay(ev,path,tp):
+              side=int(ev["side"]); j0=int(ev["entry_j"]); entry=float(ev["entry"]); mid=entry-side*e.SLIP
+              stop=entry-side*entry*.02
+              target=None if tp is None else entry+side*entry*tp/100
+              flips=np.flatnonzero(hs[j0//60:]!=side)
+              end=min((j0//60+int(flips[0])+1)*60,len(m)) if len(flips) else len(m)
+              def finish(j,x,reason):
+                  fill=x-side*e.SLIP
+                  gross=e.QTY*side*(fill-entry)
+                  fees=e.QTY*e.FEE*(entry+fill)
+                  return dict(entry_utc=m.index[j0],exit_utc=m.index[j],side=side,entry_price=entry,exit_price=fill,net_usd=round(gross-fees,6),fees_usd=fees,reason=reason,tp=tp,cycle=ev["cycle"])
+              for j in range(j0,end):
+                  nodes=e.bar_path(op[j],hi[j],lo[j],cl[j],path)
+                  active=j!=j0 or side*(nodes[0]-mid)>=-1e-9
+                  if j!=j0 and side*(nodes[0]-stop)<-1e-9: return finish(j,nodes[0],"stop_gap")
+                  if active and target is not None and side*(nodes[0]-target)>=-1e-9: return finish(j,target,"fixed_tp")
+                  for a,b in zip(nodes,nodes[1:]):
+                      if not active:
+                          if side*(b-a)<=0 or side*(b-mid)<-1e-9: continue
+                          assert side*(a-mid)<=1e-9
+                          a=mid; active=True
+                      if target is not None and side*(b-a)>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:
+                          return finish(j,target,"fixed_tp")
+                      reached,stop,_,hit=e.next_stop_on_segment(side,entry,a,b,stop,(2.,3.,5.))
+                      if hit: return finish(j,reached,"stop")
+                  assert active
+              if end<len(m): return finish(end,op[end],"supertrend_flip")
+              return None
+          # Advanced historical checks; November is explicitly excluded from acceptance.
+          native_rules=json.loads(pathlib.Path("native-frozen/rules.json").read_text())
+          def native(r):
+              target=0.;cap=0.
+              for rule in native_rules:
+                  hit=True
+                  for atom in rule["gate"].split(" AND "):
+                      k,op,v=atom.split();y=float(r[k]);v=float(v)
+                      hit=hit and (y<=v if op=="<=" else y>=v if op==">=" else y==v)
+                  if hit and (rule["mode"]=="override" or rule["mode"]=="selected_only" and target!=0 or rule["mode"]=="new_only" and target==0):
+                      target=rule["target"];cap=rule["stop_cap_pct"]/100
+              return (None if target<0 else target),cap
+          original_tp = lambda r:(v7(r),.02)
+          def run_advanced(path,slip=5,fee=.00059,tp_scale=1.,sl_pct=.02,feature_shift=0.,delay=0,include_crossing=False):
+              trades=[]; events=[]; balance=100.; peak=100.; dd=0.; min_equity=100.; min_margin_buffer=1e9; max_mae=0.; active_until=-1; blocked=0
+              for i,ev in enumerate(entries):
+                  r=f.iloc[i].copy()
+                  if feature_shift:
+                      for col in ["volume_ratio","atr_pct","atr_expansion","adx14","dir_rsi14","ema_gap_pct","supertrend_gap_pct","hourly_body_atr","hourly_range_atr"]:
+                          r[col]*=1+feature_shift
+                  tp,cap=original_tp(r)
+                  if tp==0: continue
+                  if tp is not None: tp*=tp_scale
+                  side=int(ev["side"]); j0=int(ev["entry_j"])+delay
+                  if j0>=len(m): continue
+                  if m.index[j0].tz_convert("Asia/Kolkata").strftime("%Y-%m")>"2026-10": continue
+                  if j0<=active_until: blocked+=1; continue
+                  mid=float(ev["entry"])-side*e.SLIP if not delay else op[j0]
+                  entry=mid+side*slip; stop=entry-side*entry*min(cap,sl_pct)
+                  target=None if tp is None else entry+side*entry*tp/100
+                  flips=np.flatnonzero(hs[j0//60:]!=side)
+                  end=min((j0//60+int(flips[0])+1)*60,len(m)) if len(flips) else len(m)
+                  mae=0.; mfe=0.
+                  def mark(px):
+                      nonlocal peak,dd,min_equity,min_margin_buffer,mae,mfe
+                      pnl=e.QTY*side*(px-entry)
+                      equity=balance+pnl-e.QTY*fee*(entry+px)-e.QTY*slip
+                      peak=max(peak,equity);dd=max(dd,100*(peak-equity)/peak);min_equity=min(min_equity,equity)
+                      min_margin_buffer=min(min_margin_buffer,equity-e.QTY*px*.005)
+                      mae=max(mae,-pnl);mfe=max(mfe,pnl)
+                  def close(j,px,reason):
+                      nonlocal balance,peak,dd,active_until,max_mae
+                      mark(px); fill=px-side*slip
+                      net=e.QTY*side*(fill-entry)-e.QTY*fee*(entry+fill)
+                      balance+=net;peak=max(peak,balance);dd=max(dd,100*(peak-balance)/peak)
+                      active_until=j;max_mae=max(max_mae,mae)
+                      trades.append(dict(entry_utc=m.index[j0],exit_utc=m.index[j],side=side,entry_price=entry,exit_price=fill,net_usd=net,mae=mae,mfe=mfe,reason=reason,tp=tp))
+                  done=False
+                  for j in range(j0,end):
+                      nodes=e.bar_path(op[j],hi[j],lo[j],cl[j],path)
+                      active=j!=j0 or delay>0 or side*(nodes[0]-mid)>=-1e-9
+                      if j!=j0 and side*(nodes[0]-stop)<-1e-9: close(j,nodes[0],"stop_gap");done=True;break
+                      if active and target is not None and side*(nodes[0]-target)>=-1e-9: close(j,target,"fixed_tp");done=True;break
+                      if active: mark(nodes[0])
+                      for a,b in zip(nodes,nodes[1:]):
+                          if not active:
+                              if side*(b-a)<=0 or side*(b-mid)<-1e-9: continue
+                              if side*(a-mid)>1e-9: raise AssertionError("entry traversal")
+                              a=mid;active=True
+                          mark(a)
+                          if target is not None and side*(b-a)>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:
+                              close(j,target,"fixed_tp");done=True;break
+                          reached,stop,_,hit=e.next_stop_on_segment(side,entry,a,b,stop,(2.,3.,5.))
+                          if hit: close(j,reached,"stop");done=True;break
+                          mark(reached)
+                      if done:break
+                      assert active
+                  if not done and end<len(m):close(end,op[end],"supertrend_flip")
+              t=pd.DataFrame(trades);t["month"]=t.exit_utc.dt.tz_convert("Asia/Kolkata").dt.strftime("%Y-%m")
+              if not include_crossing:t=t[t.month.isin(MONTHS)].copy()
+              mon=t.groupby("month").net_usd.sum().reindex(MONTHS,fill_value=0.)
+              return t,dict(net=float(mon.sum()),min_month=float(mon.min()),months_pos=int((mon>0).sum()),months_ge_1=int((mon>=1).sum()),trades=len(t),floating_dd_pct=dd,min_equity=min_equity,max_trade_mae_usd=max_mae,illustrative_buffer_at_half_percent_maintenance=min_margin_buffer,blocked=blocked)
+          # Funding observations are not settled payment records. Use explicitly labelled proxies.
+          def load_series(folder,col):
+              files=sorted(pathlib.Path(folder).glob("20??-??.csv.gz"))
+              frames=[]
+              for p in files:
+                  x=pd.read_csv(p,usecols=["time",col]);x.index=pd.to_datetime(x.time,unit="s",utc=True);frames.append(x[col])
+              return pd.concat(frames).sort_index().loc[lambda x:~x.index.duplicated(keep="last")]
+          funding=load_series("data/delta_india/BTCUSD/institutional/history/funding_1h","close")
+          mark_series=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","open")
+          import urllib.request
+          out=pathlib.Path("analysis/reclaim_100usd_20margin_100x_20261124");out.mkdir(parents=True,exist_ok=True)
+          mark_lo=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","low")
+          mark_hi=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","high")
+          request=urllib.request.Request("https://api.india.delta.exchange/v2/products/BTCUSD",headers={"User-Agent":"BTC-Analysis/validation","Accept":"application/json"})
+          with urllib.request.urlopen(request,timeout=15) as resp:product=json.load(resp)["result"]
+          assert float(product["contract_value"])==.001
+          mm=float(product["maintenance_margin"])/100
+          im=float(product["initial_margin"])/100
+          penalty=float(product["liquidation_penalty_factor"])
+          print("EXCHANGE_SPEC",json.dumps(dict(contract_value=product["contract_value"],maintenance_margin=mm,initial_margin=im,liquidation_penalty_factor=penalty,tick_size=product["tick_size"])),flush=True)
+          # Funding-rate OHLC is an observation archive, not final payment records. Prior completed hour only.
+          # Conservative boundary: include both entry and exit minute, and do not credit positive funding.
+          cutoff=pd.Timestamp("2025-09-08T16:00:00Z")
+          scenarios=[("base",{}),("slip10",dict(slip=10)),("slip15",dict(slip=15)),("slip25",dict(slip=25)),("fee20",dict(fee=.00059*1.2)),("fee50",dict(fee=.00059*1.5)),("tp95",dict(tp_scale=.95)),("tp105",dict(tp_scale=1.05)),("sl18",dict(sl_pct=.018)),("sl22",dict(sl_pct=.022)),("feature99",dict(feature_shift=-.01)),("feature101",dict(feature_shift=.01)),("delay1",dict(delay=1)),("moderate_cost",dict(slip=10,fee=.00059*1.2)),("severe_cost",dict(slip=25,fee=.00059*1.5)),("delay_cost",dict(slip=10,fee=.00059*1.2,delay=1)),("tp_low_cost",dict(slip=25,fee=.00059*1.5,tp_scale=.95,sl_pct=.018,feature_shift=-.01)),("tp_high_cost",dict(slip=25,fee=.00059*1.5,tp_scale=1.05,sl_pct=.022,feature_shift=.01)),("combined_low_delay",dict(slip=25,fee=.00059*1.5,tp_scale=.95,sl_pct=.018,feature_shift=-.01,delay=1)),("combined_high_delay",dict(slip=25,fee=.00059*1.5,tp_scale=1.05,sl_pct=.022,feature_shift=.01,delay=1))]
+          # Simulate whole contracts for a fixed $20 initial margin budget, 100x nominal leverage.
+          # Margin model: one position, no other account liabilities. Cross uses wallet equity;
+          # isolated uses allocated collateral only, no auto-top-up. Conservative modeled forced exit,
+          # NOT a reproduction of exchange liquidator or insurance fund. Boundary minute pessimistic.
+          import math
+          results=[];all_trades=[];month_rows=[]
+          for strategy,policy in [("V7",lambda r:(v7(r),.02)),("native50",native)]:
+              original_tp=policy
+              for path in PATHS:
+                  for label,kw in scenarios:
+                      if label not in ("base","severe_cost","combined_low_delay","combined_high_delay"):continue
+                      tt,st=run_advanced(path,include_crossing=True,**kw)
+                      fee=kw.get("fee",.00059);slip=kw.get("slip",5)
+                      for mode in ["isolated","cross"]:
+                          for shock_pct in [0.,.005]:
+                              wallet=100.;peak=100.;realized_dd=0.;floating_dd=0.;float_peak=100.;minimum_wallet=100.;minimum_buffer=float("inf");mon=pd.Series(0.,index=MONTHS)
+                              ledger=[];skips=0;missing=0;liq_count=0;max_contracts=0;total_fees=0.;total_funding=0.;total_penalty=0.
+                              for z in tt.sort_values("entry_utc").itertuples():
+                                  if wallet<=0:skips+=1;continue
+                                  unit=.001*z.entry_price
+                                  contracts=int(math.floor(2000./unit+1e-12));qty=contracts*.001
+                                  if contracts<1:skips+=1;continue
+                                  notional=qty*z.entry_price;margin=notional/100
+                                  entry_fee=notional*fee
+                                  if wallet<margin+entry_fee:skips+=1;continue
+                                  max_contracts=max(max_contracts,contracts)
+                                  idx=pd.date_range(z.entry_utc,z.exit_utc,freq="min")
+                                  pre=idx<cutoff;settle=pre|((idx>=cutoff)&(idx.minute==0)&(idx.hour%8==0))
+                                  times=idx[settle]
+                                  rates=funding.reindex(times.floor("h")-pd.Timedelta(hours=1)).to_numpy(float)
+                                  prices=mark_series.reindex(times).to_numpy(float)
+                                  weights=np.where(times<cutoff,1./480,1.)
+                                  cash=-z.side*qty*rates*prices*weights/100
+                                  adverse=(mark_lo if z.side==1 else mark_hi).reindex(idx).to_numpy(float)
+                                  favorable=(mark_hi if z.side==1 else mark_lo).reindex(idx).to_numpy(float)
+                                  if not np.isfinite(cash).all() or not np.isfinite(adverse).all() or not np.isfinite(favorable).all():
+                                      missing+=1;continue
+                                  # Conservative funding: charge observed adverse cash flows only, by timestamp.
+                                  flows=np.zeros(len(idx));flows[settle]=np.minimum(cash,0.)
+                                  cum=np.cumsum(flows)
+                                  collateral=margin if mode=="isolated" else wallet
+                                  # Current product base MM plus one-way fee and liquidation penalty reserve.
+                                  # No historical tier reconstruction; small position notional.
+                                  shock=adverse*(1-z.side*shock_pct)
+                                  reserve=mm+fee+mm*penalty*1.18
+                                  buf=collateral-entry_fee+cum+qty*z.side*(shock-z.entry_price)-qty*shock*reserve
+                                  breaches=np.flatnonzero(buf<=0)
+                                  is_liq=len(breaches)>0
+                                  j=int(breaches[0]) if is_liq else len(idx)-1
+                                  minimum_buffer=min(minimum_buffer,float(buf[:j+1].min()))
+                                  if is_liq:
+                                      # Pessimistic minute extreme fill with normal adverse slippage;
+                                      # liquidation before ordinary exit when order within minute is unknown.
+                                      exit_price=shock[j]-z.side*slip
+                                      liq_penalty=qty*exit_price*mm*penalty*1.18
+                                  else:
+                                      exit_price=z.exit_price;liq_penalty=0.
+                                  exit_fee=qty*exit_price*fee
+                                  gross=qty*z.side*(exit_price-z.entry_price)
+                                  trade_pnl=gross-entry_fee-exit_fee-liq_penalty
+                                  funding_pnl=float(cum[j]);net=trade_pnl+funding_pnl
+                                  # Account equity envelope includes both full-minute extremes; cap at modeled exit minute.
+                                  eq_lo=wallet-entry_fee+cum[:j+1]+qty*z.side*(shock[:j+1]-z.entry_price)-qty*shock[:j+1]*fee
+                                  eq_hi=wallet-entry_fee+cum[:j+1]+qty*z.side*(favorable[:j+1]-z.entry_price)-qty*favorable[:j+1]*fee
+                                  peaks=np.maximum.accumulate(np.r_[float_peak,eq_hi])[1:]
+                                  floating_dd=max(floating_dd,float(np.max(100*(peaks-eq_lo)/np.maximum(peaks,1e-12))))
+                                  float_peak=max(float_peak,float(peaks.max()))
+                                  exit_utc=idx[j];month=exit_utc.tz_convert("Asia/Kolkata").strftime("%Y-%m")
+                                  if month in MONTHS:mon[month]+=trade_pnl
+                                  for mo,g in pd.Series(flows[:j+1],index=idx[:j+1]).groupby(idx[:j+1].tz_convert("Asia/Kolkata").strftime("%Y-%m")):
+                                      if mo in MONTHS:mon[mo]+=g.sum()
+                                  wallet+=net;peak=max(peak,wallet);float_peak=max(float_peak,wallet);realized_dd=max(realized_dd,100*(peak-wallet)/peak);minimum_wallet=min(minimum_wallet,wallet)
+                                  row=dict(strategy=strategy,path=path,scenario=label,mode=mode,shock_pct=shock_pct*100,entry_utc=str(z.entry_utc),exit_utc=str(exit_utc),month=month,side=int(z.side),contracts=contracts,qty=qty,entry_price=z.entry_price,exit_price=exit_price,margin=margin,notional=notional,entry_fee=entry_fee,exit_fee=exit_fee,funding=funding_pnl,penalty=liq_penalty,net=net,liquidation=is_liq,wallet=wallet)
+                                  ledger.append(row);all_trades.append(row)
+                              sample=[z for z in ledger if z["month"] in MONTHS]
+                              liq_count=sum(z["liquidation"] for z in sample);wins=sum(z["net"]>0 for z in sample);losses=sum(z["net"]<0 for z in sample)
+                              row=dict(strategy=strategy,path=path,scenario=label,mode=mode,shock_pct=shock_pct*100,initial=100.,capital_per_trade=20.,leverage=100,net=float(mon.sum()),final=100.+float(mon.sum()),trades=len(sample),wins=wins,losses=losses,liquidations=liq_count,skips=skips,missing=missing,positive_months=int((mon>0).sum()),months_ge_1=int((mon>=1).sum()),min_month=float(mon.min()),realized_dd=realized_dd,floating_dd_envelope=floating_dd,minimum_wallet=minimum_wallet,minimum_buffer=minimum_buffer if ledger else None,max_contracts=max_contracts,total_fees=sum(z["entry_fee"]+z["exit_fee"] for z in sample),funding=sum(z["funding"] for z in sample),liquidation_penalties=sum(z["penalty"] for z in sample),monthly={k:round(float(v),6) for k,v in mon.items()})
+                              results.append(row);print("SIZE20_RESULT",json.dumps(row),flush=True)
+                              for mo,v in mon.items():month_rows.append(dict(strategy=strategy,path=path,scenario=label,mode=mode,shock_pct=shock_pct*100,month=mo,net=v))
+          pd.DataFrame(results).to_csv(out/"summary.csv",index=False);pd.DataFrame(all_trades).to_csv(out/"trades.csv",index=False);pd.DataFrame(month_rows).to_csv(out/"monthly.csv",index=False)
+          print("SIZE20_COMPLETE",len(results),flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reclaim-100usd-20margin-100x
+          path: analysis/reclaim_100usd_20margin_100x_20261124/
+          if-no-files-found: warn
