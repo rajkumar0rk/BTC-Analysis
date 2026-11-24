@@ -1,0 +1,25 @@
+name: BTCUSD Step35 - selective monthly floor
+on:
+  push:
+    branches: [research/btc-monthly-floor-selective-step35]
+    paths: [scripts/research_btc_monthly_floor_selective_step35.py, .github/workflows/research-btc-monthly-floor-selective-step35.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_monthly_floor_selective_step35.py
+      - run: python scripts/research_btc_monthly_floor_selective_step35.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-step35-selective-monthly-floor
+          path: analysis/btc_monthly_floor_selective_step35/
