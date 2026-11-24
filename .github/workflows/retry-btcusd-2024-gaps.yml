@@ -3,14 +3,14 @@ on:
   push:
     branches: [research/btcusd-2024-gap-retry-20261124]
     paths:
-      - scripts/retry_btcusd_2024_gaps.py
+      - scripts/retry_btcusd_2024_gaps_fast.py
       - .github/workflows/retry-btcusd-2024-gaps.yml
   workflow_dispatch:
 permissions:
   contents: write
 concurrency:
   group: btcusd-2024-gap-retry
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   retry:
     runs-on: ubuntu-latest
@@ -28,13 +28,13 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          python -m py_compile scripts/retry_btcusd_2024_gaps.py
+          python -m py_compile scripts/retry_btcusd_2024_gaps_fast.py
           deadline=$(( $(date +%s) + 19800 ))
           while [ "$(date +%s)" -lt "$deadline" ]; do
             if python -c 'import json; assert json.load(open("data/delta_india/BTCUSD/2024_verified_archive/manifest.json"))["totals"]["trade_1m"]["missing"]==0' 2>/dev/null; then
               echo "100% coverage reached"; break
             fi
-            python -u scripts/retry_btcusd_2024_gaps.py
+            python -u scripts/retry_btcusd_2024_gaps_fast.py
             git add data/delta_india/BTCUSD/2024_verified_archive analysis/btcusd_2024_gap_retry
             if ! git diff --cached --quiet; then
               git commit -m "Checkpoint native BTCUSD gap retry round"
@@ -44,7 +44,7 @@ jobs:
               echo "100% coverage reached"; break
             fi
             # No-progress counts inform backoff, never stop recovery.
-            pause=$(python -c 'import json; s=json.load(open("analysis/btcusd_2024_gap_retry/state.json")); print(min(900,60*2**min(s["no_progress"],4)))')
+            pause=$(python -c 'import json; s=json.load(open("analysis/btcusd_2024_gap_retry/state.json")); print(180 if s["history"][-1]["errors"] else 15 if s["history"][-1]["recovered"] else 45)')
             remaining=$(( deadline - $(date +%s) ))
             if [ "$remaining" -le 300 ]; then break; fi
             if [ "$pause" -gt "$((remaining-300))" ]; then pause=$((remaining-300)); fi
