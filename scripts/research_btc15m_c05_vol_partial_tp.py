@@ -132,9 +132,9 @@ def engine():
     patch('        net=gross-fee_out-p["fee_in"]','        net=gross-fee_out-p["fee_in"]+p.get("partial_realized",0.)')
     patch('fee_gst_usd=p["fee_in"]+fee_out,','fee_gst_usd=p["fee_in"]+fee_out+p.get("partial_fee",0.),partial_exit=bool(p.get("partial_done",False)),')
     # Process a reached partial target before the final target, even on a gap.
-    patch('                close_trade(position["target"],sec,"TP")','                partial_take(raw_open)\\n                close_trade(position["target"],sec,"TP")')
-    patch('        path=(raw_open,h[i],l[i],c[i])','        if position is not None:partial_take(raw_open)\\n        path=(raw_open,h[i],l[i],c[i])')
-    patch('            if side*(dest-p["target"])>=0:', '            partial_take(dest)\\n            if side*(dest-p["target"])>=0:')
+    patch('                close_trade(position["target"],sec,"TP")','                partial_take(raw_open)\n                close_trade(position["target"],sec,"TP")')
+    patch('        path=(raw_open,h[i],l[i],c[i])','        if position is not None:partial_take(raw_open)\n        path=(raw_open,h[i],l[i],c[i])')
+    patch('            if side*(dest-p["target"])>=0:', '            partial_take(dest)\n            if side*(dest-p["target"])>=0:')
     # Evaluate reached protection levels only after observing the path endpoint.
     # Existing stop and target checks remain first; a stop never moves backward.
     anchor='        # An overnight/minute opening price may already cross a rung.'
