@@ -1,0 +1,307 @@
+name: Native 50x constrained profit improvement
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-native-50x-profit-improvement-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Read frozen 50x version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download 45334906393 --repo rajkumar0rk/BTC-Analysis --name reclaim-native-50x-causal --dir native-frozen
+      - run: pip install numpy pandas numba scipy
+      - name: Run robust optimization on all historical stress cases
+        shell: bash
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          NUMBA_NUM_THREADS: '2'
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import json, pathlib, itertools, time
+          import numpy as np
+          import pandas as pd
+          from numba import njit, prange
+          from research_st_ema20_initial_sl_grid_20261122 import eng, MONTHS, PATHS
+          from research_st_ema20_reclaim_loss_months_20261122 import indicator_features, signal_table
+          e=eng();m,h,n=e.load();h=indicator_features(e.features(h))
+          entries=e.entry_candidates(m,h,"reclaim");f=signal_table(entries,h)
+          # Use only opportunities whose entry precedes the November cutoff.
+          use=np.array([m.index[x["entry_j"]].tz_convert("Asia/Kolkata").strftime("%Y-%m")<="2026-10" for x in entries])
+          entries=[x for x,keep in zip(entries,use) if keep];f=f.loc[use].reset_index(drop=True)
+          N=len(entries);print("DATA",len(m),N,flush=True)
+          # Frozen V5 policy from the successfully verified workflow.
+          def v4(r):
+              v1=r.ema_gap_pct<=1 and r.ema_slope_pct>=-.2 and r.supertrend_gap_pct>=.5
+              v2=v1 and (r.adx14<=20 or r.hourly_range_atr<=1 or r.ema_gap_pct>=.15) and r.dir_rsi14<=60
+              g3=r.adx14>=35 and r.ema_slope_pct<=.1
+              g4=r.adx14>=25 and r.supertrend_gap_pct>=1.5
+              if not (v2 or (v1 and g3) or g4): return 0.
+              if r.dir_rsi14>=52 and r.hourly_body_atr<=.25:return .26
+              if r.adx14>=35 and r.atr_pct<=.75:return .9
+              if r.adx14<=30 and r.atr_pct<=.3:return .55
+              if g4:return .18
+              if g3:return .3
+              return -1.
+          def v5(r):
+              if not np.isfinite(r.volume_ratio):return 0.
+              if r.volume_ratio<1.25:
+                  if r.volume_ratio<=.45 and r.atr_pct>=.4 and r.atr_expansion<=.85:return 1.
+                  if r.volume_ratio>=.8 and .6<=r.atr_pct<=.8:return 2.
+                  return 0.
+              x=v4(r)
+              if x!=0 and r.adx14<=15 and r.ema_slope_pct<=.05:x=.38
+              if x!=0 and r.adx14>=25 and r.supertrend_age_hours<=6:x=0.
+              if x!=0 and r.volume_ratio>=1.5 and r.adx14>=40:x=1.9
+              if r.dir_rsi14>=60 or r.supertrend_gap_pct<=.5:x=.33
+              if x!=0 and r.ema_slope_pct<=-.1 and r.atr_expansion<=.8:x=.185
+              return x
+          def v6(r):
+              x=v5(r)
+              if x!=0 and r.dir_rsi14>=55 and r.hourly_range_atr>=1.5:x=.3
+              if r.atr_pct<=.55 and r.supertrend_gap_pct>=1.:x=.7
+              if x==0 and r.atr_pct>=.45 and r.atr_expansion>=1.2:x=.55
+              if x!=0 and .55<=r.volume_ratio<=.8:x=1.2
+              return x
+          cols=["volume_ratio","atr_pct","atr_expansion","adx14","dir_rsi14","ema_gap_pct","supertrend_gap_pct","hourly_body_atr","hourly_range_atr"]
+          variants=[f.copy() for _ in range(3)]
+          for k,shift in [(1,-.01),(2,.01)]:variants[k][cols]*=1+shift
+          levels=np.array(sorted(set([-1.,0.,.14,.16,.18,.185,.2,.23,.26,.28,.3,.33,.35,.38,.4,.45,.5,.55,.6,.65,.7,.75,.8,.9,1.,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.,2.2,2.5,3.])))
+          A=len(levels);skip=int(np.flatnonzero(levels==0)[0])
+          scenarios=[("base",5,.00059,1.,.02,0,0),("slip10",10,.00059,1.,.02,0,0),("slip15",15,.00059,1.,.02,0,0),("slip25",25,.00059,1.,.02,0,0),("fee20",5,.00059*1.2,1.,.02,0,0),("fee50",5,.00059*1.5,1.,.02,0,0),("tp95",5,.00059,.95,.02,0,0),("tp105",5,.00059,1.05,.02,0,0),("sl18",5,.00059,1.,.018,0,0),("sl22",5,.00059,1.,.022,0,0),("feature99",5,.00059,1.,.02,1,0),("feature101",5,.00059,1.,.02,2,0),("delay1",5,.00059,1.,.02,0,1)]
+          scenarios += [("moderate_cost",10,.00059*1.2,1.,.02,0,0),("severe_cost",25,.00059*1.5,1.,.02,0,0),("delay_cost",10,.00059*1.2,1.,.02,0,1),("tp_low_cost",25,.00059*1.5,.95,.018,1,0),("tp_high_cost",25,.00059*1.5,1.05,.022,2,0),("combined_low_delay",25,.00059*1.5,.95,.018,1,1),("combined_high_delay",25,.00059*1.5,1.05,.022,2,1)]
+          S=len(scenarios)*2;group=np.array([x[5] for x in scenarios for p in range(2)],np.int64)
+          o,hi,lo,c=(m[k].to_numpy(float) for k in ["open","high","low","close"]);hs=h.side.to_numpy()
+          month_idx=np.array([MONTHS.index(x) if x in MONTHS else -1 for x in m.index.tz_convert("Asia/Kolkata").strftime("%Y-%m")],np.int64)
+          j0=np.array([x["entry_j"] for x in entries],np.int64);sd=np.array([x["side"] for x in entries],np.int64);mid=np.array([x["entry"]-x["side"]*5 for x in entries]);ends=[]
+          for j,side in zip(j0,sd):
+              z=np.flatnonzero(hs[j//60:]!=side);ends.append(min((j//60+int(z[0])+1)*60,len(m)) if len(z) else len(m))
+          ends=np.array(ends,np.int64)
+          @njit
+          def replay(jstart,end,side,mid,slip,fee,tp,sl,path,delay,o,hi,lo,c):
+              jstart+=delay
+              if jstart>=end:return -1,0.
+              if delay:mid=o[jstart]
+              entry=mid+side*slip;stop=entry-side*entry*sl
+              target=entry+side*entry*tp/100
+              for j in range(jstart,end):
+                  first=hi[j] if path==0 else lo[j];second=lo[j] if path==0 else hi[j]
+                  nodes=(o[j],first,second,c[j])
+                  active=j!=jstart or delay>0 or side*(o[j]-mid)>=-1e-9
+                  ex=0.;hit=False
+                  if j!=jstart and side*(o[j]-stop)<-1e-9:ex=o[j];hit=True
+                  elif active and tp>0 and side*(o[j]-target)>=-1e-9:ex=target;hit=True
+                  if not hit:
+                      for k in range(3):
+                          a,b=nodes[k],nodes[k+1]
+                          if not active:
+                              if side*(b-a)<=0 or side*(b-mid)<-1e-9:continue
+                              a=mid;active=True
+                          if side*(b-a)>0:
+                              if tp>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:ex=target;hit=True;break
+                              for rung in (2.,3.,5.):
+                                  z=entry+side*entry*rung/100
+                                  if side*(a-z)<-1e-9 and side*(b-z)>=-1e-9 and side*(z-stop)>1e-9:stop=z
+                          else:
+                              if side*(a-stop)<-1e-9:ex=a;hit=True;break
+                              if side*(a-stop)>=-1e-9 and side*(b-stop)<=1e-9:ex=stop;hit=True;break
+                  if hit:
+                      fill=ex-side*slip
+                      return j,.001*side*(fill-entry)-.001*fee*(entry+fill)
+              if end<len(o):
+                  fill=o[end]-side*slip
+                  return end,.001*side*(fill-entry)-.001*fee*(entry+fill)
+              return -1,0.
+          # Optimistic oracle envelope, NOT a tradable strategy: permits retrospective independent choice
+          # of exit action for every trade/scenario/month, while imposing the exact same conservative margin screen.
+          # If even this envelope fails, changing the feature gates cannot solve the problem within this grid.
+          def load_series(folder,col):
+              frames=[]
+              for p in sorted(pathlib.Path(folder).glob("20??-??.csv.gz")):
+                  x=pd.read_csv(p,usecols=["time",col]);x.index=pd.to_datetime(x.time,unit="s",utc=True);frames.append(x[col])
+              return pd.concat(frames).sort_index().loc[lambda x:~x.index.duplicated(keep="last")]
+          marklo=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","low").reindex(m.index).to_numpy(float)
+          markhi=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","high").reindex(m.index).to_numpy(float)
+          markopen=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","open").reindex(m.index).to_numpy(float)
+          funding=load_series("data/delta_india/BTCUSD/institutional/history/funding_1h","close")
+          rate=funding.reindex(m.index.floor("h")-pd.Timedelta(hours=1)).to_numpy(float)
+          pre=m.index<pd.Timestamp("2025-09-08T16:00:00Z")
+          weight=np.where(pre,1/480,np.where((m.index.minute==0)&(m.index.hour%8==0),1.,0.))
+          flow=np.where(weight==0,0.,rate*markopen*weight*.001/100)
+          missing=~np.isfinite(flow)
+          debitlong=np.r_[0.,np.cumsum(np.where(missing,0.,np.maximum(flow,0.)))]
+          debitshort=np.r_[0.,np.cumsum(np.where(missing,0.,np.maximum(-flow,0.)))]
+          invalid=np.r_[0,np.cumsum(missing|~np.isfinite(marklo)|~np.isfinite(markhi))]
+          # Native 50x only, fixed one contract, no top-ups. A causal policy selects a TP/SL action.
+          # Exact stress mask includes the full entry and exit minute, adverse mark shock,
+          # trading cost, liquidation reserve and conservative funding debits.
+          starts=np.array([m.index.searchsorted(pd.Timestamp(x+"-01",tz="Asia/Kolkata").tz_convert("UTC")) for x in MONTHS]+[m.index.searchsorted(pd.Timestamp("2026-11-01",tz="Asia/Kolkata").tz_convert("UTC"))],np.int64)
+          actions=[(0.,0.)]+[(tp,cap) for cap in [.002,.003,.004,.005,.006,.007,.008,.009,.01,.012,.015,.018,.02] for tp in [.26,.38,.5,.65,.8,.9,1.2,1.5,1.9,2.5,3.,-1.]]
+          T=np.array([x[0] for x in actions]);C=np.array([x[1] for x in actions]);B=len(actions)
+          @njit(parallel=True)
+          def build(slip,fee,scale,sl,delay,j0,ends,sd,mid,T,C,o,hi,lo,c,month_idx,marklo,markhi,debitlong,debitshort,invalid,starts):
+              # For each action precompute full monthly contribution, including debit-only funding.
+              P=np.zeros((S,N,B,22),np.float64);R=np.zeros((S,N,B),np.uint8)
+              for si in prange(S):
+                  for i in range(N):
+                      start=j0[i]+delay[si]
+                      if start>=ends[i]:continue
+                      entry=(mid[i] if delay[si]==0 else o[start])+sd[i]*slip[si]
+                      notional=.001*entry;reserve=.0025+fee[si]+.0025*.5*1.18
+                      for a in range(1,B):
+                          j,p=replay(j0[i],ends[i],sd[i],mid[i],slip[si],fee[si],T[a]*scale[si],min(sl[si],C[a]),si%2,delay[si],o,hi,lo,c)
+                          if j<start or invalid[j+1]-invalid[start]>0:
+                              R[si,i,a]=1;continue
+                          if sd[i]==1:
+                              adverse=np.min(marklo[start:j+1])*.995;debit=debitlong
+                          else:
+                              adverse=np.max(markhi[start:j+1])*1.005;debit=debitshort
+                          cost=debit[j+1]-debit[start]
+                          buf=notional/50-notional*fee[si]-cost+.001*sd[i]*(adverse-entry)-.001*adverse*reserve
+                          if buf<=0:R[si,i,a]=1
+                          mo=month_idx[j]
+                          if mo>=0:P[si,i,a,mo]=p
+                          for mo in range(22):
+                              l=max(start,starts[mo]);r=min(j+1,starts[mo+1])
+                              if r>l:P[si,i,a,mo]-=debit[r]-debit[l]
+              return P,R
+          params=[x for x in scenarios for p in range(2)]
+          args=[np.array([x[k] for x in params],dtype=np.int64 if k==6 else float) for k in [1,2,3,4,6]]
+          P,R=build(*args,j0,ends,sd,mid,T,C,o,hi,lo,c,month_idx,marklo,markhi,debitlong,debitshort,invalid,starts)
+          safe=np.stack([np.all(R[group==g]==0,axis=0) for g in range(3)])
+          print("SAFE_ACTIONS",int(safe.sum()),"ACTIONS",B,flush=True)
+          # Drop actions dominated by another globally equivalent action (only exactly equal masks and payouts).
+          thresholds={"volume_ratio":[.15,.25,.35,.45,.55,.65,.8,1.,1.25,1.5,2.,3.],"atr_pct":[.25,.35,.45,.55,.6,.7,.8,1.,1.25],"atr_expansion":[.65,.75,.85,.95,1.05,1.2],"adx14":[15,20,25,30,35,40],"dir_rsi14":[48,52,55,60,65],"ema_gap_pct":[.05,.1,.2,.4,.7,1.],"supertrend_gap_pct":[.5,.75,1.,1.5,2.],"ema_slope_pct":[-.2,-.1,0,.1,.2],"hourly_body_atr":[.25,.5,.75,1.,1.5],"hourly_range_atr":[.75,1.,1.5,2.],"supertrend_age_hours":[6,12,24,48]}
+          atoms=[]
+          for k,vs in thresholds.items():
+              for v in vs:
+                  for op in ("<=",">="):
+                      mask=np.stack([((x[k]<=v) if op=="<=" else (x[k]>=v)).to_numpy() for x in variants])
+                      if 3<=mask[0].sum()<=N-3:atoms.append((f"{k} {op} {v}",mask))
+          for side in [-1,1]:atoms.append((f"side == {side}",np.stack([(x.side==side).to_numpy() for x in variants])))
+          pool={}
+          def add(name,mask):
+              if 3<=mask[0].sum() and all(x.sum()>=2 for x in mask):
+                  key=np.packbits(mask).tobytes()
+                  if key not in pool:pool[key]=(name,mask)
+          for a,ma in atoms:add(a,ma)
+          for (a,ma),(b,mb) in itertools.combinations(atoms,2):add(a+" AND "+b,ma&mb)
+          add("ALL",np.ones((3,N),bool))
+          gates=list(pool.values())
+          def arrays(gates):
+              idx=np.full((len(gates),3,N),-1,np.int16);ct=np.zeros((len(gates),3),np.int16)
+              for gi,(_,mask) in enumerate(gates):
+                  for k in range(3):
+                      ix=np.flatnonzero(mask[k]);idx[gi,k,:len(ix)]=ix;ct[gi,k]=len(ix)
+              return idx,ct
+          @njit
+          def evaluate_policy(pol,P,R,group):
+              out=np.zeros((S,22));risk=0
+              for si in range(S):
+                  for i in range(N):
+                      a=pol[group[si],i];risk+=R[si,i,a]
+                      out[si]+=P[si,i,a]
+              return out,risk
+          @njit
+          def objective(v,goal):
+              worst_net=1e99
+              for si in range(S):
+                  net=0.
+                  for mo in range(22):
+                      if v[si,mo]<goal-1e-9:return 1e50
+                      net+=v[si,mo]
+                  worst_net=min(worst_net,net)
+              return -(min(v[0].sum(),v[1].sum())+.25*worst_net)
+          @njit(parallel=True)
+          def search(idx,ct,pol,cur,P,safe,group,goal,mode):
+              result=np.full((len(idx),B),1e99)
+              for g in prange(len(idx)):
+                  for a in range(B):
+                      ok=True;change=False
+                      # Hard feasibility: all newly selected entries must be safe under every path in their feature group.
+                      for k in range(3):
+                          for jj in range(ct[g,k]):
+                              i=idx[g,k,jj];old=pol[k,i]
+                              if old==a or (mode==1 and old==0) or (mode==2 and old!=0):continue
+                              if not safe[k,i,a]:ok=False;break
+                              change=True
+                          if not ok:break
+                      if not ok or not change:continue
+                      v=cur.copy()
+                      for si in range(S):
+                          k=group[si]
+                          for jj in range(ct[g,k]):
+                              i=idx[g,k,jj];old=pol[k,i]
+                              if old==a or (mode==1 and old==0) or (mode==2 and old!=0):continue
+                              for mo in range(22):v[si,mo]+=P[si,i,a,mo]-P[si,i,old,mo]
+                      result[g,a]=objective(v,goal)
+              return result
+          chosen=json.loads(pathlib.Path("native-frozen/rules.json").read_text())
+          pol=np.zeros((3,N),np.int16)
+          for rule in chosen:
+              a=int(np.argmin(np.abs(T-rule["target"])+100*np.abs(C-rule["stop_cap_pct"]/100)))
+              assert abs(T[a]-rule["target"])<1e-10 and abs(C[a]-rule["stop_cap_pct"]/100)<1e-10
+              mask=np.ones((3,N),bool)
+              for atom in rule["gate"].split(" AND "):
+                  k,op,v=atom.split();v=float(v)
+                  mask&=np.stack([((x[k]<=v) if op=="<=" else (x[k]>=v) if op==">=" else (x[k]==v)).to_numpy() for x in variants])
+              if rule["mode"]=="selected_only":mask&=pol!=0
+              if rule["mode"]=="new_only":mask&=pol==0
+              pol[mask]=a
+          cur,risk=evaluate_policy(pol,P,R,group)
+          expected=pd.read_csv("native-frozen/monthly.csv",index_col=0).to_numpy()
+          np.testing.assert_allclose(cur,expected,atol=1e-5,rtol=0)
+          assert risk==0 and cur.min()>=1.
+          print("FROZEN50_BASE",json.dumps(dict(net=float(min(cur[0].sum(),cur[1].sum())),worst_total=float(cur.sum(axis=1).min()),minimum_month=float(cur.min()),risk=int(risk))),flush=True)
+          base=cur.copy()
+
+          idx,ct=arrays(gates);print("GATES",len(gates),flush=True)
+          def optimize(pol,cur,chosen,gates,idx,ct,steps):
+              for step in range(steps):
+                  old=objective(cur,1.0);candidates=[]
+                  for mode in [0,1,2]:
+                      sc=search(idx,ct,pol,cur,P,safe,group,1.0,mode)
+                      g,a=np.unravel_index(sc.argmin(),sc.shape);candidates.append((float(sc[g,a]),int(g),int(a),mode))
+                  score,g,a,mode=min(candidates)
+                  if score>=old-1e-8:break
+                  mask=gates[g][1].copy()
+                  if mode==1:mask&=(pol!=0)
+                  if mode==2:mask&=(pol==0)
+                  pol[mask]=a
+                  cur,risk=evaluate_policy(pol,P,R,group);assert risk==0
+                  chosen.append(dict(gate=gates[g][0],target=float(T[a]),stop_cap_pct=float(C[a]*100),mode=["override","selected_only","new_only"][mode]))
+                  print("NATIVE50_STEP",json.dumps(dict(step=len(chosen),rule=chosen[-1],cells=int((cur>=1).sum()),min=float(cur.min()),net=float(cur[0].sum()),risk=int(risk),score=score)),flush=True)
+                  assert cur.min()>=1-1e-9
+              return pol,cur,chosen
+          pol,cur,chosen=optimize(pol,cur,chosen,gates,idx,ct,18)
+          if chosen:
+              seeds=[(name,ma) for name,ma in gates if any(x["gate"]==name for x in chosen)]
+              for name,ma in seeds:
+                  for b,mb in atoms:add(name+" AND "+b,ma&mb)
+              gates=list(pool.values());idx,ct=arrays(gates)
+              pol,cur,chosen=optimize(pol,cur,chosen,gates,idx,ct,8)
+          out=pathlib.Path("analysis/reclaim_native_50x_profit_20261124");out.mkdir(parents=True,exist_ok=True)
+          cur,risk=evaluate_policy(pol,P,R,group)
+          assert cur.min()>=1-1e-9 and risk==0
+          assert min(cur[0].sum(),cur[1].sum())>=min(base[0].sum(),base[1].sum())
+          print("NATIVE50_PROFIT_RESULT",json.dumps(dict(rules=chosen,pass_cells=int((cur>=1).sum()),total_cells=S*22,worst_month=float(cur.min()),baseline_net=float(min(cur[0].sum(),cur[1].sum())),worst_total=float(cur.sum(axis=1).min()),risk=int(risk),failed={MONTHS[i]:float(cur[:,i].min()) for i in range(22) if cur[:,i].min()<1})),flush=True)
+          (out/"rules.json").write_text(json.dumps(chosen,indent=2))
+          pd.DataFrame(cur,index=[f"{x[0]}_{p}" for x in scenarios for p in range(2)],columns=MONTHS).to_csv(out/"monthly.csv")
+          print("NATIVE50_COMPLETE",flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reclaim-native-50x-profit
+          path: analysis/reclaim_native_50x_profit_20261124/
+          if-no-files-found: warn
