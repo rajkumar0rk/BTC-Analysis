@@ -1,0 +1,75 @@
+{
+  "frozen_source_commit": "8cb6dc0cf29ceb6294dad03fed420bb960da1785",
+  "frozen_rules": [
+    [
+      "H1_RSI30_reversal",
+      "short_ADX25",
+      [
+        2.0,
+        4.0,
+        4320,
+        0,
+        0.0,
+        0
+      ],
+      1e+30
+    ],
+    [
+      "Shock_Donchian",
+      "long_ADX25",
+      [
+        1.8,
+        3.0,
+        1440,
+        1,
+        0.0,
+        0
+      ],
+      1e+30
+    ],
+    [
+      "EMA20_ADX_reclaim",
+      "all",
+      [
+        1.75,
+        6.0,
+        4320,
+        0,
+        0.0,
+        0
+      ],
+      1e+30
+    ],
+    [
+      "H1_Donchian12",
+      "range_ADX20",
+      [
+        1.8,
+        3.5,
+        1440,
+        1,
+        0.0,
+        0
+      ],
+      -1000.0
+    ]
+  ],
+  "monthly_profit_ceiling": 2000,
+  "daily_entries": 1,
+  "monthly_loss_guard": 8000,
+  "parity_verified": true,
+  "training_end": "2026-10-31 18:29:00+00:00",
+  "holdout_start": "2026-10-31 18:30:00+00:00",
+  "holdout_end": "2026-11-17 23:59:00+00:00",
+  "holdout_partial_month": true,
+  "holdout_prior_use": "November excluded from V16 optimization, but not proven untouched across prior project research; no retuning here",
+  "genuine_untouched": "Requires forward candles after freeze on 2026-11-24; not available in this archive",
+  "funding_data": "actual hourly rate OHLC, not account settlement",
+  "funding_price_proxy": "MARK:BTCUSD open, underlying index not available",
+  "funding_rate_proxy": "previous completed hour close, alternate prior 8h boundary observation, adverse debit-only scenario",
+  "funding_schedule": "minute proration before 2025-09-08 16 UTC; 0/8/16 UTC thereafter",
+  "liquidation_model": "isolated margin, one lot, 0.25% maintenance, no auto-top-up; conservative mark adverse first; full initial margin loss proxy if liquidation, exact engine fills/fees unverified; no account balance simulation",
+  "funding_settlement_verified": false,
+  "exchange_liquidation_engine_verified": false,
+  "retuned": false
+}
