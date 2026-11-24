@@ -1,0 +1,63 @@
+{
+  "config": {
+    "family": "trend_rsi_pullback",
+    "timeframe": 60,
+    "lookback": 40,
+    "stop_fraction": 1.15,
+    "rr": 3.0
+  },
+  "training_metrics": {
+    "config": 80,
+    "valid": false,
+    "min_profit": -19.956988241236516,
+    "worst_dd": 21.47032218988055,
+    "min_month_fraction": 0.0,
+    "mean_month_fraction": 0.39999999999999997,
+    "positive_fold_fraction": 0.5,
+    "score": 0.9857268956888291,
+    "neighbor_q25": 0.6881086828769888,
+    "neighbor_valid_fraction": 0.0,
+    "robust_score": 0.6881086828769888
+  },
+  "grid_size": 144,
+  "training_period": "2024-02 through 2025-12",
+  "folds": [
+    [
+      "2024_H1",
+      "2024-02-01",
+      "2024-07-01"
+    ],
+    [
+      "2024_H2",
+      "2024-07-01",
+      "2025-01-01"
+    ],
+    [
+      "2025_H1",
+      "2025-01-01",
+      "2025-07-01"
+    ],
+    [
+      "2025_H2",
+      "2025-07-01",
+      "2026-01-01"
+    ]
+  ],
+  "risk_pct": 0.03,
+  "max_effective_exposure": 3.0,
+  "max_hold_minutes": 4320,
+  "weekdays_only": true,
+  "one_position": true,
+  "no_monthly_gates": true,
+  "no_daily_limit": true,
+  "no_leverage_tuning": true,
+  "training_pass": false,
+  "holdout_previously_examined": true,
+  "regime_filter": {
+    "ema": 100,
+    "slope_bars": 5
+  },
+  "research_batch": "V32; identical V29 grid with expanded training dates only",
+  "warmup_limited": true,
+  "warmup_start": "2024-01-30 00:00:00+00:00"
+}
