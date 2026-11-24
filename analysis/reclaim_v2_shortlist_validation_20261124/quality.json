@@ -1,0 +1,38 @@
+{
+  "date_window": "2025-01..2026-10 IST",
+  "completed_months": 22,
+  "raw_1m_bars": 992160,
+  "source_files": 23,
+  "original_reclaim_signals": 62,
+  "locked_reclaim_signals": 55,
+  "profiles": [
+    "LOCKED_V1",
+    "OR_2_COND",
+    "OR_3_COND",
+    "OR_AND_4_COND",
+    "OR_AND_4_COND_NO_SIDE",
+    "OR_AND_5_COND"
+  ],
+  "baseline_replay_validated_both_paths": true,
+  "all_22_months_net_non_decrease_verified_both_paths": true,
+  "simulated_1m_price_paths": [
+    "open_high_low_close",
+    "open_low_high_close"
+  ],
+  "executed_on_original_1m_archive": true,
+  "quantity_btc": 0.001,
+  "costs": "0.001 BTC, 0.00059 taker fee with GST per side; 5 BTC-points slippage per leg",
+  "initial_SL_pct": 2.0,
+  "profit_lock_pct": [
+    2.0,
+    3.0,
+    5.0
+  ],
+  "limitations": [
+    "An OHLC path assumption is not tick-by-tick truth",
+    "No funding, exchange margin, liquidation, order-book fill depth or stop amendment latency",
+    "Approximate stress deductions do not rerun entry and exit triggers",
+    "2025 and 2026 were reused in parameter selection: no untouched OOS period",
+    "Low trade count and high-dimensional search imply severe overfitting risk"
+  ]
+}

@@ -1,0 +1,7 @@
+profile,trades,profitable_months,losing_months,flat_months,net_usd_min,net_usd_max,net_2025_min,net_2026_min,closed_equity_dd_pct_worst,wins,losses,initial_stop_exits,monthly_PnL_no_worse_both_paths
+OR_3_COND,47,17,2,3,28.425616,28.649744,21.5979,6.1682,2.967,29,18,2,True
+OR_AND_4_COND_NO_SIDE,47,17,2,3,25.609247,25.833375,18.9191,6.03063,3.04,28,19,3,True
+OR_AND_4_COND,47,17,2,3,25.291921,25.516049,19.38911,5.2433,3.021,28,19,3,True
+OR_AND_5_COND,45,17,3,2,31.699673,31.923801,24.03617,7.00398,2.828,29,16,2,True
+OR_2_COND,50,16,4,2,25.963505,26.187633,19.85695,5.44704,3.294,29,21,2,True
+LOCKED_V1,55,15,5,2,20.037378,20.261506,16.68904,2.68883,4.308,29,26,4,True
