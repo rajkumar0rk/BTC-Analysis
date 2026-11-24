@@ -1,0 +1,258 @@
+name: Reclaim V7 1x wallet optimization
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-v7-1x-wallet-optimization-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scipy
+      - name: Run robust optimization on all historical stress cases
+        shell: bash
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          NUMBA_NUM_THREADS: '2'
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import json, pathlib, itertools, time
+          import numpy as np
+          import pandas as pd
+          from numba import njit, prange
+          from research_st_ema20_initial_sl_grid_20261122 import eng, MONTHS, PATHS
+          from research_st_ema20_reclaim_loss_months_20261122 import indicator_features, signal_table
+          e=eng();m,h,n=e.load();h=indicator_features(e.features(h))
+          entries=e.entry_candidates(m,h,"reclaim");f=signal_table(entries,h)
+          # Use only opportunities whose entry precedes the November cutoff.
+          use=np.array([m.index[x["entry_j"]].tz_convert("Asia/Kolkata").strftime("%Y-%m")<="2026-10" for x in entries])
+          entries=[x for x,keep in zip(entries,use) if keep];f=f.loc[use].reset_index(drop=True)
+          N=len(entries);print("DATA",len(m),N,flush=True)
+          # Frozen V5 policy from the successfully verified workflow.
+          def v4(r):
+              v1=r.ema_gap_pct<=1 and r.ema_slope_pct>=-.2 and r.supertrend_gap_pct>=.5
+              v2=v1 and (r.adx14<=20 or r.hourly_range_atr<=1 or r.ema_gap_pct>=.15) and r.dir_rsi14<=60
+              g3=r.adx14>=35 and r.ema_slope_pct<=.1
+              g4=r.adx14>=25 and r.supertrend_gap_pct>=1.5
+              if not (v2 or (v1 and g3) or g4): return 0.
+              if r.dir_rsi14>=52 and r.hourly_body_atr<=.25:return .26
+              if r.adx14>=35 and r.atr_pct<=.75:return .9
+              if r.adx14<=30 and r.atr_pct<=.3:return .55
+              if g4:return .18
+              if g3:return .3
+              return -1.
+          def v5(r):
+              if not np.isfinite(r.volume_ratio):return 0.
+              if r.volume_ratio<1.25:
+                  if r.volume_ratio<=.45 and r.atr_pct>=.4 and r.atr_expansion<=.85:return 1.
+                  if r.volume_ratio>=.8 and .6<=r.atr_pct<=.8:return 2.
+                  return 0.
+              x=v4(r)
+              if x!=0 and r.adx14<=15 and r.ema_slope_pct<=.05:x=.38
+              if x!=0 and r.adx14>=25 and r.supertrend_age_hours<=6:x=0.
+              if x!=0 and r.volume_ratio>=1.5 and r.adx14>=40:x=1.9
+              if r.dir_rsi14>=60 or r.supertrend_gap_pct<=.5:x=.33
+              if x!=0 and r.ema_slope_pct<=-.1 and r.atr_expansion<=.8:x=.185
+              return x
+          def v6(r):
+              x=v5(r)
+              if x!=0 and r.dir_rsi14>=55 and r.hourly_range_atr>=1.5:x=.3
+              if r.atr_pct<=.55 and r.supertrend_gap_pct>=1.:x=.7
+              if x==0 and r.atr_pct>=.45 and r.atr_expansion>=1.2:x=.55
+              if x!=0 and .55<=r.volume_ratio<=.8:x=1.2
+              return x
+          cols=["volume_ratio","atr_pct","atr_expansion","adx14","dir_rsi14","ema_gap_pct","supertrend_gap_pct","hourly_body_atr","hourly_range_atr"]
+          variants=[f.copy() for _ in range(3)]
+          for k,shift in [(1,-.01),(2,.01)]:variants[k][cols]*=1+shift
+          levels=np.array(sorted(set([-1.,0.,.14,.16,.18,.185,.2,.23,.26,.28,.3,.33,.35,.38,.4,.45,.5,.55,.6,.65,.7,.75,.8,.9,1.,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.,2.2,2.5,3.])))
+          A=len(levels);skip=int(np.flatnonzero(levels==0)[0])
+          scenarios=[("base",5,.00059,1.,.02,0,0),("slip10",10,.00059,1.,.02,0,0),("slip15",15,.00059,1.,.02,0,0),("slip25",25,.00059,1.,.02,0,0),("fee20",5,.00059*1.2,1.,.02,0,0),("fee50",5,.00059*1.5,1.,.02,0,0),("tp95",5,.00059,.95,.02,0,0),("tp105",5,.00059,1.05,.02,0,0),("sl18",5,.00059,1.,.018,0,0),("sl22",5,.00059,1.,.022,0,0),("feature99",5,.00059,1.,.02,1,0),("feature101",5,.00059,1.,.02,2,0),("delay1",5,.00059,1.,.02,0,1)]
+          scenarios += [("moderate_cost",10,.00059*1.2,1.,.02,0,0),("severe_cost",25,.00059*1.5,1.,.02,0,0),("delay_cost",10,.00059*1.2,1.,.02,0,1),("tp_low_cost",25,.00059*1.5,.95,.018,1,0),("tp_high_cost",25,.00059*1.5,1.05,.022,2,0),("combined_low_delay",25,.00059*1.5,.95,.018,1,1),("combined_high_delay",25,.00059*1.5,1.05,.022,2,1)]
+          S=len(scenarios)*2;group=np.array([x[5] for x in scenarios for p in range(2)],np.int64)
+          o,hi,lo,c=(m[k].to_numpy(float) for k in ["open","high","low","close"]);hs=h.side.to_numpy()
+          month_idx=np.array([MONTHS.index(x) if x in MONTHS else -1 for x in m.index.tz_convert("Asia/Kolkata").strftime("%Y-%m")],np.int64)
+          j0=np.array([x["entry_j"] for x in entries],np.int64);sd=np.array([x["side"] for x in entries],np.int64);mid=np.array([x["entry"]-x["side"]*5 for x in entries]);ends=[]
+          for j,side in zip(j0,sd):
+              z=np.flatnonzero(hs[j//60:]!=side);ends.append(min((j//60+int(z[0])+1)*60,len(m)) if len(z) else len(m))
+          ends=np.array(ends,np.int64)
+          @njit
+          def replay(jstart,end,side,mid,slip,fee,tp,sl,path,delay,o,hi,lo,c):
+              jstart+=delay
+              if jstart>=end:return -1,0.
+              if delay:mid=o[jstart]
+              entry=mid+side*slip;stop=entry-side*entry*sl
+              target=entry+side*entry*tp/100
+              for j in range(jstart,end):
+                  first=hi[j] if path==0 else lo[j];second=lo[j] if path==0 else hi[j]
+                  nodes=(o[j],first,second,c[j])
+                  active=j!=jstart or delay>0 or side*(o[j]-mid)>=-1e-9
+                  ex=0.;hit=False
+                  if j!=jstart and side*(o[j]-stop)<-1e-9:ex=o[j];hit=True
+                  elif active and tp>0 and side*(o[j]-target)>=-1e-9:ex=target;hit=True
+                  if not hit:
+                      for k in range(3):
+                          a,b=nodes[k],nodes[k+1]
+                          if not active:
+                              if side*(b-a)<=0 or side*(b-mid)<-1e-9:continue
+                              a=mid;active=True
+                          if side*(b-a)>0:
+                              if tp>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:ex=target;hit=True;break
+                              for rung in (2.,3.,5.):
+                                  z=entry+side*entry*rung/100
+                                  if side*(a-z)<-1e-9 and side*(b-z)>=-1e-9 and side*(z-stop)>1e-9:stop=z
+                          else:
+                              if side*(a-stop)<-1e-9:ex=a;hit=True;break
+                              if side*(a-stop)>=-1e-9 and side*(b-stop)<=1e-9:ex=stop;hit=True;break
+                  if hit:
+                      fill=ex-side*slip
+                      return j,.001*side*(fill-entry)-.001*fee*(entry+fill)
+              if end<len(o):
+                  fill=o[end]-side*slip
+                  return end,.001*side*(fill-entry)-.001*fee*(entry+fill)
+              return -1,0.
+          # Chronological 1x wallet simulation. Only a completed-signal gate and current wallet
+          # balance can influence the extra-entry decision; no signal IDs or month-specific rules.
+          config=json.loads(pathlib.Path("strategy-candidates/btcusd_ema20_reclaim_v7_combined_20261124.json").read_text())
+          rules=config["policy_rules_in_order"]
+          def v7(r):
+              x=v6(r)
+              for rule in rules[1:]:
+                  hit=True
+                  if rule["gate"]!="ALL":
+                      for atom in rule["gate"].split(" AND "):
+                          k,op,v=atom.split();y=float(r[k]);v=float(v)
+                          hit=hit and (y<=v if op=="<=" else y>=v if op==">=" else y==v)
+                  if hit and (rule["mode"]=="override" or rule["mode"]=="selected_only" and x!=0 or rule["mode"]=="new_only" and x==0):x=rule["target"]
+              return x
+          pol=np.array([[int(np.argmin(np.abs(levels-v7(r)))) for _,r in v.iterrows()] for v in variants],np.int16)
+          def load_series(folder,col):
+              frames=[]
+              for p in sorted(pathlib.Path(folder).glob("20??-??.csv.gz")):
+                  x=pd.read_csv(p,usecols=["time",col]);x.index=pd.to_datetime(x.time,unit="s",utc=True);frames.append(x[col])
+              return pd.concat(frames).sort_index().loc[lambda x:~x.index.duplicated(keep="last")]
+          markopen=load_series("data/delta_india/BTCUSD/institutional/history/mark_1m","open").reindex(m.index).to_numpy(float)
+          funding=load_series("data/delta_india/BTCUSD/institutional/history/funding_1h","close")
+          rate=funding.reindex(m.index.floor("h")-pd.Timedelta(hours=1)).to_numpy(float)
+          weight=np.where(m.index<pd.Timestamp("2025-09-08T16:00:00Z"),1/480,np.where((m.index.minute==0)&(m.index.hour%8==0),1.,0.))
+          flow=np.where(weight==0,0.,rate*markopen*weight*.001/100)
+          invalid=np.r_[0,np.cumsum(~np.isfinite(flow))]
+          dl=np.r_[0.,np.cumsum(np.where(np.isfinite(flow),np.maximum(flow,0.),0.))]
+          ds=np.r_[0.,np.cumsum(np.where(np.isfinite(flow),np.maximum(-flow,0.),0.))]
+          # Month boundary indices; allocate funding debits in settlement month.
+          starts=np.array([m.index.searchsorted(pd.Timestamp(x+"-01",tz="Asia/Kolkata").tz_convert("UTC")) for x in MONTHS]+[m.index.searchsorted(pd.Timestamp("2026-11-01",tz="Asia/Kolkata").tz_convert("UTC"))],np.int64)
+          @njit(parallel=True)
+          def build(slip,fee,scale,sl,delay,j0,ends,sd,mid,levels,o,hi,lo,c,month_idx,dl,ds,invalid,starts):
+              P=np.zeros((S,N,A));M=np.full((S,N,A),-1,np.int16);F=np.zeros((S,N,A,22));D=np.zeros((S,N,A));E=np.full((S,N,A),-1,np.int64);R=np.zeros((S,N))
+              for si in prange(S):
+                  for i in range(N):
+                      start=j0[i]+delay[si]
+                      if start>=ends[i]:continue
+                      entry=(mid[i] if delay[si]==0 else o[start])+sd[i]*slip[si]
+                      R[si,i]=.001*entry*(1+fee[si])
+                      for a in range(A):
+                          if levels[a]==0:continue
+                          j,p=replay(j0[i],ends[i],sd[i],mid[i],slip[si],fee[si],levels[a]*scale[si],sl[si],si%2,delay[si],o,hi,lo,c)
+                          if j<start or invalid[j+1]-invalid[start]>0:continue
+                          E[si,i,a]=j;P[si,i,a]=p;M[si,i,a]=month_idx[j]
+                          deb=dl if sd[i]==1 else ds
+                          D[si,i,a]=deb[j+1]-deb[start]
+                          for mo in range(22):
+                              l=max(start,starts[mo]);r=min(j+1,starts[mo+1])
+                              if r>l:F[si,i,a,mo]=deb[r]-deb[l]
+              return P,M,F,D,E,R
+          params=[x for x in scenarios for p in range(2)]
+          args=[np.array([x[k] for x in params],dtype=np.int64 if k==6 else float) for k in [1,2,3,4,6]]
+          P,M,F,D,E,R=build(*args,j0,ends,sd,mid,levels,o,hi,lo,c,month_idx,dl,ds,invalid,starts)
+          @njit
+          def simulate(pol,P,M,F,D,E,R,group,j0,delay,mask,action,wallet_cap,mode,capital):
+              out=np.zeros((S,22));counts=np.zeros((S,3),np.int64)
+              for s in range(S):
+                  cash=capital;active=-1;k=group[s]
+                  for i in range(N):
+                      a=pol[k,i]
+                      if cash<wallet_cap and mask[k,i]:
+                          if (mode==0 and a==skip) or (mode==1 and a!=skip) or mode==2:a=action
+                      if a==skip:continue
+                      if E[s,i,a]<0:continue
+                      if R[s,i]>cash:counts[s,1]+=1;continue
+                      if j0[i]+delay[s]<=active:counts[s,2]+=1;continue
+                      active=E[s,i,a];counts[s,0]+=1
+                      cash+=P[s,i,a]-D[s,i,a]
+                      mo=M[s,i,a]
+                      if mo>=0:out[s,mo]+=P[s,i,a]
+                      for mo in range(22):out[s,mo]-=F[s,i,a,mo]
+              return out,counts
+          zero=np.zeros((3,N),np.bool_)
+          delays=args[-1]
+          baseline,cnt=simulate(pol,P,M,F,D,E,R,group,j0,delays,zero,skip,0.,0,100.)
+          print("BASE_1X",json.dumps(dict(net=float(baseline[0].sum()),min=float(baseline.min()),cells=int((baseline>=1).sum()),max_skips=int(cnt[:,1].max()),weak={MONTHS[i]:float(baseline[:,i].min()) for i in range(22) if baseline[:,i].min()<1})),flush=True)
+          assert int((baseline>=1).sum())==872, "1x baseline parity"
+          # A reserve-building overlay applies only below a fixed dollar wallet threshold.
+          # Optimize target and gate over all stress paths, with real chronological affordability.
+          thresholds={"volume_ratio":[.25,.35,.45,.55,.65,.8,1.,1.25,1.5,2.],"atr_pct":[.25,.35,.45,.55,.6,.7,.8,1.],"atr_expansion":[.65,.75,.85,.95,1.05,1.2],"adx14":[15,20,25,30,35,40],"dir_rsi14":[48,52,55,60,65],"ema_gap_pct":[.05,.1,.2,.4,.7,1.],"supertrend_gap_pct":[.5,.75,1.,1.5,2.],"ema_slope_pct":[-.2,-.1,0,.1,.2],"hourly_body_atr":[.25,.5,.75,1.,1.5],"hourly_range_atr":[.75,1.,1.5,2.],"supertrend_age_hours":[6,12,24,48]}
+          atoms=[]
+          for k,vs in thresholds.items():
+              for v in vs:
+                  for op in ("<=",">="):
+                      mask=np.stack([((x[k]<=v) if op=="<=" else (x[k]>=v)).to_numpy() for x in variants])
+                      if 3<=mask[0].sum()<=N-3:atoms.append((f"{k} {op} {v}",mask))
+          # Broad one-feature rules first; test pairs only among promising rules if necessary.
+          gates=atoms+[("ALL",np.ones((3,N),bool))]
+          caps=np.array([105.,110.,115.,120.])
+          actions=np.array([int(np.argmin(np.abs(levels-x))) for x in [0.,.26,.38,.5,.65,.8,1.,1.2,1.5,1.9,2.5,3.,-1.]])
+          @njit(parallel=True)
+          def search(masks,actions,caps,pol,P,M,F,D,E,R,group,j0,delay):
+              ans=np.full((len(masks),len(actions),len(caps),3),1e9)
+              for g in prange(len(masks)):
+                  for a in range(len(actions)):
+                      for cap in range(len(caps)):
+                          for mode in range(3):
+                              v,ct=simulate(pol,P,M,F,D,E,R,group,j0,delay,masks[g],actions[a],caps[cap],mode,100.)
+                              short=0.;bad=0;minnet=1e9
+                              for si in range(S):
+                                  minnet=min(minnet,v[si].sum())
+                                  for mo in range(22):
+                                      d=max(0.,1.-v[si,mo]);short+=d*d
+                                      if d>1e-8:bad+=1
+                              # Require profitability pass; then maximize worst aggregate PnL with tiny tie-breaker.
+                              ans[g,a,cap,mode]=short+bad*.01-.000001*minnet
+              return ans
+          masks=np.stack([x[1] for x in gates])
+          scores=search(masks,actions,caps,pol,P,M,F,D,E,R,group,j0,delays)
+          gi,ai,ci,mode=np.unravel_index(scores.argmin(),scores.shape)
+          best,ct=simulate(pol,P,M,F,D,E,R,group,j0,delays,masks[gi],actions[ai],caps[ci],mode,100.)
+          winner=dict(gate=gates[gi][0],target=float(levels[actions[ai]]),wallet_cap=float(caps[ci]),mode=int(mode),score=float(scores.min()),cells=int((best>=1).sum()),worst_month=float(best.min()),worst_total=float(best.sum(axis=1).min()),baseline_net=float(best[0].sum()),max_skips=int(ct[:,1].max()),max_overlaps=int(ct[:,2].max()),failed={MONTHS[i]:float(best[:,i].min()) for i in range(22) if best[:,i].min()<1})
+          print("WALLET_RESULT",json.dumps(winner),flush=True)
+          # If needed, combine top-ranked atoms into conjunctions and rerun.
+          if best.min()<1:
+              rank=scores.min(axis=(1,2,3));ix=np.argsort(rank)[:12];pairs=[];seen=set()
+              for i in ix:
+                  for j in range(len(atoms)):
+                      mask=masks[i]&masks[j];key=np.packbits(mask).tobytes()
+                      if key in seen or mask[0].sum()<3:continue
+                      seen.add(key);pairs.append((gates[i][0]+" AND "+gates[j][0],mask))
+              if pairs:
+                  masks2=np.stack([x[1] for x in pairs]);sc=search(masks2,actions,caps,pol,P,M,F,D,E,R,group,j0,delays)
+                  if sc.min()<scores.min():
+                      gi,ai,ci,mode=np.unravel_index(sc.argmin(),sc.shape)
+                      best,ct=simulate(pol,P,M,F,D,E,R,group,j0,delays,masks2[gi],actions[ai],caps[ci],mode,100.)
+                      winner=dict(gate=pairs[gi][0],target=float(levels[actions[ai]]),wallet_cap=float(caps[ci]),mode=int(mode),score=float(sc.min()),cells=int((best>=1).sum()),worst_month=float(best.min()),worst_total=float(best.sum(axis=1).min()),baseline_net=float(best[0].sum()),max_skips=int(ct[:,1].max()),max_overlaps=int(ct[:,2].max()),failed={MONTHS[i]:float(best[:,i].min()) for i in range(22) if best[:,i].min()<1})
+                      print("WALLET_FINE_RESULT",json.dumps(winner),flush=True)
+          out=pathlib.Path("analysis/reclaim_v7_1x_wallet_20261124");out.mkdir(parents=True,exist_ok=True)
+          (out/"candidate.json").write_text(json.dumps(winner,indent=2))
+          pd.DataFrame(best,index=[f"{x[0]}_{p}" for x in scenarios for p in range(2)],columns=MONTHS).to_csv(out/"monthly.csv")
+          print("WALLET_COMPLETE",json.dumps(winner),flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reclaim-v7-1x-wallet
+          path: analysis/reclaim_v7_1x_wallet_20261124/
+          if-no-files-found: warn
