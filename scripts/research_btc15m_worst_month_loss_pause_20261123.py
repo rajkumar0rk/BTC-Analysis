@@ -445,14 +445,14 @@ def simulate(df,ema,stline,trend,ind,name,cfg,signals,path_name):
     if position is not None:
         close_trade(float(c[-1]),int(tm[-1]),"SAMPLE_END_ACCOUNTING_ONLY")
         month_rows[-1]["equity_usd"]=cash
-    assert len(month_rows)==22,("wrong month count",len(month_rows),name)
+    assert len(month_rows)==len(MONTHS),("wrong month count",len(month_rows),name)
     ledger=pd.DataFrame(trade_rows)
     assert not ledger.empty,(name,path_name)
     assert not ledger.epoch.duplicated().any()
     assert abs(ledger.net_usd.sum()-(cash-INITIAL))<0.02,"Ledger/cash mismatch"
     month_df=pd.DataFrame(month_rows)
     month_df["monthly_return_pct"]=100*(month_df.equity_usd/month_df.equity_usd.shift(1,fill_value=INITIAL)-1)
-    y25=float(month_df.loc[month_df.month_ist=="2025-12","equity_usd"].iloc[0])
+    y25=float(month_df.loc[month_df.month_ist=="2025-12","equity_usd"].iloc[0]) if "2025-12" in MONTHS else float(month_df.equity_usd.iloc[-1])
     positive=ledger.net_usd>0
     gain=float(ledger.loc[positive,"net_usd"].sum())
     loss=-float(ledger.loc[~positive,"net_usd"].sum())
