@@ -1,0 +1,86 @@
+{
+  "candidate": 6,
+  "config": {
+    "atr": 3.5,
+    "rr": 3.5,
+    "wait": 4,
+    "flip": false,
+    "filter": "h4ema50",
+    "activation": 2.5,
+    "lock": 0.0
+  },
+  "passes_training_gate": false,
+  "selection": "Training only, both years and baseline/stressed costs. Previous gates plus positive returns in all four training half-year segments under both cost scenarios; higher total profitable training months with neither year regressing. Unchanged control excluded from new candidate selection. If none qualifies, top candidate diagnostic only.",
+  "archive_commit": "edcf60fa0a229108d09772dc6cbe04eb15476291",
+  "training_periods": [
+    "2024-02..12 (first 2 days warmup)",
+    "2025-01..12"
+  ],
+  "prior_2026_exposure": true,
+  "grid": [
+    {
+      "atr": 3.5,
+      "rr": 3.5,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50_body_0.25",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 3.5,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50_body_0.4",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 3.5,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50_body_0.55",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 3.5,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50_distance_0.5",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 3.5,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50_distance_1.0",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 3.5,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50_distance_1.5",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 3.5,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50",
+      "activation": 2.5,
+      "lock": 0.0
+    }
+  ],
+  "training_sha256": "fc709f1550420b73962e7ce80c6be22208ea25e9b4d882548e1744d10e025a3b"
+}
