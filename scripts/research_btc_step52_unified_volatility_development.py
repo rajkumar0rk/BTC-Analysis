@@ -191,7 +191,19 @@ def main():
                 dirs["trend60_240"][i,z]=trend
                 dirs["range_reversion"][i,z]=revert
                 dirs["trend_or_reversion"][i,z]=trend if aligned else revert
-        assert np.isfinite(atr).all() and (atr>0).all()
+        # A genuine flat-price lookback can have zero true range. Keep the
+        # original predeclared 0.15% stop floor; never invent volatility.
+        # Reject nonfinite, negative, or invalid OHLC observations instead.
+        assert np.isfinite(atr).all() and (atr>=0).all(), "invalid normalized true range"
+        zero=np.argwhere(atr==0)
+        for i,z in zero:
+            j=grid[i,z]
+            w=slice(j-226,j)
+            assert np.isfinite(np.stack([o[w],h[w],l[w],c[w],v[w]])).all()
+            assert (l[w]>0).all() and (v[w]>=0).all()
+            assert (h[w]>=np.maximum(o[w],c[w])).all() and (l[w]<=np.minimum(o[w],c[w])).all()
+            assert (h[j-225:j]==l[j-225:j]).all() and (c[j-226:j]==c[j-1]).all(), "zero range with inconsistent candles"
+        print("ZERO_VOLATILITY_SLOTS",json.dumps(dict(count=len(zero),slots=[str(ix[grid[i,z]]) for i,z in zero],policy="predeclared 0.15% stop floor")),flush=True)
         slot_cache[key]=(vol,atr,dirs)
         return vol,atr,dirs
     def replay(setting,subset,verify=False):
