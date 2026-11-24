@@ -1,0 +1,41 @@
+name: BTC ST V1 short addon independent minute audit
+on:
+  push:
+    branches:
+      - research/st-v1-short-complement-preserve-both-20261124
+    paths:
+      - scripts/research_st_v1_short_addon_independent_audit.py
+      - .github/workflows/research-st-v1-short-addon-audit.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install numpy pandas tabulate
+      - name: Independent 1m stop-first audit and cost robustness of 23 short trades
+        run: python -u scripts/research_st_v1_short_addon_independent_audit.py
+      - name: Archive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-st-v1-short-addon-independent-trade-audit
+          path: analysis/st_v1_short_addon_independent_audit_20261124/
+          if-no-files-found: warn
+      - name: Commit verified audit results
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_v1_short_addon_independent_audit_20261124/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: independently verified short addon minute execution and cost stress"
+            git push origin HEAD:research/st-v1-short-complement-preserve-both-20261124
+          fi
