@@ -1,0 +1,175 @@
+{
+  "profiles": [
+    {
+      "leverage": 50,
+      "rank": [
+        1,
+        14,
+        330,
+        -5175.659865814257,
+        -1308.4793438680033,
+        -18879.669251840704,
+        0
+      ],
+      "evaluations": 138956,
+      "legs": [
+        {
+          "group": "line_touch",
+          "filter": "H1_align",
+          "stop_fraction": 0.8,
+          "tp_pct": 2.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "H4_ATR_expand",
+          "stop_fraction": 0.8,
+          "tp_pct": 2.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 1000.0
+        },
+        {
+          "group": "M30_RSI35",
+          "filter": "H4_ATR_expand",
+          "stop_fraction": 0.4,
+          "tp_pct": 4.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 0.0
+        },
+        {
+          "group": "H1_ST_flip_exit",
+          "filter": "short_ADX25",
+          "stop_fraction": 0.6,
+          "tp_pct": 1.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 1000.0
+        }
+      ],
+      "month_ceiling": 1500.0,
+      "daily_limit": 0,
+      "loss_guard": 4000.0,
+      "pass_all": false
+    },
+    {
+      "leverage": 100,
+      "rank": [
+        1,
+        13,
+        301,
+        -4590.419573803609,
+        4148.209612351103,
+        -14863.436374479968,
+        0
+      ],
+      "evaluations": 139180,
+      "legs": [
+        {
+          "group": "H1_ST_flip_exit",
+          "filter": "H4_ATR_expand",
+          "stop_fraction": 0.6,
+          "tp_pct": 4.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "Shock_Donchian",
+          "filter": "quiet_long",
+          "stop_fraction": 0.4,
+          "tp_pct": 4.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 1000.0
+        },
+        {
+          "group": "EMA20_touch",
+          "filter": "H4_long",
+          "stop_fraction": 0.8,
+          "tp_pct": 4.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 1000.0
+        },
+        {
+          "group": "BB_stretch",
+          "filter": "range_ADX20",
+          "stop_fraction": 0.6,
+          "tp_pct": 2.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 1000.0
+        }
+      ],
+      "month_ceiling": 1500.0,
+      "daily_limit": 1,
+      "loss_guard": 4000.0,
+      "pass_all": false
+    },
+    {
+      "leverage": 200,
+      "rank": [
+        1,
+        5,
+        146,
+        -3203.14506,
+        -7484.593166645131,
+        -13726.914272039223,
+        0
+      ],
+      "evaluations": 132085,
+      "legs": [
+        {
+          "group": "line_touch",
+          "filter": "quiet20_0.5",
+          "stop_fraction": 0.2,
+          "tp_pct": 1.5,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 1e+30
+        },
+        {
+          "group": "EMA20_touch",
+          "filter": "quiet_align_1.0",
+          "stop_fraction": 0.2,
+          "tp_pct": 3.0,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 0.0
+        },
+        {
+          "group": "H1_EMA50_pullback",
+          "filter": "quiet5_0.2",
+          "stop_fraction": 0.2,
+          "tp_pct": 1.5,
+          "max_minutes": 720,
+          "trail_fraction": 0.0,
+          "mtd_gate": 0.0
+        }
+      ],
+      "month_ceiling": 1500.0,
+      "daily_limit": 1,
+      "loss_guard": 4000.0,
+      "pass_all": false
+    }
+  ],
+  "completed_leverages": [
+    50,
+    100,
+    200
+  ],
+  "pass_all": false,
+  "margin_mode": "isolated exact 1/leverage, no top-up",
+  "liquidation_assumption": "adverse mark first; full initial margin loss plus fee proxy",
+  "stop_fill": "mark-triggered safety stop at adverse trade minute extreme; independent trade stop, no favorable ordering",
+  "funding": "historical rate proxy, signed and debit-only; exact exchange settlement not verified",
+  "entry": "closed signals next minute open; prior-only volatility and basis filters",
+  "raw_trade_ledger_inputs": false,
+  "holdout": "November partial temporal, not certified untouched",
+  "return_units": "normalized points, not account return",
+  "candle_count": 963030
+}
