@@ -1,0 +1,147 @@
+{
+  "candidate": 11,
+  "config": {
+    "atr": 4.0,
+    "rr": 3.0,
+    "wait": 4,
+    "flip": false,
+    "filter": "h4ema50"
+  },
+  "passes_training_gate": false,
+  "selection": "Training only, both years and baseline/stressed costs. Same previous minimum return, DD, trade and positive neighbor score gates plus majority-positive adjacent configs. If none qualifies, top candidate diagnostic only.",
+  "archive_commit": "edcf60fa0a229108d09772dc6cbe04eb15476291",
+  "training_periods": [
+    "2024-02..12 (first 2 days warmup)",
+    "2025-01..12"
+  ],
+  "prior_2026_exposure": true,
+  "grid": [
+    {
+      "atr": 3.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "atr": 3.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h1ema50"
+    },
+    {
+      "atr": 3.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50"
+    },
+    {
+      "atr": 3.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "atr": 3.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h1ema50"
+    },
+    {
+      "atr": 3.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50"
+    },
+    {
+      "atr": 4.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "atr": 4.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h1ema50"
+    },
+    {
+      "atr": 4.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50"
+    },
+    {
+      "atr": 4.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "atr": 4.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h1ema50"
+    },
+    {
+      "atr": 4.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50"
+    },
+    {
+      "atr": 5.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "atr": 5.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h1ema50"
+    },
+    {
+      "atr": 5.0,
+      "rr": 2.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50"
+    },
+    {
+      "atr": 5.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "any"
+    },
+    {
+      "atr": 5.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h1ema50"
+    },
+    {
+      "atr": 5.0,
+      "rr": 3.0,
+      "wait": 4,
+      "flip": false,
+      "filter": "h4ema50"
+    }
+  ],
+  "training_sha256": "c24b4ea508f5e9aba0d9c381c2b0a0c15a9dfee2284d8e0a58726c44a7b1aa61"
+}
