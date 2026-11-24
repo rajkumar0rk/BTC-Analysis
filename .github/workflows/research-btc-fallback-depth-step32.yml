@@ -1,0 +1,25 @@
+name: BTCUSD Step32 - independent recovery loss depths
+on:
+  push:
+    branches: [research/btc-fallback-depth-step32]
+    paths: [scripts/research_btc_fallback_depth_step32.py, .github/workflows/research-btc-fallback-depth-step32.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_fallback_depth_step32.py
+      - run: python scripts/research_btc_fallback_depth_step32.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-step32-fallback-depth
+          path: analysis/btc_fallback_depth_step32/
