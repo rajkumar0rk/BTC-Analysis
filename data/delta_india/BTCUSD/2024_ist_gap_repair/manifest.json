@@ -1,0 +1,294 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m public history API",
+  "partition_timezone": "Asia/Kolkata",
+  "prior_run": 45374768673,
+  "synthetic_candles": 0,
+  "original_preserved": true,
+  "expected": 527040,
+  "original_missing": 38775,
+  "recovered": 3,
+  "remaining_missing": 38772,
+  "complete_months": 8,
+  "requests": 458,
+  "months": [
+    {
+      "month": "2024-01",
+      "expected": 44640,
+      "original_candles": 7514,
+      "original_missing": 37126,
+      "recovered": 0,
+      "final_candles": 7514,
+      "remaining_missing": 37126,
+      "complete": false,
+      "requests": 423,
+      "source_sha256": "eccbe5eee2a4ca32b7156726768270a568bf7156cbc0b4e4d84db5562879d266",
+      "archive_sha256": "eccbe5eee2a4ca32b7156726768270a568bf7156cbc0b4e4d84db5562879d266",
+      "remaining_gaps": [
+        {
+          "start_utc": "2023-12-31T18:30:00+00:00",
+          "end_utc_inclusive": "2024-01-10T10:19:00+00:00",
+          "minutes": 13910
+        },
+        {
+          "start_utc": "2024-01-10T18:30:00+00:00",
+          "end_utc_inclusive": "2024-01-11T06:18:00+00:00",
+          "minutes": 709
+        },
+        {
+          "start_utc": "2024-01-11T14:30:00+00:00",
+          "end_utc_inclusive": "2024-01-16T08:44:00+00:00",
+          "minutes": 6855
+        },
+        {
+          "start_utc": "2024-01-16T14:30:00+00:00",
+          "end_utc_inclusive": "2024-01-17T08:39:00+00:00",
+          "minutes": 1090
+        },
+        {
+          "start_utc": "2024-01-17T10:30:00+00:00",
+          "end_utc_inclusive": "2024-01-19T05:38:00+00:00",
+          "minutes": 2589
+        },
+        {
+          "start_utc": "2024-01-19T22:30:00+00:00",
+          "end_utc_inclusive": "2024-01-23T11:09:00+00:00",
+          "minutes": 5080
+        },
+        {
+          "start_utc": "2024-01-24T02:30:00+00:00",
+          "end_utc_inclusive": "2024-01-24T05:36:00+00:00",
+          "minutes": 187
+        },
+        {
+          "start_utc": "2024-01-24T22:30:00+00:00",
+          "end_utc_inclusive": "2024-01-25T09:50:00+00:00",
+          "minutes": 681
+        },
+        {
+          "start_utc": "2024-01-25T18:30:00+00:00",
+          "end_utc_inclusive": "2024-01-26T18:09:00+00:00",
+          "minutes": 1420
+        },
+        {
+          "start_utc": "2024-01-27T10:30:00+00:00",
+          "end_utc_inclusive": "2024-01-29T05:22:00+00:00",
+          "minutes": 2573
+        },
+        {
+          "start_utc": "2024-01-29T22:30:00+00:00",
+          "end_utc_inclusive": "2024-01-30T15:01:00+00:00",
+          "minutes": 992
+        },
+        {
+          "start_utc": "2024-01-30T18:30:00+00:00",
+          "end_utc_inclusive": "2024-01-31T07:49:00+00:00",
+          "minutes": 800
+        },
+        {
+          "start_utc": "2024-01-31T14:30:00+00:00",
+          "end_utc_inclusive": "2024-01-31T18:29:00+00:00",
+          "minutes": 240
+        }
+      ],
+      "request_errors": []
+    },
+    {
+      "month": "2024-02",
+      "expected": 41760,
+      "original_candles": 40121,
+      "original_missing": 1639,
+      "recovered": 0,
+      "final_candles": 40121,
+      "remaining_missing": 1639,
+      "complete": false,
+      "requests": 23,
+      "source_sha256": "fba80899bc0db8771771a3bd5f643eef40b2cfd65cb0f0a811e1b91b0286b232",
+      "archive_sha256": "fba80899bc0db8771771a3bd5f643eef40b2cfd65cb0f0a811e1b91b0286b232",
+      "remaining_gaps": [
+        {
+          "start_utc": "2024-01-31T18:30:00+00:00",
+          "end_utc_inclusive": "2024-02-01T09:30:00+00:00",
+          "minutes": 901
+        },
+        {
+          "start_utc": "2024-02-19T22:30:00+00:00",
+          "end_utc_inclusive": "2024-02-20T10:07:00+00:00",
+          "minutes": 698
+        },
+        {
+          "start_utc": "2024-02-20T18:30:00+00:00",
+          "end_utc_inclusive": "2024-02-20T19:09:00+00:00",
+          "minutes": 40
+        }
+      ],
+      "request_errors": []
+    },
+    {
+      "month": "2024-03",
+      "expected": 44640,
+      "original_candles": 44635,
+      "original_missing": 5,
+      "recovered": 1,
+      "final_candles": 44636,
+      "remaining_missing": 4,
+      "complete": false,
+      "requests": 7,
+      "source_sha256": "d7c2d240976c5ce1c99064b38ddd56d1437093e81e7a687bbe12149d58945cf0",
+      "archive_sha256": "d824e84711f1c95e169893c8d71d8fc708ae154bd9348cb44c3d35d8defcabe6",
+      "remaining_gaps": [
+        {
+          "start_utc": "2024-03-15T18:30:00+00:00",
+          "end_utc_inclusive": "2024-03-15T18:31:00+00:00",
+          "minutes": 2
+        },
+        {
+          "start_utc": "2024-03-19T02:30:00+00:00",
+          "end_utc_inclusive": "2024-03-19T02:31:00+00:00",
+          "minutes": 2
+        }
+      ],
+      "request_errors": []
+    },
+    {
+      "month": "2024-04",
+      "expected": 43200,
+      "original_candles": 43200,
+      "original_missing": 0,
+      "recovered": 0,
+      "final_candles": 43200,
+      "remaining_missing": 0,
+      "complete": true,
+      "requests": 0,
+      "source_sha256": "e0901b878110c33e88ab39a285f68835d5723a9d8074a3573e5ee4b07aa33506",
+      "archive_sha256": "e0901b878110c33e88ab39a285f68835d5723a9d8074a3573e5ee4b07aa33506",
+      "remaining_gaps": [],
+      "request_errors": []
+    },
+    {
+      "month": "2024-05",
+      "expected": 44640,
+      "original_candles": 44640,
+      "original_missing": 0,
+      "recovered": 0,
+      "final_candles": 44640,
+      "remaining_missing": 0,
+      "complete": true,
+      "requests": 0,
+      "source_sha256": "5ed767d54046d321812a6d35c71a8a8319237bc0c182a6ae19c7da5872ba5d6c",
+      "archive_sha256": "5ed767d54046d321812a6d35c71a8a8319237bc0c182a6ae19c7da5872ba5d6c",
+      "remaining_gaps": [],
+      "request_errors": []
+    },
+    {
+      "month": "2024-06",
+      "expected": 43200,
+      "original_candles": 43196,
+      "original_missing": 4,
+      "recovered": 1,
+      "final_candles": 43197,
+      "remaining_missing": 3,
+      "complete": false,
+      "requests": 4,
+      "source_sha256": "a22654bfb753f424e1e87f69144edd8f70ee8e50932ea46f1a8549926cab03bf",
+      "archive_sha256": "89c83147bd4a5fc00ee93e1d86b7efbe1dcd39e5e4a0a4cba23a9b0e2edfda4a",
+      "remaining_gaps": [
+        {
+          "start_utc": "2024-06-29T22:30:00+00:00",
+          "end_utc_inclusive": "2024-06-29T22:32:00+00:00",
+          "minutes": 3
+        }
+      ],
+      "request_errors": []
+    },
+    {
+      "month": "2024-07",
+      "expected": 44640,
+      "original_candles": 44639,
+      "original_missing": 1,
+      "recovered": 1,
+      "final_candles": 44640,
+      "remaining_missing": 0,
+      "complete": true,
+      "requests": 1,
+      "source_sha256": "2902878a9a4c2dde53accce35c08c477f31d2fcfe4e3e6533235fd2b49f0689e",
+      "archive_sha256": "ab7794dd7fc8d7470e3e2db8ba59c19a018955ce41f413f777848bd1df469e10",
+      "remaining_gaps": [],
+      "request_errors": []
+    },
+    {
+      "month": "2024-08",
+      "expected": 44640,
+      "original_candles": 44640,
+      "original_missing": 0,
+      "recovered": 0,
+      "final_candles": 44640,
+      "remaining_missing": 0,
+      "complete": true,
+      "requests": 0,
+      "source_sha256": "7ff6643fad3630d5bc2ad95642bbce20f687e4c2d00546a605ac0283cd97a420",
+      "archive_sha256": "7ff6643fad3630d5bc2ad95642bbce20f687e4c2d00546a605ac0283cd97a420",
+      "remaining_gaps": [],
+      "request_errors": []
+    },
+    {
+      "month": "2024-09",
+      "expected": 43200,
+      "original_candles": 43200,
+      "original_missing": 0,
+      "recovered": 0,
+      "final_candles": 43200,
+      "remaining_missing": 0,
+      "complete": true,
+      "requests": 0,
+      "source_sha256": "88834908cde205a46e26cb5b221458a5a809a66c599c46b4cdcd7f987bee57ed",
+      "archive_sha256": "88834908cde205a46e26cb5b221458a5a809a66c599c46b4cdcd7f987bee57ed",
+      "remaining_gaps": [],
+      "request_errors": []
+    },
+    {
+      "month": "2024-10",
+      "expected": 44640,
+      "original_candles": 44640,
+      "original_missing": 0,
+      "recovered": 0,
+      "final_candles": 44640,
+      "remaining_missing": 0,
+      "complete": true,
+      "requests": 0,
+      "source_sha256": "c65d7d00bfd3728393323f522fdb3879779d0f278a5eefc9f0e447ccae93813b",
+      "archive_sha256": "c65d7d00bfd3728393323f522fdb3879779d0f278a5eefc9f0e447ccae93813b",
+      "remaining_gaps": [],
+      "request_errors": []
+    },
+    {
+      "month": "2024-11",
+      "expected": 43200,
+      "original_candles": 43200,
+      "original_missing": 0,
+      "recovered": 0,
+      "final_candles": 43200,
+      "remaining_missing": 0,
+      "complete": true,
+      "requests": 0,
+      "source_sha256": "2631e10da8fcafd407991bf0a417dd7fdacb51cf12954b5db756e96863144f0f",
+      "archive_sha256": "2631e10da8fcafd407991bf0a417dd7fdacb51cf12954b5db756e96863144f0f",
+      "remaining_gaps": [],
+      "request_errors": []
+    },
+    {
+      "month": "2024-12",
+      "expected": 44640,
+      "original_candles": 44640,
+      "original_missing": 0,
+      "recovered": 0,
+      "final_candles": 44640,
+      "remaining_missing": 0,
+      "complete": true,
+      "requests": 0,
+      "source_sha256": "7fb73275adfe0f7153fb41987e51d802367c789f42a75f58373f4910040f5d2c",
+      "archive_sha256": "7fb73275adfe0f7153fb41987e51d802367c789f42a75f58373f4910040f5d2c",
+      "remaining_gaps": [],
+      "request_errors": []
+    }
+  ]
+}

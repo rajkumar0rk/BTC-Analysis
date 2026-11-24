@@ -1,0 +1,13 @@
+{
+  "source": "Delta Exchange India BTCUSD 1m public history API",
+  "partition_timezone": "Asia/Kolkata",
+  "prior_run": 45374768673,
+  "synthetic_candles": 0,
+  "original_preserved": true,
+  "expected": 527040,
+  "original_missing": 38775,
+  "recovered": 3,
+  "remaining_missing": 38772,
+  "complete_months": 8,
+  "requests": 458
+}
