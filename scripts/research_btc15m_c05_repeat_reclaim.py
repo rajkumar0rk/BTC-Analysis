@@ -1,0 +1,281 @@
+#!/usr/bin/env python3
+"""Small predeclared grid, training 2024/25 only, one frozen validation candidate."""
+import sys,inspect,itertools,json,hashlib,os
+from pathlib import Path
+import numpy as np
+import pandas as pd
+import research_btc15m_worst_month_loss_pause_20261123 as base
+OUT=Path("analysis/btc15m_c05_repeat_reclaim_20261124")
+DATA=Path("_repaired/data/delta_india/BTCUSD/2024_verified_archive")
+ARCHIVE_COMMIT="edcf60fa0a229108d09772dc6cbe04eb15476291"
+TZ="Asia/Kolkata"
+# Predeclared single change: allow fresh EMA interactions within an existing ST cycle.
+# cap counts eligible touch attempts, including failed setups, not profitable trades.
+GRID=[dict(atr=3.5,rr=3.5,wait=2,flip=False,filter="h4ema50_volmin_0.8",activation=2.5,lock=0.,attempts=n) for n in (2,3,4,6,0,1)]
+SHARDS=6
+def date(s):return pd.Timestamp(s,tz=TZ).tz_convert("UTC")
+def source24():
+    manifest=json.loads((DATA/"manifest.json").read_text())
+    assert manifest["synthetic_rows"]==0
+    parts={p["month"]:p for p in manifest["months"] if p["series"]=="trade_1m"}
+    frames=[]
+    for mon in pd.period_range("2024-02","2024-12",freq="M").astype(str):
+        p=parts[mon];f=DATA/"trade_1m"/(mon+".csv.gz")
+        assert p["missing"]==0 and p["observed"]==p["expected"] and hashlib.sha256(f.read_bytes()).hexdigest()==p["sha256"]
+        d=pd.read_csv(f,usecols=["time","open","high","low","close","volume"])
+        assert len(d)==p["expected"]
+        frames.append(d)
+    df=pd.concat(frames,ignore_index=True)
+    assert np.array_equal(df.time.to_numpy(np.int64),np.arange(int(date("2024-02-01").timestamp()),int(date("2025-01-01").timestamp()),60))
+    df.index=pd.to_datetime(df.time,unit="s",utc=True)
+    return df
+def source25_26(period):
+    root=Path("data/delta_india/BTCUSD/1m")
+    manifest=json.loads((root/"manifest.json").read_text())
+    lo,hi=("2025-01","2025-12") if period=="2025" else ("2025-12","2026-10")
+    parts=[p for p in manifest["partitions"] if lo+".csv.gz"<=p["file"]<=hi+".csv.gz"]
+    assert len(parts)==(12 if period=="2025" else 11)
+    frames=[]
+    for p in parts:
+        f=root/p["file"]
+        assert hashlib.sha256(f.read_bytes()).hexdigest()==p["sha256_gzip"] and p["missing_minutes"]==0
+        d=pd.read_csv(f);assert len(d)==p["observed_candles"];frames.append(d)
+    df=pd.concat(frames,ignore_index=True)
+    assert np.all(np.diff(df.time.to_numpy(np.int64))==60)
+    df.index=pd.to_datetime(df.time,unit="s",utc=True)
+    end=date("2026-01-01" if period=="2025" else "2026-11-01")
+    return df.loc[df.index<end].copy()
+def repeat_signals(df,ema,trend,valid,cap):
+    if cap==1:
+        return base.make_signals(df,ema,trend,valid,"reclaim",2)[0]
+    # First interaction identical to the base strategy; subsequent attempts require
+    # a fresh completed trend-side close before another opposite-side touch.
+    h=df.high.to_numpy(float).reshape(-1,15).max(axis=1)
+    l=df.low.to_numpy(float).reshape(-1,15).min(axis=1)
+    c=df.close.to_numpy(float).reshape(-1,15)[:,-1]
+    result={};active=0;epoch=0;attempts=0;pending=None;armed=True
+    for j in range(101,len(trend)-1):
+        if not valid[j] or not valid[j-1] or not np.isfinite(ema[j-1]) or trend[j]==0:
+            pending=None
+            continue
+        side=int(trend[j])
+        if side!=active:
+            active=side;epoch+=1;attempts=0;pending=None;armed=True
+            continue
+        prev=float(ema[j-1]);now=float(ema[j])
+        trend_side=side*(c[j]-prev)>0 and side*(c[j]-now)>0
+        other_side=side*(c[j]-prev)<0 and side*(c[j]-now)<0
+        if pending is not None:
+            if j-pending>2:
+                pending=None
+                armed=trend_side
+            elif trend_side:
+                result[(j+1)*15]=dict(epoch=epoch,side=side,signal_close_bar=j)
+                pending=None;armed=True
+            continue
+        if cap and attempts>=cap:continue
+        if not armed:
+            if trend_side:armed=True
+            continue
+        if not (l[j]<=prev<=h[j]):continue
+        attempts+=1;armed=False
+        if other_side:pending=j
+        elif trend_side:armed=True
+    return result
+def prep(period):
+    if period=="2024":
+        df=source24()
+        start=date("2024-02-03")
+        months=pd.period_range("2024-02","2024-12",freq="M")
+    elif period=="2025":
+        df=source25_26(period);start=date("2025-01-01");months=pd.period_range("2025-01","2025-12",freq="M")
+    else:
+        df=source25_26(period);start=date("2026-01-01");months=pd.period_range("2026-01","2026-10",freq="M")
+    assert len(df)%15==0
+    ema,st,trend,valid=base.st_and_ema(df,base.TF)
+    ind=base.make_indicators(df)
+    start_i=int(np.searchsorted(df.time.to_numpy(),int(start.timestamp())))
+    # ATR14 of completed 15m candles, Wilder smoothing.
+    h,l,c=ind["H"],ind["L"],ind["C"]
+    prev=np.r_[c[0],c[:-1]]
+    tr=np.maximum(h-l,np.maximum(abs(h-prev),abs(l-prev)))
+    atr=np.full(len(tr),np.nan);atr[13]=np.mean(tr[:14])
+    for j in range(14,len(tr)):atr[j]=(13*atr[j-1]+tr[j])/14
+    ind["ATR"]=atr
+    natr=pd.Series(atr/c)
+    # Prior 20 calendar days of 15m bars; 10 days minimum warm-up.
+    ref=natr.shift(1).rolling(20*96,min_periods=10*96).median()
+    ind["relative_vol"]=(natr/ref.where(ref>0)).to_numpy()
+    # Confirmed higher timeframe closes only, aligned by UTC epoch.
+    times=df.time.to_numpy(np.int64)
+    signal_end=times[14::15]+60
+    for hours in (1,4):
+        seconds=hours*3600
+        tmp=pd.DataFrame({"t":times,"close":df.close.to_numpy(float)})
+        tmp["bucket"]=tmp.t//seconds
+        grouped=tmp.groupby("bucket",sort=True).agg(close=("close","last"),count=("t","size"))
+        grouped=grouped[grouped["count"]==hours*60]
+        vals=grouped.close
+        avg=vals.ewm(span=50,adjust=False,min_periods=50).mean()
+        ends=(grouped.index.to_numpy(np.int64)+1)*seconds
+        idx=np.searchsorted(ends,signal_end,side="right")-1
+        mapped=np.full(len(signal_end),np.nan)
+        ok=idx>=0
+        mapped[ok]=(vals-avg).to_numpy()[idx[ok]]
+        ind[f"h{hours}ema50"]=mapped
+        if hours==4:
+            for n in (2,4,8):
+                slope=np.full(len(signal_end),np.nan)
+                slope[ok]=(avg-avg.shift(n)).to_numpy()[idx[ok]]
+                ind[f"h4ema50_slope_{n}"]=slope
+    sig={}
+    for cap in (1,2,3,4,6,0):
+        q=repeat_signals(df,ema,trend,valid,cap)
+        sig[cap]={i:v for i,v in q.items() if i>=start_i}
+    return df,ema,st,trend,ind,sig,months.astype(str).tolist()
+def engine():
+    src=inspect.getsource(base.simulate)
+    assert src.count("qty=cash/entry")==1
+    src=src.replace("qty=cash/entry",'qty=cash/entry*float(name.split("__P_")[1])/100')
+    anchor='                    assert sig["epoch"] not in seen_epochs, "Cycle duplicate"'
+    assert src.count(anchor)==1
+    src=src.replace(anchor,'                    if REPEAT==1:assert sig["epoch"] not in seen_epochs, "Cycle duplicate"')
+    # Lock is measured in entry-time R, not subsequent ATR.
+    # Update only after observing a favorable price; check old stop first.
+    anchor='        # An overnight/minute opening price may already cross a rung.'
+    assert src.count(anchor)==1
+    src=src.replace(anchor, """        if position is not None and ACT>0:
+            p=position;side=p["side"]
+            if not p["active"] and side*(raw_open-p["entry"])>=ACT*p["R"]:
+                candidate=p["entry"]+side*LOCK*p["R"]
+                assert side*(candidate-p["stop"])>0
+                p["stop"]=candidate;p["active"]=True;p["activation_count"]+=1
+        # An overnight/minute opening price may already cross a rung.""")
+    anchor='                mark(dest)\n        if i in monthends:'
+    assert src.count(anchor)==1
+    src=src.replace(anchor, """                if ACT>0 and not p["active"] and side*(dest-p["entry"])>=ACT*p["R"]:
+                    candidate=p["entry"]+side*LOCK*p["R"]
+                    assert side*(candidate-p["stop"])>0
+                    p["stop"]=candidate;p["active"]=True;p["activation_count"]+=1
+                mark(dest)
+        if i in monthends:""")
+    ns=dict(base.__dict__)
+    def filter_entry(fil,side,j,ema,ind):
+        if fil in ("h1ema50","h4ema50"):return bool(side*ind[fil][j]>0)
+        if fil.startswith("h4ema50_vol"):
+            if not side*ind["h4ema50"][j]>0:return False
+            _,mode,x=fil.split("_");x=float(x)
+            v=ind["relative_vol"][j]
+            if not np.isfinite(v):return False
+            return bool(v>=x if mode=="volmin" else v<=x)
+        return base.check_filter(fil,side,j,ema,ind)
+    ns["check_filter"]=filter_entry
+    exec(compile(src,"<simple_core>","exec"),ns);return ns
+def replay(ns,data,period,cid,cfg,prof,path,stress=False):
+    df,ema,st,trend,ind,sig,months=data
+    ns["MONTHS"]=months
+    ns["FEE"]=base.FEE;ns["SLIP"]=base.SLIP*(3 if stress else 1);ns["ACT"]=cfg["activation"];ns["LOCK"]=cfg["lock"];ns["REPEAT"]=cfg["attempts"]
+    name=f"C{cid:02d}"+("_FLIPON_" if cfg["flip"] else "_NOFLIP_")+f"__P_{prof}"
+    x,m,l=ns["simulate"](df,ema,st,trend,ind,name,(cfg["wait"],cfg["filter"],"ATR",cfg["atr"],cfg["rr"],"none"),sig[cfg["attempts"]],path)
+    for k in ("profitable_2025_months","profitable_2026_months","return_2025_pct","return_2026_pct"):x.pop(k,None)
+    x.update(candidate=cid,period=period,profile=prof,stress=stress,**cfg)
+    x["geo_month_pct"]=100*((1+x["net_return_pct"]/100)**(1/len(months))-1)
+    x["positive_fraction"]=x["profitable_months"]/len(months)
+    x["worst_month"]=float(m.monthly_return_pct.min())
+    half=m.month_ist.str[:4]+"H"+np.where(m.month_ist.str[5:].astype(int)<=6,"1","2")
+    x["worst_half_pct"]=float(((1+m.monthly_return_pct/100).groupby(half).prod()-1).min()*100)
+    m=m.assign(candidate=cid,period=period,profile=prof,stress=stress)
+    l=l.assign(candidate=cid,period=period,profile=prof,stress=stress)
+    return x,m,l
+def train():
+    OUT.mkdir(parents=True,exist_ok=True)
+    i=int(os.environ["SHARD_INDEX"]);ns=engine();rows=[];monthly=[]
+    for period in ("2024","2025"):
+        data=prep(period)
+        for cid,cfg in enumerate(GRID):
+            if cid%SHARDS!=i:continue
+            for path in base.PATHS:
+                for stress in (False,True):
+                    x,m,_=replay(ns,data,period,cid,cfg,100,path,stress)
+                    rows.append(x);monthly.append(m)
+                    print("TRAIN",period,cid,path,stress,x["net_return_pct"],flush=True)
+    d=OUT/f"shard_{i}";d.mkdir(parents=True,exist_ok=True)
+    pd.DataFrame(rows).to_csv(d/"training.csv",index=False)
+    pd.concat(monthly,ignore_index=True).to_csv(d/"monthly.csv",index=False)
+def freeze():
+    OUT.mkdir(parents=True,exist_ok=True)
+    s=pd.concat([pd.read_csv(OUT/f"shard_{i}"/"training.csv") for i in range(SHARDS)],ignore_index=True)
+    m=pd.concat([pd.read_csv(OUT/f"shard_{i}"/"monthly.csv") for i in range(SHARDS)],ignore_index=True)
+    assert len(s)==len(GRID)*2*2*2
+    assert not s.duplicated(["candidate","period","path_assumption","stress"]).any()
+    control=len(GRID)-1
+    for year,value in [(2024,65.205),(2025,55.5852)]:
+        z=s[(s.candidate==control)&(s.period==year)&(~s.stress)&(s.path_assumption=="O-H-L-C")]
+        assert len(z)==1 and abs(float(z.net_return_pct.iloc[0])-value)<.015
+    s.to_csv(OUT/"training.csv",index=False);m.to_csv(OUT/"training_monthly.csv",index=False)
+    a=s.groupby("candidate").agg(min_geo=("geo_month_pct","min"),min_win_fraction=("positive_fraction","min"),max_dd=("max_floating_drawdown_pct","max"),min_trades=("trades","min"),min_net=("net_return_pct","min"),min_half=("worst_half_pct","min")).reset_index()
+    a["score"]=a.min_geo-.05*a.max_dd
+    # Local stability: one adjacent grid coordinate differs; no isolated winner.
+    scores=dict(zip(a.candidate,a.score));positive=dict(zip(a.candidate,a.min_net>0))
+    def neighbors(i):
+        c=GRID[i];out=[]
+        if i==control:return [i]
+        for j,d in enumerate(GRID):
+            diff=[k for k in c if c[k]!=d[k]]
+            if len(diff)!=1:continue
+            k=diff[0]
+            if k=="attempts":
+                vals=[1,2,3,4,6,0]
+                if abs(vals.index(c[k])-vals.index(d[k]))==1:out.append(j)
+        return out or [i]
+    a["neighbor_median"]=a.candidate.map(lambda i:float(np.median([scores[j] for j in neighbors(i)])))
+    a["neighbor_positive_fraction"]=a.candidate.map(lambda i:float(np.mean([positive[j] for j in neighbors(i)])))
+    a["robust_score"]=.5*a.score+.5*a.neighbor_median
+    # Same earlier gate, now required under baseline AND stressed execution.
+    a["eligible"]=(a.candidate!=control)&(a.min_half>0)&(a.min_net>0)&(a.min_trades>=8)&(a.max_dd<=25)&(a.neighbor_median>0)&(a.neighbor_positive_fraction>=.5)
+    # Require better aggregate training monthly count than unchanged C05,
+    # without reducing either year's stressed positive-month count.
+    worst_counts=s.groupby(["candidate","period"]).profitable_months.min().unstack()
+    control_counts=worst_counts.loc[control]
+    a["training_positive_months_worst"]=a.candidate.map(worst_counts.sum(axis=1))
+    a["monthly_nonregression"]=a.candidate.map((worst_counts>=control_counts).all(axis=1))
+    a["eligible"] &= a.monthly_nonregression & (a.training_positive_months_worst>control_counts.sum())
+    a["eligible"] &= a.candidate.map((worst_counts[2024]>=7)&(worst_counts[2025]>=9))
+    # Reject a strategy that achieves consistency merely by suppressing most opportunities.
+    min_trades=s.groupby(["candidate","period"]).trades.min().unstack()
+    a["retains_trade_coverage"]=a.candidate.map((min_trades>=0.7*min_trades.loc[control]).all(axis=1))
+    a["eligible"] &= a.retains_trade_coverage
+    a["eligible"] &= (a.neighbor_positive_fraction==1) & (a.min_net>=float(a.loc[a.candidate==control,"min_net"].iloc[0])) & (a.max_dd<=float(a.loc[a.candidate==control,"max_dd"].iloc[0]))
+    a=a.sort_values(["eligible","robust_score","candidate"],ascending=[False,False,True])
+    a.to_csv(OUT/"training_ranked.csv",index=False)
+    top=a.iloc[0];cid=int(top.candidate)
+    frozen=dict(candidate=cid,config=GRID[cid],passes_training_gate=bool(top.eligible),selection="Training only, both years and baseline/stressed costs. Previous gates plus positive returns in all four training half-year segments under both cost scenarios; higher total profitable training months with neither year regressing. At least 70% of control trade coverage per training year; unchanged control excluded from new candidate selection. If none qualifies, top candidate diagnostic only.",archive_commit=ARCHIVE_COMMIT,training_periods=["2024-02..12 (first 2 days warmup)","2025-01..12"],prior_2026_exposure=True,grid=GRID,training_sha256=hashlib.sha256((OUT/"training.csv").read_bytes()).hexdigest())
+    (OUT/"FROZEN.json").write_text(json.dumps(frozen,indent=2)+"\n")
+    print("FROZEN",frozen,flush=True)
+def validate():
+    f=json.loads((OUT/"FROZEN.json").read_text())
+    assert hashlib.sha256((OUT/"training.csv").read_bytes()).hexdigest()==f["training_sha256"]
+    cid=f["candidate"];cfg=f["config"];assert cfg==GRID[cid]
+    if not f["passes_training_gate"]:
+        (OUT/"REPORT.md").write_text("# C05 repeat reclaim training result\n\nNo configuration passed the predefined training robustness gate. 2026 deliberately not replayed; no approved frozen candidate. See training_ranked.csv and FROZEN.json (diagnostic only).\n")
+        return
+    ns=engine();rows=[];monthly=[];ledger=[]
+    # Same selected configuration only. No reranking or fallback based on 2026.
+    for period in ("2024","2025","2026"):
+        data=prep(period)
+        for prof in (80,100):
+            for path in base.PATHS:
+                for stress in (False,True):
+                    x,m,l=replay(ns,data,period,cid,cfg,prof,path,stress)
+                    rows.append(x);monthly.append(m);ledger.append(l)
+    s=pd.DataFrame(rows);m=pd.concat(monthly,ignore_index=True);l=pd.concat(ledger,ignore_index=True)
+    s.to_csv(OUT/"frozen_summary.csv",index=False);m.to_csv(OUT/"frozen_monthly.csv",index=False);l.to_csv(OUT/"frozen_ledger.csv",index=False)
+    z=s.groupby(["period","profile","stress"],as_index=False).agg(net=("net_return_pct","min"),dd=("max_floating_drawdown_pct","max"),months=("profitable_months","min"),trades=("trades","min"),wins=("wins","min"),losses=("losses","max"))
+    cols=["period","profile","stress","net","dd","months","trades","wins","losses"]
+    lines=["# C05 repeat reclaim training / frozen validation","",f"5 repeat-attempt limits plus protected volatility-filtered control; 48 training path/cost replays. Selected C{cid:02d}: {cfg}. Training gate passed: {f['passes_training_gate']}.","Training: Feb-Dec 2024 (Feb 1-2 warmup), Jan-Dec 2025 (source starts Jan 1 UTC). Validation: Jan-Oct 2026 (Dec 2025 warmup, no pre-2026 entries). 2026 was examined in previous research, so this is a procedural holdout, not genuinely untouched OOS. No tuning on validation results.","Confirmed H4 EMA50, fixed ATR14 stop and TP, fixed 2.5R delayed entry-price lock; two-candle reclaim and relative volatility >=0.8 retained; fresh repeat interactions require rearm on a completed trend-side close. No overlapping positions; cap counts attempts, not trades. Zero-R lock is price breakeven before fees and slippage. No adaptive rules. No combined strategies, hedging, monthly or account-history switches. Fixed exposure. Baseline costs 0.05% taker per side+GST18%, slip 0.02% per side; stress slip 0.06%. Funding excluded.","",z[cols].to_markdown(index=False),"","## Monthly returns (normal costs, worse of two paths)",m[~m.stress].groupby(["month_ist","profile"]).monthly_return_pct.min().unstack().to_markdown(),""]
+    (OUT/"REPORT.md").write_text("\n".join(lines)+"\n")
+    print("\n".join(lines),flush=True)
+if __name__=="__main__":
+    if sys.argv[1]=="train":train()
+    elif sys.argv[1]=="freeze":freeze()
+    else:validate()
