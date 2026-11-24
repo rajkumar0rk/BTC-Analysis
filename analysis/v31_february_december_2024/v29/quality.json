@@ -1,0 +1,59 @@
+{
+  "frozen_sha256": "48eadaabd9ba425055429ef232673b127f68e6732d54298a2e8839d97d181f1e",
+  "config": {
+    "family": "ema_cross",
+    "timeframe": 240,
+    "lookback": 20,
+    "stop_fraction": 1.15,
+    "rr": 3.0
+  },
+  "archive_totals": {
+    "funding_1h": {
+      "expected": 8785,
+      "observed": 8785,
+      "missing": 0,
+      "complete_months": 12,
+      "recovered_this_run": 0,
+      "requests_this_run": 0,
+      "request_errors": 0
+    },
+    "mark_1m": {
+      "expected": 527040,
+      "observed": 527040,
+      "missing": 0,
+      "complete_months": 12,
+      "recovered_this_run": 80,
+      "requests_this_run": 1,
+      "request_errors": 0
+    },
+    "trade_1m": {
+      "expected": 527040,
+      "observed": 501321,
+      "missing": 25719,
+      "complete_months": 11,
+      "recovered_this_run": 0,
+      "requests_this_run": 15,
+      "request_errors": 0
+    }
+  },
+  "scored_months": [
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12"
+  ],
+  "warmup_limited": true,
+  "warmup_start": "2024-01-30 00:00:00+00:00",
+  "start": "2024-01-31 18:30:00+00:00",
+  "end_exclusive": "2024-12-31 18:30:00+00:00",
+  "no_retuning": true,
+  "funding_proxy": true,
+  "liquidation_proxy": true
+}

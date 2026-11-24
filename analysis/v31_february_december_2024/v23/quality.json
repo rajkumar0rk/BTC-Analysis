@@ -1,0 +1,71 @@
+{
+  "frozen_source": "V23/V19 50x common profile, no V25 results used",
+  "same_config_all_leverage": true,
+  "no_2024_tuning": true,
+  "prior_2024_research_exists": true,
+  "full_year": false,
+  "archive_totals": {
+    "funding_1h": {
+      "expected": 8785,
+      "observed": 8785,
+      "missing": 0,
+      "complete_months": 12,
+      "recovered_this_run": 0,
+      "requests_this_run": 0,
+      "request_errors": 0
+    },
+    "mark_1m": {
+      "expected": 527040,
+      "observed": 527040,
+      "missing": 0,
+      "complete_months": 12,
+      "recovered_this_run": 80,
+      "requests_this_run": 1,
+      "request_errors": 0
+    },
+    "trade_1m": {
+      "expected": 527040,
+      "observed": 501321,
+      "missing": 25719,
+      "complete_months": 11,
+      "recovered_this_run": 0,
+      "requests_this_run": 15,
+      "request_errors": 0
+    }
+  },
+  "frozen_profile_sha256": "4d24be271e2050bcfafd3a7b36842386de4c794a3cd05353dbb017c323ce9341",
+  "data_sources": {
+    "trade": {
+      "rows": 501351
+    },
+    "mark_1m": {
+      "rows": 527070
+    },
+    "funding_1h": {
+      "rows": 8785
+    }
+  },
+  "exact_exchange_liquidation": false,
+  "exact_funding": false,
+  "status": "completed",
+  "scored_months": [
+    "2024-02",
+    "2024-03",
+    "2024-04",
+    "2024-05",
+    "2024-06",
+    "2024-07",
+    "2024-08",
+    "2024-09",
+    "2024-10",
+    "2024-11",
+    "2024-12"
+  ],
+  "minimum_warmup_days": 1,
+  "warmup_limited": true,
+  "indicator_warmup_start": "2024-01-30 00:00:00+00:00",
+  "scored_start": "2024-01-31 18:30:00+00:00",
+  "scored_end_exclusive": "2024-12-31 18:30:00+00:00",
+  "signal_count": 843,
+  "scenario_rows": 560
+}
