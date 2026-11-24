@@ -61,7 +61,7 @@ jobs:
           mark=joined("mark_1m",["open","low","high"])
           # Separate each contiguous segment. Seven days of indicator warmup, never bridge data gaps.
           segments={}
-          feature_names=["volume_ratio","atr_pct","atr_expansion","ema_slope_pct","ema_gap_pct","supertrend_gap_pct","dir_rsi14","adx14","hourly_body_atr","hourly_range_atr","signal_hour_ist","signal_weekday_ist","supertrend_age_hours"]
+          feature_names=["volume_ratio","atr_pct","atr_expansion","ema_slope_pct","ema_gap_pct","supertrend_gap_pct","dir_rsi14","adx14","hourly_body_atr","hourly_range_atr","signal_hour_ist","signal_weekday_ist","supertrend_age_hours","side"]
           month_coverage={}
           coverage=[]
           for yr in [2024,2025,2026]:
@@ -180,7 +180,7 @@ jobs:
               return mon,counts,wins,losses,flat,dd,skips,overlaps,boundary,missing,markmissing,funding,fees,marginrisk,cash,peak
           # All original rules use ordered override/new_only/selected_only semantics.
           rules=original["rules"]
-          allowed=set(feature_names)-{"signal_hour_ist","signal_weekday_ist"}
+          allowed=set(feature_names)-{"signal_hour_ist","signal_weekday_ist","side"}
           def atoms(rule):
               return [tuple(x.split()) for x in rule["gate"].split(" AND ") if x!="ALL"]
           for rule in rules:
@@ -193,7 +193,7 @@ jobs:
               for rule in rules:
                   hit=np.ones(len(f),bool)
                   for k,op,v in atoms(rule):
-                      x=f[:,feature_names.index(k)]*(1+shift);v=float(v)
+                      x=f[:,feature_names.index(k)]*(1 if k in {"side","signal_hour_ist","signal_weekday_ist"} else 1+shift);v=float(v)
                       hit &= np.isfinite(x)&((x>=v) if op==">=" else (x<=v) if op=="<=" else (x==v))
                   result.append(hit)
               return result
