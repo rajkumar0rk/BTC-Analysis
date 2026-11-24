@@ -1,0 +1,482 @@
+name: V8 training-only separate post-win cooldown and cap
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-v8-training-only-renewed-cooldown-20261124.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  fixed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify embedded Python syntax
+        run: |
+          python3 - <<'CHECK'
+          import pathlib,textwrap
+          p=pathlib.Path(".github/workflows/reclaim-v8-training-only-renewed-cooldown-20261124.yml")
+          s=p.read_text().split("PYTHONPATH=scripts python -u - <<'PY'\n",1)[1].split("\n          PY\n",1)[0]
+          compile(textwrap.dedent(s),str(p),"exec")
+          print("PYTHON_SYNTAX_OK")
+          CHECK
+      - name: Restore prior native archive for year-end UTC bridge only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download 45363730365 --repo rajkumar0rk/BTC-Analysis --name delta-india-btcusd-2024-native --dir research-data-2024
+      - name: Pin recovered 2024 archive with 11 complete IST months
+        run: |
+          git fetch --depth=1 origin bb9998f72c12673c2104e6e04ffcbffae66205f9
+          git checkout FETCH_HEAD -- data/delta_india/BTCUSD/2024_verified_archive
+      - name: Retrieve immutable original candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download 45366169753 --repo rajkumar0rk/BTC-Analysis --name reclaim-2025-2026-profit-refinement --dir frozen-v8
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy pandas numba
+      - name: Test renewed reclaim after profitable exit on training years only
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import json,pathlib,itertools
+          import numpy as np,pandas as pd
+          from numba import njit
+          from research_st_ema20_initial_sl_grid_20261122 import eng
+          from research_st_ema20_reclaim_loss_months_20261122 import indicator_features
+          import hashlib
+          raw_candidate=pathlib.Path("frozen-v8/candidate.json").read_bytes()
+          original=json.loads(raw_candidate)
+          assert len(original["rules"])==57
+          assert hashlib.sha256(raw_candidate).hexdigest()=="28fdb61028220a1bd2fa0ee1354ac125c934230849b804d35afec6e44d1b94c9"
+          print("RULE_REMOVAL_IDENTITY",json.dumps(dict(original_rules=57,original_overlay=bool(original["overlay"]),pruning=True,wallet_overlay=False,source_run=45366169753)),flush=True)
+          e=eng();e.smoke_test()
+          root=pathlib.Path("data/delta_india/BTCUSD")
+          out=pathlib.Path("analysis/reclaim_v8_training_only_renewed_cooldown");out.mkdir(parents=True,exist_ok=True)
+          IST="Asia/Kolkata"
+          def ist(s):return pd.Timestamp(s,tz=IST).tz_convert("UTC")
+          def read_frame(p,cols):
+              x=pd.read_csv(p,usecols=["time"]+cols);t=x.pop("time")
+              x.index=pd.to_datetime(t,unit="s",utc=True) if pd.api.types.is_numeric_dtype(t) else pd.to_datetime(t,utc=True)
+              assert not x.index.has_duplicates and np.isfinite(x[cols].to_numpy(float)).all(),str(p)
+              return x.sort_index()
+          def load(folder,years,cols):
+              parts=[read_frame(p,cols) for p in sorted(pathlib.Path(folder).glob("20??-??.csv.gz")) if p.name[:4] in years]
+              assert parts,str(folder)
+              x=pd.concat(parts).sort_index();assert not x.index.has_duplicates
+              return x
+          arch=root/"2024_verified_archive"
+          manifest=json.loads((arch/"manifest.json").read_text())
+          assert manifest["synthetic_rows"]==0
+          months=[f"2024-{i:02}" for i in range(2,13)]
+          def recovered(label,oldlabel,newfolder,cols,step):
+              parts=[]
+              for month in months:
+                  items=[x for x in manifest["months"] if x["series"]==label and x["month"]==month]
+                  assert len(items)==1 and items[0]["missing"]==0 and items[0]["expected"]==items[0]["observed"],(label,month)
+                  item=items[0];p=arch/label/(month+".csv.gz")
+                  assert hashlib.sha256(p.read_bytes()).hexdigest()==item["sha256"],str(p)
+                  x=read_frame(p,cols);assert len(x)==item["expected"],str(p)
+                  parts.append(x)
+              z=pd.concat(parts).sort_index()
+              assert not z.index.has_duplicates
+              # The native 2024 repaired files are IST-partitioned. The older UTC archive
+              # supplies only the 5.5-hour bridge belonging to 1 Jan 2025 IST.
+              bridge_start=ist("2025-01-01")
+              if step==3600:bridge_start=bridge_start.floor("h")
+              bridge_end=pd.Timestamp("2025-01-01",tz="UTC")
+              old=load("research-data-2024/"+oldlabel,["2024"],cols)
+              bridge=old.loc[(old.index>=bridge_start)&(old.index<bridge_end)&(~old.index.isin(z.index))]
+              z=pd.concat([z,bridge,load(newfolder,["2025"],cols)]).sort_index()
+              assert not z.index.has_duplicates,label
+              start=ist("2024-02-01") if step==60 else ist("2024-02-01").ceil("h")
+              end=ist("2026-01-01")
+              expected=pd.date_range(start,end-pd.Timedelta(seconds=1),freq="min" if step==60 else "h")
+              actual=z.loc[(z.index>=start)&(z.index<end)].index
+              assert actual.equals(expected),(label,len(actual),len(expected),str(expected.difference(actual)[:10]))
+              print("VERIFIED_SERIES",label,len(actual),"missing",len(expected.difference(actual)),flush=True)
+              return z.loc[z.index<end]
+          cols=["open","high","low","close","volume"]
+          m=recovered("trade_1m","1m",root/"1m",cols,60)
+          mark=recovered("mark_1m","mark_1m",root/"institutional/history/mark_1m",["open","low","high"],60)
+          fund=recovered("funding_1h","funding_1h",root/"institutional/history/funding_1h",["close"],3600).close
+          assert m.index.max()<ist("2026-01-01") and mark.index.max()<ist("2026-01-01") and fund.index.max()<ist("2026-01-01")
+          print("TRAINING_ONLY_DATA_OK",flush=True)
+          assert (m.low<=m[["open","close"]].min(axis=1)).all() and (m.high>=m[["open","close"]].max(axis=1)).all()
+          print("VERIFIED_ARCHIVE",json.dumps(dict(commit="bb9998f72c12673c2104e6e04ffcbffae66205f9",months=months,synthetic_rows=0,calendar="Asia/Kolkata")),flush=True)
+          # Separate each contiguous segment. Seven days of indicator warmup, never bridge data gaps.
+          segments={}
+          variants=[("first_breakout",0.),("eligible_breakout",0.)]
+          all_variants=list(dict.fromkeys(variants+[(v[0],v[1]*k) for v in variants if v[1]>0 for k in [.8,1.2]]))
+          by_entry={v:{} for v in all_variants}
+          def entry_events(q,h,variant):
+              mode,buffer=variant
+              if variant==variants[0]:return e.entry_candidates(q,h,"reclaim")
+              events=e.setups(h,"reclaim")
+              op=q.open.to_numpy(float);hi=q.high.to_numpy(float);lo=q.low.to_numpy(float)
+              used=set();out=[]
+              for hour,ev in sorted(events.items()):
+                  if hour>=len(h) or (mode.startswith("first") and ev["cycle"] in used):continue
+                  side=ev["side"];j0=hour*60;trigger=ev["trigger"]+side*buffer*float(h.atr.iloc[hour-1])
+                  if mode.endswith("open"):
+                      j=j0;mid=op[j]
+                  else:
+                      hits=np.flatnonzero(hi[j0:j0+60]>=trigger if side==1 else lo[j0:j0+60]<=trigger)
+                      if not len(hits):continue
+                      j=j0+int(hits[0]);mid=max(op[j],trigger) if side==1 else min(op[j],trigger)
+                  out.append(dict(entry_j=j,entry=mid+side*e.SLIP,side=side,cycle=ev["cycle"],signal=ev["signal"]))
+                  used.add(ev["cycle"])
+              return out
+          feature_names=["volume_ratio","atr_pct","atr_expansion","ema_slope_pct","ema_gap_pct","supertrend_gap_pct","dir_rsi14","adx14","hourly_body_atr","hourly_range_atr","signal_hour_ist","signal_weekday_ist","supertrend_age_hours","side","h4ema20","h4ema50","ema50gap","signal_atr"]
+          month_coverage={}
+          raw_coverage={}
+          coverage=[]
+          for yr in [2024,2025]:
+              start=ist("2024-02-01") if yr==2024 else ist(str(yr)+"-01-01");end=ist(str(yr+1)+"-01-01")
+              raw=m.loc[(m.index>=max(ist("2024-02-01"),start-pd.Timedelta(days=7)))&(m.index<end)]
+              score_index=raw.index[(raw.index>=start)&(raw.index<end)]
+              assert score_index.equals(pd.date_range(start,end-pd.Timedelta(minutes=1),freq="min")),yr
+              raw_coverage[yr]=np.bincount(score_index.tz_convert(IST).month-1,minlength=12)
+              grp=raw.index.to_series().diff().ne(pd.Timedelta(minutes=1)).cumsum()
+              segments[yr]=[]; used=0; month_coverage[yr]=np.zeros(12,dtype=int)
+              for v in all_variants:by_entry[v][yr]=[]
+              for _,q in raw.groupby(grp):
+                  a=q.index.min().ceil("h");b=(q.index.max()+pd.Timedelta(minutes=1)).floor("h")
+                  q=q.loc[(q.index>=a)&(q.index<b)]
+                  if len(q)<8*24*60:continue
+                  eligible=max(start,q.index.min()+pd.Timedelta(days=7))
+                  if eligible>=q.index.max():continue
+                  assert q.close.resample("1h").count().eq(60).all()
+                  h=e.features(q.resample("1h").agg(dict(open="first",high="max",low="min",close="last",volume="sum")))
+                  h=indicator_features(h)
+                  # Higher-timeframe features only from bars completed at the signal close.
+                  h4=q.resample("4h").agg(dict(open="first",high="max",low="min",close="last",volume="sum"))
+                  h4=h4.loc[q.close.resample("4h").count().eq(240)]
+                  for n in [20,50]:
+                      ema=h4.close.ewm(span=n,adjust=False,min_periods=n).mean()
+                      z=pd.Series(ema.to_numpy(),index=h4.index+pd.Timedelta(hours=4))
+                      v=z.reindex(h.index+pd.Timedelta(hours=1),method="ffill").to_numpy()
+                      h["h4ema"+str(n)]=100*h.side*(h.close-v)/h.close
+                  h["ema50gap"]=100*h.side*(h.close-h.close.ewm(span=50,adjust=False,min_periods=50).mean())/h.close
+                  idx=q.index
+                  rates=fund.reindex(idx.floor("h")-pd.Timedelta(hours=1)).to_numpy(float)
+                  mk=mark.reindex(idx)
+                  weight=np.where(idx<pd.Timestamp("2025-09-08T16:00:00Z"),1/480,np.where((idx.minute==0)&(idx.hour%8==0),1.,0.))
+                  flow=np.where(weight==0,0.,rates*mk.open.to_numpy()*weight*.001/100)
+                  missing=~np.isfinite(flow)
+                  def prefix(x):return np.r_[0.,np.cumsum(x)]
+                  month=idx.tz_convert(IST).month.to_numpy(np.int64)-1
+                  n=int((idx>=eligible).sum());used+=n
+                  month_coverage[yr]+=np.bincount(month[idx>=eligible],minlength=12)
+                  coverage.append(dict(year=yr,start=str(eligible),end=str(idx[-1]),used_minutes=n,signals_by_variant={str(v):len(entry_events(q,h,v)) for v in variants}))
+                  for variant in all_variants:
+                      events=entry_events(q,h,variant)
+                      j=[];s=[];mid=[];ends=[];features=[];cycles=[]
+                      hs=h.side.to_numpy()
+                      for v in events:
+                          k=int(v["entry_j"])
+                          if q.index[k]<eligible or pd.Timestamp(v["signal"])<eligible:continue
+                          sd=int(v["side"]);f=np.flatnonzero(hs[k//60:]!=sd)
+                          endj=min((k//60+int(f[0])+1)*60,len(q)) if len(f) else len(q)
+                          j.append(k);s.append(sd);mid.append(float(v["entry"])-sd*e.SLIP);ends.append(endj);cycles.append(v["cycle"])
+                          row=h.loc[pd.Timestamp(v["signal"])]
+                          features.append([float(row[x]) for x in feature_names[:-1]]+[float(row.atr)])
+                      by_entry[variant][yr].append((*(q[k].to_numpy(float) for k in ["open","high","low","close"]),np.array(j,np.int64),np.array(s,np.int64),np.array(mid,float),np.array(ends,np.int64),month,prefix(np.where(missing,0.,np.maximum(flow,0.))),prefix(np.where(missing,0.,np.maximum(-flow,0.))),prefix(missing),mk.low.to_numpy(float),mk.high.to_numpy(float),np.array(cycles,np.int64),np.asarray(features,float).reshape(-1,len(feature_names))))
+              print("COVERAGE",yr,used,int((end-start).total_seconds()/60),"raw_months",raw_coverage[yr].tolist(),"usable_months",month_coverage[yr].tolist(),flush=True)
+          segments=by_entry[variants[0]]
+          (out/"coverage.json").write_text(json.dumps(coverage,indent=2))
+          @njit
+          def replay(o,h,l,c,j,sd,mid,end,sl,tp,path,slip,ladder,protect,atr,activation,distance,fee,lock_activation,lock_r):
+              entry=mid+sd*slip;stop=entry*(1-sd*sl/100);target=entry*(1+sd*tp/100)
+              lo=entry;hi=entry;best=entry
+              trail_enabled=activation>0 and distance>0 and np.isfinite(atr) and atr>0
+              protect_trigger=entry*(1+sd*protect/100);protect_stop=entry*(1+sd*.2/100)
+              risk_distance=entry*sl/100
+              # Exact fee break-even fill plus expected exit slip and optional fraction of initial risk.
+              # Funding and gap exits can still cause a net loss.
+              lock_stop=(entry*(1+sd*fee)+sd*lock_r*risk_distance)/(1-sd*fee)+sd*slip
+              lock_trigger=entry+sd*max(lock_activation*risk_distance,sd*(lock_stop-entry)+1.)
+              for k in range(j,end):
+                  nodes=(o[k],h[k],l[k],c[k]) if path==0 else (o[k],l[k],h[k],c[k])
+                  active=k!=j or sd*(nodes[0]-mid)>=0
+                  if active:
+                      lo=min(lo,nodes[0]);hi=max(hi,nodes[0])
+                      if sd*(nodes[0]-stop)<0:return k,nodes[0]-sd*slip,lo,hi,0,sd*(stop-entry)<0
+                      if tp>0 and sd*(nodes[0]-target)>=0:return k,nodes[0]-sd*slip,lo,hi,0,False
+                      if protect>0 and sd*(nodes[0]-protect_trigger)>=0 and sd*(protect_stop-stop)>0:stop=protect_stop
+                      if lock_activation>0 and sd*(nodes[0]-lock_trigger)>=0 and sd*(lock_stop-stop)>0:stop=lock_stop
+                      if sd*(nodes[0]-best)>0:best=nodes[0]
+                      if trail_enabled and sd*(best-entry)>=activation*atr:
+                          candidate=best-sd*distance*atr
+                          if sd*(candidate-stop)>0:stop=candidate
+                  for z in range(3):
+                      a,b=nodes[z],nodes[z+1]
+                      if not active:
+                          if sd*(b-a)<=0 or sd*(b-mid)<0:continue
+                          a=mid;active=True
+                      lo=min(lo,a);hi=max(hi,a)
+                      if sd*(b-a)>0:
+                          if tp>0 and sd*(a-target)<=0 and sd*(b-target)>=0:
+                              lo=min(lo,target);hi=max(hi,target)
+                              return k,target-sd*slip,lo,hi,0,False
+                          for rung in ladder:
+                              v=entry*(1+sd*rung/100)
+                              if sd*(a-v)<0 and sd*(b-v)>=0 and sd*(v-stop)>0:stop=v
+                          if protect>0 and sd*(b-protect_trigger)>=0 and sd*(protect_stop-stop)>0:stop=protect_stop
+                          if lock_activation>0 and sd*(b-lock_trigger)>=0 and sd*(lock_stop-stop)>0:stop=lock_stop
+                          if sd*(b-best)>0:best=b
+                          if trail_enabled and sd*(best-entry)>=activation*atr:
+                              candidate=best-sd*distance*atr
+                              if sd*(candidate-stop)>0:stop=candidate
+                      elif sd*(b-stop)<=0:
+                          x=a if sd*(a-stop)<0 else stop
+                          lo=min(lo,x);hi=max(hi,x)
+                          return k,x-sd*slip,lo,hi,0,sd*(stop-entry)<0
+                      lo=min(lo,b);hi=max(hi,b)
+              if end<len(o):return end,o[end]-sd*slip,min(lo,o[end]),max(hi,o[end]),0,False
+              return end-1,c[end-1]-sd*slip,min(lo,c[end-1]),max(hi,c[end-1]),1,False
+          @njit
+          def batch(o,h,l,c,j,sd,mid,ends,month,fl,fs,fmissing,ml,mh,cycles,stops,targets,path,slip,fee,cash,peak,ladder,protect,max_reentries,cooldown,retry_sl,retry_tp,slscale,atrs,activation,distance,collateral_multiple,lock_activation,lock_r,win_cap,win_cooldown):
+              mon=np.zeros(12);counts=np.zeros(12);wins=0;losses=0;flat=0;dd=0.;skips=0;overlaps=0;boundary=0;missing=0;markmissing=0;funding=0.;fees=0.;marginrisk=0;active=-1;last_cycle=-1;attempts=0;win_reentries=0;last_exit_win=False;retry_allowed=False;reentries=0;skip_month=np.zeros(12);skip_pnl=np.zeros(12);skip_wins=0;skip_losses=0
+              ledger=np.full((len(j),15),np.nan)
+              for i in range(len(j)):
+                  k=j[i];side=sd[i];entry=mid[i]+side*slip
+                  first=cycles[i]!=last_cycle
+                  if first:
+                      last_cycle=cycles[i];attempts=0;win_reentries=0;last_exit_win=False;retry_allowed=False
+                  else:
+                      # A fresh distinct reclaim after an eligible exit; never enter while a position is open.
+                      if not retry_allowed or attempts==0 or attempts>max_reentries:continue
+                      if last_exit_win:
+                          if win_reentries>=win_cap or k<=active+win_cooldown:continue
+                      elif k<=active+cooldown:continue
+                  if targets[i]==0:continue
+                  if k<=active:overlaps+=1;continue
+                  local_sl=stops[i];local_tp=targets[i]
+                  if attempts>0:
+                      local_sl=min(local_sl*retry_sl,2.*slscale)
+                      local_tp=local_tp*retry_tp
+                  notional=entry*.001
+                  required=notional*(1+fee)
+                  if collateral_multiple>1.:
+                      # Hypothetical cross-wallet collateral cap, not actual exchange margin.
+                      # Reserve stop loss, both fees, two slips and an additional 1% notional cushion.
+                      required=notional/collateral_multiple+notional*(local_sl/100+2*fee+.01)+.002*slip
+                  if required>cash:
+                      skips+=1;skip_month[month[k]]+=1
+                      # Diagnostic standalone replay only; overlapping counterfactuals are not portfolio P&L.
+                      xx,ff,ll,hh,bb,ss=replay(o,h,l,c,k,side,mid[i],ends[i],local_sl,local_tp,path,slip,ladder,protect,atrs[i],activation,distance,fee,lock_activation,lock_r)
+                      pp=fl if side==1 else fs
+                      nn=.001*side*(ff-entry)-.001*fee*(entry+ff)-(pp[xx+1]-pp[k])
+                      if fmissing[xx+1]-fmissing[k]==0 and bb==0:
+                          skip_pnl[month[k]]+=nn
+                          if nn>0:skip_wins+=1
+                          elif nn<0:skip_losses+=1
+                      continue
+                  if attempts>0 and last_exit_win:win_reentries+=1
+                  attempts+=1
+                  if attempts>1:reentries+=1
+                  x,fill,low,high,bd,initial_stop=replay(o,h,l,c,k,side,mid[i],ends[i],local_sl,local_tp,path,slip,ladder,protect,atrs[i],activation,distance,fee,lock_activation,lock_r)
+                  active=x;boundary+=bd
+                  fp=fl if side==1 else fs
+                  debit=fp[x+1]-fp[k];funding+=debit;missing+=fmissing[x+1]-fmissing[k]
+                  f=.001*fee*(entry+fill);fees+=f
+                  net=.001*side*(fill-entry)-f-debit
+                  last_exit_win=net>0
+                  retry_allowed=(initial_stop and net<0) or (win_cap>0 and last_exit_win)
+                  risk_points=entry*local_sl/100
+                  mfe=max(0.,side*((high if side==1 else low)-entry))
+                  mae=max(0.,-side*((low if side==1 else high)-entry))
+                  ledger[i,0]=k;ledger[i,1]=x;ledger[i,2]=side;ledger[i,3]=entry;ledger[i,4]=fill;ledger[i,5]=net;ledger[i,6]=f;ledger[i,7]=debit;ledger[i,8]=risk_points;ledger[i,9]=mfe;ledger[i,10]=mae;ledger[i,11]=attempts;ledger[i,12]=month[x]+1;ledger[i,13]=(1.0 if initial_stop else 0.0);ledger[i,14]=local_tp
+                  # Conservative floating DD bound: allow favorable peak before adverse low/high.
+                  good=high if side==1 else low;bad=low if side==1 else high
+                  peak=max(peak,cash+.001*side*(good-entry)-.001*fee*(entry+good))
+                  loweq=cash+.001*side*(bad-entry)-.001*fee*(entry+bad)-debit-.001*slip
+                  dd=max(dd,100*(peak-loweq)/peak)
+                  ma=ml[k:x+1] if side==1 else mh[k:x+1]
+                  if not np.isfinite(ma).all():markmissing+=1
+                  else:
+                      adverse=np.min(ma)*.995 if side==1 else np.max(ma)*1.005
+                      equity=cash+.001*side*(adverse-entry)-f-debit
+                      if equity<=.001*adverse*(.0025+fee+.0025*.5*1.18):marginrisk+=1
+                  cash+=net;peak=max(peak,cash);dd=max(dd,100*(peak-cash)/peak)
+                  mon[month[x]]+=net;counts[month[x]]+=1
+                  if net>0:wins+=1
+                  elif net<0:losses+=1
+                  else:flat+=1
+              return mon,counts,wins,losses,flat,dd,skips,overlaps,boundary,missing,markmissing,funding,fees,marginrisk,reentries,skip_month,skip_pnl,skip_wins,skip_losses,ledger,cash,peak
+          # All original rules use ordered override/new_only/selected_only semantics.
+          rules=original["rules"]
+          allowed=set(feature_names)-{"signal_hour_ist","signal_weekday_ist","side"}
+          def atoms(rule):
+              return [tuple(x.split()) for x in rule["gate"].split(" AND ") if x!="ALL"]
+          for rule in rules:
+              assert rule["mode"] in ["override","new_only","selected_only"]
+              assert all(k in feature_names and op in [">=","<=","=="] for k,op,v in atoms(rule)),rule
+          # No date, weekday, time or wallet conditions. Never invent or refit thresholds.
+          legal=tuple(i for i,r in enumerate(rules) if all(k in allowed for k,op,v in atoms(r)))
+          def masks(f,shift=0.):
+              result=[]
+              for rule in rules:
+                  hit=np.ones(len(f),bool)
+                  for k,op,v in atoms(rule):
+                      x=f[:,feature_names.index(k)]*(1 if k in {"side","signal_hour_ist","signal_weekday_ist"} else 1+shift);v=float(v)
+                      hit &= np.isfinite(x)&((x>=v) if op==">=" else (x<=v) if op=="<=" else (x==v))
+                  result.append(hit)
+              return result
+          def policy(f,ids,shift=0.,scale=1.,slscale=1.,pre=None):
+              target=np.zeros(len(f));stop=np.zeros(len(f))
+              hits=masks(f,shift) if pre is None else pre
+              for i in ids:
+                  r=rules[i];hit=hits[i].copy()
+                  if r["mode"]=="new_only":hit &= target==0
+                  elif r["mode"]=="selected_only":hit &= target!=0
+                  target[hit]=float(r["target"]);stop[hit]=float(r["stop_cap_pct"])
+              target=np.where(target>0,target*scale,target)
+              stop=np.minimum(stop*slscale,2.*slscale)
+              return stop,target
+          # Freeze support threshold before any performance ranking: each retained rule must
+          # change the final decision for at least 3 opportunities in EACH training year.
+          def support(ids,i):
+              count=[]
+              for yr in [2024,2025]:
+                  n=0
+                  for seg in segments[yr]:
+                      f=seg[-1];hit=masks(f);s,t=policy(f,ids,pre=hit);ss,tt=policy(f,tuple(j for j in ids if j!=i),pre=hit)
+                      n+=int(((t!=tt)|((t!=0)&(s!=ss))).sum())
+                  count.append(n)
+              return count
+          def supported(ids):
+              # Remove weakest effective rule and recalculate because ordering interactions matter.
+              ids=tuple(ids)
+              while ids:
+                  counts={i:support(ids,i) for i in ids}
+                  weak=[i for i in ids if min(counts[i])<3]
+                  if not weak:return ids,counts
+                  i=min(weak,key=lambda j:(min(counts[j]),sum(counts[j]),-j))
+                  ids=tuple(j for j in ids if j!=i)
+              return ids,{}
+          scenarios=[(p,slip,fee,shift,scale,slscale) for p in [0,1] for slip,fee,shift,scale,slscale in [(5.,.00059,0.,1.,1.),(25.,.000885,0.,1.,1.),(25.,.000885,-.05,.9,.9),(25.,.000885,.05,1.1,1.1)]]
+          # Precompute only training masks initially; holdout never used for ranking.
+          cache={}
+          def evaluate(yr,ids,sc,conf,collect=False):
+              max_reentries,cooldown_hours,mode,activation,distance,collateral_multiple,win_cap,win_cooldown_hours=conf
+              lock_activation=0.;lock_r=0.
+              variant=variants[1] if max_reentries else variants[0]
+              path,slip,fee,shift,scale,slscale=sc
+              mon=np.zeros(12);counts=np.zeros(12);cash=100.;peak=100.;dd=0.;v=np.zeros(10);risk=0;reentries=0;skip_month=np.zeros(12);skip_pnl=np.zeros(12);skip_wins=0;skip_losses=0;trade_ledger=[]
+              for si,seg in enumerate(by_entry[variant][yr]):
+                  f=seg[-1]
+                  key=(variant,yr,si,shift)
+                  if key not in cache:cache[key]=masks(f,shift)
+                  s,t=policy(f,ids,shift,scale,slscale,cache[key])
+                  atr=np.ascontiguousarray(f[:,feature_names.index("signal_atr")])*(1+shift)
+                  if mode=="trail_only":t=np.where(t>0,-1.,t)
+                  ladder=np.asarray([2.,3.,5.]) if mode!="trail_only" else np.empty(0,dtype=float)
+                  r=batch(*seg[:-1],s,t,path,slip,fee,cash,peak,ladder,0.,max_reentries,int(cooldown_hours*60),1.,1.,slscale,atr,activation,distance,collateral_multiple,lock_activation,lock_r,win_cap,int(win_cooldown_hours*60))
+                  mon+=r[0];counts+=r[1];dd=max(dd,r[5]);cash,peak=r[-2:]
+                  v+=np.array([*r[2:5],*r[6:13]]);risk+=r[13];reentries+=r[14];skip_month+=r[15];skip_pnl+=r[16];skip_wins+=r[17];skip_losses+=r[18]
+                  if collect:
+                      data=r[19][np.isfinite(r[19][:,0])]
+                      for z in data:
+                          trade_ledger.append(dict(segment=si,entry_minute=int(z[0]),exit_minute=int(z[1]),side=int(z[2]),entry=z[3],exit=z[4],net=z[5],fees=z[6],funding=z[7],initial_risk_points=z[8],mfe_points=z[9],mae_points=z[10],mfe_r=z[9]/z[8],mae_r=z[10]/z[8],attempt=int(z[11]),exit_month=int(z[12]),initial_stop=bool(z[13]),target_pct=z[14]))
+              if collect:
+                  assert len(trade_ledger)==int(counts.sum()) and abs(sum(z['net'] for z in trade_ledger)-mon.sum())<1e-8
+              return dict(year=yr,path=path,slip=slip,fee=fee,feature_shift=shift,tp_scale=scale,sl_scale=slscale,net=float(mon.sum()),monthly=mon.tolist(),monthly_trades=counts.tolist(),trades=int(counts.sum()),wins=int(v[0]),losses=int(v[1]),dd=dd,skips=int(v[3]),overlaps=int(v[4]),boundary=int(v[5]),missing=int(v[6]+v[7]),funding=float(v[8]),fees=float(v[9]),risk=risk,reentries=int(reentries),collateral_multiple=collateral_multiple,capital_skips_by_entry_month=skip_month.tolist(),standalone_skipped_net_by_entry_month=skip_pnl.tolist(),standalone_skipped_wins=int(skip_wins),standalone_skipped_losses=int(skip_losses),trade_ledger=trade_ledger)
+          def stats(rows,yr):
+              mon=np.array([x["monthly"] for x in rows]);base=mon[[x["slip"]==5 for x in rows]]
+              return dict(base=min(x["net"] for x in rows if x["slip"]==5),stress=min(x["net"] for x in rows),base_months=int((base.min(axis=0)>0).sum()),stress_months=int((mon.min(axis=0)>0).sum()),halfyear=[float(mon[:,i:i+6].sum(axis=1).min()) for i in range(0,mon.shape[1],6)],dd=max(x["dd"] for x in rows),min_trades=min(x["trades"] for x in rows),max_skips=max(x["skips"] for x in rows),risk=max(x["risk"] for x in rows),missing=max(x["missing"] for x in rows),overlap=max(x["overlaps"] for x in rows),boundary=max(x["boundary"] for x in rows),monthly_floor=mon.min(axis=0).tolist())
+          # Capital constraint audit: fixed quantity, no live/exchange margin claim.
+          ids=tuple(i-1 for i in [2,5,18,25,29,41,52,56])
+          assert supported(ids)[0]==ids and all(i in legal for i in ids)
+          base=(0,0.,"fixed",0.,0.,1.,0,1.)
+          retry_base=(2,1.,"fixed",0.,0.,1.,0,1.)
+          trail_base=(2,1.,"additive",4.,1.,1.,0,1.)
+          collateral_base=(2,1.,"additive",4.,1.,1.25,0,1.)
+          # Preserve global maximum two reentries and the loss-reentry cooldown.
+          # Compare one or two post-win reentries with coarse, hour-scale cooldowns.
+          configs=[base,retry_base,trail_base,collateral_base]+[(2,1.,"additive",4.,1.,m,2,1.) for m in [1.,1.25]]+[(2,1.,"additive",4.,1.,m,w,h) for m in [1.,1.25] for w,h in [(1,1.),(1,3.),(1,6.),(1,12.),(2,3.),(2,6.),(2,12.)]]
+          complete={}
+          for yr in [2024,2025]:
+              n=12
+              expected=np.array([pd.Period(f"{yr}-{i:02d}").days_in_month*1440 for i in range(1,n+1)])
+              complete[yr]=raw_coverage[yr][:n]==expected
+              assert int(complete[yr].sum())==(11 if yr==2024 else n)
+          def summarize(rows,yr):
+              s=stats(rows,yr)
+              mon=np.array([x["monthly"] for x in rows]);b=mon[[x["slip"]==5 for x in rows]];ok=complete[yr]
+              s.update(complete_months=int(ok.sum()),complete_base_months=int(((b.min(axis=0)>0)&ok).sum()),complete_stress_months=int(((mon.min(axis=0)>0)&ok).sum()),base_min_trades=min(x["trades"] for x in rows if x["slip"]==5),base_dd=max(x["dd"] for x in rows if x["slip"]==5),worst_month=float(mon[:,ok].min()),base_reentries=min(x["reentries"] for x in rows if x["slip"]==5))
+              return s
+          memo={}
+          def inspect(conf):
+              if conf in memo:return memo[conf]
+              a,b=[summarize([evaluate(yr,ids,sc,conf) for sc in scenarios],yr) for yr in [2024,2025]]
+              folds=a["halfyear"]+b["halfyear"]
+              valid=min(a["min_trades"],b["min_trades"])>=20 and a["base_min_trades"]>=.7*52 and b["base_min_trades"]>=.7*38 and max(a["risk"],b["risk"],a["missing"],b["missing"],a["boundary"],b["boundary"])==0
+              row=dict(config=conf,y2024=a,y2025=b,valid=valid,both=min(a["stress"],b["stress"])>0,folds=sum(x>0 for x in folds),worst_fold=min(folds),worst_year=min(a["stress"],b["stress"]),max_dd=max(a["dd"],b["dd"]),stress_months=a["complete_stress_months"]+b["complete_stress_months"],base_months=a["complete_base_months"]+b["complete_base_months"],stress_rate=min(a["complete_stress_months"]/11,b["complete_stress_months"]/12),base_rate=min(a["complete_base_months"]/11,b["complete_base_months"]/12))
+              memo[conf]=row;return row
+          def passes(r):return r["valid"] and r["both"] and r["folds"]==4
+          def score(r):
+              return (r["valid"],r["both"],r["folds"],r["stress_rate"],r["stress_months"],r["base_rate"],r["base_months"],r["worst_fold"],r["worst_year"],-r["max_dd"],-r["config"][0])
+          rank=[inspect(x) for x in configs]
+          inc=rank[0]
+          retry_inc=rank[1]
+          combined_inc=rank[2]
+          # Reproduce both previous experiments before ranking new risk controls.
+          assert abs(inc['y2024']['base']-11.040450227728234)<1e-8
+          assert abs(inc['y2025']['base']-23.867175933296437)<1e-8
+          assert abs(retry_inc['y2024']['base']-16.56177421493308)<1e-8
+          assert abs(retry_inc['y2025']['base']-26.129794764396443)<1e-8
+          assert abs(rank[2]['y2024']['base']-16.744048373706377)<1e-8
+          assert abs(rank[2]['y2025']['base']-27.31792370828333)<1e-8
+          assert abs(rank[3]['y2024']['stress']-5.822798277274111)<1e-8
+          assert abs(rank[3]['y2025']['stress']-14.949710274836224)<1e-8
+          assert abs(rank[4]['y2024']['base']-12.15083293478971)<1e-8
+          assert abs(rank[4]['y2025']['base']-28.00402853419919)<1e-8
+          assert abs(rank[5]['y2025']['base']-27.42356555276419)<1e-8
+          print('ALL_BASELINE_PARITY_OK',flush=True)
+          for r in rank[1:]:
+              if not passes(r):continue
+              n,h,mode,a,d,m,w,wh=r["config"]
+              if not w:continue
+              near=[inspect((n,h,mode,a,d,m,w,wh*k)) for k in [.8,1.2]]+[inspect((n,h,mode,a,d,m,3-w,wh))]+[inspect((n,h,mode,a*k,d,m,w,wh)) for k in [.8,1.2]]+[inspect((n,h,mode,a,d*k,m,w,wh)) for k in [.8,1.2]]
+              r["neighbor_pass"]=sum(passes(x) for x in near)
+              r["plateau"]=all(passes(x) for x in near)
+              r["neighbor_base_months"]=min([r["base_months"]]+[x["base_months"] for x in near])
+              r["neighbor_stress_months"]=min([r["stress_months"]]+[x["stress_months"] for x in near])
+          eligible=[r for r in rank if r.get("plateau") and r["neighbor_base_months"]>=retry_inc["base_months"] and r["neighbor_stress_months"]>=(15 if r["config"][5]>1 else 13) and r["base_months"]>retry_inc["base_months"] and all(r[y]["complete_base_months"]>=retry_inc[y]["complete_base_months"] and r[y]["base"]>=inc[y]["base"] and r[y]["worst_month"]>=(rank[3][y]["worst_month"] if r["config"][5]>1 else combined_inc[y]["worst_month"]) for y in ["y2024","y2025"]) and r["y2024"]["base"]+r["y2025"]["base"]>= (rank[3]["y2024"]["base"]+rank[3]["y2025"]["base"] if r["config"][5]>1 else combined_inc["y2024"]["base"]+combined_inc["y2025"]["base"])]
+          diagnostic=max(rank,key=score)
+          chosen=max(eligible,key=lambda r:(r["neighbor_stress_months"],r["neighbor_base_months"],score(r))) if eligible else inc
+          conf=chosen["config"]
+          candidate=dict(name="V8 training-only separate post-win cooldown and cap",source_run=45366169753,source_sha256=hashlib.sha256(raw_candidate).hexdigest(),rules=[rules[i] for i in ids],original_rule_ids=[i+1 for i in ids],overlay=None,entry_mode="first_breakout_then_distinct_reclaim",max_reentries=conf[0],cooldown_hours=conf[1],requires_losing_initial_stop=conf[6]==0,allow_reentry_after_net_profit=conf[6]>0,max_post_win_reentries=conf[6],post_win_cooldown_hours=conf[7],global_reentry_cap_unchanged=True,reentry_stop_multiplier=1.,reentry_target_multiplier=1.,exit_mode=conf[2],trail_activation_atr=conf[3],trail_distance_atr=conf[4],atr_reference="completed_signal_candle",hypothetical_collateral_multiple=conf[5],risk_lock_activation_r=0.,risk_lock_extra_r=0.,lock_accounts_for_fees_and_exit_slippage=True,lock_guarantees_net_profit=False,exchange_margin_verified=False,quantity_scaled_by_leverage=False,reentry_stop_cap_percent=2.,training_period="2024-02 through 2025-12",validation_period="reserved; not loaded or evaluated",validation_executed=False,initial_warmup_days=7,calendar_timezone=IST,archive_commit="bb9998f72c12673c2104e6e04ffcbffae66205f9",quantity_btc=.001,initial_wallet_usd=100,signal_timeframe="1h",execution_timeframe="1m",supertrend=[10,3],ema=20,profit_lock_percent=[2,3,5] if conf[2]!="trail_only" else [],training_pass=passes(chosen),plateau_pass=bool(eligible),deployment_approved=False,research_incumbent_unchanged=not bool(eligible))
+          (out/"candidate.json").write_text(json.dumps(candidate,indent=2))
+          (out/"rank.json").write_text(json.dumps(rank,indent=2))
+          print("RENEWED_COOLDOWN_OPT_SELECTED",json.dumps(dict(candidate=candidate,training=chosen,incumbent=inc,reentry_reference=retry_inc,trailing_reference=rank[2],collateral_reference=rank[3],coarse_count=len(rank),tested_count=len(memo),passing_plateaus=len(eligible),passing_coarse=sum(passes(r) for r in rank),best_diagnostic=diagnostic,training_rank=[dict(config=r["config"],months=r["base_months"],stress_months=r["stress_months"],folds=r["folds"],valid=r["valid"],net24=r["y2024"]["base"],net25=r["y2025"]["base"],stress24=r["y2024"]["stress"],stress25=r["y2025"]["stress"],reentries24=r["y2024"]["base_reentries"],reentries25=r["y2025"]["base_reentries"],trades24=r["y2024"]["base_min_trades"],trades25=r["y2025"]["base_min_trades"],months24=r["y2024"]["complete_base_months"],months25=r["y2025"]["complete_base_months"],fold_values=r["y2024"]["halfyear"]+r["y2025"]["halfyear"],worst_month24=r["y2024"]["worst_month"],worst_month25=r["y2025"]["worst_month"],max_skips24=r["y2024"]["max_skips"],max_skips25=r["y2025"]["max_skips"]) for r in sorted(rank,key=score,reverse=True)])),flush=True)
+          # Output training years only, even if challenger passes. Separate validation required.
+          reports=[]
+          for label,cfg in [("selected",conf),("previous_8",base),("reentry_reference",retry_base),("combined_reference",trail_base),("collateral_reference",collateral_base),("renew_full_notional",configs[4]),("renew_collateral",configs[5]),("diagnostic",diagnostic["config"])]:
+              for yr in [2024,2025]:
+                  rows=[evaluate(yr,ids,sc,cfg) for sc in scenarios]
+                  row=dict(label=label,year=yr,summary=summarize(rows,yr),rows=rows)
+                  reports.append(row);print("RENEWED_COOLDOWN_OPT_RESULT",json.dumps(row),flush=True)
+          (out/"results.json").write_text(json.dumps(reports,indent=2))
+          # All executed trades, both years and every stress path, for each comparison.
+          ledgers=[]
+          for label,cfg in [("combined_reference",trail_base),("collateral_reference",collateral_base),("renew_full_notional",configs[4]),("renew_collateral",configs[5]),("diagnostic",diagnostic["config"])]:
+              for yr in [2024,2025]:
+                  for sc in scenarios:
+                      row=evaluate(yr,ids,sc,cfg,collect=True)
+                      trades=row.pop("trade_ledger")
+                      losers=[z for z in trades if z["net"]<0]
+                      print("TRADE_LOSS_DIAGNOSTIC",json.dumps(dict(label=label,year=yr,scenario=sc,losers=len(losers),initial_stop_losses=int(sum(z["initial_stop"] for z in losers)),losses_reaching_1R=int(sum(z["mfe_r"]>=1 for z in losers)),losses_reaching_1_5R=int(sum(z["mfe_r"]>=1.5 for z in losers)),losses_reaching_2R=int(sum(z["mfe_r"]>=2 for z in losers)),median_loss_mfe_r=float(np.median([z["mfe_r"] for z in losers])) if losers else 0.,net_loss=float(sum(z["net"] for z in losers)))),flush=True)
+                      ledgers.extend(dict(label=label,year=yr,scenario=list(sc),**z) for z in trades)
+          (out/"trade_ledger.json").write_text(json.dumps(ledgers,indent=2,default=lambda x:x.item() if isinstance(x,np.generic) else (_ for _ in ()).throw(TypeError(type(x).__name__))))
+          print("RENEWED_COOLDOWN_OPT_COMPLETE",flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reclaim-v8-training-only-renewed-cooldown
+          path: analysis/reclaim_v8_training_only_renewed_cooldown/
