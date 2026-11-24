@@ -1,0 +1,21 @@
+{
+  "checked_configs": 5400,
+  "short_candidate_patterns": 780,
+  "retained_original_long_trades": 85,
+  "original_line_touch_and_bullish_flip_unmodified": true,
+  "original_2025_pnl": 14553.35,
+  "original_2026_pnl": 4546.27,
+  "original_22month_pnl": 19099.62,
+  "original_winning_months": 17,
+  "strict_profit_months_and_core_count": 58,
+  "strict_profit_months_core_and_drawdown_count": 58,
+  "strict_improve_months": 6,
+  "strict_improve_months_with_drawdown_control": 6,
+  "max_strict_winning_months": 18,
+  "max_retrospective_winning_months": 19,
+  "independent_holdout": false,
+  "last_complete_month": "2026-10",
+  "execution": "1m conservative STOP-FIRST for SHORT; 15m green ST exit",
+  "short_margin_and_liquidation_not_modeled": true,
+  "future_market_information_in_filters": false
+}
