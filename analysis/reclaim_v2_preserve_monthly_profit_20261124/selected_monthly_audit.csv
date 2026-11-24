@@ -1,0 +1,177 @@
+scenario,path,month_ist,locked_v1_net_usd,candidate_net_usd,month_net_delta_usd,locked_v1_positive,candidate_positive
+locked_v1,open_high_low_close,2025-01,0.0,0.0,0.0,False,False
+locked_v1,open_high_low_close,2025-02,5.987289,5.987289,0.0,True,True
+locked_v1,open_high_low_close,2025-03,1.651791,1.651791,0.0,True,True
+locked_v1,open_high_low_close,2025-04,0.312497,0.312497,0.0,True,True
+locked_v1,open_high_low_close,2025-05,0.104966,0.104966,0.0,True,True
+locked_v1,open_high_low_close,2025-06,4.923339,4.923339,0.0,True,True
+locked_v1,open_high_low_close,2025-07,3.199484,3.199484,0.0,True,True
+locked_v1,open_high_low_close,2025-08,0.405523,0.405523,0.0,True,True
+locked_v1,open_high_low_close,2025-09,-0.130897,-0.130897,0.0,False,False
+locked_v1,open_high_low_close,2025-10,-1.602894,-1.602894,0.0,False,False
+locked_v1,open_high_low_close,2025-11,1.625956,1.625956,0.0,True,True
+locked_v1,open_high_low_close,2025-12,0.211983,0.211983,0.0,True,True
+locked_v1,open_high_low_close,2026-01,1.657403,1.657403,0.0,True,True
+locked_v1,open_high_low_close,2026-02,1.306978,1.306978,0.0,True,True
+locked_v1,open_high_low_close,2026-03,-1.421728,-1.421728,0.0,False,False
+locked_v1,open_high_low_close,2026-04,-0.984376,-0.984376,0.0,False,False
+locked_v1,open_high_low_close,2026-05,1.262489,1.262489,0.0,True,True
+locked_v1,open_high_low_close,2026-06,0.986303,0.986303,0.0,True,True
+locked_v1,open_high_low_close,2026-07,2.237246,2.237246,0.0,True,True
+locked_v1,open_high_low_close,2026-08,1.215505,1.215505,0.0,True,True
+locked_v1,open_high_low_close,2026-09,-2.911479,-2.911479,0.0,False,False
+locked_v1,open_high_low_close,2026-10,0.0,0.0,0.0,False,False
+locked_v1,open_low_high_close,2025-01,0.0,0.0,0.0,False,False
+locked_v1,open_low_high_close,2025-02,5.987289,5.987289,0.0,True,True
+locked_v1,open_low_high_close,2025-03,1.651791,1.651791,0.0,True,True
+locked_v1,open_low_high_close,2025-04,0.312497,0.312497,0.0,True,True
+locked_v1,open_low_high_close,2025-05,0.104966,0.104966,0.0,True,True
+locked_v1,open_low_high_close,2025-06,3.851001,3.851001,0.0,True,True
+locked_v1,open_low_high_close,2025-07,4.284009,4.284009,0.0,True,True
+locked_v1,open_low_high_close,2025-08,0.405523,0.405523,0.0,True,True
+locked_v1,open_low_high_close,2025-09,-0.130897,-0.130897,0.0,False,False
+locked_v1,open_low_high_close,2025-10,-1.602894,-1.602894,0.0,False,False
+locked_v1,open_low_high_close,2025-11,1.625956,1.625956,0.0,True,True
+locked_v1,open_low_high_close,2025-12,1.083438,1.083438,0.0,True,True
+locked_v1,open_low_high_close,2026-01,1.657403,1.657403,0.0,True,True
+locked_v1,open_low_high_close,2026-02,1.306978,1.306978,0.0,True,True
+locked_v1,open_low_high_close,2026-03,-1.421728,-1.421728,0.0,False,False
+locked_v1,open_low_high_close,2026-04,-0.984376,-0.984376,0.0,False,False
+locked_v1,open_low_high_close,2026-05,1.262489,1.262489,0.0,True,True
+locked_v1,open_low_high_close,2026-06,0.986303,0.986303,0.0,True,True
+locked_v1,open_low_high_close,2026-07,1.577732,1.577732,0.0,True,True
+locked_v1,open_low_high_close,2026-08,1.215505,1.215505,0.0,True,True
+locked_v1,open_low_high_close,2026-09,-2.911479,-2.911479,0.0,False,False
+locked_v1,open_low_high_close,2026-10,0.0,0.0,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-01,0.0,0.0,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-02,5.987289,5.987289,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-03,1.651791,1.651791,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-04,0.312497,0.312497,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-05,0.104966,0.104966,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-06,4.923339,4.923339,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-07,3.199484,3.199484,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-08,0.405523,0.405523,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-09,-0.130897,-0.130897,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-10,-1.602894,-1.602894,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-11,1.625956,1.625956,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2025-12,0.211983,1.508538,1.296555,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-01,1.657403,1.657403,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-02,1.306978,1.306978,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-03,-1.421728,-1.421728,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-04,-0.984376,0.038665,1.023041,False,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-05,1.262489,1.262489,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-06,0.986303,1.477488,0.491185,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-07,2.237246,2.237246,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-08,1.215505,1.215505,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-09,-2.911479,-2.911479,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_high_low_close,2026-10,0.0,0.0,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-01,0.0,0.0,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-02,5.987289,5.987289,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-03,1.651791,1.651791,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-04,0.312497,0.312497,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-05,0.104966,0.104966,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-06,3.851001,3.851001,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-07,4.284009,4.284009,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-08,0.405523,0.405523,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-09,-0.130897,-0.130897,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-10,-1.602894,-1.602894,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-11,1.625956,1.625956,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2025-12,1.083438,2.379993,1.296555,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-01,1.657403,1.657403,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-02,1.306978,1.306978,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-03,-1.421728,-1.421728,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-04,-0.984376,0.038665,1.023041,False,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-05,1.262489,1.262489,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-06,0.986303,1.477488,0.491185,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-07,1.577732,1.577732,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-08,1.215505,1.215505,0.0,True,True
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-09,-2.911479,-2.911479,0.0,False,False
+strong_sl0p5__2p0_3p0_5p0_hourly_range_atr >= 2,open_low_high_close,2026-10,0.0,0.0,0.0,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-01,0.0,0.0,0.0,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-02,5.987289,5.987289,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-03,1.651791,1.651791,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-04,0.312497,0.312497,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-05,0.104966,0.104966,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-06,4.923339,4.923339,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-07,3.199484,3.199484,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-08,0.405523,1.752518,1.346995,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-09,-0.130897,1.297816,1.428713,False,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-10,-1.602894,-2.444252,-0.841358,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-11,1.625956,1.625956,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-12,0.211983,0.211983,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-01,1.657403,1.657403,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-02,1.306978,1.306978,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-03,-1.421728,0.75226,2.173988,False,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-04,-0.984376,-1.519069,-0.534693,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-05,1.262489,1.262489,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-06,0.986303,0.986303,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-07,2.237246,2.237246,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-08,1.215505,1.215505,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-09,-2.911479,-2.911479,0.0,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-10,0.0,0.0,0.0,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-01,0.0,0.0,0.0,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-02,5.987289,5.987289,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-03,1.651791,1.651791,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-04,0.312497,0.312497,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-05,0.104966,0.104966,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-06,3.851001,3.851001,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-07,4.284009,4.284009,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-08,0.405523,1.752518,1.346995,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-09,-0.130897,1.297816,1.428713,False,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-10,-1.602894,-2.444252,-0.841358,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-11,1.625956,1.625956,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-12,1.083438,1.083438,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-01,1.657403,1.657403,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-02,1.306978,1.306978,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-03,-1.421728,0.75226,2.173988,False,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-04,-0.984376,-1.519069,-0.534693,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-05,1.262489,1.262489,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-06,0.986303,0.986303,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-07,1.577732,1.577732,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-08,1.215505,1.215505,0.0,True,True
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-09,-2.911479,-2.911479,0.0,False,False
+strict_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-10,0.0,0.0,0.0,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-01,0.0,0.0,0.0,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-02,5.987289,5.987289,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-03,1.651791,1.651791,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-04,0.312497,0.312497,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-05,0.104966,0.104966,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-06,4.923339,4.923339,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-07,3.199484,3.199484,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-08,0.405523,1.752518,1.346995,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-09,-0.130897,1.297816,1.428713,False,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-10,-1.602894,-2.444252,-0.841358,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-11,1.625956,1.625956,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2025-12,0.211983,0.211983,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-01,1.657403,1.657403,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-02,1.306978,1.306978,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-03,-1.421728,0.75226,2.173988,False,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-04,-0.984376,-1.519069,-0.534693,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-05,1.262489,1.262489,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-06,0.986303,0.986303,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-07,2.237246,2.237246,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-08,1.215505,1.215505,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-09,-2.911479,-2.911479,0.0,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_high_low_close,2026-10,0.0,0.0,0.0,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-01,0.0,0.0,0.0,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-02,5.987289,5.987289,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-03,1.651791,1.651791,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-04,0.312497,0.312497,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-05,0.104966,0.104966,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-06,3.851001,3.851001,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-07,4.284009,4.284009,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-08,0.405523,1.752518,1.346995,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-09,-0.130897,1.297816,1.428713,False,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-10,-1.602894,-2.444252,-0.841358,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-11,1.625956,1.625956,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2025-12,1.083438,1.083438,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-01,1.657403,1.657403,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-02,1.306978,1.306978,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-03,-1.421728,0.75226,2.173988,False,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-04,-0.984376,-1.519069,-0.534693,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-05,1.262489,1.262489,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-06,0.986303,0.986303,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-07,1.577732,1.577732,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-08,1.215505,1.215505,0.0,True,True
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-09,-2.911479,-2.911479,0.0,False,False
+status_only_sl2p0__1p25_3p0_adx14 >= 35,open_low_high_close,2026-10,0.0,0.0,0.0,False,False

@@ -1,0 +1,3 @@
+method,setting,gate,gated_trade_count,positive_min,positive_max,losing_max,flat_max,worst_net,best_net,net25_worst,net26_worst,preserve_month_dollars,preserve_profit_status,no_month_worse,preserve_years_and_total,months_promoted_intersection,months_promoted_union,months_worse_union,worthy,strong_worthy
+CAUSAL_ADAPTIVE_EXIT,sl0p5__2p0_3p0_5p0,hourly_range_atr >= 2,5,16,16,4,2,22.848159,23.072287000000003,17.985591999999997,4.203053,True,True,True,True,2026-04,2026-04,,True,True
+CAUSAL_ADAPTIVE_EXIT,sl0p5__2p0_2p5_3p0_5p0,hourly_range_atr >= 2,5,16,16,4,2,22.848159,23.072287000000003,17.985591999999997,4.203053,True,True,True,True,2026-04,2026-04,,True,True

@@ -1,0 +1,37 @@
+{
+  "source_archive": "Delta Exchange India BTCUSD 1m",
+  "completed_months_ist": [
+    "2025-01",
+    "2026-10"
+  ],
+  "loaded_minute_bars": 992160,
+  "hourly_bars": 16536,
+  "source_files": 23,
+  "all_reclaim_signals": 62,
+  "frozen_v1_entries": 55,
+  "direct_exit_configurations": 197,
+  "unique_causal_gates": 149,
+  "path_level_unconditional_replays": 394,
+  "scored_adaptive_and_unconditional_policies": 21169,
+  "pass_exact_per_profit_month_dollars_and_total_and_improve": 59,
+  "pass_never_worse_any_month_and_improve": 2,
+  "pass_status_only_improvements": 157,
+  "original_per_path_nets": {
+    "open_high_low_close": 20.037378,
+    "open_low_high_close": 20.261506
+  },
+  "original_profit_months": 15,
+  "original_loss_months": 5,
+  "original_flat_months": 2,
+  "initial_SL_percent": 2,
+  "profit_lock_pct": [
+    2,
+    3,
+    5
+  ],
+  "quantity_btc": 0.001,
+  "fee_per_side_with_GST": 0.00059,
+  "BTC_points_slippage_per_side": 5.0,
+  "comparability": "Trade entries are exactly frozen V1; conditional exit only based on completed H1 signal features",
+  "warning": "All historical 2025-26 optimization; 2026 is NOT untouched out-of-sample. Tick order, funding, liquidation, amend delay not modeled"
+}
