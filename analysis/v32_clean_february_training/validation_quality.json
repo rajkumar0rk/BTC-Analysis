@@ -1,0 +1,18 @@
+{
+  "frozen_sha256": "066e6b2954f7521d6ff07b09144911a5add22d5cf459f30931251c624e4ba471",
+  "config": {
+    "family": "trend_rsi_pullback",
+    "timeframe": 60,
+    "lookback": 40,
+    "stop_fraction": 1.15,
+    "rr": 3.0
+  },
+  "training_pass": false,
+  "validation_period": "2026-01-01 IST through 2026-11-17 UTC; November partial",
+  "validation_used_for_selection": false,
+  "prior_2026_research_exists": true,
+  "funding_proxy": true,
+  "liquidation_proxy": true,
+  "live_execution": false,
+  "scenario_rows": 280
+}
