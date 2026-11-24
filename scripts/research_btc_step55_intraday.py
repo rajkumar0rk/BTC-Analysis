@@ -130,7 +130,7 @@ def main():
                     gross,elapsed=raw[2],raw[4]
                     lmark,hmark=mark_extrema(risk.mark_low,risk.mark_high,jj,elapsed)
                     assert np.isfinite(lmark).all() and np.isfinite(hmark).all()
-                    sign=sd[:,None];mid=o[jj,None]
+                    sign=sd[:,None].astype(np.float64);mid=o[jj,None]
                     starts2=np.broadcast_to(jj[:,None],elapsed.shape)
                     fund=risk.funding(starts2,elapsed,sign,mid,adverse=True)
                     result=[];adverse=[];favorable=[]
