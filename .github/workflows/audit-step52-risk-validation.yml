@@ -1,0 +1,44 @@
+name: BTCUSD Step52 combined risk validation
+on:
+  push:
+    branches: [research/btc-step52-risk-validation]
+    paths:
+      - scripts/audit_step52_dynamic_risk.py
+      - scripts/step52_dynamic_risk_engine.py
+      - .github/workflows/audit-step52-risk-validation.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  scenario:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {fee: historical, slip: 5}
+          - {fee: historical, slip: 20}
+          - {fee: conservative, slip: 5}
+          - {fee: conservative, slip: 20}
+          - {fee: offer30, slip: 5}
+          - {fee: offer30, slip: 20}
+          - {fee: offer30, slip: 50}
+          - {fee: standard, slip: 5}
+          - {fee: standard, slip: 20}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/audit_step52_dynamic_risk.py scripts/step52_dynamic_risk_engine.py
+      - run: python scripts/audit_step52_dynamic_risk.py
+        env:
+          SLIP_POINTS: ${{ matrix.slip }}
+          FEE_MODE: ${{ matrix.fee }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: risk-${{ matrix.fee }}-${{ matrix.slip }}
+          path: analysis/btc_step52_risk_validation/
