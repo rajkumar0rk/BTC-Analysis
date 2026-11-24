@@ -1,0 +1,25 @@
+name: BTCUSD Step31 - selective fallback recovery
+on:
+  push:
+    branches: [research/btc-fallback-selective-recovery-step31]
+    paths: [scripts/research_btc_fallback_selective_step31.py, .github/workflows/research-btc-fallback-selective-step31.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_fallback_selective_step31.py
+      - run: python scripts/research_btc_fallback_selective_step31.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-step31-selective-recovery
+          path: analysis/btc_fallback_selective_step31/
