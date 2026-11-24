@@ -1,0 +1,104 @@
+{
+  "candidate": 4,
+  "config": {
+    "atr": 3.5,
+    "rr": 4.0,
+    "wait": 2,
+    "flip": false,
+    "filter": "h4ema50_volmin_0.8",
+    "activation": 2.5,
+    "lock": 0.0
+  },
+  "passes_training_gate": false,
+  "selection": "Training only, both years and baseline/stressed costs. Previous gates plus positive returns in all four training half-year segments under both cost scenarios; higher total profitable training months with neither year regressing. At least 70% of control trade coverage per training year; at least half of adjacent settings positive in every training half-year; unchanged control excluded from new candidate selection. If none qualifies, top candidate diagnostic only.",
+  "archive_commit": "edcf60fa0a229108d09772dc6cbe04eb15476291",
+  "training_periods": [
+    "2024-02..12 (first 2 days warmup)",
+    "2025-01..12"
+  ],
+  "prior_2026_exposure": true,
+  "grid": [
+    {
+      "atr": 2.5,
+      "rr": 3.0,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 2.5,
+      "rr": 3.5,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 2.5,
+      "rr": 4.0,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 3.0,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 4.0,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 4.5,
+      "rr": 3.0,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 4.5,
+      "rr": 3.5,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 4.5,
+      "rr": 4.0,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    },
+    {
+      "atr": 3.5,
+      "rr": 3.5,
+      "wait": 2,
+      "flip": false,
+      "filter": "h4ema50_volmin_0.8",
+      "activation": 2.5,
+      "lock": 0.0
+    }
+  ],
+  "training_sha256": "0c11bb3d5e3b3b41fc8f402ce8f304270c0a0d1b4a6b013b10df2b778312b225"
+}
