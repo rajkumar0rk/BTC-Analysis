@@ -1,0 +1,41 @@
+name: BTC ST V1 independently improve monthly wins per strategy
+on:
+  push:
+    branches:
+      - research/st-v1-separate-monthly-win-20261124
+    paths:
+      - scripts/research_st_v1_separate_monthly_win_exits.py
+      - .github/workflows/research-st-v1-separate-monthly-exits.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pandas and numpy
+        run: python -m pip install numpy pandas tabulate
+      - name: Replay independent exit changes against original locked 22 months
+        run: python -u scripts/research_st_v1_separate_monthly_win_exits.py
+      - name: Upload audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-st-v1-separate-monthly-winning-leg-tests
+          path: analysis/st_v1_separate_monthly_win_exits_20261124/
+          if-no-files-found: warn
+      - name: Save successful research to working branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/st_v1_separate_monthly_win_exits_20261124/
+          if ! git diff --cached --quiet; then
+            git commit -m "research: separately audit no-loss-profit-month exit settings"
+            git push origin HEAD:research/st-v1-separate-monthly-win-20261124
+          fi
