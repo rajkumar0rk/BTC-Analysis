@@ -267,11 +267,6 @@ def main():
             # under stress, gaps, funding or real execution.
             cfg[fallback,0]=1;cfg[fallback,4]=.40;cfg[fallback,5]=.20
         limits=np.where(fallback,hold,phold)
-        if exit_setting is not None:
-            if protect=="late_lock":
-                cfg[:,0]=1;cfg[:,4]=2*risk;cfg[:,5]=.5*risk
-            elif protect=="late_trail":
-                cfg[:,0]=2;cfg[:,4]=2*risk;cfg[:,5]=risk
         hh=np.empty(len(starts),np.int64);gg=np.empty(len(starts));why=np.empty(len(starts),np.int64)
         for limit in np.unique(limits):
             k=np.flatnonzero(limits==limit)
@@ -409,6 +404,11 @@ def main():
         cfg[:,1]=risk;cfg[:,2]=risk*3;cfg[:,3]=limits
         if kind in ("round13","delayed_lock"):
             cfg[:,0]=1;cfg[:,4]=1.5*risk;cfg[:,5]=.5*risk
+        if exit_setting is not None:
+            if protect=="late_lock":
+                cfg[:,0]=1;cfg[:,4]=2*risk;cfg[:,5]=.5*risk
+            elif protect=="late_trail":
+                cfg[:,0]=2;cfg[:,4]=2*risk;cfg[:,5]=risk
         hh=np.empty(len(starts),np.int64);gg=np.empty(len(starts));why=np.empty(len(starts),np.int64)
         for limit in np.unique(limits):
             ids=np.flatnonzero(limits==limit)
