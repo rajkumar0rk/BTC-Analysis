@@ -1,0 +1,14 @@
+{
+  "tested": 396288,
+  "unique_signal_masks": 2752,
+  "rejected_core_conflict": 62755,
+  "nonempty_core_retained": 332237,
+  "strict": 15343,
+  "strict_all": 13664,
+  "strict_improved": 809,
+  "strict_all_improved": 701,
+  "best_strict_months": 21,
+  "baseline_net": 26452.29,
+  "baseline_drawdown": 2392.53,
+  "unseen_holdout": false
+}
