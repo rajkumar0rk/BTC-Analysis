@@ -1,0 +1,15 @@
+{
+  "candles": 963030,
+  "first": "2025-01-01 00:00:00+00:00",
+  "last": "2026-10-31 18:29:00+00:00",
+  "entry_days": "Mon-Fri IST",
+  "single_position": true,
+  "raw_trade_ledgers_read": false,
+  "recovery_state": "actual closed portfolio net; no shadow reservation",
+  "cost_model": "uniform taker 0.05% + GST each side, 5 points per fill, extra points per close",
+  "funding": "not modeled: settlement not verified",
+  "liquidation": "not modeled; price points not leveraged returns",
+  "independent_ohlc_paths": true,
+  "unseen_holdout": false,
+  "interpretation": "V14 causal adaptation, not exact hindsight-selected portfolio"
+}
