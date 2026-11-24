@@ -1,0 +1,27 @@
+name: BTCUSD Step45 - fresh monthly floor replay
+on:
+  push:
+    branches: [research/btc-monthly-floor-step45]
+    paths:
+      - scripts/research_btc_monthly_floor_step45.py
+      - .github/workflows/research-btc-monthly-floor-step45.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_monthly_floor_step45.py
+      - run: python scripts/research_btc_monthly_floor_step45.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: btc-step45-fresh-monthly-floor
+          path: analysis/btc_monthly_floor_step45/
