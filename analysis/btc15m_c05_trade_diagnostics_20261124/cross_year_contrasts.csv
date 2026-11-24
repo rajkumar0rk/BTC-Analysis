@@ -1,0 +1,16 @@
+candidate,label,dimension,a,b,min_sample,min_difference_pct,max_difference_pct,consistent_direction,adequate_sample
+0,profitability,direction,LONG,SHORT,23,0.09188186719986557,0.3274524619091731,True,True
+0,profitability,adx_group,strong,weak,17,0.22297920340767552,2.151675243914595,True,True
+0,profitability,dmi_group,aligned,unaligned,16,0.506626086252336,1.1207978577856506,True,True
+0,profitability,vol_group,above_prior_median,below_prior_median,14,0.14407256417745073,0.7547710928724753,True,True
+1,partial_tp,direction,LONG,SHORT,23,0.11798248271834477,0.30784769975731974,True,True
+1,partial_tp,adx_group,strong,weak,17,0.20501817325697835,2.100161082327056,True,True
+1,partial_tp,dmi_group,aligned,unaligned,16,0.5087093600620713,1.180259426785296,True,True
+1,partial_tp,vol_group,above_prior_median,below_prior_median,14,0.0944609625824806,0.7324735473433521,True,True
+2,adx20_sizing,direction,LONG,SHORT,23,-0.1904176801739671,0.4554304051888718,False,True
+2,adx20_sizing,adx_group,strong,weak,17,0.7203015343460651,1.5518440043723698,True,True
+2,adx20_sizing,dmi_group,aligned,unaligned,16,0.057313761982196176,1.0458254937242062,True,True
+2,adx20_sizing,vol_group,above_prior_median,below_prior_median,14,0.07530162659373663,0.2535603885367185,True,True
+3,adx20_strict,direction,LONG,SHORT,16,-0.3818883027375708,1.2718362251092112,False,True
+3,adx20_strict,dmi_group,aligned,unaligned,7,-0.6701022421625595,1.2821570348747426,False,False
+3,adx20_strict,vol_group,above_prior_median,below_prior_median,8,-0.23418183124659264,0.12403661300166968,False,False
