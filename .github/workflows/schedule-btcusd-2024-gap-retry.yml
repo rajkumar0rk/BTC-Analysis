@@ -43,7 +43,7 @@ jobs:
             if python -c 'import json; assert json.load(open("data/delta_india/BTCUSD/2024_verified_archive/manifest.json"))["totals"]["trade_1m"]["missing"]==0' 2>/dev/null; then
               break
             fi
-            python -u scripts/retry_btcusd_2024_gaps.py
+            python -u scripts/retry_btcusd_2024_gaps_fast.py
             git add data/delta_india/BTCUSD/2024_verified_archive analysis/btcusd_2024_gap_retry
             if ! git diff --cached --quiet; then
               git commit -m "Checkpoint scheduled native BTCUSD gap recovery"
