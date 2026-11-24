@@ -20,9 +20,10 @@ def tag_cache(cache,starts):
         cache[(side,guard,cap)]=(np.concatenate((pnl,extra),axis=2),*raw[1:])
     return cache
 
+from research_btc_daily_preentry_risk_step18 import preentry_features as original_preentry_features
+
 def risk_features_prior_close(m,starts,sides):
-    from research_btc_daily_preentry_risk_step18 import preentry_features
-    result=preentry_features(m,starts,sides)
+    result=original_preentry_features(m,starts,sides)
     hi=m.high.to_numpy(float);lo=m.low.to_numpy(float);cl=m.close.to_numpy(float)
     result["range60"]=np.array([(hi[i-60:i].max()-lo[i-60:i].min())/cl[i-1] for i in starts])
     return result
