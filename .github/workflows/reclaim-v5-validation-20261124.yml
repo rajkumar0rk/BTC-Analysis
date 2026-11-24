@@ -12,6 +12,11 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - name: Load updated November archive from main only
+        run: |
+          git fetch --depth=1 origin main
+          git restore --source=FETCH_HEAD -- data/delta_india/BTCUSD/1m/2026-11.csv.gz
+          git hash-object data/delta_india/BTCUSD/1m/2026-11.csv.gz
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -28,12 +33,13 @@ jobs:
           e=eng()
           e.smoke_test()
           m,h,nfiles=e.load()
+          print("ARCHIVE_COVERAGE",m.index.min(),m.index.max(),flush=True)
           h=indicator_features(e.features(h))
           entries=e.entry_candidates(m,h,"reclaim")
           f=signal_table(entries,h)
           ref=pd.read_csv("analysis/st_ema20_reclaim_loss_months_20261122/signal_entry_features.csv")
           eligible=f.volume_ratio.ge(1.25)
-          ff=f.loc[eligible].reset_index(drop=True)
+          ff=f.loc[eligible & f.entry_utc.map(lambda x: pd.Timestamp(x)<pd.Timestamp('2026-11-21T00:00:00Z'))].reset_index(drop=True)
           assert len(ff)==len(ref)==62
           assert ff.entry_utc.tolist()==ref.entry_utc.tolist()
           assert ff.side.tolist()==ref.side.tolist()
@@ -98,7 +104,7 @@ jobs:
           # Compare the independently regenerated baseline entries against both archived paths.
           audit=pd.read_csv("analysis/st_ema20_reclaim_loss_months_20261122/baseline_trade_feature_audit.csv")
           for path in PATHS:
-              for k,i in enumerate(np.flatnonzero(eligible)):
+              for k,i in enumerate(np.flatnonzero(eligible & f.entry_utc.map(lambda x: pd.Timestamp(x)<pd.Timestamp('2026-11-21T00:00:00Z')))):
                   z=replay(entries[i],path,None)
                   old=audit[(audit.path==path)&(audit.signal_entry_id==k)].iloc[0]
                   assert abs(z["net_usd"]-old.net_usd)<1e-6+1e-10
@@ -126,6 +132,8 @@ jobs:
                   t["weekend_entry"]=t.entry_utc.dt.tz_convert("Asia/Kolkata").dt.dayofweek>=5
                   t["profile"]=name;t["path"]=path
                   alltrades.append(t)
+                  if name=="V5":
+                      print("NOVEMBER_TRADES",path, t.loc[t.month=="2026-11",["entry_utc","exit_utc","side","entry_price","exit_price","net_usd","tp","reason","weekend_entry"]].to_json(orient="records",date_format="iso"),flush=True)
                   a=t[t.month.isin(MONTHS)].copy()
                   mon=a.groupby("month").net_usd.sum().reindex(MONTHS,fill_value=0.)
                   eq=100+np.cumsum(a.net_usd.to_numpy())
