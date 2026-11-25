@@ -1,0 +1,51 @@
+{
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "new_configurations": 16,
+  "total_configurations": 18,
+  "baseline_parity": true,
+  "prior_v91_parity": true,
+  "timeframes_minutes": [
+    240
+  ],
+  "entry_channel": "prior completed highs/lows",
+  "entry_profiles": [
+    [
+      20,
+      1.25
+    ],
+    [
+      15,
+      1.5
+    ]
+  ],
+  "breakeven_grid": [
+    0.5,
+    0.75,
+    1.0
+  ],
+  "hold_days_grid": [
+    5,
+    10,
+    15
+  ],
+  "stop_atr": 3.0,
+  "neighbor_check": true,
+  "monthly_first_ranking": true,
+  "initial_stop_and_trailing_unchanged": true,
+  "candle_anchor": "UTC midnight",
+  "strict_monthly_improvement": true,
+  "yearwise_monthly_non_regression": true,
+  "worst_month_non_regression": true,
+  "overlap_asserted": true,
+  "original_costs_retained": true,
+  "monthly_pnl_basis": "realized cash PnL with modeled funding allocation, not end-of-month mark-to-market",
+  "contraction_delay_bars": 12,
+  "risk_pct": 0.03,
+  "exposure_cap": 3.0,
+  "minimum_trades": 300,
+  "aspirational_positive_months": 23,
+  "aspirational_months_ge_1pct": 23,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
