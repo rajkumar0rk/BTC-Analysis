@@ -1,0 +1,29 @@
+{
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "new_configurations": 2,
+  "baseline_parity": true,
+  "v79_parity": true,
+  "targets_r": [
+    1.0,
+    2.0
+  ],
+  "target_with_existing_trailing": true,
+  "target_with_existing_breakeven": true,
+  "contraction_exit_unchanged": true,
+  "timeframes_minutes": [
+    240,
+    60
+  ],
+  "lookback_bars": 20,
+  "entry_rule": "4H EMA20/50 direction and close beyond EMA20; 1H EMA20 close reclaim from opposite side",
+  "completed_bars_only": true,
+  "overlap_asserted": true,
+  "hold_bars": 60,
+  "contraction_delay_bars": 12,
+  "risk_pct": 0.03,
+  "exposure_cap": 3.0,
+  "minimum_trades": 300,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
