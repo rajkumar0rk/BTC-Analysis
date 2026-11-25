@@ -1,7 +1,7 @@
 name: V69 causal entry ablation training only
 on:
   push:
-    branches: [research/v69-entry-ablation-20261124]
+    branches: [research/v69-entry-ablation-20261125]
     paths:
       - scripts/research_v69_entry_ablation.py
       - .github/workflows/research-v69-entry-ablation.yml
@@ -38,7 +38,7 @@ jobs:
           git add analysis/v69_entry_ablation
           if ! git diff --cached --quiet; then
             git commit -m 'Report V69 entry ablation using only 2024 and 2025 training'
-            git push origin HEAD:research/v69-entry-ablation-20261124
+            git push origin HEAD:research/v69-entry-ablation-20261125
           fi
       - uses: actions/upload-artifact@v4
         with:
