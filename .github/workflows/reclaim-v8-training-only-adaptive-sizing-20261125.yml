@@ -848,7 +848,7 @@ jobs:
           pct_ref=inspect(parents[1][:-9]+(.8,0.,1.,1.,0,0.,0,0,.5),ids)
           assert abs(pct_ref["y2024"]["base"]-11.497492869933367)<1e-8
           assert abs(pct_ref["y2025"]["base"]-21.801824592905017)<1e-8
-          joint_ref=inspect(parents[1][:17]+(3,.375)+parents[1][19:-4]+(1.,.9,0,0.),ids)
+          joint_ref=inspect(parents[1][:17]+(3,.375)+parents[1][19:-7]+(1.,.9,0,0.,0,0,.5),ids)
           assert abs(joint_ref["y2024"]["base"]-21.005136073505653)<1e-8
           assert abs(joint_ref["y2025"]["base"]-28.21370896920737)<1e-8
           h4_ref=inspect(parents[1][:17]+(3,.375)+parents[1][19:-5]+(3,12.,0,0,.5),ids)
