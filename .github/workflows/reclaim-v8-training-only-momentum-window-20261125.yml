@@ -370,6 +370,7 @@ jobs:
                       # Floor at fee-aware exit break-even plus one tick; not a funding guarantee.
                       breakeven=100.*(2.*fee/(1.-side*fee)+slip/entry+.5/entry)
                       local_tp=max(local_tp,breakeven)
+                  fp=fl if side==1 else fs
                   notional=entry*.001
                   required=notional*(1+fee)
                   if collateral_multiple>1.:
@@ -379,7 +380,7 @@ jobs:
                   if required>cash:
                       skips+=1;skip_month[month[k]]+=1
                       # Diagnostic standalone replay only; overlapping counterfactuals are not portfolio P&L.
-                      xx,ff,ll,hh,bb,ss=replay(o,h,l,c,k,side,local_mid,ends[i],local_sl,local_tp,path,slip,ladder,protect,atrs[i],activation,distance,fee,lock_activation,lock_r,fail_minutes,fail_progress,fail_adverse,fade_activation,fade_fraction,fl if side==1 else fs,signal_closes[i],structure_minutes,structure_buffer,gradual_start,fail_window)
+                      xx,ff,ll,hh,bb,ss=replay(o,h,l,c,k,side,local_mid,ends[i],local_sl,local_tp,path,slip,ladder,protect,atrs[i],activation,distance,fee,lock_activation,lock_r,fail_minutes,fail_progress,fail_adverse,fade_activation,fade_fraction,fp,signal_closes[i],structure_minutes,structure_buffer,gradual_start,fail_window)
                       pp=fl if side==1 else fs
                       nn=.001*side*(ff-entry)-.001*fee*(entry+ff)-(pp[xx+1]-pp[k])
                       if fmissing[xx+1]-fmissing[k]==0 and bb==0:
@@ -390,7 +391,7 @@ jobs:
                   if attempts>0 and last_exit_win:win_reentries+=1
                   attempts+=1
                   if attempts>1:reentries+=1
-                  x,fill,low,high,bd,initial_stop=replay(o,h,l,c,k,side,local_mid,ends[i],local_sl,local_tp,path,slip,ladder,protect,atrs[i],activation,distance,fee,lock_activation,lock_r,fail_minutes,fail_progress,fail_adverse,fade_activation,fade_fraction,fl if side==1 else fs,signal_closes[i],structure_minutes,structure_buffer,gradual_start,fail_window)
+                  x,fill,low,high,bd,initial_stop=replay(o,h,l,c,k,side,local_mid,ends[i],local_sl,local_tp,path,slip,ladder,protect,atrs[i],activation,distance,fee,lock_activation,lock_r,fail_minutes,fail_progress,fail_adverse,fade_activation,fade_fraction,fp,signal_closes[i],structure_minutes,structure_buffer,gradual_start,fail_window)
                   active=x;boundary+=bd
                   fp=fl if side==1 else fs
                   debit=fp[x+1]-fp[k];funding+=debit;missing+=fmissing[x+1]-fmissing[k]
