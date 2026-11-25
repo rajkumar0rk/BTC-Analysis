@@ -23,7 +23,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mr004-btc-1m-baseline
-          path: analysis/mean_reversion_research/MR004/results/
-          if-no-files-found: warn
+          name: mr004-btc-1m-causal-v2
+          path: analysis/mean_reversion_research/MR004/results_causal_v2/
+          if-no-files-found: error
           retention-days: 90
