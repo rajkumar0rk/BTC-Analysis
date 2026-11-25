@@ -1,0 +1,10 @@
+candidate,comparison_control,fresh_reset,repeat_size,target_rr,delta_worst_return_pp,delta_max_dd_pp,delta_profitable_months,annual_month_nonregression,incremental_pass
+0,14,0,1.0,1.5,-52.9562,1.213000000000001,-2,False,False
+0,9,0,1.0,1.5,-12.5674,-8.855999999999998,0,True,False
+0,10,0,1.0,1.5,-27.927699999999998,-0.19299999999999962,-3,False,False
+1,14,0,1.0,2.0,-42.699600000000004,2.9220000000000006,-3,False,False
+1,9,0,1.0,2.0,-2.3108000000000004,-7.1469999999999985,-1,False,False
+1,10,0,1.0,2.0,-17.6711,1.516,-4,False,False
+2,14,0,1.0,2.5,-25.4068,0.0,-1,False,False
+2,9,0,1.0,2.5,14.982,-10.068999999999999,1,True,True
+2,10,0,1.0,2.5,-0.3782999999999994,-1.4060000000000006,-2,False,False
