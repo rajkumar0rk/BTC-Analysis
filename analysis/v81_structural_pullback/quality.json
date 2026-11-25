@@ -1,0 +1,25 @@
+{
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "new_configurations": 1,
+  "baseline_parity": true,
+  "v79_parity": true,
+  "timeframes_minutes": [
+    240,
+    60,
+    15
+  ],
+  "lookback_bars": 20,
+  "entry_rule": "4H EMA20/50 regime; M15 close pullback across EMA20, then first close beyond prior four M15 highs/lows within four bars of last pullback close",
+  "structural_window_bars": 4,
+  "one_signal_per_armed_pullback": true,
+  "completed_bars_only": true,
+  "overlap_asserted": true,
+  "hold_bars": 60,
+  "contraction_delay_bars": 12,
+  "risk_pct": 0.03,
+  "exposure_cap": 3.0,
+  "minimum_trades": 300,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
