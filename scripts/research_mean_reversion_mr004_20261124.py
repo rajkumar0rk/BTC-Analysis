@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from research_every_candle_200 import read_archive
 
-OUT=Path("analysis/mean_reversion_research/MR004/results")
+OUT=Path("analysis/mean_reversion_research/MR004/results_causal_v2")
 FEE=0.0005*1.18
 MONTHS=pd.period_range("2025-01","2026-10",freq="M").astype(str).tolist()
 
@@ -54,14 +54,21 @@ def main():
             stop_hit=(lo[j]<=stop if side==1 else hi[j]>=stop)
             signal=events.get(ts)
             target=entry*1.05
-            segment_end=(j==len(raw)-1 or (j+1<len(raw) and (times[j+1]-ts).total_seconds()!=60))
+            gap_open=(j>0 and (ts-times[j-1]).total_seconds()!=60)
+            segment_end=(j==len(raw)-1)
             reason=None;px=None
-            if stop_hit:
+            if gap_open:
+                reason="archive_gap_next_open";px=op[j]
+            elif op[j]<=stop:
+                reason="stop_gap_open";px=op[j]
+            elif op[j]>=target:
+                reason="roi_gap_open";px=op[j]
+            elif signal and signal[0]=="exit" and signal[1]==side and op[j]>entry:
+                reason="profit_only_midline";px=op[j]
+            elif stop_hit:
                 reason="stop";px=min(op[j],stop) if side==1 else max(op[j],stop)
             elif hi[j]>=target:
                 reason="roi_5pct";px=max(op[j],target)
-            elif signal and signal[0]=="exit" and signal[1]==side and op[j]>entry:
-                reason="profit_only_midline";px=op[j]
             elif segment_end:
                 reason="archive_gap_or_end";px=cl[j]
             if reason:
@@ -80,9 +87,10 @@ def main():
             if signal and signal[0]=="enter":
                 _,side,_=signal
                 entry=op[j];stop=entry*.95
-                if entry>0 and (j+1<len(raw)) and (times[j+1]-ts).total_seconds()==60:
+                if entry>0 and j<len(raw)-1 and (j==0 or (ts-times[j-1]).total_seconds()==60):
                     # Matched 1% NAV stop risk; 1x notional cap.
-                    qty=min(cash/entry,.01*cash/(entry-stop))
+                    qty=min(cash/(entry*(1+FEE)),.01*cash/(entry-stop+FEE*(entry+stop)))
+                    assert qty*(entry-stop+FEE*(entry+stop)) <= .01*cash+1e-12
                     if qty>0:
                         before=cash;fee=qty*entry*FEE;cash-=fee
                         position=dict(side=side,entry=entry,stop=stop,qty=qty,
@@ -123,7 +131,7 @@ def main():
     pf=float(ledger.loc[ledger.net_pnl>0,"net_pnl"].sum()/(-ledger.loc[ledger.net_pnl<0,"net_pnl"].sum())) if (ledger.net_pnl<0).any() else None
     result=dict(source_commit="eff78d3ce3456b52c68a4e9a33cc055a56b801ff",
         source_signal="Combined BinHV45 capitulation OR Cluc EMA50 lower BB excursion, 5% ROI/stop, profit-only middle-band exit",
-        transfer="Original 5m long-only signals to BTC futures 1m execution; archive-gap liquidation",
+        transfer="Original 5m long-only signals to BTC futures 1m execution; next-observed-open gap liquidation; fee-inclusive stop risk",
         data_quality=quality,trades=len(ledger),net_return_pct=100*(cash-1),
         profit_factor_net=pf,max_minute_close_dd_pct=100*maxdd,
         positive_months=int((m.net_return_pct>0).sum()),
