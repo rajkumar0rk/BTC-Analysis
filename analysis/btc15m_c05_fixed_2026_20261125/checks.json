@@ -1,0 +1,12 @@
+{
+  "one_minute_candles": 437760,
+  "warmup_candles": 44310,
+  "period_start_ist": "2026-01-01 00:00",
+  "period_end_ist_exclusive": "2026-11-01 00:00",
+  "scenario_count": 8,
+  "source_sha256": "f8cf79c0547b2afc22c942fd19c1c8b9576c46edd80af2f0f322f0fd2080b4e2",
+  "no_overlap": true,
+  "no_preperiod_entry": true,
+  "monthly_compounding_reconciled": true,
+  "training_parity": true
+}
