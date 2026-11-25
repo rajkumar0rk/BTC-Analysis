@@ -851,8 +851,8 @@ def main():
     grid_configs=controls+configs
     print("R48_SIGNAL_QUALITY",json.dumps(dict(total=len(extras),volume_qualified=sum(x[6]>=1.25 for x in extras),
         aligned_volume_qualified=sum(x[6]>=1.25 and x[7] for x in extras),
-        er25_volume_qualified=sum(x[6]>=1.25 and x[7] and x[8]>=.25 for x in extras),
-        er40_volume_qualified=sum(x[6]>=1.25 and x[7] and x[8]>=.40 for x in extras))),flush=True)
+        er25_volume_qualified=int(sum(x[6]>=1.25 and x[7] and x[8]>=.25 for x in extras)),
+        er40_volume_qualified=int(sum(x[6]>=1.25 and x[7] and x[8]>=.40 for x in extras)))),flush=True)
     base_rows={}
     for label,bp in (("R36",orig_p),("R43",c01p)):
         rr=summarize(bp,years,months,complete)
