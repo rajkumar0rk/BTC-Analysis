@@ -1,0 +1,32 @@
+{
+  "profile": "V69_no_cap",
+  "config": {
+    "family": "expansion_breakout",
+    "lookback": 20,
+    "stop_fraction": 3.0,
+    "rr": 0.0,
+    "exit_kind": "breakeven_1r",
+    "activation_r": 0.75,
+    "lock_r": 0.0,
+    "early_kind": "contraction",
+    "early_param": 0.75,
+    "timeframe": 240,
+    "hold_minutes": 14400,
+    "early_hours": 48
+  },
+  "entry_rule": "4H prior 20 highs/lows breakout with TR >= 1.25 prior Wilder ATR14",
+  "capital": 100,
+  "risk": 0.03,
+  "exposure_cap": 3.0,
+  "minimum_lot_btc": 0.001,
+  "margin_mode": "cross",
+  "training_net_usd": 49.277536827321114,
+  "training_stress_net_usd": 42.020963450250946,
+  "training_positive_months": 17,
+  "training_months_ge_1pct": 13,
+  "training_trades": 68,
+  "training_pass": false,
+  "user_requested_diagnostic": true,
+  "prior_2026_research_exists": true,
+  "no_parameter_tuning": true
+}

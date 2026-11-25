@@ -1,0 +1,15 @@
+{
+  "frozen_sha256": "2a41f107a03d360f7945de9bb6a50611682540b4b37a7d656a5daf99a259fc8c",
+  "config_unchanged": true,
+  "training_gate_passed": false,
+  "diagnostic_only": true,
+  "validation_previously_examined": true,
+  "no_parameter_tuning": true,
+  "full_months": "2026-01 through 2026-10 IST",
+  "partial_period_end_exclusive": "2026-11-18 00:00:00+00:00",
+  "historical_funding_proxy": true,
+  "liquidation_proxy": true,
+  "live_execution": false,
+  "overlap_asserted": true,
+  "complete_candle_data_asserted": true
+}
