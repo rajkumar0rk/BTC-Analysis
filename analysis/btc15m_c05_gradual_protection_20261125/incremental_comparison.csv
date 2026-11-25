@@ -1,0 +1,4 @@
+candidate,comparison_control,gradual_r,delta_worst_return_pp,delta_max_dd_pp,delta_profitable_months,annual_month_nonregression,incremental_pass
+0,12,1.5,-15.259300000000003,0.2859999999999996,0,True,False
+1,12,2.0,-12.208799999999997,0.7780000000000005,0,True,False
+2,12,2.5,-11.877499999999998,0.0,0,True,False
