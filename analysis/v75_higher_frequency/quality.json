@@ -1,0 +1,19 @@
+{
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "new_configurations": 2,
+  "baseline_parity": true,
+  "timeframes_minutes": [
+    240,
+    120,
+    60
+  ],
+  "lookback_bars": 20,
+  "hold_bars": 60,
+  "contraction_delay_bars": 12,
+  "risk_pct": 0.03,
+  "exposure_cap": 3.0,
+  "minimum_trades": 200,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
