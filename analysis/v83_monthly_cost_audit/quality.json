@@ -1,0 +1,27 @@
+{
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "new_strategy_configurations": 0,
+  "frozen_profiles": 9,
+  "baseline_parity_all_profiles": true,
+  "nominal_leverage": 50,
+  "additional_cost_points": [
+    0,
+    50,
+    100,
+    200
+  ],
+  "combined_stress_retained": true,
+  "fee_gst_funding_and_slippage_retained": true,
+  "risk_and_reserve_unchanged": true,
+  "monthly_targets": [
+    23,
+    23
+  ],
+  "minimum_monthly_return_pct": 1.0,
+  "minimum_trades": 300,
+  "diagnostic_only": true,
+  "actual_cost_calibration_pending": true,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
