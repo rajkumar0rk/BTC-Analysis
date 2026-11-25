@@ -1,0 +1,37 @@
+name: BTC Step52 Round 49 breakout rebound
+on:
+  push:
+    branches: [research/btc-step52-r49-breakout-rebound]
+    paths:
+      - scripts/research_btc_step52_r49_breakout_rebound.py
+      - .github/workflows/research-btc-step52-r49-breakout-rebound.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load verified recovered archive and record snapshot
+        run: |
+          git fetch --depth=1 origin 2322033bef409d8c722571876b34f064fc418a72
+          git rev-parse FETCH_HEAD
+          git checkout FETCH_HEAD -- data/delta_india/BTCUSD/2024_verified_archive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_btc_step52_r49_breakout_rebound.py
+      - run: python scripts/research_btc_step52_r49_breakout_rebound.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: step52-r49-breakout-rebound
+          path: analysis/btc_step52_r49_breakout_rebound/
