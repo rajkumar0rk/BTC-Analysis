@@ -1,0 +1,32 @@
+name: Exact C16 2026 diagnostic replay
+on:
+  push:
+    branches: [research/btc15m-c05-fixed-2026-20261125]
+    paths:
+      - scripts/research_btc15m_c05_fixed_2026.py
+      - .github/workflows/research-btc15m-c05-fixed-2026.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==3.1.1 numpy==2.5.5 tabulate==0.10.0
+      - run: python scripts/research_btc15m_c05_fixed_2026.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c05-fixed-2026-diagnostic
+          path: analysis/btc15m_c05_fixed_2026_20261125/
+          if-no-files-found: error
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analysis/btc15m_c05_fixed_2026_20261125/
+          git commit -m "research: publish fixed C16 2026 diagnostic results"
+          git push origin HEAD:research/btc15m-c05-fixed-2026-20261125
