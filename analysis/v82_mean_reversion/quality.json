@@ -1,0 +1,24 @@
+{
+  "training_period": "2024-02 to 2025-12",
+  "validation_2026_run": false,
+  "new_configurations": 1,
+  "baseline_parity": true,
+  "timeframes_minutes": [
+    240,
+    15
+  ],
+  "lookback_bars": 20,
+  "mean_band_stddev": 2.0,
+  "mean_target_frozen_at_signal": true,
+  "mean_stop_atr": 3.0,
+  "mean_hold_bars": 20,
+  "mean_trailing": false,
+  "mean_contraction": false,
+  "cost_decomposition": true,
+  "overlap_asserted": true,
+  "risk_pct": 0.03,
+  "exposure_cap": 3.0,
+  "minimum_trades": 300,
+  "holdout_previously_examined": true,
+  "selection_bias_possible": true
+}
