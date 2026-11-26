@@ -8,7 +8,7 @@ async function start(){
  const response=await fetch(indexURL+"studio-python.zip",{credentials:"omit"});
  if(!response.ok)throw new Error("Python SDK assets unavailable");
  py.FS.writeFile("/studio-python.zip",new Uint8Array(await response.arrayBuffer()));
- py.runPython("import sys; sys.path.insert(0, '/studio-python.zip')\nfrom btc_analysis.service.browser_replay import replay\nfrom btc_analysis.service.browser_cache import ReplayCache\nfrom btc_analysis.service.walkforward import browser_fold\ncache=ReplayCache()\nimport json");
+ py.runPython("import sys; sys.path.insert(0, '/studio-python.zip')\nfrom btc_analysis.service.browser_replay import replay\nfrom btc_analysis.service.browser_cache import ReplayCache\nfrom btc_analysis.service.walkforward import browser_fold\nfrom btc_analysis.visual import Graph, compile_graph\ncache=ReplayCache()\nimport json");
  return py;
 }
 let busy=false;
@@ -17,6 +17,14 @@ self.onmessage=async({data:m})=>{
  busy=true;
  const t=performance.now();
  try{
+  if(m.action==="compile_visual"){
+   if(typeof m.graph!=="string"||m.graph.length>65536)throw Error("Invalid graph");
+   runtime??=start();const py=await runtime;
+   py.globals.set("graph_json",m.graph);
+   try{const result=py.runPython("json.dumps(compile_graph(Graph.model_validate_json(graph_json)))");self.postMessage({id:m.id,status:"done",result:JSON.parse(result)});}
+   finally{py.globals.delete("graph_json");}
+   return;
+  }
   if(typeof m.csv!=="string"||typeof m.graph!=="string"||m.csv.length>16777216||m.graph.length>65536)throw new Error("Invalid bounded input");
   self.postMessage({id:m.id,status:"initializing"});
   runtime??=start();const py=await runtime;

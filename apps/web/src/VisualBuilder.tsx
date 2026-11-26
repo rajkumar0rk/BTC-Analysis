@@ -6,7 +6,7 @@ const captions={long_entry:"Long entry",short_entry:"Short entry",long_exit:"Lon
 const opLabels={gt:">",gte:"≥",lt:"<",lte:"≤",eq:"=",cross_up:"Crosses above",cross_down:"Crosses below"};
 const frameLabel=(n:number)=>n>=86400?"1 day":n>=3600?n/3600+"h":n/60+"m";
 const message=(e:unknown)=>e instanceof Error?e.message:"Request failed";
-function FrameSelect({value,change,label,disabled}:{value:Frame;change:(v:Frame)=>void;label:string;disabled:boolean}){
+export function FrameSelect({value,change,label,disabled}:{value:Frame;change:(v:Frame)=>void;label:string;disabled:boolean}){
  return <label>{label}<select aria-label={label} value={value} disabled={disabled} onChange={e=>change(Number(e.target.value) as Frame)}>{frames.map(f=><option key={f} value={f}>{frameLabel(f)}</option>)}</select></label>;
 }
 function OperandEdit({value,change,catalog,label,disabled}:{value:Operand;change:(o:Operand)=>void;catalog:Catalog;label:string;disabled:boolean}){
@@ -23,7 +23,7 @@ function OperandEdit({value,change,catalog,label,disabled}:{value:Operand;change
  </>}
  </div>;
 }
-function RuleEdit({rule,title,change,catalog,disabled}:{rule:Rule;title:string;change:(r:Rule)=>void;catalog:Catalog;disabled:boolean}){
+export function RuleEdit({rule,title,change,catalog,disabled}:{rule:Rule;title:string;change:(r:Rule)=>void;catalog:Catalog;disabled:boolean}){
  function group(i:number,g:Group){change({...rule,groups:rule.groups.map((x,j)=>j===i?g:x)});}
  function move(i:number,j:number){if(j<0||j>=rule.groups.length||i===j)return;const g=[...rule.groups];g.splice(j,0,g.splice(i,1)[0]);change({...rule,groups:g});}
  return <fieldset className="visual-rule" disabled={disabled}><legend>{title}</legend><label className="check"><input type="checkbox" checked={rule.enabled} onChange={e=>change({...rule,enabled:e.target.checked,groups:e.target.checked&&!rule.groups.length?[newGroup()]:rule.groups})}/> Enable {title.toLowerCase()}</label>

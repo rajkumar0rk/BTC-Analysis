@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['dashboard/index.html', 'dashboard/app.js', 'dashboard/style.css', 'scripts/dashboard_smoke.cjs', '.github/workflows/backtest-dashboard.yml']
+    paths: ['dashboard/index.html', 'dashboard/app.js', 'dashboard/style.css', 'apps/web/**', 'src/btc_analysis/**', 'scripts/prepare_browser_python.py', 'scripts/dashboard_smoke.cjs', 'scripts/studio_pages_smoke.mjs', 'scripts/browser_parity_fixture.py', 'requirements/platform-linux.lock', 'pyproject.toml', '.github/workflows/backtest-dashboard.yml']
   pull_request:
-    paths: ['dashboard/index.html', 'dashboard/app.js', 'dashboard/style.css', 'scripts/dashboard_smoke.cjs', '.github/workflows/backtest-dashboard.yml']
+    paths: ['dashboard/index.html', 'dashboard/app.js', 'dashboard/style.css', 'apps/web/**', 'src/btc_analysis/**', 'scripts/prepare_browser_python.py', 'scripts/dashboard_smoke.cjs', 'scripts/studio_pages_smoke.mjs', 'scripts/browser_parity_fixture.py', 'requirements/platform-linux.lock', 'pyproject.toml', '.github/workflows/backtest-dashboard.yml']
 permissions:
   contents: read
 concurrency:
@@ -28,18 +28,40 @@ jobs:
           done
           echo "::error::No published dashboard data snapshot; run Publish backtest data"
           exit 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements/platform-linux.lock && python -m pip install --no-deps '.[data,api]' && python -m pip check
+      - working-directory: apps/web
+        run: npm ci --no-audit --no-fund
+      - run: python scripts/prepare_browser_python.py && python scripts/browser_parity_fixture.py
+      - working-directory: apps/web
+        run: npm run build -- --mode pages
       - name: Browser smoke test against actual public GitHub Raw snapshot
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
-          npm install --prefix /tmp/dashboard-smoke playwright@1.51.1
-          /tmp/dashboard-smoke/node_modules/.bin/playwright install chromium --with-deps
-          DASHBOARD_SMOKE_REMOTE=1 NODE_PATH=/tmp/dashboard-smoke/node_modules node scripts/dashboard_smoke.cjs
-      - name: Package UI only
+          apps/web/node_modules/.bin/playwright install chromium --with-deps
+          DASHBOARD_SMOKE_REMOTE=1 NODE_PATH="$GITHUB_WORKSPACE/apps/web/node_modules" node scripts/dashboard_smoke.cjs
+      - name: Package public UI and static Studio
         run: |
           mkdir -p dashboard-site
           cp dashboard/index.html dashboard/app.js dashboard/style.css dashboard-site/
-          test "$(find dashboard-site -type f | wc -l)" -eq 3
+          mkdir -p dashboard-site/studio
+          cp -a apps/web/dist/. dashboard-site/studio/
+          touch dashboard-site/.nojekyll
+          test -f dashboard-site/studio/index.html
+          test -f dashboard-site/studio/browser-python-worker.js
+          test -f dashboard-site/studio/python-runtime/pyodide.asm.wasm
+          # Reject unexpected archive/credential inputs in the release.
+          test -z "$(find dashboard-site -type f \( -name '*.csv' -o -name '*.sqlite' -o -name '.dev.vars*' -o -name '.env*' \) -print)"
           du -sh dashboard-site
+      - name: Nested Pages path browser parity
+        run: |
+          apps/web/node_modules/.bin/playwright install chromium --with-deps
+          node scripts/studio_pages_smoke.mjs
       - uses: actions/upload-pages-artifact@v3
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         with:
