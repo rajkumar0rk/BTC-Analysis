@@ -1,0 +1,46 @@
+name: Platform foundation CI
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/btc_analysis/**'
+      - 'tests/platform/**'
+      - 'pyproject.toml'
+      - 'docs/platform/**'
+      - '.github/workflows/platform-foundation.yml'
+  pull_request:
+    paths:
+      - 'src/btc_analysis/**'
+      - 'tests/platform/**'
+      - 'pyproject.toml'
+      - 'docs/platform/**'
+      - '.github/workflows/platform-foundation.yml'
+permissions:
+  contents: read
+concurrency:
+  group: platform-foundation-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install foundation package
+        run: python -m pip install .
+      - name: Compile new platform code
+        run: python -m compileall -q src/btc_analysis tests/platform
+      - name: Domain contract and security policy tests
+        run: python -m unittest discover -s tests/platform -v
+      - name: Package smoke check
+        run: python -c "import btc_analysis; from btc_analysis import sdk; assert btc_analysis.SCHEMA_VERSION == 1"
+      - name: Verify legacy dashboard syntax
+        run: node --check dashboard/app.js

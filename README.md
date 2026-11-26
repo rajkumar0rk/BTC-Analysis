@@ -1,4 +1,27 @@
-# BTC-Analysis — BTC futures OHLCV research archive
+# BTC-Analysis — research and backtesting platform
+
+The existing research archive and [Backtest Explorer](https://rajkumar0rk.github.io/BTC-Analysis/) remain available. A new Python-first multi-asset platform is being added incrementally, without replacing historical results.
+
+## Platform foundation (M1)
+
+- [Architecture](docs/platform/ARCHITECTURE.md)
+- [Data and result contracts](docs/platform/DATA_AND_RESULTS.md)
+- [Execution security](docs/platform/SECURITY.md)
+- [Milestone roadmap and migration](docs/platform/ROADMAP.md)
+- [Foundation CI](https://github.com/rajkumar0rk/BTC-Analysis/actions/workflows/platform-foundation.yml)
+
+Install and test the foundation with Python 3.11 or 3.12:
+
+```bash
+python -m pip install .
+python -m unittest discover -s tests/platform -v
+```
+
+M1 supplies validated contracts and SDK interfaces, not a functioning new backtest engine or arbitrary-code runner. Existing research scripts and dashboard workflows are unchanged.
+
+---
+
+## Original research archive
 
 Research archive from the October 2026 ChatGPT analysis of a supplied BTC futures 5-minute OHLCV dataset. Includes the original data, 15m/30m aggregates, exploratory statistical outputs, and all available research notes.
 
