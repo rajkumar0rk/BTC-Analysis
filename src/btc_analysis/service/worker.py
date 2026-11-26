@@ -53,9 +53,14 @@ def work_once(store:Store,timeout=90,history_root=None):
                 try:
                     process.stdin.write(json.dumps(payload).encode());process.stdin.close()
                     started=time.monotonic()
+                    progress=0;offset=0;fragment=b""
                     while True:
-                        progress=0
-                        for line in err.read_text(errors="replace").splitlines():
+                        with err.open("rb") as log:
+                            log.seek(offset);chunk=log.read(65536);offset+=len(chunk)
+                        fragment+=chunk
+                        *lines,fragment=fragment.split(b"\n")
+                        if len(fragment)>65536:fragment=b""
+                        for line in lines:
                             try:progress=max(progress,int(json.loads(line)["progress"]))
                             except (ValueError,KeyError,TypeError):pass
                         if not store.heartbeat(jid,token,min(99,progress)):
@@ -71,7 +76,7 @@ def work_once(store:Store,timeout=90,history_root=None):
                             if result.get("kind")!=payload["kind"] or result.get("synthetic") is not (payload["kind"]=="reference_fixture"):
                                 raise ValueError("invalid result kind")
                             store.finish(jid,token,result=result);break
-                        time.sleep(.05)
+                        time.sleep(.20)
                 finally:
                     if process.poll() is None:
                         import signal

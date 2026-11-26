@@ -99,3 +99,5 @@ This repository has been initialized and contains the complete 5-minute source, 
 - [Forward paper trading (M15)](docs/platform/PAPER_TRADING.md)
 
 - [Multi-market reference import (M16)](docs/platform/MARKETS.md)
+
+- [Production readiness and recovery (M17)](docs/platform/PRODUCTION.md)

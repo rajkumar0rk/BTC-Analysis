@@ -9,3 +9,5 @@ Default deny real trading and exchange writes. Future live execution is a separa
 M6 adds authenticated local API, inert stored code, bounded durable jobs and a subprocess for bundled synthetic fixtures only. The subprocess is NOT an untrusted sandbox; custom execution still fails closed. See [backend API](BACKEND_API.md).
 
 M8 authenticated source validation compiles in a bounded subprocess without evaluating bytecode. This is syntax diagnostics only, not an execution sandbox or strategy approval. Custom execution remains disabled.
+
+M17 adds bounded request reception, redacted validation errors, response headers, recovery utility and local service hardening templates. Arbitrary source execution remains fail-closed. See [readiness and deployment](PRODUCTION.md).

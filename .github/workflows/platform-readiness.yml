@@ -1,0 +1,58 @@
+name: Platform readiness audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['src/btc_analysis/**','tests/platform/**','apps/web/package*.json','deploy/platform/**','scripts/platform_readiness.py','.github/workflows/platform-readiness.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install '.[data,api]'
+      - name: Recovery and security tests
+        run: python -m unittest discover -s tests/platform -p test_production.py -v
+      - name: Reference workload and recovery benchmark
+        run: |
+          mkdir -p "$RUNNER_TEMP/readiness"
+          python scripts/platform_readiness.py --output "$RUNNER_TEMP/readiness/benchmark.json"
+      - name: Dependency advisory reports (informational, not a pass gate)
+        shell: bash
+        run: |
+          set +e
+          report="$RUNNER_TEMP/readiness"
+          python -m pip freeze > "$report/python-dependencies.txt"
+          python -m pip install 'pip-audit==2.9.0' > "$report/pip-audit-install.log" 2>&1
+          install_status=$?
+          if [ "$install_status" -eq 0 ]; then
+            python -m pip_audit -f json -o "$report/python-audit.json" > "$report/python-audit.log" 2>&1
+            py_status=$?
+          else
+            py_status=125
+          fi
+          cd apps/web
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund > "$report/npm-resolve.log" 2>&1
+          install_status=$?
+          if [ "$install_status" -eq 0 ]; then
+            cp package-lock.json "$report/package-lock.json"
+            npm audit --json > "$report/npm-audit.json" 2> "$report/npm-audit.log"
+            npm_status=$?
+          else
+            npm_status=125
+          fi
+          printf '{"python_audit_exit":%s,"npm_audit_exit":%s,"production_approved":false}\n' "$py_status" "$npm_status" > "$report/advisory-status.json"
+          cat "$report/advisory-status.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: platform-readiness
+          path: ${{ runner.temp }}/readiness/
+          if-no-files-found: error

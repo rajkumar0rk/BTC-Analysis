@@ -1,5 +1,7 @@
 """Authenticated local API. Bearer secrets supplied by operator, never generated into UI."""
 from __future__ import annotations
+import asyncio
+import time
 import hashlib
 import hmac
 import os
@@ -7,6 +9,7 @@ import json
 from typing import Annotated, Literal
 from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 from .store import Store, Missing, Conflict, Invalid
 from .diagnostics import validate_source, DiagnosticUnavailable
@@ -66,9 +69,20 @@ class BodyLimit:
     async def __call__(self,scope,receive,send):
         if scope["type"]!="http" or scope["method"] not in ("POST","PUT","PATCH"):
             await self.app(scope,receive,send);return
-        chunks=[];size=0
+        chunks=[];size=0;frames=0;deadline=time.monotonic()+10
+        lengths=[v for k,v in scope.get("headers",[]) if k==b"content-length"]
+        if lengths:
+            if len(lengths)!=1 or not lengths[0].isdigit() or len(lengths[0])>12:
+                await JSONResponse({"detail":"invalid content length"},400)(scope,receive,send);return
+            if int(lengths[0])>MAX_BODY:
+                await JSONResponse({"detail":"request too large"},413)(scope,receive,send);return
         while True:
-            msg=await receive()
+            try:msg=await asyncio.wait_for(receive(),max(0,deadline-time.monotonic()))
+            except TimeoutError:
+                await JSONResponse({"detail":"request body timeout"},408)(scope,receive,send);return
+            frames+=1
+            if frames>4096:
+                await JSONResponse({"detail":"request too fragmented"},413)(scope,receive,send);return
             if msg["type"]=="http.disconnect":return
             body=msg.get("body",b"");size+=len(body)
             if size>MAX_BODY:
@@ -108,6 +122,10 @@ def create_app(db_path,tokens,history_root=None,market_root=None):
         if found is None:raise HTTPException(401,"invalid credentials")
         return found
 
+    @app.exception_handler(RequestValidationError)
+    def invalid_request(request:Request,exc:RequestValidationError):
+        return JSONResponse({"detail":"invalid request fields"},422)
+
     @app.exception_handler(Missing)
     def missing(request:Request,exc:Missing):return JSONResponse({"detail":str(exc)},404)
     @app.exception_handler(Conflict)
@@ -120,6 +138,9 @@ def create_app(db_path,tokens,history_root=None,market_root=None):
         response=await call_next(request)
         response.headers["Cache-Control"]="no-store"
         response.headers["X-Content-Type-Options"]="nosniff"
+        response.headers["Referrer-Policy"]="no-referrer"
+        response.headers["X-Frame-Options"]="DENY"
+        response.headers["Cross-Origin-Resource-Policy"]="same-origin"
         return response
 
     @app.get("/health")
