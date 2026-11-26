@@ -1,0 +1,68 @@
+{
+  "symbol": "ETHUSD",
+  "month": "2024-11",
+  "source": "https://api.india.delta.exchange/v2/history/candles",
+  "source_timestamp_label": "as_returned_by_API",
+  "funding_is_settlement": false,
+  "series": [
+    {
+      "series": "trade_1m",
+      "month": "2024-11",
+      "utc_start": "2024-11-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-12-01T00:00:00+00:00",
+      "expected": 43200,
+      "seed_rows": 0,
+      "observed": 43200,
+      "recovered": 43200,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 37,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "trade_1m.csv.gz",
+      "sha256": "53510a1ceaede1e83d4a993fe701d2f1b7443a5eec2c0238decac1cc2c38f6a0"
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-11",
+      "utc_start": "2024-11-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-12-01T00:00:00+00:00",
+      "expected": 43200,
+      "seed_rows": 0,
+      "observed": 43141,
+      "recovered": 43141,
+      "missing": 59,
+      "gaps_exclusive": [
+        [
+          1732867200,
+          1732870740
+        ]
+      ],
+      "requests": 37,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "mark_1m.csv.gz",
+      "sha256": "c256c5fc77e4b598d4435c6f3a5abefdd47af8c86c962ec3b47d2cd5dbc9f20c"
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-11",
+      "utc_start": "2024-11-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-12-01T00:00:00+00:00",
+      "expected": 720,
+      "seed_rows": 0,
+      "observed": 720,
+      "recovered": 720,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 1,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "funding_1h.csv.gz",
+      "sha256": "d1587a94091071bb30c677e330d2f76dbab1652c863bd40147eca77c07dea107"
+    }
+  ]
+}

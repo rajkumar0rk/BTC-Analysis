@@ -1,0 +1,96 @@
+{
+  "symbol": "BTCUSD",
+  "month": "2024-01",
+  "source": "https://api.india.delta.exchange/v2/history/candles",
+  "source_timestamp_label": "as_returned_by_API",
+  "funding_is_settlement": false,
+  "series": [
+    {
+      "series": "trade_1m",
+      "month": "2024-01",
+      "utc_start": "2024-01-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-02-01T00:00:00+00:00",
+      "expected": 44640,
+      "seed_rows": 15202,
+      "observed": 15202,
+      "recovered": 0,
+      "missing": 29438,
+      "gaps_exclusive": [
+        [
+          1704067200,
+          1704882000
+        ],
+        [
+          1704934440,
+          1704953940
+        ],
+        [
+          1705054320,
+          1705394700
+        ],
+        [
+          1705449600,
+          1705480800
+        ],
+        [
+          1705554000,
+          1705642740
+        ],
+        [
+          1705708800,
+          1706008200
+        ],
+        [
+          1706253120,
+          1706292600
+        ],
+        [
+          1706373000,
+          1706505780
+        ]
+      ],
+      "requests": 63,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "trade_1m.csv.gz",
+      "sha256": "65f10d2db028b52bea9784b843e7c620f66718a9491a85fdca3e566688bd3618"
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-01",
+      "utc_start": "2024-01-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-02-01T00:00:00+00:00",
+      "expected": 44640,
+      "seed_rows": 44640,
+      "observed": 44640,
+      "recovered": 0,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 0,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "mark_1m.csv.gz",
+      "sha256": "be2b0af3b24a9beaf8c7fb0a0a717c104bae44ebbd446becd17452de66b884e0"
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-01",
+      "utc_start": "2024-01-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-02-01T00:00:00+00:00",
+      "expected": 744,
+      "seed_rows": 744,
+      "observed": 744,
+      "recovered": 0,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 0,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "funding_1h.csv.gz",
+      "sha256": "9358ff33cfce1100532b2fa43df164e4581dcd15a0893f28999ceada15cc5b3f"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "symbol": "BTCUSD",
+  "month": "2024-12",
+  "source": "https://api.india.delta.exchange/v2/history/candles",
+  "source_timestamp_label": "as_returned_by_API",
+  "funding_is_settlement": false,
+  "series": [
+    {
+      "series": "trade_1m",
+      "month": "2024-12",
+      "utc_start": "2024-12-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-01-01T00:00:00+00:00",
+      "expected": 44640,
+      "seed_rows": 44310,
+      "observed": 44640,
+      "recovered": 330,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 1,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "trade_1m.csv.gz",
+      "sha256": "a2f9feab2c09aae3110b7871c7f9ef10bd41f8a42510543e1013f34504c7e4d5"
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-12",
+      "utc_start": "2024-12-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-01-01T00:00:00+00:00",
+      "expected": 44640,
+      "seed_rows": 44310,
+      "observed": 44640,
+      "recovered": 330,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 1,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "mark_1m.csv.gz",
+      "sha256": "384573c69b8b155fcef8e98116df20bc71279dc54cce8d2b421193c083e7f60d"
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-12",
+      "utc_start": "2024-12-01T00:00:00+00:00",
+      "utc_end_exclusive": "2025-01-01T00:00:00+00:00",
+      "expected": 744,
+      "seed_rows": 738,
+      "observed": 744,
+      "recovered": 6,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 2,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "funding_1h.csv.gz",
+      "sha256": "ceba65a0b6a36a6a0a01a0a5e09d6f732ce6d8dac48e778d2be0544f7634ae77"
+    }
+  ]
+}
