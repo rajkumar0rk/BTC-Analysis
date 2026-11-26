@@ -20,3 +20,8 @@ test-results/
 # Generated versioned browser runtime assets
 apps/web/public/python-runtime/
 apps/web/tests/browser-oracle.json
+
+# Cloudflare local credentials and generated artifacts
+.dev.vars
+.dev.vars.*
+.wrangler/

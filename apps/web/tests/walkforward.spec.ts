@@ -14,6 +14,8 @@ test("local chronological study matches native fold hashes",async({page})=>{
  await page.getByLabel("Study maximum drawdown %").fill("100");
  await page.getByText("Acknowledge research-only chronological testing, independent balances and non-attested holdout.").click();
  await page.getByRole("button",{name:"Run walk-forward study"}).click();
- await expect(page.getByLabel("Walk-forward progress")).toContainText("2/2 completed",{timeout:150000});
+ await expect(page.getByLabel("Walk-forward progress")).toContainText("Study finished",{timeout:150000});
+ console.log("Walk-forward diagnostics:",await page.getByLabel("Walk-forward research").locator(".error").allTextContents());
+ await expect(page.getByLabel("Walk-forward progress")).toContainText("2/2 completed");
  for(const f of o.walkforward)await expect(page.getByText("Fold SHA-256: "+f.fold_sha256,{exact:true})).toBeVisible();
 });

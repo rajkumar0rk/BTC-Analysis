@@ -23,7 +23,7 @@ self.onmessage=async({data:m})=>{
   self.postMessage({id:m.id,status:"running"});
   const args={csv_text:m.csv,graph_text:m.graph,symbol:m.symbol,settings:m.settings,assume_open:m.assume};
   py.globals.set("request_json",JSON.stringify(m.study?{...args,study:m.study,fold:m.fold}:{...args,risk:m.risk??null}));
-  const progress=p=>self.postMessage({id:m.id,status:"progress",progress:p});
+  const progress=p=>{self.postMessage({id:m.id,status:"progress",progress:p});return true;};
   py.globals.set("report_progress",progress);
   const started=performance.now();
   try{
