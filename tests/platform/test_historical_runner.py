@@ -70,6 +70,24 @@ class HistoricalTests(unittest.TestCase):
                 self.assertFalse(result["result"]["timestamp_label_verified"])
                 self.assertEqual(result["result"]["dataset_manifest_sha256"],data["manifest_sha256"])
                 self.assertEqual(result["result"]["result"]["scenarios"][0]["bars"],60)
+                a=client.get("/v1/jobs/"+jid+"/analytics",headers=AUTH)
+                self.assertEqual(a.status_code,200,a.text)
+                self.assertEqual(a.json()["result_sha256"],result["result"]["result_sha256"])
+                self.assertEqual(client.get("/v1/jobs/"+jid+"/analytics",headers={"Authorization":"Bearer "+"y"*40}).status_code,404)
+                if not real:
+                    scenario=result["result"]["result"]["scenarios"][0]
+                    self.assertTrue(scenario["closed_trades"])
+                    trade=scenario["closed_trades"][0]
+                    url="/v1/jobs/"+jid+"/replay"
+                    params={"path":scenario["path"],"trade_id":trade["trade_id"]}
+                    replay=client.get(url,headers=AUTH,params=params)
+                    self.assertEqual(replay.status_code,200,replay.text)
+                    rows=replay.json()
+                    self.assertEqual(rows["dataset_manifest_sha256"],data["manifest_sha256"])
+                    self.assertEqual({x["fill"]["fill_id"] for x in rows["markers"]},
+                                     {x["fill_id"] for x in trade["entry_fills"]+trade["exit_fills"]})
+                    self.assertEqual(client.get(url,headers={"Authorization":"Bearer "+"y"*40},params=params).status_code,404)
+                    self.assertEqual(client.get(url,headers=AUTH,params={**params,"offset":9999}).status_code,422)
                 if real:print("Actual BTCUSD archive job result hash:",result["result"]["result_sha256"])
 
 if __name__=="__main__":unittest.main()

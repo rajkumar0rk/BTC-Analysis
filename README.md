@@ -14,6 +14,7 @@ The existing research archive and [Backtest Explorer](https://rajkumar0rk.github
 - [Advanced Python editor (M8)](docs/platform/PYTHON_EDITOR.md)
 - [Visual Python strategy builder (M9)](docs/platform/VISUAL_BUILDER.md)
 - [Historical backtest runner (M10)](docs/platform/HISTORICAL_RUNNER.md)
+- [Performance analytics and trade replay (M11)](docs/platform/ANALYTICS.md)
 - [Data and result contracts](docs/platform/DATA_AND_RESULTS.md)
 - [Execution security](docs/platform/SECURITY.md)
 - [Milestone roadmap and migration](docs/platform/ROADMAP.md)

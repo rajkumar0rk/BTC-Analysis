@@ -1,0 +1,5 @@
+# M11 analytics and trade replay
+
+Decimal server metrics over stored results: net closed-trade P&L, win rate (all closed trades), PF (net wins divided by absolute net losses; null with status when no loss), expectancy, marked account P&L and drawdown, monthly marked equity including partial months. No annualized or full-month claims. Studio scenario selector, month tiles, searchable paged ledger, CSV export and recorded fill details.
+
+Owner-scoped replay resolves original fill evidence intervals to the exact pinned historical 1m snapshot, five surrounding candles bounded by the test range, up to 240 bars per window. Step/play/paginate; modeled fill markers and reasons, no exact tick claim. No synthetic fallback, missing data fail closed. Open-label assumption retained. Existing results unchanged. API tests for metrics, access control and pinned replay on controlled partitions; browser test for analytics on synthetic results. Actual historical browser replay and independent review remain gates. No production deployment or change to 24h/1x historical limits.

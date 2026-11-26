@@ -13,6 +13,7 @@ from .diagnostics import validate_source, DiagnosticUnavailable
 from ..indicators import CATALOG
 from ..visual import Graph, compile_graph, recover_graph
 from .historical import HistoricalRequest, snapshots, prepare, MAX_MINUTES
+from .analytics import analytics, trade_replay
 
 MAX_BODY=100_000
 Name=Annotated[str,StringConstraints(strip_whitespace=True,min_length=1,max_length=100)]
@@ -174,6 +175,18 @@ def create_app(db_path,tokens,history_root=None):
 
     @app.get("/v1/jobs/{jid}")
     def job(jid:str,user:str=Depends(owner)):return store.job(user,jid)
+
+    @app.get("/v1/jobs/{jid}/analytics")
+    def job_analytics(jid:str,user:str=Depends(owner)):
+        j=store.job(user,jid)
+        try:return analytics(j)
+        except ValueError as exc:raise HTTPException(422,str(exc)) from exc
+
+    @app.get("/v1/jobs/{jid}/replay")
+    def replay(jid:str,path:str,trade_id:str,offset:int=0,user:str=Depends(owner)):
+        j=store.job(user,jid)
+        try:return trade_replay(j,path,trade_id,history_root,offset)
+        except (ValueError,OSError,KeyError) as exc:raise HTTPException(422,"Replay unavailable: "+str(exc)[:200]) from exc
 
     @app.post("/v1/jobs/{jid}/cancel")
     def cancel(jid:str,user:str=Depends(owner)):return store.cancel(user,jid)

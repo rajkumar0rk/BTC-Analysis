@@ -21,6 +21,13 @@ test("real authenticated API, version history, fixture worker and mobile layout"
  await page.getByLabel("View version").selectOption("1");await expect(page.getByLabel("Python source")).toHaveValue("raise RuntimeError('inert')");await expect(page.getByRole("button",{name:"Save new version"})).toBeDisabled();
  await page.getByRole("button",{name:"Backtest runner"}).click();await page.getByLabel("Number of 1-minute fixture bars").fill("61");await expect(page.getByRole("button",{name:"Run synthetic fixture"})).toBeDisabled();
  await page.getByLabel("Number of 1-minute fixture bars").fill("60");await page.getByRole("button",{name:"Run synthetic fixture"}).click();await expect(page.getByRole("heading",{name:"Synthetic fixture result"})).toBeVisible({timeout:30000});await expect(page.locator("svg.chart")).toHaveCount(2);
+ await expect(page.getByRole("heading",{name:"Performance analytics"})).toBeVisible();
+ await expect(page.getByText("Profit factor",{exact:true})).toBeVisible();
+ await expect(page.getByRole("heading",{name:"Closed trade ledger"})).toBeVisible();
+ await page.getByLabel("Analysis scenario").selectOption("O-L-H-C");
+ await page.getByLabel("Outcome").selectOption("loss");
+ await page.getByLabel("Search trade reasons").fill("nonexistent reason");
+ await expect(page.getByText("0 matching trades")).toBeVisible();
  await page.getByRole("button",{name:"Settings",exact:true}).click();await expect(page.getByText("Custom Python execution",{exact:true})).toBeVisible();
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy();
  expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
