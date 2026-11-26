@@ -71,6 +71,6 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
         wire=to_wire(s)
         scenarios.append({"path":s.path,"bars":s.bars,"metrics":summarize(wire),"monthly":wire["monthly"],
                           "final_equity":wire["final_equity"],"fees":wire["fees"],"taxes":wire["taxes"]})
-    return {"source":"user CSV (unverified provenance)","research_only":True,"data_sha256":h,"graph_sha256":compiled["graph_sha256"],
+    return {"engine_version":result.engine_version,"source":"user CSV (unverified provenance)","research_only":True,"data_sha256":h,"graph_sha256":compiled["graph_sha256"],
             "result_sha256":result.result_sha256,"worst_path":result.worst_path,"scenarios":scenarios,
             "limitations":list(result.limitations)+["No warmup outside CSV; entry candle protection starts on next minute."]}

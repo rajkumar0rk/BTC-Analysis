@@ -1,8 +1,8 @@
 import {useEffect,useRef,useState} from "react";
 import {ParallelReplay,MAX_VARIANTS,recommendedConcurrency} from "./parallelReplay";
-import type {BatchInput,BatchSnapshot,Variant} from "./parallelReplay";
+import type {BatchInput,BatchSnapshot,Variant,BatchRow} from "./parallelReplay";
 const number=(v:string|number|null|undefined)=>v==null?"—":Number(v).toFixed(4);
-export function ParallelRunner({input,graph,disabled,onBusy}:{input:BatchInput;graph:string;disabled:boolean;onBusy:(v:boolean)=>void}){
+export function ParallelRunner({input,graph,disabled,onBusy,onComplete}:{input:BatchInput;graph:string;disabled:boolean;onBusy:(v:boolean)=>void;onComplete:(input:BatchInput,rows:BatchRow[])=>void}){
  const [variants,setVariants]=useState<Variant[]>([]),[limit,setLimit]=useState(recommendedConcurrency);
  const [snapshot,setSnapshot]=useState<BatchSnapshot|null>(null),[error,setError]=useState("");
  const [active,setActive]=useState(false);
@@ -18,9 +18,10 @@ export function ParallelRunner({input,graph,disabled,onBusy}:{input:BatchInput;g
   setError("");setSnapshot(null);
   try{
    pool.current?.dispose();
-   const p=new ParallelReplay(input,variants,Math.min(limit,cap),s=>{
+   const captured={...input,settings:{...input.settings}};let recorded=false;
+   const p=new ParallelReplay(captured,variants,Math.min(limit,cap),s=>{
     setSnapshot(s);
-    if(s.finished){setActive(false);onBusy(false);}
+    if(s.finished){if(!recorded){recorded=true;onComplete(captured,s.rows);}setActive(false);onBusy(false);}
    });
    pool.current=p;setActive(true);onBusy(true);p.start();
   }catch(e){pool.current?.dispose();setActive(false);onBusy(false);setError(String(e));}
