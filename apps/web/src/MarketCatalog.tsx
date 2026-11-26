@@ -1,0 +1,7 @@
+import {useEffect,useState} from "react";
+import type {Api,MarketBundle} from "./api";
+export function MarketCatalog({api}:{api:Api}){
+ const [rows,setRows]=useState<MarketBundle[]>([]),[error,setError]=useState(""),[loaded,setLoaded]=useState(false);
+ useEffect(()=>{let live=true;api.markets().then(x=>{if(live){setRows(x);setLoaded(true);}}).catch(e=>{if(live)setError(String(e));});return()=>{live=false;};},[api]);
+ return <section className="panel"><h2>Market data catalog</h2><p className="notice">Imported venue data only. Contract and calendar evidence is operator supplied. Eligible linear futures/perpetuals can run through the local reference CLI, not Studio jobs. No live trading.</p>{error&&<p role="alert">{error}</p>}{loaded&&!rows.length&&<p>No external market bundles configured. The existing BTCUSD/ETHUSD archive remains available in the historical runner.</p>}<div className="table-wrap"><table><thead><tr><th>Venue / instrument</th><th>Market / asset</th><th>Currency</th><th>Rows</th><th>Expiry UTC</th><th>Reference status</th><th>Provenance</th></tr></thead><tbody>{rows.map(r=><tr key={r.bundle_sha256}><td>{r.venue} / {r.symbol}</td><td>{r.market} / {r.asset_class}</td><td>{r.currency}</td><td>{r.rows}</td><td>{r.expiry===null?"—":new Date(r.expiry*1000).toISOString()}</td><td>{r.reference_eligible?"Local CLI only":"Not executable"}</td><td><details><summary>Bundle evidence</summary><p>{r.source}</p><p>{r.attestation}</p><p className="hash">{r.bundle_sha256}</p></details></td></tr>)}</tbody></table></div></section>;
+}

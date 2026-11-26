@@ -17,6 +17,7 @@ from .analytics import analytics, trade_replay
 from .optimization import OptimizationRequest, prepare_optimization
 from .validation import ValidationRequest, prepare_validation
 from .paper import PaperStore, PaperRequest
+from ..markets import catalog as market_catalog
 
 MAX_BODY=100_000
 Name=Annotated[str,StringConstraints(strip_whitespace=True,min_length=1,max_length=100)]
@@ -83,7 +84,7 @@ class BodyLimit:
         await self.app(scope,replay,send)
 
 
-def create_app(db_path,tokens,history_root=None):
+def create_app(db_path,tokens,history_root=None,market_root=None):
     if not isinstance(tokens,dict) or not tokens:raise ValueError("explicit API identities required")
     digests={}
     for owner,token in tokens.items():
@@ -199,6 +200,9 @@ def create_app(db_path,tokens,history_root=None):
     @app.post("/v1/paper/{sid}/stop")
     def stop_paper(sid:str,user:str=Depends(owner)):return paper.stop(user,sid)
 
+    @app.get("/v1/markets")
+    def markets(user:str=Depends(owner)):return market_catalog(market_root)
+
     @app.get("/v1/datasets")
     def datasets(user:str=Depends(owner)):
         return snapshots(history_root)
@@ -257,4 +261,4 @@ def create_app(db_path,tokens,history_root=None):
 
 def app_from_env():
     # Fail closed if operator configuration absent; no default credentials.
-    return create_app(os.environ["BTC_PLATFORM_DB"],json.loads(os.environ["BTC_PLATFORM_TOKENS_JSON"]),os.environ.get("BTC_PLATFORM_HISTORY"))
+    return create_app(os.environ["BTC_PLATFORM_DB"],json.loads(os.environ["BTC_PLATFORM_TOKENS_JSON"]),os.environ.get("BTC_PLATFORM_HISTORY"),os.environ.get("BTC_PLATFORM_MARKETS"))

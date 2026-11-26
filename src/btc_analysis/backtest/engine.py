@@ -158,9 +158,13 @@ class Context:
     def cancel(self, intent_id): self._sim.cancel(intent_id)
 
 
-def _validate(cfg, profile=None):
-    if cfg.instrument.asset_class is not AssetClass.CRYPTO_PERPETUAL:
-        raise ValueError("M3 supports only explicitly linear perpetual contracts")
+def _validate(cfg, profile=None, session_reference=False):
+    dated=cfg.instrument.asset_class is AssetClass.FUTURE
+    if dated:
+        if session_reference is not True or profile is not None or cfg.end_utc>=cfg.instrument.expiry_utc:
+            raise ValueError("dated futures require a trusted single-session reference, strictly before expiry")
+    elif cfg.instrument.asset_class is not AssetClass.CRYPTO_PERPETUAL or session_reference:
+        raise ValueError("unsupported instrument/session reference")
     if not (cfg.account_currency == cfg.instrument.quote_currency == cfg.instrument.settlement_currency):
         raise ValueError("M3 requires same quote, settlement and account currency")
     if profile is None:
@@ -175,7 +179,7 @@ def _validate(cfg, profile=None):
         raise ValueError("slippage must be below 10000 bps")
     if cfg.intrabar_policy not in (IntrabarPolicy.STOP_FIRST, IntrabarPolicy.BOTH_PATHS):
         raise ValueError("tick sequence not supported by candle simulator")
-    if cfg.calendar_id != "crypto-24x7" or cfg.allow_data_gaps:
+    if (not dated and cfg.calendar_id != "crypto-24x7") or (dated and not cfg.calendar_id.startswith("reviewed-session:")) or cfg.allow_data_gaps:
         raise ValueError("M3 requires gap-free continuous UTC data")
     expected_kinds={DataKind.OHLCV}
     if profile is not None:expected_kinds.add(DataKind.MARK)
@@ -202,7 +206,8 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
                  warmup_factory: Callable[[], Iterable[Candle]] | None = None,
                  margin_profile: MarginProfile | None = None,
                  risk_factory: Callable[[], Iterable[RiskBar]] | None = None,
-                 risk_manifest_sha256s: tuple[str, ...] = ()) -> BacktestResult:
+                 risk_manifest_sha256s: tuple[str, ...] = (),
+                 session_reference: bool = False) -> BacktestResult:
     """Run fresh strategies for each scenario. No mutation of input config or source.
 
     The caller is a trusted adapter responsible for the declared source manifest and
@@ -211,7 +216,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
     oracle selection. STOP_FIRST chooses an adverse-first path at each bar based
     on starting position or first pending entry direction (a heuristic).
     """
-    _validate(config,margin_profile)
+    _validate(config,margin_profile,session_reference)
     execution=next(d for d in config.datasets if d.kind is DataKind.OHLCV)
     if (margin_profile is None)!=(risk_factory is None):
         raise ValueError("margin profile and risk stream required together")
@@ -265,6 +270,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         "Adverse-first is a heuristic; two fixed paths are scenarios, not worst-case bounds.",
         "Fees use configured bps; no venue-specific rebates, offers or fee rounding.",
         "No forced terminal liquidation; open positions marked at final close.",
+        ("Dated contract reference: single reviewed continuous session before expiry; no rollover, delivery or settlement." if session_reference else "Continuous perpetual reference."),
         "Drawdown sampled at modeled price events; not actual tick drawdown.",
         "Strategy callbacks are close-time; on_fill observes final bar state, not intrabar state.",
         "Caller attests pinned source and code; observed candle hash recorded independently.",

@@ -7,6 +7,7 @@ export type RegistryMeta={archived:boolean;frozen_version:number|null;frozen_at:
 export type Registry=RegistryMeta&{id:string;versions:{version:number;code_sha256:string;created:number}[];events:{sequence:number;action:string;version:number;code_sha256:string;created:number}[]};
 export type Strategy=RegistryMeta&{id:string;name:string;latest_version:number;created:number};
 export type Revision=RegistryMeta&{id:string;name:string;version:number;source:string;code_sha256:string};
+export type MarketBundle={bundle_sha256:string;venue:string;symbol:string;underlying:string;market:string;asset_class:string;currency:string;start:number;end:number;rows:number;expiry:number|null;reference_eligible:boolean;source:string;attestation:string;studio_execution:false};
 export type Dataset={symbol:"BTCUSD"|"ETHUSD";manifest_sha256:string;start:number;end:number;timestamp_label_verified:boolean};
 export type Historical={kind:"historical_visual";strategy_id:string;version:number;symbol:Dataset["symbol"];manifest_sha256:string;start:number;end:number;warmup_minutes:number;initial_equity:string;maker_bps:string;taker_bps:string;tax_rate:string;slippage_bps:string;tick_size:string;lot_size:string;multiplier:string;assume_open:boolean;acknowledge_reference:true};
 export type Search={method:"grid"|"random";axes:{key:string;values:string[]}[];samples:number;seed:number;objective:"net_return"|"profit_factor"|"win_rate";max_drawdown_pct:string;min_trades:number};
@@ -51,6 +52,7 @@ export function client(token:string){
   paper:()=>call<PaperSession[]>("/v1/paper"),
   startPaper:(body:PaperRequest,key:string)=>call<PaperSession>("/v1/paper",{method:"POST",headers:{"Idempotency-Key":key},body:JSON.stringify(body)}),
   stopPaper:(id:string)=>call<PaperSession>("/v1/paper/"+encodeURIComponent(id)+"/stop",{method:"POST"}),
+  markets:()=>call<MarketBundle[]>("/v1/markets"),
   datasets:()=>call<Dataset[]>("/v1/datasets"),
   validateStudy:(body:ValidationRequest,key:string)=>call<Job>("/v1/jobs/validation",{method:"POST",headers:{"Idempotency-Key":key},body:JSON.stringify(body)}),
   optimize:(body:Optimization,key:string)=>call<Job>("/v1/jobs/optimization",{method:"POST",headers:{"Idempotency-Key":key},body:JSON.stringify(body)}),

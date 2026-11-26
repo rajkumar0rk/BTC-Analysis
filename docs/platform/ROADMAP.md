@@ -16,7 +16,7 @@ M12 Registry: [immutable strategy lifecycle](REGISTRY.md), freeze/clone/archive/
 M13 Optimization: [bounded sequential grid/random search](OPTIMIZATION.md), train-only conservative path ranking, drawdown/trade constraints, fingerprints. Parallel/multi-year optimization remains pending.
 M14 Validation: [fixed-winner holdout and stress checks](VALIDATION.md), chronological windows, parameter neighbor, fees/slippage, prefix fill check and acceptance report. Full rolling walk-forward, liquidation and independent untouched attestation pending.
 M15 Forward paper: [bounded public candle sessions](PAPER_TRADING.md), future start, frozen graph, durable capture, prefix fill checks, virtual accounts and stale/drawdown halt. Live network and deployment remain pending.
-M16 Multi-market: venue calendars, dated contracts/rollovers, options only with verified specifications.
+M16 Multi-market: [operator-imported market bundles](MARKETS.md), native-currency linear pre-expiry single-session futures CLI, explicit calendar/spec evidence, rollover planning and read-only catalog. Real venue feeds, options/spot execution and rollover settlement remain pending.
 M17 Production: independent security, load, failure recovery, backup and deployment gates.
 
 ## Migration
