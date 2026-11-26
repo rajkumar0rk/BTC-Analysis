@@ -7,3 +7,5 @@ Required before enabling custom code: authenticated ownership/authorization; imm
 Default deny real trading and exchange writes. Future live execution is a separate permission and service. Paper trading must not share live credentials. M1 tests check policy rejects weakened configuration and custom execution is unavailable. Actual sandbox escape tests, authentication, access-control review and load testing are mandatory later, not claimed completed.
 
 M6 adds authenticated local API, inert stored code, bounded durable jobs and a subprocess for bundled synthetic fixtures only. The subprocess is NOT an untrusted sandbox; custom execution still fails closed. See [backend API](BACKEND_API.md).
+
+M8 authenticated source validation compiles in a bounded subprocess without evaluating bytecode. This is syntax diagnostics only, not an execution sandbox or strategy approval. Custom execution remains disabled.

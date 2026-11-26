@@ -1,3 +1,6 @@
+export type Diagnostic={severity:"error";message:string;line:number;column:number;end_line:number;end_column:number};
+export type Validation={source_sha256:string;syntax_valid:boolean;diagnostics:Diagnostic[];execution_allowed:false;python_version:string};
+export type Catalog={sdk_version:string;execution_allowed:false;indicators:{name:string;defaults:Record<string,string|number>;outputs:string[]}[]};
 export type Capabilities={custom_python_execution:boolean;historical_runs:boolean;strategy_storage:boolean;worker_concurrency:number;fixture_max_bars:number;job_kinds:string[]};
 export type Strategy={id:string;name:string;latest_version:number;created:number};
 export type Revision={id:string;name:string;version:number;source:string;code_sha256:string};
@@ -15,6 +18,8 @@ export function client(token:string){
  }
  return {
   capabilities:()=>call<Capabilities>("/v1/capabilities"),
+  validate:(source:string)=>call<Validation>("/v1/strategies/validate",{method:"POST",body:JSON.stringify({source})}),
+  catalog:()=>call<Catalog>("/v1/sdk/catalog"),
   strategies:()=>call<Strategy[]>("/v1/strategies"),
   create:(name:string,source:string)=>call<Revision>("/v1/strategies",{method:"POST",body:JSON.stringify({name,source})}),
   revision:(id:string,v:number)=>call<Revision>("/v1/strategies/"+encodeURIComponent(id)+"/versions/"+v),

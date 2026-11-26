@@ -11,6 +11,7 @@ The existing research archive and [Backtest Explorer](https://rajkumar0rk.github
 - [Reference margin and funding engine (M5)](docs/platform/MARGIN_ENGINE.md)
 - [Authenticated backend and job queue (M6)](docs/platform/BACKEND_API.md)
 - [React Strategy Studio (M7)](docs/platform/FRONTEND.md)
+- [Advanced Python editor (M8)](docs/platform/PYTHON_EDITOR.md)
 - [Data and result contracts](docs/platform/DATA_AND_RESULTS.md)
 - [Execution security](docs/platform/SECURITY.md)
 - [Milestone roadmap and migration](docs/platform/ROADMAP.md)

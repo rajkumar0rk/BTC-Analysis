@@ -8,9 +8,16 @@ test("real authenticated API, version history, fixture worker and mobile layout"
  await page.getByLabel("API access token").fill(token);await page.getByRole("button",{name:"Connect",exact:true}).click();
  await expect(page.getByRole("heading",{name:"Overview"})).toBeVisible();
  await page.getByRole("button",{name:"Strategy library"}).click();
+ await expect(page.locator(".monaco-editor")).toBeVisible({timeout:15000});
+ await page.getByRole("button",{name:"Use plain text editor"}).click();
+ await page.getByLabel("Python source",{exact:true}).fill("def broken(:");
+ await page.getByRole("button",{name:"Validate syntax"}).click();
+ await expect(page.getByText("Syntax errors",{exact:true})).toBeVisible();
+ await expect(page.getByText(/Line 1, column/)).toBeVisible();
  await page.getByLabel("Name",{exact:true}).fill("Browser fixture");await page.getByLabel("Python source").fill("raise RuntimeError('inert')");
  await page.getByRole("button",{name:"Save strategy",exact:true}).click();await expect(page.getByText("Saved immutable version 1.")).toBeVisible();
- await page.getByLabel("Python source").fill("pass");await page.getByRole("button",{name:"Save new version"}).click();await expect(page.getByText("Saved immutable version 2.")).toBeVisible();
+ await page.getByLabel("Python source").fill("pass");
+ await page.getByRole("button",{name:"Validate syntax"}).click();await expect(page.getByText("Syntax valid",{exact:true})).toBeVisible();await page.getByRole("button",{name:"Save new version"}).click();await expect(page.getByText("Saved immutable version 2.")).toBeVisible();
  await page.getByLabel("View version").selectOption("1");await expect(page.getByLabel("Python source")).toHaveValue("raise RuntimeError('inert')");await expect(page.getByRole("button",{name:"Save new version"})).toBeDisabled();
  await page.getByRole("button",{name:"Backtest runner"}).click();await page.getByLabel("Number of 1-minute fixture bars").fill("61");await expect(page.getByRole("button",{name:"Run synthetic fixture"})).toBeDisabled();
  await page.getByLabel("Number of 1-minute fixture bars").fill("60");await page.getByRole("button",{name:"Run synthetic fixture"}).click();await expect(page.getByRole("heading",{name:"Synthetic fixture result"})).toBeVisible({timeout:30000});await expect(page.locator("svg.chart")).toHaveCount(2);

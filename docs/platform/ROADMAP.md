@@ -8,7 +8,7 @@ M4 Python SDK + indicators: [streaming library and SDK](PYTHON_SDK.md), 13 indic
 M5 Venue execution: [reference fixed-tier risk engine](MARGIN_ENGINE.md), explicit isolated/cross collateral, mark-first liquidation scenarios, signed settlement input and fee/tax reconciliation. Historical profiles, actual settlement attestation, spread, tiered/portfolio margin and exchange parity remain outstanding.
 M6 API/jobs: [local authenticated API and durable queue](BACKEND_API.md), immutable source revisions, idempotent submission, trusted synthetic subprocess worker, cancellation, leases, progress and ownership. Arbitrary-code isolation, historical jobs and deployment remain gated.
 M7 Frontend shell: [React/TypeScript studio](FRONTEND.md), real local API, source revisions, synthetic runner, responsive job/results views and browser CI. Production deployment remains gated.
-M8 Python editor: Monaco, diagnostics, safe submission and versioning.
+M8 Python editor: [Monaco and compiler diagnostics](PYTHON_EDITOR.md), SDK catalog/snippets, syntax-gated UI saves and immutable versions. Semantic checks and secure arbitrary execution remain later gates.
 M9 Visual Python builder: typed graph, validation/compiler, code preview, deterministic graph/code parity, custom code mode.
 M10 Runner: run configuration, live progress, cancellation, status/history.
 M11 Analytics and replay: standard results, actual fills/reasons, account vs points, monthly MTM.

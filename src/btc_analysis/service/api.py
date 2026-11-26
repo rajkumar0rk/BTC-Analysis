@@ -9,6 +9,8 @@ from fastapi import FastAPI, Depends, HTTPException, Header, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 from .store import Store, Missing, Conflict, Invalid
+from .diagnostics import validate_source, DiagnosticUnavailable
+from ..indicators import CATALOG
 
 MAX_BODY=100_000
 Name=Annotated[str,StringConstraints(strip_whitespace=True,min_length=1,max_length=100)]
@@ -28,6 +30,10 @@ class StrategyCreate(StrictModel):
 class RevisionCreate(StrictModel):
     source:Source
     expected_version:Annotated[int,Field(ge=1,le=100)]
+
+
+class SyntaxRequest(StrictModel):
+    source:Source
 
 
 class FixtureRequest(StrictModel):
@@ -104,6 +110,19 @@ def create_app(db_path,tokens):
     def capabilities(user:str=Depends(owner)):
         return {"custom_python_execution":False,"historical_runs":False,"job_kinds":["reference_fixture"],
                 "strategy_storage":True,"worker_concurrency":1,"fixture_max_bars":600}
+
+    @app.post("/v1/strategies/validate")
+    def validate(body:SyntaxRequest,user:str=Depends(owner)):
+        try:return validate_source(body.source)
+        except ValueError as exc:raise HTTPException(422,str(exc)) from exc
+        except DiagnosticUnavailable as exc:raise HTTPException(503,str(exc)) from exc
+
+    @app.get("/v1/sdk/catalog")
+    def catalog(user:str=Depends(owner)):
+        return {"sdk_version":"1","indicators":[
+            {"name":name,"defaults":{k:(str(v) if not isinstance(v,int) else v) for k,v in defaults.items()},
+             "outputs":list(fields)} for name,(defaults,fields) in sorted(CATALOG.items())],
+             "execution_allowed":False}
 
     @app.post("/v1/strategies",status_code=201)
     def create(body:StrategyCreate,user:str=Depends(owner)):

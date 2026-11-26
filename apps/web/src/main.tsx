@@ -2,7 +2,8 @@ import {useState,useEffect,useMemo,useRef} from "react";
 import type {FormEvent} from "react";
 import {createRoot} from "react-dom/client";
 import {client,ApiError} from "./api";
-import type {Api,Capabilities,Job,Strategy,Revision,Fixture,Scenario} from "./api";
+import type {Api,Capabilities,Job,Strategy,Revision,Fixture,Scenario,Catalog,Validation} from "./api";
+import {PythonEditor} from "./PythonEditor";
 import "./style.css";
 const pages=["Overview","Strategy library","Backtest runner","Job history","Settings"] as const;
 type Page=typeof pages[number];
@@ -42,11 +43,35 @@ function Jobs({jobs,open}:{jobs:Job[];open:(id:string)=>void}){
  return jobs.length?<div className="table-wrap"><table><thead><tr><th>Job</th><th>Status</th><th>Progress</th><th>Submitted</th><th>Details</th></tr></thead><tbody>{jobs.map(j=><tr key={j.id}><td>Synthetic fixture<small>{j.request.bars} bars · {j.request.signal_minutes}m · {j.id.slice(0,8)}</small></td><td><span className={"status "+j.status}>{j.status}</span></td><td><progress value={j.progress} max={100} aria-label="Job progress"/> {j.progress}%</td><td>{new Date(j.created*1000).toLocaleString()}</td><td><button onClick={()=>open(j.id)}>Inspect</button></td></tr>)}</tbody></table></div>:<p className="muted">No jobs to display.</p>;
 }
 function Library({api,strategies,refresh,report}:{api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void}){
- const [r,setR]=useState<Revision|null>(null);const [name,setName]=useState("");const [source,setSource]=useState(starter);const [busy,setBusy]=useState(false);const [note,setNote]=useState("");
+ const [r,setR]=useState<Revision|null>(null);const [name,setName]=useState("");const [source,setSource]=useState(starter);
+ const [busy,setBusy]=useState(false);const [note,setNote]=useState("");const [validation,setValidation]=useState<Validation|null>(null);
+ const [catalog,setCatalog]=useState<Catalog|null>(null);
  const latest=Math.max(r?.version??1,strategies.find(s=>s.id===r?.id)?.latest_version??1);
- async function load(id:string,v:number){setBusy(true);setNote("");try{const x=await api.revision(id,v);setR(x);setName(x.name);setSource(x.source);}catch(e){report(e);}finally{setBusy(false);}}
- async function save(e:FormEvent){e.preventDefault();setBusy(true);try{const x=r?await api.save(r.id,r.version,source):await api.create(name.trim(),source);setR(x);setNote("Saved immutable version "+x.version+".");await refresh();}catch(e){report(e);}finally{setBusy(false);}}
- return <div className="split"><section className="panel"><div className="head"><h2>Strategies</h2><button disabled={busy} onClick={()=>{setR(null);setName("");setSource(starter);setNote("");}}>New</button></div>{strategies.map(s=><button className="strategy" key={s.id} disabled={busy} onClick={()=>void load(s.id,s.latest_version)}>{s.name}<small>Version {s.latest_version}</small></button>)}</section><section className="panel"><h2>{r?"Strategy version":"New strategy"}</h2><p className="muted">Source storage only; execution disabled.</p>{r&&<><label htmlFor="version">View version</label><select id="version" value={r.version} disabled={busy} onChange={e=>void load(r.id,Number(e.target.value))}>{Array.from({length:latest},(_,i)=><option key={i+1}>{i+1}</option>)}</select></>}<form onSubmit={save}><label htmlFor="name">Name</label><input id="name" required maxLength={100} disabled={busy||!!r} value={name} onChange={e=>setName(e.target.value)}/><label htmlFor="source">Python source</label><textarea id="source" rows={14} required maxLength={65536} spellCheck={false} disabled={busy||!!r&&r.version!==latest} value={source} onChange={e=>setSource(e.target.value)}/>{r&&<p className="hash muted">Saved SHA-256: {r.code_sha256}</p>}<button className="primary" disabled={busy||!!r&&r.version!==latest}>{r?"Save new version":"Save strategy"}</button>{note&&<p role="status">{note}</p>}</form></section></div>;
+ const bytes=new TextEncoder().encode(source).length;
+ const readOnly=busy||!!r&&r.version!==latest;
+ useEffect(()=>{let alive=true;api.catalog().then(c=>{if(alive)setCatalog(c);}).catch(e=>{if(alive)report(e);});return()=>{alive=false;};},[api]);
+ function edit(v:string){setSource(v);setValidation(null);setNote("");}
+ async function load(id:string,v:number){setBusy(true);setNote("");setValidation(null);try{const x=await api.revision(id,v);setR(x);setName(x.name);setSource(x.source);}catch(e){report(e);}finally{setBusy(false);}}
+ async function check(){setBusy(true);setValidation(null);setNote("");try{setValidation(await api.validate(source));}catch(e){report(e);}finally{setBusy(false);}}
+ async function save(e:FormEvent){e.preventDefault();setBusy(true);setNote("");setValidation(null);
+  try{const v=await api.validate(source);setValidation(v);if(!v.syntax_valid)return;
+   const x=r?await api.save(r.id,r.version,source):await api.create(name.trim(),source);setR(x);
+   setNote("Saved immutable version "+x.version+".");await refresh();
+  }catch(e){report(e);}finally{setBusy(false);}}
+ const canCheck=!busy&&bytes>0&&bytes<=65536&&source.trim().length>0;
+ return <div className="split"><section className="panel"><div className="head"><h2>Strategies</h2><button disabled={busy} onClick={()=>{setR(null);setName("");edit(starter);}}>New</button></div>
+ {strategies.map(s=><button className="strategy" key={s.id} disabled={busy} onClick={()=>void load(s.id,s.latest_version)}>{s.name}<small>Version {s.latest_version}</small></button>)}
+ <details><summary>SDK indicator catalog</summary>{catalog?<div className="catalog">{catalog.indicators.map(i=><div key={i.name}><strong>{i.name}</strong><small>{i.outputs.join(" · ")}</small><small>{Object.entries(i.defaults).map(([k,v])=>k+"="+v).join(", ")}</small></div>)}</div>:<p className="muted">Catalog unavailable.</p>}</details></section>
+ <section className="panel"><h2>{r?"Strategy version":"New strategy"}</h2><p className="muted">Python syntax checking and immutable source storage. Custom execution is disabled.</p>
+ {r&&<><label htmlFor="version">View version</label><select id="version" value={r.version} disabled={busy} onChange={e=>void load(r.id,Number(e.target.value))}>{Array.from({length:latest},(_,i)=><option key={i+1}>{i+1}</option>)}</select></>}
+ <form onSubmit={save}><label htmlFor="name">Name</label><input id="name" required maxLength={100} disabled={busy||!!r} value={name} onChange={e=>setName(e.target.value)}/>
+ <PythonEditor value={source} onChange={edit} readOnly={readOnly} diagnostics={validation?.diagnostics??[]} catalog={catalog}/>
+ <div className="head"><span className="muted">{bytes.toLocaleString()} / 65,536 bytes</span><button type="button" disabled={!canCheck} onClick={()=>void check()}>Validate syntax</button></div>
+ {bytes>65536&&<p role="alert" className="error">Source exceeds 64 KiB.</p>}
+ {validation&&<div className={validation.syntax_valid?"validation-ok":"error"} role="status"><strong>{validation.syntax_valid?"Syntax valid":"Syntax errors"}</strong><p>Python {validation.python_version} · Compile only, not execution or strategy validation.</p>
+ {validation.diagnostics.map((d,i)=><p key={i}>Line {d.line}, column {d.column}: {d.message}</p>)}</div>}
+ {r&&<p className="hash muted">Saved SHA-256: {r.code_sha256}</p>}
+ <button className="primary" disabled={readOnly||!canCheck}>{r?"Save new version":"Save strategy"}</button>{note&&<p role="status">{note}</p>}</form></section></div>;
 }
 function Runner({api,caps,open,refresh,report}:{api:Api;caps:Capabilities;open:(id:string)=>void;refresh:()=>Promise<void>;report:(e:unknown)=>void}){
  const [bars,setBars]=useState(120);const [tf,setTf]=useState<1|5|15>(5);const [busy,setBusy]=useState(false);const retry=useRef<{body:string;key:string}|null>(null);
