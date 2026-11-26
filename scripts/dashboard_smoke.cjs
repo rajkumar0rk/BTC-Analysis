@@ -37,6 +37,17 @@ const assert=require("node:assert/strict");
   }
   const research=page.locator("#supertrendStrategies button").filter({hasText:"Replay"}).first();await research.click();await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));assert.equal(await page.locator("#netUnit").innerText(),"Net account USD");
   await page.setViewportSize({width:390,height:844});
+  const nav=page.getByRole("navigation",{name:"Workspace navigation"});
+  assert.equal(await nav.getByRole("link").count(),3);
+  assert.equal(await nav.getByRole("link",{name:"Backtest Explorer",exact:true}).getAttribute("aria-current"),"page");
+  assert.equal(await nav.getByRole("link",{name:"Strategy Studio",exact:true}).getAttribute("href"),"./studio/");
+  assert.equal(await nav.getByRole("link",{name:"Private Cloud",exact:true}).getAttribute("href"),"https://btc-analysis.rajkumar55853.workers.dev");
+  for(const width of [320,390,768,1440]){
+    await page.setViewportSize({width,height:844});
+    const layout=await nav.evaluate(el=>({display:getComputedStyle(el).display,width:el.clientWidth,scroll:el.scrollWidth,links:[...el.querySelectorAll("a")].map(a=>{const r=a.getBoundingClientRect();return {left:r.left,right:r.right,height:r.height,top:r.top,border:getComputedStyle(a).borderTopWidth}})}));
+    assert.equal(layout.display,"grid");assert.ok(layout.scroll<=layout.width+1,"navigation overflow at "+width);
+    for(let i=0;i<layout.links.length;i++){const a=layout.links[i];assert.ok(a.height>=44&&a.border!=="0px","styled tap target at "+width);if(i)assert.ok(a.left>=layout.links[i-1].right+4,"separate navigation links at "+width);}
+  }
   assert.equal(errors.length,0,errors.join("\n"));
   console.log("Browser smoke passed; data requests:",requests.length);
  }finally{if(browser)await browser.close();server.kill()}

@@ -19,6 +19,8 @@ try{
  assert.equal(await nav.getByRole("link",{name:"Strategy Studio",exact:true}).getAttribute("aria-current"),"page");
  assert.equal(await nav.getByRole("link",{name:"Private Cloud",exact:true}).getAttribute("href"),"https://btc-analysis.rajkumar55853.workers.dev");
  assert.equal(await nav.getByRole("link",{name:"Private Cloud",exact:true}).getAttribute("rel"),"noreferrer");
+ assert.equal(await nav.evaluate(el=>getComputedStyle(el).display),"flex");
+ assert.ok(await nav.evaluate(el=>[...el.querySelectorAll("a")].every(a=>a.getBoundingClientRect().height>=44)));
  assert.equal(await page.getByLabel("Cloud bearer token").count(),0);
  assert.equal(await page.getByLabel("API access token").count(),0);
  await page.getByRole("button",{name:"Generate local Python"}).click();
