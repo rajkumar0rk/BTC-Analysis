@@ -4,7 +4,7 @@ export const MAX_RUNS=30;
 const MAX_RECORD_BYTES=256*1024;
 export type RunRecord={id:string;created:number;name:string;graph:string;symbol:BatchInput["symbol"];settings:Record<string,string>;result:LocalResult;elapsedMs:number;totalMs:number};
 export function recordRun(input:BatchInput,graph:string,name:string,result:LocalResult,elapsedMs:number,totalMs:number):RunRecord{
- return {id:crypto.randomUUID(),created:Date.now(),name:name.trim().slice(0,80)||"Experiment",graph,symbol:input.symbol,settings:{...input.settings},result,elapsedMs,totalMs};
+ return {id:crypto.randomUUID(),created:Date.now(),name:name.trim().slice(0,80)||"Experiment",graph,symbol:input.symbol,settings:{...input.settings},result:{...result,scenarios:result.scenarios.map(({details: _details,...summary})=>summary)},elapsedMs,totalMs};
 }
 export function mergeRuns(...groups:RunRecord[][]){
  const byId=new Map<string,RunRecord>();

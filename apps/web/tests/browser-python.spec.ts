@@ -12,6 +12,15 @@ test("standalone Python worker matches native Python and supports warm rerun",as
  await page.getByRole("button",{name:"Run local Python"}).click();
  await expect(page.getByRole("heading",{name:"Local reference result"})).toBeVisible({timeout:125000});
  await expect(page.getByText("Result SHA-256: "+oracle.result.result_sha256,{exact:false})).toBeVisible();
+ await expect(page.getByLabel("Interactive backtest results")).toBeVisible();
+ await expect(page.getByRole("img",{name:"Monthly net P&L (IST)"})).toBeVisible();
+ await expect(page.getByRole("img",{name:"Sampled account equity (UTC)"})).toBeVisible();
+ await expect(page.getByRole("heading",{name:"Local closed trade ledger"})).toBeVisible();
+ await page.getByLabel("Chart scenario").selectOption("O-L-H-C");
+ const inspect=page.getByRole("button",{name:/Inspect local trade-/}).first();
+ if(await inspect.count()){await inspect.click();await expect(page.getByRole("img",{name:"Local trade candlestick chart"})).toBeVisible();}
+ await page.setViewportSize({width:390,height:844});
+ expect(await page.getByLabel("Interactive backtest results").evaluate(e=>e.scrollWidth<=e.clientWidth+2)).toBe(true);
  await page.getByRole("button",{name:"Run local Python"}).click();
  await expect(page.getByRole("heading",{name:"Local reference result"})).toBeVisible({timeout:30000});
  await expect(page.getByText("Result SHA-256: "+oracle.result.result_sha256,{exact:false})).toBeVisible();

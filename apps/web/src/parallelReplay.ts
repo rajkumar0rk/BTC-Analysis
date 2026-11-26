@@ -1,5 +1,7 @@
 /** Bounded batch orchestration. Each worker owns its own Python runtime/cache. */
-export type LocalScenario={path:string;bars:number;final_equity:string;fees:string;taxes:string;metrics:Record<string,string|number|null>;monthly:{month:string;pnl:string;return_pct:string|null}[];yearly?:{year:string;pnl:string;return_pct:string|null}[]};
+import type {Trade} from "./api";
+export type LocalDetails={equity:{event_utc:string;equity:string}[];equity_total:number;closed_trade_total:number;trades:Trade[];evidence:{fill_id:string;bar_open_utc:string;bar_close_utc:string;phase:string;path:string}[]};
+export type LocalScenario={path:string;bars:number;final_equity:string;fees:string;taxes:string;metrics:Record<string,string|number|null>;details?:LocalDetails;monthly:{month:string;pnl:string;return_pct:string|null;opening_equity?:string;closing_equity?:string}[];yearly?:{year:string;pnl:string;return_pct:string|null}[]};
 export type LocalResult={engine_version:string;source:string;data_sha256:string;graph_sha256:string;result_sha256:string;worst_path:string;scenarios:LocalScenario[];limitations:string[]};
 export type BatchInput={csv:string;symbol:"BTCUSD"|"ETHUSD";settings:Record<string,string>;assume:boolean};
 export type Variant={id:number;name:string;graph:string};
