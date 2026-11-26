@@ -2,15 +2,16 @@ import {useEffect,useRef,useState} from "react";
 import type {Api,Strategy} from "./api";
 import {saveHistory,loadHistory,deleteHistory} from "./historyCache";
 import type {SymbolName} from "./historyCache";
+import {ParallelRunner} from "./ParallelRunner";
+import type {LocalResult as Result} from "./parallelReplay";
 const rule=(op:string)=>({enabled:true,groups:[{conditions:[{left:{kind:"price",timeframe:300,field:"close"},op,right:{kind:"indicator",timeframe:300,name:"ema.value",parameters:{period:3}}}]}]});
 const off={enabled:false,groups:[]};
 const starter=JSON.stringify({signal_timeframe:300,execution_timeframe:60,exposure_pct:"20",stop_loss_pct:"1",take_profit_pct:"2",long_entry:rule("cross_up"),long_exit:rule("cross_down"),short_entry:off,short_exit:off},null,2);
-type Scenario={path:string;bars:number;final_equity:string;fees:string;taxes:string;metrics:Record<string,string|number|null>;monthly:{month:string;pnl:string;return_pct:string|null}[]};
-type Result={source:string;data_sha256:string;graph_sha256:string;result_sha256:string;worst_path:string;scenarios:Scenario[];limitations:string[]};
 export function BrowserRunner({api,strategies=[],initialGraph}:{api?:Api;strategies?:Strategy[];initialGraph?:string}){
  const [graph,setGraph]=useState(initialGraph??starter),[csv,setCsv]=useState(""),[file,setFile]=useState(""),[symbol,setSymbol]=useState<SymbolName>("BTCUSD"),[assume,setAssume]=useState(false),[sid,setSid]=useState("");
  const [settings,setSettings]=useState({initial_equity:"100",maker_bps:"2",taker_bps:"5",tax_rate:"0.18",slippage_bps:"0",tick_size:"0.1",lot_size:"0.001",multiplier:"1"});
  const [status,setStatus]=useState("Ready"),[busy,setBusy]=useState(false),[progress,setProgress]=useState(0),[error,setError]=useState(""),[result,setResult]=useState<Result|null>(null),[timing,setTiming]=useState("");
+ const [batchBusy,setBatchBusy]=useState(false);
  const [cacheNote,setCacheNote]=useState(""),[historyBusy,setHistoryBusy]=useState(false),[cacheStats,setCacheStats]=useState<{candle_hit:boolean;indicator_hits:number;indicator_misses:number;indicator_updates_reused:number}|null>(null);
  const worker=useRef<Worker|null>(null),seq=useRef(0),timer=useRef<number|undefined>(undefined),readSeq=useRef(0);
  function stop(){seq.current++;worker.current?.terminate();worker.current=null;window.clearTimeout(timer.current);setBusy(false);}
@@ -43,7 +44,7 @@ export function BrowserRunner({api,strategies=[],initialGraph}:{api?:Api;strateg
   }catch(e){stop();setStatus("Failed");setError(String(e));}
  }
  return <section className="panel"><h2>Local Python backtest</h2><p className="notice">Runs trusted visual rules in Python/WebAssembly on this device. No API call for execution. 1× only, two modeled OHLC paths, no funding or liquidation. Up to 31 days, no external warmup. Arbitrary handwritten Python is not executed.</p>
- <fieldset disabled={busy||historyBusy}><label>Historical CSV<input aria-label="Historical CSV" type="file" accept=".csv,text/csv" onChange={e=>void load(e.target.files?.[0])}/></label><small>time,open,high,low,close,volume — UTC epoch seconds, contiguous 1m rows. {file}</small>
+ <fieldset disabled={busy||historyBusy||batchBusy}><label>Historical CSV<input aria-label="Historical CSV" type="file" accept=".csv,text/csv" onChange={e=>void load(e.target.files?.[0])}/></label><small>time,open,high,low,close,volume — UTC epoch seconds, contiguous 1m rows. {file}</small>
  <label>Local instrument<select value={symbol} onChange={e=>{setSymbol(e.target.value as SymbolName);setResult(null);setCacheStats(null);setCacheNote("");}}><option>BTCUSD</option><option>ETHUSD</option></select></label>
  <div className="head"><button disabled={!result||!csv} onClick={()=>void history("save")}>Save CSV on this device</button><button onClick={()=>void history("load")}>Load saved CSV</button><button onClick={()=>void history("remove")}>Remove saved CSV</button></div><p className="muted">Optional local storage, one CSV per instrument. No upload or automatic persistence. {cacheNote}</p>
  {api&&<><label>Saved local-run strategy<select value={sid} onChange={e=>setSid(e.target.value)}><option value="">Choose strategy</option>{strategies.filter(s=>!s.archived).map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></label><button disabled={!sid} onClick={()=>void openSaved()}>Load saved visual source</button></>}
@@ -54,5 +55,6 @@ export function BrowserRunner({api,strategies=[],initialGraph}:{api?:Api;strateg
  {busy&&<button onClick={()=>{stop();setStatus("Cancelled");}}>Cancel local run</button>}
  <p role="status">{status} · {progress}% {timing}</p>{cacheStats&&<p className="muted" aria-label="Cache statistics">Candle cache: {cacheStats.candle_hit?"hit":"miss"} · Indicator series hits: {cacheStats.indicator_hits} · misses: {cacheStats.indicator_misses} · reused updates: {cacheStats.indicator_updates_reused}</p>}{error&&<pre role="alert" className="error" style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}>{error}</pre>}
  {result&&<><h3>Local reference result</h3><p>Worst modeled path: {result.worst_path}</p><p className="hash muted">CSV SHA-256: {result.data_sha256}<br/>Graph SHA-256: {result.graph_sha256}<br/>Result SHA-256: {result.result_sha256}</p><div className="scenarios">{result.scenarios.map(s=><article className="scenario" key={s.path}><h3>{s.path}</h3><dl>{[["Candles",s.bars],["Final equity",s.final_equity],["Net P&L",s.metrics.account_net],["Trades",s.metrics.trades],["Win rate %",s.metrics.win_rate_pct],["Profit factor",s.metrics.profit_factor],["Drawdown %",s.metrics.max_event_drawdown_pct],["Fees",s.fees],["Tax",s.taxes]].map(([k,v])=><div key={k}><dt>{k}</dt><dd>{v==null?"—":Number(v).toFixed(k==="Candles"||k==="Trades"?0:4)}</dd></div>)}</dl><table><thead><tr><th>Month</th><th>P&L</th></tr></thead><tbody>{s.monthly.map(m=><tr key={m.month}><td>{m.month}</td><td>{Number(m.pnl).toFixed(4)}</td></tr>)}</tbody></table></article>)}</div><details><summary>Limitations</summary><ul>{result.limitations.map(l=><li key={l}>{l}</li>)}</ul></details></>}
+ <ParallelRunner input={{csv,symbol,settings,assume}} graph={graph} disabled={busy||historyBusy} onBusy={v=>{if(v){seq.current++;worker.current?.terminate();worker.current=null;window.clearTimeout(timer.current);}setBatchBusy(v);}}/>
  </section>;
 }

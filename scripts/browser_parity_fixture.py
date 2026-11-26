@@ -8,4 +8,7 @@ g={"signal_timeframe":60,"execution_timeframe":60,"exposure_pct":"20","stop_loss
 csv="time,open,high,low,close,volume\n"+"".join(f"{1735689600+i*60},{100+i%10},{103+i%10},{99+i%10},{102+i%10},1\n" for i in range(60))
 settings=dict(initial_equity="100",maker_bps="2",taker_bps="5",tax_rate="0.18",slippage_bps="0",tick_size="0.1",lot_size="0.001",multiplier="1")
 r=replay(csv,json.dumps(g),"BTCUSD",settings,True)
-Path("apps/web/tests/browser-oracle.json").write_text(json.dumps({"csv":csv,"graph":g,"result":r}))
+changed={**g,"stop_loss_pct":"2"}
+changed_result=replay(csv,json.dumps(changed),"BTCUSD",settings,True)
+assert changed_result["result_sha256"]!=r["result_sha256"]
+Path("apps/web/tests/browser-oracle.json").write_text(json.dumps({"csv":csv,"graph":g,"result":r,"changed_graph":changed,"changed_result":changed_result}))

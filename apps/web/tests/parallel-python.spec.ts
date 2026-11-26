@@ -1,0 +1,58 @@
+import {test,expect} from "@playwright/test";
+import {readFileSync} from "node:fs";
+test("parallel batch executes independent variants, preserves parity, isolates failure and cancels queued work",async({page})=>{
+ test.setTimeout(180000);
+ const oracle=JSON.parse(readFileSync("tests/browser-oracle.json","utf8"));
+ await page.addInitScript(()=>{
+  Object.defineProperty(navigator,"hardwareConcurrency",{get:()=>8,configurable:true});
+  Object.defineProperty(navigator,"deviceMemory",{get:()=>8,configurable:true});
+ });
+ const calls:string[]=[];page.on("request",r=>{if(r.url().includes("/v1/"))calls.push(r.url());});
+ await page.goto("/");
+ await page.getByRole("button",{name:"Open local Python runner"}).click();
+ await page.getByLabel("Historical CSV").setInputFiles({name:"fixture.csv",mimeType:"text/csv",buffer:Buffer.from(oracle.csv)});
+ await page.getByText("Assume CSV times are candle opens; provenance and contract specs are unverified.").click();
+ await page.getByLabel("Local visual source").fill(JSON.stringify(oracle.graph));
+ await page.getByRole("button",{name:"Add current strategy as variant"}).click();
+ await page.getByLabel("Local visual source").fill(JSON.stringify(oracle.changed_graph));
+ await page.getByRole("button",{name:"Add current strategy as variant"}).click();
+ await page.getByLabel("Local visual source").fill("import os");
+ await page.getByRole("button",{name:"Add current strategy as variant"}).click();
+ await page.getByRole("button",{name:"Add current strategy as variant"}).click();
+ await page.getByLabel("Concurrent workers").selectOption("2");
+ await page.getByRole("button",{name:"Run strategy batch"}).click();
+ await expect(page.getByLabel("Batch progress")).toContainText("peak 2");
+ await expect(page.getByRole("button",{name:"Run local Python",exact:true})).toBeDisabled();
+ await page.getByRole("button",{name:"Cancel variant 4",exact:true}).click();
+ await expect(page.getByLabel("Batch progress")).toContainText("Batch finished",{timeout:140000});
+ await expect(page.getByLabel("Batch variant 1")).toContainText("completed");
+ await expect(page.getByLabel("Batch variant 2")).toContainText("completed");
+ await expect(page.getByLabel("Batch variant 3")).toContainText("failed");
+ await expect(page.getByLabel("Batch variant 4")).toContainText("cancelled");
+ await page.getByText("Variant 1 result evidence",{exact:true}).click();
+ await page.getByText("Variant 2 result evidence",{exact:true}).click();
+ await expect(page.getByText("Result SHA-256: "+oracle.result.result_sha256,{exact:false})).toBeVisible();
+ await expect(page.getByText("Result SHA-256: "+oracle.changed_result.result_sha256,{exact:false})).toBeVisible();
+ console.log("Parallel batch:",await page.getByLabel("Batch progress").innerText());
+ expect(calls).toEqual([]);
+});
+test("low-memory device limit and cancel-all release local runner",async({page})=>{
+ test.setTimeout(30000);
+ const oracle=JSON.parse(readFileSync("tests/browser-oracle.json","utf8"));
+ await page.addInitScript(()=>{
+  Object.defineProperty(navigator,"hardwareConcurrency",{get:()=>2,configurable:true});
+  Object.defineProperty(navigator,"deviceMemory",{get:()=>2,configurable:true});
+ });
+ await page.goto("/");await page.getByRole("button",{name:"Open local Python runner"}).click();
+ await page.getByLabel("Historical CSV").setInputFiles({name:"fixture.csv",mimeType:"text/csv",buffer:Buffer.from(oracle.csv)});
+ await page.getByText("Assume CSV times are candle opens; provenance and contract specs are unverified.").click();
+ await page.getByRole("button",{name:"Add current strategy as variant"}).click();
+ await page.getByRole("button",{name:"Add current strategy as variant"}).click();
+ await expect(page.getByLabel("Concurrent workers").locator("option")).toHaveCount(1);
+ await page.getByRole("button",{name:"Run strategy batch"}).click();
+ await page.getByRole("button",{name:"Cancel entire batch"}).click();
+ await expect(page.getByLabel("Batch progress")).toContainText("Batch finished");
+ await expect(page.getByLabel("Batch variant 1")).toContainText("cancelled");
+ await expect(page.getByLabel("Batch variant 2")).toContainText("cancelled");
+ await expect(page.getByRole("button",{name:"Run local Python",exact:true})).toBeEnabled();
+});
