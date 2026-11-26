@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['apps/web/**', 'src/btc_analysis/**', 'pyproject.toml', '.github/workflows/platform-web.yml']
+    paths: ['apps/web/**', 'src/btc_analysis/**', 'pyproject.toml', 'requirements/platform-linux.lock', '.github/workflows/platform-web.yml']
   pull_request:
-    paths: ['apps/web/**', 'src/btc_analysis/**', 'pyproject.toml', '.github/workflows/platform-web.yml']
+    paths: ['apps/web/**', 'src/btc_analysis/**', 'pyproject.toml', 'requirements/platform-linux.lock', '.github/workflows/platform-web.yml']
 permissions:
   contents: read
 jobs:
@@ -20,9 +20,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: python -m pip install '.[data,api]'
+      - run: python -m pip install -r requirements/platform-linux.lock && python -m pip install --no-deps '.[data,api]' && python -m pip check
       - working-directory: apps/web
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - working-directory: apps/web
         run: npm run build
       - working-directory: apps/web

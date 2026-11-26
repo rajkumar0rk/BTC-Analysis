@@ -16,3 +16,5 @@ Upgrade vulnerable dependencies, enforce audit pass, verify both Python versions
 7. Target-host secure deployment, backup/restore drills, load/soak and independent review.
 
 No live trading permissions or production approval.
+
+M18: upgrade CI 45772559003/45772558986/45772558936/45772558916 passed; Python and npm audits both exit zero. Pin runtime versions from the successful audit. Import exact audited npm lock (artifact 15094622990, SHA-256 378fdda9e7820bbafb15d9c9751cfc1e0c3fc3d2ad8dd6ebe2b37b106af2f000), then enforce npm ci and Python pinned runtime installs in CI. Exact-lock reruns pending. Python pins versions, not wheel hashes; Linux 3.11/3.12 scope. Build toolchain and action commit pinning remain separate security work.

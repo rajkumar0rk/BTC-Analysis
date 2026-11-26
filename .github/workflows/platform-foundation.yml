@@ -7,6 +7,7 @@ on:
       - 'src/btc_analysis/**'
       - 'tests/platform/**'
       - 'pyproject.toml'
+      - 'requirements/platform-linux.lock'
       - 'docs/platform/**'
       - '.github/workflows/platform-foundation.yml'
   pull_request:
@@ -14,6 +15,7 @@ on:
       - 'src/btc_analysis/**'
       - 'tests/platform/**'
       - 'pyproject.toml'
+      - 'requirements/platform-linux.lock'
       - 'docs/platform/**'
       - '.github/workflows/platform-foundation.yml'
 permissions:
@@ -35,7 +37,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install foundation package
-        run: python -m pip install '.[data,api]'
+        run: python -m pip install -r requirements/platform-linux.lock && python -m pip install --no-deps '.[data,api]' && python -m pip check
       - name: Compile new platform code
         run: python -m compileall -q src/btc_analysis tests/platform
       - name: Domain contract and security policy tests
