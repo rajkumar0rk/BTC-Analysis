@@ -1,0 +1,105 @@
+name: Recover Delta India 2024 historical data
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['scripts/recover_delta_2024.py','scripts/validate_recovered_2024.py','scripts/test_recover_delta_2024.py','.github/workflows/recover-delta-2024.yml']
+permissions:
+  contents: read
+concurrency:
+  group: delta-2024-recovery
+  cancel-in-progress: false
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python scripts/test_recover_delta_2024.py
+  recover:
+    needs: test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - symbol: BTCUSD
+            month: '2024-01'
+          - symbol: BTCUSD
+            month: '2024-02'
+          - symbol: BTCUSD
+            month: '2024-12'
+          - symbol: ETHUSD
+            month: '2024-01'
+          - symbol: ETHUSD
+            month: '2024-02'
+          - symbol: ETHUSD
+            month: '2024-03'
+          - symbol: ETHUSD
+            month: '2024-04'
+          - symbol: ETHUSD
+            month: '2024-05'
+          - symbol: ETHUSD
+            month: '2024-06'
+          - symbol: ETHUSD
+            month: '2024-07'
+          - symbol: ETHUSD
+            month: '2024-08'
+          - symbol: ETHUSD
+            month: '2024-09'
+          - symbol: ETHUSD
+            month: '2024-10'
+          - symbol: ETHUSD
+            month: '2024-11'
+          - symbol: ETHUSD
+            month: '2024-12'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recover real source rows
+        env:
+          SYMBOL: ${{ matrix.symbol }}
+          MONTH: ${{ matrix.month }}
+        run: python scripts/recover_delta_2024.py --symbol "$SYMBOL" --month "$MONTH" --out "$RUNNER_TEMP/recovered"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: recovery-${{ matrix.symbol }}-${{ matrix.month }}
+          path: ${{ runner.temp }}/recovered/
+          retention-days: 14
+          if-no-files-found: error
+  retain:
+    needs: recover
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: recovery-*
+          merge-multiple: true
+          path: data/delta_india/2024_recovery_candidates
+      - name: Validate exact source preservation, hashes and gaps
+        run: python scripts/validate_recovered_2024.py data/delta_india/2024_recovery_candidates
+      - name: Retain immutable run-specific branch (never push main)
+        run: |
+          set -euo pipefail
+          branch="data/delta-2024-recovery-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git switch -c "$branch"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- data/delta_india/2024_recovery_candidates
+          git commit -m "data: validated 2024 acquisition candidates, gaps retained"
+          git push origin "HEAD:refs/heads/$branch"
+          printf 'Candidate branch: %s\n\nCoverage validation passed; missing data is NOT assumed complete. Review coverage.json before publishing.\n' "$branch" >> "$GITHUB_STEP_SUMMARY"
