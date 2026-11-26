@@ -11,4 +11,9 @@ r=replay(csv,json.dumps(g),"BTCUSD",settings,True)
 changed={**g,"stop_loss_pct":"2"}
 changed_result=replay(csv,json.dumps(changed),"BTCUSD",settings,True)
 assert changed_result["result_sha256"]!=r["result_sha256"]
-Path("apps/web/tests/browser-oracle.json").write_text(json.dumps({"csv":csv,"graph":g,"result":r,"changed_graph":changed,"changed_result":changed_result}))
+from btc_analysis.service.walkforward import browser_fold
+study=dict(start=1735689600,train_minutes=20,test_minutes=10,folds=2,mode="rolling",
+    search=dict(method="grid",axes=[dict(key="stop_loss_pct",values=["2","5"])],max_drawdown_pct="100",min_trades=1),
+    objective="net_return",acknowledge=True)
+folds=[browser_fold(csv,json.dumps(g),"BTCUSD",settings,True,study,n) for n in (1,2)]
+Path("apps/web/tests/browser-oracle.json").write_text(json.dumps({"csv":csv,"graph":g,"result":r,"changed_graph":changed,"changed_result":changed_result,"walkforward":folds}))
