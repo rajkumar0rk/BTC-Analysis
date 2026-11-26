@@ -20,9 +20,11 @@ def source_rows(path,expected_hash=None,expected_count=None,step=60,signed=False
         decoded=gz.read(12*1024*1024+1)
     if len(decoded)>12*1024*1024:raise ValueError("decompressed archive too large")
     reader=csv.reader(io.StringIO(decoded.decode("utf-8")))
-    if next(reader,None)!=HEADER:raise ValueError("unexpected archive schema: "+str(path))
+    header=next(reader,None)
+    if header!=HEADER and not (blank_volume and header==HEADER[:5]):raise ValueError("unexpected archive schema: "+str(path))
     rows=[];previous=-1
     for row in reader:
+        if header==HEADER[:5] and len(row)==5:row.append("")
         if len(row)!=6 or not re.fullmatch(r"[0-9]{1,10}",row[0]):raise ValueError("invalid timestamp")
         t=int(row[0])
         if t<=previous or t%step:raise ValueError("unordered or unaligned archive: "+str(path))
@@ -63,18 +65,43 @@ def stage_retained_trade(root,history):
     current["retained_2024_source"]="cda60e8e4aa0808469db5d07304dbaed52e190bb; IST partitions normalized to UTC; no synthetic rows"
     current["note"]+=" 2024 UTC archive has gaps including any uncovered year-end minutes."
     (out/"manifest.json").write_text(json.dumps(current,sort_keys=True,separators=(",",":"))+"\n")
-def publish_trade(out,key,rows):
+def publish_trade(out,key,rows,step=60):
     a,b=month_bounds(key)
     buf=io.StringIO(newline="");w=csv.writer(buf,lineterminator="\n");w.writerow(HEADER);w.writerows(rows)
     raw=gzip.compress(buf.getvalue().encode(),mtime=0);h=digest(raw);(out/(h+".bin")).write_bytes(raw)
-    return entry(key+".csv.gz",a,b,len(rows),h)
+    return entry(key+".csv.gz",a,b,len(rows),h,step)
+def retained_risk(root,out,kind,step):
+    source=root/"data/delta_india/BTCUSD/2024_verified_archive"
+    original=json.loads((source/"manifest.json").read_text())
+    if original["synthetic_rows"]!=0:raise ValueError("unexpected retained risk provenance")
+    metas=sorted((m for m in original["months"] if m["series"]==kind),key=lambda m:m["month"])
+    if [m["month"] for m in metas]!=[f"2024-{i:02d}" for i in range(1,13)]:raise ValueError("retained risk archive missing months")
+    pending={};prior=[];last=-1
+    for m in metas:
+        _,rows=source_rows(source/kind/(m["month"]+".csv.gz"),m["sha256"],m["observed"],step=step,signed=kind=="funding_1h",blank_volume=True)
+        a,b=month_bounds(m["month"])
+        # Funding source uses UTC-hour boundaries around IST month edges.
+        # Permit only the rounded boundary hour; never alter timestamps.
+        lo=(a-19800)//step*step
+        hi=((b-19800+step-1)//step)*step
+        for row in rows:
+            t=int(row[0])
+            if not lo<=t<hi or t<=last:raise ValueError("invalid or overlapping retained risk partition")
+            last=t
+            if dt(t).year==2024:pending.setdefault(dt(t).strftime("%Y-%m"),[]).append(row)
+        for key in sorted(k for k in pending if k<m["month"]):
+            prior.append(publish_trade(out,key,pending.pop(key),step))
+    for key,rows in sorted(pending.items()):prior.append(publish_trade(out,key,rows,step))
+    if len(prior)!=12:raise ValueError("retained risk UTC month missing")
+    return prior
+
 def stage_risk(root,history,symbol):
     source=root/"data/delta_india"/symbol/"institutional"
     m=json.loads((source/"history_manifest.json").read_text())
     if m["symbol"]!=symbol:raise ValueError("risk manifest symbol mismatch")
     for kind,step in (("mark_1m",60),("funding_1h",3600)):
         series=m["series"][kind];out=history/symbol/kind;out.mkdir()
-        entries=[]
+        entries=retained_risk(root,out,kind,step) if symbol=="BTCUSD" else []
         for p in series["partitions"]:
             name=Path(p["partition"]).name
             if not re.fullmatch(r"[0-9]{4}-[0-9]{2}\.csv\.gz",name):raise ValueError("bad risk partition name")
@@ -83,10 +110,11 @@ def stage_risk(root,history,symbol):
             a,b=month_bounds(name[:7]);a=max(a,stamp(m["requested_start_utc"]));b=min(b,stamp(m["requested_end_exclusive_utc"]))
             if not a<=int(rows[0][0])<=int(rows[-1][0])<b:raise ValueError("risk outside partition")
             h=digest(raw);(out/(h+".bin")).write_bytes(raw);entries.append(entry(name,a,b,len(rows),h,step))
-        # 2024 retained mark/funding are preserved in GitHub but not yet normalized for risk execution.
+        # All staged UTC partitions retain the true observed intervals and counts.
         obj={"symbol":symbol,"resolution":"1m" if step==60 else "1h","timestamp_unit":"unix_seconds_utc","timestamp_label":"as_returned_by_API","requested_through_utc":dt(stamp(m["requested_end_exclusive_utc"])-1).date().isoformat(),"partitions":entries,"series":kind,"note":"Funding observations, not settlements." if step==3600 else "Native mark candles, not executable prices."}
+        if symbol=="BTCUSD":obj["retained_2024_source"]="cda60e8e4aa0808469db5d07304dbaed52e190bb; original source hashes checked; UTC month normalization; no synthetic rows"
         (out/"manifest.json").write_text(json.dumps(obj,sort_keys=True,separators=(",",":"))+"\n")
 def stage_extended_history(root,history):
     stage_retained_trade(root,history)
     for symbol in ("BTCUSD","ETHUSD"):stage_risk(root,history,symbol)
-    print("Staged normalized retained BTC 2024 trade data and checked 2025–2026 mark/funding observations.")
+    print("Staged normalized retained BTC 2024 trade/mark/funding observations and checked 2025–2026 risk series.")

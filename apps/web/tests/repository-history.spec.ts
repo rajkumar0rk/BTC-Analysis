@@ -32,6 +32,8 @@ test("retained BTC 2024 and repository mark data are available",async({page})=>{
  await expect(page.getByRole("table",{name:"Published historical coverage"})).toContainText("2024-01-01");
  await page.getByLabel("History from (UTC)").fill("2024-04-01");await page.getByLabel("History to (UTC)").fill("2024-04-02");
  await page.getByRole("button",{name:"Load existing historical data"}).click();await expect(page.getByText(/Verified 2,880 contiguous 1m candles/)).toBeVisible({timeout:30000});
+ await page.getByRole("button",{name:"Load matching repository mark prices"}).click();await expect(page.getByText(/Verified 2,880 repository mark candles/)).toBeVisible({timeout:30000});
+ await expect(page.getByRole("table",{name:"Published historical coverage"}).getByRole("row").filter({hasText:"Funding 1h observations"})).toContainText("2024-01-01");
  await page.getByLabel("History from (UTC)").fill("2025-01-31");await page.getByLabel("History to (UTC)").fill("2025-02-01");
  await page.getByRole("button",{name:"Load existing historical data"}).click();await expect(page.getByText(/Verified 2,880 contiguous 1m candles/)).toBeVisible({timeout:30000});
  await page.getByRole("button",{name:"Load matching repository mark prices"}).click();await expect(page.getByText(/Verified 2,880 repository mark candles/)).toBeVisible({timeout:30000});

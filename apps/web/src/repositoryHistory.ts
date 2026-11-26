@@ -38,10 +38,10 @@ export async function loadRepositoryHistory(symbol:SymbolName,from:string,to:str
    const cols=line.split(","),t=Number(cols[0]);
    if(cols.length!==6||!/^\d+$/.test(cols[0])||!Number.isSafeInteger(t)||t%step||t<=previous||t<a||t>=b||cols.slice(1).some((v,j)=>!(kind!=="trade"&&j===4&&!v.trim())&&(!v.trim()||!Number.isFinite(Number(v)))))throw Error("Invalid or unordered archive row.");
    previous=t;
-   if(t>=start&&t<end){if(t!==next)throw Error("Missing or duplicate 1m candle at "+new Date(next*1000).toISOString());rows.push(kind==="mark"?cols.slice(0,5).join(","):line);next+=step;}
+   if(t>=start&&t<end){if(t!==next)throw Error("Missing or duplicate "+(kind==="funding"?"1h observation":"1m candle")+" at "+new Date(next*1000).toISOString());rows.push(kind==="mark"?cols.slice(0,5).join(","):line);next+=step;}
   }
  }
- if(next!==end||rows.length!==(end-start)/step)throw Error("Selected range contains missing 1m candles.");
+ if(next!==end||rows.length!==(end-start)/step)throw Error("Selected range contains missing "+(kind==="funding"?"1h observations":"1m candles")+".");
  const csv=(kind==="mark"?"time,open,high,low,close":HEADER)+"\n"+rows.join("\n")+"\n";if(new TextEncoder().encode(csv).byteLength>16*1024*1024)throw Error("CSV exceeds 16 MiB.");
  return {csv,name:symbol+" "+from+" to "+to+" UTC (repository)",bars:rows.length,cacheHits,partitions:selected.length,coverageThrough:manifest.requested_through_utc};
 }

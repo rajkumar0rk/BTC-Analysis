@@ -6,6 +6,8 @@ on:
     paths:
       - 'src/btc_analysis/data/**'
       - 'tests/platform/test_data_engine.py'
+      - 'scripts/stage_repository_history.py'
+      - 'scripts/test_stage_repository_history.py'
       - 'pyproject.toml'
       - 'requirements/platform-linux.lock'
       - 'data/delta_india/**'
@@ -25,6 +27,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements/platform-linux.lock && python -m pip install --no-deps '.[data]' && python -m pip check
+      - name: Actual retained 2024 risk archive validation
+        run: python scripts/test_stage_repository_history.py
       - name: Data engine unit tests
         run: python -m unittest discover -s tests/platform -p test_data_engine.py -v
       - name: Ingest actual BTC and ETH source partitions and verify streaming parity

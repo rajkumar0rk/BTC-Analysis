@@ -65,3 +65,5 @@ M36 exact-head 4c3ddc2: all six CI/deploy workflows passed. M37 owner operations
 M37 correction c2437cd: release, operations and private deploy passed; public health, 401s, origin rejection and shell security headers verified. Authenticated monitoring not configured; provider CPU unmeasured. M38 configurable direction/close-trigger virtual linear paper engine, legacy compatibility, deterministic P&L and adverse-gap tests. CI pending. No liquidation, funding or leverage above 1x.
 
 M38 exact-head 588610b: all five CI workflows passed; private deploy failed on Cloudflare service lookup GET 504, migration succeeded. M39 deployment repair: bounded retries for confirmed transient GET failures only, stale-head guard before each mutation/retry, no retry of ambiguous migration/secret writes, exact deployed release SHA health gate. CI pending.
+
+M39 exact-head 119b088: foundation, cloud API, release and private deploy passed. M40 retained BTC 2024 mark/funding observation normalization and integration, hash/count validation and actual source/browser tests; CI pending. BTC trade gaps, ETH 2024 and actual funding settlement evidence remain pending.
