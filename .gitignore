@@ -16,3 +16,7 @@ dist/
 node_modules/
 playwright-report/
 test-results/
+
+# Generated versioned browser runtime assets
+apps/web/public/python-runtime/
+apps/web/tests/browser-oracle.json

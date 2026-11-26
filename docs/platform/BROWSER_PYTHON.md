@@ -1,0 +1,7 @@
+# M20 local Python replay
+
+Run python scripts/prepare_browser_python.py before building the web application. It stages fixed-version Pyodide 0.29.3 core assets and pydantic/tzdata dependency wheels (upstream SHA256 verified) into ignored public/python-runtime, plus trusted SDK source zip. Build records core and wheel digests; independent core hash pinning/security review still pending. Serve assets same-origin (WASM MIME type and wasm-unsafe-eval CSP if enforcing CSP). No third-party CDN calls at browser runtime. Release bundle must include generated assets.
+
+Local runner available before login, also in Backtest runner after login. Import UTF-8 CSV time,open,high,low,close,volume with contiguous epoch-second UTC opens, max 10080 rows/4 MiB, complete timeframe alignment. Graph JSON or exact generated Python metadata accepted through the existing validator; arbitrary source rejected, never exec/eval. CSV data stays in browser for local run. Both OHLC paths, 1x, user-supplied costs/spec, no funding/liquidation, no external warmup. Summary and month results only. Worker reuse avoids runtime reinitialization on successful reruns; cancel/timeout terminate worker. This worker is a responsiveness boundary, not an arbitrary-code sandbox.
+
+Native/Chromium parity and warm repeat run checked in CI. No full historical cache, parallel pool, custom Python sandbox, multi-year browser runs, mobile benchmark or production deployment yet. M21/M22 extend caching and parallelism after parity is proven.

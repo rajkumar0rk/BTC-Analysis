@@ -1,0 +1,22 @@
+import {test,expect} from "@playwright/test";
+import {readFileSync} from "node:fs";
+test("standalone Python worker matches native Python and supports warm rerun",async({page})=>{
+ test.setTimeout(180000);
+ const oracle=JSON.parse(readFileSync("tests/browser-oracle.json","utf8"));
+ const apiCalls:string[]=[];page.on("request",r=>{if(r.url().includes("/v1/"))apiCalls.push(r.url());});
+ await page.goto("/");
+ await page.getByRole("button",{name:"Open local Python runner"}).click();
+ await page.getByLabel("Historical CSV").setInputFiles({name:"fixture.csv",mimeType:"text/csv",buffer:Buffer.from(oracle.csv)});
+ await page.getByLabel("Local visual source").fill(JSON.stringify(oracle.graph));
+ await page.getByText("Assume CSV times are candle opens; provenance and contract specs are unverified.").click();
+ await page.getByRole("button",{name:"Run local Python"}).click();
+ await expect(page.getByRole("heading",{name:"Local reference result"})).toBeVisible({timeout:125000});
+ await expect(page.getByText("Result SHA-256: "+oracle.result.result_sha256,{exact:false})).toBeVisible();
+ await page.getByRole("button",{name:"Run local Python"}).click();
+ await expect(page.getByRole("heading",{name:"Local reference result"})).toBeVisible({timeout:30000});
+ await expect(page.getByText("Result SHA-256: "+oracle.result.result_sha256,{exact:false})).toBeVisible();
+ await page.getByLabel("Local visual source").fill("import os");
+ await page.getByRole("button",{name:"Run local Python"}).click();
+ await expect(page.getByRole("alert")).toBeVisible({timeout:10000});
+ expect(apiCalls).toEqual([]);
+});

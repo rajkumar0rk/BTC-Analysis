@@ -12,6 +12,7 @@ import {OptimizationResults} from "./OptimizationResults";
 import {ValidationPanel,ValidationResults} from "./ValidationPanel";
 import {PaperTrading} from "./PaperTrading";
 import {MarketCatalog} from "./MarketCatalog";
+import {BrowserRunner} from "./BrowserRunner";
 import "./style.css";
 const pages=["Overview","Strategy library","Visual builder","Backtest runner","Job history","Paper trading","Markets","Settings"] as const;
 type Page=typeof pages[number];
@@ -20,11 +21,12 @@ const err=(e:unknown)=>e instanceof Error?e.message:"Request failed";
 const fmt=(v:string|null)=>v===null?"—":Number(v).toFixed(2);
 const starter="from btc_analysis.strategy import PythonStrategy\n\nclass MyStrategy(PythonStrategy):\n    def on_signal(self, ctx):\n        pass\n";
 function App(){
- const [token,setToken]=useState("");const [session,setSession]=useState<{token:string;caps:Capabilities}|null>(null);
+ const [local,setLocal]=useState(false);const [token,setToken]=useState("");const [session,setSession]=useState<{token:string;caps:Capabilities}|null>(null);
  const [error,setError]=useState("");const [busy,setBusy]=useState(false);
  async function login(e:FormEvent){e.preventDefault();setBusy(true);setError("");try{const t=token.trim();setSession({token:t,caps:await client(t).capabilities()});setToken("");}catch(e){setError(err(e));}finally{setBusy(false);}}
+ if(local)return <main className="panel"><button onClick={()=>setLocal(false)}>Back to sign in</button><BrowserRunner/></main>;
  if(session)return <Studio token={session.token} caps={session.caps} logout={()=>setSession(null)}/>;
- return <main className="login"><section className="panel login-card"><div className="eyebrow">BTC ANALYSIS / RESEARCH</div><h1>Strategy Studio</h1><p>Connect to your local service. Credentials stay in this tab's memory.</p><form onSubmit={login}><label htmlFor="token">API access token</label><input id="token" type="password" autoComplete="off" minLength={32} required value={token} onChange={e=>setToken(e.target.value)}/>{error&&<p role="alert" className="error">{error}</p>}<button className="primary" disabled={busy}>Connect</button></form><p className="muted">Trusted synthetic jobs only. No custom Python execution.</p><a href="https://rajkumar0rk.github.io/BTC-Analysis/" rel="noreferrer">Existing research dashboard</a></section></main>;
+ return <main className="login"><section className="panel login-card"><div className="eyebrow">BTC ANALYSIS / RESEARCH</div><h1>Strategy Studio</h1><p>Connect to your local service. Credentials stay in this tab's memory.</p><form onSubmit={login}><label htmlFor="token">API access token</label><input id="token" type="password" autoComplete="off" minLength={32} required value={token} onChange={e=>setToken(e.target.value)}/>{error&&<p role="alert" className="error">{error}</p>}<button className="primary" disabled={busy}>Connect</button></form><button onClick={()=>setLocal(true)}>Open local Python runner</button><p className="muted">Local runner requires no API token. Custom handwritten Python execution remains disabled.</p><a href="https://rajkumar0rk.github.io/BTC-Analysis/" rel="noreferrer">Existing research dashboard</a></section></main>;
 }
 function Studio({token,caps,logout}:{token:string;caps:Capabilities;logout:()=>void}){
  const api=useMemo(()=>client(token),[token]);
@@ -44,7 +46,7 @@ function Studio({token,caps,logout}:{token:string;caps:Capabilities;logout:()=>v
  {page==="Overview"&&<><div className="metrics">{[["Saved strategies",strategies.length],["Active jobs",jobs.filter(active).length],["Successful jobs",jobs.filter(j=>j.status==="succeeded").length],["Worker capacity",caps.worker_concurrency]].map(([label,v])=><section className="panel metric" key={label}><span className="muted">{label}</span><strong>{ready?v:"—"}</strong></section>)}</div><section className="panel"><div className="head"><h2>Recent jobs</h2><button className="primary" onClick={()=>nav("Backtest runner")}>New reference run</button></div><Jobs jobs={jobs.slice(0,6)} open={open}/></section></>}
  {page==="Strategy library"&&<Library key={pythonRevision?.id??"library"} initial={pythonRevision} api={api} strategies={strategies} refresh={refresh} report={report} openJob={open}/>}
  {page==="Visual builder"&&<VisualBuilder api={api} strategies={strategies} refresh={refresh} report={report} openPython={r=>{setPythonRevision(r);setPage("Strategy library");}}/>}
- {page==="Backtest runner"&&<><HistoricalRunner api={api} strategies={strategies} open={open} refresh={refresh} report={report}/><Runner api={api} caps={caps} open={open} refresh={refresh} report={report}/></>}
+ {page==="Backtest runner"&&<><BrowserRunner api={api} strategies={strategies}/><HistoricalRunner api={api} strategies={strategies} open={open} refresh={refresh} report={report}/><Runner api={api} caps={caps} open={open} refresh={refresh} report={report}/></>}
  {page==="Job history"&&<><section className="panel"><div className="head"><h2>Job history</h2><button onClick={()=>void refresh()}>Refresh</button></div><Jobs jobs={jobs} open={open}/></section>{selected&&<Detail key={selected} api={api} id={selected} refresh={refresh} report={report} open={open}/>}</>}
  {page==="Paper trading"&&<PaperTrading api={api} strategies={strategies}/>}
  {page==="Markets"&&<MarketCatalog api={api}/>}
