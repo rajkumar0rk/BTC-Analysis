@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       operation:
-        description: 'Validate config only or apply migration and deploy (paper disabled)'
+        description: 'Validate config only or apply migration and deploy (virtual paper only)'
         required: true
         type: choice
         default: validate
@@ -62,8 +62,8 @@ jobs:
       - run: python scripts/prepare_browser_python.py
       - working-directory: apps/web
         run: npm ci --no-audit --no-fund && npm run build -- --mode private
-      - name: Generate private deployment config (paper disabled)
-        run: python scripts/prepare_cloud_release.py --worker "$CF_WORKER" --origin "$CF_ORIGIN" --database-id "$CF_DATABASE_ID"
+      - name: Generate private deployment config (virtual paper enabled)
+        run: python scripts/prepare_cloud_release.py --worker "$CF_WORKER" --origin "$CF_ORIGIN" --database-id "$CF_DATABASE_ID" --enable-paper
       - name: Bundle and validate without cloud writes
         working-directory: apps/cloud
         run: npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml --dry-run --outdir "$RUNNER_TEMP/private-bundle"
@@ -121,4 +121,4 @@ jobs:
           status="$(curl -sS --max-time 15 -o "$RUNNER_TEMP/unauth.json" -w '%{http_code}' "$CF_ORIGIN/v1/cloud/capabilities")"
           test "$status" = 401
           python -c 'import json,sys;assert json.load(open(sys.argv[1]))["error"]=="invalid_credentials"' "$RUNNER_TEMP/unauth.json"
-          printf '### Private Studio deployed (paper disabled)\n%s\n\nAuthenticated data roundtrip and actual quota measurements still require operator verification.\n' "$CF_ORIGIN" >> "$GITHUB_STEP_SUMMARY"
+          printf '### Private Studio deployed (virtual paper enabled; no sessions auto-started)\n%s\n\nAuthenticated data roundtrip and actual quota measurements still require operator verification.\n' "$CF_ORIGIN" >> "$GITHUB_STEP_SUMMARY"

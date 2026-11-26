@@ -30,6 +30,7 @@ export class PaperLane{
    return out({session:s.id,fills:[...records.values()],next:records.size?Number([...records.values()].at(-1).id):after,scale:"100000000"});
   }
   if(path==="/start"&&req.method==="POST"){
+   if(this.env.PAPER_ENABLED!=="true")return out({error:"paper_disabled"},503);
    let c,b;try{b=await req.json();if(!["BTCUSD","ETHUSD"].includes(b.symbol))throw Error();c=validateConfig(b.config);}catch{return out({error:"invalid_paper_config"},400);}
    return this.storage.transaction(async()=>{
     const old=await this.storage.get("state");
@@ -83,6 +84,7 @@ export class PaperLane{
   await commit(async s=>{
    if(this.now()>t+180000){await halt(s,"stale_or_missing_candle");return;}
    const next=advance(s,bar);
+   next.state.last_receipt_ms=this.now();
    for(const e of next.events)await this.storage.put("fill:"+id+":"+String(e.id).padStart(8,"0"),e);
    await this.storage.put("state",next.state);
    if(ACTIVE(next.state))await this.storage.setAlarm(Math.max(this.now()+1000,next.state.cursor+70000));else await this.storage.deleteAlarm();

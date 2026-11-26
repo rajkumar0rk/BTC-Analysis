@@ -46,8 +46,35 @@ test("alarm advances persisted cursor once, stale halt, stop during fetch fenced
 });
 
 test("disabled paper alarm halts without fetching market",async()=>{
- const storage=new Memory(),obj=new PaperLane({storage},{PAPER_ENABLED:"false"});obj.now=()=>0;
+ const storage=new Memory(),obj=new PaperLane({storage},{PAPER_ENABLED:"true"});obj.now=()=>0;
  await obj.fetch(new Request("https://internal/start",{method:"POST",body:JSON.stringify({symbol:"BTCUSD",config})}));
+ obj.env.PAPER_ENABLED="false";
  obj.candle=async()=>{throw Error("must not fetch");};await obj.alarm();
  const s=await storage.get("state");assert.equal(s.status,"halted");assert.equal(s.reason,"paper_disabled");assert.equal(storage.alarm,null);
+});
+
+test("multi-timeframe paper uses completed signals, next minute execution, and drawdown halt",()=>{
+ const c=validateConfig({...config,signal_minutes:5,max_drawdown_bps:100,duration_minutes:43200,exposure_bps:9000});
+ let s=init("BTCUSD",c,0),events=[];
+ assert.equal(s.start,300000);
+ const closes=[100,90,80,110,111,50];
+ for(const p of closes){
+  for(let n=0;n<5;n++){
+   if(!["scheduled","running"].includes(s.status))break;
+   const r=advance(s,candle(s.cursor,p));s=r.state;events.push(...r.events);
+  }
+ }
+ assert.ok(s.signal_bars>=4);
+ assert.equal(events[0].side,"buy");
+ assert.equal(events[0].minute,300000+20*60000);
+ assert.equal(events[0].price,String(units("111")));
+ assert.equal(s.status,"halted");assert.equal(s.reason,"drawdown_limit");assert.equal(s.pending,null);
+ assert.ok(BigInt(s.qty)>0n);
+ assert.throws(()=>validateConfig({...config,signal_minutes:7,max_drawdown_bps:100}));
+ assert.throws(()=>validateConfig({...config,signal_minutes:5,max_drawdown_bps:100,duration_minutes:21}));
+});
+test("disabled lane refuses starts",async()=>{
+ const obj=new PaperLane({storage:new Memory()},{PAPER_ENABLED:"false"});
+ const r=await obj.fetch(new Request("https://internal/start",{method:"POST",body:JSON.stringify({symbol:"BTCUSD",config})}));
+ assert.equal(r.status,503);
 });

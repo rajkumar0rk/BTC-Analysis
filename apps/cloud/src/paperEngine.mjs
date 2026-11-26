@@ -9,15 +9,19 @@ export function units(v){
 }
 export function validateConfig(c){
  const keys=["request_id","fast","slow","equity","exposure_bps","taker_bps","tax_bps","slippage_bps","duration_minutes","acknowledge"];
+ const extended=["signal_minutes","max_drawdown_bps"].some(k=>c&&Object.hasOwn(c,k));
+ if(extended)keys.push("signal_minutes","max_drawdown_bps");
  if(!c||typeof c!=="object"||Array.isArray(c)||Object.keys(c).sort().join(",")!==keys.sort().join(",")||typeof c.request_id!=="string"||!/^[0-9a-f]{32}$/.test(c.request_id)||c.acknowledge!==true)throw Error("invalid_config");
  const int=(v,a,b)=>Number.isInteger(v)&&v>=a&&v<=b;
- if(!int(c.fast,2,99)||!int(c.slow,c.fast+1,200)||!int(c.exposure_bps,1,9000)||!int(c.taker_bps,0,100)||!int(c.tax_bps,0,10000)||!int(c.slippage_bps,0,100)||!int(c.duration_minutes,c.slow+2,10080)||units(c.equity)<S||units(c.equity)>1000000n*S)throw Error("invalid_config");
+ if(!int(c.fast,2,99)||!int(c.slow,c.fast+1,200)||!int(c.exposure_bps,1,9000)||!int(c.taker_bps,0,100)||!int(c.tax_bps,0,10000)||!int(c.slippage_bps,0,100)||!int(c.duration_minutes,extended?(c.slow+2)*c.signal_minutes:c.slow+2,extended?43200:10080)||units(c.equity)<S||units(c.equity)>1000000n*S)throw Error("invalid_config");
+ if(extended&&(![1,5,15,30,60].includes(c.signal_minutes)||!int(c.max_drawdown_bps,1,10000)||c.duration_minutes%c.signal_minutes))throw Error("invalid_config");
  return {...c,equity: str(units(c.equity))};
 }
 export function init(symbol,c,now){
- const start=Math.floor(now/60000)*60000+60000;
- return {schema:1,engine:VERSION,id:c.request_id,symbol,config:c,status:"scheduled",reason:null,start,end:start+c.duration_minutes*60000,cursor:start,
-  balance:c.equity,qty:"0",entry:"0",entry_cost:"0",ema_fast:null,ema_slow:null,bars:0,pending:null,fees:"0",tax:"0",trades:0,fill_count:0,last_close:null,equity:c.equity,peak:c.equity,drawdown_bps:0};
+ const step=(c.signal_minutes??1)*60000;
+ const start=Math.floor(now/step)*step+step;
+ return {schema:1,engine:c.signal_minutes?"ema-cross-fixed8-mtf-v2":VERSION,id:c.request_id,symbol,config:c,status:"scheduled",reason:null,start,end:start+c.duration_minutes*60000,cursor:start,
+  balance:c.equity,qty:"0",entry:"0",entry_cost:"0",ema_fast:null,ema_slow:null,bars:0,...(c.signal_minutes?{signal_bars:0}:{}),pending:null,fees:"0",tax:"0",trades:0,fill_count:0,last_close:null,equity:c.equity,peak:c.equity,drawdown_bps:0};
 }
 export function parseCandle(raw,t){
  if(!raw||raw.time!==t/1000)throw Error("missing_candle");
@@ -56,17 +60,22 @@ export function advance(old,bar){
   cash+=n-commission-tax;fill("sell",price,qty,commission,tax,n-commission-tax-entryCost);s.trades++;qty=0n;entry=0n;entryCost=0n;
  }
  s.pending=null;s.bars++;
- const fast=ema(s.ema_fast,close,c.fast),slow=ema(s.ema_slow,close,c.slow);
- if(s.bars>c.slow&&s.ema_fast!==null&&s.ema_slow!==null){
-  if(qty===0n&&BigInt(s.ema_fast)<=BigInt(s.ema_slow)&&fast>slow)s.pending="buy";
-  if(qty>0n&&BigInt(s.ema_fast)>=BigInt(s.ema_slow)&&fast<slow)s.pending="sell";
+ if((bar.time+60000)%((c.signal_minutes??1)*60000)===0){
+  if(c.signal_minutes)s.signal_bars++;
+  const fast=ema(s.ema_fast,close,c.fast),slow=ema(s.ema_slow,close,c.slow);
+  if((s.signal_bars??s.bars)>c.slow&&s.ema_fast!==null&&s.ema_slow!==null){
+   if(qty===0n&&BigInt(s.ema_fast)<=BigInt(s.ema_slow)&&fast>slow)s.pending="buy";
+   if(qty>0n&&BigInt(s.ema_fast)>=BigInt(s.ema_slow)&&fast<slow)s.pending="sell";
+  }
+  s.ema_fast=str(fast);s.ema_slow=str(slow);
  }
- s.ema_fast=str(fast);s.ema_slow=str(slow);s.last_close=str(close);
+ s.last_close=str(close);
  s.balance=str(cash);s.qty=str(qty);s.entry=str(entry);s.entry_cost=str(entryCost);s.fees=str(fees);s.tax=str(taxes);
  const equity=cash+qty*close/S,peak=BigInt(s.peak)>equity?BigInt(s.peak):equity;
  s.equity=str(equity);s.peak=str(peak);s.drawdown_bps=Math.max(s.drawdown_bps,Number((peak-equity)*BPS/peak));
  s.cursor+=60000;s.status="running";
- if(s.cursor>=s.end){s.status="completed";s.pending=null;s.reason="duration_reached";}
+ if(c.max_drawdown_bps!==undefined&&s.drawdown_bps>=c.max_drawdown_bps){s.status="halted";s.pending=null;s.reason="drawdown_limit";}
+ else if(s.cursor>=s.end){s.status="completed";s.pending=null;s.reason="duration_reached";}
  // No terminal market order: open exposure stays visible.
  return {state:s,events};
 }
