@@ -14,6 +14,9 @@ class RetainedArchiveTest(unittest.TestCase):
                 self.assertEqual(len(entries),12)
                 self.assertEqual(sum(p["expected_minutes"] for p in entries),366*86400//step)
                 self.assertTrue(all(p["missing_minutes"]>=0 for p in entries))
+                self.assertEqual(sum(p["missing_minutes"] for p in entries),330 if step==60 else 6)
+                self.assertTrue(all(p["missing_minutes"]==0 for p in entries[:-1]))
+                self.assertEqual(entries[-1]["missing_minutes"],330 if step==60 else 6)
                 for p in entries:
                     _,rows=source_rows(dest/(p["sha256_gzip"]+".bin"),p["sha256_gzip"],p["observed_candles"],step=step,signed=kind=="funding_1h",blank_volume=True)
                     a,b=month_bounds(p["file"][:7])

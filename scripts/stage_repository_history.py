@@ -80,13 +80,16 @@ def retained_risk(root,out,kind,step):
     for m in metas:
         _,rows=source_rows(source/kind/(m["month"]+".csv.gz"),m["sha256"],m["observed"],step=step,signed=kind=="funding_1h",blank_volume=True)
         a,b=month_bounds(m["month"])
-        # Funding source uses UTC-hour boundaries around IST month edges.
-        # Permit only the rounded boundary hour; never alter timestamps.
+        # Match the retained acquisition script exactly: floor both IST
+        # endpoints for hourly funding; January includes one preceding hour.
         lo=(a-19800)//step*step
-        hi=((b-19800+step-1)//step)*step
+        hi=(b-19800)//step*step
+        if kind=="funding_1h" and m["month"]=="2024-01":lo-=step
+        if m["expected"]!=(hi-lo)//step or m["missing"]!=m["expected"]-m["observed"]:
+            raise ValueError("retained risk metadata mismatch: "+kind+" "+m["month"])
         for row in rows:
             t=int(row[0])
-            if not lo<=t<hi or t<=last:raise ValueError("invalid or overlapping retained risk partition")
+            if not lo<=t<hi or t<=last:raise ValueError("invalid or overlapping retained risk partition: "+kind+" "+m["month"]+" timestamp="+str(t))
             last=t
             if dt(t).year==2024:pending.setdefault(dt(t).strftime("%Y-%m"),[]).append(row)
         for key in sorted(k for k in pending if k<m["month"]):
