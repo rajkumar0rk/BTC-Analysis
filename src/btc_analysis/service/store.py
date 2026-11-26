@@ -210,16 +210,17 @@ class Store:
 
     def submit(self,owner,key,payload):
         # The API only accepts schema-validated trusted fixture requests.
-        if payload.get("kind") not in ("reference_fixture","historical_visual"):raise Invalid("custom execution disabled")
+        if payload.get("kind") not in ("reference_fixture","historical_visual","optimization"):raise Invalid("custom execution disabled")
         packed=canonical(payload);digest=sha(packed)
         with self.connection(True) as c:
             prior=c.execute("SELECT * FROM jobs WHERE owner=? AND request_key=?",(owner,key)).fetchone()
             if prior:
                 if prior["request_sha"]!=digest:raise Conflict("idempotency key reused with different request")
                 return self._public(prior)
-            if payload["kind"]=="historical_visual":
+            if payload["kind"] in ("historical_visual","optimization"):
                 state=self._registry(c,owner,payload["strategy_id"])
                 if state["archived"]:raise Conflict("archived strategy cannot submit new jobs")
+                if payload["kind"]=="optimization" and state["frozen_version"] is not None:raise Conflict("clone frozen strategy before optimizing")
                 if state["frozen_version"] is not None and payload["version"]!=state["frozen_version"]:
                     raise Conflict("frozen strategy requires its frozen version")
                 revision=c.execute("SELECT code_sha FROM revisions WHERE strategy_id=? AND version=?",

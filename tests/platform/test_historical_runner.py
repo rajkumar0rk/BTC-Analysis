@@ -88,6 +88,20 @@ class HistoricalTests(unittest.TestCase):
                                      {x["fill_id"] for x in trade["entry_fills"]+trade["exit_fills"]})
                     self.assertEqual(client.get(url,headers={"Authorization":"Bearer "+"y"*40},params=params).status_code,404)
                     self.assertEqual(client.get(url,headers=AUTH,params={**params,"offset":9999}).status_code,422)
-                if real:print("Actual BTCUSD archive job result hash:",result["result"]["result_sha256"])
+                opt={**body,"kind":"optimization","acknowledge_training_only":True,
+                     "search":{"method":"grid","axes":[{"key":"stop_loss_pct","values":["1","2"]}]}}
+                url="/v1/jobs/optimization"
+                self.assertEqual(client.post(url,headers={**AUTH,"Idempotency-Key":"bad-opt"},json={**opt,"acknowledge_training_only":False}).status_code,422)
+                q=client.post(url,headers={**AUTH,"Idempotency-Key":"opt"},json=opt)
+                self.assertEqual(q.status_code,202,q.text)
+                self.assertTrue(work_once(Store(db),history_root=history))
+                result2=client.get("/v1/jobs/"+q.json()["id"],headers=AUTH).json()
+                self.assertEqual(result2["status"],"succeeded",result2)
+                study=result2["result"]["optimization"]
+                self.assertTrue(study["training_only"])
+                self.assertEqual(len(study["candidates"]),2)
+                self.assertEqual(study["base_code_sha256"],r["code_sha256"])
+                self.assertEqual(client.get("/v1/strategies/"+r["id"]+"/versions",headers=AUTH).json()["versions"][0]["version"],1)
+                if real:print("Actual BTCUSD archive optimization hash:",result2["result"]["result_sha256"])
 
 if __name__=="__main__":unittest.main()

@@ -26,6 +26,9 @@ def child():
     if payload.get("kind")=="historical_visual":
         from .historical import execute_historical
         result=execute_historical(payload,os.environ.get("BTC_PLATFORM_HISTORY"),progress)
+    elif payload.get("kind")=="optimization":
+        from .optimization import execute_optimization
+        result=execute_optimization(payload,os.environ.get("BTC_PLATFORM_HISTORY"),progress)
     else:result=execute_fixture(payload,progress)
     json.dump(result,sys.stdout,separators=(",",":"),allow_nan=False)
 

@@ -13,7 +13,7 @@ M9 Visual Python builder: [typed rule graph and deterministic Python compiler](V
 M10 Runner: [bounded historical visual research jobs](HISTORICAL_RUNNER.md), pinned datasets and versions, explicit assumptions, progress/cancel/results. Multi-year, leveraged historical jobs and arbitrary Python remain gated.
 M11 Analytics and replay: [stored-result analytics and pinned replay](ANALYTICS.md), closed-trade metrics, account MTM, monthly tiles, searchable ledger, fill details and CSV.
 M12 Registry: [immutable strategy lifecycle](REGISTRY.md), freeze/clone/archive/restore, transactional state and submission gates, lineage, comparison and linked job history. Permanent retention/backup policy remains pending.
-M13 Optimization: bounded parallel grid/random, train-only and reproducible search.
+M13 Optimization: [bounded sequential grid/random search](OPTIMIZATION.md), train-only conservative path ranking, drawdown/trade constraints, fingerprints. Parallel/multi-year optimization remains pending.
 M14 Validation: chronological OOS, sensitivity, stress, data and liquidation audits.
 M15 Forward paper: newly arriving data, separate execution state, reconciliation.
 M16 Multi-market: venue calendars, dated contracts/rollovers, options only with verified specifications.

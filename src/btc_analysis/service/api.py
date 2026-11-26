@@ -14,6 +14,7 @@ from ..indicators import CATALOG
 from ..visual import Graph, compile_graph, recover_graph
 from .historical import HistoricalRequest, snapshots, prepare, MAX_MINUTES
 from .analytics import analytics, trade_replay
+from .optimization import OptimizationRequest, prepare_optimization
 
 MAX_BODY=100_000
 Name=Annotated[str,StringConstraints(strip_whitespace=True,min_length=1,max_length=100)]
@@ -123,7 +124,7 @@ def create_app(db_path,tokens,history_root=None):
     @app.get("/v1/capabilities")
     def capabilities(user:str=Depends(owner)):
         available=snapshots(history_root)
-        return {"custom_python_execution":False,"historical_runs":bool(available),"job_kinds":["reference_fixture"]+(["historical_visual"] if available else []),
+        return {"custom_python_execution":False,"historical_runs":bool(available),"job_kinds":["reference_fixture"]+(["historical_visual","optimization"] if available else []),
                 "historical_max_minutes":MAX_MINUTES,
                 "strategy_storage":True,"worker_concurrency":1,"fixture_max_bars":600}
 
@@ -184,6 +185,13 @@ def create_app(db_path,tokens,history_root=None):
     @app.get("/v1/datasets")
     def datasets(user:str=Depends(owner)):
         return snapshots(history_root)
+
+    @app.post("/v1/jobs/optimization",status_code=202)
+    def optimization(body:OptimizationRequest,idempotency_key:Annotated[Key,Header()],user:str=Depends(owner)):
+        revision=store.revision(user,body.strategy_id,body.version)
+        try:payload=prepare_optimization(history_root,body,revision)
+        except (ValueError,OSError,KeyError) as exc:raise HTTPException(422,"Optimization configuration invalid: "+str(exc)[:300]) from exc
+        return store.submit(user,idempotency_key,payload)
 
     @app.post("/v1/jobs/historical",status_code=202)
     def historical(body:HistoricalRequest,idempotency_key:Annotated[Key,Header()],user:str=Depends(owner)):

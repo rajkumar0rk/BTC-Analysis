@@ -35,6 +35,7 @@ def summarize(s):
             flat_months=sum(x==0 for x in months),max_event_drawdown_pct=D(s["max_event_drawdown_pct"])))
 
 def analytics(job):
+    if job.get("request",{}).get("kind")=="optimization":raise ValueError("optimization has candidate summaries, not trade analytics")
     if job["status"]!="succeeded" or not job["result"]:raise ValueError("completed result required")
     return {"result_sha256":job["result"]["result_sha256"],
             "scenarios":[{"path":s["path"],"metrics":summarize(s)} for s in job["result"]["result"]["scenarios"]]}

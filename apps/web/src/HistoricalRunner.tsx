@@ -1,9 +1,10 @@
 import {useEffect,useState,useRef} from "react";
-import type {Api,Dataset,Historical,Strategy} from "./api";
+import type {Api,Dataset,Historical,Strategy,Search,Optimization} from "./api";
 export function HistoricalRunner({api,strategies,open,refresh,report}:{api:Api;strategies:Strategy[];open:(id:string)=>void;refresh:()=>Promise<void>;report:(e:unknown)=>void}){
  const [datasets,setDatasets]=useState<Dataset[]>([]),[symbol,setSymbol]=useState<Dataset["symbol"]>("BTCUSD"),[sid,setSid]=useState(""),[version,setVersion]=useState(1);
  const [start,setStart]=useState(""),[end,setEnd]=useState(""),[warm,setWarm]=useState(0),[assume,setAssume]=useState(false),[ack,setAck]=useState(false),[busy,setBusy]=useState(false);
  const [settings,setSettings]=useState({initial_equity:"100",maker_bps:"2",taker_bps:"5",tax_rate:"0.18",slippage_bps:"0",tick_size:"0.1",lot_size:"0.001",multiplier:"1"});
+ const [optimize,setOptimize]=useState(false),[method,setMethod]=useState<Search["method"]>("grid"),[objective,setObjective]=useState<Search["objective"]>("net_return"),[axis,setAxis]=useState([{key:"stop_loss_pct",values:"0.5,1,2"}]),[samples,setSamples]=useState(3),[seed,setSeed]=useState(42),[dd,setDd]=useState("20"),[minTrades,setMinTrades]=useState(1),[training,setTraining]=useState(false);
  const retry=useRef<{body:string;key:string}|null>(null);
  useEffect(()=>{let live=true;api.datasets().then(x=>{if(live){setDatasets(x);if(x.length)setSymbol(x[0].symbol);}}).catch(report);return()=>{live=false;};},[api]);
  const dataset=datasets.find(d=>d.symbol===symbol),strategy=strategies.find(s=>s.id===sid);
@@ -11,8 +12,10 @@ export function HistoricalRunner({api,strategies,open,refresh,report}:{api:Api;s
  const valid=!!dataset&&!!strategy&&!strategy.archived&&(strategy.frozen_version===null||version===strategy.frozen_version)&&version<=strategy.latest_version&&Number.isFinite(lo)&&Number.isFinite(hi)&&hi>lo&&hi-lo<=86400&&lo-warm*60>=dataset.start&&hi<=dataset.end&&Number.isInteger(warm)&&warm>=0&&warm<=1440&&ack&&(dataset.timestamp_label_verified||assume);
  async function run(e:React.FormEvent){e.preventDefault();if(!valid||!dataset||!strategy)return;setBusy(true);
  const payload:Historical={kind:"historical_visual",strategy_id:sid,version,symbol,manifest_sha256:dataset.manifest_sha256,start:lo,end:hi,warmup_minutes:warm,...settings,assume_open:assume,acknowledge_reference:true};
- const body=JSON.stringify(payload);if(retry.current?.body!==body)retry.current={body,key:crypto.randomUUID()};
- try{const job=await api.historical(payload,retry.current.key);retry.current=null;await refresh();open(job.id);}catch(e){report(e);}finally{setBusy(false);}
+ const search:Search={method,objective,axes:axis.map(a=>({key:a.key.trim(),values:a.values.split(",").map(v=>v.trim())})),samples,seed,max_drawdown_pct:dd,min_trades:minTrades};
+ const request:Historical|Optimization=optimize?{...payload,kind:"optimization",search,acknowledge_training_only:true}:payload;
+ const body=JSON.stringify(request);if(retry.current?.body!==body)retry.current={body,key:crypto.randomUUID()};
+ try{const job=await (request.kind==="optimization"?api.optimize(request,retry.current.key):api.historical(request,retry.current.key));retry.current=null;await refresh();open(job.id);}catch(e){report(e);}finally{setBusy(false);}
  }
  return <section className="panel"><h2>Historical visual backtest</h2><p className="notice">Research only: 1× linear reference simulation. Maximum 24 hours per job; no funding, spread or liquidation. Only intact visual revisions are accepted.</p>
  {!datasets.length?<p className="muted">No configured historical snapshots. Import the archive and configure the local service.</p>:<form onSubmit={run}>
@@ -25,5 +28,14 @@ export function HistoricalRunner({api,strategies,open,refresh,report}:{api:Api;s
  <div className="visual-config">{Object.entries(settings).map(([k,v])=><label key={k}>{({initial_equity:"Capital USD",maker_bps:"Maker fee (bps)",taker_bps:"Taker fee (bps)",tax_rate:"Tax fraction",slippage_bps:"Slippage (bps)",tick_size:"Assumed tick size",lot_size:"Assumed lot size",multiplier:"Assumed contract multiplier"} as Record<string,string>)[k]}<input required value={v} onChange={e=>setSettings(s=>({...s,[k]:e.target.value}))}/></label>)}</div>
  {dataset&&!dataset.timestamp_label_verified&&<label className="check"><input type="checkbox" checked={assume} onChange={e=>setAssume(e.target.checked)}/> Explicitly assume raw timestamps are candle opens (unverified).</label>}
  <label className="check"><input type="checkbox" checked={ack} onChange={e=>setAck(e.target.checked)}/> I accept the reference cost and contract assumptions, omitted funding/liquidation, and entry-candle protection limitation.</label>
- <button className="primary" disabled={!valid||busy}>Run historical visual strategy</button></form>}</section>;
+ <label className="check"><input type="checkbox" checked={optimize} onChange={e=>setOptimize(e.target.checked)}/> Optimize parameters (training only)</label>
+ {optimize&&<fieldset className="visual-rule"><legend>Parameter search</legend><p className="muted">Up to 8 candidates, 5,760 combined candidate-minutes including warmup. Sequential worker; both OHLC paths. No automatic promotion. Clone frozen strategies before optimizing.</p>
+ <label>Search method<select value={method} onChange={e=>setMethod(e.target.value as Search["method"])}><option value="grid">Grid</option><option value="random">Seeded random</option></select></label>
+ {axis.map((a,i)=><div key={i} className="rule-group"><label>Parameter {i+1}<input value={a.key} onChange={e=>setAxis(old=>old.map((x,j)=>j===i?{...x,key:e.target.value}:x))}/></label><label>Candidate values {i+1} (comma-separated)<input value={a.values} onChange={e=>setAxis(old=>old.map((x,j)=>j===i?{...x,values:e.target.value}:x))}/></label><button type="button" disabled={axis.length===1} onClick={()=>setAxis(old=>old.filter((_,j)=>j!==i))}>Remove parameter</button></div>)}
+ <small>Keys: exposure_pct, stop_loss_pct, take_profit_pct, or a declared indicator output and timeframe, e.g. ema.value@900:period. All matching operands change together.</small><button type="button" disabled={axis.length>=3} onClick={()=>setAxis(old=>[...old,{key:"take_profit_pct",values:"1,2"}])}>Add parameter</button>
+ {method==="random"&&<><label>Sample count<input type="number" min={1} max={8} value={samples} onChange={e=>setSamples(Number(e.target.value))}/></label><label>Random seed<input type="number" min={0} max={2147483647} value={seed} onChange={e=>setSeed(Number(e.target.value))}/></label></>}
+ <label>Objective<select value={objective} onChange={e=>setObjective(e.target.value as Search["objective"])}><option value="net_return">Worst-path net return</option><option value="profit_factor">Worst-path profit factor (finite only)</option><option value="win_rate">Worst-path win rate</option></select></label>
+ <label>Maximum drawdown (%)<input value={dd} onChange={e=>setDd(e.target.value)}/></label><label>Minimum closed trades per path<input type="number" min={1} max={1000} value={minTrades} onChange={e=>setMinTrades(Number(e.target.value))}/></label>
+ <label className="check"><input type="checkbox" checked={training} onChange={e=>setTraining(e.target.checked)}/> This is training data only, not untouched validation.</label></fieldset>}
+ <button className="primary" disabled={!valid||busy||optimize&&(!training||strategy?.frozen_version!=null)}>{optimize?"Run parameter search":"Run historical visual strategy"}</button></form>}</section>;
 }
