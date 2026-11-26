@@ -1,10 +1,6 @@
 name: ETHUSD replay all BTC rule strategy families
 on:
-  push:
-    branches: [main]
-    paths:
-      - scripts/research_eth_all_strategies_replay.py
-      - .github/workflows/research-eth-all-strategies.yml
+  # Legacy replay is manual-only to avoid automatically rerunning archived research.
   workflow_dispatch:
 permissions:
   contents: write
@@ -24,7 +20,6 @@ jobs:
           - time_day
           - five_minute
           - other_systems
-          - older_systems
     steps:
       - uses: actions/checkout@v4
         with:

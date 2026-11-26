@@ -51,7 +51,6 @@ SUITES={
   "research_one_trade_every_day_200.py",
   "research_time_day_strategies.py",
   "research_price_action_time_day.py",
-  "research_previous_day_range_swing.py",
   "research_selective_big_moves.py",
   "research_daily_200_500_points.py",
  ],
@@ -64,22 +63,9 @@ SUITES={
   "research_volatility_scaled_exits_stage5.py",
   "research_directional_acceptance.py",
   "research_behavioral_discovery.py",
-  "research_big_trend_stage1.py",
   "research_failed_auction_stage24.py",
  ],
- "older_systems":[
-  "v7_2025_trend_discovery.py",
-  "research_v7_1_retest_2025.py",
-  "research_v7_2_daily_4h_2025.py",
-  "research_v8_2025_big_moves.py",
-  "research_v8_1_2025_exits.py",
-  "research_mtf_swing_range_long.py",
-  "research_mtf_swing_range_long_fixed2r.py",
-  "research_mtf_swing_range_short_fixed2r.py",
-  "research_mtf_swing_range_short_fixed3r.py",
-  "research_mtf_swing_range_fixed3r.py",
-  "research_mtf_uptrend_short_fixed3r.py",
- ],
+
 }
 EXCLUDED_WITH_REASON={
  "research_market_neutral_carry.py":"Requires authentic ETH spot versus ETH perpetual hedge plus observed ETH funding cashflows; BTC spot must not substitute",

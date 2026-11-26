@@ -7,19 +7,9 @@ import pandas as pd
 # Every schema declares complete known independent configuration keys.
 # Unknown schemas remain discoverable in the coverage catalog, not guessed.
 SCHEMAS=[
- dict(glob="analysis/v7_2_2025/v7_2_trades.csv",keys=["entry_type","exit_type","direction"],side="direction",entry="entry_time",exit="exit_time",ep="entry_price",xp="exit_price",net="net_points",gross="gross_points",reason="exit_reason",signal="signal_time",trigger="entry_type",symbol="BTCUSD"),
- dict(glob="analysis/**/v8_1_trade_ledger.csv",keys=["variant","side"],side="side",entry="entry_utc",exit="exit_utc",ep="entry_price",xp="exit_price",net="net_points",gross="gross_points",reason="exit_reason",signal="signal_utc",symbol="BTCUSD"),
- dict(glob="analysis/mtf_swing_range_long/trade_ledger.csv*",keys=["trend","setup","session","target_r"],fixed_side=1,entry="entry_utc",exit="exit_utc",ep="entry",xp="exit",net="net_pts",gross="gross_pts",reason="exit_reason",trigger="setup",symbol="BTCUSD"),
  dict(glob="analysis/ethusd_native_atr_price_action/full_trade_ledger.csv*",keys=["model"],side="direction",entry="entry_unix",exit="exit_unix",ep="entry_price_usd",xp="exit_price_usd",net="net_eth_price_points",gross="gross_eth_price_points",reason="result",trigger="pattern",symbol="ETHUSD"),
-]
-SCHEMAS.extend([
- dict(glob="analysis/v7_1_2025/*exclusive_trades.csv",keys=["cohort","horizon_h"],side="side",entry="entry_time",exit="exit_time",ep="entry_price",xp="exit_price",net="net_pts",gross="gross_pts",reason="exit_reason",signal="signal_time",trigger="cohort",symbol="BTCUSD"),
- dict(glob="analysis/big_trend_stage1/trade_ledger.csv.gz",keys=["side","trend","range_bars","qualifier","entry_mode","exit_mode","session"],side="side",entry="entry_utc",exit="exit_utc",ep="entry_price",xp="exit_price",net="net_pts",gross="gross_pts",reason="reason",trigger="entry_mode",symbol="BTCUSD"),
- dict(glob="analysis/previous_day_range_swing/trade_ledger.csv.gz",keys=["side","setup","tf","session","sl","tp","hold"],side="side",entry="entry_utc",exit="exit_utc",ep="entry",xp="exit",net="net_pts",gross="gross_pts",reason="exit_reason",trigger="setup",symbol="BTCUSD"),
  dict(glob="analysis/institutional_discovery_stage24_failed_auction/original_trade_ledger.csv.gz",keys=["mult","rr","hold"],side="side",entry="entry_unix",exit="exit_unix",net="net_points",reason="reason",symbol="BTCUSD"),
-])
-for name,side in [("mtf_swing_range_fixed3r",1),("mtf_swing_range_long_fixed2r",1),("mtf_swing_range_short_fixed2r",-1),("mtf_swing_range_short_fixed3r",-1),("mtf_swing_range_long_fixed3r",1),("mtf_uptrend_short_fixed3r",-1)]:
-    SCHEMAS.append(dict(glob=f"analysis/{name}/trade_ledger.csv*",keys=["trend","setup","session","sl_pts","tp_pts"],fixed_side=side,entry="entry_utc",exit="exit_utc",ep="entry",xp="exit",net="net_pts",gross="gross_pts",reason="exit_reason",trigger="setup",symbol="BTCUSD"))
+]
 
 def dump(p,x):
     p.parent.mkdir(parents=True,exist_ok=True)
@@ -105,7 +95,7 @@ def extend(root,out):
     # Limit generated website size; oversized/incompatible ledgers are explicitly cataloged.
     coverage=[]; seen=set(); supported_count=0; budget=330*1024*1024; used={"BTCUSD":0,"ETHUSD":0}
     # Reserve independent budgets so BTC research cannot crowd out ETH.
-    for s in sorted(SCHEMAS,key=lambda s: (s["symbol"]!="ETHUSD",s["glob"].startswith("analysis/mtf_"))):
+    for s in SCHEMAS:
         matches=sorted(root.glob(s["glob"]))
         if not matches: coverage.append(dict(path=s["glob"],status="Missing archived ledger"));continue
         for path in matches:

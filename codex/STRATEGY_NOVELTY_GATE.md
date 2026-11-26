@@ -77,3 +77,7 @@ Show monthly PnL, total/win/loss trade counts, peak-to-trough
 drawdown, estimated execution costs, excluded gaps, and separate
 train/check periods. Avoid fitting to 2026 month labels, leverage
 only to force return, or implying guaranteed future profits.
+
+## Retired legacy experiments
+
+See [RETIRED_STRATEGIES.md](RETIRED_STRATEGIES.md) and inspect the pinned pre-retirement commit before proposing equivalent rules. Removal from the current branch does not make previously tested ideas novel. Do not automatically recreate deleted workflows or result directories.

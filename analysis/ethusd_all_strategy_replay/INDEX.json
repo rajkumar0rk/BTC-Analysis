@@ -19,13 +19,6 @@
       "monthly_summaries": 0
     },
     {
-      "suite": "older_systems",
-      "attempted": 11,
-      "completed": 11,
-      "skipped_or_failed": 0,
-      "monthly_summaries": 0
-    },
-    {
       "suite": "other_systems",
       "attempted": 6,
       "completed": 2,
@@ -47,7 +40,8 @@
       "monthly_summaries": 0
     }
   ],
-  "total_attempted": 41,
-  "total_completed": 35,
-  "caveat": "No funding or actual spread/market impact modeled. Failed engines are not counted as backtests."
+  "total_attempted": 30,
+  "total_completed": 24,
+  "caveat": "No funding or actual spread/market impact modeled. Failed engines are not counted as backtests.",
+  "retirement_note": "Historical mixed-suite results retain original counts; retired engines will not be included in future manual replays. Full old suite is available at 0ba988119848c6d93a5c1c934795dee3526e5277"
 }
