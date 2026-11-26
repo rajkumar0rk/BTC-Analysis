@@ -1,20 +1,28 @@
 name: Backtest dashboard
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '23 */6 * * *'
+  workflow_run:
+    workflows: ['ETHUSD native ATR price-action strategy research']
+    types: [completed]
+    branches: [main]
   push:
     branches: [main]
-    paths: ['dashboard/**', 'analysis/**', 'scripts/dashboard_archive.py', 'scripts/export_dashboard.py', 'scripts/test_dashboard_audit.py', 'scripts/research_daily_200_500_points.py', '.github/workflows/backtest-dashboard.yml']
+    paths: ['dashboard/**', 'analysis/**', 'scripts/dashboard_archive.py', 'scripts/export_dashboard.py', 'scripts/test_dashboard_audit.py', 'scripts/test_dashboard_archive.py', 'scripts/verify_dashboard_export.py', 'scripts/dashboard_smoke.cjs', 'scripts/research_daily_200_500_points.py', '.github/workflows/backtest-dashboard.yml']
   pull_request:
-    paths: ['dashboard/**', 'analysis/**', 'scripts/dashboard_archive.py', 'scripts/export_dashboard.py', 'scripts/test_dashboard_audit.py', 'scripts/research_daily_200_500_points.py', '.github/workflows/backtest-dashboard.yml']
+    paths: ['dashboard/**', 'analysis/**', 'scripts/dashboard_archive.py', 'scripts/export_dashboard.py', 'scripts/test_dashboard_audit.py', 'scripts/test_dashboard_archive.py', 'scripts/verify_dashboard_export.py', 'scripts/dashboard_smoke.cjs', 'scripts/research_daily_200_500_points.py', '.github/workflows/backtest-dashboard.yml']
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: backtest-dashboard-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,7 +32,27 @@ jobs:
       - run: python scripts/test_dashboard_audit.py
       - run: python scripts/test_dashboard_archive.py
       - run: node --check dashboard/app.js
+      - name: Retrieve latest successful ETH trade evidence
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          run=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/research-eth-native-atr-price-action.yml/runs?status=success&branch=main&per_page=1" --jq '.workflow_runs[0].id // empty')
+          if [ -n "$run" ]; then
+            gh run download "$run" --name eth-native-atr-trade-ledger --dir analysis/ethusd_native_atr_price_action
+            test -s analysis/ethusd_native_atr_price_action/full_trade_ledger.csv.gz
+          else
+            echo '::warning::No successful ETH ledger run found'
+          fi
+      - name: Catalog research refs
+        run: git ls-remote --heads origin > .dashboard-branches.txt
       - run: python scripts/export_dashboard.py
+      - run: python scripts/verify_dashboard_export.py
+      - name: Browser smoke test
+        run: |
+          npm install --prefix /tmp/dashboard-smoke playwright@1.51.1
+          /tmp/dashboard-smoke/node_modules/.bin/playwright install chromium --with-deps
+          NODE_PATH=/tmp/dashboard-smoke/node_modules node scripts/dashboard_smoke.cjs
       - uses: actions/upload-artifact@v4
         with:
           name: backtest-dashboard

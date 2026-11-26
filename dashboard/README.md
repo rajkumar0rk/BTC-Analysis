@@ -9,3 +9,6 @@ Static GitHub Pages application. Main workflow: Backtest dashboard. GitHub Actio
 - Daily candles, monthly trade shards, bounded cache, sampled curve. Archive budget 240 MiB; missing/unsupported/oversize sources appear in coverage. Public Pages only: no private data.
 
 Run locally: install pandas and numpy; python scripts/test_dashboard_audit.py; python scripts/test_dashboard_archive.py; python scripts/export_dashboard.py; python -m http.server 8000 --directory dashboard-dist.
+
+## V3 verification and coverage
+ETH ledger is downloaded from the latest successful native-ATR workflow artifact. Dashboard rebuilds on its successful completion and on a six-hour schedule. Source archive budget is split by instrument; summary-only configurations retain full metrics but omit trade shards. Research branches are cataloged, not merged or automatically replayed. CI validates generated data and exercises BTC/ETH UI in Chromium. Missing fills and actual trailing/liquidation trajectories remain unavailable unless recorded in the originating engine.

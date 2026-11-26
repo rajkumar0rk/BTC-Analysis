@@ -12,7 +12,13 @@ SCHEMAS=[
  dict(glob="analysis/mtf_swing_range_long/trade_ledger.csv*",keys=["trend","setup","session","target_r"],fixed_side=1,entry="entry_utc",exit="exit_utc",ep="entry",xp="exit",net="net_pts",gross="gross_pts",reason="exit_reason",trigger="setup",symbol="BTCUSD"),
  dict(glob="analysis/ethusd_native_atr_price_action/full_trade_ledger.csv*",keys=["model"],side="direction",entry="entry_unix",exit="exit_unix",ep="entry_price_usd",xp="exit_price_usd",net="net_eth_price_points",gross="gross_eth_price_points",reason="result",trigger="pattern",symbol="ETHUSD"),
 ]
-for name,side in [("mtf_swing_range_long_fixed2r",1),("mtf_swing_range_short_fixed2r",-1),("mtf_swing_range_short_fixed3r",-1),("mtf_swing_range_long_fixed3r",1),("mtf_uptrend_short_fixed3r",-1)]:
+SCHEMAS.extend([
+ dict(glob="analysis/v7_1_2025/*exclusive_trades.csv",keys=["cohort","horizon_h"],side="side",entry="entry_time",exit="exit_time",ep="entry_price",xp="exit_price",net="net_pts",gross="gross_pts",reason="exit_reason",signal="signal_time",trigger="cohort",symbol="BTCUSD"),
+ dict(glob="analysis/big_trend_stage1/trade_ledger.csv.gz",keys=["side","trend","range_bars","qualifier","entry_mode","exit_mode","session"],side="side",entry="entry_utc",exit="exit_utc",ep="entry_price",xp="exit_price",net="net_pts",gross="gross_pts",reason="reason",trigger="entry_mode",symbol="BTCUSD"),
+ dict(glob="analysis/previous_day_range_swing/trade_ledger.csv.gz",keys=["side","setup","tf","session","sl","tp","hold"],side="side",entry="entry_utc",exit="exit_utc",ep="entry",xp="exit",net="net_pts",gross="gross_pts",reason="exit_reason",trigger="setup",symbol="BTCUSD"),
+ dict(glob="analysis/institutional_discovery_stage24_failed_auction/original_trade_ledger.csv.gz",keys=["mult","rr","hold"],side="side",entry="entry_unix",exit="exit_unix",net="net_points",reason="reason",symbol="BTCUSD"),
+])
+for name,side in [("mtf_swing_range_fixed3r",1),("mtf_swing_range_long_fixed2r",1),("mtf_swing_range_short_fixed2r",-1),("mtf_swing_range_short_fixed3r",-1),("mtf_swing_range_long_fixed3r",1),("mtf_uptrend_short_fixed3r",-1)]:
     SCHEMAS.append(dict(glob=f"analysis/{name}/trade_ledger.csv*",keys=["trend","setup","session","sl_pts","tp_pts"],fixed_side=side,entry="entry_utc",exit="exit_utc",ep="entry",xp="exit",net="net_pts",gross="gross_pts",reason="exit_reason",trigger="setup",symbol="BTCUSD"))
 
 def dump(p,x):
@@ -26,7 +32,8 @@ def value(v):
 
 def stamp(v):
     if pd.isna(v): return None
-    t=pd.to_datetime(v,unit="s",utc=True) if isinstance(v,(int,float,np.number)) else pd.to_datetime(v,utc=True,errors="coerce")
+    if isinstance(v,str) and len(v)==25 and v.endswith("+00:00") and v[10]=="T": return v
+    t=pd.to_datetime(v,unit="s",utc=True,errors="coerce") if isinstance(v,(int,float,np.number)) else pd.to_datetime(v,utc=True,errors="coerce")
     return None if pd.isna(t) else t.isoformat()
 
 def number(v):
@@ -67,8 +74,8 @@ def normalize(row,s):
     direction=s.get("fixed_side") or side(get("side"))
     net=number(get("net"))
     if not entry or not exit or exit<entry or direction is None or net is None: return None
-    ctx={k:value(row[k]) for k in ("atr","signal_atr","ema20","ema50","supertrend","risk_pts","stop_distance_eth_usd","target_distance_eth_usd","fee_gst_points","modeled_cost_points","fee_slippage_pts","equity_trade_return","mfe_points","mae_points","trail_stop_price","liquidation_price") if k in row and value(row[k]) is not None}
-    return dict(entry_utc=entry,exit_utc=exit,trigger_utc=stamp(get("signal")),side=direction,entry_price=number(get("ep")),exit_price=number(get("xp")),entry_reason=get("trigger"),exit_reason=get("reason"),result=get("reason") or "Not recorded",net_points=net,gross_points=number(get("gross")),fee_points=number(row.get("fee_gst_points")),assumed_slippage_points=None,stop_price=number(row.get("stop_price")),target_price=number(row.get("target_price")),trailing_stop_price=number(row.get("trail_stop_price")),liquidation_price=number(row.get("liquidation_price")),signal_context=ctx,split=value(row.get("period")),audit="archived fields only")
+    ctx={k:value(row[k]) for k in ("atr","signal_atr","ema20","ema50","supertrend","risk_pts","stop_distance_eth_usd","target_distance_eth_usd","fee_gst_points","modeled_cost_points","fee_slippage_pts","equity_trade_return","mfe_points","mae_points","mfe_pts","mae_pts","stop_distance_pts","level","cost_pts","entry_price_usd","entry_fill_usd","trade_return","trail_stop_price","liquidation_price") if k in row and value(row[k]) is not None}
+    return dict(entry_utc=entry,exit_utc=exit,trigger_utc=stamp(get("signal")),side=direction,entry_price=number(row.get("entry_fill_usd")) if s["symbol"]=="ETHUSD" and number(row.get("entry_fill_usd")) is not None else number(get("ep")),exit_price=number(get("xp")),entry_reason=value(row.get("entry_reason")) or get("trigger"),exit_reason=value(row.get("exit_reason")) or get("reason"),result=get("reason") or "Not recorded",net_points=net,gross_points=number(get("gross")),fee_points=number(row.get("fee_gst_points")),assumed_slippage_points=None,stop_price=number(row.get("stop_price")),target_price=number(row.get("target_price")),trailing_stop_price=number(row.get("trail_stop_price")),liquidation_price=number(row.get("liquidation_price")),signal_context=ctx,split=value(row.get("period")),audit="archived fields only")
 
 def candle_shards(root,out,symbol):
     folder=root/"data"/"delta_india"/symbol/"1m"
@@ -96,8 +103,9 @@ def extend(root,out):
         dump(out/"data"/"runs"/r["id"]/"curve.json",curve(records))
     # Use original daily shards for the first run, new symbol-specific paths for archive.
     # Limit generated website size; oversized/incompatible ledgers are explicitly cataloged.
-    coverage=[]; seen=set(); supported_count=0; budget=240*1024*1024; used=0
-    for s in SCHEMAS:
+    coverage=[]; seen=set(); supported_count=0; budget=330*1024*1024; used={"BTCUSD":0,"ETHUSD":0}
+    # Reserve independent budgets so BTC research cannot crowd out ETH.
+    for s in sorted(SCHEMAS,key=lambda s: (s["symbol"]!="ETHUSD",s["glob"].startswith("analysis/mtf_"))):
         matches=sorted(root.glob(s["glob"]))
         if not matches: coverage.append(dict(path=s["glob"],status="Missing archived ledger"));continue
         for path in matches:
@@ -108,6 +116,11 @@ def extend(root,out):
                 cols=set(s["keys"]+[s[k] for k in ("entry","exit","net")])
                 if not cols.issubset(d.columns): raise ValueError("Schema mismatch: "+str(sorted(cols-set(d.columns))))
                 if not s.get("fixed_side") and s.get("side") not in d: raise ValueError("Missing recorded side")
+                # Parse timestamps once per column rather than once per row.
+                for col in {s.get("entry"),s.get("exit"),s.get("signal")}-{None}:
+                    if col not in d: continue
+                    ts=pd.to_datetime(d[col],unit="s",utc=True,errors="coerce") if pd.api.types.is_numeric_dtype(d[col]) else pd.to_datetime(d[col],utc=True,errors="coerce",format="mixed")
+                    d[col]=ts.dt.strftime("%Y-%m-%dT%H:%M:%S+00:00")
                 prepared=[]; invalid=0
                 for keys,g in d.groupby(s["keys"],sort=True,dropna=False):
                     if not isinstance(keys,tuple): keys=(keys,)
@@ -115,14 +128,17 @@ def extend(root,out):
                     for row in g.to_dict("records"):
                         rec=normalize(row,s)
                         if rec is None: invalid+=1
-                        else: records.append(rec)
+                        else: records.append({k:v for k,v in rec.items() if v is not None})
                     if not records: continue
                     rid="a"+hashlib.sha256((rel+repr(keys)).encode()).hexdigest()[:18]
                     prepared.append((rid,keys,records))
                 if invalid: raise ValueError(f"{invalid} invalid trade rows; entire ledger excluded")
-                estimate=sum(len(json.dumps(rec,allow_nan=False,separators=(",",":"))) + 1 for _,_,rr in prepared for rec in rr)
-                if used+estimate>budget: raise ValueError("Archive export size budget reached")
+                imported=0; summary_only=0
                 for rid,keys,records in prepared:
+                    size=sum(len(json.dumps(rec,allow_nan=False,separators=(",",":")))+45 for rec in records)
+                    full=used[s["symbol"]]+size<=budget//2
+                    if full: used[s["symbol"]]+=size;imported+=1
+                    else: summary_only+=1
                     config=" / ".join(f"{k}={v}" for k,v in zip(s["keys"],keys))
                     months=[]
                     by={}
@@ -130,12 +146,12 @@ def extend(root,out):
                         by.setdefault(rec["entry_utc"][:7],[]).append(rec)
                     for month,rr in sorted(by.items()):
                         for j,rec in enumerate(rr): rec["id"]=f"{rid}-{month}-{j}"
-                        dump(out/"data"/"runs"/rid/(month+".json"),rr)
+                        if full: dump(out/"data"/"runs"/rid/(month+".json"),rr)
                         months.append(dict(month=month,net=round(sum(t["net_points"] for t in rr),6),trades=len(rr),wins=sum(t["net_points"]>0 for t in rr)))
                     dump(out/"data"/"runs"/rid/"curve.json",curve(records))
-                    index["runs"].append(dict(id=rid,strategy=path.parent.name+" / "+config,target=None,stop=None,months=months,symbol=s["symbol"],unit="price points",source=rel,audit="archived fields only",costs="Source model costs; consult original report. No inferred fees or fills.",**stats(records)))
-                used+=estimate;supported_count+=len(prepared)
-                coverage.append(dict(path=rel,status="Imported",configurations=len(prepared)))
+                    index["runs"].append(dict(id=rid,strategy=path.parent.name+" / "+config,target=None,stop=None,months=months,symbol=s["symbol"],unit="price points",source=rel,audit="execution-time fields" if s["symbol"]=="ETHUSD" and "entry_fill_usd" in d.columns else "archived fields only",detail_available=full,costs="Source model costs; consult original report. No inferred fees or fills.",**stats(records)))
+                supported_count+=len(prepared)
+                coverage.append(dict(path=rel,status=f"Imported {imported} full, {summary_only} summary-only (size budget)",configurations=len(prepared)))
             except (ValueError,KeyError,TypeError,OverflowError,MemoryError) as exc:
                 coverage.append(dict(path=rel,status="Not imported: "+str(exc)))
     for path in sorted((root/"analysis").rglob("*")):
@@ -151,6 +167,15 @@ def extend(root,out):
         except (ValueError,OSError) as exc:
             index.setdefault("candle_days",{})[symbol]=[]
             coverage.append(dict(path=f"data/delta_india/{symbol}/1m",status="Candle export unavailable: "+str(exc)))
+    # The original BTC-only shards are superseded by symbol-specific shards.
+    for path in (out/"data"/"candles").glob("*.json"): path.unlink()
     dump(out/"data"/"coverage.json",coverage)
     index["archive_configurations"]=supported_count
+    index["full_configurations"]=sum(r.get("detail_available",True) for r in index["runs"])
+    # Keep a lightweight catalog of research branches without merging them.
+    branches=root/".dashboard-branches.txt"
+    if branches.exists():
+        refs=[dict(sha=line.split()[0],name=line.split()[1].removeprefix("refs/heads/")) for line in branches.read_text().splitlines() if len(line.split())==2]
+        dump(out/"data"/"branches.json",refs)
+    else: dump(out/"data"/"branches.json",[])
     dump(idxpath,index)
