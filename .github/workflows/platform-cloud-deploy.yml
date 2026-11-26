@@ -1,0 +1,107 @@
+name: Deploy private Cloudflare Studio
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: 'Validate config only or apply migration and deploy (paper disabled)'
+        required: true
+        type: choice
+        default: validate
+        options: [validate, deploy]
+permissions:
+  contents: read
+concurrency:
+  group: private-cloud-production
+  cancel-in-progress: false
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: cloudflare-production
+    env:
+      WRANGLER_SEND_METRICS: 'false'
+      CF_WORKER: btc-analysis
+      CF_ORIGIN: ${{ vars.CF_ORIGIN }}
+      CF_DATABASE_ID: ${{ vars.CF_DATABASE_ID }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate operator configuration before building
+        run: |
+          python - <<'PY'
+          import os,re,uuid
+          origin=os.environ.get("CF_ORIGIN","")
+          if not re.fullmatch(r"https://btc-analysis\.[a-z0-9-]+\.workers\.dev",origin):
+              raise SystemExit("Set environment variable CF_ORIGIN to the exact worker HTTPS origin")
+          try:
+              db=uuid.UUID(os.environ.get("CF_DATABASE_ID",""))
+          except ValueError:
+              raise SystemExit("Set environment variable CF_DATABASE_ID to a dedicated D1 database UUID")
+          if str(db) in ("00000000-0000-4000-8000-000000000001","12345678-1234-4234-8234-123456789012"):
+              raise SystemExit("Test database IDs prohibited")
+          PY
+      - run: python scripts/prepare_browser_python.py
+      - working-directory: apps/web
+        run: npm ci --no-audit --no-fund && npm run build -- --mode private
+      - name: Generate private deployment config (paper disabled)
+        run: python scripts/prepare_cloud_release.py --worker "$CF_WORKER" --origin "$CF_ORIGIN" --database-id "$CF_DATABASE_ID"
+      - name: Bundle and validate without cloud writes
+        working-directory: apps/cloud
+        run: npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml --dry-run --outdir "$RUNNER_TEMP/private-bundle"
+      - name: Verify operator credentials and auth digest map
+        if: inputs.operation == 'deploy'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          AUTH_HASHES_JSON: ${{ secrets.AUTH_HASHES_JSON }}
+        working-directory: apps/cloud
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,re,json
+          if not re.fullmatch(r"[0-9a-fA-F]{32}",os.environ.get("CLOUDFLARE_ACCOUNT_ID","")) or not os.environ.get("CLOUDFLARE_API_TOKEN"):
+              raise SystemExit("Missing Cloudflare account ID or API token")
+          try:
+              a=json.loads(os.environ.get("AUTH_HASHES_JSON",""))
+              assert isinstance(a,dict) and 1<=len(a)<=8
+              assert all(re.fullmatch(r"[A-Za-z0-9_-]{1,64}",k) and isinstance(v,str) and re.fullmatch(r"[0-9a-f]{64}",v) for k,v in a.items())
+              assert len(set(a.values()))==len(a)
+          except (ValueError,TypeError,AssertionError):
+              raise SystemExit("AUTH_HASHES_JSON must be a valid owner-to-SHA256 digest map")
+          PY
+          npx --yes wrangler@4.157.0 d1 info btc-analysis --config wrangler.release.toml
+      - name: Apply dedicated database migration and deploy private Studio
+        if: inputs.operation == 'deploy'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          AUTH_HASHES_JSON: ${{ secrets.AUTH_HASHES_JSON }}
+        working-directory: apps/cloud
+        run: |
+          set -euo pipefail
+          npx --yes wrangler@4.157.0 d1 migrations apply DB --remote --config wrangler.release.toml
+          npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml
+          printf '%s' "$AUTH_HASHES_JSON" | npx --yes wrangler@4.157.0 secret put AUTH_HASHES_JSON --config wrangler.release.toml
+      - name: Verify deployed public shell and unauthenticated API denial
+        if: inputs.operation == 'deploy'
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 20); do
+            if curl -fsS --max-time 10 "$CF_ORIGIN/health" | python -c 'import json,sys;d=json.load(sys.stdin);assert d["status"]=="ok" and d["service"]=="btc-analysis-cloud"'; then break; fi
+            sleep 3
+          done
+          curl -fsS --max-time 15 "$CF_ORIGIN/health" | python -c 'import json,sys;d=json.load(sys.stdin);assert d["service"]=="btc-analysis-cloud"'
+          curl -fsS --max-time 15 "$CF_ORIGIN/" -o "$RUNNER_TEMP/private-index.html"
+          grep -q 'Strategy Studio' "$RUNNER_TEMP/private-index.html"
+          status="$(curl -sS --max-time 15 -o "$RUNNER_TEMP/unauth.json" -w '%{http_code}' "$CF_ORIGIN/v1/cloud/capabilities")"
+          test "$status" = 401
+          python -c 'import json,sys;assert json.load(open(sys.argv[1]))["error"]=="invalid_credentials"' "$RUNNER_TEMP/unauth.json"
+          printf '### Private Studio deployed (paper disabled)\n%s\n\nAuthenticated data roundtrip and actual quota measurements still require operator verification.\n' "$CF_ORIGIN" >> "$GITHUB_STEP_SUMMARY"
