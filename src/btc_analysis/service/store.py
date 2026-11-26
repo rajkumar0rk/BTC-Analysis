@@ -53,6 +53,19 @@ class Store:
                 UNIQUE(owner,request_key));
               CREATE INDEX IF NOT EXISTS jobs_queue ON jobs(status,created,id);
               CREATE INDEX IF NOT EXISTS jobs_owner ON jobs(owner,created);
+              CREATE TABLE IF NOT EXISTS strategy_registry(
+                strategy_id TEXT PRIMARY KEY REFERENCES strategies(id),
+                archived INTEGER NOT NULL DEFAULT 0 CHECK(archived IN (0,1)),
+                frozen_version INTEGER, frozen_at INTEGER, state_version INTEGER NOT NULL DEFAULT 0,
+                parent_strategy_id TEXT REFERENCES strategies(id), parent_version INTEGER, parent_code_sha TEXT,
+                FOREIGN KEY(strategy_id,frozen_version) REFERENCES revisions(strategy_id,version),
+                FOREIGN KEY(parent_strategy_id,parent_version) REFERENCES revisions(strategy_id,version));
+              CREATE TABLE IF NOT EXISTS registry_events(
+                strategy_id TEXT NOT NULL REFERENCES strategies(id),
+                sequence INTEGER NOT NULL, action TEXT NOT NULL, version INTEGER NOT NULL,
+                code_sha TEXT NOT NULL, created INTEGER NOT NULL,
+                PRIMARY KEY(strategy_id,sequence));
+              INSERT OR IGNORE INTO strategy_registry(strategy_id) SELECT id FROM strategies;
             """)
 
     @contextmanager
@@ -74,6 +87,24 @@ class Store:
         if r is None:raise Missing("strategy not found")
         return r
 
+    def _registry(self,c,owner,sid):
+        self._strategy(c,owner,sid)
+        r=c.execute("SELECT * FROM strategy_registry WHERE strategy_id=?",(sid,)).fetchone()
+        if r is None:raise Invalid("registry metadata missing")
+        return r
+
+    @staticmethod
+    def _metadata(r):
+        return dict(archived=bool(r["archived"]),frozen_version=r["frozen_version"],
+                    frozen_at=r["frozen_at"],state_version=r["state_version"],
+                    parent_strategy_id=r["parent_strategy_id"],parent_version=r["parent_version"],
+                    parent_code_sha256=r["parent_code_sha"])
+
+    @staticmethod
+    def _event(c,sid,action,version,digest):
+        seq=c.execute("SELECT COALESCE(MAX(sequence),0)+1 FROM registry_events WHERE strategy_id=?",(sid,)).fetchone()[0]
+        c.execute("INSERT INTO registry_events VALUES(?,?,?,?,?,?)",(sid,seq,action,version,digest,now()))
+
     def create_strategy(self,owner,name,source):
         self._validate_source(source)
         with self.connection(True) as c:
@@ -82,6 +113,8 @@ class Store:
             sid=uuid.uuid4().hex;t=now()
             c.execute("INSERT INTO strategies VALUES(?,?,?,?)",(sid,owner,name,t))
             c.execute("INSERT INTO revisions VALUES(?,?,?,?,?)",(sid,1,source,sha(source),t))
+            c.execute("INSERT INTO strategy_registry(strategy_id) VALUES(?)",(sid,))
+            self._event(c,sid,"created",1,sha(source))
         return self.revision(owner,sid,1)
 
     @staticmethod
@@ -93,12 +126,14 @@ class Store:
     def add_revision(self,owner,sid,source,expected_version):
         self._validate_source(source)
         with self.connection(True) as c:
-            self._strategy(c,owner,sid)
+            state=self._registry(c,owner,sid)
+            if state["archived"] or state["frozen_version"] is not None:raise Conflict("strategy is archived or frozen; clone to edit")
             latest=c.execute("SELECT MAX(version) FROM revisions WHERE strategy_id=?",(sid,)).fetchone()[0]
             if latest!=expected_version:raise Conflict("strategy version changed")
             if latest>=MAX_VERSIONS:raise Conflict("revision quota exceeded")
             version=latest+1
             c.execute("INSERT INTO revisions VALUES(?,?,?,?,?)",(sid,version,source,sha(source),now()))
+            self._event(c,sid,"revision_created",version,sha(source))
         return self.revision(owner,sid,version)
 
     def revision(self,owner,sid,version):
@@ -106,13 +141,64 @@ class Store:
             s=self._strategy(c,owner,sid)
             r=c.execute("SELECT * FROM revisions WHERE strategy_id=? AND version=?",(sid,version)).fetchone()
             if r is None:raise Missing("revision not found")
-            return dict(id=sid,name=s["name"],version=r["version"],source=r["source"],code_sha256=r["code_sha"],created=r["created"])
+            return dict(id=sid,name=s["name"],version=r["version"],source=r["source"],code_sha256=r["code_sha"],created=r["created"],**self._metadata(self._registry(c,owner,sid)))
 
     def strategies(self,owner):
         with self.connection() as c:
-            return [dict(r) for r in c.execute("""SELECT s.id,s.name,s.created,MAX(r.version) AS latest_version
+            rows=c.execute("""SELECT s.id,s.name,s.created,MAX(r.version) AS latest_version
                   FROM strategies s JOIN revisions r ON r.strategy_id=s.id
-                  WHERE s.owner=? GROUP BY s.id ORDER BY s.created DESC,s.id LIMIT ?""",(owner,MAX_STRATEGIES))]
+                  WHERE s.owner=? GROUP BY s.id ORDER BY s.created DESC,s.id LIMIT ?""",(owner,MAX_STRATEGIES))
+            return [dict(r,**self._metadata(self._registry(c,owner,r["id"]))) for r in rows]
+
+    def versions(self,owner,sid):
+        with self.connection() as c:
+            state=self._registry(c,owner,sid)
+            versions=[dict(r) for r in c.execute("SELECT version,code_sha AS code_sha256,created FROM revisions WHERE strategy_id=? ORDER BY version DESC",(sid,))]
+            events=[dict(r) for r in c.execute("SELECT sequence,action,version,code_sha AS code_sha256,created FROM registry_events WHERE strategy_id=? ORDER BY sequence DESC LIMIT 200",(sid,))]
+            return {"id":sid,**self._metadata(state),"versions":versions,"events":events}
+
+    def transition(self,owner,sid,action,expected_state,expected_version):
+        with self.connection(True) as c:
+            state=self._registry(c,owner,sid)
+            r=c.execute("SELECT version,code_sha FROM revisions WHERE strategy_id=? ORDER BY version DESC LIMIT 1",(sid,)).fetchone()
+            if state["state_version"]!=expected_state or r["version"]!=expected_version:
+                raise Conflict("strategy state or head changed")
+            if action=="freeze":
+                if state["archived"]:raise Conflict("restore before freezing")
+                if state["frozen_version"] is not None:raise Conflict("already frozen")
+                c.execute("UPDATE strategy_registry SET frozen_version=?,frozen_at=?,state_version=state_version+1 WHERE strategy_id=?",(r["version"],now(),sid))
+            elif action in ("archive","restore"):
+                desired=int(action=="archive")
+                if state["archived"]==desired:raise Conflict("strategy already in requested state")
+                c.execute("UPDATE strategy_registry SET archived=?,state_version=state_version+1 WHERE strategy_id=?",(desired,sid))
+            else:raise Invalid("unknown transition")
+            self._event(c,sid,action,r["version"],r["code_sha"])
+        return self.versions(owner,sid)
+
+    def clone(self,owner,sid,version,name):
+        with self.connection(True) as c:
+            self._registry(c,owner,sid)
+            r=c.execute("SELECT * FROM revisions WHERE strategy_id=? AND version=?",(sid,version)).fetchone()
+            if r is None:raise Missing("revision not found")
+            if c.execute("SELECT COUNT(*) FROM strategies WHERE owner=?",(owner,)).fetchone()[0]>=MAX_STRATEGIES:
+                raise Conflict("strategy quota exceeded")
+            if sha(r["source"])!=r["code_sha"]:raise Invalid("source checksum mismatch")
+            new=uuid.uuid4().hex;t=now()
+            c.execute("INSERT INTO strategies VALUES(?,?,?,?)",(new,owner,name,t))
+            c.execute("INSERT INTO revisions VALUES(?,?,?,?,?)",(new,1,r["source"],r["code_sha"],t))
+            c.execute("INSERT INTO strategy_registry(strategy_id,parent_strategy_id,parent_version,parent_code_sha) VALUES(?,?,?,?)",(new,sid,version,r["code_sha"]))
+            self._event(c,new,"cloned",1,r["code_sha"])
+        return self.revision(owner,new,1)
+
+    def strategy_jobs(self,owner,sid,offset=0):
+        with self.connection() as c:
+            self._registry(c,owner,sid)
+            rows=c.execute("""SELECT id,status,progress,created,updated,error,payload,
+                 json_extract(result,'$.result_sha256') AS result_sha256
+                 FROM jobs WHERE owner=? AND json_extract(payload,'$.strategy_id')=?
+                 ORDER BY created DESC,id LIMIT 21 OFFSET ?""",(owner,sid,offset)).fetchall()
+            return {"jobs":[dict(self._public(r),result_sha256=r["result_sha256"]) for r in rows[:20]],
+                    "next_offset":offset+20 if len(rows)>20 else None}
 
     @staticmethod
     def _public(r,include_result=False):
@@ -131,6 +217,14 @@ class Store:
             if prior:
                 if prior["request_sha"]!=digest:raise Conflict("idempotency key reused with different request")
                 return self._public(prior)
+            if payload["kind"]=="historical_visual":
+                state=self._registry(c,owner,payload["strategy_id"])
+                if state["archived"]:raise Conflict("archived strategy cannot submit new jobs")
+                if state["frozen_version"] is not None and payload["version"]!=state["frozen_version"]:
+                    raise Conflict("frozen strategy requires its frozen version")
+                revision=c.execute("SELECT code_sha FROM revisions WHERE strategy_id=? AND version=?",
+                                   (payload["strategy_id"],payload["version"])).fetchone()
+                if revision is None or revision["code_sha"]!=payload["code_sha256"]:raise Conflict("pinned strategy mismatch")
             if c.execute("SELECT COUNT(*) FROM jobs WHERE owner=?",(owner,)).fetchone()[0]>=MAX_JOBS:
                 raise Conflict("job history quota exceeded")
             if c.execute("SELECT COUNT(*) FROM jobs WHERE owner=? AND status IN ('queued','running','cancelling')",(owner,)).fetchone()[0]>=MAX_ACTIVE:

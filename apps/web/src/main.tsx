@@ -7,6 +7,7 @@ import {PythonEditor} from "./PythonEditor";
 import {VisualBuilder} from "./VisualBuilder";
 import {HistoricalRunner} from "./HistoricalRunner";
 import {TradeAnalytics} from "./TradeAnalytics";
+import {RegistryPanel} from "./RegistryPanel";
 import "./style.css";
 const pages=["Overview","Strategy library","Visual builder","Backtest runner","Job history","Settings"] as const;
 type Page=typeof pages[number];
@@ -37,7 +38,7 @@ function Studio({token,caps,logout}:{token:string;caps:Capabilities;logout:()=>v
  <div className="notice"><strong>Reference environment.</strong> {caps.historical_runs?"Historical visual research and synthetic fixtures available.":"Only synthetic fixtures can run."} Saved arbitrary Python source is inert. No live orders.</div>
  {error&&<div role="alert" className="error">{error} <button onClick={()=>{setError("");void refresh();}}>Retry</button></div>}
  {page==="Overview"&&<><div className="metrics">{[["Saved strategies",strategies.length],["Active jobs",jobs.filter(active).length],["Successful jobs",jobs.filter(j=>j.status==="succeeded").length],["Worker capacity",caps.worker_concurrency]].map(([label,v])=><section className="panel metric" key={label}><span className="muted">{label}</span><strong>{ready?v:"—"}</strong></section>)}</div><section className="panel"><div className="head"><h2>Recent jobs</h2><button className="primary" onClick={()=>nav("Backtest runner")}>New reference run</button></div><Jobs jobs={jobs.slice(0,6)} open={open}/></section></>}
- {page==="Strategy library"&&<Library key={pythonRevision?.id??"library"} initial={pythonRevision} api={api} strategies={strategies} refresh={refresh} report={report}/>}
+ {page==="Strategy library"&&<Library key={pythonRevision?.id??"library"} initial={pythonRevision} api={api} strategies={strategies} refresh={refresh} report={report} openJob={open}/>}
  {page==="Visual builder"&&<VisualBuilder api={api} strategies={strategies} refresh={refresh} report={report} openPython={r=>{setPythonRevision(r);setPage("Strategy library");}}/>}
  {page==="Backtest runner"&&<><HistoricalRunner api={api} strategies={strategies} open={open} refresh={refresh} report={report}/><Runner api={api} caps={caps} open={open} refresh={refresh} report={report}/></>}
  {page==="Job history"&&<><section className="panel"><div className="head"><h2>Job history</h2><button onClick={()=>void refresh()}>Refresh</button></div><Jobs jobs={jobs} open={open}/></section>{selected&&<Detail key={selected} api={api} id={selected} refresh={refresh} report={report}/>}</>}
@@ -47,13 +48,15 @@ function Studio({token,caps,logout}:{token:string;caps:Capabilities;logout:()=>v
 function Jobs({jobs,open}:{jobs:Job[];open:(id:string)=>void}){
  return jobs.length?<div className="table-wrap"><table><thead><tr><th>Job</th><th>Status</th><th>Progress</th><th>Submitted</th><th>Details</th></tr></thead><tbody>{jobs.map(j=><tr key={j.id}><td>{j.request.kind==="reference_fixture"?"Synthetic fixture":j.request.symbol+" historical visual"}<small>{j.request.kind==="reference_fixture"?j.request.bars+" bars · "+j.request.signal_minutes+"m":new Date(j.request.start*1000).toISOString().slice(0,16)+" UTC"} · {j.id.slice(0,8)}</small></td><td><span className={"status "+j.status}>{j.status}</span></td><td><progress value={j.progress} max={100} aria-label="Job progress"/> {j.progress}%</td><td>{new Date(j.created*1000).toLocaleString()}</td><td><button onClick={()=>open(j.id)}>Inspect</button></td></tr>)}</tbody></table></div>:<p className="muted">No jobs to display.</p>;
 }
-function Library({api,strategies,refresh,report,initial}:{initial:Revision|null;api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void}){
+function Library({api,strategies,refresh,report,initial,openJob}:{initial:Revision|null;api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void;openJob:(id:string)=>void}){
  const [r,setR]=useState<Revision|null>(initial);const [name,setName]=useState(initial?.name??"");const [source,setSource]=useState(initial?.source??starter);
  const [busy,setBusy]=useState(false);const [note,setNote]=useState("");const [validation,setValidation]=useState<Validation|null>(null);
  const [catalog,setCatalog]=useState<Catalog|null>(null);
- const latest=Math.max(r?.version??1,strategies.find(s=>s.id===r?.id)?.latest_version??1);
+ const current=strategies.find(s=>s.id===r?.id);
+ const latest=Math.max(r?.version??1,current?.latest_version??1);
+ const [showArchived,setShowArchived]=useState(false);
  const bytes=new TextEncoder().encode(source).length;
- const readOnly=busy||!!r&&r.version!==latest;
+ const readOnly=busy||!!r&&(r.version!==latest||(current??r).archived||(current??r).frozen_version!==null);
  useEffect(()=>{let alive=true;api.catalog().then(c=>{if(alive)setCatalog(c);}).catch(e=>{if(alive)report(e);});return()=>{alive=false;};},[api]);
  function edit(v:string){setSource(v);setValidation(null);setNote("");}
  async function load(id:string,v:number){setBusy(true);setNote("");setValidation(null);try{const x=await api.revision(id,v);setR(x);setName(x.name);setSource(x.source);}catch(e){report(e);}finally{setBusy(false);}}
@@ -64,8 +67,9 @@ function Library({api,strategies,refresh,report,initial}:{initial:Revision|null;
    setNote("Saved immutable version "+x.version+".");await refresh();
   }catch(e){report(e);}finally{setBusy(false);}}
  const canCheck=!busy&&bytes>0&&bytes<=65536&&source.trim().length>0;
- return <div className="split"><section className="panel"><div className="head"><h2>Strategies</h2><button disabled={busy} onClick={()=>{setR(null);setName("");edit(starter);}}>New</button></div>
- {strategies.map(s=><button className="strategy" key={s.id} disabled={busy} onClick={()=>void load(s.id,s.latest_version)}>{s.name}<small>Version {s.latest_version}</small></button>)}
+ return <><div className="split"><section className="panel"><div className="head"><h2>Strategies</h2><button disabled={busy} onClick={()=>{setR(null);setName("");edit(starter);}}>New</button></div>
+ <label className="check"><input type="checkbox" checked={showArchived} onChange={e=>setShowArchived(e.target.checked)}/> Show archived strategies</label>
+ {strategies.filter(s=>showArchived||!s.archived).map(s=><button className="strategy" key={s.id} disabled={busy} onClick={()=>void load(s.id,s.latest_version)}>{s.name}<small>Version {s.latest_version}{s.archived?" · Archived":s.frozen_version!==null?" · Frozen":""}</small></button>)}
  <details><summary>SDK indicator catalog</summary>{catalog?<div className="catalog">{catalog.indicators.map(i=><div key={i.name}><strong>{i.name}</strong><small>{i.outputs.join(" · ")}</small><small>{Object.entries(i.defaults).map(([k,v])=>k+"="+v).join(", ")}</small></div>)}</div>:<p className="muted">Catalog unavailable.</p>}</details></section>
  <section className="panel"><h2>{r?"Strategy version":"New strategy"}</h2><p className="muted">Python syntax checking and immutable source storage. Custom execution is disabled.</p>
  {r&&<><label htmlFor="version">View version</label><select id="version" value={r.version} disabled={busy} onChange={e=>void load(r.id,Number(e.target.value))}>{Array.from({length:latest},(_,i)=><option key={i+1}>{i+1}</option>)}</select></>}
@@ -76,7 +80,7 @@ function Library({api,strategies,refresh,report,initial}:{initial:Revision|null;
  {validation&&<div className={validation.syntax_valid?"validation-ok":"error"} role="status"><strong>{validation.syntax_valid?"Syntax valid":"Syntax errors"}</strong><p>Python {validation.python_version} · Compile only, not execution or strategy validation.</p>
  {validation.diagnostics.map((d,i)=><p key={i}>Line {d.line}, column {d.column}: {d.message}</p>)}</div>}
  {r&&<p className="hash muted">Saved SHA-256: {r.code_sha256}</p>}
- <button className="primary" disabled={readOnly||!canCheck}>{r?"Save new version":"Save strategy"}</button>{note&&<p role="status">{note}</p>}</form></section></div>;
+ <button className="primary" disabled={readOnly||!canCheck}>{r?"Save new version":"Save strategy"}</button>{note&&<p role="status">{note}</p>}</form></section></div>{r&&<RegistryPanel key={r.id+":"+r.version} api={api} revision={r} strategy={current} refresh={refresh} openJob={openJob} load={x=>{setR(x);setName(x.name);setSource(x.source);setValidation(null);setNote("");}}/>}</>;
 }
 function Runner({api,caps,open,refresh,report}:{api:Api;caps:Capabilities;open:(id:string)=>void;refresh:()=>Promise<void>;report:(e:unknown)=>void}){
  const [bars,setBars]=useState(120);const [tf,setTf]=useState<1|5|15>(5);const [busy,setBusy]=useState(false);const retry=useRef<{body:string;key:string}|null>(null);

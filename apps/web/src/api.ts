@@ -3,8 +3,10 @@ export type Diagnostic={severity:"error";message:string;line:number;column:numbe
 export type Validation={source_sha256:string;syntax_valid:boolean;diagnostics:Diagnostic[];execution_allowed:false;python_version:string};
 export type Catalog={sdk_version:string;execution_allowed:false;indicators:{name:string;defaults:Record<string,string|number>;outputs:string[]}[]};
 export type Capabilities={custom_python_execution:boolean;historical_runs:boolean;strategy_storage:boolean;worker_concurrency:number;fixture_max_bars:number;job_kinds:string[]};
-export type Strategy={id:string;name:string;latest_version:number;created:number};
-export type Revision={id:string;name:string;version:number;source:string;code_sha256:string};
+export type RegistryMeta={archived:boolean;frozen_version:number|null;frozen_at:number|null;state_version:number;parent_strategy_id:string|null;parent_version:number|null;parent_code_sha256:string|null};
+export type Registry=RegistryMeta&{id:string;versions:{version:number;code_sha256:string;created:number}[];events:{sequence:number;action:string;version:number;code_sha256:string;created:number}[]};
+export type Strategy=RegistryMeta&{id:string;name:string;latest_version:number;created:number};
+export type Revision=RegistryMeta&{id:string;name:string;version:number;source:string;code_sha256:string};
 export type Dataset={symbol:"BTCUSD"|"ETHUSD";manifest_sha256:string;start:number;end:number;timestamp_label_verified:boolean};
 export type Historical={kind:"historical_visual";strategy_id:string;version:number;symbol:Dataset["symbol"];manifest_sha256:string;start:number;end:number;warmup_minutes:number;initial_equity:string;maker_bps:string;taker_bps:string;tax_rate:string;slippage_bps:string;tick_size:string;lot_size:string;multiplier:string;assume_open:boolean;acknowledge_reference:true};
 export type Fixture={kind:"reference_fixture";bars:number;signal_minutes:1|5|15};
@@ -30,6 +32,10 @@ export function client(token:string){
   compileVisual:(graph:Graph)=>call<Compiled>("/v1/visual/compile",{method:"POST",body:JSON.stringify(graph)}),
   recoverVisual:(source:string)=>call<Compiled>("/v1/visual/recover",{method:"POST",body:JSON.stringify({source})}),
   strategies:()=>call<Strategy[]>("/v1/strategies"),
+  versions:(id:string)=>call<Registry>("/v1/strategies/"+encodeURIComponent(id)+"/versions"),
+  state:(id:string,action:"freeze"|"archive"|"restore",expected_state:number,expected_version:number)=>call<Registry>("/v1/strategies/"+encodeURIComponent(id)+"/state",{method:"POST",body:JSON.stringify({action,expected_state,expected_version})}),
+  clone:(id:string,version:number,name:string)=>call<Revision>("/v1/strategies/"+encodeURIComponent(id)+"/clone",{method:"POST",body:JSON.stringify({version,name})}),
+  strategyJobs:(id:string,offset=0)=>call<{jobs:(Job&{result_sha256:string|null})[];next_offset:number|null}>("/v1/strategies/"+encodeURIComponent(id)+"/jobs?offset="+offset),
   create:(name:string,source:string)=>call<Revision>("/v1/strategies",{method:"POST",body:JSON.stringify({name,source})}),
   revision:(id:string,v:number)=>call<Revision>("/v1/strategies/"+encodeURIComponent(id)+"/versions/"+v),
   save:(id:string,v:number,source:string)=>call<Revision>("/v1/strategies/"+encodeURIComponent(id)+"/versions",{method:"POST",body:JSON.stringify({source,expected_version:v})}),

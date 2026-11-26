@@ -35,6 +35,17 @@ class RevisionCreate(StrictModel):
     expected_version:Annotated[int,Field(ge=1,le=100)]
 
 
+class RegistryTransition(StrictModel):
+    action:Literal["freeze","archive","restore"]
+    expected_state:Annotated[int,Field(ge=0)]
+    expected_version:Annotated[int,Field(ge=1,le=100)]
+
+
+class CloneRequest(StrictModel):
+    version:Annotated[int,Field(ge=1,le=100)]
+    name:Name
+
+
 class SyntaxRequest(StrictModel):
     source:Source
 
@@ -149,6 +160,22 @@ def create_app(db_path,tokens,history_root=None):
     @app.post("/v1/strategies/{sid}/versions",status_code=201)
     def revision(sid:str,body:RevisionCreate,user:str=Depends(owner)):
         return store.add_revision(user,sid,body.source,body.expected_version)
+
+    @app.get("/v1/strategies/{sid}/versions")
+    def versions(sid:str,user:str=Depends(owner)):return store.versions(user,sid)
+
+    @app.post("/v1/strategies/{sid}/state")
+    def transition(sid:str,body:RegistryTransition,user:str=Depends(owner)):
+        return store.transition(user,sid,body.action,body.expected_state,body.expected_version)
+
+    @app.post("/v1/strategies/{sid}/clone",status_code=201)
+    def clone(sid:str,body:CloneRequest,user:str=Depends(owner)):
+        return store.clone(user,sid,body.version,body.name)
+
+    @app.get("/v1/strategies/{sid}/jobs")
+    def strategy_jobs(sid:str,offset:int=0,user:str=Depends(owner)):
+        if not 0<=offset<=1000:raise HTTPException(422,"invalid offset")
+        return store.strategy_jobs(user,sid,offset)
 
     @app.get("/v1/strategies/{sid}/versions/{version}")
     def get_revision(sid:str,version:int,user:str=Depends(owner)):

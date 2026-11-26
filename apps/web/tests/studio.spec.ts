@@ -55,3 +55,26 @@ test("visual rules generate, persist, recover and open Python",async({page})=>{
  await page.getByRole("button",{name:"Use plain text editor"}).click();
  await expect(page.getByLabel("Python source",{exact:true})).toHaveValue(/class VisualStrategy/);
 });
+
+test("registry freeze, clone, archive and restore",async({page})=>{
+ const token=process.env.PLATFORM_TEST_TOKEN;if(!token)throw new Error("Missing test token");
+ await page.goto("/");await page.getByLabel("API access token").fill(token);await page.getByRole("button",{name:"Connect",exact:true}).click();
+ await page.getByRole("button",{name:"Strategy library",exact:true}).click();
+ await page.getByRole("button",{name:"Use plain text editor"}).click();
+ await page.getByLabel("Name",{exact:true}).fill("Registry browser fixture");
+ await page.getByLabel("Python source",{exact:true}).fill("pass");
+ await page.getByRole("button",{name:"Save strategy",exact:true}).click();
+ await expect(page.getByRole("heading",{name:"Strategy management"})).toBeVisible();
+ await page.getByRole("button",{name:"Freeze latest version"}).click();
+ await expect(page.getByText("Strategy frozen. Clone to edit.",{exact:true})).toBeVisible();
+ await expect(page.getByRole("button",{name:"Save new version"})).toBeDisabled();
+ await page.getByRole("button",{name:"Archive strategy",exact:true}).click();
+ await expect(page.getByText("Strategy archived.",{exact:true})).toBeVisible();
+ await page.getByRole("button",{name:"Restore strategy",exact:true}).click();
+ await expect(page.getByText("Strategy restored.",{exact:true})).toBeVisible();
+ await page.getByLabel("Clone name").fill("Registry browser clone");
+ await page.getByRole("button",{name:"Clone saved version 1"}).click();
+ await expect(page.getByLabel("Name",{exact:true})).toHaveValue("Registry browser clone");
+ await expect(page.getByRole("button",{name:"Save new version"})).toBeEnabled();
+ await expect(page.getByText(/Cloned from /)).toBeVisible();
+});
