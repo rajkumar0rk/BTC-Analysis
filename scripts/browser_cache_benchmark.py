@@ -12,7 +12,7 @@ def main():
         with HistoryStore(root,symbol) as h:
             lo=h.manifest["start"];hi=lo+31*86400
             rows=h.query(lo,hi,assume_open=True).to_pylist()
-        csv="time,open,high,low,close,volume\n"+"".join(",".join(str(row[k]) for k in ("time","open","high","low","close","volume"))+"\n" for row in rows)
+        csv="time,open,high,low,close,volume\n"+"".join(",".join((str(row[k]) if k=="time" else format(row[k],"f")) for k in ("time","open","high","low","close","volume"))+"\n" for row in rows)
         def rule(op):
             return {"enabled":True,"groups":[{"conditions":[{"left":{"kind":"price","timeframe":900,"field":"close"},"op":op,"right":{"kind":"indicator","timeframe":900,"name":"ema.value","parameters":{"period":20}}}]}]}
         off={"enabled":False,"groups":[]}
