@@ -277,7 +277,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         "OHLC paths are assumptions; limit touch assumes full fill, no volume or queue modeling.",
         "Intrabar fills have bar-close availability timestamps, not observed tick timestamps.",
         "Adverse-first is a heuristic; two fixed paths are scenarios, not worst-case bounds.",
-        "Fees use configured bps; no venue-specific rebates, offers or fee rounding.",
+        ("Optional conservative single-entry full-close fee waiver with explicit effective period; no voucher or partial-close modeling." if margin_profile is not None and margin_profile.scalp_window_seconds else "Fees use configured bps; no venue-specific rebates, offers or fee rounding."),
         "No forced terminal liquidation; open positions marked at final close.",
         ("Dated contract reference: single reviewed continuous session before expiry; no rollover, delivery or settlement." if session_reference else "Continuous perpetual reference."),
         "Drawdown sampled at modeled price events; not actual tick drawdown.",
@@ -285,7 +285,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         "Caller attests pinned source and code; observed candle hash recorded independently.",
         "Indicators use explicit documented seeds and completed UTC-aligned bars; no external library parity claim.",
         "Warmup bars initialize indicators/history only, without orders, callbacks or evaluation P&L.",
-        "No historical bid-ask, tier transitions, partial exchange liquidation, fee offers or portfolio margin.",
+        ("Mark-vertex pre-liquidation buffer is modeled only; gaps can liquidate first, protective close halts the run. No historical bid-ask, tier transitions, partial liquidation or portfolio margin." if margin_profile is not None and margin_profile.preliquidation_buffer_points else "No historical bid-ask, tier transitions, partial exchange liquidation, fee offers or portfolio margin."),
     ),fingerprint(margin_profile) if margin_profile is not None else None)
 
 
@@ -385,6 +385,16 @@ class Simulator:
         if price<=0: raise ValueError("nonpositive modeled fill price")
         rate=(self.profile.liquidation_fee_bps if self.liquidating else
               self.cfg.costs.maker_bps if resting else self.cfg.costs.taker_bps)
+        # Conservative single-entry/full-close waiver. Intrabar evidence only
+        # bounds execution time, so use earliest possible entry for eligibility.
+        if (self.profile is not None and self.profile.scalp_window_seconds and opposite
+                and not self.liquidating and len(self.entries)==1 and not self.exits
+                and qty==abs(self.quantity)):
+            entry=self.entries[0]
+            earliest=entry.event_utc-timedelta(seconds=self.cfg.execution_timeframe.seconds)
+            if (self.profile.scalp_effective_start<=earliest<=self.now<self.profile.scalp_effective_end
+                    and (self.now-earliest).total_seconds()<=self.profile.scalp_window_seconds):
+                rate=ZERO
         fee=price*qty*self.mult*rate/BPS; tax=fee*self.cfg.costs.tax_rate
         if not opposite:
             if self.profile is None:
@@ -438,13 +448,13 @@ class Simulator:
                     del self.pending[key];self.log(key,"cancelled","position_flat")
         self.sample(price)
         if self.profile is not None and not self.liquidating:
-            self.check_liquidation(bar,phase,path)
+            self.check_liquidation(bar,phase,path,trade_ref=ref)
 
     def isolated_collateral(self):
         if self.profile is None:return ZERO
         return self.profile.initial(sum((q*p*self.mult for q,p in self.lots),ZERO),self.cfg.leverage)+self.iso_adjustment
 
-    def check_liquidation(self,bar,phase,path):
+    def check_liquidation(self,bar,phase,path,trade_ref=None):
         if self.profile is None or not self.quantity or self.liquidating:return
         mark=self.risk_mark
         notional=abs(self.quantity)*mark*self.mult
@@ -452,19 +462,26 @@ class Simulator:
             raise ValueError("position exceeds supported fixed-tier notional; tier transition required")
         equity=collateral_equity(self.cfg.margin_mode,self.balance,self.isolated_collateral(),self.unrealized(mark))
         maintenance=self.profile.maintenance(notional)
-        if equity>maintenance:return
+        liquidation=equity<=maintenance
+        # Fixed price-point buffer expressed as collateral surplus at this mark.
+        # At a gap below maintenance liquidation wins; no guaranteed stop fill.
+        sign=D(1) if self.quantity>0 else D(-1)
+        buffer=abs(self.quantity)*self.mult*self.profile.preliquidation_buffer_points*(1-sign*self.profile.maintenance_rate)
+        protective=(not liquidation and trade_ref is not None and buffer>0 and equity-maintenance<=buffer)
+        if not liquidation and not protective:return
         self.now=bar.open_utc if phase=="open" else bar.close_utc
-        self.liquidations.append(LiquidationRecord(self.now,mark,equity,maintenance,self.quantity,phase))
+        reason="modeled_liquidation" if liquidation else "modeled_preliquidation_stop"
+        if liquidation:self.liquidations.append(LiquidationRecord(self.now,mark,equity,maintenance,self.quantity,phase))
         for key in list(self.pending):
-            del self.pending[key];self.log(key,"cancelled","liquidation")
-        key=f"__liquidation_{len(self.liquidations)}"
+            del self.pending[key];self.log(key,"cancelled",reason)
+        key=f"__risk_close_{len(self.fills)+1}"
         if key in self.seen:raise ValueError("reserved liquidation intent ID collision")
         self.seen.add(key)
         side=Side.SELL if self.quantity>0 else Side.BUY
-        o=OrderIntent(key,self.cfg.instrument,self.now,side,OrderType.MARKET,abs(self.quantity),"modeled_liquidation",reduce_only=True)
-        p=Pending(o);self.pending[key]=p;self.log(key,"accepted","forced_liquidation",o)
-        self.liquidating=True;self.halted=True
-        try:self._fill(p,mark,phase,bar,path)
+        o=OrderIntent(key,self.cfg.instrument,self.now,side,OrderType.MARKET,abs(self.quantity),reason,reduce_only=True)
+        p=Pending(o);self.pending[key]=p;self.log(key,"accepted",reason,o)
+        self.liquidating=liquidation;self.halted=True
+        try:self._fill(p,mark if liquidation else trade_ref,phase,bar,path)
         finally:self.liquidating=False
 
     def risk_open(self,bar,risk,path):
@@ -485,7 +502,7 @@ class Simulator:
             self.balance-=paid;self.funding+=paid;self.trade_funding+=paid
             if self.cfg.margin_mode is MarginMode.ISOLATED:self.iso_adjustment-=paid
             self.funding_records.append(FundingRecord(f.event_utc,self.quantity,f.rate,f.reference_mark,paid,f.source_id))
-        self.sample(m.open);self.check_liquidation(bar,"open",path)
+        self.sample(m.open);self.check_liquidation(bar,"open",path,trade_ref=bar.open)
 
     @staticmethod
     def stop_hit(o,p):
@@ -562,7 +579,7 @@ class Simulator:
                 # Explicit mark-first stress ordering: independent source candles
                 # cannot establish exact chronological alignment with trades.
                 self.now=bar.close_utc;self.risk_mark=mark_levels[i]
-                self.sample(self.risk_mark);self.check_liquidation(bar,f"mark_vertex_{i}",path)
+                self.sample(self.risk_mark);self.check_liquidation(bar,f"mark_vertex_{i}",path,trade_ref=b)
             self._segment(a,b,i,bar,path)
         self.now=bar.close_utc;self.sample(bar.close)
         return self.fills[before:]

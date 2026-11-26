@@ -21,7 +21,7 @@ self.onmessage=async({data:m})=>{
   self.postMessage({id:m.id,status:"initializing"});
   runtime??=start();const py=await runtime;
   self.postMessage({id:m.id,status:"running"});
-  py.globals.set("request_json",JSON.stringify({csv_text:m.csv,graph_text:m.graph,symbol:m.symbol,settings:m.settings,assume_open:m.assume}));
+  py.globals.set("request_json",JSON.stringify({csv_text:m.csv,graph_text:m.graph,symbol:m.symbol,settings:m.settings,assume_open:m.assume,risk:m.risk??null}));
   const progress=p=>self.postMessage({id:m.id,status:"progress",progress:p});
   py.globals.set("report_progress",progress);
   const started=performance.now();

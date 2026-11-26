@@ -21,6 +21,10 @@ class MarginProfile:
     liquidation_fee_bps: D
     funding_interval_seconds: int = 0
     funding_anchor_epoch: int = 0
+    preliquidation_buffer_points: D = ZERO
+    scalp_window_seconds: int = 0
+    scalp_effective_start: datetime | None = None
+    scalp_effective_end: datetime | None = None
 
     def __post_init__(self):
         ident(self.profile_id,"profile_id");ident(self.source,"source")
@@ -34,6 +38,12 @@ class MarginProfile:
         require(type(self.funding_interval_seconds) is int and self.funding_interval_seconds>=0,
                 "invalid funding interval")
         require(type(self.funding_anchor_epoch) is int,"invalid funding anchor")
+        dec(self.preliquidation_buffer_points,"preliquidation buffer",nonnegative=True)
+        require(type(self.scalp_window_seconds) is int and self.scalp_window_seconds in (0,1800),"unsupported scalp window")
+        if self.scalp_window_seconds:
+            utc(self.scalp_effective_start);utc(self.scalp_effective_end)
+            require(self.instrument.symbol in ("BTCUSD","ETHUSD") and self.scalp_effective_start<self.scalp_effective_end,"invalid offer interval/instrument")
+        else:require(self.scalp_effective_start is None and self.scalp_effective_end is None,"disabled offer must have no dates")
 
     def initial_rate(self,leverage):
         return max(self.initial_rate_floor,D(1)/leverage)

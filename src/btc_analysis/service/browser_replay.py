@@ -14,7 +14,7 @@ from ..backtest import run_backtest
 MAX_ROWS=44640
 MAX_CSV=16*1024*1024
 
-def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:True,cache=None):
+def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:True,cache=None,risk=None):
     if assume_open is not True:raise ValueError("acknowledge CSV timestamps as UTC candle opens")
     if symbol not in ("BTCUSD","ETHUSD"):raise ValueError("unsupported instrument")
     if len(csv_text.encode())>MAX_CSV or len(graph_text.encode())>65536:raise ValueError("input too large")
@@ -54,9 +54,13 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
     if any(int(t.timestamp())%f for f in frames(g) for t in (start,end)):raise ValueError("CSV boundaries must align to all graph timeframes")
     code=sha256(compiled["source"].encode()).hexdigest()
     ds=DatasetRef("local-csv",i,DataKind.OHLCV,tf,start,end,h,"user-provided CSV; label assumed",0,True)
-    cfg=BacktestConfig(StrategyRef("local-visual","1",code,compiled["graph_sha256"]),i,(ds,),start,end,
-        Timeframe(g.signal_timeframe),tf,v["initial_equity"],"USD",D(1),MarginMode.ISOLATED,
-        CostModel(v["maker_bps"],v["taker_bps"],v["tax_rate"],v["slippage_bps"],False,False,False,"local-assumptions"),
+    leverage=D(1);mode=MarginMode.ISOLATED;profile=None;risk_refs=();risk_rows=();risk_meta=None
+    if risk is not None:
+        from .leveraged_replay import prepare_risk
+        leverage,mode,profile,risk_refs,risk_rows,risk_meta=prepare_risk(risk,rows,i,tf)
+    cfg=BacktestConfig(StrategyRef("local-visual","1",code,compiled["graph_sha256"]),i,(ds,)+risk_refs,start,end,
+        Timeframe(g.signal_timeframe),tf,v["initial_equity"],"USD",leverage,mode,
+        CostModel(v["maker_bps"],v["taker_bps"],v["tax_rate"],v["slippage_bps"],bool(risk_meta and risk_meta["funding_enabled"]),False,profile is not None,"local-assumptions"),
         IntrabarPolicy.BOTH_PATHS,"Asia/Kolkata","crypto-24x7")
     count=0
     def stream():
@@ -65,12 +69,22 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             count+=1
             if count%128==0:progress(min(99,count*99//(len(rows)*2)))
             yield b
-    result=run_backtest(cfg,lambda:GraphStrategy(g),stream,linear_contract=True,dataset_manifest_sha256=h,indicator_book_factory=cache.book if cache is not None else None)
+    def strategy():
+        obj=GraphStrategy(g)
+        # Exposure is percentage of account equity allocated to initial margin.
+        obj.exposure*=leverage
+        return obj
+    result=run_backtest(cfg,strategy,stream,linear_contract=True,dataset_manifest_sha256=h,
+        indicator_book_factory=cache.book if cache is not None else None,margin_profile=profile,
+        risk_factory=(lambda:iter(risk_rows)) if profile is not None else None,
+        risk_manifest_sha256s=tuple(d.manifest_sha256 for d in risk_refs))
     scenarios=[]
     for s in result.scenarios:
         wire=to_wire(s)
         scenarios.append({"path":s.path,"bars":s.bars,"metrics":summarize(wire),"monthly":wire["monthly"],
-                          "final_equity":wire["final_equity"],"fees":wire["fees"],"taxes":wire["taxes"]})
+                          "final_equity":wire["final_equity"],"fees":wire["fees"],"taxes":wire["taxes"],
+                          "funding_paid":wire["funding_paid"],"liquidation_count":len(s.liquidations),
+                          "preliq_count":sum(f.reason=="modeled_preliquidation_stop" for f in s.fills)})
     return {"engine_version":result.engine_version,"source":"user CSV (unverified provenance)","research_only":True,"data_sha256":h,"graph_sha256":compiled["graph_sha256"],
-            "result_sha256":result.result_sha256,"worst_path":result.worst_path,"scenarios":scenarios,
+            "result_sha256":result.result_sha256,"worst_path":result.worst_path,"scenarios":scenarios,"risk":risk_meta,
             "limitations":list(result.limitations)+["No warmup outside CSV; entry candle protection starts on next minute."]}
