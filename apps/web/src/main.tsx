@@ -28,6 +28,7 @@ function App(){
  const [error,setError]=useState("");const [busy,setBusy]=useState(false);
  async function login(e:FormEvent){e.preventDefault();setBusy(true);setError("");try{const t=token.trim();setSession({token:t,caps:await client(t).capabilities()});setToken("");}catch(e){setError(err(e));}finally{setBusy(false);}}
  if(import.meta.env.MODE==="pages")return <PublicStudio/>;
+ if(import.meta.env.MODE==="private")return <CloudWorkspace exit={()=>window.location.reload()} sameOrigin/>;
  if(cloud)return <CloudWorkspace exit={()=>setCloud(false)}/>;
  if(local)return <main className="panel"><button onClick={()=>setLocal(false)}>Back to sign in</button><BrowserRunner/></main>;
  if(session)return <Studio token={session.token} caps={session.caps} logout={()=>setSession(null)}/>;

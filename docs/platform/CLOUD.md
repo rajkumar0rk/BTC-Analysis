@@ -16,3 +16,6 @@ SQLite-backed PaperLane Durable Object (new_sqlite_classes migration), owner + s
 
 ## M29 UI integration
 Public Pages Studio is token-free. Default build has separate private cloud workspace, HTTPS non-github.io guard, explicit connection, immutable revision management, exact-source matching upload of previously saved device-local experiment summaries, inspection/deletion, fixed EMA paper lane controls and paged ledger. Use isolated trusted HTTPS origin, not shared public Pages; server CORS must allow that exact origin. No automatic uploads, no browser token persistence, no claims of server-verified results. Paper refresh is manual; alarm scheduling is server-side. Private frontend hosting, production Worker/D1 provisioning, actual network/CPU/free-tier verification remain M30 work. Public dashboard publisher untouched.
+
+## M30 release gate
+See docs/platform/RELEASE.md. Private build uses same-origin HTTPS Worker static assets, local-only generated config with exact origin and D1 ID, no credentials in config; default paper disabled. Alarm generation fencing protects reused request IDs. Actual production provisioning, private hosting and cloud quota evidence require authorized operator setup. CI uses dummy IDs and mocked feed only for local runtime alarm scheduling; no remote mutation.

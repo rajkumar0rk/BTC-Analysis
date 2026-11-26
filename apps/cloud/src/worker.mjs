@@ -112,11 +112,12 @@ export function makeHandler(storageFactory=()=>null){
    if(!path.startsWith("/v1/cloud/"))fail(404,"not_found");
    const owner=await auth(req,env);
    const store=storageFactory(env);
-   if(path==="/v1/cloud/capabilities"&&req.method==="GET")return json({schema_version:1,owner,storage:!!store,source_execution:false,backtest_execution:false,paper_trading:!!env.PAPER,live_orders:false,max_source_bytes:MAX_SOURCE,max_strategies:30,max_revisions:100,max_owner_revisions:300,max_results:200,results_storage:!!store?.saveResult},200,origin);
+   if(path==="/v1/cloud/capabilities"&&req.method==="GET")return json({schema_version:1,owner,storage:!!store,source_execution:false,backtest_execution:false,paper_trading:!!env.PAPER&&env.PAPER_ENABLED==="true",live_orders:false,max_source_bytes:MAX_SOURCE,max_strategies:30,max_revisions:100,max_owner_revisions:300,max_results:200,results_storage:!!store?.saveResult},200,origin);
    const paper=path.match(/^\/v1\/cloud\/paper\/(BTCUSD|ETHUSD)\/(state|ledger|start|stop|clear)$/);
    if(paper){
     if(!env.PAPER)fail(503,"paper_not_configured");
     const [,symbol,action]=paper;
+    if(action==="start"&&env.PAPER_ENABLED!=="true")fail(503,"paper_disabled");
     const get=action==="state"||action==="ledger";
     if(req.method!==(get?"GET":"POST"))fail(405,"method_not_allowed");
     if(url.search&&(action!=="ledger"||[...url.searchParams.keys()].join(",")!=="after"||!/^\d{1,8}$/.test(url.searchParams.get("after")||"")))fail(400,"invalid_cursor");

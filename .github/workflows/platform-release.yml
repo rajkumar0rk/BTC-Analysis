@@ -1,0 +1,81 @@
+name: Platform final release verification
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['apps/cloud/**','apps/web/**','src/btc_analysis/**','scripts/platform_browser_benchmark*','scripts/prepare_cloud_release.py','.github/workflows/platform-release.yml']
+permissions:
+  contents: read
+jobs:
+  browser-month:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        symbol: [BTCUSD, ETHUSD]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements/platform-linux.lock && python -m pip install --no-deps '.[data,api]' && python -m pip check
+      - run: python -m btc_analysis.data.cli --symbol ${{ matrix.symbol }} --store "$RUNNER_TEMP/history"
+      - run: python scripts/platform_browser_benchmark_fixture.py "$RUNNER_TEMP/history" ${{ matrix.symbol }} "$RUNNER_TEMP/month.json"
+      - run: python scripts/prepare_browser_python.py
+      - working-directory: apps/web
+        run: npm ci --no-audit --no-fund && npm run build -- --mode private && npx playwright install chromium --with-deps
+      - run: node scripts/platform_browser_benchmark.mjs "$RUNNER_TEMP/month.json" "$RUNNER_TEMP/browser-benchmark.json"
+      - name: Private deployment configuration dry run (dummy nonproduction ID)
+        run: |
+          python scripts/prepare_cloud_release.py --worker btc-analysis-test --origin https://btc-analysis-test.example.workers.dev --database-id 12345678-1234-4234-8234-123456789012
+          cd apps/cloud
+          npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml --dry-run --outdir "$RUNNER_TEMP/private-bundle"
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: browser-month-${{ matrix.symbol }}
+          path: ${{ runner.temp }}/browser-benchmark.json
+          if-no-files-found: error
+  scheduled-alarm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - working-directory: apps/cloud
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: |
+          set -euo pipefail
+          node --input-type=module -e 'import {createHash} from "node:crypto";import {writeFileSync} from "node:fs";writeFileSync(".dev.vars","AUTH_HASHES_JSON="+JSON.stringify({alice:createHash("sha256").update("A".repeat(43)).digest("hex")})+"\n");'
+          start() {
+            setsid npx --yes wrangler@4.157.0 dev --local --config wrangler.alarm-test.toml --persist-to "$RUNNER_TEMP/alarm-test" --ip 127.0.0.1 --port 8790 > "$RUNNER_TEMP/alarm.log" 2>&1 & worker=$!
+            for i in $(seq 1 60); do
+              if ! kill -0 "$worker" 2>/dev/null; then cat "$RUNNER_TEMP/alarm.log"; return 1; fi
+              if curl -fsS --max-time 2 http://127.0.0.1:8790/health >/dev/null 2>&1; then return; fi
+              sleep 1
+            done
+            cat "$RUNNER_TEMP/alarm.log"; return 1
+          }
+          stop() {
+            if [ -n "${worker:-}" ]; then
+              kill -TERM -- "-$worker" 2>/dev/null || true
+              wait "$worker" 2>/dev/null || true
+              kill -KILL -- "-$worker" 2>/dev/null || true
+              worker=""
+            fi
+          }
+          trap 'stop; rm -f .dev.vars' EXIT
+          start
+          node tests/alarm.integration.mjs --start
+          stop
+          if curl -fsS --max-time 2 http://127.0.0.1:8790/health >/dev/null 2>&1; then echo "Old worker still running"; exit 1; fi
+          start
+          node tests/alarm.integration.mjs || { cat "$RUNNER_TEMP/alarm.log"; exit 1; }

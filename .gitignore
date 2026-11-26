@@ -25,3 +25,5 @@ apps/web/tests/browser-oracle.json
 .dev.vars
 .dev.vars.*
 .wrangler/
+
+apps/cloud/wrangler.release.toml

@@ -36,7 +36,7 @@ export class PaperLane{
     if(old?.id===c.request_id)return sameConfig(old.config,c)?out({session:old}):out({error:"request_conflict"},409);
     // Single retained session per lane. Explicit clear required; no silent deletion.
     if(old)return out({error:"lane_not_empty"},409);
-    const s=init(b.symbol,c,this.now());
+    const s={...init(b.symbol,c,this.now()),generation:crypto.randomUUID()};
     await this.storage.put("state",s);
     await this.storage.setAlarm(s.cursor+70000);
     return out({session:s},201);
@@ -67,12 +67,13 @@ export class PaperLane{
  }
  async alarm(){
   const snapshot=await this.storage.get("state");if(!ACTIVE(snapshot))return;
-  const t=snapshot.cursor,id=snapshot.id,now=this.now();
+  const t=snapshot.cursor,id=snapshot.id,generation=snapshot.generation,now=this.now();
   const commit=async(fn)=>this.storage.transaction(async()=>{
-   const s=await this.storage.get("state");if(!ACTIVE(s)||s.id!==id||s.cursor!==t)return;
+   const s=await this.storage.get("state");if(!ACTIVE(s)||s.id!==id||s.generation!==generation||s.cursor!==t)return;
    await fn(s);
   });
   const halt=async(s,reason)=>{s.status="halted";s.pending=null;s.reason=reason;await this.storage.put("state",s);await this.storage.deleteAlarm();};
+  if(this.env.PAPER_ENABLED!=="true"){await commit(s=>halt(s,"paper_disabled"));return;}
   // Set retry alarm before network I/O. State CAS fences stop/restart and duplicate delivery.
   if(now>t+180000){await commit(s=>halt(s,"stale_or_missing_candle"));return;}
   if(now<t+70000){await commit(()=>this.storage.setAlarm(t+70000));return;}

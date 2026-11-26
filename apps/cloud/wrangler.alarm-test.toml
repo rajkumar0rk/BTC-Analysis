@@ -1,0 +1,15 @@
+# Local-only deterministic market fixture. Never deploy.
+name = "btc-analysis-alarm-test"
+main = "tests/alarmFixture.mjs"
+compatibility_date = "2026-11-10"
+workers_dev = false
+preview_urls = false
+[vars]
+ALLOWED_ORIGINS = "https://studio.example.com"
+PAPER_ENABLED = "true"
+[[durable_objects.bindings]]
+name = "PAPER"
+class_name = "PaperLane"
+[[migrations]]
+tag = "paper-v1"
+new_sqlite_classes = ["PaperLane"]

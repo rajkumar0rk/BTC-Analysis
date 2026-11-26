@@ -27,7 +27,7 @@ class Memory{
  async transaction(fn){return fn(this);}
 }
 test("alarm advances persisted cursor once, stale halt, stop during fetch fenced",async()=>{
- const storage=new Memory(),obj=new PaperLane({storage},{});
+ const storage=new Memory(),obj=new PaperLane({storage},{PAPER_ENABLED:"true"});
  let now=0;obj.now=()=>now;
  const start=()=>obj.fetch(new Request("https://internal/start",{method:"POST",body:JSON.stringify({symbol:"BTCUSD",config})}));
  assert.equal((await start()).status,201);assert.equal((await start()).status,200);
@@ -40,7 +40,14 @@ test("alarm advances persisted cursor once, stale halt, stop during fetch fenced
   return candle(t,100);
  };
  await obj.alarm();s=await storage.get("state");assert.equal(s.status,"stopped");assert.equal(s.bars,1);assert.equal(storage.alarm,null);
- const staleStore=new Memory(),stale=new PaperLane({storage:staleStore},{});stale.now=()=>now;
+ const staleStore=new Memory(),stale=new PaperLane({storage:staleStore},{PAPER_ENABLED:"true"});stale.now=()=>now;
  await stale.fetch(new Request("https://internal/start",{method:"POST",body:JSON.stringify({symbol:"ETHUSD",config})}));
  now=(await staleStore.get("state")).cursor+180001;await stale.alarm();assert.equal((await staleStore.get("state")).status,"halted");
+});
+
+test("disabled paper alarm halts without fetching market",async()=>{
+ const storage=new Memory(),obj=new PaperLane({storage},{PAPER_ENABLED:"false"});obj.now=()=>0;
+ await obj.fetch(new Request("https://internal/start",{method:"POST",body:JSON.stringify({symbol:"BTCUSD",config})}));
+ obj.candle=async()=>{throw Error("must not fetch");};await obj.alarm();
+ const s=await storage.get("state");assert.equal(s.status,"halted");assert.equal(s.reason,"paper_disabled");assert.equal(storage.alarm,null);
 });
