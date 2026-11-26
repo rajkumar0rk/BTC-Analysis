@@ -1,0 +1,46 @@
+name: Platform historical data audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/btc_analysis/data/**'
+      - 'tests/platform/test_data_engine.py'
+      - 'pyproject.toml'
+      - 'data/delta_india/**'
+      - '.github/workflows/platform-data-audit.yml'
+permissions:
+  contents: read
+concurrency:
+  group: platform-data-audit
+  cancel-in-progress: true
+jobs:
+  historical-data:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install '.[data]'
+      - name: Data engine unit tests
+        run: python -m unittest discover -s tests/platform -p test_data_engine.py -v
+      - name: Ingest actual BTC and ETH source partitions and verify streaming parity
+        run: |
+          mkdir -p .platform-local
+          /usr/bin/time -v -o .platform-local/data-benchmark.txt python -m btc_analysis.data.cli --symbol BTCUSD --symbol ETHUSD --report .platform-local/data-audit.json
+          cat .platform-local/data-benchmark.txt
+      - name: Verify unchanged partitions are reusable
+        run: |
+          /usr/bin/time -v -o .platform-local/reuse-benchmark.txt python -m btc_analysis.data.cli --symbol BTCUSD --symbol ETHUSD --report .platform-local/data-audit-reuse.json
+          cmp .platform-local/data-audit.json .platform-local/data-audit-reuse.json
+          cat .platform-local/reuse-benchmark.txt
+      - name: Upload verified data quality and benchmark reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: platform-data-audit
+          path: |
+            .platform-local/data-audit*.json
+            .platform-local/*benchmark.txt
+          if-no-files-found: error

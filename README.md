@@ -5,6 +5,7 @@ The existing research archive and [Backtest Explorer](https://rajkumar0rk.github
 ## Platform foundation (M1)
 
 - [Architecture](docs/platform/ARCHITECTURE.md)
+- [Historical data engine (M2)](docs/platform/HISTORICAL_DATA.md)
 - [Data and result contracts](docs/platform/DATA_AND_RESULTS.md)
 - [Execution security](docs/platform/SECURITY.md)
 - [Milestone roadmap and migration](docs/platform/ROADMAP.md)
@@ -13,7 +14,7 @@ The existing research archive and [Backtest Explorer](https://rajkumar0rk.github
 Install and test the foundation with Python 3.11 or 3.12:
 
 ```bash
-python -m pip install .
+python -m pip install '.[data]'
 python -m unittest discover -s tests/platform -v
 ```
 

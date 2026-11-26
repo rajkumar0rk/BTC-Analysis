@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install foundation package
-        run: python -m pip install .
+        run: python -m pip install '.[data]'
       - name: Compile new platform code
         run: python -m compileall -q src/btc_analysis tests/platform
       - name: Domain contract and security policy tests
