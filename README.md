@@ -93,3 +93,5 @@ Pre-register a test before viewing its holdout set, compare against time-of-day/
 ## GitHub upload status (2026-10-18)
 
 This repository has been initialized and contains the complete 5-minute source, complete reconstructed 15-minute and 30-minute OHLCV aggregates, Codex research-handoff notes, and selected research reports/results. **It is not yet a complete mirror of the original 46-file local research archive.** Some large generated CSV scans and the reusable scripts remain in the downloadable archive. The archived local file manifest is not yet published here. Do not interpret missing research tables as negative results; refer to the original archive until synchronization is completed.
+
+- [Robustness validation (M14)](docs/platform/VALIDATION.md)

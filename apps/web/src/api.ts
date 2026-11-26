@@ -13,13 +13,16 @@ export type Search={method:"grid"|"random";axes:{key:string;values:string[]}[];s
 export type Optimization=Omit<Historical,"kind">&{kind:"optimization";search:Search;acknowledge_training_only:true};
 export type Candidate={rank:number;parameters:Record<string,string>;graph_sha256:string;code_sha256:string;result_sha256:string;score:string|null;max_drawdown_pct:string;min_closed_trades:number;eligible:boolean;rejections:string[];scenarios:{path:string;metrics:Record<string,string|number|null>}[]};
 export type Study={training_only:true;search:Search;training_request:Historical;base_graph_sha256:string;candidates:Candidate[];winner_graph_sha256:string|null;timestamp_label_verified:boolean};
+export type ValidationRequest={optimization_job_id:string;optimization_result_sha256:string;windows:{start:number;end:number}[];fee_multiplier:string;extra_slippage_bps:string;min_return_pct:string;max_drawdown_pct:string;min_trades:number;acknowledge_holdout:true};
+export type ValidationJob=Omit<Historical,"kind">&{kind:"validation";validation_request:ValidationRequest};
+export type ValidationReport={training_result_sha256:string;optimization_job_id:string;winner_graph_sha256:string;training_start:number;training_end:number;criteria:ValidationRequest;modeled_checks_passed:boolean;not_assessed:string[];timestamp_label_verified:boolean;production_approved:false;rows:{window:number;test:string;start:number;end:number;graph_sha256:string;result_sha256:string;passed:boolean;failures:string[];worst_return_pct?:string;max_drawdown_pct?:string;min_closed_trades?:number;scenarios?:unknown[]}[]};
 export type Fixture={kind:"reference_fixture";bars:number;signal_minutes:1|5|15};
 export type Fill={fill_id:string;order_id:string;event_utc:string;side:string;quantity:string;price:string;fee:string;tax:string;reason:string};
 export type Trade={trade_id:string;entry_fills:Fill[];exit_fills:Fill[];entry_reason:string;exit_reason:string;gross_pnl:string;fees:string;taxes:string;funding_paid:string;net_pnl:string;currency:string};
 export type Analytics={result_sha256:string;scenarios:{path:string;metrics:Record<string,string|number|null>}[]};
 export type Replay={symbol:string;dataset_manifest_sha256:string;timestamp_label_verified:boolean;scenario:string;trade_id:string;offset:number;total:number;next_offset:number|null;previous_offset:number|null;candles:{time:number;open:string;high:string;low:string;close:string;volume:string}[];markers:{bar_open:number;bar_close:number;phase:string;path:string;role:string;fill:Fill}[]};
 export type Scenario={path:string;final_equity:string;initial_equity:string;net_pnl:string;fees:string;taxes:string;max_event_drawdown_pct:string;closed_trades:Trade[];equity_curve:{equity:string;event_utc:string}[];monthly:{month:string;pnl:string;return_pct:string|null}[]};
-export type Job={id:string;status:"queued"|"running"|"cancelling"|"succeeded"|"failed"|"cancelled";progress:number;created:number;error:string|null;request:Fixture|Historical|Optimization;result?:{synthetic:boolean;research_only?:boolean;timestamp_label_verified?:boolean;assumptions?:string[];optimization?:Study;result_sha256:string;result:{worst_path:string;scenarios:Scenario[];limitations:string[]}}|null};
+export type Job={id:string;status:"queued"|"running"|"cancelling"|"succeeded"|"failed"|"cancelled";progress:number;created:number;error:string|null;request:Fixture|Historical|Optimization|ValidationJob;result?:{synthetic:boolean;research_only?:boolean;timestamp_label_verified?:boolean;assumptions?:string[];optimization?:Study;validation?:ValidationReport;result_sha256:string;result:{worst_path:string;scenarios:Scenario[];limitations:string[]}}|null};
 export class ApiError extends Error{constructor(public status:number,message:string){super(message)}}
 export function client(token:string){
  async function call<T>(path:string,options:RequestInit={}):Promise<T>{
@@ -44,6 +47,7 @@ export function client(token:string){
   revision:(id:string,v:number)=>call<Revision>("/v1/strategies/"+encodeURIComponent(id)+"/versions/"+v),
   save:(id:string,v:number,source:string)=>call<Revision>("/v1/strategies/"+encodeURIComponent(id)+"/versions",{method:"POST",body:JSON.stringify({source,expected_version:v})}),
   datasets:()=>call<Dataset[]>("/v1/datasets"),
+  validateStudy:(body:ValidationRequest,key:string)=>call<Job>("/v1/jobs/validation",{method:"POST",headers:{"Idempotency-Key":key},body:JSON.stringify(body)}),
   optimize:(body:Optimization,key:string)=>call<Job>("/v1/jobs/optimization",{method:"POST",headers:{"Idempotency-Key":key},body:JSON.stringify(body)}),
   historical:(body:Historical,key:string)=>call<Job>("/v1/jobs/historical",{method:"POST",headers:{"Idempotency-Key":key},body:JSON.stringify(body)}),
   analytics:(id:string)=>call<Analytics>("/v1/jobs/"+encodeURIComponent(id)+"/analytics"),

@@ -102,6 +102,25 @@ class HistoricalTests(unittest.TestCase):
                 self.assertEqual(len(study["candidates"]),2)
                 self.assertEqual(study["base_code_sha256"],r["code_sha256"])
                 self.assertEqual(client.get("/v1/strategies/"+r["id"]+"/versions",headers=AUTH).json()["versions"][0]["version"],1)
+                if not real:
+                    self.assertIsNotNone(study["winner_graph_sha256"])
+                    validation={"optimization_job_id":q.json()["id"],"optimization_result_sha256":result2["result"]["result_sha256"],
+                                "windows":[{"start":start+3600,"end":start+7200}],"acknowledge_holdout":True}
+                    vurl="/v1/jobs/validation"
+                    def vsubmit(v,key,auth=AUTH):
+                        return client.post(vurl,headers={**auth,"Idempotency-Key":key},json=v)
+                    self.assertEqual(vsubmit({**validation,"windows":[{"start":start,"end":start+3600}]},"overlap").status_code,422)
+                    self.assertEqual(vsubmit(validation,"owner",{"Authorization":"Bearer "+"y"*40}).status_code,404)
+                    self.assertEqual(vsubmit({**validation,"optimization_result_sha256":"0"*64},"hash").status_code,422)
+                    v=vsubmit(validation,"validate")
+                    self.assertEqual(v.status_code,202,v.text)
+                    self.assertTrue(work_once(Store(db),history_root=history))
+                    vr=client.get("/v1/jobs/"+v.json()["id"],headers=AUTH).json()
+                    self.assertEqual(vr["status"],"succeeded",vr)
+                    report=vr["result"]["validation"]
+                    self.assertEqual(report["winner_graph_sha256"],study["winner_graph_sha256"])
+                    self.assertEqual({x["test"] for x in report["rows"]},{"baseline","fee_stress","slippage_stress","combined_stress","parameter_neighbor","causal_prefix"})
+                    self.assertFalse(report["production_approved"])
                 if real:print("Actual BTCUSD archive optimization hash:",result2["result"]["result_sha256"])
 
 if __name__=="__main__":unittest.main()

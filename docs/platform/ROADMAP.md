@@ -14,7 +14,7 @@ M10 Runner: [bounded historical visual research jobs](HISTORICAL_RUNNER.md), pin
 M11 Analytics and replay: [stored-result analytics and pinned replay](ANALYTICS.md), closed-trade metrics, account MTM, monthly tiles, searchable ledger, fill details and CSV.
 M12 Registry: [immutable strategy lifecycle](REGISTRY.md), freeze/clone/archive/restore, transactional state and submission gates, lineage, comparison and linked job history. Permanent retention/backup policy remains pending.
 M13 Optimization: [bounded sequential grid/random search](OPTIMIZATION.md), train-only conservative path ranking, drawdown/trade constraints, fingerprints. Parallel/multi-year optimization remains pending.
-M14 Validation: chronological OOS, sensitivity, stress, data and liquidation audits.
+M14 Validation: [fixed-winner holdout and stress checks](VALIDATION.md), chronological windows, parameter neighbor, fees/slippage, prefix fill check and acceptance report. Full rolling walk-forward, liquidation and independent untouched attestation pending.
 M15 Forward paper: newly arriving data, separate execution state, reconciliation.
 M16 Multi-market: venue calendars, dated contracts/rollovers, options only with verified specifications.
 M17 Production: independent security, load, failure recovery, backup and deployment gates.

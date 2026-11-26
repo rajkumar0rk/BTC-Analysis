@@ -29,6 +29,9 @@ def child():
     elif payload.get("kind")=="optimization":
         from .optimization import execute_optimization
         result=execute_optimization(payload,os.environ.get("BTC_PLATFORM_HISTORY"),progress)
+    elif payload.get("kind")=="validation":
+        from .validation import execute_validation
+        result=execute_validation(payload,os.environ.get("BTC_PLATFORM_HISTORY"),progress)
     else:result=execute_fixture(payload,progress)
     json.dump(result,sys.stdout,separators=(",",":"),allow_nan=False)
 

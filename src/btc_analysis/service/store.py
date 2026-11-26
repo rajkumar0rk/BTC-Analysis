@@ -204,23 +204,23 @@ class Store:
     def _public(r,include_result=False):
         if r is None:raise Missing("job not found")
         d={k:r[k] for k in ("id","status","progress","created","updated","error")}
-        d["request"]={k:v for k,v in json.loads(r["payload"]).items() if k!="graph"}
+        d["request"]={k:v for k,v in json.loads(r["payload"]).items() if k not in ("graph","training_study")}
         if include_result:d["result"]=json.loads(r["result"]) if r["result"] else None
         return d
 
     def submit(self,owner,key,payload):
         # The API only accepts schema-validated trusted fixture requests.
-        if payload.get("kind") not in ("reference_fixture","historical_visual","optimization"):raise Invalid("custom execution disabled")
+        if payload.get("kind") not in ("reference_fixture","historical_visual","optimization","validation"):raise Invalid("custom execution disabled")
         packed=canonical(payload);digest=sha(packed)
         with self.connection(True) as c:
             prior=c.execute("SELECT * FROM jobs WHERE owner=? AND request_key=?",(owner,key)).fetchone()
             if prior:
                 if prior["request_sha"]!=digest:raise Conflict("idempotency key reused with different request")
                 return self._public(prior)
-            if payload["kind"] in ("historical_visual","optimization"):
+            if payload["kind"] in ("historical_visual","optimization","validation"):
                 state=self._registry(c,owner,payload["strategy_id"])
                 if state["archived"]:raise Conflict("archived strategy cannot submit new jobs")
-                if payload["kind"]=="optimization" and state["frozen_version"] is not None:raise Conflict("clone frozen strategy before optimizing")
+                if payload["kind"] in ("optimization","validation") and state["frozen_version"] is not None:raise Conflict("clone frozen strategy before variant research")
                 if state["frozen_version"] is not None and payload["version"]!=state["frozen_version"]:
                     raise Conflict("frozen strategy requires its frozen version")
                 revision=c.execute("SELECT code_sha FROM revisions WHERE strategy_id=? AND version=?",
