@@ -6,6 +6,7 @@ The existing research archive and [Backtest Explorer](https://rajkumar0rk.github
 
 - [Architecture](docs/platform/ARCHITECTURE.md)
 - [Historical data engine (M2)](docs/platform/HISTORICAL_DATA.md)
+- [Reference backtesting engine (M3)](docs/platform/BACKTEST_ENGINE.md)
 - [Data and result contracts](docs/platform/DATA_AND_RESULTS.md)
 - [Execution security](docs/platform/SECURITY.md)
 - [Milestone roadmap and migration](docs/platform/ROADMAP.md)
@@ -18,7 +19,7 @@ python -m pip install '.[data]'
 python -m unittest discover -s tests/platform -v
 ```
 
-M1 supplies validated contracts and SDK interfaces, not a functioning new backtest engine or arbitrary-code runner. Existing research scripts and dashboard workflows are unchanged.
+M1–M3 supply validated contracts, an audited historical data engine and a trusted 1x reference backtest simulator. Untrusted code execution and exchange-specific margin are disabled. Existing research scripts and dashboard workflows are unchanged.
 
 ---
 

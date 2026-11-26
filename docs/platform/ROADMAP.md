@@ -3,7 +3,7 @@
 M1 Foundation: typed v1 contracts, Python SDK interfaces, deterministic encoding, fail-closed execution policy, architecture/security/data/migration docs, package tests on Python 3.11 and 3.12, legacy dashboard unchanged. CI success required to mark verified. Independent maintainer review remains a distinct gate.
 
 M2 Data engine: Delta archive ingestion, content-addressed Parquet, manifest checks, bounded queries, session-aware coverage, completed-bar aggregation and CI benchmark. See [historical data](HISTORICAL_DATA.md). Open-label attestation and external independent review remain separate gates; actual coverage determined by audit.
-M3 Backtest engine: deterministic event sequencing, chronological fills, adverse intrabar treatment, position ledger, reference fixture tests.
+M3 Backtest engine: [trusted reference simulator](BACKTEST_ENGINE.md), chronological fills, two-path replay, order lifecycle, FIFO positions, fee/tax reconciliation and deterministic tests. Exchange-specific leverage, funding, spread, liquidation and untrusted code remain later gates.
 M4 Python SDK + indicators: causal warmup and indicator parity, sample strategy, no future access, no deployment.
 M5 Venue execution: verified fees/tax/funding, sizing/lot constraints, mark-price margin/liquidation, isolated/cross and portfolio when evidence permits.
 M6 API/jobs: authenticated strategy versions, idempotent submission, isolated worker, cancellation, progress, authorization and limits.

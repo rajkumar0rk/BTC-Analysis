@@ -1,4 +1,4 @@
-"""Strategy API v1; contracts only, not an executable backtest engine.
+"""Strategy API v1; implemented by the M3 trusted reference engine.
 A host supplies a read-only causal view. Python is NOT a security boundary.
 """
 from __future__ import annotations
@@ -33,6 +33,7 @@ class StrategyContext(MarketView, Protocol):
     def submit(self, intent: OrderIntent) -> None:
         """Emit reason-bearing intent, not an immediate fill."""
         ...
+    def cancel(self, intent_id: str) -> None: ...
 
 
 class Strategy(Protocol):
@@ -49,7 +50,7 @@ class Strategy(Protocol):
 
 class BacktestEngine(Protocol):
     def run(self, config, strategy: Strategy, datasets: Sequence[object]):
-        """M3 will implement the validated deterministic event loop."""
+        """Interface for a deterministic simulation host."""
         ...
 
 
