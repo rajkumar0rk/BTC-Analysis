@@ -18,7 +18,9 @@ from ..contracts import (AssetClass, BacktestConfig, Candle, ClosedTrade, Fill,
     IntrabarPolicy, MarginMode, OrderIntent, OrderType, Side, Timeframe, DataKind)
 from ..serialization import canonical_bytes, fingerprint
 
-ENGINE_VERSION = "m3-reference-1"
+from ..indicators import IndicatorBook, IndicatorSpec
+
+ENGINE_VERSION = "m4-reference-1"
 ZERO = D(0)
 BPS = D(10000)
 MAX_HISTORY = 4096
@@ -29,6 +31,8 @@ MAX_BARS = 5_000_000
 
 class BaseStrategy:
     """Convenience lifecycle methods; trusted subclasses override as needed."""
+    def indicators(self): return ()
+    def extra_timeframes(self): return ()
     def on_start(self, ctx): pass
     def on_signal(self, ctx): pass
     def on_execution(self, ctx): pass
@@ -93,6 +97,10 @@ class ScenarioResult:
     orders: tuple[OrderEvent, ...]
     equity_curve: tuple[EquityPoint, ...]
     monthly: tuple[MonthlyResult, ...]
+    warmup_bars: int
+    warmup_candle_sha256: str | None
+    indicator_specs: tuple[IndicatorSpec, ...]
+    extra_timeframes: tuple[Timeframe, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,8 +141,11 @@ class Context:
         if timeframe.seconds not in self._sim.history:
             raise ValueError("unsupported timeframe; use configured execution or signal timeframe")
         return tuple(self._sim.history[timeframe.seconds])[-limit:]
-    def indicator(self, name, timeframe, parameters):
-        raise NotImplementedError("indicator library is M4")
+    def indicator(self, name, timeframe, parameters=None):
+        values=self.indicator_history(name,timeframe,parameters,limit=1)
+        return values[-1] if values else None
+    def indicator_history(self,name,timeframe,parameters=None,*,limit=2):
+        return self._sim.indicators.get(name,timeframe,parameters,limit)
     def submit(self, intent): self._sim.submit(intent)
     def cancel(self, intent_id): self._sim.cancel(intent_id)
 
@@ -169,7 +180,9 @@ def _validate(cfg):
 
 def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStrategy],
                  candle_factory: Callable[[], Iterable[Candle]], *,
-                 linear_contract: bool = False, dataset_manifest_sha256: str) -> BacktestResult:
+                 linear_contract: bool = False, dataset_manifest_sha256: str,
+                 warmup_start_utc: datetime | None = None,
+                 warmup_factory: Callable[[], Iterable[Candle]] | None = None) -> BacktestResult:
     """Run fresh strategies for each scenario. No mutation of input config or source.
 
     The caller is a trusted adapter responsible for the declared source manifest and
@@ -179,6 +192,15 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
     on starting position or first pending entry direction (a heuristic).
     """
     _validate(config)
+    if (warmup_start_utc is None)!=(warmup_factory is None):
+        raise ValueError("warmup start and factory must be supplied together")
+    if warmup_start_utc is not None:
+        from ..contracts import utc
+        utc(warmup_start_utc)
+        if not config.datasets[0].start_utc<=warmup_start_utc<config.start_utc:
+            raise ValueError("warmup outside pinned dataset")
+        if (config.start_utc-warmup_start_utc).total_seconds()//config.execution_timeframe.seconds>MAX_BARS:
+            raise ValueError("warmup bar quota exceeded")
     if linear_contract is not True:
         raise ValueError("trusted adapter must attest a linear contract")
     if dataset_manifest_sha256 != config.datasets[0].manifest_sha256:
@@ -194,9 +216,13 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
                 raise ValueError("strategy factory must return fresh instances")
             used.append(strategy)
             sim = Simulator(config, strategy, path)
+            if warmup_factory is not None:
+                sim.warmup(warmup_start_utc,warmup_factory())
             out.append(sim.run(candle_factory()))
-    if len({x.observed_candle_sha256 for x in out}) != 1:
+    if len({(x.observed_candle_sha256,x.warmup_candle_sha256) for x in out}) != 1:
         raise ValueError("scenario candle streams differ")
+    if len({(x.indicator_specs,x.extra_timeframes) for x in out}) != 1:
+        raise ValueError("scenario strategy declarations differ")
     worst = min(out,key=lambda x:(x.final_equity,x.path))
     return BacktestResult(ENGINE_VERSION,fingerprint(config),
         tuple(d.manifest_sha256 for d in config.datasets),tuple(out),worst.path,(
@@ -210,6 +236,8 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         "Drawdown sampled at modeled price events; not actual tick drawdown.",
         "Strategy callbacks are close-time; on_fill observes final bar state, not intrabar state.",
         "Caller attests pinned source and code; observed candle hash recorded independently.",
+        "Indicators use explicit documented seeds and completed UTC-aligned bars; no external library parity claim.",
+        "Warmup bars initialize indicators/history only, without orders, callbacks or evaluation P&L.",
     ))
 
 
@@ -223,9 +251,21 @@ class Simulator:
         self.pending={}; self.seen=set(); self.orders=[]; self.fills=[]; self.evidence=[]
         self.trades=[]; self.curve=[]; self.monthly=[]
         self.peak=cfg.initial_equity; self.dd=ZERO
-        self.history={k:deque(maxlen=MAX_HISTORY) for k in
-            (cfg.execution_timeframe.seconds,cfg.signal_timeframe.seconds)}
-        self.group=[]; self.context=Context(self)
+        self.definitions=getattr(strategy,"indicators",lambda:())()
+        self.indicators=IndicatorBook(self.definitions,MAX_HISTORY)
+        self.extra_frames=getattr(strategy,"extra_timeframes",lambda:())()
+        if not isinstance(self.extra_frames,tuple) or len(self.extra_frames)>16 or any(not isinstance(t,Timeframe) for t in self.extra_frames):
+            raise ValueError("extra timeframes must be a bounded tuple of Timeframe")
+        e=cfg.execution_timeframe.seconds
+        frames={e,cfg.signal_timeframe.seconds,*[t.seconds for t in self.extra_frames],*[d.timeframe.seconds for d in self.definitions]}
+        if len(frames)>18:raise ValueError("too many strategy timeframes")
+        for seconds in frames:
+            if seconds%e or seconds//e>MAX_HISTORY or any(int(t.timestamp())%seconds for t in (cfg.start_utc,cfg.end_utc)):
+                raise ValueError("strategy timeframe incompatible with execution/range")
+        self.history={k:deque(maxlen=MAX_HISTORY) for k in sorted(frames)}
+        self.groups={k:[] for k in self.history if k!=e}
+        self.context=Context(self)
+        self.warmup_bars=0;self.warmup_hash=None
         self.active=True; self.bar_count=0; self.digest=sha256()
         self.mult=cfg.instrument.contract_multiplier
         self.tz=ZoneInfo(cfg.reporting_timezone)
@@ -406,16 +446,34 @@ class Simulator:
 
     def _publish(self,bar):
         e=self.cfg.execution_timeframe.seconds;s=self.cfg.signal_timeframe.seconds
-        self.history[e].append(bar)
-        if e==s:return True
-        self.group.append(bar)
-        if len(self.group)!=s//e:return False
-        a=self.group[0];b=self.group[-1]
-        candle=Candle(bar.instrument,Timeframe(s),a.open_utc,b.close_utc,a.open,
-                      max(c.high for c in self.group),min(c.low for c in self.group),
-                      b.close,sum((c.volume for c in self.group),ZERO))
-        self.history[s].append(candle);self.group.clear()
-        return True
+        self.history[e].append(bar);self.indicators.update(bar)
+        signal_complete=e==s
+        for seconds,group in self.groups.items():
+            group.append(bar)
+            if len(group)!=seconds//e:continue
+            a=group[0];b=group[-1]
+            candle=Candle(bar.instrument,Timeframe(seconds),a.open_utc,b.close_utc,a.open,
+                          max(c.high for c in group),min(c.low for c in group),
+                          b.close,sum((c.volume for c in group),ZERO))
+            self.history[seconds].append(candle);self.indicators.update(candle);group.clear()
+            if seconds==s:signal_complete=True
+        return signal_complete
+
+    def warmup(self,start,candles):
+        if start.microsecond or any(int(start.timestamp())%seconds for seconds in self.history):
+            raise ValueError("warmup must align to every strategy timeframe")
+        expected=start;digest=sha256()
+        for bar in candles:
+            if (not isinstance(bar,Candle) or bar.instrument!=self.cfg.instrument or
+                    bar.timeframe!=self.cfg.execution_timeframe or bar.open_utc!=expected or
+                    bar.close_utc>self.cfg.start_utc):
+                raise ValueError("invalid warmup stream")
+            expected=bar.close_utc;self.warmup_bars+=1
+            digest.update(canonical_bytes(bar));digest.update(b"\n")
+            self._publish(bar)
+        if expected!=self.cfg.start_utc or not self.warmup_bars or any(self.groups.values()):
+            raise ValueError("incomplete warmup stream")
+        self.warmup_hash=digest.hexdigest()
 
     def _record_month(self,bar):
         # Month labels use bar open local date. The final close of a month belongs
@@ -454,7 +512,7 @@ class Simulator:
             # Bounded result sampling: every signal close, not every execution minute.
             if complete:
                 self.curve.append(EquityPoint(self.now,self.balance,self.equity(bar.close),self.quantity))
-        if expected!=self.cfg.end_utc or not self.bar_count or self.group:
+        if expected!=self.cfg.end_utc or not self.bar_count or any(self.groups.values()):
             raise ValueError("incomplete execution stream")
         self.active=False
         for i in list(self.pending):
@@ -468,4 +526,5 @@ class Simulator:
             raise ArithmeticError("equity/month reconciliation failed")
         return ScenarioResult(self.path,self.bar_count,self.digest.hexdigest(),self.cfg.initial_equity,e,self.balance,
             e-self.cfg.initial_equity,self.gross,self.fees,self.taxes,self.quantity,unreal,self.dd,
-            tuple(self.trades),tuple(self.fills),tuple(self.evidence),tuple(self.orders),tuple(self.curve),tuple(self.monthly))
+            tuple(self.trades),tuple(self.fills),tuple(self.evidence),tuple(self.orders),tuple(self.curve),tuple(self.monthly),
+            self.warmup_bars,self.warmup_hash,self.definitions,self.extra_frames)

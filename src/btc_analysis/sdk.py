@@ -1,4 +1,4 @@
-"""Strategy API v1; implemented by the M3 trusted reference engine.
+"""Strategy API v1; implemented by the M4 trusted reference engine.
 A host supplies a read-only causal view. Python is NOT a security boundary.
 """
 from __future__ import annotations
@@ -7,6 +7,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Protocol, Sequence
 from .contracts import Candle, Timeframe, Instrument, OrderIntent, Fill
+from .indicators import IndicatorSpec
 
 
 class MarketView(Protocol):
@@ -18,9 +19,14 @@ class MarketView(Protocol):
         """Return only completed candles with close_utc <= now_utc."""
         ...
     def indicator(self, name: str, timeframe: Timeframe,
-                  parameters: dict[str, int | str | Decimal]) -> Decimal | None:
+                  parameters: dict[str, int | str | Decimal] | None = None) -> Decimal | None:
         """Latest causal indicator; None during warmup."""
         ...
+
+
+    def indicator_history(self, name: str, timeframe: Timeframe,
+                          parameters: dict[str, int | str | Decimal] | None = None,
+                          *, limit: int = 2) -> tuple[Decimal | None, ...]: ...
 
 
 class StrategyContext(MarketView, Protocol):
@@ -37,6 +43,8 @@ class StrategyContext(MarketView, Protocol):
 
 
 class Strategy(Protocol):
+    def indicators(self) -> tuple[IndicatorSpec, ...]: ...
+    def extra_timeframes(self) -> tuple[Timeframe, ...]: ...
     def on_start(self, ctx: StrategyContext) -> None: ...
     def on_signal(self, ctx: StrategyContext) -> None:
         """Called only when signal candle closes; decisions cannot fill retroactively."""
