@@ -5,6 +5,7 @@ None until ready. No arbitrary expressions, third-party strategy code or future 
 from __future__ import annotations
 
 from collections import deque
+from itertools import islice
 from dataclasses import dataclass
 from decimal import Decimal as D, localcontext
 from typing import Mapping
@@ -236,4 +237,4 @@ class IndicatorBook:
         if type(limit) is not int or not 1<=limit<=MAX_PERIOD:raise ValueError("invalid indicator history limit")
         key=IndicatorSpec.create(name,timeframe,parameters)
         if key not in self.entries:raise ValueError("indicator must be declared before replay")
-        return tuple(self.entries[key][1])[-limit:]
+        return tuple(reversed(tuple(islice(reversed(self.entries[key][1]),limit))))

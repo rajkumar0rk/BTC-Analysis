@@ -1,0 +1,25 @@
+name: Platform cache benchmark
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['src/btc_analysis/service/browser_*.py','src/btc_analysis/backtest/**','src/btc_analysis/indicators.py','scripts/browser_cache_benchmark.py','.github/workflows/platform-cache.yml']
+permissions:
+  contents: read
+jobs:
+  cache:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements/platform-linux.lock && python -m pip install --no-deps '.[data,api]' && python -m pip check
+      - run: python -m unittest discover -s tests/platform -p test_browser_replay.py -v
+      - run: python -m btc_analysis.data.cli --symbol BTCUSD --symbol ETHUSD --store "$RUNNER_TEMP/history"
+      - run: python scripts/browser_cache_benchmark.py "$RUNNER_TEMP/history" "$RUNNER_TEMP/cache-benchmark.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: browser-cache-benchmark
+          path: ${{ runner.temp }}/cache-benchmark.json

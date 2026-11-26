@@ -15,7 +15,14 @@ test("standalone Python worker matches native Python and supports warm rerun",as
  await page.getByRole("button",{name:"Run local Python"}).click();
  await expect(page.getByRole("heading",{name:"Local reference result"})).toBeVisible({timeout:30000});
  await expect(page.getByText("Result SHA-256: "+oracle.result.result_sha256,{exact:false})).toBeVisible();
+ await expect(page.getByLabel("Cache statistics")).toContainText("Candle cache: hit");
+ await page.getByRole("button",{name:"Save CSV on this device"}).click();
+ await expect(page.getByText("Validated CSV saved on this device.",{exact:false})).toBeVisible();
+ await page.reload();await page.getByRole("button",{name:"Open local Python runner"}).click();
+ await page.getByRole("button",{name:"Load saved CSV",exact:true}).click();
+ await expect(page.getByText("Saved CSV restored and checksum verified.",{exact:false})).toBeVisible();
  await page.getByLabel("Local visual source").fill("import os");
+ await page.getByText("Assume CSV times are candle opens; provenance and contract specs are unverified.").click();
  await page.getByRole("button",{name:"Run local Python"}).click();
  await expect(page.getByRole("alert")).toBeVisible({timeout:10000});
  expect(apiCalls).toEqual([]);

@@ -207,7 +207,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
                  margin_profile: MarginProfile | None = None,
                  risk_factory: Callable[[], Iterable[RiskBar]] | None = None,
                  risk_manifest_sha256s: tuple[str, ...] = (),
-                 session_reference: bool = False, archive_factory=None) -> BacktestResult:
+                 session_reference: bool = False, archive_factory=None, indicator_book_factory=None) -> BacktestResult:
     """Run fresh strategies for each scenario. No mutation of input config or source.
 
     The caller is a trusted adapter responsible for the declared source manifest and
@@ -250,6 +250,8 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
             used.append(strategy)
             sim = Simulator(config, strategy, path, margin_profile,
                             iter(risk_factory()) if risk_factory is not None else None)
+            if indicator_book_factory is not None:
+                sim.indicators=indicator_book_factory(sim.definitions,MAX_HISTORY)
             if warmup_factory is not None:
                 sim.warmup(warmup_start_utc,warmup_factory())
             if archive_factory is None:

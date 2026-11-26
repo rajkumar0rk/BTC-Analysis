@@ -11,10 +11,10 @@ from .analytics import summarize
 from ..serialization import to_wire
 from ..backtest import run_backtest
 
-MAX_ROWS=10080
-MAX_CSV=4*1024*1024
+MAX_ROWS=44640
+MAX_CSV=16*1024*1024
 
-def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:True):
+def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:True,cache=None):
     if assume_open is not True:raise ValueError("acknowledge CSV timestamps as UTC candle opens")
     if symbol not in ("BTCUSD","ETHUSD"):raise ValueError("unsupported instrument")
     if len(csv_text.encode())>MAX_CSV or len(graph_text.encode())>65536:raise ValueError("input too large")
@@ -32,22 +32,27 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             raise ValueError("invalid "+k)
     v={k:D(x) for k,x in settings.items()}
     i=Instrument("local-csv",symbol,AssetClass.CRYPTO_PERPETUAL,"USD","USD",v["tick_size"],v["lot_size"],v["multiplier"])
-    tf=Timeframe(60);rows=[]
-    r=csv.reader(io.StringIO(csv_text,newline=""))
-    if next(r,None)!=["time","open","high","low","close","volume"]:raise ValueError("CSV header must be time,open,high,low,close,volume")
-    for row in r:
-        if len(rows)>=MAX_ROWS:raise ValueError("maximum 10080 candles (7 days)")
-        if len(row)!=6 or not re.fullmatch(r"[0-9]{1,10}",row[0]) or any(not re.fullmatch(r"[0-9]{1,18}(?:\.[0-9]{1,18})?",x) for x in row[1:]):
-            raise ValueError("invalid CSV row")
-        epoch=int(row[0])
-        if not 0<=epoch<=4102444800 or epoch%60:raise ValueError("invalid UTC minute timestamp")
-        t=datetime.fromtimestamp(epoch,timezone.utc)
-        if rows and t!=rows[-1].close_utc:raise ValueError("CSV contains gaps, duplicates or reversed timestamps")
-        rows.append(Candle(i,tf,t,t+timedelta(minutes=1),*(D(x) for x in row[1:])))
-    if len(rows)<2:raise ValueError("at least two candles required")
+    tf=Timeframe(60);h=sha256(csv_text.encode()).hexdigest()
+    rows=cache.select((h,i)) if cache is not None else None
+    if rows is None:
+        rows=[]
+        r=csv.reader(io.StringIO(csv_text,newline=""))
+        if next(r,None)!=["time","open","high","low","close","volume"]:raise ValueError("CSV header must be time,open,high,low,close,volume")
+        for row in r:
+            if len(rows)>=MAX_ROWS:raise ValueError("maximum 44640 candles (31 days)")
+            if len(row)!=6 or not re.fullmatch(r"[0-9]{1,10}",row[0]) or any(not re.fullmatch(r"[0-9]{1,18}(?:\.[0-9]{1,18})?",x) for x in row[1:]):
+                raise ValueError("invalid CSV row")
+            epoch=int(row[0])
+            if not 0<=epoch<=4102444800 or epoch%60:raise ValueError("invalid UTC minute timestamp")
+            t=datetime.fromtimestamp(epoch,timezone.utc)
+            if rows and t!=rows[-1].close_utc:raise ValueError("CSV contains gaps, duplicates or reversed timestamps")
+            rows.append(Candle(i,tf,t,t+timedelta(minutes=1),*(D(x) for x in row[1:])))
+        if len(rows)<2:raise ValueError("at least two candles required")
+        rows=tuple(rows)
+        if cache is not None:cache.rows=rows
     start,end=rows[0].open_utc,rows[-1].close_utc
     if any(int(t.timestamp())%f for f in frames(g) for t in (start,end)):raise ValueError("CSV boundaries must align to all graph timeframes")
-    h=sha256(csv_text.encode()).hexdigest();code=sha256(compiled["source"].encode()).hexdigest()
+    code=sha256(compiled["source"].encode()).hexdigest()
     ds=DatasetRef("local-csv",i,DataKind.OHLCV,tf,start,end,h,"user-provided CSV; label assumed",0,True)
     cfg=BacktestConfig(StrategyRef("local-visual","1",code,compiled["graph_sha256"]),i,(ds,),start,end,
         Timeframe(g.signal_timeframe),tf,v["initial_equity"],"USD",D(1),MarginMode.ISOLATED,
@@ -60,7 +65,7 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             count+=1
             if count%128==0:progress(min(99,count*99//(len(rows)*2)))
             yield b
-    result=run_backtest(cfg,lambda:GraphStrategy(g),stream,linear_contract=True,dataset_manifest_sha256=h)
+    result=run_backtest(cfg,lambda:GraphStrategy(g),stream,linear_contract=True,dataset_manifest_sha256=h,indicator_book_factory=cache.book if cache is not None else None)
     scenarios=[]
     for s in result.scenarios:
         wire=to_wire(s)

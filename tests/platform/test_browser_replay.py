@@ -23,3 +23,23 @@ class BrowserReplayTests(unittest.TestCase):
             with self.assertRaises(ValueError):replay(csv_text(),source,"BTCUSD",SETTINGS,True)
         with self.assertRaises(ValueError):replay(csv_text().replace("1735689660,","1735689720,"),json.dumps(graph()),"BTCUSD",SETTINGS,True)
         with self.assertRaises(ValueError):replay(csv_text(),json.dumps(graph()),"BTCUSD",SETTINGS,False)
+
+    def test_cache_reuse_and_parameter_invalidation(self):
+        from btc_analysis.service.browser_cache import ReplayCache
+        from copy import deepcopy
+        g=graph()
+        g["long_entry"]["groups"][0]["conditions"][0]["right"]={"kind":"indicator","name":"ema.value","timeframe":60,"parameters":{"period":3}}
+        cache=ReplayCache()
+        def run(g,settings=SETTINGS,data=None,use_cache=True):
+            return replay(data or csv_text(),json.dumps(g),"BTCUSD",settings,True,cache=cache if use_cache else None)
+        a=run(g);self.assertEqual(a,run(g,use_cache=False))
+        self.assertFalse(cache.stats["candle_hit"]);self.assertEqual(cache.stats["indicator_misses"],1)
+        self.assertEqual(cache.stats["indicator_hits"],1)
+        b=run(g);self.assertEqual(a,b);self.assertTrue(cache.stats["candle_hit"])
+        self.assertEqual(cache.stats["indicator_hits"],2);self.assertEqual(cache.stats["indicator_misses"],0)
+        changed=deepcopy(g);changed["stop_loss_pct"]="2"
+        self.assertEqual(run(changed),run(changed,use_cache=False));self.assertEqual(cache.stats["indicator_misses"],0)
+        changed["long_entry"]["groups"][0]["conditions"][0]["right"]["parameters"]["period"]=7
+        self.assertEqual(run(changed),run(changed,use_cache=False));self.assertEqual(cache.stats["indicator_misses"],1)
+        self.assertEqual(run(g,data=csv_text().replace(",1\n",",2\n")),run(g,data=csv_text().replace(",1\n",",2\n"),use_cache=False))
+        self.assertFalse(cache.stats["candle_hit"])
