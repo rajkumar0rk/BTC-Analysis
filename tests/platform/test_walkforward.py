@@ -38,3 +38,29 @@ class WalkForwardTests(unittest.TestCase):
         a=browser_fold(csv_text(),json.dumps(graph()),"BTCUSD",SETTINGS,True,s,2)
         b=browser_fold(csv_text(),json.dumps(graph()),"BTCUSD",SETTINGS,True,s,2)
         self.assertEqual(a,b)
+
+    def test_repository_fold_matches_short_selection_and_metrics(self):
+        import gzip,tempfile
+        from pathlib import Path
+        from hashlib import sha256
+        from datetime import datetime,timezone
+        from btc_analysis.service.browser_archive_study import repository_fold
+        text=csv_text();lines=text.splitlines();start=int(lines[1].split(",")[0])
+        # Pad the fixture to a complete day using observed fixture rows repeated
+        # with new timestamps. This is explicitly synthetic test data only.
+        data=lines[1:];rows=[lines[0]]
+        for j in range(1440):
+            rows.append(str(start+j*60)+","+data[j%len(data)].split(",",1)[1])
+        raw=gzip.compress(("\n".join(rows)+"\n").encode());h=sha256(raw).hexdigest()
+        m=json.dumps({"symbol":"BTCUSD","resolution":"1m","timestamp_unit":"unix_seconds_utc","partitions":[{"file":"2025-01.csv.gz","utc_start":datetime.fromtimestamp(start,timezone.utc).isoformat(),"utc_end_exclusive":datetime.fromtimestamp(start+86400,timezone.utc).isoformat(),"expected_minutes":1440,"observed_candles":1440,"missing_minutes":0,"sha256_gzip":h}]})
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp)/(h+".bin")).write_bytes(raw)
+            short=browser_fold(text,json.dumps(graph()),"BTCUSD",SETTINGS,True,study(),1)
+            long=repository_fold(m,"BTCUSD","2025-01-01","2025-01-01",json.dumps(graph()),study(),1,SETTINGS,True,tmp)
+            self.assertEqual(short["winner_graph_sha256"],long["winner_graph_sha256"])
+            self.assertEqual(short["winner_parameters"],long["winner_parameters"])
+            self.assertEqual(len(short["tests"]),len(long["tests"]))
+            for a,b in zip(short["tests"],long["tests"]):
+                for key in ("test","worst_return_pct","max_drawdown_pct","min_trades","passed"):self.assertEqual(a[key],b[key])
+            with self.assertRaisesRegex(ValueError,"outside selected"):
+                repository_fold(m,"BTCUSD","2025-01-01","2025-01-01",json.dumps(graph()),{**study(),"train_minutes":1440},1,SETTINGS,True,tmp)

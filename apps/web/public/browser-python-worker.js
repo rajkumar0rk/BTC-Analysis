@@ -19,21 +19,23 @@ async function archiveBytes(url,max){
  const bytes=new Uint8Array(length);let offset=0;for(const c of chunks){bytes.set(c,offset);offset+=c.length;}return bytes;
 }
 async function longReplay(m,t){
+ const studyMode=m.action==="repository_study";
  if(typeof m.graph!=="string"||m.graph.length>65536||!["BTCUSD","ETHUSD"].includes(m.symbol)||m.assume!==true)throw Error("Invalid long replay request");
  self.postMessage({id:m.id,status:"initializing"});
  runtime??=start();const py=await runtime;
- py.runPython("from btc_analysis.service.browser_long_replay import plan_archive, replay_archive");
+ py.runPython("from btc_analysis.service.browser_long_replay import plan_archive, replay_archive\nfrom btc_analysis.service.browser_archive_study import study_download_plan, repository_fold");
  const root=new URL("./history-archive/"+m.symbol+"/",self.location.href);
  const manifest=new TextDecoder("utf-8",{fatal:true}).decode(await archiveBytes(new URL("manifest.json",root),262144));
  const markRoot=new URL("mark_1m/",root);
  const markManifest=m.risk?new TextDecoder("utf-8",{fatal:true}).decode(await archiveBytes(new URL("manifest.json",markRoot),262144)):null;
- const input={risk:m.risk??null,mark_manifest:markManifest,manifest_text:manifest,symbol:m.symbol,from_date:m.from,to_date:m.to,graph_text:m.graph,settings:m.settings,assume_open:m.assume,folder:"/long-history"};
+ const common={manifest_text:manifest,symbol:m.symbol,from_date:m.from,to_date:m.to,graph_text:m.graph,settings:m.settings,assume_open:m.assume,folder:"/long-history"};
+ const input=studyMode?{...common,study:m.study,fold:m.fold}:{...common,risk:m.risk??null,mark_manifest:markManifest};
  py.globals.set("long_json",JSON.stringify(input));
  const progress=p=>{self.postMessage({id:m.id,status:"progress",progress:Math.min(99,15+Math.floor(p*.85))});return true;};
  py.globals.set("report_progress",progress);
  let folder=false;
  try{
-  const plan=JSON.parse(py.runPython("json.dumps(plan_archive(**{k:v for k,v in json.loads(long_json).items() if k in ('manifest_text','symbol','from_date','to_date')}))"));
+  const plan=JSON.parse(py.runPython(studyMode?"json.dumps(study_download_plan(**{k:v for k,v in json.loads(long_json).items() if k in ('manifest_text','symbol','from_date','to_date','graph_text','study','fold')}))":"json.dumps(plan_archive(**{k:v for k,v in json.loads(long_json).items() if k in ('manifest_text','symbol','from_date','to_date')}))"));
   const markPlan=markManifest?JSON.parse(py.runPython("json.dumps(plan_archive(json.loads(long_json)['mark_manifest'],json.loads(long_json)['symbol'],json.loads(long_json)['from_date'],json.loads(long_json)['to_date']))")):null;
   const parts=[...plan.parts.map(part=>({part,root})),...(markPlan?.parts??[]).map(part=>({part,root:markRoot}))];
   py.FS.mkdir("/long-history");folder=true;
@@ -46,7 +48,7 @@ async function longReplay(m,t){
   }
   self.postMessage({id:m.id,status:"running"});
   const started=performance.now();
-  const result=py.runPython("json.dumps(replay_archive(**json.loads(long_json), progress=report_progress), allow_nan=False)");
+  const result=py.runPython(studyMode?"json.dumps(repository_fold(**json.loads(long_json), progress=report_progress), allow_nan=False)":"json.dumps(replay_archive(**json.loads(long_json), progress=report_progress), allow_nan=False)");
   self.postMessage({id:m.id,status:"done",result:JSON.parse(result),elapsed_ms:performance.now()-started,total_ms:performance.now()-t});
  }finally{
   py.globals.delete("long_json");py.globals.delete("report_progress");
@@ -59,7 +61,7 @@ self.onmessage=async({data:m})=>{
  busy=true;
  const t=performance.now();
  try{
-  if(m.action==="long_repository"){await longReplay(m,t);return;}
+  if(m.action==="long_repository"||m.action==="repository_study"){await longReplay(m,t);return;}
   if(m.action==="compile_visual"){
    if(typeof m.graph!=="string"||m.graph.length>65536)throw Error("Invalid graph");
    runtime??=start();const py=await runtime;

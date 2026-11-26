@@ -19,3 +19,18 @@ test("local chronological study matches native fold hashes",async({page})=>{
  await expect(page.getByLabel("Walk-forward progress")).toContainText("2/2 completed");
  for(const f of o.walkforward)await expect(page.getByText("Fold SHA-256: "+f.fold_sha256,{exact:true})).toBeVisible();
 });
+
+test("repository study uses archived data without importing CSV",async({page})=>{
+ test.setTimeout(180000);
+ await page.goto("/");await page.getByRole("button",{name:"Open local Python runner"}).click();
+ await page.getByLabel("History from (UTC)").fill("2025-01-01");await page.getByLabel("History to (UTC)").fill("2025-01-02");
+ await page.getByText("Assume CSV times are candle opens; provenance and contract specs are unverified.").click();
+ await page.getByText("Use repository historical data for long studies").click();
+ await page.getByLabel("Training window minutes").fill("60");await page.getByLabel("Test window minutes").fill("30");
+ await page.getByLabel("Study values 1").fill("1,2");
+ await page.getByLabel("Study maximum drawdown %").fill("100");
+ await page.getByText("Acknowledge research-only chronological testing, independent balances and non-attested holdout.").click();
+ await page.getByRole("button",{name:"Run walk-forward study"}).click();
+ await expect(page.getByLabel("Walk-forward progress")).toContainText("Study finished",{timeout:150000});
+ await expect(page.getByLabel("Walk-forward progress")).toContainText("2/2 completed");
+});

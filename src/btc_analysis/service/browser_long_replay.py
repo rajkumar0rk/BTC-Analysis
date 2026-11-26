@@ -37,9 +37,11 @@ def utc_day(text):
     if d.isoformat()!=text:raise ValueError("invalid UTC date")
     return int(datetime(d.year,d.month,d.day,tzinfo=timezone.utc).timestamp())
 def plan_archive(manifest_text,symbol,from_date,to_date):
+    return plan_archive_range(manifest_text,symbol,utc_day(from_date),utc_day(to_date)+DAY)
+
+def plan_archive_range(manifest_text,symbol,start,end):
     if symbol not in ("BTCUSD","ETHUSD") or len(manifest_text.encode())>262144:raise ValueError("invalid archive input")
-    start=utc_day(from_date);end=utc_day(to_date)+DAY
-    if not 0<end-start<=MAX_DAYS*DAY:raise ValueError("select 1–1098 calendar days (inclusive UTC)")
+    if type(start) is not int or type(end) is not int or start%60 or end%60 or not 0<=start<end<=4102444800 or not 0<end-start<=MAX_DAYS*DAY:raise ValueError("select 1–1098 calendar days (inclusive UTC)")
     m=json.loads(manifest_text)
     if (m["symbol"],m["resolution"],m["timestamp_unit"])!=(symbol,"1m","unix_seconds_utc") or not isinstance(m["partitions"],list) or len(m["partitions"])>500:raise ValueError("invalid archive manifest")
     selected=[]
@@ -134,7 +136,7 @@ def long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf):
     if not isinstance(source,str) or not source.strip() or len(source)>150:raise ValueError("profile evidence/source required")
     start,end=plan["start"],plan["end"]
     if not isinstance(mark_manifest,str) or json.loads(mark_manifest).get("series")!="mark_1m":raise ValueError("native mark archive required")
-    mp=plan_archive(mark_manifest,symbol,from_date,to_date)
+    mp=plan_archive_range(mark_manifest,symbol,start,end)
     if verify_files(plan,root)+verify_files(mp,root)>MAX_TOTAL:raise ValueError("combined compressed archive exceeds 64 MiB")
     refs=[DatasetRef("repository-mark:"+mp["manifest_sha256"][:16],i,DataKind.MARK,tf,dt(start),dt(end),mp["manifest_sha256"],"published Delta native mark archive; timestamps assumed",0,True)]
     funding={};interval=0;anchor=0
@@ -171,10 +173,10 @@ def yearly(monthly):
             years[y][1]=m.closing_equity;years[y][2]+=m.pnl
         return [{"year":y,"pnl":p,"return_pct":p/a*100 if a>0 else None,"opening_equity":a,"closing_equity":b} for y,(a,b,p) in years.items()]
 
-def replay_archive(manifest_text,from_date,to_date,graph_text,symbol,settings,assume_open,folder,progress=lambda p:True,risk=None,mark_manifest=None):
+def replay_archive(manifest_text,from_date,to_date,graph_text,symbol,settings,assume_open,folder,progress=lambda p:True,risk=None,mark_manifest=None,window=None):
     if assume_open is not True:raise ValueError("acknowledge unverified candle-open timestamps")
     if len(graph_text.encode())>65536:raise ValueError("graph too large")
-    plan=plan_archive(manifest_text,symbol,from_date,to_date)
+    plan=plan_archive(manifest_text,symbol,from_date,to_date) if window is None else plan_archive_range(manifest_text,symbol,*window)
     start,end=plan["start"],plan["end"];h=plan["manifest_sha256"]
     expected_keys={"initial_equity","maker_bps","taker_bps","tax_rate","slippage_bps","tick_size","lot_size","multiplier"}
     if set(settings)!=expected_keys:raise ValueError("invalid settings")
