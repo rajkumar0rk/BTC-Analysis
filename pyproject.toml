@@ -11,8 +11,8 @@ requires-python = ">=3.11"
 dependencies = []
 
 [project.optional-dependencies]
-data = ["pyarrow==19.0.1"]
-api = ["fastapi==0.115.12", "uvicorn==0.34.2", "httpx==0.28.1"]
+data = ["pyarrow==23.0.1"]
+api = ["fastapi==0.165.0", "uvicorn==0.34.2", "httpx==0.28.1"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

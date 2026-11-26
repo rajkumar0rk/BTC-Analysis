@@ -25,7 +25,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/readiness"
           python scripts/platform_readiness.py --output "$RUNNER_TEMP/readiness/benchmark.json"
-      - name: Dependency advisory reports (informational, not a pass gate)
+      - name: Dependency advisory reports
         shell: bash
         run: |
           set +e
@@ -52,7 +52,24 @@ jobs:
           printf '{"python_audit_exit":%s,"npm_audit_exit":%s,"production_approved":false}\n' "$py_status" "$npm_status" > "$report/advisory-status.json"
           cat "$report/advisory-status.json"
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: platform-readiness
           path: ${{ runner.temp }}/readiness/
           if-no-files-found: error
+      - name: Enforce clean dependency audit
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"readiness"
+          status=json.loads((root/"advisory-status.json").read_text())
+          if status["python_audit_exit"]!=0 or status["npm_audit_exit"]!=0:
+              raise SystemExit("Dependency advisories or scanner failure: inspect readiness artifact.")
+          py=json.loads((root/"python-audit.json").read_text())
+          npm=json.loads((root/"npm-audit.json").read_text())
+          if any(d.get("vulns") for d in py["dependencies"]) or npm["metadata"]["vulnerabilities"]["total"]!=0:
+              raise SystemExit("Dependency advisories remain.")
+          print("Both dependency audits report no known vulnerabilities.")
+          PY
