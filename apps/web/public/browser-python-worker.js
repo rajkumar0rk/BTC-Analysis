@@ -25,20 +25,24 @@ async function longReplay(m,t){
  py.runPython("from btc_analysis.service.browser_long_replay import plan_archive, replay_archive");
  const root=new URL("./history-archive/"+m.symbol+"/",self.location.href);
  const manifest=new TextDecoder("utf-8",{fatal:true}).decode(await archiveBytes(new URL("manifest.json",root),262144));
- const input={manifest_text:manifest,symbol:m.symbol,from_date:m.from,to_date:m.to,graph_text:m.graph,settings:m.settings,assume_open:m.assume,folder:"/long-history"};
+ const markRoot=new URL("mark_1m/",root);
+ const markManifest=m.risk?new TextDecoder("utf-8",{fatal:true}).decode(await archiveBytes(new URL("manifest.json",markRoot),262144)):null;
+ const input={risk:m.risk??null,mark_manifest:markManifest,manifest_text:manifest,symbol:m.symbol,from_date:m.from,to_date:m.to,graph_text:m.graph,settings:m.settings,assume_open:m.assume,folder:"/long-history"};
  py.globals.set("long_json",JSON.stringify(input));
  const progress=p=>{self.postMessage({id:m.id,status:"progress",progress:Math.min(99,15+Math.floor(p*.85))});return true;};
  py.globals.set("report_progress",progress);
  let folder=false;
  try{
   const plan=JSON.parse(py.runPython("json.dumps(plan_archive(**{k:v for k,v in json.loads(long_json).items() if k in ('manifest_text','symbol','from_date','to_date')}))"));
+  const markPlan=markManifest?JSON.parse(py.runPython("json.dumps(plan_archive(json.loads(long_json)['mark_manifest'],json.loads(long_json)['symbol'],json.loads(long_json)['from_date'],json.loads(long_json)['to_date']))")):null;
+  const parts=[...plan.parts.map(part=>({part,root})),...(markPlan?.parts??[]).map(part=>({part,root:markRoot}))];
   py.FS.mkdir("/long-history");folder=true;
   let total=0,done=0;
-  for(const part of plan.parts){
-   const bytes=await archiveBytes(new URL(part.sha256+".bin",root),4*1024*1024);total+=bytes.length;
+  for(const {part,root:archiveRoot} of parts){
+   const bytes=await archiveBytes(new URL(part.sha256+".bin",archiveRoot),4*1024*1024);total+=bytes.length;
    if(total>64*1024*1024)throw Error("Compressed history exceeds 64 MiB");
    py.FS.writeFile("/long-history/"+part.sha256+".bin",bytes);
-   self.postMessage({id:m.id,status:"progress",progress:Math.floor(++done*15/plan.parts.length)});
+   self.postMessage({id:m.id,status:"progress",progress:Math.floor(++done*15/parts.length)});
   }
   self.postMessage({id:m.id,status:"running"});
   const started=performance.now();

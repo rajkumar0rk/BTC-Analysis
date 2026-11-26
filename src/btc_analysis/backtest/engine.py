@@ -217,8 +217,8 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
     on starting position or first pending entry direction (a heuristic).
     """
     _validate(config,margin_profile,session_reference)
-    if archive_factory is not None and (margin_profile is not None or session_reference):
-        raise ValueError("long archive supports continuous 1x reference only")
+    if archive_factory is not None and (session_reference or (margin_profile is not None and not getattr(archive_factory,"supports_risk",False))):
+        raise ValueError("archive adapter does not support requested risk/session model")
     execution=next(d for d in config.datasets if d.kind is DataKind.OHLCV)
     if (margin_profile is None)!=(risk_factory is None):
         raise ValueError("margin profile and risk stream required together")
