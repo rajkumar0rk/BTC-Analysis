@@ -6,8 +6,9 @@ ROOT=Path(__file__).resolve().parents[1]
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--worker",required=True);p.add_argument("--origin",required=True);p.add_argument("--database-id",required=True)
-    p.add_argument("--database-name",default="btc-analysis");p.add_argument("--enable-paper",action="store_true")
+    p.add_argument("--database-name",default="btc-analysis");p.add_argument("--enable-paper",action="store_true");p.add_argument("--release-sha",default="")
     a=p.parse_args()
+    if a.release_sha and not re.fullmatch(r"[0-9a-f]{40}",a.release_sha):raise SystemExit("invalid release SHA")
     if not re.fullmatch(r"[a-z][a-z0-9-]{2,39}",a.worker) or not re.fullmatch(r"[a-zA-Z0-9_-]{1,63}",a.database_name):raise SystemExit("invalid names")
     u=urlsplit(a.origin)
     if u.scheme!="https" or a.origin!="https://"+u.netloc or not re.fullmatch(re.escape(a.worker)+r"\.[a-z0-9-]+\.workers\.dev",u.netloc):raise SystemExit("use exact matching HTTPS workers.dev origin")
@@ -26,6 +27,7 @@ workers_dev = true
 preview_urls = false
 [vars]
 ALLOWED_ORIGINS = "{a.origin}"
+RELEASE_SHA = "{a.release_sha}"
 PAPER_ENABLED = "{str(a.enable_paper).lower()}"
 [assets]
 directory = "../web/dist"

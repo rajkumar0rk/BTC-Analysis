@@ -108,7 +108,7 @@ export function makeHandler(storageFactory=()=>null){
     const h=headers(origin);h.set("Access-Control-Allow-Methods","GET, POST, PUT, DELETE");h.set("Access-Control-Allow-Headers","Authorization, Content-Type");h.set("Access-Control-Max-Age","300");
     return new Response(null,{status:204,headers:h});
    }
-   if(path==="/health"&&req.method==="GET")return json({status:"ok",service:"btc-analysis-cloud",schema_version:1},200,origin);
+   if(path==="/health"&&req.method==="GET")return json({status:"ok",service:"btc-analysis-cloud",schema_version:1,...(/^[0-9a-f]{40}$/.test(env.RELEASE_SHA||"")?{release_sha:env.RELEASE_SHA}:{})},200,origin);
    if(!path.startsWith("/v1/cloud/"))fail(404,"not_found");
    const owner=await auth(req,env);
    const store=storageFactory(env);

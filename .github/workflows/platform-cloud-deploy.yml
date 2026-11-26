@@ -28,6 +28,7 @@ jobs:
       CF_WORKER: btc-analysis
       CF_ORIGIN: ${{ vars.CF_ORIGIN }}
       CF_DATABASE_ID: ${{ vars.CF_DATABASE_ID }}
+      VERIFIED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -63,7 +64,7 @@ jobs:
       - working-directory: apps/web
         run: npm ci --no-audit --no-fund && npm run build -- --mode private
       - name: Generate private deployment config (virtual paper enabled)
-        run: python scripts/prepare_cloud_release.py --worker "$CF_WORKER" --origin "$CF_ORIGIN" --database-id "$CF_DATABASE_ID" --enable-paper
+        run: python scripts/prepare_cloud_release.py --worker "$CF_WORKER" --origin "$CF_ORIGIN" --database-id "$CF_DATABASE_ID" --enable-paper --release-sha "$VERIFIED_SHA"
       - name: Bundle and validate without cloud writes
         working-directory: apps/cloud
         run: npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml --dry-run --outdir "$RUNNER_TEMP/private-bundle"
@@ -94,28 +95,29 @@ jobs:
           except (ValueError,TypeError,AssertionError):
               raise SystemExit("AUTH_HASHES_JSON must be a valid owner-to-SHA256 digest map")
           PY
-          npx --yes wrangler@4.157.0 d1 info btc-analysis --config wrangler.release.toml
+          python ../../scripts/cloud_deploy_retry.py info
       - name: Apply dedicated database migration and deploy private Studio
         if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
         env:
+          GH_TOKEN: ${{ github.token }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           AUTH_HASHES_JSON: ${{ secrets.AUTH_HASHES_JSON }}
         working-directory: apps/cloud
         run: |
           set -euo pipefail
-          npx --yes wrangler@4.157.0 d1 migrations apply DB --remote --config wrangler.release.toml
-          npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml
-          printf '%s' "$AUTH_HASHES_JSON" | npx --yes wrangler@4.157.0 secret put AUTH_HASHES_JSON --config wrangler.release.toml
+          python ../../scripts/cloud_deploy_retry.py migrate
+          python ../../scripts/cloud_deploy_retry.py deploy
+          python ../../scripts/cloud_deploy_retry.py secret
       - name: Verify deployed public shell and unauthenticated API denial
         if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
         run: |
           set -euo pipefail
           for attempt in $(seq 1 20); do
-            if curl -fsS --max-time 10 "$CF_ORIGIN/health" | python -c 'import json,sys;d=json.load(sys.stdin);assert d["status"]=="ok" and d["service"]=="btc-analysis-cloud"'; then break; fi
+            if curl -fsS --max-time 10 "$CF_ORIGIN/health" | python -c 'import json,sys,os;d=json.load(sys.stdin);assert d["status"]=="ok" and d["service"]=="btc-analysis-cloud" and d.get("release_sha")==os.environ["VERIFIED_SHA"]'; then break; fi
             sleep 3
           done
-          curl -fsS --max-time 15 "$CF_ORIGIN/health" | python -c 'import json,sys;d=json.load(sys.stdin);assert d["service"]=="btc-analysis-cloud"'
+          curl -fsS --max-time 15 "$CF_ORIGIN/health" | python -c 'import json,sys,os;d=json.load(sys.stdin);assert d["status"]=="ok" and d["service"]=="btc-analysis-cloud" and d.get("release_sha")==os.environ["VERIFIED_SHA"]'
           curl -fsS --max-time 15 "$CF_ORIGIN/" -o "$RUNNER_TEMP/private-index.html"
           grep -q 'Strategy Studio' "$RUNNER_TEMP/private-index.html"
           status="$(curl -sS --max-time 15 -o "$RUNNER_TEMP/unauth.json" -w '%{http_code}' "$CF_ORIGIN/v1/cloud/capabilities")"
