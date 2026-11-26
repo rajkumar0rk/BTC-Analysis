@@ -46,3 +46,16 @@ export async function loadRepositoryHistory(symbol:SymbolName,from:string,to:str
  return {csv,name:symbol+" "+from+" to "+to+" UTC (repository)",bars:rows.length,cacheHits,partitions:selected.length,coverageThrough:manifest.requested_through_utc};
 }
 export async function clearRepositoryHistoryCache(){await caches.delete(CACHE);}
+
+export type RepositoryCoverage={kind:"trade"|"mark"|"funding";from:string;through:string;rows:number;missing:number};
+export async function repositoryCoverage(symbol:SymbolName,signal?:AbortSignal):Promise<RepositoryCoverage[]> {
+ return Promise.all((["trade","mark","funding"] as const).map(async (kind):Promise<RepositoryCoverage>=>{
+  const root=base(symbol,kind);
+  const m=JSON.parse(new TextDecoder().decode(await bounded(await get(new URL("manifest.json",root),signal),256*1024))) as Manifest;
+  if(m.symbol!==symbol||m.resolution!==(kind==="funding"?"1h":"1m")||m.timestamp_unit!=="unix_seconds_utc"||!Array.isArray(m.partitions)||!m.partitions.length||m.partitions.length>500)throw Error("Invalid coverage manifest");
+  const parts=[...m.partitions].sort((a,b)=>epoch(a.utc_start)-epoch(b.utc_start));
+  const step=kind==="funding"?3600:60;
+  for(const p of parts){const a=epoch(p.utc_start),b=epoch(p.utc_end_exclusive);if(b<=a||!Number.isSafeInteger(p.observed_candles)||p.observed_candles<0||p.expected_minutes!==(b-a)/step||p.missing_minutes!==p.expected_minutes-p.observed_candles||p.missing_minutes<0)throw Error("Invalid coverage partition");}
+  return {kind,from:parts[0].utc_start.slice(0,10),through:m.requested_through_utc,rows:parts.reduce((a,p)=>a+p.observed_candles,0),missing:parts.reduce((a,p)=>a+p.missing_minutes,0)};
+ }));
+}
