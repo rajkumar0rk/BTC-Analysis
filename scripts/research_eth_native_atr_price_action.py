@@ -163,7 +163,7 @@ def replay(o,h,l,c,entry_idx,side,risk,rr,hold):
     exitfill=mid*(1-side*SLIP)
     gross=side*(mid-entry)
     net=side*(exitfill-entryfill)-FEE*(entryfill+exitfill)
-    return j,net,gross,why
+    return j,net,gross,why,entryfill,exitfill,stop,target
 
 def compute(f,events):
     o=f.open.to_numpy(float);h=f.high.to_numpy(float)
@@ -184,7 +184,7 @@ def compute(f,events):
                         risk=mult*z.atr
                         relative=risk/z.entry_px
                         if not (.0008<=relative<=.12):continue
-                        j,net,gross,why=replay(o,h,l,c,int(z.k),int(z.side),
+                        j,net,gross,why,entryfill,exitfill,stop_price,target_price=replay(o,h,l,c,int(z.k),int(z.side),
                             float(risk),float(rr),int(hold))
                         last=j
                         fraction=min(RISK_FRAC,LEV_CAP*risk/z.entry_px)
@@ -196,6 +196,10 @@ def compute(f,events):
                               tz_convert("Asia/Kolkata").strftime("%Y-%m"),
                             direction="LONG" if z.side==1 else "SHORT",
                             entry_price_usd=float(z.entry_px),
+                            entry_fill_usd=float(entryfill),exit_price_usd=float(exitfill),
+                            stop_price=float(stop_price),target_price=float(target_price),
+                            entry_reason=name,exit_reason=["Stop touched (stop-first)","Target touched","Maximum hold reached"][why],
+                            signal_atr=float(z.atr),
                             stop_distance_eth_usd=round(float(risk),6),
                             target_distance_eth_usd=round(float(rr*risk),6),
                             net_eth_price_points=round(float(net),6),

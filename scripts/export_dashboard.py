@@ -44,7 +44,9 @@ def main():
         losses=-p[p<0].sum()
         runs.append(dict(id=str(i),strategy=name,target=int(tp),stop=int(sl),trades=len(g),net=round(float(p.sum()),3),win_rate=round(float((p>0).mean()*100),2),profit_factor=round(float(p[p>0].sum()/losses),3) if losses else None,drawdown=round(float((np.maximum.accumulate(eq)-eq).max()),3),months=months))
     write(OUT/"data"/"index.json",dict(schema=1,instrument="BTCUSD",first=str(d.index[0]),last=str(d.index[-1]),bars=len(d),commit=os.getenv("GITHUB_SHA","local"),source="scripts/research_daily_200_500_points.py",costs="0.05% taker each side + 18% GST; 5 points slippage each side; funding not modeled; no leverage or account sizing",runs=runs))
-    print(f"Exported {len(runs)} configurations, {len(trades)} trades, {len(d)} candles")
+    from dashboard_archive import extend
+    extend(ROOT,OUT)
+    print(f"Exported {len(runs)} audited configurations, {len(trades)} trades, {len(d)} candles plus archived results")
 
 if __name__=="__main__":
     main()
