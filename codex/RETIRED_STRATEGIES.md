@@ -54,3 +54,7 @@ The old ETH replay suite and matching legacy source-result copies are retired. M
 
 ## Duplicate branch cleanup
 See VERIFIED_DUPLICATE_BRANCHES.json for explicitly reviewed identical branch refs. The pruning workflow deletes only exact SHA duplicates, with open-PR and active-workflow safeguards and an explicit lease. Retained refs keep the same commit. Other research branches are not classified by name alone; review their metrics and active dependencies before retirement.
+
+## Bulk branch consolidation (2026-11-26)
+
+The maintainer approved reducing historical branch refs. The reviewed manifest `RESEARCH_BRANCH_RETIREMENT_20261126.json` records every original head. A separate archive ref preserves each reviewed historical head as an ancestor before lease-protected deletion. Open PRs, active runs, protected refs, changed heads, locked/frozen and retained refs are skipped. Read workflow deletion report for actual outcomes. This is consolidation rather than a claim every retired strategy lost money.

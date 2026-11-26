@@ -1,0 +1,33 @@
+name: Consolidate obsolete research branches
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'codex/RESEARCH_BRANCH_RETIREMENT_20261126.json'
+      - 'scripts/retire_research_branches.py'
+      - '.github/workflows/consolidate-research-branches.yml'
+permissions:
+  contents: write
+  pull-requests: read
+  actions: read
+concurrency:
+  group: research-branch-retirement
+  cancel-in-progress: false
+jobs:
+  retire:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Archive and lease-delete reviewed historical refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/retire_research_branches.py
+      - name: Upload exact deletion report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: branch-retirement-report
+          path: branch-retirement-report.json
+          if-no-files-found: warn

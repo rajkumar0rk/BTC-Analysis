@@ -81,3 +81,7 @@ only to force return, or implying guaranteed future profits.
 ## Retired legacy experiments
 
 See [RETIRED_STRATEGIES.md](RETIRED_STRATEGIES.md) and inspect the pinned pre-retirement commit before proposing equivalent rules. Removal from the current branch does not make previously tested ideas novel. Do not automatically recreate deleted workflows or result directories.
+
+## Consolidated historical branch references (2026-11-26)
+
+Consult `codex/RESEARCH_BRANCH_RETIREMENT_20261126.json` before new experiments. Inspect retired experiments at their exact recorded commit SHA, reachable from `archive/retired-research-20261126` after consolidation succeeds. Do not recreate retired refs to inspect them. Reuse the relevant retained workstream for iterative research. Retirement is not evidence of strategy failure.
