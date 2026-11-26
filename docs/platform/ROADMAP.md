@@ -7,7 +7,7 @@ M3 Backtest engine: [trusted reference simulator](BACKTEST_ENGINE.md), chronolog
 M4 Python SDK + indicators: [streaming library and SDK](PYTHON_SDK.md), 13 indicator families, declared multi-timeframe access, separate warmup, formula fixtures and trusted example. External library and frozen-strategy parity remain separate gates.
 M5 Venue execution: [reference fixed-tier risk engine](MARGIN_ENGINE.md), explicit isolated/cross collateral, mark-first liquidation scenarios, signed settlement input and fee/tax reconciliation. Historical profiles, actual settlement attestation, spread, tiered/portfolio margin and exchange parity remain outstanding.
 M6 API/jobs: [local authenticated API and durable queue](BACKEND_API.md), immutable source revisions, idempotent submission, trusted synthetic subprocess worker, cancellation, leases, progress and ownership. Arbitrary-code isolation, historical jobs and deployment remain gated.
-M7 Frontend shell: accessible React/TypeScript navigation and job/results views.
+M7 Frontend shell: [React/TypeScript studio](FRONTEND.md), real local API, source revisions, synthetic runner, responsive job/results views and browser CI. Production deployment remains gated.
 M8 Python editor: Monaco, diagnostics, safe submission and versioning.
 M9 Visual Python builder: typed graph, validation/compiler, code preview, deterministic graph/code parity, custom code mode.
 M10 Runner: run configuration, live progress, cancellation, status/history.

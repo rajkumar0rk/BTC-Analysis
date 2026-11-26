@@ -1,0 +1,3 @@
+## M7 Strategy Studio
+
+React 19, TypeScript and Vite, separate from the existing Pages dashboard. Real M6 API, in-memory operator bearer token, strategy source revision creation and retrieval, synthetic runner, job monitoring/cancellation, results and settings. Start the M6 API and worker as documented in BACKEND_API.md. Then run `cd apps/web`, `npm install`, `npm run dev`, and open http://127.0.0.1:5173. The local proxy forwards only the API routes. No public deployment, live trading, historical execution or arbitrary Python execution. Production TLS, same-origin reverse proxy, auth review, accessibility audit and dependency lockfile remain pending. Direct dependencies pinned; browser CI builds and tests actual API and worker and uploads compiled UI.

@@ -1,0 +1,21 @@
+import {test,expect} from "@playwright/test";
+test("real authenticated API, version history, fixture worker and mobile layout",async({page})=>{
+ const token=process.env.PLATFORM_TEST_TOKEN;if(!token)throw new Error("Missing test token");
+ const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));
+ await page.goto("/");
+ await page.getByLabel("API access token").fill("x".repeat(40));await page.getByRole("button",{name:"Connect",exact:true}).click();
+ await expect(page.getByRole("alert")).toContainText("invalid credentials");
+ await page.getByLabel("API access token").fill(token);await page.getByRole("button",{name:"Connect",exact:true}).click();
+ await expect(page.getByRole("heading",{name:"Overview"})).toBeVisible();
+ await page.getByRole("button",{name:"Strategy library"}).click();
+ await page.getByLabel("Name",{exact:true}).fill("Browser fixture");await page.getByLabel("Python source").fill("raise RuntimeError('inert')");
+ await page.getByRole("button",{name:"Save strategy",exact:true}).click();await expect(page.getByText("Saved immutable version 1.")).toBeVisible();
+ await page.getByLabel("Python source").fill("pass");await page.getByRole("button",{name:"Save new version"}).click();await expect(page.getByText("Saved immutable version 2.")).toBeVisible();
+ await page.getByLabel("View version").selectOption("1");await expect(page.getByLabel("Python source")).toHaveValue("raise RuntimeError('inert')");await expect(page.getByRole("button",{name:"Save new version"})).toBeDisabled();
+ await page.getByRole("button",{name:"Backtest runner"}).click();await page.getByLabel("Number of 1-minute fixture bars").fill("61");await expect(page.getByRole("button",{name:"Run synthetic fixture"})).toBeDisabled();
+ await page.getByLabel("Number of 1-minute fixture bars").fill("60");await page.getByRole("button",{name:"Run synthetic fixture"}).click();await expect(page.getByRole("heading",{name:"Synthetic fixture result"})).toBeVisible({timeout:30000});await expect(page.locator("svg.chart")).toHaveCount(2);
+ await page.getByRole("button",{name:"Settings",exact:true}).click();await expect(page.getByText("Custom Python execution",{exact:true})).toBeVisible();
+ await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBeTruthy();
+ expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
+ await page.getByRole("button",{name:"Disconnect",exact:true}).click();await expect(page.getByLabel("API access token")).toBeVisible();expect(errors).toEqual([]);
+});
