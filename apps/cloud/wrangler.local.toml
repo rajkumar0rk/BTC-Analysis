@@ -1,7 +1,7 @@
 # Local emulator only. Never use this dummy id with --remote or deploy.
 name = "btc-analysis-cloud-local"
 main = "src/worker.mjs"
-compatibility_date = "2026-11-16"
+compatibility_date = "2026-11-10"
 workers_dev = false
 preview_urls = false
 [vars]
