@@ -1,7 +1,11 @@
 /** Explicit HTTPS cloud endpoint; token lives only in the returned client closure. */
-export type CloudCapabilities={schema_version:1;owner:string;storage:boolean;source_execution:false;backtest_execution:false;paper_trading:false;live_orders:false;max_source_bytes:number;max_strategies:number;max_revisions:number};
+export type CloudCapabilities={schema_version:1;owner:string;storage:boolean;source_execution:false;backtest_execution:false;paper_trading:false;live_orders:false;max_source_bytes:number;max_strategies:number;max_revisions:number;max_owner_revisions:number;max_results:number;results_storage:boolean};
 export type CloudStrategy={id:string;name:string;latest_version:number};
 export type CloudRevision={id:string;name?:string;version:number;source:string;code_sha256:string;created:number};
+export type CloudResultSummary={engine_version:string;initial_equity:string;scenarios:{path:"O-H-L-C"|"O-L-H-C";net_pnl:string;drawdown_pct:string;trades:number;profit_factor:string|null;win_rate_pct:string|null;monthly:{month:string;pnl:string}[]}[]};
+export type CloudResultInput={id:string;strategy_id:string;version:number;code_sha256:string;symbol:"BTCUSD"|"ETHUSD";dataset_sha256:string;result_sha256:string;summary:CloudResultSummary};
+export type CloudResultMeta=Omit<CloudResultInput,"code_sha256"|"summary">&{payload_sha256:string;created:number};
+export type CloudResult=CloudResultMeta&{summary:CloudResultSummary;verification:"client_reported"};
 export function cloudClient(endpoint:string,token:string){
  const url=new URL(endpoint);
  if(url.protocol!=="https:"||url.username||url.password||url.search||url.hash||url.pathname!=="/")throw new Error("Cloud API must be an explicit HTTPS origin.");
@@ -17,5 +21,9 @@ export function cloudClient(endpoint:string,token:string){
  return {capabilities:()=>call<CloudCapabilities>("/capabilities"),strategies:()=>call<{strategies:CloudStrategy[]}>("/strategies"),
   create:(name:string,source:string)=>call<CloudRevision>("/strategies","POST",{name,source}),
   revision:(key:string,v:number)=>call<CloudRevision>("/strategies/"+id(key)+"/revisions/"+version(v)),
-  revise:(key:string,v:number,source:string)=>call<CloudRevision>("/strategies/"+id(key),"PUT",{expected_version:version(v),source})};
+  revise:(key:string,v:number,source:string)=>call<CloudRevision>("/strategies/"+id(key),"PUT",{expected_version:version(v),source}),
+  results:()=>call<{results:CloudResultMeta[];verification:"client_reported"}>("/results"),
+  saveResult:(value:CloudResultInput)=>call<CloudResult>("/results","POST",value),
+  result:(key:string)=>call<CloudResult>("/results/"+id(key)),
+  deleteResult:(key:string)=>call<{deleted:true}>("/results/"+id(key),"DELETE")};
 }

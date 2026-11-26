@@ -18,6 +18,34 @@ jobs:
         with:
           node-version: '22'
       - run: node --test apps/cloud/tests/*.test.mjs
+      - name: Real local D1 migrations and runtime integration
+        working-directory: apps/cloud
+        shell: bash
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: |
+          set -euo pipefail
+          node --input-type=module -e 'import {createHash} from "node:crypto"; import {writeFileSync} from "node:fs"; const h=s=>createHash("sha256").update(s).digest("hex"); writeFileSync(".dev.vars","AUTH_HASHES_JSON="+JSON.stringify({alice:h("A".repeat(43)),bob:h("B".repeat(43))})+"\n");'
+          npx --yes wrangler@4.157.0 d1 migrations apply DB --local --config wrangler.local.toml --persist-to "$RUNNER_TEMP/d1-test"
+          export CLOUD_TEST_ID_FILE="$RUNNER_TEMP/d1-strategy-id"
+          start() {
+            npx --yes wrangler@4.157.0 dev --local --config wrangler.local.toml --persist-to "$RUNNER_TEMP/d1-test" --ip 127.0.0.1 --port 8789 > "$RUNNER_TEMP/d1-worker.log" 2>&1 & worker=$!
+            for i in $(seq 1 60); do
+              if curl -fsS http://127.0.0.1:8789/health >/dev/null 2>&1; then return; fi
+              sleep 1
+            done
+            cat "$RUNNER_TEMP/d1-worker.log"; return 1
+          }
+          trap 'kill "$worker" 2>/dev/null || true; rm -f .dev.vars' EXIT
+          start
+          node tests/d1.integration.mjs || { cat "$RUNNER_TEMP/d1-worker.log"; exit 1; }
+          # Kill local server process tree before checking persisted state in a fresh runtime.
+          pkill -TERM -P "$worker" || true
+          kill "$worker" 2>/dev/null || true
+          wait "$worker" || true
+          sleep 2
+          start
+          CLOUD_TEST_STRATEGY_ID="$(cat "$CLOUD_TEST_ID_FILE")" node tests/d1.integration.mjs --restart
       - name: Bundle worker without deploying
         working-directory: apps/cloud
         run: npx --yes wrangler@4.157.0 deploy --dry-run --outdir "$RUNNER_TEMP/cloud-bundle"
