@@ -9,7 +9,7 @@ M5 Venue execution: [reference fixed-tier risk engine](MARGIN_ENGINE.md), explic
 M6 API/jobs: [local authenticated API and durable queue](BACKEND_API.md), immutable source revisions, idempotent submission, trusted synthetic subprocess worker, cancellation, leases, progress and ownership. Arbitrary-code isolation, historical jobs and deployment remain gated.
 M7 Frontend shell: [React/TypeScript studio](FRONTEND.md), real local API, source revisions, synthetic runner, responsive job/results views and browser CI. Production deployment remains gated.
 M8 Python editor: [Monaco and compiler diagnostics](PYTHON_EDITOR.md), SDK catalog/snippets, syntax-gated UI saves and immutable versions. Semantic checks and secure arbitrary execution remain later gates.
-M9 Visual Python builder: typed graph, validation/compiler, code preview, deterministic graph/code parity, custom code mode.
+M9 Visual Python builder: [typed rule graph and deterministic Python compiler](VISUAL_BUILDER.md), grouped conditions, multi-timeframe indicators, fixed risk brackets, source round-trip, generated/handwritten parity fixture, and code mode. Arbitrary code execution and advanced graph/risk features remain gated.
 M10 Runner: run configuration, live progress, cancellation, status/history.
 M11 Analytics and replay: standard results, actual fills/reasons, account vs points, monthly MTM.
 M12 Registry: immutable versions, freeze/clone/archive, provenance and retention.

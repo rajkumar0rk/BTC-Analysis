@@ -11,6 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 from .store import Store, Missing, Conflict, Invalid
 from .diagnostics import validate_source, DiagnosticUnavailable
 from ..indicators import CATALOG
+from ..visual import Graph, compile_graph, recover_graph
 
 MAX_BODY=100_000
 Name=Annotated[str,StringConstraints(strip_whitespace=True,min_length=1,max_length=100)]
@@ -123,6 +124,16 @@ def create_app(db_path,tokens):
             {"name":name,"defaults":{k:(str(v) if not isinstance(v,int) else v) for k,v in defaults.items()},
              "outputs":list(fields)} for name,(defaults,fields) in sorted(CATALOG.items())],
              "execution_allowed":False}
+
+    @app.post("/v1/visual/compile")
+    def visual_compile(body:Graph,user:str=Depends(owner)):
+        try:return compile_graph(body)
+        except ValueError as exc:raise HTTPException(422,str(exc)) from exc
+
+    @app.post("/v1/visual/recover")
+    def visual_recover(body:SyntaxRequest,user:str=Depends(owner)):
+        try:return recover_graph(body.source)
+        except ValueError as exc:raise HTTPException(422,str(exc)) from exc
 
     @app.post("/v1/strategies",status_code=201)
     def create(body:StrategyCreate,user:str=Depends(owner)):

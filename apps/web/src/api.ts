@@ -1,3 +1,4 @@
+import type {Graph,Compiled} from "./visualTypes";
 export type Diagnostic={severity:"error";message:string;line:number;column:number;end_line:number;end_column:number};
 export type Validation={source_sha256:string;syntax_valid:boolean;diagnostics:Diagnostic[];execution_allowed:false;python_version:string};
 export type Catalog={sdk_version:string;execution_allowed:false;indicators:{name:string;defaults:Record<string,string|number>;outputs:string[]}[]};
@@ -20,6 +21,8 @@ export function client(token:string){
   capabilities:()=>call<Capabilities>("/v1/capabilities"),
   validate:(source:string)=>call<Validation>("/v1/strategies/validate",{method:"POST",body:JSON.stringify({source})}),
   catalog:()=>call<Catalog>("/v1/sdk/catalog"),
+  compileVisual:(graph:Graph)=>call<Compiled>("/v1/visual/compile",{method:"POST",body:JSON.stringify(graph)}),
+  recoverVisual:(source:string)=>call<Compiled>("/v1/visual/recover",{method:"POST",body:JSON.stringify({source})}),
   strategies:()=>call<Strategy[]>("/v1/strategies"),
   create:(name:string,source:string)=>call<Revision>("/v1/strategies",{method:"POST",body:JSON.stringify({name,source})}),
   revision:(id:string,v:number)=>call<Revision>("/v1/strategies/"+encodeURIComponent(id)+"/versions/"+v),

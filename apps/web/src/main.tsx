@@ -4,8 +4,9 @@ import {createRoot} from "react-dom/client";
 import {client,ApiError} from "./api";
 import type {Api,Capabilities,Job,Strategy,Revision,Fixture,Scenario,Catalog,Validation} from "./api";
 import {PythonEditor} from "./PythonEditor";
+import {VisualBuilder} from "./VisualBuilder";
 import "./style.css";
-const pages=["Overview","Strategy library","Backtest runner","Job history","Settings"] as const;
+const pages=["Overview","Strategy library","Visual builder","Backtest runner","Job history","Settings"] as const;
 type Page=typeof pages[number];
 const active=(j:Job)=>["queued","running","cancelling"].includes(j.status);
 const err=(e:unknown)=>e instanceof Error?e.message:"Request failed";
@@ -21,19 +22,21 @@ function App(){
 function Studio({token,caps,logout}:{token:string;caps:Capabilities;logout:()=>void}){
  const api=useMemo(()=>client(token),[token]);
  const [page,setPage]=useState<Page>("Overview");const [jobs,setJobs]=useState<Job[]>([]);const [strategies,setStrategies]=useState<Strategy[]>([]);
+ const [pythonRevision,setPythonRevision]=useState<Revision|null>(null);
  const [selected,setSelected]=useState("");const [error,setError]=useState("");const [ready,setReady]=useState(false);
  const generation=useRef(0);const mounted=useRef(true);
  function report(e:unknown){if(!mounted.current)return;if(e instanceof ApiError&&e.status===401){logout();return;}setError(err(e));}
  async function refresh(){const n=++generation.current;try{const [j,s]=await Promise.all([api.jobs(),api.strategies()]);if(mounted.current&&generation.current===n){setJobs(j);setStrategies(s);setReady(true);}}catch(e){if(generation.current===n)report(e);}}
  useEffect(()=>{mounted.current=true;let stopped=false;let timer:number;async function poll(){await refresh();if(!stopped)timer=window.setTimeout(poll,2500);}void poll();return()=>{mounted.current=false;stopped=true;generation.current++;window.clearTimeout(timer);};},[api]);
  function open(id:string){setSelected(id);setPage("Job history");}
- function nav(p:Page){setError("");setPage(p);}
- return <div className="shell"><a className="skip" href="#main">Skip to content</a><aside><div className="brand"><span className="mark">B</span><div><strong>BTC Analysis</strong><small>Strategy Studio</small></div></div><nav aria-label="Primary navigation">{pages.map((p,i)=><button key={p} aria-current={page===p?"page":undefined} className={page===p?"nav active":"nav"} onClick={()=>nav(p)}><span aria-hidden="true">{["◈","▤","▷","◷","⚙"][i]}</span>{p}</button>)}</nav><div className="bottom"><a href="https://rajkumar0rk.github.io/BTC-Analysis/" target="_blank" rel="noreferrer">Research archive ↗</a><button onClick={logout}>Disconnect</button></div></aside>
+ function nav(p:Page){setError("");setPythonRevision(null);setPage(p);}
+ return <div className="shell"><a className="skip" href="#main">Skip to content</a><aside><div className="brand"><span className="mark">B</span><div><strong>BTC Analysis</strong><small>Strategy Studio</small></div></div><nav aria-label="Primary navigation">{pages.map((p,i)=><button key={p} aria-current={page===p?"page":undefined} className={page===p?"nav active":"nav"} onClick={()=>nav(p)}><span aria-hidden="true">{["◈","▤","◇","▷","◷","⚙"][i]}</span>{p}</button>)}</nav><div className="bottom"><a href="https://rajkumar0rk.github.io/BTC-Analysis/" target="_blank" rel="noreferrer">Research archive ↗</a><button onClick={logout}>Disconnect</button></div></aside>
  <main id="main" tabIndex={-1}><header><div><div className="eyebrow">RESEARCH WORKSPACE</div><h1>{page}</h1></div><span className="muted">{error?"Service issue":ready?"● API connected":"Connecting…"}</span></header>
  <div className="notice"><strong>Reference environment.</strong> Only synthetic fixtures can run. Saved Python source is inert. No live orders.</div>
  {error&&<div role="alert" className="error">{error} <button onClick={()=>{setError("");void refresh();}}>Retry</button></div>}
  {page==="Overview"&&<><div className="metrics">{[["Saved strategies",strategies.length],["Active jobs",jobs.filter(active).length],["Successful jobs",jobs.filter(j=>j.status==="succeeded").length],["Worker capacity",caps.worker_concurrency]].map(([label,v])=><section className="panel metric" key={label}><span className="muted">{label}</span><strong>{ready?v:"—"}</strong></section>)}</div><section className="panel"><div className="head"><h2>Recent jobs</h2><button className="primary" onClick={()=>nav("Backtest runner")}>New reference run</button></div><Jobs jobs={jobs.slice(0,6)} open={open}/></section></>}
- {page==="Strategy library"&&<Library api={api} strategies={strategies} refresh={refresh} report={report}/>}
+ {page==="Strategy library"&&<Library key={pythonRevision?.id??"library"} initial={pythonRevision} api={api} strategies={strategies} refresh={refresh} report={report}/>}
+ {page==="Visual builder"&&<VisualBuilder api={api} strategies={strategies} refresh={refresh} report={report} openPython={r=>{setPythonRevision(r);setPage("Strategy library");}}/>}
  {page==="Backtest runner"&&<Runner api={api} caps={caps} open={open} refresh={refresh} report={report}/>}
  {page==="Job history"&&<><section className="panel"><div className="head"><h2>Job history</h2><button onClick={()=>void refresh()}>Refresh</button></div><Jobs jobs={jobs} open={open}/></section>{selected&&<Detail key={selected} api={api} id={selected} refresh={refresh} report={report}/>}</>}
  {page==="Settings"&&<section className="panel"><h2>Service capabilities</h2><dl>{[["Strategy storage",caps.strategy_storage?"Available":"Disabled"],["Custom Python execution",caps.custom_python_execution?"Available":"Disabled"],["Historical jobs",caps.historical_runs?"Available":"Disabled"],["Worker concurrency",caps.worker_concurrency],["Fixture limit",caps.fixture_max_bars],["Authentication","In-memory token"]].map(([k,v])=><div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></section>}
@@ -42,8 +45,8 @@ function Studio({token,caps,logout}:{token:string;caps:Capabilities;logout:()=>v
 function Jobs({jobs,open}:{jobs:Job[];open:(id:string)=>void}){
  return jobs.length?<div className="table-wrap"><table><thead><tr><th>Job</th><th>Status</th><th>Progress</th><th>Submitted</th><th>Details</th></tr></thead><tbody>{jobs.map(j=><tr key={j.id}><td>Synthetic fixture<small>{j.request.bars} bars · {j.request.signal_minutes}m · {j.id.slice(0,8)}</small></td><td><span className={"status "+j.status}>{j.status}</span></td><td><progress value={j.progress} max={100} aria-label="Job progress"/> {j.progress}%</td><td>{new Date(j.created*1000).toLocaleString()}</td><td><button onClick={()=>open(j.id)}>Inspect</button></td></tr>)}</tbody></table></div>:<p className="muted">No jobs to display.</p>;
 }
-function Library({api,strategies,refresh,report}:{api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void}){
- const [r,setR]=useState<Revision|null>(null);const [name,setName]=useState("");const [source,setSource]=useState(starter);
+function Library({api,strategies,refresh,report,initial}:{initial:Revision|null;api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void}){
+ const [r,setR]=useState<Revision|null>(initial);const [name,setName]=useState(initial?.name??"");const [source,setSource]=useState(initial?.source??starter);
  const [busy,setBusy]=useState(false);const [note,setNote]=useState("");const [validation,setValidation]=useState<Validation|null>(null);
  const [catalog,setCatalog]=useState<Catalog|null>(null);
  const latest=Math.max(r?.version??1,strategies.find(s=>s.id===r?.id)?.latest_version??1);

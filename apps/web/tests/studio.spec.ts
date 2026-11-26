@@ -26,3 +26,25 @@ test("real authenticated API, version history, fixture worker and mobile layout"
  expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
  await page.getByRole("button",{name:"Disconnect",exact:true}).click();await expect(page.getByLabel("API access token")).toBeVisible();expect(errors).toEqual([]);
 });
+
+test("visual rules generate, persist, recover and open Python",async({page})=>{
+ const token=process.env.PLATFORM_TEST_TOKEN;if(!token)throw new Error("Missing test token");
+ await page.goto("/");await page.getByLabel("API access token").fill(token);await page.getByRole("button",{name:"Connect",exact:true}).click();
+ await page.getByRole("button",{name:"Visual builder",exact:true}).click();
+ await page.getByLabel("Strategy name",{exact:true}).fill("Visual browser test");
+ await expect(page.getByRole("group",{name:"Long entry",exact:true})).toBeVisible();
+ await page.getByRole("group",{name:"Long entry",exact:true}).getByRole("button",{name:"Add group"}).click();
+ await page.getByRole("button",{name:"Long entry group 2 move up"}).click();
+ await page.getByRole("button",{name:"Generate Python",exact:true}).click();
+ await expect(page.getByLabel("Generated Python source")).toContainText("class VisualStrategy");
+ await page.getByRole("button",{name:"Save visual strategy",exact:true}).click();
+ await expect(page.getByText("Saved visual strategy version 1.")).toBeVisible();
+ await page.getByRole("button",{name:"New visual strategy"}).click();
+ await page.getByLabel("Saved visual strategy").selectOption({label:"Visual browser test · v1"});
+ await page.getByRole("button",{name:"Open visual version"}).click();
+ await expect(page.getByText("Recovered exact visual source.")).toBeVisible();
+ await page.getByRole("button",{name:"Open saved Python"}).click();
+ await expect(page.getByRole("heading",{name:"Strategy library",exact:true})).toBeVisible();
+ await page.getByRole("button",{name:"Use plain text editor"}).click();
+ await expect(page.getByLabel("Python source",{exact:true})).toHaveValue(/class VisualStrategy/);
+});
