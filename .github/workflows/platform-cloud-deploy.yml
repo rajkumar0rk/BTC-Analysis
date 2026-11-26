@@ -1,5 +1,9 @@
 name: Deploy private Cloudflare Studio
 on:
+  workflow_run:
+    workflows: ['Platform final release verification']
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       operation:
@@ -15,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   release:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository))
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment: cloudflare-production
@@ -28,6 +32,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - name: Reject stale automatic release before build
+        if: github.event_name == 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: test "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)" = "$VERIFIED_SHA"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -56,8 +67,14 @@ jobs:
       - name: Bundle and validate without cloud writes
         working-directory: apps/cloud
         run: npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml --dry-run --outdir "$RUNNER_TEMP/private-bundle"
+      - name: Recheck main before automatic cloud writes
+        if: github.event_name == 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: test "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)" = "$VERIFIED_SHA"
       - name: Verify operator credentials and auth digest map
-        if: inputs.operation == 'deploy'
+        if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -79,7 +96,7 @@ jobs:
           PY
           npx --yes wrangler@4.157.0 d1 info btc-analysis --config wrangler.release.toml
       - name: Apply dedicated database migration and deploy private Studio
-        if: inputs.operation == 'deploy'
+        if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -91,7 +108,7 @@ jobs:
           npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml
           printf '%s' "$AUTH_HASHES_JSON" | npx --yes wrangler@4.157.0 secret put AUTH_HASHES_JSON --config wrangler.release.toml
       - name: Verify deployed public shell and unauthenticated API denial
-        if: inputs.operation == 'deploy'
+        if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
         run: |
           set -euo pipefail
           for attempt in $(seq 1 20); do
