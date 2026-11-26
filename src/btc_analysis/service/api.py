@@ -16,6 +16,7 @@ from .historical import HistoricalRequest, snapshots, prepare, MAX_MINUTES
 from .analytics import analytics, trade_replay
 from .optimization import OptimizationRequest, prepare_optimization
 from .validation import ValidationRequest, prepare_validation
+from .paper import PaperStore, PaperRequest
 
 MAX_BODY=100_000
 Name=Annotated[str,StringConstraints(strip_whitespace=True,min_length=1,max_length=100)]
@@ -92,6 +93,7 @@ def create_app(db_path,tokens,history_root=None):
         if d in digests:raise ValueError("duplicate identity token")
         digests[d]=owner
     store=Store(db_path)
+    paper=PaperStore(store)
     app=FastAPI(title="BTC-Analysis API",version="0.6.0",docs_url=None,redoc_url=None,openapi_url=None)
     app.add_middleware(BodyLimit)
 
@@ -182,6 +184,20 @@ def create_app(db_path,tokens,history_root=None):
     @app.get("/v1/strategies/{sid}/versions/{version}")
     def get_revision(sid:str,version:int,user:str=Depends(owner)):
         return store.revision(user,sid,version)
+
+    @app.get("/v1/paper")
+    def paper_sessions(user:str=Depends(owner)):return paper.list(user)
+
+    @app.post("/v1/paper",status_code=201)
+    def create_paper(body:PaperRequest,idempotency_key:Annotated[Key,Header()],user:str=Depends(owner)):
+        try:return paper.create(user,idempotency_key,body)
+        except ValueError as exc:raise HTTPException(422,str(exc)[:300]) from exc
+
+    @app.get("/v1/paper/{sid}")
+    def paper_session(sid:str,user:str=Depends(owner)):return paper.get(user,sid)
+
+    @app.post("/v1/paper/{sid}/stop")
+    def stop_paper(sid:str,user:str=Depends(owner)):return paper.stop(user,sid)
 
     @app.get("/v1/datasets")
     def datasets(user:str=Depends(owner)):

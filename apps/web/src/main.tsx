@@ -10,8 +10,9 @@ import {TradeAnalytics} from "./TradeAnalytics";
 import {RegistryPanel} from "./RegistryPanel";
 import {OptimizationResults} from "./OptimizationResults";
 import {ValidationPanel,ValidationResults} from "./ValidationPanel";
+import {PaperTrading} from "./PaperTrading";
 import "./style.css";
-const pages=["Overview","Strategy library","Visual builder","Backtest runner","Job history","Settings"] as const;
+const pages=["Overview","Strategy library","Visual builder","Backtest runner","Job history","Paper trading","Settings"] as const;
 type Page=typeof pages[number];
 const active=(j:Job)=>["queued","running","cancelling"].includes(j.status);
 const err=(e:unknown)=>e instanceof Error?e.message:"Request failed";
@@ -35,7 +36,7 @@ function Studio({token,caps,logout}:{token:string;caps:Capabilities;logout:()=>v
  useEffect(()=>{mounted.current=true;let stopped=false;let timer:number;async function poll(){await refresh();if(!stopped)timer=window.setTimeout(poll,2500);}void poll();return()=>{mounted.current=false;stopped=true;generation.current++;window.clearTimeout(timer);};},[api]);
  function open(id:string){setSelected(id);setPage("Job history");}
  function nav(p:Page){setError("");setPythonRevision(null);setPage(p);}
- return <div className="shell"><a className="skip" href="#main">Skip to content</a><aside><div className="brand"><span className="mark">B</span><div><strong>BTC Analysis</strong><small>Strategy Studio</small></div></div><nav aria-label="Primary navigation">{pages.map((p,i)=><button key={p} aria-current={page===p?"page":undefined} className={page===p?"nav active":"nav"} onClick={()=>nav(p)}><span aria-hidden="true">{["◈","▤","◇","▷","◷","⚙"][i]}</span>{p}</button>)}</nav><div className="bottom"><a href="https://rajkumar0rk.github.io/BTC-Analysis/" target="_blank" rel="noreferrer">Research archive ↗</a><button onClick={logout}>Disconnect</button></div></aside>
+ return <div className="shell"><a className="skip" href="#main">Skip to content</a><aside><div className="brand"><span className="mark">B</span><div><strong>BTC Analysis</strong><small>Strategy Studio</small></div></div><nav aria-label="Primary navigation">{pages.map((p,i)=><button key={p} aria-current={page===p?"page":undefined} className={page===p?"nav active":"nav"} onClick={()=>nav(p)}><span aria-hidden="true">{["◈","▤","◇","▷","◷","◎","⚙"][i]}</span>{p}</button>)}</nav><div className="bottom"><a href="https://rajkumar0rk.github.io/BTC-Analysis/" target="_blank" rel="noreferrer">Research archive ↗</a><button onClick={logout}>Disconnect</button></div></aside>
  <main id="main" tabIndex={-1}><header><div><div className="eyebrow">RESEARCH WORKSPACE</div><h1>{page}</h1></div><span className="muted">{error?"Service issue":ready?"● API connected":"Connecting…"}</span></header>
  <div className="notice"><strong>Reference environment.</strong> {caps.historical_runs?"Historical visual research and synthetic fixtures available.":"Only synthetic fixtures can run."} Saved arbitrary Python source is inert. No live orders.</div>
  {error&&<div role="alert" className="error">{error} <button onClick={()=>{setError("");void refresh();}}>Retry</button></div>}
@@ -44,6 +45,7 @@ function Studio({token,caps,logout}:{token:string;caps:Capabilities;logout:()=>v
  {page==="Visual builder"&&<VisualBuilder api={api} strategies={strategies} refresh={refresh} report={report} openPython={r=>{setPythonRevision(r);setPage("Strategy library");}}/>}
  {page==="Backtest runner"&&<><HistoricalRunner api={api} strategies={strategies} open={open} refresh={refresh} report={report}/><Runner api={api} caps={caps} open={open} refresh={refresh} report={report}/></>}
  {page==="Job history"&&<><section className="panel"><div className="head"><h2>Job history</h2><button onClick={()=>void refresh()}>Refresh</button></div><Jobs jobs={jobs} open={open}/></section>{selected&&<Detail key={selected} api={api} id={selected} refresh={refresh} report={report} open={open}/>}</>}
+ {page==="Paper trading"&&<PaperTrading api={api} strategies={strategies}/>}
  {page==="Settings"&&<section className="panel"><h2>Service capabilities</h2><dl>{[["Strategy storage",caps.strategy_storage?"Available":"Disabled"],["Custom Python execution",caps.custom_python_execution?"Available":"Disabled"],["Historical jobs",caps.historical_runs?"Available":"Disabled"],["Worker concurrency",caps.worker_concurrency],["Fixture limit",caps.fixture_max_bars],["Authentication","In-memory token"]].map(([k,v])=><div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl></section>}
  </main></div>;
 }
