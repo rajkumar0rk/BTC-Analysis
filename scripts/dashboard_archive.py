@@ -1,5 +1,5 @@
 """Conservative archive import. No synthesized fills, no combined strategies."""
-import json, hashlib, math, re
+import json, hashlib, math, re, os, shutil
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -67,16 +67,29 @@ def normalize(row,s):
     ctx={k:value(row[k]) for k in ("atr","signal_atr","ema20","ema50","supertrend","risk_pts","stop_distance_eth_usd","target_distance_eth_usd","fee_gst_points","modeled_cost_points","fee_slippage_pts","equity_trade_return","mfe_points","mae_points","mfe_pts","mae_pts","stop_distance_pts","level","cost_pts","entry_price_usd","entry_fill_usd","trade_return","trail_stop_price","liquidation_price") if k in row and value(row[k]) is not None}
     return dict(entry_utc=entry,exit_utc=exit,trigger_utc=stamp(get("signal")),side=direction,entry_price=number(row.get("entry_fill_usd")) if s["symbol"]=="ETHUSD" and number(row.get("entry_fill_usd")) is not None else number(get("ep")),exit_price=number(get("xp")),entry_reason=value(row.get("entry_reason")) or get("trigger"),exit_reason=value(row.get("exit_reason")) or get("reason"),result=get("reason") or "Not recorded",net_points=net,gross_points=number(get("gross")),fee_points=number(row.get("fee_gst_points")),assumed_slippage_points=None,stop_price=number(row.get("stop_price")),target_price=number(row.get("target_price")),trailing_stop_price=number(row.get("trail_stop_price")),liquidation_price=number(row.get("liquidation_price")),signal_context=ctx,split=value(row.get("period")),audit="archived fields only")
 
-def candle_shards(root,out,symbol):
+def candle_shards(root,out,symbol,previous,old_manifest,new_manifest):
     folder=root/"data"/"delta_india"/symbol/"1m"
-    days=[]
+    days=[]; reused=0
     for path in sorted(folder.glob("20??-??.csv.gz")):
+        key=f"{symbol}/{path.name}"
+        digest=hashlib.sha256(path.read_bytes()).hexdigest()
+        prior=old_manifest.get(key,{})
+        old_days=prior.get("days",[])
+        if previous and prior.get("sha256")==digest and old_days and all((previous/"candles"/symbol/(day+".json")).is_file() for day in old_days):
+            for day in old_days:
+                dest=out/"data"/"candles"/symbol/(day+".json")
+                dest.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copy2(previous/"candles"/symbol/(day+".json"),dest)
+            days.extend(old_days);new_manifest[key]=prior;reused+=len(old_days);continue
         d=pd.read_csv(path,usecols=["time","open","high","low","close","volume"])
         if d.time.duplicated().any() or d.isna().any().any(): raise ValueError(f"Invalid candles {path}")
         d=d.sort_values("time")
+        partition=[]
         for day,g in d.groupby(pd.to_datetime(d.time,unit="s",utc=True).dt.strftime("%Y-%m-%d")):
             rows=[[int(t),*[round(float(v),6) for v in vals]] for t,*vals in g[["time","open","high","low","close","volume"]].itertuples(index=False,name=None)]
-            dump(out/"data"/"candles"/symbol/(day+".json"),rows);days.append(day)
+            dump(out/"data"/"candles"/symbol/(day+".json"),rows);partition.append(day);days.append(day)
+        new_manifest[key]=dict(sha256=digest,days=partition,bars=len(d))
+    print(f"{symbol}: {len(days)} candle days, {reused} unchanged shards reused",flush=True)
     return sorted(set(days))
 
 def extend(root,out):
@@ -150,13 +163,16 @@ def extend(root,out):
         name=path.name.lower()
         if rel not in seen and ("ledger" in name or name.endswith("_trades.csv") or name.endswith("_trades.csv.gz")) and (name.endswith(".csv") or name.endswith(".csv.gz")):
             coverage.append(dict(path=rel,status="Adapter pending — source preserved"))
+    previous=Path(os.environ["DASHBOARD_PREVIOUS_DATA"]) if os.getenv("DASHBOARD_PREVIOUS_DATA") else None
+    manifest_path=previous/"candle_manifest.json" if previous else None
+    old_manifest=json.loads(manifest_path.read_text()) if manifest_path and manifest_path.exists() else {}
+    new_manifest={}
     for symbol in ("BTCUSD","ETHUSD"):
-        try:
-            days=candle_shards(root,out,symbol)
-            index.setdefault("candle_days",{})[symbol]=days
-        except (ValueError,OSError) as exc:
-            index.setdefault("candle_days",{})[symbol]=[]
-            coverage.append(dict(path=f"data/delta_india/{symbol}/1m",status="Candle export unavailable: "+str(exc)))
+        days=candle_shards(root,out,symbol,previous,old_manifest,new_manifest)
+        if not days:raise ValueError(f"No source candles for {symbol}")
+        index.setdefault("candle_days",{})[symbol]=days
+    index["bars"]=sum(v["bars"] for k,v in new_manifest.items() if k.startswith("BTCUSD/"))
+    dump(out/"data"/"candle_manifest.json",new_manifest)
     # The original BTC-only shards are superseded by symbol-specific shards.
     for path in (out/"data"/"candles").glob("*.json"): path.unlink()
     dump(out/"data"/"coverage.json",coverage)
@@ -165,7 +181,7 @@ def extend(root,out):
     # Keep a lightweight catalog of research branches without merging them.
     branches=root/".dashboard-branches.txt"
     if branches.exists():
-        refs=[dict(sha=line.split()[0],name=line.split()[1].removeprefix("refs/heads/")) for line in branches.read_text().splitlines() if len(line.split())==2]
+        refs=[dict(sha=line.split()[0],name=line.split()[1].removeprefix("refs/heads/")) for line in branches.read_text().splitlines() if len(line.split())==2 and line.split()[1]!="refs/heads/dashboard-data"]
         dump(out/"data"/"branches.json",refs)
     else: dump(out/"data"/"branches.json",[])
     dump(idxpath,index)

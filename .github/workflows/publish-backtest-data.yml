@@ -1,0 +1,48 @@
+name: Publish backtest data
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 */6 * * *'
+  workflow_run:
+    workflows:
+      - ETHUSD native ATR price-action strategy research
+      - BTCUSD daily 200–500 point feasibility
+      - Research BTC Stage24 two-hour failed auction 22 months
+    types: [completed]
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - 'analysis/**'
+      - 'data/delta_india/BTCUSD/1m/**'
+      - 'data/delta_india/ETHUSD/1m/**'
+      - 'scripts/export_dashboard.py'
+      - 'scripts/dashboard_archive.py'
+      - 'scripts/verify_dashboard_export.py'
+      - 'scripts/publish_dashboard_data.sh'
+      - '.github/workflows/publish-backtest-data.yml'
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: dashboard-data-publication
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==2.2.3 numpy==2.2.6
+      - run: python scripts/test_dashboard_archive.py
+      - name: Publish verified data only, never deploy Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/publish_dashboard_data.sh

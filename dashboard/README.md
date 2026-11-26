@@ -1,16 +1,12 @@
-# Backtest Explorer v2
+# Backtest Explorer — independent UI and data publishing
 
-Static GitHub Pages application. Main workflow: Backtest dashboard. GitHub Actions rebuilds after changes to analysis artifacts and dashboard inputs, or manual dispatch.
+Public static GitHub Pages UI; no backend, token, or browser-side GitHub API credential.
 
-- Original execution-audited BTC experiment remains reproduced, with no changes to strategy rules.
-- Explicit archive adapters cover native ETH ATR and Stage24 failed-auction where ledgers exist. The retired V7/V8, swing, big-trend and previous-day range families were removed from main. Unsupported/missing ledgers are listed. No inferred fills or reasons. Configuration-level comparisons are restricted to the same instrument and price-point units; cost assumptions differ.
-- ETH native ATR engine now records modeled fills, stop/target levels, signal ATR and reasons during execution. Historical archives are not silently rewritten. The novelty gate applies to new strategy tests; this change is observability only.
-- Realized P&L/drawdown is exit ordered, not account equity or mark-to-market; yearly/monthly points use entry month. Reference EMA20/50 uses displayed 1m data only. Recorded stop/trailing/liquidation levels are rendered only if present; actual dynamic trajectories are not reconstructed.
-- Daily candles, monthly trade shards, bounded cache, sampled curve. Archive budget 330 MiB (split by instrument); missing/unsupported/oversize sources appear in coverage. Public Pages only: no private data.
+- **Backtest dashboard** deploys only index.html, app.js and style.css when UI code changes or on manual dispatch. It does not generate or bundle candles or backtest results. Its Chromium smoke test checks the real cross-origin GitHub Raw data snapshot.
+- **Publish backtest data** runs independently after successful supported BTC daily, ETH native ATR and BTC Stage24 research workflows, relevant main data changes, on a six-hour reconciliation schedule, or manual dispatch. It has no Pages permission or deployment step. Unchanged source fingerprints skip export and push. Data publish reads existing recorded ledgers; it never reruns a backtest.
+- The public `dashboard-data` branch stores daily candle shards, monthly trade shards, compact curves and index. A validated pointer at `dashboard-data/latest.json` references an immutable Git commit; clients fetch all files at that SHA so mid-refresh updates cannot mix versions. UI checks the pointer on load, every minute while visible, or with Refresh results. GitHub/CDN caching may delay updates briefly.
+- ETH ledger is copied from the latest successful Actions artifact and retained in the data branch so artifact expiry does not remove previously published trades. If a newer artifact is unavailable the publisher explicitly retains the last valid ledger and identifies its source run. Unchanged candle partitions reuse existing daily shards. Failed validation leaves the last published snapshot intact. No history rewrite; old snapshots remain recoverable.
+- Supported sources: BTC daily audited ledger, ETH native ATR and Stage24 failed auction. Unsupported research files are cataloged, not guessed. New strategy families need an explicit ledger adapter. Other branch results are listed, not automatically merged. Retired experiments remain retired.
+- P&L/drawdown in price points, not account equity. EMA overlays are chart references. Missing fills, decisions and dynamic risk trajectories are never fabricated. Public data only; never publish secrets.
 
-Run locally: install pandas and numpy; python scripts/test_dashboard_audit.py; python scripts/test_dashboard_archive.py; python scripts/export_dashboard.py; python -m http.server 8000 --directory dashboard-dist.
-
-## V3 verification and coverage
-ETH ledger is downloaded from the latest successful native-ATR workflow artifact. Dashboard rebuilds on its successful completion and on a six-hour schedule. Source archive budget is split by instrument; summary-only configurations retain full metrics but omit trade shards. Research branches are cataloged, not merged or automatically replayed. CI validates generated data and exercises BTC/ETH UI in Chromium. Missing fills and actual trailing/liquidation trajectories remain unavailable unless recorded in the originating engine.
-
-See [retired strategy index](../codex/RETIRED_STRATEGIES.md) for historical references. Market data and active research branches are unchanged.
+Local: install pandas/numpy, obtain the recorded ETH ledger if available, run `python scripts/export_dashboard.py`, `python scripts/verify_dashboard_export.py`, then `python -m http.server 8000 --directory dashboard-dist`. Localhost uses local shards unless `?remote=1` is supplied.
