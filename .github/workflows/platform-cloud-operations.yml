@@ -1,5 +1,8 @@
 name: Private Cloud operations
 on:
+  push:
+    branches: [main]
+    paths: ['scripts/cloud_health_check.py','scripts/test_cloud_health_check.py','.github/workflows/platform-cloud-operations.yml']
   schedule:
     - cron: '23 2 * * *'
   workflow_dispatch:
@@ -13,7 +16,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: private-cloud-production
+  group: private-cloud-operations
   cancel-in-progress: false
 jobs:
   health:
