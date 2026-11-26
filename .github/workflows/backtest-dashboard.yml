@@ -1,0 +1,48 @@
+name: Backtest dashboard
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['dashboard/**', 'scripts/export_dashboard.py', 'scripts/test_dashboard_audit.py', 'scripts/research_daily_200_500_points.py', '.github/workflows/backtest-dashboard.yml']
+  pull_request:
+    paths: ['dashboard/**', 'scripts/export_dashboard.py', 'scripts/test_dashboard_audit.py', 'scripts/research_daily_200_500_points.py', '.github/workflows/backtest-dashboard.yml']
+permissions:
+  contents: read
+concurrency:
+  group: backtest-dashboard-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pandas==2.2.3 numpy==2.2.6
+      - run: python scripts/test_dashboard_audit.py
+      - run: node --check dashboard/app.js
+      - run: python scripts/export_dashboard.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backtest-dashboard
+          path: dashboard-dist/
+          retention-days: 14
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: dashboard-dist/
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

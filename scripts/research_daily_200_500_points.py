@@ -42,18 +42,18 @@ def events(d):
     b5=resample(d,5)
     b15=resample(d,15)
     recs=[]
-    def emit(name,t,side,tf):
+    def emit(name,t,side,tf,reason,context):
         if side not in (1,-1):return
         when=t+pd.Timedelta(minutes=tf)
         if when not in d.index:return
         local=when.tz_convert(NY)
         recs.append(dict(strategy=name,trigger_utc=str(t),entry_utc=when,
-                         date_ny=str(local.date()),side=side))
+                         date_ny=str(local.date()),side=side,entry_reason=reason,signal_context=json.dumps(context),signal_tf=tf))
     # Fixed-clock opening candle direction; not a claim of edge.
     loc=d.index.tz_convert(NY)
     mask=(loc.dayofweek<5)&(loc.hour==9)&(loc.minute==30)
     for t,r in d.loc[mask].iterrows():
-        emit("NY_0930_first_1m_direction",t,int(r.close>r.open)-int(r.close<r.open),1)
+        emit("NY_0930_first_1m_direction",t,int(r.close>r.open)-int(r.close<r.open),1,"Completed NY 09:30 candle direction",dict(open=float(r.open),close=float(r.close)))
     # 5m: large US opening candle follow-through
     r5=b5.high-b5.low
     r5prev=r5.rolling(24,min_periods=24).median().shift(1)
@@ -61,14 +61,14 @@ def events(d):
     m5=m5 & ((b5.close-b5.open).abs()/r5.replace(0,np.nan)>0.55)
     z=b5.index.tz_convert(NY)
     for t,r in b5[(z.dayofweek<5)&(z.hour==9)&(z.minute==30)&m5].iterrows():
-        emit("NY_0930_big_5m_follow",t,int(r.close>r.open)-int(r.close<r.open),5)
+        emit("NY_0930_big_5m_follow",t,int(r.close>r.open)-int(r.close<r.open),5,"Opening range > 1.5x prior median; body > 55%; follow direction",dict(open=float(r.open),close=float(r.close),range=float(r5.loc[t]),prior_median=float(r5prev.loc[t]),body_ratio=float(abs(r.close-r.open)/r5.loc[t])))
     # 15m: reverse an unusually large US opening candle
     r15=b15.high-b15.low
     r15prev=r15.rolling(8,min_periods=8).median().shift(1)
     m15=(r15>1.7*r15prev)&((b15.close-b15.open).abs()/r15.replace(0,np.nan)>0.6)
     z=b15.index.tz_convert(NY)
     for t,r in b15[(z.dayofweek<5)&(z.hour==9)&(z.minute==30)&m15].iterrows():
-        emit("NY_0930_large_15m_fade",t,-(int(r.close>r.open)-int(r.close<r.open)),15)
+        emit("NY_0930_large_15m_fade",t,-(int(r.close>r.open)-int(r.close<r.open)),15,"Opening range > 1.7x prior median; body > 60%; fade direction",dict(open=float(r.open),close=float(r.close),range=float(r15.loc[t]),prior_median=float(r15prev.loc[t]),body_ratio=float(abs(r.close-r.open)/r15.loc[t])))
     # Trend breakout in liquid US session. Only past candles in all operands.
     b5["hi12"]=b5.high.rolling(12,min_periods=12).max().shift(1)
     b5["lo12"]=b5.low.rolling(12,min_periods=12).min().shift(1)
@@ -87,13 +87,15 @@ def events(d):
         side=0
         if r.close>r.hi12 and r.ema20>r.ema50 and r.close>r.ema20:side=1
         if r.close<r.lo12 and r.ema20<r.ema50 and r.close<r.ema20:side=-1
-        emit("US_trend_5m_12bar_break",t,side,5)
+        emit("US_trend_5m_12bar_break",t,side,5,"Completed 12-bar breakout with EMA20/50 alignment, range and body filters",dict(close=float(r.close),prior_high=float(r.hi12),prior_low=float(r.lo12),ema20=float(r.ema20),ema50=float(r.ema50),range=float(span),prior_median=float(r.prior24),body_ratio=float(abs(r.close-r.open)/span)))
     # Data-discovered 15m sequence from earlier exploration. Confirm on new holdout only.
     span=(b15.high-b15.low)
     strong_green=(b15.close>b15.open)&(span>1.8*r15prev)&((b15.close-b15.open)/span.replace(0,np.nan)>0.60)
     seq=(b15.close.shift(2)<b15.open.shift(2)) & strong_green.shift(1).fillna(False) & (b15.close>b15.open)
+    prev_open=b15.open.shift(1); prev_close=b15.close.shift(1)
+    prev_span=span.shift(1); prev_med=r15prev.shift(1)
     for t in b15.index[seq]:
-        emit("15m_red_impulsegreen_green_short",t,-1,15)
+        emit("15m_red_impulsegreen_green_short",t,-1,15,"Completed red / strong green / green sequence; short",dict(previous_open=float(prev_open.loc[t]),previous_close=float(prev_close.loc[t]),previous_range=float(prev_span.loc[t]),previous_prior_median=float(prev_med.loc[t]),close=float(b15.close.loc[t])))
     f=pd.DataFrame(recs).sort_values("entry_utc")
     # Only the first qualifying event for each strategy per NY calendar day.
     return f.drop_duplicates(["strategy","date_ny"],keep="first").reset_index(drop=True)
@@ -144,12 +146,15 @@ def trade_sim(d,ev):
         for target in TARGETS:
             for stop in STOPS:
                 result="time"; exit_price=float(raw_close[end-1]); held=HOLD_MINUTES
+                exit_reason="Maximum holding period reached; exit candle close"
                 for k in range(j,end):
                     take=(raw_high[k]>=price+target) if side==1 else (raw_low[k]<=price-target)
                     lose=(raw_low[k]<=price-stop) if side==1 else (raw_high[k]>=price+stop)
                     if lose: # pessimistic on simultaneous touch
+                        exit_reason="Stop touched; stop-first on simultaneous target touch" if take else "Stop touched"
                         exit_price=price-side*stop;result="stop";held=k-j+1;break
                     if take:
+                        exit_reason="Take-profit target touched"
                         exit_price=price+side*target;result="target";held=k-j+1;break
                 gross=side*(exit_price-price)
                 fee_pts=TAKER_FEE_RATE*(1+GST)*(price+exit_price)
@@ -158,6 +163,10 @@ def trade_sim(d,ev):
                     split="discovery" if entry_ts<SPLIT else "holdout",
                     entry_utc=str(entry_ts),side=side,target_points=target,stop_points=stop,
                     result=result,held_min=held,entry_price=round(price,2),
+                    trigger_utc=r.trigger_utc,signal_tf=int(r.signal_tf),entry_reason=r.entry_reason,signal_context=r.signal_context,
+                    exit_utc=str(ix[j+held-1]),exit_price=round(exit_price,2),exit_reason=exit_reason,
+                    exit_candle_high=float(raw_high[j+held-1]),exit_candle_low=float(raw_low[j+held-1]),
+                    stop_price=round(price-side*stop,2),target_price=round(price+side*target,2),
                     gross_points=round(gross,3),fee_points=round(fee_pts,3),
                     assumed_slippage_points=10,net_points=round(net,3),
                     net_usd_per_0_001btc=round(net*.001,4)))
