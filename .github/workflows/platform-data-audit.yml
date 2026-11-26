@@ -46,3 +46,5 @@ jobs:
             .platform-local/*benchmark.txt
           include-hidden-files: true
           if-no-files-found: error
+
+# M19 rerun against imported lock and pinned runtime.

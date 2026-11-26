@@ -1,53 +1,11 @@
-name: Import verified platform npm lock
-on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/platform-lock-import.yml']
+# One-time npm lock import completed at e68571f4e6b2adee851961b2ac0e8d99656f78cd.
+name: Verified lock import retired
+on: workflow_dispatch
 permissions:
-  contents: write
-  actions: read
+  contents: read
 jobs:
-  import:
+  verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: platform-readiness
-          run-id: 45772559003
-          github-token: ${{ github.token }}
-          path: ${{ runner.temp }}/verified
-      - name: Verify audited lock and commit only that file
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd "$RUNNER_TEMP/verified"
-          printf '%s\n' '378fdda9e7820bbafb15d9c9751cfc1e0c3fc3d2ad8dd6ebe2b37b106af2f000  package-lock.json' 'f7b5645d89775c2dd783e27feced54169ee3c2414dbee34324c1f374e4d905a8  advisory-status.json' | sha256sum -c -
-          cd "$GITHUB_WORKSPACE"
-          python - <<'PY'
-          import json, os
-          from pathlib import Path
-          d=Path(os.environ["RUNNER_TEMP"])/"verified"
-          status=json.loads((d/"advisory-status.json").read_text())
-          assert status["python_audit_exit"]==status["npm_audit_exit"]==0
-          lock=json.loads((d/"package-lock.json").read_text())
-          pkg=json.loads(Path("apps/web/package.json").read_text())
-          for k in ("name","version","dependencies","devDependencies"):
-              assert lock["packages"][""][k]==pkg[k]
-          assert lock["lockfileVersion"]==3
-          for key,entry in lock["packages"].items():
-              if key:
-                  assert entry["resolved"].startswith("https://registry.npmjs.org/")
-                  assert entry["integrity"].startswith(("sha512-","sha1-"))
-          dest=Path("apps/web/package-lock.json")
-          assert not dest.exists(), "Refusing to overwrite existing lock"
-          dest.write_bytes((d/"package-lock.json").read_bytes())
-          PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f apps/web/package-lock.json
-          git diff --cached --name-only | grep -Fx apps/web/package-lock.json
-          test "$(git diff --cached --name-only | wc -l)" -eq 1
-          git commit -m "build(platform): pin npm lock from clean security audit"
-          git push origin HEAD:main
+      - run: test -s apps/web/package-lock.json

@@ -15,6 +15,7 @@ from ..backtest import run_backtest
 from .fixture import Cancelled
 
 MAX_MINUTES=1440
+MAX_LONG_MINUTES=3*366*1440
 MAX_WARMUP=1440
 Hash=Annotated[str,StringConstraints(pattern=r"^[0-9a-f]{64}$")]
 Id=Annotated[str,StringConstraints(pattern=r"^[0-9a-f]{32}$")]
@@ -125,12 +126,21 @@ def prepare(root,request,revision):
     return {**request.model_dump(),"graph":c["graph"],"graph_sha256":c["graph_sha256"],
             "code_sha256":revision["code_sha256"]}
 
-def execute_historical(payload,root,progress):
+class LongHistoricalRequest(HistoricalRequest):
+    @model_validator(mode="after")
+    def check(self):
+        if self.start%60 or self.end%60 or not 0<self.end-self.start<=MAX_LONG_MINUTES*60:
+            raise ValueError("long range must be minute aligned and at most 1098 days")
+        # Reuse the base financial validation with a short valid interval.
+        HistoricalRequest.model_validate({**self.model_dump(),"end":self.start+60})
+        return self
+
+def execute_historical(payload,root,progress,*,archive_factory=None):
     from ..data import HistoryStore
     from ..data.store import dt, SOURCE
     if root is None:raise ValueError("historical store not configured")
     raw={k:v for k,v in payload.items() if k not in ("graph","graph_sha256","code_sha256")}
-    r=HistoricalRequest.model_validate(raw);g=Graph.model_validate(payload["graph"])
+    r=(HistoricalRequest if archive_factory is None else LongHistoricalRequest).model_validate(raw);g=Graph.model_validate(payload["graph"])
     compiled=compile_graph(g)
     if compiled["graph_sha256"]!=payload["graph_sha256"] or sha256(compiled["source"].encode()).hexdigest()!=payload["code_sha256"]:
         raise ValueError("pinned visual source mismatch")
@@ -156,13 +166,13 @@ def execute_historical(payload,root,progress):
             nonlocal count
             for bar in h.iter_candles(i,a,b,assume_open=r.assume_open):
                 count+=1
-                if count%32==0 and not progress(min(99,count*99//total)):raise Cancelled()
+                if count%(32 if archive_factory is None else 4096)==0 and not progress(min(99,count*99//total)):raise Cancelled()
                 yield bar
         if not progress(0):raise Cancelled()
         kwargs={}
         if r.warmup_minutes:kwargs={"warmup_start_utc":dt(lo),"warmup_factory":lambda:stream(lo,r.start)}
         result=run_backtest(cfg,lambda:GraphStrategy(g),lambda:stream(r.start,r.end),
-                            linear_contract=True,dataset_manifest_sha256=h.key,**kwargs)
+                            linear_contract=True,dataset_manifest_sha256=h.key,archive_factory=archive_factory,**kwargs)
         if not progress(99):raise Cancelled()
         return {"kind":"historical_visual","synthetic":False,"research_only":True,
                 "timestamp_label_verified":verified,"dataset_manifest_sha256":h.key,

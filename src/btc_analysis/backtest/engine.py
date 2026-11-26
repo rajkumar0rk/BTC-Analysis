@@ -207,7 +207,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
                  margin_profile: MarginProfile | None = None,
                  risk_factory: Callable[[], Iterable[RiskBar]] | None = None,
                  risk_manifest_sha256s: tuple[str, ...] = (),
-                 session_reference: bool = False) -> BacktestResult:
+                 session_reference: bool = False, archive_factory=None) -> BacktestResult:
     """Run fresh strategies for each scenario. No mutation of input config or source.
 
     The caller is a trusted adapter responsible for the declared source manifest and
@@ -217,6 +217,8 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
     on starting position or first pending entry direction (a heuristic).
     """
     _validate(config,margin_profile,session_reference)
+    if archive_factory is not None and (margin_profile is not None or session_reference):
+        raise ValueError("long archive supports continuous 1x reference only")
     execution=next(d for d in config.datasets if d.kind is DataKind.OHLCV)
     if (margin_profile is None)!=(risk_factory is None):
         raise ValueError("margin profile and risk stream required together")
@@ -250,7 +252,12 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
                             iter(risk_factory()) if risk_factory is not None else None)
             if warmup_factory is not None:
                 sim.warmup(warmup_start_utc,warmup_factory())
-            out.append(sim.run(candle_factory()))
+            if archive_factory is None:
+                out.append(sim.run(candle_factory()))
+            else:
+                with archive_factory(path) as archive:
+                    archive.bind(sim)
+                    out.append(sim.run(candle_factory(),archive=archive))
     if len({(x.observed_candle_sha256,x.warmup_candle_sha256,x.risk_stream_sha256) for x in out}) != 1:
         raise ValueError("scenario candle streams differ")
     if len({(x.indicator_specs,x.extra_timeframes) for x in out}) != 1:
@@ -604,7 +611,7 @@ class Simulator:
         r=p/self.month_open*100 if self.month_open>0 else None
         self.monthly.append(MonthlyResult(self.month,self.month_open,self.month_close,p,r))
 
-    def run(self,candles):
+    def run(self,candles,*,archive=None):
         self.strategy.on_start(self.context)
         expected=self.cfg.start_utc
         self.curve.append(EquityPoint(expected,self.balance,self.balance,ZERO))
@@ -641,6 +648,7 @@ class Simulator:
             raise ArithmeticError("balance reconciliation failed")
         if e!=self.balance+unreal or sum((m.pnl for m in self.monthly),ZERO)!=e-self.cfg.initial_equity:
             raise ArithmeticError("equity/month reconciliation failed")
+        if archive is not None:return archive.finish(self,e,unreal)
         return ScenarioResult(self.path,self.bar_count,self.digest.hexdigest(),self.cfg.initial_equity,e,self.balance,
             e-self.cfg.initial_equity,self.gross,self.fees,self.taxes,self.quantity,unreal,self.dd,
             tuple(self.trades),tuple(self.fills),tuple(self.evidence),tuple(self.orders),tuple(self.curve),tuple(self.monthly),
