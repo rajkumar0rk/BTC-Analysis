@@ -1,3 +1,4 @@
+import {WorkspaceNav} from "./WorkspaceNav";
 import {useState,useEffect,useRef} from "react";
 import {BrowserRunner} from "./BrowserRunner";
 import {FrameSelect,RuleEdit} from "./VisualBuilder";
@@ -29,7 +30,7 @@ export function PublicStudio(){
    w.postMessage({id:1,action:"compile_visual",graph:JSON.stringify(graph)});
   }catch(e){setError(String(e));stop();}
  }
- return <main className="public-studio"><header><div><div className="eyebrow">BTC ANALYSIS / RESEARCH</div><h1>Strategy Studio</h1></div><a href="../">Backtest Explorer</a></header>
+ return <main className="public-studio"><header><div><div className="eyebrow">BTC ANALYSIS / RESEARCH</div><h1>Strategy Studio</h1></div></header><WorkspaceNav current="studio"/>
  <p className="notice">Public static workspace. No API token, cloud account or VPS required for local backtests. Imported CSV and optional local storage are device/browser-local, not private from other scripts on this shared origin. Do not enter secrets. Private cloud storage and paper controls use the separately hosted trusted workspace.</p>
  <div className="head"><button aria-current={page==="builder"?"page":undefined} onClick={()=>{stop();setPage("builder");}}>Visual strategy builder</button><button aria-current={page==="research"?"page":undefined} onClick={()=>{stop();setPage("research");}}>Local research runner</button></div>
  {page==="builder"?<><section className="panel"><h2>Visual Python strategy builder</h2><button disabled={busy} onClick={()=>edit(initialGraph())}>New visual strategy</button><div className="visual-config"><FrameSelect label="Signal timeframe" value={graph.signal_timeframe} disabled={busy} change={v=>edit({...graph,signal_timeframe:v})}/><FrameSelect label="Execution timeframe" value={graph.execution_timeframe} disabled={busy} change={v=>edit({...graph,execution_timeframe:v})}/>

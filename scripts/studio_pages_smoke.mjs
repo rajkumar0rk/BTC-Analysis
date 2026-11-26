@@ -14,6 +14,11 @@ try{
  browser=await chromium.launch({headless:true});const page=await browser.newPage({viewport:{width:390,height:844}});
  const errors=[],unexpected=[];page.on("pageerror",e=>errors.push(e.message));page.on("request",r=>{if(!r.url().startsWith(url)&&!r.url().startsWith("blob:")&&!r.url().startsWith("data:"))unexpected.push(r.url());});
  await page.goto(url);await page.getByRole("heading",{name:"Strategy Studio",exact:true}).waitFor();
+ const nav=page.getByRole("navigation",{name:"Workspace navigation"});
+ assert.equal(await nav.getByRole("link",{name:"Backtest Explorer",exact:true}).getAttribute("href"),"../");
+ assert.equal(await nav.getByRole("link",{name:"Strategy Studio",exact:true}).getAttribute("aria-current"),"page");
+ assert.equal(await nav.getByRole("link",{name:"Private Cloud",exact:true}).getAttribute("href"),"https://btc-analysis.rajkumar55853.workers.dev");
+ assert.equal(await nav.getByRole("link",{name:"Private Cloud",exact:true}).getAttribute("rel"),"noreferrer");
  assert.equal(await page.getByLabel("Cloud bearer token").count(),0);
  assert.equal(await page.getByLabel("API access token").count(),0);
  await page.getByRole("button",{name:"Generate local Python"}).click();
