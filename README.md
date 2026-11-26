@@ -8,6 +8,7 @@ The existing research archive and [Backtest Explorer](https://rajkumar0rk.github
 - [Historical data engine (M2)](docs/platform/HISTORICAL_DATA.md)
 - [Reference backtesting engine (M3)](docs/platform/BACKTEST_ENGINE.md)
 - [Python strategy SDK and indicators (M4)](docs/platform/PYTHON_SDK.md)
+- [Reference margin and funding engine (M5)](docs/platform/MARGIN_ENGINE.md)
 - [Data and result contracts](docs/platform/DATA_AND_RESULTS.md)
 - [Execution security](docs/platform/SECURITY.md)
 - [Milestone roadmap and migration](docs/platform/ROADMAP.md)
@@ -20,7 +21,7 @@ python -m pip install '.[data]'
 python -m unittest discover -s tests/platform -v
 ```
 
-M1–M4 supply validated contracts, an audited historical data engine, a trusted 1x reference backtest simulator and a streaming strategy SDK. Untrusted code execution and exchange-specific margin are disabled. Existing research scripts and dashboard workflows are unchanged.
+M1–M4 supply validated contracts, an audited historical data engine, a trusted 1x reference backtest simulator and a streaming strategy SDK. M5 adds explicit reference margin/funding scenarios; certified venue margin and untrusted code execution remain unavailable. Existing research scripts and dashboard workflows are unchanged.
 
 ---
 

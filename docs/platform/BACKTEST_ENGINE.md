@@ -15,3 +15,5 @@ Pinned dataset manifest supplied by trusted adapter; each observed candle stream
 
 ## Tests
 `python -m unittest discover -s tests/platform -p test_backtest_engine.py -v` exercises chronological fills, multi-timeframe visibility, ambiguity, stops and limits, partial exits, costs, positions, no future access, gap rejection and determinism. CI runs entire platform suite. Real data integration requires verified candle timestamp semantics; legacy research remains unchanged.
+
+M5 adds opt-in reference margin/funding/mark simulation; see [margin engine](MARGIN_ENGINE.md). The 1x limitations above describe the baseline without a profile.

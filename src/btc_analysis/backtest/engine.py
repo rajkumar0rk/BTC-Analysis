@@ -1,6 +1,6 @@
-"""Reference event simulator for linear single-instrument 1x perpetual research.
+"""Reference event simulator for single-instrument linear perpetual research.
 
-No arbitrary Python sandbox, venue margin, funding, orderbook or liquidation.
+Optional explicit M5 margin, mark and funding scenario; no arbitrary Python sandbox or orderbook.
 Only trusted strategy factories. Source factory must replay identical completed bars.
 The execution clock is deterministic; intrabar prices are scenarios, not tick evidence.
 """
@@ -20,7 +20,10 @@ from ..serialization import canonical_bytes, fingerprint
 
 from ..indicators import IndicatorBook, IndicatorSpec
 
-ENGINE_VERSION = "m4-reference-1"
+from ..margin import (MarginProfile, RiskBar, FundingSettlement, FundingRecord,
+    LiquidationRecord, funding_payment, collateral_equity)
+
+ENGINE_VERSION = "m5-reference-1"
 ZERO = D(0)
 BPS = D(10000)
 MAX_HISTORY = 4096
@@ -101,6 +104,10 @@ class ScenarioResult:
     warmup_candle_sha256: str | None
     indicator_specs: tuple[IndicatorSpec, ...]
     extra_timeframes: tuple[Timeframe, ...]
+    funding_paid: D
+    funding_records: tuple[FundingRecord, ...]
+    liquidations: tuple[LiquidationRecord, ...]
+    risk_stream_sha256: str | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -111,6 +118,7 @@ class BacktestResult:
     scenarios: tuple[ScenarioResult, ...]
     worst_path: str
     limitations: tuple[str, ...]
+    margin_profile_sha256: str | None
 
     @property
     def result_sha256(self):
@@ -150,23 +158,32 @@ class Context:
     def cancel(self, intent_id): self._sim.cancel(intent_id)
 
 
-def _validate(cfg):
+def _validate(cfg, profile=None):
     if cfg.instrument.asset_class is not AssetClass.CRYPTO_PERPETUAL:
         raise ValueError("M3 supports only explicitly linear perpetual contracts")
     if not (cfg.account_currency == cfg.instrument.quote_currency == cfg.instrument.settlement_currency):
         raise ValueError("M3 requires same quote, settlement and account currency")
-    if cfg.leverage != 1 or cfg.margin_mode not in (MarginMode.ISOLATED, MarginMode.CROSS):
-        raise ValueError("M3 supports only 1x baseline collateral; venue margin is M5")
-    if cfg.costs.include_funding or cfg.costs.include_spread or cfg.costs.include_liquidation:
-        raise ValueError("M5 required for funding, spread or liquidation")
+    if profile is None:
+        if cfg.leverage != 1 or cfg.margin_mode not in (MarginMode.ISOLATED, MarginMode.CROSS):
+            raise ValueError("leverage requires explicit margin profile and mark data")
+        if cfg.costs.include_funding or cfg.costs.include_spread or cfg.costs.include_liquidation:
+            raise ValueError("risk inputs require explicit margin profile")
+    else:
+        if not isinstance(profile,MarginProfile):raise ValueError("expected MarginProfile")
+        profile.validate(cfg)
     if cfg.costs.slippage_bps >= BPS:
         raise ValueError("slippage must be below 10000 bps")
     if cfg.intrabar_policy not in (IntrabarPolicy.STOP_FIRST, IntrabarPolicy.BOTH_PATHS):
         raise ValueError("tick sequence not supported by candle simulator")
     if cfg.calendar_id != "crypto-24x7" or cfg.allow_data_gaps:
         raise ValueError("M3 requires gap-free continuous UTC data")
-    if len(cfg.datasets) != 1 or cfg.datasets[0].kind != DataKind.OHLCV:
-        raise ValueError("M3 requires exactly one execution OHLCV dataset")
+    expected_kinds={DataKind.OHLCV}
+    if profile is not None:expected_kinds.add(DataKind.MARK)
+    if cfg.costs.include_funding:expected_kinds.add(DataKind.FUNDING)
+    if len(cfg.datasets)!=len(expected_kinds) or {d.kind for d in cfg.datasets}!=expected_kinds:
+        raise ValueError("expected one dataset for each enabled data kind")
+    if profile is not None and next(d for d in cfg.datasets if d.kind is DataKind.MARK).timeframe!=cfg.execution_timeframe:
+        raise ValueError("mark data must match execution timeframe")
     step = cfg.execution_timeframe.seconds
     sig = cfg.signal_timeframe.seconds
     if sig // step > MAX_HISTORY:
@@ -182,7 +199,10 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
                  candle_factory: Callable[[], Iterable[Candle]], *,
                  linear_contract: bool = False, dataset_manifest_sha256: str,
                  warmup_start_utc: datetime | None = None,
-                 warmup_factory: Callable[[], Iterable[Candle]] | None = None) -> BacktestResult:
+                 warmup_factory: Callable[[], Iterable[Candle]] | None = None,
+                 margin_profile: MarginProfile | None = None,
+                 risk_factory: Callable[[], Iterable[RiskBar]] | None = None,
+                 risk_manifest_sha256s: tuple[str, ...] = ()) -> BacktestResult:
     """Run fresh strategies for each scenario. No mutation of input config or source.
 
     The caller is a trusted adapter responsible for the declared source manifest and
@@ -191,19 +211,25 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
     oracle selection. STOP_FIRST chooses an adverse-first path at each bar based
     on starting position or first pending entry direction (a heuristic).
     """
-    _validate(config)
+    _validate(config,margin_profile)
+    execution=next(d for d in config.datasets if d.kind is DataKind.OHLCV)
+    if (margin_profile is None)!=(risk_factory is None):
+        raise ValueError("margin profile and risk stream required together")
+    expected_risk=tuple(d.manifest_sha256 for d in config.datasets if d.kind is not DataKind.OHLCV)
+    if risk_manifest_sha256s!=expected_risk:
+        raise ValueError("risk manifest mismatch")
     if (warmup_start_utc is None)!=(warmup_factory is None):
         raise ValueError("warmup start and factory must be supplied together")
     if warmup_start_utc is not None:
         from ..contracts import utc
         utc(warmup_start_utc)
-        if not config.datasets[0].start_utc<=warmup_start_utc<config.start_utc:
+        if not execution.start_utc<=warmup_start_utc<config.start_utc:
             raise ValueError("warmup outside pinned dataset")
         if (config.start_utc-warmup_start_utc).total_seconds()//config.execution_timeframe.seconds>MAX_BARS:
             raise ValueError("warmup bar quota exceeded")
     if linear_contract is not True:
         raise ValueError("trusted adapter must attest a linear contract")
-    if dataset_manifest_sha256 != config.datasets[0].manifest_sha256:
+    if dataset_manifest_sha256 != execution.manifest_sha256:
         raise ValueError("source manifest does not match pinned configuration")
     paths = ("O-H-L-C","O-L-H-C") if config.intrabar_policy is IntrabarPolicy.BOTH_PATHS else ("adverse-first",)
     out = []
@@ -215,11 +241,12 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
             if any(strategy is old for old in used):
                 raise ValueError("strategy factory must return fresh instances")
             used.append(strategy)
-            sim = Simulator(config, strategy, path)
+            sim = Simulator(config, strategy, path, margin_profile,
+                            iter(risk_factory()) if risk_factory is not None else None)
             if warmup_factory is not None:
                 sim.warmup(warmup_start_utc,warmup_factory())
             out.append(sim.run(candle_factory()))
-    if len({(x.observed_candle_sha256,x.warmup_candle_sha256) for x in out}) != 1:
+    if len({(x.observed_candle_sha256,x.warmup_candle_sha256,x.risk_stream_sha256) for x in out}) != 1:
         raise ValueError("scenario candle streams differ")
     if len({(x.indicator_specs,x.extra_timeframes) for x in out}) != 1:
         raise ValueError("scenario strategy declarations differ")
@@ -227,7 +254,12 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
     return BacktestResult(ENGINE_VERSION,fingerprint(config),
         tuple(d.manifest_sha256 for d in config.datasets),tuple(out),worst.path,(
         "Trusted strategy and source adapters only; no untrusted Python execution.",
-        "Linear 1x collateral cap only; no exchange margin, funding, spread or liquidation.",
+        ("Linear 1x collateral cap only; no exchange margin, funding, spread or liquidation." if margin_profile is None else
+         "Explicit single-position fixed-tier linear margin simulation; not certified exchange rules."),
+        ("No risk stream used." if margin_profile is None else
+         "Mark-first paired OHLC vertices; liquidation modeled as full close at mark with adverse slippage and explicit fee; halt after liquidation."),
+        ("Funding excluded." if not config.costs.include_funding else
+         "Funding supplied as explicit settlement events, applied before opening orders at each boundary."),
         "OHLC paths are assumptions; limit touch assumes full fill, no volume or queue modeling.",
         "Intrabar fills have bar-close availability timestamps, not observed tick timestamps.",
         "Adverse-first is a heuristic; two fixed paths are scenarios, not worst-case bounds.",
@@ -238,16 +270,20 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         "Caller attests pinned source and code; observed candle hash recorded independently.",
         "Indicators use explicit documented seeds and completed UTC-aligned bars; no external library parity claim.",
         "Warmup bars initialize indicators/history only, without orders, callbacks or evaluation P&L.",
-    ))
+        "No historical bid-ask, tier transitions, partial exchange liquidation, fee offers or portfolio margin.",
+    ),fingerprint(margin_profile) if margin_profile is not None else None)
 
 
 class Simulator:
-    def __init__(self,cfg,strategy,path):
+    def __init__(self,cfg,strategy,path,profile=None,risk_stream=None):
         self.cfg=cfg; self.strategy=strategy; self.path=path
         self.now=cfg.start_utc; self.mark=None
         self.balance=cfg.initial_equity; self.quantity=ZERO
         self.lots=deque(); self.entries=[]; self.exits=[]; self.trade_gross=ZERO
         self.gross=ZERO; self.fees=ZERO; self.taxes=ZERO
+        self.profile=profile;self.risk_stream=risk_stream;self.risk_digest=sha256()
+        self.risk_mark=None;self.funding=ZERO;self.trade_funding=ZERO;self.iso_adjustment=ZERO
+        self.funding_records=[];self.liquidations=[];self.halted=False;self.liquidating=False
         self.pending={}; self.seen=set(); self.orders=[]; self.fills=[]; self.evidence=[]
         self.trades=[]; self.curve=[]; self.monthly=[]
         self.peak=cfg.initial_equity; self.dd=ZERO
@@ -272,6 +308,7 @@ class Simulator:
         self.month=None; self.month_open=cfg.initial_equity; self.month_close=cfg.initial_equity
 
     def unrealized(self, price):
+        if self.profile is not None:price=self.risk_mark
         if price is None: return ZERO
         sign=D(1) if self.quantity>0 else D(-1)
         return sum(((price-p)*q*self.mult*sign for q,p in self.lots),ZERO)
@@ -279,7 +316,7 @@ class Simulator:
     def equity(self,price): return self.balance+self.unrealized(price)
 
     def sample(self, price):
-        self.mark=price; e=self.equity(price)
+        self.mark=self.risk_mark if self.profile is not None else price; e=self.equity(price)
         self.peak=max(self.peak,e)
         self.dd=max(self.dd,(self.peak-e)/self.peak*100)
 
@@ -292,8 +329,8 @@ class Simulator:
         i=intent.intent_id
         if i in self.seen: raise ValueError("duplicate order intent ID")
         self.seen.add(i)
-        if not self.active:
-            self.log(i,"rejected","run_finished",intent); return
+        if not self.active or self.halted:
+            self.log(i,"rejected","liquidation_halt" if self.halted else "run_finished",intent); return
         if intent.instrument!=self.cfg.instrument or intent.decision_utc!=self.now:
             self.log(i,"rejected","instrument_or_decision_time_mismatch",intent); return
         if len(self.pending)>=MAX_PENDING:
@@ -331,13 +368,26 @@ class Simulator:
         else:
             price=self.round_price(ref*(1+sign*self.cfg.costs.slippage_bps/BPS),o.side)
         if price<=0: raise ValueError("nonpositive modeled fill price")
-        rate=self.cfg.costs.maker_bps if resting else self.cfg.costs.taker_bps
+        rate=(self.profile.liquidation_fee_bps if self.liquidating else
+              self.cfg.costs.maker_bps if resting else self.cfg.costs.taker_bps)
         fee=price*qty*self.mult*rate/BPS; tax=fee*self.cfg.costs.tax_rate
         if not opposite:
-            # 1x initial collateral cap: existing marked exposure plus new notional.
-            e=self.equity(price)
-            if (abs(self.quantity)+qty)*price*self.mult+fee+tax>e:
-                del self.pending[i];self.log(i,"rejected","baseline_collateral_cap");return
+            if self.profile is None:
+                e=self.equity(price)
+                allowed=(abs(self.quantity)+qty)*price*self.mult+fee+tax<=e
+                detail="baseline_collateral_cap"
+            else:
+                notional=(abs(self.quantity)+qty)*max(price,self.risk_mark)*self.mult
+                if self.cfg.margin_mode is MarginMode.ISOLATED:
+                    required=self.profile.initial(qty*price*self.mult,self.cfg.leverage)+fee+tax
+                    allowed=required<=self.balance-self.isolated_collateral()
+                else:
+                    required=self.profile.initial(notional,self.cfg.leverage)+fee+tax
+                    allowed=required<=self.equity(self.risk_mark)
+                allowed=allowed and notional<=self.profile.max_notional
+                detail="initial_margin_or_notional_cap"
+            if not allowed:
+                del self.pending[i];self.log(i,"rejected",detail);return
         if len(self.fills)>=MAX_EVENTS: raise ValueError("fill event quota exceeded")
         del self.pending[i]
         f=Fill(f"fill-{len(self.fills)+1}",i,o.instrument,self.now,o.side,qty,price,fee,tax,
@@ -347,6 +397,8 @@ class Simulator:
         self.log(i,"filled","reduce_only_clipped" if qty!=o.quantity else "modeled_full_fill")
         self.balance-=fee+tax;self.fees+=fee;self.taxes+=tax
         if opposite:
+            if self.profile is not None and self.cfg.margin_mode is MarginMode.ISOLATED:
+                self.iso_adjustment*= (abs(self.quantity)-qty)/abs(self.quantity)
             left=qty; gross=ZERO
             oldsign=D(1) if self.quantity>0 else D(-1)
             while left:
@@ -362,14 +414,63 @@ class Simulator:
             allfills=self.entries+self.exits
             fees=sum((x.fee for x in allfills),ZERO);taxes=sum((x.tax for x in allfills),ZERO)
             self.trades.append(ClosedTrade(f"trade-{len(self.trades)+1}",tuple(self.entries),tuple(self.exits),
-                self.entries[0].reason,self.exits[-1].reason,self.trade_gross,fees,taxes,ZERO,
-                self.trade_gross-fees-taxes,self.cfg.account_currency))
-            self.entries=[];self.exits=[];self.trade_gross=ZERO
+                self.entries[0].reason,self.exits[-1].reason,self.trade_gross,fees,taxes,self.trade_funding,
+                self.trade_gross-fees-taxes-self.trade_funding,self.cfg.account_currency))
+            self.entries=[];self.exits=[];self.trade_gross=ZERO;self.trade_funding=ZERO;self.iso_adjustment=ZERO
             # Prevent stale protection orders from reopening or affecting a later trade.
             for key,other in list(self.pending.items()):
                 if other.intent.reduce_only:
                     del self.pending[key];self.log(key,"cancelled","position_flat")
         self.sample(price)
+        if self.profile is not None and not self.liquidating:
+            self.check_liquidation(bar,phase,path)
+
+    def isolated_collateral(self):
+        if self.profile is None:return ZERO
+        return self.profile.initial(sum((q*p*self.mult for q,p in self.lots),ZERO),self.cfg.leverage)+self.iso_adjustment
+
+    def check_liquidation(self,bar,phase,path):
+        if self.profile is None or not self.quantity or self.liquidating:return
+        mark=self.risk_mark
+        notional=abs(self.quantity)*mark*self.mult
+        if notional>self.profile.max_notional:
+            raise ValueError("position exceeds supported fixed-tier notional; tier transition required")
+        equity=collateral_equity(self.cfg.margin_mode,self.balance,self.isolated_collateral(),self.unrealized(mark))
+        maintenance=self.profile.maintenance(notional)
+        if equity>maintenance:return
+        self.now=bar.open_utc if phase=="open" else bar.close_utc
+        self.liquidations.append(LiquidationRecord(self.now,mark,equity,maintenance,self.quantity,phase))
+        for key in list(self.pending):
+            del self.pending[key];self.log(key,"cancelled","liquidation")
+        key=f"__liquidation_{len(self.liquidations)}"
+        if key in self.seen:raise ValueError("reserved liquidation intent ID collision")
+        self.seen.add(key)
+        side=Side.SELL if self.quantity>0 else Side.BUY
+        o=OrderIntent(key,self.cfg.instrument,self.now,side,OrderType.MARKET,abs(self.quantity),"modeled_liquidation",reduce_only=True)
+        p=Pending(o);self.pending[key]=p;self.log(key,"accepted","forced_liquidation",o)
+        self.liquidating=True;self.halted=True
+        try:self._fill(p,mark,phase,bar,path)
+        finally:self.liquidating=False
+
+    def risk_open(self,bar,risk,path):
+        if not isinstance(risk,RiskBar):raise ValueError("missing risk bar")
+        m=risk.mark
+        if (m.instrument!=bar.instrument or m.timeframe!=bar.timeframe or
+                m.open_utc!=bar.open_utc or m.close_utc!=bar.close_utc):
+            raise ValueError("mark stream alignment mismatch")
+        required=self.cfg.costs.include_funding and self.profile.is_funding_time(bar.open_utc)
+        if required!=(risk.funding is not None):raise ValueError("missing or unexpected funding settlement")
+        self.risk_digest.update(canonical_bytes(risk));self.risk_digest.update(b"\n")
+        self.risk_mark=m.open
+        if risk.funding is not None:
+            f=risk.funding
+            if not isinstance(f,FundingSettlement) or f.event_utc!=bar.open_utc:
+                raise ValueError("funding settlement timestamp mismatch")
+            paid=funding_payment(self.quantity,self.mult,f.rate,f.reference_mark)
+            self.balance-=paid;self.funding+=paid;self.trade_funding+=paid
+            if self.cfg.margin_mode is MarginMode.ISOLATED:self.iso_adjustment-=paid
+            self.funding_records.append(FundingRecord(f.event_utc,self.quantity,f.rate,f.reference_mark,paid,f.source_id))
+        self.sample(m.open);self.check_liquidation(bar,"open",path)
 
     @staticmethod
     def stop_hit(o,p):
@@ -426,7 +527,7 @@ class Simulator:
             self._point(nxt,phase,bar,path);current=nxt
         if current!=b:self._point(b,phase,bar,path)
 
-    def _execute(self,bar):
+    def _execute(self,bar,risk=None):
         path=self.path
         if path=="adverse-first":
             direction=self.quantity
@@ -435,11 +536,18 @@ class Simulator:
                 direction= D(-1) if first and first.side is Side.SELL else D(1)
             path="O-L-H-C" if direction>=0 else "O-H-L-C"
         self.now=bar.open_utc
-        self.sample(bar.open)
         before=len(self.fills)
+        if self.profile is not None:self.risk_open(bar,risk,path)
+        self.sample(bar.open)
         self._point(bar.open,"open",bar,path,at_open=True)
         levels=(bar.open,bar.high,bar.low,bar.close) if path=="O-H-L-C" else (bar.open,bar.low,bar.high,bar.close)
+        mark_levels=None if risk is None else ((risk.mark.open,risk.mark.high,risk.mark.low,risk.mark.close) if path=="O-H-L-C" else (risk.mark.open,risk.mark.low,risk.mark.high,risk.mark.close))
         for i,(a,b) in enumerate(zip(levels,levels[1:]),1):
+            if mark_levels is not None:
+                # Explicit mark-first stress ordering: independent source candles
+                # cannot establish exact chronological alignment with trades.
+                self.now=bar.close_utc;self.risk_mark=mark_levels[i]
+                self.sample(self.risk_mark);self.check_liquidation(bar,f"mark_vertex_{i}",path)
             self._segment(a,b,i,bar,path)
         self.now=bar.close_utc;self.sample(bar.close)
         return self.fills[before:]
@@ -501,7 +609,8 @@ class Simulator:
                 raise ValueError("noncontiguous or out-of-range candle stream")
             expected=bar.close_utc;self.bar_count+=1
             self.digest.update(canonical_bytes(bar));self.digest.update(b"\n")
-            fills=self._execute(bar)
+            risk=next(self.risk_stream,None) if self.risk_stream is not None else None
+            fills=self._execute(bar,risk)
             complete=self._publish(bar)
             # These callbacks see only the now-complete bar and final bar position;
             # all submitted orders become eligible at the next bar.
@@ -512,6 +621,8 @@ class Simulator:
             # Bounded result sampling: every signal close, not every execution minute.
             if complete:
                 self.curve.append(EquityPoint(self.now,self.balance,self.equity(bar.close),self.quantity))
+        if self.risk_stream is not None and next(self.risk_stream,None) is not None:
+            raise ValueError("excess risk stream data")
         if expected!=self.cfg.end_utc or not self.bar_count or any(self.groups.values()):
             raise ValueError("incomplete execution stream")
         self.active=False
@@ -520,11 +631,13 @@ class Simulator:
         self.strategy.on_finish(self.context)
         self._finish_month()
         e=self.equity(self.mark);unreal=self.unrealized(self.mark)
-        if self.balance != self.cfg.initial_equity+self.gross-self.fees-self.taxes:
+        if self.balance != self.cfg.initial_equity+self.gross-self.fees-self.taxes-self.funding:
             raise ArithmeticError("balance reconciliation failed")
         if e!=self.balance+unreal or sum((m.pnl for m in self.monthly),ZERO)!=e-self.cfg.initial_equity:
             raise ArithmeticError("equity/month reconciliation failed")
         return ScenarioResult(self.path,self.bar_count,self.digest.hexdigest(),self.cfg.initial_equity,e,self.balance,
             e-self.cfg.initial_equity,self.gross,self.fees,self.taxes,self.quantity,unreal,self.dd,
             tuple(self.trades),tuple(self.fills),tuple(self.evidence),tuple(self.orders),tuple(self.curve),tuple(self.monthly),
-            self.warmup_bars,self.warmup_hash,self.definitions,self.extra_frames)
+            self.warmup_bars,self.warmup_hash,self.definitions,self.extra_frames,
+            self.funding,tuple(self.funding_records),tuple(self.liquidations),
+            self.risk_digest.hexdigest() if self.profile is not None else None)
