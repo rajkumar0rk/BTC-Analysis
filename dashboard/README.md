@@ -10,3 +10,6 @@ Public static GitHub Pages UI; no backend, token, or browser-side GitHub API cre
 - P&L/drawdown in price points, not account equity. EMA overlays are chart references. Missing fills, decisions and dynamic risk trajectories are never fabricated. Public data only; never publish secrets.
 
 Local: install pandas/numpy, obtain the recorded ETH ledger if available, run `python scripts/export_dashboard.py`, `python scripts/verify_dashboard_export.py`, then `python -m http.server 8000 --directory dashboard-dist`. Localhost uses local shards unless `?remote=1` is supplied.
+
+## Curated strategy list
+One profitable, full-replay variant per signal family, ranked descriptively by positive months over Jan 2025–Oct 2026, then net, PF and drawdown. Negative configurations and duplicate parameter variants are removed from the published data tree, not erased from Git history. Frozen BTC lock summaries are separately displayed with original source links and cost/validation caveats. No claim of independent validation. The branch catalog lists frozen refs only. Other research engines require explicit adapters.

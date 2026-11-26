@@ -1,0 +1,40 @@
+name: Prune verified duplicate research branches
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'codex/VERIFIED_DUPLICATE_BRANCHES.json'
+      - '.github/workflows/prune-verified-duplicate-branches.yml'
+permissions:
+  contents: write
+  pull-requests: read
+  actions: read
+concurrency:
+  group: verified-research-branch-pruning
+  cancel-in-progress: false
+jobs:
+  prune:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Delete only explicitly reviewed identical branch refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          jq -r '.[] | [.delete,.keep,.sha] | @tsv' codex/VERIFIED_DUPLICATE_BRANCHES.json | while IFS=$'\t' read -r drop keep sha; do
+            [[ "$drop" == research/* && "$keep" == research/* && "$drop" != "$keep" && "$sha" =~ ^[0-9a-f]{40}$ ]]
+            actual=$(git ls-remote origin "refs/heads/$drop" | cut -f1)
+            retained=$(git ls-remote origin "refs/heads/$keep" | cut -f1)
+            if [ -z "$actual" ]; then echo "Already absent: $drop"; continue; fi
+            if [ "$actual" != "$sha" ] || [ "$retained" != "$sha" ]; then echo "::warning::Changed refs; skipped $drop"; continue; fi
+            prs=$(gh pr list --state open --head "$drop" --json number --jq 'length')
+            if [ "$prs" != 0 ]; then echo "::warning::Open PR; skipped $drop"; continue; fi
+            active=$(gh api --method GET "repos/$GITHUB_REPOSITORY/actions/runs" -f branch="$drop" -f per_page=100 --paginate --jq '[.workflow_runs[] | select(.status != "completed")] | length' | awk '{s+=$1} END {print s+0}')
+            if [ "$active" != 0 ]; then echo "::warning::Active workflow; skipped $drop"; continue; fi
+            git push --force-with-lease="refs/heads/$drop:$sha" origin ":refs/heads/$drop"
+            test -z "$(git ls-remote origin "refs/heads/$drop")"
+            test "$(git ls-remote origin "refs/heads/$keep" | cut -f1)" = "$sha"
+            echo "Verified deleted $drop; identical retained $keep at $sha"
+          done

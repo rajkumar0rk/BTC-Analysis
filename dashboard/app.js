@@ -36,10 +36,12 @@ async function refreshData(force=false){
   }
   if(activeSnapshot===manifest.data_commit&&!force){$("dataStatus").textContent="Up to date · checked "+new Date().toLocaleTimeString();return}
   const next=await json(base+"index.json");
+  const frozen=await json(base+"frozen.json");
   if(next.schema!==2||!Array.isArray(next.runs)||!next.runs.length)throw Error("Invalid result index");
   const symbol=$("symbol").value,preferred=$("run").value;
   stop();++monthToken;++tradeToken;++curveToken;cache.clear();dataBase=base;activeSnapshot=manifest.data_commit;index=next;ledger=[];trade=null;bars=[];curves=[];
-  $("coverage").textContent=index.runs.length+" configurations · "+(index.full_configurations??index.runs.length)+" with trade replay";
+  $("coverage").textContent=index.runs.length+" selected replay configurations · "+frozen.length+" frozen strategies · "+(index.selection_policy?.excluded??0)+" excluded";
+  $("frozenStrategies").innerHTML="<table><thead><tr><th>Strategy</th><th>Profitable months</th><th>Trades</th><th>Recorded net USD (0.001 BTC)</th><th>Research status</th></tr></thead><tbody>"+frozen.map(r=>'<tr><td><a href="https://github.com/rajkumar0rk/BTC-Analysis/blob/'+encodeURIComponent(r.sha)+'/'+encodeURI(r.path)+'">'+esc(r.name)+'</a></td><td>'+r.positive_months+'/'+r.months+'</td><td>'+r.trades+'</td><td>'+fmt(r.net_usd_min)+' – '+fmt(r.net_usd_max)+'</td><td>'+esc(r.status)+'</td></tr>').join("")+"</tbody></table>";
   $("provenance").textContent="Source commit: "+index.commit+" | Data snapshot: "+activeSnapshot+" | ETH workflow run: "+(index.eth_workflow_run||"not recorded")+" | Archived runs preserve their own cost assumptions. EMA overlay uses displayed 1m candles only; research only.";
   $("dataStatus").textContent="Published "+manifest.published_at+" · auto-refresh every minute";
   $("notice").textContent="";

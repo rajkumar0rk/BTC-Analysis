@@ -15,7 +15,9 @@ const assert=require("node:assert/strict");
   await page.goto("http://127.0.0.1:8765"+(remote?"?remote=1":""),{waitUntil:"networkidle"});
   await page.locator("#ledger tr").first().waitFor();
   await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"));
-  assert.equal(await page.locator("#symbol").inputValue(),"BTCUSD");
+  assert.ok(["BTCUSD","ETHUSD"].includes(await page.locator("#symbol").inputValue()));
+  assert.equal(await page.locator("#frozenStrategies tbody tr").count(),2);
+  assert.ok(await page.locator("#coverage").innerText().then(t=>t.includes("excluded")));
   assert.ok(await page.locator("#details").innerText().then(t=>t.includes("Why entered")&&t.includes("Why exited")));
   assert.ok(requests.filter(x=>x.includes("/candles/")).length<=1);
   if(remote){assert.ok(requests.some(x=>/^https:\/\/raw\.githubusercontent\.com\/rajkumar0rk\/BTC-Analysis\/[a-f0-9]{40}\/data\/index\.json$/.test(x)),"remote pinned index");assert.ok(requests.every(x=>x.startsWith("https://raw.githubusercontent.com/")),"no bundled data");await page.locator("#refreshData").click();await page.locator("#ledger tr").first().waitFor();}

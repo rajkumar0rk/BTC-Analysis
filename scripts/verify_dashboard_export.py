@@ -7,8 +7,12 @@ def read(p): return json.loads(p.read_text())
 def main():
     index=read(ROOT/"index.json")
     runs=index["runs"]
-    assert len(runs)>=30 and len({r["id"] for r in runs})==len(runs)
-    assert any(r["symbol"]=="BTCUSD" for r in runs)
+    assert runs and len({r["id"] for r in runs})==len(runs)
+    assert all(r["net"]>0 and r["profit_factor"]>1 and r.get("detail_available",True) for r in runs)
+    assert index["selection_policy"]["retained"]==len(runs)
+    assert {p.name for p in (ROOT/"runs").iterdir()}=={r["id"] for r in runs}
+    frozen=read(ROOT/"frozen.json")
+    assert len(frozen)==2 and all(f["months"]==f["positive_months"]+f["losing_months"]+f["flat_months"] for f in frozen)
     eth_source=Path("analysis/ethusd_native_atr_price_action/full_trade_ledger.csv.gz")
     if eth_source.exists():
         assert any(r["symbol"]=="ETHUSD" and r.get("detail_available",True) for r in runs), "ETH artifact exists but no full ETH import"

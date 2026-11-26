@@ -51,3 +51,6 @@ Removed from main at the maintainer's request to reduce legacy strategy clutter.
 - `.github/workflows/research-v8-2025.yml`
 
 The old ETH replay suite and matching legacy source-result copies are retired. Mixed-suite historical reports remain as recorded evidence; their old filenames do not authorize reruns. ETH all-strategy replay is now manual-only and excludes these engines. Inspect the pre-retirement commit for novelty checks. This commit does not erase Git history, delete other branches, or purge historical Actions artifacts.
+
+## Duplicate branch cleanup
+See VERIFIED_DUPLICATE_BRANCHES.json for explicitly reviewed identical branch refs. The pruning workflow deletes only exact SHA duplicates, with open-PR and active-workflow safeguards and an explicit lease. Retained refs keep the same commit. Other research branches are not classified by name alone; review their metrics and active dependencies before retirement.

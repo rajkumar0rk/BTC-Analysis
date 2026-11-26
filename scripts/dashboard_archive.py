@@ -181,7 +181,7 @@ def extend(root,out):
     # Keep a lightweight catalog of research branches without merging them.
     branches=root/".dashboard-branches.txt"
     if branches.exists():
-        refs=[dict(sha=line.split()[0],name=line.split()[1].removeprefix("refs/heads/")) for line in branches.read_text().splitlines() if len(line.split())==2 and line.split()[1]!="refs/heads/dashboard-data"]
+        refs=[dict(sha=line.split()[0],name=line.split()[1].removeprefix("refs/heads/")) for line in branches.read_text().splitlines() if len(line.split())==2 and (line.split()[1].startswith("refs/heads/locked/") or "frozen" in line.split()[1])]
         dump(out/"data"/"branches.json",refs)
     else: dump(out/"data"/"branches.json",[])
     dump(idxpath,index)

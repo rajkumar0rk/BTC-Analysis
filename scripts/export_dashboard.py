@@ -39,5 +39,7 @@ def main():
     write(OUT/"data"/"index.json",dict(schema=2,instrument="BTCUSD",first=trades.entry_utc.min(),last=trades.exit_utc.max(),commit=os.getenv("GITHUB_SHA","local"),source=str(SOURCE.relative_to(ROOT)),costs="0.05% taker each side + 18% GST; 5 points slippage each side; funding not modeled; no leverage or account sizing",eth_workflow_run=os.getenv("DASHBOARD_ETH_RUN",""),runs=runs))
     from dashboard_archive import extend
     extend(ROOT,OUT)
+    from curate_dashboard import curate
+    curate(ROOT,OUT)
     print(f"Imported {len(runs)} actual BTC configurations, {len(trades)} recorded trades; no backtest rerun")
 if __name__=="__main__":main()

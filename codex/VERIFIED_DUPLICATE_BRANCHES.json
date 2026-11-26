@@ -1,0 +1,17 @@
+[
+  {
+    "delete": "research/btc15m-150pct-profit-lock-20261123",
+    "keep": "research/btc15m-staircase-lock-sequences-20261123",
+    "sha": "c5a45b2acbb3d80b59e73dbfe35614ab2b6ceeb3"
+  },
+  {
+    "delete": "research/btc15m-small-profit-fixedtp-20261123",
+    "keep": "research/btc15m-high-frequency-reclaim-exits-20261123",
+    "sha": "4ea0e4cdc235fb24cefc1e9635984c13bf89220d"
+  },
+  {
+    "delete": "research/original-1h-fixed-tp200-sl200-wallet-20261121",
+    "keep": "research/ema-st-1h-stop-trail-hourly-20261120",
+    "sha": "fba832c616b780b72aaa3709e470cf101a145f11"
+  }
+]
