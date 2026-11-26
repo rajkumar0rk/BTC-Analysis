@@ -11,3 +11,11 @@ binding = "DB"
 database_name = "btc-analysis-local"
 database_id = "00000000-0000-4000-8000-000000000001"
 migrations_dir = "migrations"
+
+[[durable_objects.bindings]]
+name = "PAPER"
+class_name = "PaperLane"
+
+[[migrations]]
+tag = "paper-v1"
+new_sqlite_classes = ["PaperLane"]

@@ -48,6 +48,7 @@ jobs:
           trap 'stop; rm -f .dev.vars' EXIT
           start
           node tests/d1.integration.mjs || { cat "$RUNNER_TEMP/d1-worker.log"; exit 1; }
+          node tests/paper.integration.mjs || { cat "$RUNNER_TEMP/d1-worker.log"; exit 1; }
           # Kill local server process tree before checking persisted state in a fresh runtime.
           stop
           for i in $(seq 1 20); do
@@ -59,6 +60,7 @@ jobs:
           fi
           start
           CLOUD_TEST_STRATEGY_ID="$(cat "$CLOUD_TEST_ID_FILE")" node tests/d1.integration.mjs --restart
+          node tests/paper.integration.mjs --restart
       - name: Bundle worker without deploying
         working-directory: apps/cloud
         run: npx --yes wrangler@4.157.0 deploy --dry-run --outdir "$RUNNER_TEMP/cloud-bundle"

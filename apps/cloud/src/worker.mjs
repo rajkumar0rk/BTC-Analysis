@@ -1,5 +1,6 @@
 /** Lightweight Cloudflare module Worker. No backtest, arbitrary code or trading execution. */
 import {d1Store} from "./d1Store.mjs";
+export {PaperLane} from "./paperObject.mjs";
 const MAX_BODY=96*1024,MAX_SOURCE=65536,MAX_OWNERS=8;
 const encoder=new TextEncoder();
 const ID=/^[0-9a-f]{32}$/,HASH=/^[0-9a-f]{64}$/,OWNER=/^[a-zA-Z0-9_-]{1,64}$/;
@@ -95,7 +96,7 @@ export function makeHandler(storageFactory=()=>null){
   let origin=null;
   try{
    const url=new URL(req.url),path=url.pathname;
-   if(url.search)fail(400,"query_not_supported");
+   if(url.search&&!/^\/v1\/cloud\/paper\/(BTCUSD|ETHUSD)\/ledger$/.test(path))fail(400,"query_not_supported");
    const incoming=req.headers.get("Origin");
    if(incoming){if(!origins(env).includes(incoming))fail(403,"origin_not_allowed");origin=incoming;}
    if(req.method==="OPTIONS"){
@@ -111,7 +112,24 @@ export function makeHandler(storageFactory=()=>null){
    if(!path.startsWith("/v1/cloud/"))fail(404,"not_found");
    const owner=await auth(req,env);
    const store=storageFactory(env);
-   if(path==="/v1/cloud/capabilities"&&req.method==="GET")return json({schema_version:1,owner,storage:!!store,source_execution:false,backtest_execution:false,paper_trading:false,live_orders:false,max_source_bytes:MAX_SOURCE,max_strategies:30,max_revisions:100,max_owner_revisions:300,max_results:200,results_storage:!!store?.saveResult},200,origin);
+   if(path==="/v1/cloud/capabilities"&&req.method==="GET")return json({schema_version:1,owner,storage:!!store,source_execution:false,backtest_execution:false,paper_trading:!!env.PAPER,live_orders:false,max_source_bytes:MAX_SOURCE,max_strategies:30,max_revisions:100,max_owner_revisions:300,max_results:200,results_storage:!!store?.saveResult},200,origin);
+   const paper=path.match(/^\/v1\/cloud\/paper\/(BTCUSD|ETHUSD)\/(state|ledger|start|stop|clear)$/);
+   if(paper){
+    if(!env.PAPER)fail(503,"paper_not_configured");
+    const [,symbol,action]=paper;
+    const get=action==="state"||action==="ledger";
+    if(req.method!==(get?"GET":"POST"))fail(405,"method_not_allowed");
+    if(url.search&&(action!=="ledger"||[...url.searchParams.keys()].join(",")!=="after"||!/^\d{1,8}$/.test(url.searchParams.get("after")||"")))fail(400,"invalid_cursor");
+    let data;
+    if(!get){
+     const b=await body(req);
+     if(action==="start"){data={symbol,config:b};}
+     else{exact(b,["id"]);if(typeof b.id!=="string"||!ID.test(b.id))fail(400,"invalid_session_id");data=b;}
+    }
+    const stub=env.PAPER.get(env.PAPER.idFromName(owner+":"+symbol));
+    const r=await stub.fetch("https://paper.internal/"+action+url.search,{method:req.method,...(get?{}:{headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})});
+    return json(await r.json(),r.status,origin);
+   }
    if(path==="/v1/cloud/strategies"){
     if(req.method==="GET")return json({strategies:await requireStorage(store).list(owner)},200,origin);
     if(req.method==="POST"){
