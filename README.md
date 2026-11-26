@@ -9,6 +9,7 @@ The existing research archive and [Backtest Explorer](https://rajkumar0rk.github
 - [Reference backtesting engine (M3)](docs/platform/BACKTEST_ENGINE.md)
 - [Python strategy SDK and indicators (M4)](docs/platform/PYTHON_SDK.md)
 - [Reference margin and funding engine (M5)](docs/platform/MARGIN_ENGINE.md)
+- [Authenticated backend and job queue (M6)](docs/platform/BACKEND_API.md)
 - [Data and result contracts](docs/platform/DATA_AND_RESULTS.md)
 - [Execution security](docs/platform/SECURITY.md)
 - [Milestone roadmap and migration](docs/platform/ROADMAP.md)
@@ -17,7 +18,7 @@ The existing research archive and [Backtest Explorer](https://rajkumar0rk.github
 Install and test the foundation with Python 3.11 or 3.12:
 
 ```bash
-python -m pip install '.[data]'
+python -m pip install '.[data,api]'
 python -m unittest discover -s tests/platform -v
 ```
 
