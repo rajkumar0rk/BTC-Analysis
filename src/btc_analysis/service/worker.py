@@ -17,17 +17,20 @@ from .fixture import execute_fixture
 def child():
     # Only a bundled fixture handler; request input is schema checked again.
     import resource
-    resource.setrlimit(resource.RLIMIT_CPU,(20,20))
+    resource.setrlimit(resource.RLIMIT_CPU,(60,60))
     resource.setrlimit(resource.RLIMIT_FSIZE,(MAX_RESULT,MAX_RESULT))
-    resource.setrlimit(resource.RLIMIT_AS,(512*1024*1024,512*1024*1024))
+    resource.setrlimit(resource.RLIMIT_AS,(2*1024**3,2*1024**3))
     payload=json.load(sys.stdin)
     def progress(n):
         print(json.dumps({"progress":n}),file=sys.stderr,flush=True);return True
-    result=execute_fixture(payload,progress)
+    if payload.get("kind")=="historical_visual":
+        from .historical import execute_historical
+        result=execute_historical(payload,os.environ.get("BTC_PLATFORM_HISTORY"),progress)
+    else:result=execute_fixture(payload,progress)
     json.dump(result,sys.stdout,separators=(",",":"),allow_nan=False)
 
 
-def work_once(store:Store,timeout=30):
+def work_once(store:Store,timeout=90,history_root=None):
     claim=store.claim()
     if claim is None:return False
     jid,token,payload=claim
@@ -36,7 +39,8 @@ def work_once(store:Store,timeout=30):
     try:
         with tempfile.TemporaryDirectory(prefix="btc-fixture-") as directory:
             out=Path(directory)/"result.json";err=Path(directory)/"progress.log"
-            env={"PATH":os.defpath,"PYTHONUTF8":"1","TZ":"UTC"}
+            env={"PATH":os.defpath,"PYTHONUTF8":"1","TZ":"UTC","OPENBLAS_NUM_THREADS":"1","OMP_NUM_THREADS":"1","ARROW_NUM_THREADS":"1"}
+            if history_root is not None:env["BTC_PLATFORM_HISTORY"]=str(Path(history_root).resolve())
             with out.open("wb") as o,err.open("wb") as e:
                 process=subprocess.Popen([sys.executable,"-I","-m","btc_analysis.service.worker","--child"],
                     stdin=subprocess.PIPE,stdout=o,stderr=e,env=env,cwd=directory,start_new_session=True)
@@ -54,12 +58,12 @@ def work_once(store:Store,timeout=30):
                             store.finish(jid,token,error="worker_timeout");break
                         if process.poll() is not None:
                             if process.returncode!=0:
-                                store.finish(jid,token,error="fixture_execution_failed");break
+                                store.finish(jid,token,error="reference_execution_failed");break
                             if out.stat().st_size>MAX_RESULT:
                                 store.finish(jid,token,error="result_too_large");break
                             result=json.loads(out.read_text())
-                            if result.get("kind")!="reference_fixture" or result.get("synthetic") is not True:
-                                raise ValueError("invalid fixture result")
+                            if result.get("kind")!=payload["kind"] or result.get("synthetic") is not (payload["kind"]=="reference_fixture"):
+                                raise ValueError("invalid result kind")
                             store.finish(jid,token,result=result);break
                         time.sleep(.05)
                 finally:
@@ -82,7 +86,7 @@ def main():
     if not a.db:p.error("--db required")
     store=Store(a.db)
     while True:
-        ran=work_once(store)
+        ran=work_once(store,history_root=os.environ.get("BTC_PLATFORM_HISTORY"))
         if a.once:return
         if not ran:time.sleep(1)
 

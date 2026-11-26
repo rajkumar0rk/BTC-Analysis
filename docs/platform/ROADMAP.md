@@ -10,7 +10,7 @@ M6 API/jobs: [local authenticated API and durable queue](BACKEND_API.md), immuta
 M7 Frontend shell: [React/TypeScript studio](FRONTEND.md), real local API, source revisions, synthetic runner, responsive job/results views and browser CI. Production deployment remains gated.
 M8 Python editor: [Monaco and compiler diagnostics](PYTHON_EDITOR.md), SDK catalog/snippets, syntax-gated UI saves and immutable versions. Semantic checks and secure arbitrary execution remain later gates.
 M9 Visual Python builder: [typed rule graph and deterministic Python compiler](VISUAL_BUILDER.md), grouped conditions, multi-timeframe indicators, fixed risk brackets, source round-trip, generated/handwritten parity fixture, and code mode. Arbitrary code execution and advanced graph/risk features remain gated.
-M10 Runner: run configuration, live progress, cancellation, status/history.
+M10 Runner: [bounded historical visual research jobs](HISTORICAL_RUNNER.md), pinned datasets and versions, explicit assumptions, progress/cancel/results. Multi-year, leveraged historical jobs and arbitrary Python remain gated.
 M11 Analytics and replay: standard results, actual fills/reasons, account vs points, monthly MTM.
 M12 Registry: immutable versions, freeze/clone/archive, provenance and retention.
 M13 Optimization: bounded parallel grid/random, train-only and reproducible search.

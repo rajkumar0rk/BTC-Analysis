@@ -27,10 +27,15 @@ jobs:
         run: npm run build
       - working-directory: apps/web
         run: npx playwright install chromium --with-deps
+      - name: Import actual archive and exercise historical worker
+        run: |
+          python -m btc_analysis.data.cli --symbol BTCUSD --store "$RUNNER_TEMP/history"
+          PLATFORM_TEST_REAL_HISTORY="$RUNNER_TEMP/history" python -m unittest discover -s tests/platform -p test_historical_runner.py -v
       - name: Real API worker and browser integration
         run: |
           set -euo pipefail
           export BTC_PLATFORM_DB="$RUNNER_TEMP/platform-web.sqlite"
+          export BTC_PLATFORM_HISTORY="$RUNNER_TEMP/history"
           export PLATFORM_TEST_TOKEN="$(python -c 'import secrets; print(secrets.token_urlsafe(48))')"
           echo "::add-mask::$PLATFORM_TEST_TOKEN"
           export BTC_PLATFORM_TOKENS_JSON="$(python -c 'import json,os; print(json.dumps({"browser":os.environ["PLATFORM_TEST_TOKEN"]}))')"

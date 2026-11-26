@@ -12,6 +12,7 @@ from .store import Store, Missing, Conflict, Invalid
 from .diagnostics import validate_source, DiagnosticUnavailable
 from ..indicators import CATALOG
 from ..visual import Graph, compile_graph, recover_graph
+from .historical import HistoricalRequest, snapshots, prepare, MAX_MINUTES
 
 MAX_BODY=100_000
 Name=Annotated[str,StringConstraints(strip_whitespace=True,min_length=1,max_length=100)]
@@ -67,7 +68,7 @@ class BodyLimit:
         await self.app(scope,replay,send)
 
 
-def create_app(db_path,tokens):
+def create_app(db_path,tokens,history_root=None):
     if not isinstance(tokens,dict) or not tokens:raise ValueError("explicit API identities required")
     digests={}
     for owner,token in tokens.items():
@@ -109,7 +110,9 @@ def create_app(db_path,tokens):
 
     @app.get("/v1/capabilities")
     def capabilities(user:str=Depends(owner)):
-        return {"custom_python_execution":False,"historical_runs":False,"job_kinds":["reference_fixture"],
+        available=snapshots(history_root)
+        return {"custom_python_execution":False,"historical_runs":bool(available),"job_kinds":["reference_fixture"]+(["historical_visual"] if available else []),
+                "historical_max_minutes":MAX_MINUTES,
                 "strategy_storage":True,"worker_concurrency":1,"fixture_max_bars":600}
 
     @app.post("/v1/strategies/validate")
@@ -150,6 +153,17 @@ def create_app(db_path,tokens):
     def get_revision(sid:str,version:int,user:str=Depends(owner)):
         return store.revision(user,sid,version)
 
+    @app.get("/v1/datasets")
+    def datasets(user:str=Depends(owner)):
+        return snapshots(history_root)
+
+    @app.post("/v1/jobs/historical",status_code=202)
+    def historical(body:HistoricalRequest,idempotency_key:Annotated[Key,Header()],user:str=Depends(owner)):
+        revision=store.revision(user,body.strategy_id,body.version)
+        try:payload=prepare(history_root,body,revision)
+        except (ValueError,OSError,KeyError) as exc:raise HTTPException(422,"Historical configuration invalid: "+str(exc)[:300]) from exc
+        return store.submit(user,idempotency_key,payload)
+
     @app.post("/v1/jobs",status_code=202)
     def submit(body:FixtureRequest,idempotency_key:Annotated[Key,Header()],user:str=Depends(owner)):
         if body.bars%body.signal_minutes:raise HTTPException(422,"bars must divide into full signal intervals")
@@ -169,4 +183,4 @@ def create_app(db_path,tokens):
 
 def app_from_env():
     # Fail closed if operator configuration absent; no default credentials.
-    return create_app(os.environ["BTC_PLATFORM_DB"],json.loads(os.environ["BTC_PLATFORM_TOKENS_JSON"]))
+    return create_app(os.environ["BTC_PLATFORM_DB"],json.loads(os.environ["BTC_PLATFORM_TOKENS_JSON"]),os.environ.get("BTC_PLATFORM_HISTORY"))

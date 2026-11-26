@@ -118,13 +118,13 @@ class Store:
     def _public(r,include_result=False):
         if r is None:raise Missing("job not found")
         d={k:r[k] for k in ("id","status","progress","created","updated","error")}
-        d["request"]=json.loads(r["payload"])
+        d["request"]={k:v for k,v in json.loads(r["payload"]).items() if k!="graph"}
         if include_result:d["result"]=json.loads(r["result"]) if r["result"] else None
         return d
 
     def submit(self,owner,key,payload):
         # The API only accepts schema-validated trusted fixture requests.
-        if payload.get("kind")!="reference_fixture":raise Invalid("custom execution disabled")
+        if payload.get("kind") not in ("reference_fixture","historical_visual"):raise Invalid("custom execution disabled")
         packed=canonical(payload);digest=sha(packed)
         with self.connection(True) as c:
             prior=c.execute("SELECT * FROM jobs WHERE owner=? AND request_key=?",(owner,key)).fetchone()
