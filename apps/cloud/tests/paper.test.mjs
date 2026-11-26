@@ -78,3 +78,41 @@ test("disabled lane refuses starts",async()=>{
  const r=await obj.fetch(new Request("https://internal/start",{method:"POST",body:JSON.stringify({symbol:"BTCUSD",config})}));
  assert.equal(r.status,503);
 });
+
+test("directional linear short P&L and fee accounting; target fills at next open",()=>{
+ const c=validateConfig({...config,signal_minutes:1,max_drawdown_bps:10000,direction:"short",stop_bps:0,target_bps:500,taker_bps:5,tax_bps:1800});
+ let s=init("BTCUSD",c,0),fills=[];
+ // Explicit pending entry isolates execution/accounting from signal generation.
+ s.pending="short";
+ for(const p of [100,90,85]){
+  const r=advance(s,candle(s.cursor,p));s=r.state;fills.push(...r.events);
+ }
+ assert.equal(fills.length,2);assert.equal(fills[0].side,"sell");assert.equal(fills[1].side,"buy");assert.equal(fills[1].reason,"target_close");
+ assert.equal(fills[1].price,strUnits("85"));assert.equal(s.qty,"0");
+ const net=BigInt(fills[1].closed_net);
+ assert.ok(net>0n);assert.equal(BigInt(s.balance),units("100")+net);
+ assert.equal(BigInt(s.equity),BigInt(s.balance));assert.equal(s.trades,1);
+});
+const strUnits=v=>String(units(v));
+test("directional modes follow completed EMA crosses and preserve old engines",()=>{
+ for(const direction of ["long","short","both"]){
+  const c=validateConfig({...config,signal_minutes:1,max_drawdown_bps:10000,direction,stop_bps:0,target_bps:0});
+  let s=init("ETHUSD",c,0),fills=[];
+  for(const p of [100,90,80,110,111,80,79,120,121,70,69,130,131]){
+   const r=advance(s,candle(s.cursor,p));s=r.state;fills.push(...r.events);
+  }
+  const entries=fills.filter(x=>x.reason==="ema_entry");assert.ok(entries.length>0);
+  if(direction==="short")assert.ok(entries.every(e=>e.side==="sell"));
+  if(direction==="long")assert.ok(entries.every(e=>e.side==="buy"));
+  assert.equal(s.engine,"ema-cross-linear-fixed8-v3");
+ }
+ assert.equal(init("BTCUSD",validateConfig(config),0).engine,"ema-cross-fixed8-v1");
+ assert.throws(()=>validateConfig({...config,signal_minutes:1,max_drawdown_bps:1000,direction:"hedge",stop_bps:0,target_bps:0}));
+});
+test("short adverse price gap preserves negative equity and halts rather than inventing liquidation",()=>{
+ const c=validateConfig({...config,signal_minutes:1,max_drawdown_bps:10000,direction:"short",stop_bps:100,target_bps:0,exposure_bps:9000});
+ let s=init("BTCUSD",c,0);s.pending="short";
+ s=advance(s,candle(s.cursor,100)).state;
+ s=advance(s,candle(s.cursor,250)).state;
+ assert.ok(BigInt(s.equity)<0n);assert.ok(BigInt(s.qty)<0n);assert.equal(s.status,"halted");assert.equal(s.reason,"nonpositive_equity");
+});

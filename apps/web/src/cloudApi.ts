@@ -7,9 +7,9 @@ export type CloudResultSummary={engine_version:string;initial_equity:string;scen
 export type CloudResultInput={id:string;strategy_id:string;version:number;code_sha256:string;symbol:"BTCUSD"|"ETHUSD";dataset_sha256:string;result_sha256:string;summary:CloudResultSummary};
 export type CloudResultMeta=Omit<CloudResultInput,"code_sha256"|"summary">&{payload_sha256:string;created:number};
 export type CloudResult=CloudResultMeta&{summary:CloudResultSummary;verification:"client_reported"};
-export type PaperConfig={request_id:string;fast:number;slow:number;equity:string;exposure_bps:number;taker_bps:number;tax_bps:number;slippage_bps:number;duration_minutes:number;signal_minutes?:number;max_drawdown_bps?:number;acknowledge:true};
-export type PaperSession={id:string;symbol:"BTCUSD"|"ETHUSD";status:string;reason:string|null;start:number;end:number;cursor:number;balance:string;qty:string;equity:string;bars:number;trades:number;fill_count:number;fees:string;tax:string;drawdown_bps:number;engine:string;signal_bars?:number;last_receipt_ms?:number;config?:{signal_minutes?:number;max_drawdown_bps?:number;equity:string;fast:number;slow:number}};
-export type PaperFill={id:number;minute:number;side:"buy"|"sell";price:string;quantity:string;fee:string;tax:string;closed_net:string|null};
+export type PaperConfig={request_id:string;fast:number;slow:number;equity:string;exposure_bps:number;taker_bps:number;tax_bps:number;slippage_bps:number;duration_minutes:number;signal_minutes?:number;max_drawdown_bps?:number;direction?:"long"|"short"|"both";stop_bps?:number;target_bps?:number;acknowledge:true};
+export type PaperSession={id:string;symbol:"BTCUSD"|"ETHUSD";status:string;reason:string|null;start:number;end:number;cursor:number;balance:string;qty:string;equity:string;bars:number;trades:number;fill_count:number;fees:string;tax:string;drawdown_bps:number;engine:string;signal_bars?:number;last_receipt_ms?:number;config?:{signal_minutes?:number;max_drawdown_bps?:number;direction?:"long"|"short"|"both";stop_bps?:number;target_bps?:number;equity:string;fast:number;slow:number}};
+export type PaperFill={id:number;minute:number;side:"buy"|"sell";price:string;quantity:string;fee:string;tax:string;closed_net:string|null;reason?:string};
 export function cloudClient(endpoint:string,token:string){
  const url=new URL(endpoint);
  if(url.protocol!=="https:"||url.username||url.password||url.search||url.hash||url.pathname!=="/")throw new Error("Cloud API must be an explicit HTTPS origin.");
