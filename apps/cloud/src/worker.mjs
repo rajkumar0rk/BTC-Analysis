@@ -20,7 +20,7 @@ function origins(env){
  return values;
 }
 function headers(origin){
- const h=new Headers({"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Content-Type-Options":"nosniff","Referrer-Policy":"no-referrer","X-Frame-Options":"DENY","Content-Security-Policy":"default-src 'none'; frame-ancestors 'none'","Vary":"Origin"});
+ const h=new Headers({"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Content-Type-Options":"nosniff","Referrer-Policy":"no-referrer","Permissions-Policy":"camera=(), microphone=(), geolocation=()","X-Frame-Options":"DENY","Content-Security-Policy":"default-src 'none'; frame-ancestors 'none'","Vary":"Origin"});
  if(origin)h.set("Access-Control-Allow-Origin",origin);
  return h;
 }
@@ -113,6 +113,12 @@ export function makeHandler(storageFactory=()=>null){
    const owner=await auth(req,env);
    const store=storageFactory(env);
    if(path==="/v1/cloud/capabilities"&&req.method==="GET")return json({schema_version:1,owner,storage:!!store,source_execution:false,backtest_execution:false,paper_trading:!!env.PAPER&&env.PAPER_ENABLED==="true",live_orders:false,max_source_bytes:MAX_SOURCE,max_strategies:30,max_revisions:100,max_owner_revisions:300,max_results:200,results_storage:!!store?.saveResult},200,origin);
+   if(path==="/v1/cloud/operations"){
+    if(req.method!=="GET")fail(405,"method_not_allowed");
+    const s=requireStorage(store);
+    const usage=await s.usage(owner);
+    return json({schema_version:1,checked_at:Date.now(),database:"reachable",usage,limits:{strategies:30,revisions:300,results:200},paper_enabled:!!env.PAPER&&env.PAPER_ENABLED==="true",live_orders:false,provider_metrics:"not_measured"},200,origin);
+   }
    const paper=path.match(/^\/v1\/cloud\/paper\/(BTCUSD|ETHUSD)\/(state|ledger|start|stop|clear)$/);
    if(paper){
     if(!env.PAPER)fail(503,"paper_not_configured");

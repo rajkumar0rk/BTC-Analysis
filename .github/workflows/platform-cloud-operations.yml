@@ -1,0 +1,87 @@
+name: Private Cloud operations
+on:
+  schedule:
+    - cron: '23 2 * * *'
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: 'Read-only health or encrypted D1 export (may briefly interrupt database access)'
+        type: choice
+        options: [health, backup]
+        default: health
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: private-cloud-production
+  cancel-in-progress: false
+jobs:
+  health:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    environment: cloudflare-production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Health and security probes
+        env:
+          CF_ORIGIN: ${{ vars.CF_ORIGIN }}
+          CF_MONITOR_TOKEN: ${{ secrets.CF_MONITOR_TOKEN }}
+        run: python scripts/cloud_health_check.py | tee -a "$GITHUB_STEP_SUMMARY"
+  backup:
+    if: github.event_name == 'workflow_dispatch' && inputs.operation == 'backup' && github.ref == 'refs/heads/main'
+    needs: health
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: cloudflare-production
+    env:
+      CF_DATABASE_ID: ${{ vars.CF_DATABASE_ID }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_BACKUP_AGE_RECIPIENT: ${{ vars.CF_BACKUP_AGE_RECIPIENT }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Export, rehearse restore and encrypt
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          # Public age recipient only; the corresponding private key never enters CI.
+          python - <<'PY'
+          import os,re,uuid
+          assert re.fullmatch(r"age1[0-9a-z]{58}",os.environ.get("CF_BACKUP_AGE_RECIPIENT","")), "Configure CF_BACKUP_AGE_RECIPIENT before export"
+          db=str(uuid.UUID(os.environ["CF_DATABASE_ID"]))
+          assert db not in ("00000000-0000-4000-8000-000000000001","12345678-1234-4234-8234-123456789012")
+          PY
+          sudo apt-get update -qq && sudo apt-get install -y -qq age
+          tmp="$(mktemp -d)"
+          trap 'rm -rf "$tmp"' EXIT
+          printf 'name = "btc-analysis"\ncompatibility_date = "2026-11-10"\n[[d1_databases]]\nbinding = "DB"\ndatabase_name = "btc-analysis"\ndatabase_id = "%s"\n' "$CF_DATABASE_ID" > "$tmp/wrangler.toml"
+          if ! npx --yes wrangler@4.157.0 d1 export DB --remote --output "$tmp/backup.sql" --config "$tmp/wrangler.toml" >"$tmp/export.log" 2>&1; then
+            echo "D1 export failed; private export logs not published"; exit 1
+          fi
+          python scripts/cloud_restore_check.py "$tmp/backup.sql" "$tmp/restored.sqlite"
+          mkdir -m 700 "$RUNNER_TEMP/encrypted-backup"
+          age -r "$CF_BACKUP_AGE_RECIPIENT" -o "$RUNNER_TEMP/encrypted-backup/d1.sql.age" "$tmp/backup.sql"
+          cd "$RUNNER_TEMP/encrypted-backup"
+          sha256sum d1.sql.age > SHA256SUMS
+          echo "Encrypted D1 export and offline restore rehearsal passed. Paper Durable Objects excluded." >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: encrypted-d1-backup
+          path: ${{ runner.temp }}/encrypted-backup/
+          retention-days: 7
+          if-no-files-found: error

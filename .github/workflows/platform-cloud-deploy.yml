@@ -122,3 +122,9 @@ jobs:
           test "$status" = 401
           python -c 'import json,sys;assert json.load(open(sys.argv[1]))["error"]=="invalid_credentials"' "$RUNNER_TEMP/unauth.json"
           printf '### Private Studio deployed (virtual paper enabled; no sessions auto-started)\n%s\n\nAuthenticated data roundtrip and actual quota measurements still require operator verification.\n' "$CF_ORIGIN" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Extended production security and optional authenticated read check
+        if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
+        env:
+          CF_MONITOR_TOKEN: ${{ secrets.CF_MONITOR_TOKEN }}
+        run: python scripts/cloud_health_check.py >> "$GITHUB_STEP_SUMMARY"

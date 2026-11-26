@@ -12,6 +12,10 @@ export function d1Store(db){
  const all=async(sql,...v)=>(await q(sql,...v).all()).results;
  const first=(sql,...v)=>q(sql,...v).first();
  return {
+  async usage(owner){
+   const r=await first("SELECT (SELECT count(*) FROM strategies WHERE owner=?) AS strategies, (SELECT count(*) FROM revisions WHERE owner=?) AS revisions, (SELECT count(*) FROM results WHERE owner=?) AS results",owner,owner,owner);
+   return {strategies:r.strategies,revisions:r.revisions,results:r.results};
+  },
   async list(owner){return all("SELECT id,name,latest_version,created FROM strategies WHERE owner=? ORDER BY created DESC,id LIMIT 30",owner);},
   async create(owner,v){
    try{

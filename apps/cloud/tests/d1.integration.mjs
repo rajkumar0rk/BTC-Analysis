@@ -36,6 +36,8 @@ assert.equal((await call("/results/"+row.id)).status,404);
 for(let n=1;n<30;n++)assert.equal((await call("/strategies","POST",{name:"Quota "+n,source:"pass"})).status,201);
 assert.equal((await call("/strategies","POST",{name:"Overflow",source:"pass"})).status,409);
 assert.equal((await call("/strategies")).body.strategies.length,30);
+const usage=await call("/operations");assert.equal(usage.status,200);assert.deepEqual(usage.body.usage,{strategies:30,revisions:31,results:0});assert.equal(usage.body.live_orders,false);assert.equal(usage.body.provider_metrics,"not_measured");
 assert.equal((await call("/strategies","POST",{name:"Other owner",source:"pass"},bob)).status,201);
+assert.deepEqual((await call("/operations","GET",undefined,bob)).body.usage,{strategies:1,revisions:1,results:0});
 console.log("D1 integration passed: atomic CAS, owner isolation, result idempotency, deletion, quota.");
 if(process.env.CLOUD_TEST_ID_FILE){const {writeFileSync}=await import("node:fs");writeFileSync(process.env.CLOUD_TEST_ID_FILE,id);}

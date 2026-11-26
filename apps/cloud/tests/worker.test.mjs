@@ -48,3 +48,5 @@ test("strategy contract, immutable revisions, ownership and CAS",async()=>{
  assert.equal((await handle(request("/strategies","POST",token,"a".repeat(100000)),env)).status,413);
  assert.equal((await handle(request("/strategies","POST",token,{} ,{"Content-Type":"text/plain"}),env)).status,415);
 });
+
+test("operations is authenticated, owner scoped and read only",async()=>{const handle=makeHandler(()=>({usage:async owner=>({strategies:owner==="alice"?2:1,revisions:3,results:0})}));assert.equal((await handle(request("/operations","GET",null),env)).status,401);assert.equal((await handle(request("/operations","POST",token,{}),env)).status,405);const r=await handle(request("/operations"),env);assert.equal(r.headers.get("Cache-Control"),"no-store");assert.equal((await r.json()).usage.strategies,2);assert.equal((await (await handle(request("/operations","GET",other),env)).json()).usage.strategies,1);});
