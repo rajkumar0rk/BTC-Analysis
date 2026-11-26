@@ -1,3 +1,4 @@
+import {loadRepositoryHistory} from "./repositoryHistory";
 import {useEffect,useRef,useState} from "react";
 import type {BatchInput,LocalResult} from "./parallelReplay";
 type RiskScenario=LocalResult["scenarios"][number]&{funding_paid:string;liquidation_count:number;preliq_count:number};
@@ -5,14 +6,28 @@ type RiskResult=Omit<LocalResult,"scenarios">&{scenarios:RiskScenario[];risk:unk
 const defaults={leverage:"1",margin_mode:"isolated",initial_rate_floor:"",maintenance_rate:"",max_notional:"",liquidation_fee_bps:"",profile_start:"",profile_end:"",profile_source:"",preliq_points:"0",scalp_start:"",scalp_end:""};
 export function LeveragedRunner({input,graph,disabled,onBusy}:{input:BatchInput;graph:string;disabled:boolean;onBusy:(v:boolean)=>void}){
  const [v,setV]=useState(defaults),[mark,setMark]=useState(""),[funding,setFunding]=useState(""),[fund,setFund]=useState(false),[scalp,setScalp]=useState(false),[ack,setAck]=useState(false),[interval,setInterval]=useState("28800"),[anchor,setAnchor]=useState("0");
+ const [markInput,setMarkInput]=useState<{csv:string;symbol:string}|null>(null),[markNote,setMarkNote]=useState("");
+ useEffect(()=>{setMark("");setMarkInput(null);setMarkNote("");setResult(null);},[input.csv,input.symbol]);
  const [busy,setBusy]=useState(false),[loading,setLoading]=useState(false),[status,setStatus]=useState("Ready"),[error,setError]=useState(""),[result,setResult]=useState<RiskResult|null>(null);
  const worker=useRef<Worker|null>(null),timer=useRef<number|undefined>(undefined),seq=useRef(0);
  function close(){seq.current++;worker.current?.terminate();worker.current=null;window.clearTimeout(timer.current);setBusy(false);onBusy(false);}
  useEffect(()=>()=>{worker.current?.terminate();window.clearTimeout(timer.current);},[]);
  async function file(f:File|undefined,kind:"mark"|"funding"){setLoading(true);setError("");setResult(null);try{
   if(f&&f.size>16777216)throw new Error("Risk CSV exceeds 16 MiB.");
-  const text=f?await f.text():"";if(kind==="mark")setMark(text);else setFunding(text);
+  const text=f?await f.text():"";if(kind==="mark"){setMark(text);setMarkInput({csv:input.csv,symbol:input.symbol});setMarkNote("Custom mark CSV.");}else setFunding(text);
  }catch(e){setError(String(e));if(kind==="mark")setMark("");else setFunding("");}finally{setLoading(false);}}
+ async function loadMark(){
+  setLoading(true);onBusy(true);setError("");setResult(null);setMark("");setMarkInput(null);setMarkNote("");
+  try{
+   const lines=input.csv.trimEnd().split(/\r?\n/);if(lines.length<3)throw Error("Load trade candles first.");
+   const first=Number(lines[1].split(",")[0]),last=Number(lines[lines.length-1].split(",")[0]);
+   if(!Number.isSafeInteger(first)||!Number.isSafeInteger(last)||first%86400||(last+60)%86400)throw Error("Repository mark loading requires complete UTC days. Import a matching custom mark CSV for partial days.");
+   const from=new Date(first*1000).toISOString().slice(0,10),to=new Date(last*1000).toISOString().slice(0,10);
+   const r=await loadRepositoryHistory(input.symbol,from,to,true,undefined,"mark");
+   if(r.bars!==lines.length-1)throw Error("Mark and trade counts differ.");
+   setMark(r.csv);setMarkInput({csv:input.csv,symbol:input.symbol});setMarkNote("Verified "+r.bars.toLocaleString()+" repository mark candles. Exact trade alignment is checked by the risk engine.");
+  }catch(e){setError(String(e));}finally{setLoading(false);onBusy(false);}
+ }
  function run(){
   if(disabled||busy||loading)return;setError("");setResult(null);setBusy(true);onBusy(true);setStatus("Initializing risk replay");
   const id=++seq.current;
@@ -28,9 +43,10 @@ export function LeveragedRunner({input,graph,disabled,onBusy}:{input:BatchInput;
    w.postMessage({id,...input,graph,risk:{...v,mark_csv:mark,funding_enabled:fund,funding_csv:fund?funding:"",funding_interval_seconds:Number(interval),funding_anchor_epoch:Number(anchor),scalp_enabled:scalp,acknowledge:ack}});
   }catch(e){setError(String(e));close();}
  }
- const ready=!!input.csv&&input.assume&&!!mark&&ack&&!!v.profile_start&&!!v.profile_end&&!!v.profile_source&&!!v.initial_rate_floor&&!!v.maintenance_rate&&!!v.max_notional&&!!v.liquidation_fee_bps&&(!fund||!!funding)&&(!scalp||!!v.scalp_start&&!!v.scalp_end);
+ const ready=!!input.csv&&input.assume&&!!mark&&markInput?.csv===input.csv&&markInput?.symbol===input.symbol&&ack&&!!v.profile_start&&!!v.profile_end&&!!v.profile_source&&!!v.initial_rate_floor&&!!v.maintenance_rate&&!!v.max_notional&&!!v.liquidation_fee_bps&&(!fund||!!funding)&&(!scalp||!!v.scalp_start&&!!v.scalp_end);
  return <section className="scenario" style={{marginTop:16}}><h2>Leveraged reference replay</h2><p className="notice">Uses current strategy and trade CSV, separate mark data and explicit historical fixed-tier assumptions. Exposure % now represents equity allocated to initial margin; notional scales with leverage. No exchange-certified liquidation or historical eligibility inference. Mark-vertex protection can miss gaps. Single isolated/cross position only.</p>
  <fieldset disabled={disabled||busy||loading} style={{minWidth:0}}>
+ <button disabled={!input.csv} onClick={()=>void loadMark()}>Load matching repository mark prices</button><p className="muted">{markNote}</p>
  <label>Risk mark CSV<input aria-label="Risk mark CSV" type="file" accept=".csv,text/csv" onChange={e=>void file(e.target.files?.[0],"mark")}/></label><small>time,open,high,low,close — one exact mark candle per trade candle.</small>
  <div className="visual-config">{Object.entries(v).filter(([k])=>k!=="margin_mode"&&!k.startsWith("scalp_")).map(([k,value])=><label key={k}>{k==="profile_start"||k==="profile_end"?k+" UTC epoch seconds":k}<input value={value} onChange={e=>{setV(old=>({...old,[k]:e.target.value}));setResult(null);}}/></label>)}
  <label>Margin mode<select value={v.margin_mode} onChange={e=>setV(old=>({...old,margin_mode:e.target.value}))}><option>isolated</option><option>cross</option></select></label></div>
