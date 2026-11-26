@@ -27,3 +27,6 @@ apps/web/tests/browser-oracle.json
 .wrangler/
 
 apps/cloud/wrangler.release.toml
+
+# Generated public historical archive snapshot (source remains in data/delta_india)
+apps/web/public/history-archive/

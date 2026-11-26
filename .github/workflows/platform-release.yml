@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['apps/cloud/**','apps/web/**','src/btc_analysis/**','scripts/platform_browser_benchmark*','scripts/prepare_cloud_release.py','scripts/prepare_browser_python.py','requirements/platform-linux.lock','pyproject.toml','.github/workflows/platform-release.yml','.github/workflows/platform-cloud-deploy.yml']
+    paths: ['apps/cloud/**','apps/web/**','data/delta_india/*/1m/**','src/btc_analysis/**','scripts/platform_browser_benchmark*','scripts/prepare_cloud_release.py','scripts/prepare_browser_python.py','requirements/platform-linux.lock','pyproject.toml','.github/workflows/platform-release.yml','.github/workflows/platform-cloud-deploy.yml']
 permissions:
   contents: read
 jobs:

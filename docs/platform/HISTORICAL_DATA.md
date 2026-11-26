@@ -17,3 +17,6 @@ Delta India BTCUSD/ETHUSD 1m source files on main only. Older 2024 gap-repair br
 
 ## CI
 Platform historical data audit runs synthetic tests plus full BTC/ETH actual archive import, streaming count parity, unchanged-source reuse parity and records maximum RSS / wall time. Reports are downloadable action artifacts. M1 unit CI runs both foundation and data unit tests on 3.11/3.12. Independent review remains separate.
+
+## Browser repository snapshot loader
+The release build stages checksum-verified public BTCUSD/ETHUSD compressed monthly archives from main as same-origin content-addressed binary assets. The browser downloads only partitions overlapping the selected inclusive UTC dates, verifies gzip SHA-256, manifest row counts and exact 1m continuity, and refuses missing dates or invalid rows. Optional Cache Storage retains up to four public partition files; cache hits are rehashed. Custom CSV remains available. The existing 31-day/16 MiB execution limits and explicit timestamp-open research assumption remain; this is not a multi-year engine or verified venue contract model. Data changes on main trigger a new published snapshot through the existing CI/release workflows. No R2/D1 history storage, API credentials or new paid service required.

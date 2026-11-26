@@ -35,3 +35,27 @@ with zipfile.ZipFile(OUT/"studio-python.zip","w",compression=zipfile.ZIP_DEFLATE
 assets["studio-python.zip"]=hashlib.sha256((OUT/"studio-python.zip").read_bytes()).hexdigest()
 (OUT/"assets.json").write_text(json.dumps({"version":VERSION,"sha256":assets},sort_keys=True,indent=2)+"\n")
 print("Prepared Pyodide",VERSION,len(assets),"assets")
+
+# Publish only the existing public, checksummed monthly OHLCV archives as same-origin
+# compressed binary assets. No credentials, private data, or runtime GitHub requests.
+import shutil
+history=ROOT/"apps/web/public/history-archive"
+if history.exists():shutil.rmtree(history)
+history.mkdir()
+for symbol in ("BTCUSD","ETHUSD"):
+    source=ROOT/"data/delta_india"/symbol/"1m"
+    manifest=json.loads((source/"manifest.json").read_text())
+    if manifest["symbol"]!=symbol or manifest["resolution"]!="1m" or manifest["timestamp_unit"]!="unix_seconds_utc":
+        raise ValueError("unexpected history manifest")
+    out=history/symbol
+    out.mkdir()
+    for item in manifest["partitions"]:
+        name=item["file"];digest=item["sha256_gzip"]
+        if not re.fullmatch(r"[0-9]{4}-[0-9]{2}\.csv\.gz",name) or not re.fullmatch(r"[a-f0-9]{64}",digest):
+            raise ValueError("invalid archive partition")
+        raw=(source/name).read_bytes()
+        if len(raw)>4*1024*1024 or hashlib.sha256(raw).hexdigest()!=digest:
+            raise ValueError("archive size/checksum mismatch: "+symbol+"/"+name)
+        (out/(digest+".bin")).write_bytes(raw)
+    (out/"manifest.json").write_text(json.dumps(manifest,sort_keys=True,separators=(",",":"))+"\n")
+print("Staged verified BTCUSD/ETHUSD monthly archive snapshots.")
