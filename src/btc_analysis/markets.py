@@ -16,6 +16,7 @@ from .data.calendar import SessionCalendar,ContinuousCalendar
 from .serialization import fingerprint,to_wire
 from .visual import Graph,compile_graph,DecimalText
 from .service.historical import GraphStrategy,frames
+from .backtest import run_backtest
 
 MAX_ROWS=100000
 MAX_BYTES=32*1024*1024
