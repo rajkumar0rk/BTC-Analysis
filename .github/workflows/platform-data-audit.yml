@@ -43,4 +43,5 @@ jobs:
           path: |
             .platform-local/data-audit*.json
             .platform-local/*benchmark.txt
+          include-hidden-files: true
           if-no-files-found: error
