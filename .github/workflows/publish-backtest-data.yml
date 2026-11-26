@@ -20,6 +20,8 @@ on:
       - 'scripts/export_dashboard.py'
       - 'scripts/dashboard_archive.py'
       - 'scripts/curate_dashboard.py'
+      - 'scripts/import_supertrend_dashboard.py'
+      - 'dashboard/supertrend-sources.json'
       - 'dashboard/frozen-strategies.json'
       - 'scripts/verify_dashboard_export.py'
       - 'scripts/publish_dashboard_data.sh'

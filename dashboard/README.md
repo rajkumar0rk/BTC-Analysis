@@ -13,3 +13,6 @@ Local: install pandas/numpy, obtain the recorded ETH ledger if available, run `p
 
 ## Curated strategy list
 One profitable, full-replay variant per signal family, ranked descriptively by positive months over Jan 2025–Oct 2026, then net, PF and drawdown. Negative configurations and duplicate parameter variants are removed from the published data tree, not erased from Git history. Frozen BTC lock summaries are separately displayed with original source links and cost/validation caveats. No claim of independent validation. The branch catalog lists frozen refs only. Other research engines require explicit adapters.
+
+## Supertrend evidence
+The reviewed source manifest pins exact branch/archived commit SHAs. The data publisher imports the original locked 15m ATR shortlist, latest recovery candidates, C05 training and exact C16 diagnostic, C13-neighbor C12, X180 frozen 2024 and the original 1m execution audit. Diagnostic replays bypass the positive-profit shortlist only as explicitly labeled evidence; no trading approval. Source MTM monthly percentage and floating drawdown are separate from recorded closed-trade USD replay. Unknown entry reasons and missing monthly/ledger data are not reconstructed. Future source updates use a reviewed manifest revision; no UI deployment needed for compatible data changes.

@@ -41,5 +41,7 @@ def main():
     extend(ROOT,OUT)
     from curate_dashboard import curate
     curate(ROOT,OUT)
+    from import_supertrend_dashboard import main as import_supertrend
+    import_supertrend(ROOT,OUT)
     print(f"Imported {len(runs)} actual BTC configurations, {len(trades)} recorded trades; no backtest rerun")
 if __name__=="__main__":main()

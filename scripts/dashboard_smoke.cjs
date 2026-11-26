@@ -17,7 +17,10 @@ const assert=require("node:assert/strict");
   await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"));
   assert.ok(["BTCUSD","ETHUSD"].includes(await page.locator("#symbol").inputValue()));
   assert.equal(await page.locator("#frozenStrategies tbody tr").count(),2);
-  assert.ok(await page.locator("#coverage").innerText().then(t=>t.includes("excluded")));
+  assert.ok(await page.locator("#coverage").innerText().then(t=>t.includes("Supertrend")));
+  assert.ok(await page.locator("#supertrendStrategies tbody tr").count()>=12);
+  await page.locator("#supertrendStrategies button").filter({hasText:"Details"}).first().click();
+  assert.ok(await page.locator("#supertrendMonthly").innerText().then(t=>t.includes("Exact monthly series")));
   assert.ok(await page.locator("#details").innerText().then(t=>t.includes("Why entered")&&t.includes("Why exited")));
   assert.ok(requests.filter(x=>x.includes("/candles/")).length<=1);
   if(remote){assert.ok(requests.some(x=>/^https:\/\/raw\.githubusercontent\.com\/rajkumar0rk\/BTC-Analysis\/[a-f0-9]{40}\/data\/index\.json$/.test(x)),"remote pinned index");assert.ok(requests.every(x=>x.startsWith("https://raw.githubusercontent.com/")),"no bundled data");await page.locator("#refreshData").click();await page.locator("#ledger tr").first().waitFor();}
@@ -32,6 +35,7 @@ const assert=require("node:assert/strict");
     await page.locator("#ledger tr").first().waitFor();
     await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));
   }
+  const research=page.locator("#supertrendStrategies button").filter({hasText:"Replay"}).first();await research.click();await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));assert.equal(await page.locator("#netUnit").innerText(),"Net account USD");
   await page.setViewportSize({width:390,height:844});
   assert.equal(errors.length,0,errors.join("\n"));
   console.log("Browser smoke passed; data requests:",requests.length);

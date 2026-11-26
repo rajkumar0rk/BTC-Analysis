@@ -1,0 +1,75 @@
+[
+  {
+    "id": "locked15",
+    "sha": "fdfff184584384324fa26e252a8bd8184ac4fc5e",
+    "folder": "analysis/locked_strategies",
+    "files": [
+      "BTCUSD_15M_ATR_STRATEGY_SHORTLIST_20261123.json",
+      "btcusd_15m_reclaim_atr020_100pct_20261123.json"
+    ]
+  },
+  {
+    "id": "latest",
+    "sha": "57bd78cecbe2e5fe2f877d40d066be079936f5ca",
+    "folder": "analysis/btc15m_atr_month22_recovery_state_20261124",
+    "files": [
+      "profile_80.csv",
+      "profile_100.csv",
+      "RESEARCH_REPORT.md"
+    ]
+  },
+  {
+    "id": "c05",
+    "sha": "f552f670986b91750d0394b9fa552331c37187a6",
+    "folder": "analysis/btc15m_c05_adx_vol_grid_20261125",
+    "files": [
+      "monthly_comparison.csv",
+      "FROZEN.json",
+      "REPORT.md"
+    ]
+  },
+  {
+    "id": "c05validation",
+    "sha": "af924037a33da66fe90641683f52f920f2485a7d",
+    "folder": "analysis/btc15m_c05_fixed_2026_20261125",
+    "files": [
+      "summary.csv",
+      "monthly.csv",
+      "ledger.csv",
+      "REPORT.md"
+    ]
+  },
+  {
+    "id": "c13",
+    "sha": "d309f931d1d90e9c144fe8884a8f0f183719fd3e",
+    "folder": "analysis/btc15m_c13_local_robustness_20261124",
+    "files": [
+      "frozen_summary.csv",
+      "frozen_monthly.csv",
+      "frozen_ledger.csv",
+      "FROZEN.json",
+      "REPORT.md"
+    ]
+  },
+  {
+    "id": "x180",
+    "sha": "e0136b73c079fa85b28c15c6b7e3732ed0f1dda9",
+    "folder": "analysis/btc15m_x180_frozen_2024",
+    "files": [
+      "summary.csv",
+      "monthly.csv",
+      "ledger.csv",
+      "REPORT.md"
+    ]
+  },
+  {
+    "id": "original",
+    "sha": "086d23842b9c1fae1efb7ea71d63a2b0ea0169b6",
+    "folder": "analysis/btc_ema_st_15m_entry_1m_exit_20261120",
+    "files": [
+      "summary.json",
+      "RESEARCH_REPORT.md",
+      "assumed_30m_offer_1m_monthly.csv"
+    ]
+  }
+]

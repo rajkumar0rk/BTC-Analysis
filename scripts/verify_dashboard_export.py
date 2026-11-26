@@ -8,8 +8,12 @@ def main():
     index=read(ROOT/"index.json")
     runs=index["runs"]
     assert runs and len({r["id"] for r in runs})==len(runs)
-    assert all(r["net"]>0 and r["profit_factor"]>1 and r.get("detail_available",True) for r in runs)
-    assert index["selection_policy"]["retained"]==len(runs)
+    assert all(r.get("research_reference") or (r["net"]>0 and r["profit_factor"]>1 and r.get("detail_available",True)) for r in runs)
+    assert index["selection_policy"]["retained"]+index["supertrend_replay_count"]==len(runs)
+    research=read(ROOT/"supertrend.json")
+    assert len(research)>=12 and any(r["id"]=="locked15-100" for r in research)
+    assert {r["replay_id"] for r in research if r["replay_id"]}=={r["id"] for r in runs if r.get("research_reference")}
+    assert all(r["unit"]=="account USD" for r in runs if r.get("research_reference"))
     assert {p.name for p in (ROOT/"runs").iterdir()}=={r["id"] for r in runs}
     frozen=read(ROOT/"frozen.json")
     assert len(frozen)==2 and all(f["months"]==f["positive_months"]+f["losing_months"]+f["flat_months"] for f in frozen)
