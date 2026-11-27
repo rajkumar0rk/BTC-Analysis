@@ -18,11 +18,19 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
     if assume_open is not True:raise ValueError("acknowledge CSV timestamps as UTC candle opens")
     if symbol not in ("BTCUSD","ETHUSD"):raise ValueError("unsupported instrument")
     if len(csv_text.encode())>MAX_CSV or len(graph_text.encode())>65536:raise ValueError("input too large")
-    if graph_text.startswith("# btc-visual-v1 "):
-        compiled=recover_graph(graph_text)
-    else:compiled=compile_graph(Graph.model_validate_json(graph_text))
-    g=Graph.model_validate(compiled["graph"])
-    if g.execution_timeframe!=60:raise ValueError("execution timeframe must be 1m")
+    from ..examples.mtf_pullback import HEADER as PULLBACK_HEADER,recover_pullback,MTFPullbackStrategy
+    recipe=graph_text.startswith(PULLBACK_HEADER)
+    if recipe:
+        compiled=recover_pullback(graph_text)
+        g=None
+        signal_seconds=60 if compiled["mode"]=="touch" else 900
+        frame_seconds=(60,900,3600)
+    else:
+        if graph_text.startswith("# btc-visual-v1 "):compiled=recover_graph(graph_text)
+        else:compiled=compile_graph(Graph.model_validate_json(graph_text))
+        g=Graph.model_validate(compiled["graph"])
+        if g.execution_timeframe!=60:raise ValueError("execution timeframe must be 1m")
+        signal_seconds=g.signal_timeframe;frame_seconds=frames(g)
     bounds={"initial_equity":("1","1000000"),"maker_bps":("0","100"),"taker_bps":("0","100"),
         "tax_rate":("0","1"),"slippage_bps":("0","100"),"tick_size":("0.00000001","1000"),
         "lot_size":("0.00000001","1000"),"multiplier":("0.00000001","1000")}
@@ -51,7 +59,7 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
         rows=tuple(rows)
         if cache is not None:cache.rows=rows
     start,end=rows[0].open_utc,rows[-1].close_utc
-    if any(int(t.timestamp())%f for f in frames(g) for t in (start,end)):raise ValueError("CSV boundaries must align to all graph timeframes")
+    if any(int(t.timestamp())%f for f in frame_seconds for t in (start,end)):raise ValueError("CSV boundaries must align to all graph timeframes")
     code=sha256(compiled["source"].encode()).hexdigest()
     ds=DatasetRef("local-csv",i,DataKind.OHLCV,tf,start,end,h,"user-provided CSV; label assumed",0,True)
     leverage=D(1);mode=MarginMode.ISOLATED;profile=None;risk_refs=();risk_rows=();risk_meta=None
@@ -59,7 +67,7 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
         from .leveraged_replay import prepare_risk
         leverage,mode,profile,risk_refs,risk_rows,risk_meta=prepare_risk(risk,rows,i,tf)
     cfg=BacktestConfig(StrategyRef("local-visual","1",code,compiled["graph_sha256"]),i,(ds,)+risk_refs,start,end,
-        Timeframe(g.signal_timeframe),tf,v["initial_equity"],"USD",leverage,mode,
+        Timeframe(signal_seconds),tf,v["initial_equity"],"USD",leverage,mode,
         CostModel(v["maker_bps"],v["taker_bps"],v["tax_rate"],v["slippage_bps"],bool(risk_meta and risk_meta["funding_enabled"]),False,profile is not None,"local-assumptions"),
         IntrabarPolicy.BOTH_PATHS,"Asia/Kolkata","crypto-24x7")
     count=0
@@ -70,7 +78,7 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             if count%128==0:progress(min(99,count*99//(len(rows)*2)))
             yield b
     def strategy():
-        obj=GraphStrategy(g)
+        obj=MTFPullbackStrategy(compiled["mode"]) if recipe else GraphStrategy(g)
         # Exposure is percentage of account equity allocated to initial margin.
         obj.exposure*=leverage
         return obj
@@ -97,4 +105,4 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             scenarios[-1]["details"]={"equity":[{"event_utc":x["event_utc"],"equity":x["equity"]} for x in sampled],"equity_total":len(curve),"closed_trade_total":len(wire["closed_trades"]),"trades":trades,"evidence":evidence}
     return {"engine_version":result.engine_version,"source":"user CSV (unverified provenance)","research_only":True,"data_sha256":h,"graph_sha256":compiled["graph_sha256"],
             "result_sha256":result.result_sha256,"worst_path":result.worst_path,"scenarios":scenarios,"risk":risk_meta,
-            "limitations":list(result.limitations)+["No warmup outside CSV; entry candle protection starts on next minute."]}
+            "limitations":list(result.limitations)+(["Reviewed MTF recipe: first 100 hours are initialization, entry only on IST weekdays, fixed-point bracket active on entry minute. OHLC path scenarios, not tick fills."] if recipe else ["No warmup outside CSV; entry candle protection starts on next minute."])}

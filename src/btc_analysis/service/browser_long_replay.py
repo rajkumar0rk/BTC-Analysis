@@ -186,9 +186,18 @@ def replay_archive(manifest_text,from_date,to_date,graph_text,symbol,settings,as
     expected_keys={"initial_equity","maker_bps","taker_bps","tax_rate","slippage_bps","tick_size","lot_size","multiplier"}
     if set(settings)!=expected_keys:raise ValueError("invalid settings")
     r=LongHistoricalRequest.model_validate(dict(kind="historical_visual",strategy_id="0"*32,version=1,symbol=symbol,manifest_sha256=h,start=start,end=end,assume_open=True,acknowledge_reference=True,**settings))
-    c=recover_graph(graph_text) if graph_text.startswith("# btc-visual-v1 ") else compile_graph(Graph.model_validate_json(graph_text))
-    g=Graph.model_validate(c["graph"])
-    if g.execution_timeframe!=60 or any(t%f for f in frames(g) for t in (start,end)):raise ValueError("range must align with all graph timeframes; 1m execution required")
+    from ..examples.mtf_pullback import HEADER as PULLBACK_HEADER,recover_pullback,MTFPullbackStrategy
+    recipe=graph_text.startswith(PULLBACK_HEADER)
+    if recipe:
+        c=recover_pullback(graph_text);g=None
+        signal_seconds=60 if c["mode"]=="touch" else 900
+        frame_seconds=(60,900,3600)
+    else:
+        c=recover_graph(graph_text) if graph_text.startswith("# btc-visual-v1 ") else compile_graph(Graph.model_validate_json(graph_text))
+        g=Graph.model_validate(c["graph"])
+        if g.execution_timeframe!=60:raise ValueError("1m execution required")
+        signal_seconds=g.signal_timeframe;frame_seconds=frames(g)
+    if any(t%f for f in frame_seconds for t in (start,end)):raise ValueError("range must align with all strategy timeframes; 1m execution required")
     i=Instrument("delta_india",symbol,AssetClass.CRYPTO_PERPETUAL,"USD","USD",D(r.tick_size),D(r.lot_size),D(r.multiplier))
     tf=Timeframe(60);root=Path(folder)
     verify_files(plan,root)
@@ -196,7 +205,7 @@ def replay_archive(manifest_text,from_date,to_date,graph_text,symbol,settings,as
     if risk is not None:lev,mode,profile,refs,factory,meta=long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf)
     elif mark_manifest is not None:raise ValueError("unexpected mark manifest")
     ds=DatasetRef("repository-history:"+h[:16],i,DataKind.OHLCV,tf,dt(start),dt(end),h,"published Delta India archive; timestamp label assumed",0,True)
-    cfg=BacktestConfig(StrategyRef("repository-visual","1",sha256(c["source"].encode()).hexdigest(),c["graph_sha256"]),i,(ds,)+refs,dt(start),dt(end),Timeframe(g.signal_timeframe),tf,D(r.initial_equity),"USD",lev,mode,CostModel(D(r.maker_bps),D(r.taker_bps),D(r.tax_rate),D(r.slippage_bps),bool(meta and meta["funding_enabled"]),False,profile is not None,"local-assumptions"),IntrabarPolicy.BOTH_PATHS,"Asia/Kolkata","crypto-24x7")
+    cfg=BacktestConfig(StrategyRef("repository-visual","1",sha256(c["source"].encode()).hexdigest(),c["graph_sha256"]),i,(ds,)+refs,dt(start),dt(end),Timeframe(signal_seconds),tf,D(r.initial_equity),"USD",lev,mode,CostModel(D(r.maker_bps),D(r.taker_bps),D(r.tax_rate),D(r.slippage_bps),bool(meta and meta["funding_enabled"]),False,profile is not None,"local-assumptions"),IntrabarPolicy.BOTH_PATHS,"Asia/Kolkata","crypto-24x7")
     count=0;total=2*((end-start)//60)
     def stream():
         nonlocal count
@@ -220,7 +229,7 @@ def replay_archive(manifest_text,from_date,to_date,graph_text,symbol,settings,as
                 if seen!=p["rows"]:raise ValueError("archive row count mismatch")
         if expected!=end:raise ValueError("incomplete archive range")
     def strategy():
-        obj=GraphStrategy(g);obj.exposure*=lev;return obj
+        obj=MTFPullbackStrategy(c["mode"]) if recipe else GraphStrategy(g);obj.exposure*=lev;return obj
     result=run_backtest(cfg,strategy,stream,linear_contract=True,dataset_manifest_sha256=h,archive_factory=RiskDigestArchive if profile is not None else DigestArchive,margin_profile=profile,risk_factory=factory,risk_manifest_sha256s=tuple(d.manifest_sha256 for d in refs))
     scenarios=[]
     for s in result.scenarios:
@@ -230,4 +239,4 @@ def replay_archive(manifest_text,from_date,to_date,graph_text,symbol,settings,as
             ctx.prec=50
             metrics["account_return_pct"]=q["net_pnl"]/q["initial_equity"]*100
         scenarios.append(dict(path=s.path,bars=s.bars,metrics=metrics,monthly=s.monthly,yearly=yearly(s.monthly),final_equity=s.final_equity,fees=q["fees"],taxes=q["taxes"],observed_candle_sha256=s.observed_candle_sha256,event_digests=s.files,risk_stream_sha256=s.risk_stream_sha256,funding_paid=q.get("funding_paid",D(0)),liquidation_count=q.get("liquidation_count",0),preliq_count=q.get("preliq_count",0),partial_liquidation_count=q.get("partial_liquidation_count",0),full_liquidation_count=q.get("full_liquidation_count",0),remaining_quantity=q.get("open_quantity",D(0))))
-    return to_wire(dict(engine_version=result.engine_version,source="repository leveraged long replay" if profile is not None else "repository long replay",risk=meta,research_only=True,data_sha256=h,graph_sha256=c["graph_sha256"],result_sha256=result.result_sha256,worst_path=result.worst_path,scenarios=scenarios,limitations=list(result.limitations)+["Manifest SHA-256 identifies the published snapshot; observed candle and event digests are separate.","Monthly and yearly performance use Asia/Kolkata accounting; date selection is UTC.","No external warmup; entry candle protection starts on next minute.","Summary only; event records are hashed and discarded. Order-ID memory and event quotas remain bounded by engine limits."]))
+    return to_wire(dict(engine_version=result.engine_version,source="repository leveraged long replay" if profile is not None else "repository long replay",risk=meta,research_only=True,data_sha256=h,graph_sha256=c["graph_sha256"],result_sha256=result.result_sha256,worst_path=result.worst_path,scenarios=scenarios,limitations=list(result.limitations)+["Manifest SHA-256 identifies the published snapshot; observed candle and event digests are separate.","Monthly and yearly performance use Asia/Kolkata accounting; date selection is UTC.",("Reviewed MTF recipe: first 100 hours are initialization; IST weekday entries; fixed-point brackets active on entry minute." if recipe else "No external warmup; entry candle protection starts on next minute."),"Summary only; event records are hashed and discarded. Order-ID memory and event quotas remain bounded by engine limits."]))

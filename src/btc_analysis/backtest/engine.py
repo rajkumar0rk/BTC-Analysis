@@ -461,6 +461,39 @@ class Simulator:
         self.sample(price)
         if self.profile is not None and not self.liquidating:
             self.check_liquidation(bar,phase,path,trade_ref=ref)
+        bracket=getattr(self.strategy,"fixed_point_bracket",None)
+        if bracket is not None and not opposite and self.quantity and not self.halted:
+            if self.quantity!=sign*qty or phase!="open" or o.order_type is not OrderType.MARKET:
+                raise ValueError("fixed-point bracket requires a single market entry at open")
+            self.install_fixed_bracket(f,ref,phase,bar,path,bracket)
+
+    def install_fixed_bracket(self,fill,ref,phase,bar,path,bracket):
+        # The trusted recipe requests exact price-point distances; do not
+        # silently round them into a different risk/reward.
+        stop_points,target_points=bracket
+        tick=self.cfg.instrument.tick_size
+        if any(not isinstance(v,D) or not v.is_finite() or v<=0 or v%tick for v in bracket):
+            raise ValueError("fixed-point bracket distances must be positive tick multiples")
+        direction=D(1) if self.quantity>0 else D(-1)
+        stop=fill.price-direction*stop_points
+        target=fill.price+direction*target_points
+        if min(stop,target)<=0:raise ValueError("nonpositive fixed-point bracket price")
+        side=Side.SELL if direction>0 else Side.BUY
+        stop_key="__fixed_stop_"+fill.fill_id
+        target_key="__fixed_target_"+fill.fill_id
+        for key,kind,reason,limit,trigger in (
+            (stop_key,OrderType.STOP_MARKET,"mtf_fixed_stop",None,stop),
+            (target_key,OrderType.LIMIT,"mtf_fixed_target",target,None)):
+            self.submit(OrderIntent(key,self.cfg.instrument,self.now,side,kind,abs(self.quantity),
+                                    reason,limit,trigger,True))
+            if key not in self.pending:raise ValueError("fixed-point protective order rejected")
+        # At the entry open, adverse execution slippage may already place
+        # the raw trade reference beyond the stop. Check stop first.
+        p=self.pending[stop_key]
+        if self.stop_hit(p.intent,ref):
+            self._fill(p,ref,phase,bar,path)
+        elif self.limit_hit(self.pending[target_key].intent,ref):
+            self._fill(self.pending[target_key],ref,phase,bar,path,limit=True)
 
     def isolated_collateral(self):
         if self.profile is None:return ZERO
