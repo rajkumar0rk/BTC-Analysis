@@ -113,7 +113,7 @@ jobs:
                       elif self.variant.startswith("Lock Progressive"):
                           if self.mfe>=max(2*self.risk,fee_points):fraction=.4
                           elif self.mfe>=max(1.5*self.risk,fee_points):fraction=.25
-                          elif self.mfe>=max(self.first_activation*self.risk,fee_points):fraction=0.
+                          elif self.mfe>=fee_points:fraction=0.
                       if fraction is not None:
                           floor=entry+side*max(fee_points,fraction*self.mfe)
                           if self.lock is None or side*(floor-self.lock)>0:
@@ -134,7 +134,7 @@ jobs:
                       monthly[k]=round(v-prev,8);prev=v
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s=='flip' for _,s in self.trades),target_exits=sum(s=='target' for _,s in self.trades),rsi_exits=sum(s=='rsi' for _,s in self.trades),lock_exits=sum(s=='lock' for _,s in self.trades),protection_losses=sum(p<=0 and s in ('rsi','lock') for p,s in self.trades),invalid_line=self.invalid_line,mean_initial_distance=sum(self.distances)/len(self.distances) if self.distances else None)
-          settings={"Lock Progressive NoFilters Multi CandleConfirm":(3.,(.4,.6,.8),1.),**{f"Lock Progressive NoFilters Multi CloseCross {a:g}R CandleConfirm":(3.,(.4,.6,.8),a) for a in (1.,.75,.5)}}
+          settings={"Lock Progressive NoFilters Multi CloseCross FeeOnly CandleConfirm":(3.,(.4,.6,.8),0.)}
           states={k:State(k,*v) for k,v in settings.items()}
           audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0,"rsi_blocked_reclaim":0,"candle_color_blocked":0,"candle_color_blocked_long":0,"candle_color_blocked_short":0,"confirmed_wrong_color_entries":0,"baseline_wrong_color_entries":0}
           volumes=deque(maxlen=20);atrs=deque(maxlen=20);filter_pass=False;filter_stats={"15m_ready":0,"volume_pass":0,"atr_pass":0,"both_pass":0}
@@ -211,7 +211,7 @@ jobs:
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          confirmed=states["Lock Progressive NoFilters Multi CandleConfirm"]
+          confirmed=states["Lock Progressive NoFilters Multi CloseCross FeeOnly CandleConfirm"]
           assert audit["confirmed_wrong_color_entries"]==0
           assert all(t["side"]*(t["signal_context"]["signal_close"]-t["signal_context"]["signal_open"])>0 for t in confirmed.ledger)
           assert all(s.result()["target_exits"]==0 for s in states.values())
@@ -225,11 +225,9 @@ jobs:
                   assert ctx["close_cross"] and ctx["color_ok"]
                   assert tr["entry_utc"]==ctx["signal_utc"]
               assert not any(tr["entry_utc"]=="2026-08-04T08:15:00+00:00" for tr in state.ledger)
-          assert confirmed.result()["trades"]==313 and confirmed.result()["wins"]==128
-          assert abs(confirmed.result()["net"]+36.55162461913736)<1e-8
-          assert abs(confirmed.result()["max_drawdown_pct"]-44.05037845872604)<1e-8
-          assert abs(sum(x["net_usd"] for x in confirmed.ledger)-confirmed.result()["net"])<1e-8
-          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"15m Supertrend; previous and current ST directions equal; CloseCross variants require previous completed 15m close strictly opposite EMA20 at that close, current completed 15m close strictly on trade side of its own EMA20; no high/low touch entry; historical wick-only baseline retained solely for comparison; all require bullish signal candle for long and bearish for short, excludes doji; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; all variants progressive: first activation 1R control, 0.75R or 0.5R fee-adjusted breakeven, 1.5R 25% MFE, 2R 40% MFE, 3R onwards existing RSI 40/60/80% of MFE; all stages require MFE >= fee-adjusted breakeven; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; All variants bypass volume and volatility entry filters; strict variants use close-to-close crossover only; ATR remains diagnostic and Supertrend still uses ATR10","results":{k:s.result() for k,s in states.items()}}
+          assert confirmed.first_activation==0.
+          if confirmed.pos is None:assert abs(sum(x["net_usd"] for x in confirmed.ledger)-confirmed.result()["net"])<1e-8
+          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"15m Supertrend; previous and current ST directions equal; CloseCross variants require previous completed 15m close strictly opposite EMA20 at that close, current completed 15m close strictly on trade side of its own EMA20; no high/low touch entry; require bullish signal candle for long and bearish for short, excludes doji; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; progressive: first activation fee-adjusted breakeven plus 0.5 point only, no R threshold, 1.5R 25% MFE, 2R 40% MFE, 3R onwards existing RSI 40/60/80% of MFE; all stages require MFE >= fee-adjusted breakeven; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; All variants bypass volume and volatility entry filters; strict variants use close-to-close crossover only; ATR remains diagnostic and Supertrend still uses ATR10","results":{k:s.result() for k,s in states.items()}}
           # Compact output permits all results to be retrieved without truncation.
           print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
           for k,v in results["results"].items():
@@ -239,10 +237,10 @@ jobs:
           for key,state in states.items():
               if state.pos is None:assert abs(sum(x["net_usd"] for x in state.ledger)-state.result()["net"])<1e-8
               for tr in state.ledger:
-                  if tr["entry_utc"]=="2026-08-04T08:15:00+00:00":print("EXAMPLE_TRADE "+json.dumps({"name":key,**tr},separators=(",",":")))
+                  if tr["entry_utc"] in ("2025-02-05T20:45:00+00:00","2025-02-05T02:00:00+00:00"):print("EXAMPLE_TRADE "+json.dumps({"name":key,**tr},separators=(",",":")))
           target=Path("reclaim-progressive-multi")
           target.mkdir(exist_ok=True)
-          (target/"ledger.json").write_text(json.dumps(states["Lock Progressive NoFilters Multi CloseCross 0.5R CandleConfirm"].ledger,separators=(",",":"))+"\n")
+          (target/"ledger.json").write_text(json.dumps(confirmed.ledger,separators=(",",":"))+"\n")
           (target/"summary.json").write_text(json.dumps(results,indent=2)+"\n")
           Path("mtf-color-results.json").write_text(json.dumps(results,indent=2))
           variants=[]
@@ -253,7 +251,7 @@ jobs:
                   row["net_points"]=row.pop("net_usd")
                   row["trigger_utc"]=row["signal_context"]["signal_utc"]
                   trades.append(row)
-              variants.append(dict(key=hashlib.sha256(name.encode()).hexdigest()[:24],name=name,parameters={"activation_r":state.activation,"first_activation_r":state.first_activation,"entry_mode":"close_to_close" if "CloseCross" in name else "historical_wick_control","fractions":list(state.fractions),"variant":name},summary=state.result(),trades=trades,events=state.events))
+              variants.append(dict(key=hashlib.sha256(name.encode()).hexdigest()[:24],name=name,parameters={"activation_r":state.activation,"first_activation_r":state.first_activation,"breakeven_activation":"fee_gst_plus_0.5_point","entry_mode":"close_to_close" if "CloseCross" in name else "historical_wick_control","fractions":list(state.fractions),"variant":name},summary=state.result(),trades=trades,events=state.events))
           export_bundle("backtest-export/backtest.json",family="reclaim-color-progressive",symbol="BTCUSD",unit="account USD",start_utc=start.isoformat(),end_utc=dt(end).isoformat(),execution_timeframe_minutes=1,signal_timeframe_minutes=m.seconds//60,costs=results["execution"],variants=variants,recorder=recorder,data_provenance={"trade_manifest_sha256":hashlib.sha256((root/"1m/manifest.json").read_bytes()).hexdigest(),"input_bars":count,"execution":"1m Color paired trade and mark paths","range":results["range"]})
           
           PY
