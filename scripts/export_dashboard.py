@@ -63,13 +63,15 @@ def main():
     write(OUT/"data"/"index.json",dict(schema=2,instrument="BTCUSD",first=trades.entry_utc.min(),last=trades.exit_utc.max(),commit=os.getenv("GITHUB_SHA","local"),source=str(SOURCE.relative_to(ROOT)),costs="0.05% taker each side + 18% GST; 5 points slippage each side; funding not modeled; no leverage or account sizing",eth_workflow_run=os.getenv("DASHBOARD_ETH_RUN",""),runs=runs))
     from dashboard_archive import extend
     extend(ROOT,OUT)
-    from curate_dashboard import curate
-    curate(ROOT,OUT)
-    from import_supertrend_dashboard import main as import_supertrend
-    import_supertrend(ROOT,OUT)
+    from dashboard_catalog import migrate,build_catalog
+    previous=os.getenv("DASHBOARD_PREVIOUS_DATA")
+    if not previous or not (Path(previous)/"index.json").is_file():
+        raise ValueError("DASHBOARD_PREVIOUS_DATA must point to a verified historical snapshot")
+    migrate(OUT/"data",Path(previous))
     bundle_cache=os.getenv("DASHBOARD_BUNDLE_CACHE")
     if bundle_cache:
         from publish_backtest_bundles import publish
         publish(Path(bundle_cache),OUT/"data")
+    build_catalog(OUT/"data")
     print(f"Imported {len(runs)} actual BTC configurations, {len(trades)} recorded trades; no backtest rerun")
 if __name__=="__main__":main()

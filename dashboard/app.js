@@ -70,7 +70,7 @@ function fail(e){$("notice").textContent="Unable to load data: "+e.message}
 function options(el,items){el.replaceChildren(...items.map(([v,t])=>new Option(t,v)))}
 function stop(){clearInterval(timer);timer=null;if($("play"))$("play").textContent="Play replay"}
 function renderRun(preferredMonth=null,preferredTrade=null){run=index.runs.find(r=>r.id===$("run").value);if(!run)return;const unit=run.unit||"price points";$("netUnit").textContent="Net "+unit;$("monthUnit").textContent="Entry-month realized "+unit+"; not account MTM"+(run.automatic_version?" · "+(run.latest_version?"Latest":"Previous")+" version · source total "+fmt(run.source_summary.net)+" "+unit:"");options($("compare"),[["","None"],...index.runs.filter(r=>r.symbol===run.symbol&&r.unit===run.unit&&r.id!==run.id).map(r=>[r.id,runLabel(r)])]);renderComparison().catch(fail);$("metrics").innerHTML=[["Trades",run.trades],["Net "+unit,run.net],["Win rate",run.win_rate+"%"],["Profit factor",run.profit_factor??"N/A"],["Realized DD "+unit,run.drawdown]].map(([k,v],i)=>'<div class="metric"><small>'+k+'</small><strong class="'+(i===1?sign(v):"")+'">'+esc(typeof v==="number"?fmt(v):v)+'</strong></div>').join("");const max=Math.max(1,...run.months.map(m=>Math.abs(m.net)));$("months").replaceChildren(...run.months.map(m=>{const b=document.createElement("button");b.className="month "+sign(m.net);b.style.setProperty("--h",Math.max(2,Math.abs(m.net)/max*38)+"px");b.innerHTML='<span>'+esc(m.month.slice(2))+'</span><i></i><small>'+fmt(m.net)+'</small>';b.title=m.month+" · "+m.trades+" trades";b.onclick=()=>{$("month").value=m.month;loadMonth().catch(fail)};return b}));options($("month"),run.months.map(m=>[m.month,m.month+" ("+m.trades+")"]));$("month").value=run.months.some(m=>m.month===preferredMonth)?preferredMonth:run.months.filter(m=>m.trades>0).at(-1)?.month||run.months.at(-1)?.month||"";loadMonth(preferredTrade).catch(fail)}
-async function loadMonth(preferredTrade=null){const seq=++monthToken;++tradeToken;stop();trade=null;bars=[];draw();$("details").textContent="Loading trades…";$("ledger").replaceChildren();$("notice").textContent="";ledger=[];page=0;if(run.detail_available===false){$("details").textContent="Summary only: full trade detail exceeds publication budget. Original ledger: "+run.source;$("count").textContent="Summary only";return}const data=await get("runs/"+run.id+"/"+$("month").value+".json");if(seq!==monthToken)return;ledger=data;renderLedger(preferredTrade)}
+async function loadMonth(preferredTrade=null){const seq=++monthToken;++tradeToken;stop();trade=null;bars=[];draw();$("details").textContent="Loading trades…";$("ledger").replaceChildren();$("notice").textContent="";ledger=[];page=0;if(run.detail_available===false){$("details").textContent="Summary only: full replay unavailable. Original source: "+run.source;$("count").textContent="Summary only";return}const data=await get("runs/"+run.id+"/"+$("month").value+".json");if(seq!==monthToken)return;ledger=data;renderLedger(preferredTrade)}
 function renderLedger(preferredTrade=null){const filter=$("filter").value,list=ledger.filter(t=>!filter||(filter==="win"?t.net_points>0:t.net_points<=0));const preferredIndex=list.findIndex(t=>t.id===preferredTrade);if(preferredIndex>=0)page=Math.floor(preferredIndex/PAGE);page=Math.max(0,Math.min(page,Math.ceil(list.length/PAGE)-1));const shown=list.slice(page*PAGE,(page+1)*PAGE);$("count").textContent=list.length+" trades · page "+(page+1)+" / "+Math.max(1,Math.ceil(list.length/PAGE));$("ledger").replaceChildren(...shown.map(t=>{const tr=document.createElement("tr");tr.tabIndex=0;tr.innerHTML='<td>'+esc(t.entry_utc.slice(0,16))+'</td><td>'+(t.side===1?"LONG":"SHORT")+'</td><td>'+esc(t.result)+'</td><td class="'+sign(t.net_points)+'">'+fmt(t.net_points)+'</td>';tr.onclick=()=>selectTrade(t,tr).catch(fail);tr.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tr.click()}};return tr}));if(shown.length)$("ledger").children[preferredIndex>=0?preferredIndex%PAGE:0].click();else{++tradeToken;stop();trade=null;bars=[];draw();$("details").textContent="No matching trades."}}
 function secs(t){return t?Date.parse(t.replace(" ","T"))/1000:NaN}
 async function selectTrade(t,row){stop();resetViewport();replayMode=false;browseAnchor=null;trade=t;if(frameRun!==run.id){chartFrame=Number(t.signal_tf)||1;if(![1,3,5,15,30,60,240].includes(chartFrame))chartFrame=1;$("timeframe").value=String(chartFrame);frameRun=run.id}windowDay=Math.floor(secs(t.entry_utc)/86400)*86400;$("ledger").querySelectorAll("tr").forEach(x=>x.classList.toggle("active",x===row));const pairs=o=>'<dl>'+Object.entries(o).map(([k,v])=>'<dt>'+esc(k.replaceAll("_"," "))+'</dt><dd>'+esc(v==null?"Not recorded":typeof v==="number"?fmt(v):v)+'</dd>').join("")+'</dl>';$("details").innerHTML='<div class="details"><article><h3>Why entered</h3><p>'+esc(t.entry_reason||"Not recorded in source ledger")+'</p>'+pairs({audit:run.audit,signal_utc:t.trigger_utc,signal_minutes:t.signal_tf,entry_utc:t.entry_utc,entry_price:t.entry_price,...t.signal_context})+'</article><article><h3>Why exited</h3><p>'+esc(t.exit_reason||"Not recorded in source ledger")+'</p>'+pairs({exit_utc:t.exit_utc,exit_price:t.exit_price,stop_price:t.stop_price,target_price:t.target_price,trailing_stop_price:t.trailing_stop_price,liquidation_price:t.liquidation_price,gross_points:t.gross_points,fee_points:t.fee_points,slippage_points:t.assumed_slippage_points,[run.unit==="account USD"?"net_account_usd":"net_points"]:t.net_points,split:t.split})+'</article></div>';await loadWindow()}
@@ -403,38 +403,56 @@ function chooseSymbol(preferred=null,preferredMonth=null,preferredTrade=null){
  if(same.some(r=>r.id===preferred))$("run").value=preferred;
  options($("compare"),[["","None"],...same.map(r=>[r.id,runLabel(r)])]);renderRun(preferredMonth,preferredTrade)
 }
+const catalogPageSize=50;
+let catalogPage=0;
+function catalogRows(){
+ const query=$("catalogSearch").value.trim().toLowerCase(),symbol=$("catalogSymbol").value,version=$("catalogVersion").value,state=$("catalogStatus").value,outcome=$("catalogOutcome").value,frame=$("catalogTimeframe").value,from=$("catalogFrom").value,to=$("catalogTo").value;
+ return index.catalog.filter(r=>{
+  if(query&&!([r.strategy,r.id,r.status,r.source_run_id,r.period].join(" ").toLowerCase().includes(query)))return false;
+  if(symbol&&r.symbol!==symbol||version&&r.version!==version||state==="frozen"&&!r.frozen||state==="research"&&r.frozen||frame&&String(r.signal_timeframe_minutes??"unknown")!==frame)return false;
+  const min=r.net??r.net_min,max=r.net??r.net_max;
+  if(outcome==="win"&&!(Number.isFinite(min)&&min>0)||outcome==="loss"&&!(Number.isFinite(max)&&max<0)||outcome==="flat"&&!(min===0&&max===0)||outcome==="zero"&&r.trades!==0||outcome==="unknown"&&(Number.isFinite(min)||Number.isFinite(max)))return false;
+  const date=r.completed_at?.slice(0,10);if(from&&(!date||date<from)||to&&(!date||date>to))return false;
+  return true
+ }).sort((a,b)=>String(b.completed_at||"").localeCompare(String(a.completed_at||""))||((b.source_run_id||0)-(a.source_run_id||0))||a.strategy.localeCompare(b.strategy))
+}
+function catalogSourceLink(source){if(!source)return null;if(/^https:\/\/github\.com\/rajkumar0rk\/BTC-Analysis\//.test(source))return source;if(/^analysis\//.test(source)&&!source.includes(".."))return "https://github.com/rajkumar0rk/BTC-Analysis/blob/main/"+encodeURI(source);return null}
+function catalogNet(r){return Number.isFinite(r.net)?fmt(r.net)+" "+r.unit:Number.isFinite(r.net_min)&&Number.isFinite(r.net_max)?fmt(r.net_min)+" – "+fmt(r.net_max)+" "+r.unit:"Not reported"}
+function showCatalogEvidence(r){
+ const host=$("catalogEvidence");host.replaceChildren();host.hidden=false;
+ const heading=document.createElement("h3");heading.textContent=r.strategy;host.append(heading);
+ const info=document.createElement("p");info.textContent=(r.status||"Archived result")+" · "+(r.period||"Period not reported")+" · "+(r.detail_available?"Trade replay available":"Summary only; missing ledger not invented");host.append(info);
+ const e=r.evidence;
+ if(e){
+  const meta=document.createElement("p");meta.textContent="Source accounting: "+catalogNet(e)+" · "+(e.positive_months??"Not reported")+"/"+(e.months??"Not reported")+" positive months"+(e.drawdown==null?"":" · "+fmt(e.drawdown)+"% "+(e.drawdown_label||"drawdown"));host.append(meta);
+  if(e.notes){const notes=document.createElement("p");notes.textContent=e.notes;host.append(notes)}
+  if(e.monthly?.length){const title=document.createElement("h4");title.textContent="Exact monthly series — "+e.unit+" (source accounting)";host.append(title);const table=document.createElement("table");for(const m of e.monthly){const row=table.insertRow();row.insertCell().textContent=m.month;row.insertCell().textContent=fmt(m.value)}host.append(table)}
+ }
+ const link=catalogSourceLink(e?.source||r.source);if(link){const a=document.createElement("a");a.href=link;a.target="_blank";a.rel="noopener";a.textContent="Original source evidence ↗";host.append(a)}
+ const close=document.createElement("button");close.textContent="Close details";close.onclick=()=>{host.hidden=true};host.append(close);
+ host.scrollIntoView({block:"nearest"})
+}
 function renderLatest(){
- const list=rankedRuns(index.runs.filter(r=>r.automatic_version));
- const newest=list[0]?.source_run_id;
- $("latestSummary").textContent=list.length?list.length+" published versions · newest run "+newest+" · includes losing and zero-trade results":"No standardized backtest artifacts published yet.";
+ const list=catalogRows();catalogPage=Math.max(0,Math.min(catalogPage,Math.ceil(list.length/catalogPageSize)-1));
+ $("latestSummary").textContent=list.length+" of "+index.catalog.length+" results · page "+(catalogPage+1)+" / "+Math.max(1,Math.ceil(list.length/catalogPageSize))+" · all outcomes included";
+ $("catalogPrev").disabled=catalogPage===0;$("catalogNext").disabled=(catalogPage+1)*catalogPageSize>=list.length;
  const rows=$("latestRuns");rows.replaceChildren();
- for(const r of list){
+ for(const r of list.slice(catalogPage*catalogPageSize,(catalogPage+1)*catalogPageSize)){
   const tr=document.createElement("tr");tr.dataset.runId=r.id;
-  const fields=[r.strategy,r.symbol,r.source_run_id+"."+r.source_attempt,String(r.completed_at||"").replace("T"," ").replace("Z"," UTC"),r.trades,fmt(r.net)+" "+r.unit,r.latest_version?"Latest variant":"Previous version"];
-  for(const [i,v] of fields.entries()){const td=document.createElement("td");td.textContent=v;if(i===5)td.className=sign(r.net);tr.append(td)}
-  const cell=document.createElement("td"),button=document.createElement("button");button.textContent="Open result";button.onclick=()=>{ $("symbol").value=r.symbol;$("filter").value="";chooseSymbol(r.id);$("run").scrollIntoView({block:"center",behavior:"smooth"}) };cell.append(button);tr.append(cell);rows.append(tr)
+  const fields=[r.strategy,r.symbol,r.signal_timeframe_minutes?r.signal_timeframe_minutes+"m":"—",r.source_run_id?r.source_run_id+"."+r.source_attempt:"Archive",r.completed_at?String(r.completed_at).replace("T"," ").replace("Z"," UTC"):r.period||"—",r.trades??"—",catalogNet(r),r.version==="latest"?"Latest variant":r.version==="previous"?"Previous version":"Archived",r.frozen?"Frozen · "+r.status:r.status,r.detail_available?"Replay":"Summary only"];
+  for(const [i,v] of fields.entries()){const td=document.createElement("td");td.textContent=v??"—";if(i===6&&Number.isFinite(r.net))td.className=sign(r.net);tr.append(td)}
+  const cell=document.createElement("td");
+  if(r.run_id){const b=document.createElement("button");b.textContent=r.detail_available?"Open result":"Open summary";b.onclick=()=>{$("symbol").value=r.symbol;$("filter").value="";chooseSymbol(r.run_id);$("run").scrollIntoView({block:"center",behavior:"smooth"})};cell.append(b)}
+  const b=document.createElement("button");b.textContent="Details";b.onclick=()=>showCatalogEvidence(r);cell.append(b);tr.append(cell);rows.append(tr)
  }
 }
-
+for(const id of ["catalogSearch","catalogSymbol","catalogVersion","catalogStatus","catalogOutcome","catalogTimeframe","catalogFrom","catalogTo"])$(id).addEventListener(id==="catalogSearch"?"input":"change",()=>{catalogPage=0;if(index)renderLatest()});
+$("catalogPrev").onclick=()=>{catalogPage--;renderLatest()};$("catalogNext").onclick=()=>{catalogPage++;renderLatest()};
+$("catalogReset").onclick=()=>{for(const id of ["catalogSearch","catalogSymbol","catalogVersion","catalogStatus","catalogOutcome","catalogTimeframe","catalogFrom","catalogTo"])$(id).value="";catalogPage=0;if(index)renderLatest()};
 $("showBranches").onclick=async()=>{try{const rows=await get("branches.json");$("branchCoverage").replaceChildren(...rows.map(r=>{const a=document.createElement("a");a.href="https://github.com/rajkumar0rk/BTC-Analysis/tree/"+r.sha;a.textContent=r.name;const p=document.createElement("p");p.append(a);return p}))}catch(e){fail(e)}};
 async function renderComparison(){const token=++curveToken,other=index.runs.find(r=>r.id===$("compare").value&&r.symbol===run.symbol&&r.unit===run.unit),selected=[run,...(other&&other.id!==run.id?[other]:[])];$("comparison").innerHTML='<div class="comparison-row"><b>Configuration</b><b>Net '+esc(run.unit||"price points")+'</b><b>Win rate</b><b>Realized drawdown</b></div>'+selected.map(r=>'<div class="comparison-row"><span>'+esc(runLabel(r))+'</span><span>'+fmt(r.net)+'</span><span>'+fmt(r.win_rate)+'%</span><span>'+fmt(r.drawdown)+'</span></div>').join("");const years={};for(const m of run.months){const y=m.month.slice(0,4);years[y]=(years[y]||0)+m.net}$("yearly").replaceChildren(...Object.entries(years).map(([y,n])=>{const el=document.createElement("div");el.className="metric";el.innerHTML='<small>'+esc(y)+' · entry-month total</small><strong class="'+sign(n)+'">'+fmt(n)+'</strong>';return el}));const data=await Promise.all(selected.map(r=>get("runs/"+r.id+"/curve.json")));if(token!==curveToken)return;curves=data;drawCurves()}
 function drawCurves(){const c=$("equity"),w=c.clientWidth,h=c.clientHeight,dpr=window.devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;const x=c.getContext("2d");x.scale(dpr,dpr);if(!curves.length)return;const all=curves.flat(),ts=all.map(v=>secs(v[0])),tmin=Math.min(...ts),tmax=Math.max(...ts),lo=Math.min(0,...all.map(v=>Math.min(v[1],-v[2]))),hi=Math.max(1,...all.map(v=>v[1])),px=t=>12+(t-tmin)/Math.max(1,tmax-tmin)*(w-80),py=v=>12+(hi-v)/Math.max(1,hi-lo)*(h-40);x.font="11px system-ui";for(let i=0;i<5;i++){const v=lo+(hi-lo)*i/4;x.strokeStyle="#26364a";x.beginPath();x.moveTo(12,py(v));x.lineTo(w-65,py(v));x.stroke();x.fillStyle="#9aafc2";x.fillText(fmt(v),w-62,py(v)+4)}curves.forEach((series,i)=>{for(const [col,field,sgn] of [[i?"#79baff":"#36d8aa",1,1],[i?"#d9a4ff":"#fb7785",2,-1]]){x.strokeStyle=col;x.beginPath();series.forEach((v,j)=>j?x.lineTo(px(secs(v[0])),py(sgn*v[field])):x.moveTo(px(secs(v[0])),py(sgn*v[field])));x.stroke()}});x.fillStyle="#9aafc2";x.fillText("Green/blue: realized P&L · red/purple: negative drawdown",12,h-8)}
 $("symbol").onchange=()=>chooseSymbol();$("compare").onchange=()=>renderComparison().catch(fail);$("showCoverage").onclick=async()=>{try{const rows=await get("coverage.json");$("archiveCoverage").innerHTML='<table><thead><tr><th>Source ledger</th><th>Coverage</th></tr></thead><tbody>'+rows.map(r=>'<tr><td><a href="'+esc(r.url||("https://github.com/rajkumar0rk/BTC-Analysis/blob/main/"+encodeURI(r.path)))+'">'+esc(r.path)+'</a></td><td>'+esc(r.status)+(r.configurations?" · "+r.configurations:"")+'</td></tr>').join("")+'</tbody></table>'}catch(e){fail(e)}};
-function renderSupertrend(rows){
- const host=$("supertrendStrategies");host.replaceChildren();$("supertrendMonthly").replaceChildren();
- const table=document.createElement("table");table.innerHTML="<thead><tr><th>Strategy / source</th><th>Period</th><th>Net (source unit)</th><th>Drawdown</th><th>Positive months</th><th>Trades</th><th>Status</th><th>Evidence</th></tr></thead>";
- const body=document.createElement("tbody");
- for(const r of rows){
-  const tr=document.createElement("tr"),net=r.net==null?"Not reported":fmt(r.net)+(r.unit==="account return %"?"%":" USD"),dd=r.drawdown==null?"Not reported":fmt(r.drawdown)+"% ("+r.drawdown_label+")";
-  tr.innerHTML='<td><a href="'+esc(r.source)+'" target="_blank" rel="noopener">'+esc(r.name)+'</a></td><td>'+esc(r.window)+'</td><td class="'+sign(r.net)+'">'+esc(net)+'</td><td>'+esc(dd)+'</td><td>'+r.positive_months+'/'+r.months+'</td><td>'+esc(r.trades??"Not reported")+'</td><td>'+esc(r.status)+'</td>';
-  const actions=document.createElement("td"),b=document.createElement("button");b.textContent="Details";b.onclick=()=>{
-   $("supertrendMonthly").innerHTML="<h3>"+esc(r.name)+"</h3><p>"+esc(r.notes)+"</p>"+(r.monthly.length?'<table><thead><tr><th>Month (source)</th><th>'+esc(r.unit)+'</th></tr></thead><tbody>'+r.monthly.map(m=>'<tr><td>'+esc(m.month)+'</td><td class="'+sign(m.value)+'">'+fmt(m.value)+'</td></tr>').join("")+'</tbody></table>':"<p>Exact monthly series not recorded for this selected configuration.</p>");
-  };actions.append(b);
-  if(r.replay_id){const replay=document.createElement("button");replay.textContent="Replay";replay.onclick=()=>{$("symbol").value="BTCUSD";chooseSymbol(r.replay_id);$("run").scrollIntoView({block:"center"})};actions.append(replay)}
-  tr.append(actions);body.append(tr)
- }
- table.append(body);host.append(table)
-}
 async function refreshData(force=false){
  if(refreshBusy)return;refreshBusy=true;
  try{
@@ -447,14 +465,15 @@ async function refreshData(force=false){
   }
   if(activeSnapshot===manifest.data_commit){$("dataStatus").textContent="Up to date · checked "+new Date().toLocaleTimeString();return}
   const next=await json(base+"index.json");
-  const frozen=await json(base+"frozen.json");
-  const supertrend=await json(base+"supertrend.json");
-  if(next.schema!==2||!Array.isArray(next.runs)||!next.runs.length)throw Error("Invalid result index");
+  if(next.schema!==2||!Array.isArray(next.catalog)||!Array.isArray(next.runs)||!next.runs.length)throw Error("Invalid result index");
   const symbol=$("symbol").value,preferred=$("run").value,preferredMonth=$("month").value,preferredTrade=trade?.id;
   stop();++monthToken;++tradeToken;++curveToken;cache.clear();dataBase=base;activeSnapshot=manifest.data_commit;index=next;ledger=[];trade=null;bars=[];curves=[];
-  $("coverage").textContent=index.selection_policy.retained+" ranked replays · "+index.supertrend_replay_count+" Supertrend evidence replays · "+(index.automatic_run_count||0)+" versioned backtests · "+frozen.length+" frozen summaries";
-  renderLatest();renderSupertrend(supertrend);
-  $("frozenStrategies").innerHTML="<table><thead><tr><th>Strategy</th><th>Profitable months</th><th>Trades</th><th>Recorded net USD (0.001 BTC)</th><th>Research status</th></tr></thead><tbody>"+frozen.map(r=>'<tr><td><a href="https://github.com/rajkumar0rk/BTC-Analysis/blob/'+encodeURIComponent(r.sha)+'/'+encodeURI(r.path)+'">'+esc(r.name)+'</a></td><td>'+r.positive_months+'/'+r.months+'</td><td>'+r.trades+'</td><td>'+fmt(r.net_usd_min)+' – '+fmt(r.net_usd_max)+'</td><td>'+esc(r.status)+'</td></tr>').join("")+"</tbody></table>";
+  $("coverage").textContent=index.catalog.length+" catalog results · "+index.full_configurations+" full replays · "+(index.automatic_run_count||0)+" automatic versions";
+  const cs=$("catalogSymbol").value,cf=$("catalogTimeframe").value;
+  options($("catalogSymbol"),[["","All instruments"],...[...new Set(index.catalog.map(r=>r.symbol))].sort().map(s=>[s,s])]);if([...$("catalogSymbol").options].some(o=>o.value===cs))$("catalogSymbol").value=cs;
+  const frames=[...new Set(index.catalog.map(r=>r.signal_timeframe_minutes).filter(Number.isFinite))].sort((a,b)=>a-b);
+  options($("catalogTimeframe"),[["","All timeframes"],...frames.map(n=>[String(n),n+"m"]),["unknown","Not recorded"]]);if([...$("catalogTimeframe").options].some(o=>o.value===cf))$("catalogTimeframe").value=cf;
+  renderLatest();
   $("provenance").textContent="Source commit: "+index.commit+" | Data snapshot: "+activeSnapshot+" | ETH workflow run: "+(index.eth_workflow_run||"not recorded")+" | Archived runs preserve their own cost assumptions. Indicator declarations and histories are read only from recorded run data. Legacy signal fields are separately labeled. Research only.";
   $("dataStatus").textContent="Published "+manifest.published_at+" · auto-refresh every minute";
   $("notice").textContent="";

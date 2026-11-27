@@ -23,7 +23,7 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           for attempt in $(seq 1 60); do
-            if curl -fsS "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/dashboard-data/latest.json?bootstrap=$GITHUB_RUN_ID-$attempt" | python -c 'import json,sys; d=json.load(sys.stdin); assert d["data_schema"]==2 and d.get("catalog_policy")==2'; then exit 0; fi
+            if curl -fsS "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/dashboard-data/latest.json?bootstrap=$GITHUB_RUN_ID-$attempt" | python -c 'import json,sys; d=json.load(sys.stdin); assert d["data_schema"]==2 and d.get("catalog_policy")==3'; then exit 0; fi
             sleep 10
           done
           echo "::error::No published dashboard data snapshot; run Publish backtest data"

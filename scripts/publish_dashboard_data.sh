@@ -47,7 +47,7 @@ export DASHBOARD_BUNDLE_CACHE="$work/_sources/backtest-bundles"
 python scripts/publish_backtest_bundles.py collect "$DASHBOARD_BUNDLE_CACHE" "$GITHUB_REPOSITORY"
 # Fingerprint relevant content rather than main HEAD; unrelated commits and unchanged runs are no-ops.
 fingerprint=$({
-  git ls-tree -r HEAD -- data/delta_india/BTCUSD/1m data/delta_india/ETHUSD/1m analysis/delta_points_200_500/individual_trade_replay.csv analysis/institutional_discovery_stage24_failed_auction/original_trade_ledger.csv.gz scripts/backtest_bundle.py scripts/publish_backtest_bundles.py scripts/dashboard_indicator_history.py src/btc_analysis/indicators.py src/btc_analysis/contracts.py scripts/export_dashboard.py scripts/dashboard_archive.py scripts/verify_dashboard_export.py scripts/curate_dashboard.py scripts/import_supertrend_dashboard.py dashboard/supertrend-sources.json dashboard/frozen-strategies.json scripts/publish_dashboard_data.sh
+  git ls-tree -r HEAD -- data/delta_india/BTCUSD/1m data/delta_india/ETHUSD/1m analysis/delta_points_200_500/individual_trade_replay.csv analysis/institutional_discovery_stage24_failed_auction/original_trade_ledger.csv.gz scripts/backtest_bundle.py scripts/publish_backtest_bundles.py scripts/dashboard_indicator_history.py src/btc_analysis/indicators.py src/btc_analysis/contracts.py scripts/export_dashboard.py scripts/dashboard_archive.py scripts/verify_dashboard_export.py scripts/dashboard_catalog.py scripts/publish_dashboard_data.sh
   git ls-files analysis | grep -E '(ledger|_trades)[^/]*\.csv(\.gz)?$' || true
   sha256sum "$eth_dir/full_trade_ledger.csv.gz"
   printf '%s\n' "$DASHBOARD_ETH_RUN"
@@ -72,7 +72,7 @@ export data_commit fingerprint
 python - "$work/latest.json" <<'PY'
 import datetime,json,os,sys
 from pathlib import Path
-Path(sys.argv[1]).write_text(json.dumps(dict(schema=1,data_schema=2,catalog_policy=2,data_commit=os.environ["data_commit"],source_commit=os.environ["GITHUB_SHA"],fingerprint=os.environ["fingerprint"],eth_run=os.environ["DASHBOARD_ETH_RUN"],published_at=datetime.datetime.now(datetime.timezone.utc).isoformat()),separators=(",",":"))+"\n")
+Path(sys.argv[1]).write_text(json.dumps(dict(schema=1,data_schema=2,catalog_policy=3,data_commit=os.environ["data_commit"],source_commit=os.environ["GITHUB_SHA"],fingerprint=os.environ["fingerprint"],eth_run=os.environ["DASHBOARD_ETH_RUN"],published_at=datetime.datetime.now(datetime.timezone.utc).isoformat()),separators=(",",":"))+"\n")
 PY
 git -C "$work" add latest.json
 git -C "$work" commit -qm "data: atomically advance latest snapshot pointer"

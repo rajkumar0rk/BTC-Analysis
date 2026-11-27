@@ -18,18 +18,18 @@ const assert=require("node:assert/strict");
   assert.ok(["BTCUSD","ETHUSD"].includes(await page.locator("#symbol").inputValue()));
   const newest=await page.evaluate(()=>rankedRuns(index.runs.filter(r=>r.automatic_version))[0]||null);
   if(newest){
-    assert.equal(await page.locator("#latestRuns tr").count(),await page.evaluate(()=>index.automatic_run_count));
+    assert.equal(await page.locator("#latestRuns tr").count(),await page.evaluate(()=>Math.min(catalogPageSize,index.catalog_count)));
     assert.equal(await page.locator("#latestRuns tr").first().getAttribute("data-run-id"),newest.id);
     await page.locator("#latestRuns tr").first().getByRole("button",{name:"Open result"}).click();
     assert.equal(await page.locator("#run").inputValue(),newest.id);
     if(newest.trades){await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"))}
     else{await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("No matching trades"));const sample=await page.evaluate(()=>rankedRuns(index.runs.filter(r=>r.symbol===$("symbol").value&&r.trades>0&&r.detail_available!==false))[0]?.id);assert.ok(sample);await page.locator("#run").selectOption(sample);await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"))}
   }
-  assert.equal(await page.locator("#frozenStrategies tbody tr").count(),2);
-  assert.ok(await page.locator("#coverage").innerText().then(t=>t.includes("Supertrend")));
-  assert.ok(await page.locator("#supertrendStrategies tbody tr").count()>=12);
-  await page.locator("#supertrendStrategies button").filter({hasText:"Details"}).first().click();
-  assert.ok(await page.locator("#supertrendMonthly").innerText().then(t=>t.includes("Exact monthly series")));
+  assert.equal(await page.locator("#frozenStrategies,#supertrendStrategies").count(),0);
+  assert.ok(await page.locator("#coverage").innerText().then(t=>t.includes("catalog results")));
+  await page.locator("#catalogStatus").selectOption("frozen");assert.ok(await page.evaluate(()=>catalogRows().every(r=>r.frozen)));assert.ok(await page.locator("#latestRuns tr").count()>0);
+  await page.locator("#latestRuns tr").first().getByRole("button",{name:"Details",exact:true}).click();assert.ok(await page.locator("#catalogEvidence").isVisible());
+  await page.locator("#catalogReset").click();await page.locator("#catalogOutcome").selectOption("loss");assert.ok(await page.evaluate(()=>catalogRows().every(r=>(r.net??r.net_max)<0)));await page.locator("#catalogReset").click();
   assert.ok(await page.locator("#details").innerText().then(t=>t.includes("Why entered")&&t.includes("Why exited")));
   assert.ok(requests.filter(x=>x.includes("/candles/")).length>=1);
   const before=await page.locator("#cursor").innerText();
@@ -81,7 +81,8 @@ const assert=require("node:assert/strict");
     await page.locator("#ledger tr").first().waitFor();
     await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));
   }
-  const research=page.locator("#supertrendStrategies button").filter({hasText:"Replay"}).first();await research.click();await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));assert.equal(await page.locator("#netUnit").innerText(),"Net account USD");
+  const research=await page.evaluate(()=>index.catalog.find(r=>r.evidence&&r.run_id&&r.detail_available&&r.unit==="account USD"));
+  assert.ok(research);await page.locator("#catalogSearch").fill(research.id);await page.locator("#latestRuns tr").filter({has:page.getByRole("button",{name:"Open result",exact:true})}).first().getByRole("button",{name:"Open result",exact:true}).click();await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));assert.equal(await page.locator("#netUnit").innerText(),"Net account USD");await page.locator("#catalogReset").click();
   const style=await page.evaluate(()=>{const defs=[{id:"st",name:"supertrend.line",timeframe_minutes:15,panel:"price",parameters:{period:10,multiplier:3}},{id:"dir",name:"supertrend.direction",timeframe_minutes:15,panel:"panel",parameters:{multiplier:3,period:10}},{id:"rsi",name:"rsi.value",timeframe_minutes:15,panel:"panel",parameters:{period:14}}];return {paired:pairedDirection(defs[0],defs)?.id,hidden:!indicatorVisual(defs[1],1,defs).visible,label:indicatorLabel(defs[2]),direction:indicatorValueLabel(defs[1],-1)}});
   assert.deepEqual(style,{paired:"dir",hidden:true,label:"RSI 14 · 15m",direction:"Bearish"});
   const grouped=await page.evaluate(()=>{

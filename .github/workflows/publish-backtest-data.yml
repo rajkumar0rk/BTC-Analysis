@@ -27,10 +27,8 @@ on:
       - 'scripts/publish_backtest_bundles.py'
       - 'scripts/test_publish_backtest_bundles.py'
       - 'scripts/dashboard_archive.py'
-      - 'scripts/curate_dashboard.py'
-      - 'scripts/import_supertrend_dashboard.py'
-      - 'dashboard/supertrend-sources.json'
-      - 'dashboard/frozen-strategies.json'
+      - 'scripts/dashboard_catalog.py'
+      - 'scripts/test_dashboard_catalog.py'
       - 'scripts/verify_dashboard_export.py'
       - 'scripts/publish_dashboard_data.sh'
       - '.github/workflows/publish-backtest-data.yml'
@@ -57,7 +55,7 @@ jobs:
       - run: python scripts/test_dashboard_indicator_history.py
       - run: python scripts/test_dashboard_archive.py
       - run: python scripts/test_publish_backtest_bundles.py
-      - run: python scripts/test_curate_dashboard.py
+      - run: python scripts/test_dashboard_catalog.py
       - name: Publish verified data only, never deploy Pages
         env:
           GH_TOKEN: ${{ github.token }}

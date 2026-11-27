@@ -8,8 +8,21 @@ def main():
     index=read(ROOT/"index.json")
     runs=index["runs"]
     assert runs and len({r["id"] for r in runs})==len(runs)
-    assert all(r.get("automatic_version") or r.get("research_reference") or (r["net"]>0 and r["profit_factor"]>1 and r.get("detail_available",True)) for r in runs)
-    assert index["selection_policy"]["retained"]+index["supertrend_replay_count"]+index.get("automatic_run_count",0)==len(runs)
+    assert index["selection_policy"]["version"]==3 and index["selection_policy"]["excluded"]==0
+    catalog=index["catalog"]; evidence=index["legacy_evidence"]
+    assert len(catalog)==index["catalog_count"] and len(evidence)==index["legacy_evidence_count"]
+    assert len({r["id"] for r in catalog})==len(catalog)
+    assert {c["run_id"] for c in catalog if c["run_id"] is not None}=={r["id"] for r in runs}
+    assert {c["evidence"]["id"] for c in catalog if c.get("evidence")}=={e["id"] for e in evidence}
+    assert all(c["run_id"] is not None or not c["detail_available"] for c in catalog)
+    assert len(catalog)==len(runs)+sum(not e.get("replay_id") for e in evidence)
+    for c in catalog:
+        if c["run_id"] is not None:
+            r=next(r for r in runs if r["id"]==c["run_id"])
+            assert (c["net"],c["unit"],c["trades"],c["detail_available"])==(r["net"],r["unit"],r["trades"],r.get("detail_available",True))
+        else:
+            assert c["evidence"]["unit"]==c["unit"]
+    assert index["full_configurations"]==sum(r.get("detail_available",True) for r in runs)
     automatic=[r for r in runs if r.get("automatic_version")]
     assert len(automatic)==index.get("automatic_run_count",0)
     registry=index.get("backtest_number_registry",{})
@@ -21,13 +34,7 @@ def main():
     assert len({(r["source_run_id"],r["source_attempt"],r["family"],r["variant_key"]) for r in automatic})==len(automatic)
     for k in {(r["symbol"],r["family"],r["variant_key"]) for r in automatic}:
         assert sum(r["latest_version"] for r in automatic if (r["symbol"],r["family"],r["variant_key"])==k)==1
-    research=read(ROOT/"supertrend.json")
-    assert len(research)>=12 and any(r["id"]=="locked15-100" for r in research)
-    assert {r["replay_id"] for r in research if r["replay_id"]}=={r["id"] for r in runs if r.get("research_reference")}
-    assert all(r["unit"]=="account USD" for r in runs if r.get("research_reference"))
     assert {p.name for p in (ROOT/"runs").iterdir()}=={r["id"] for r in runs}
-    frozen=read(ROOT/"frozen.json")
-    assert len(frozen)==2 and all(f["months"]==f["positive_months"]+f["losing_months"]+f["flat_months"] for f in frozen)
     eth_source=Path("analysis/ethusd_native_atr_price_action/full_trade_ledger.csv.gz")
     if eth_source.exists():
         assert any(r["symbol"]=="ETHUSD" and r.get("detail_available",True) for r in runs), "ETH artifact exists but no full ETH import"
