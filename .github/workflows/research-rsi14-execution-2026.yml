@@ -1,7 +1,7 @@
 name: BTC RSI14 frozen 2026 validation
 on:
   push:
-    branches: ['research/rsi14-execution-2026-2026-validation']
+    branches: ['research/rsi14-execution-2026-validation']
     paths:
       - 'scripts/research_rsi14_execution_2026.py'
       - '.github/workflows/research-rsi14-execution-2026.yml'
