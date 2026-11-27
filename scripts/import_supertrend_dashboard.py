@@ -130,6 +130,54 @@ def main(root,out):
     if len(monthly)!=22 or sum(x["value"]>0 for x in monthly)!=sr["profitable_months"] or abs(sum(x["value"] for x in monthly)-sr["net"])>1e-6:
         raise ValueError("RSI MTM monthly result mismatch")
     add(rid,name,key,"summary.json","2025-01–2026-10 IST","In-sample best of 40; marginal positive result, not approved",sr["net"],sr["max_drawdown_pct"],sr["profitable_months"],22,sr["trades"],monthly,rid,unit="account USD",notes="Exact 224-trade replay of sweep run 45977394435; $100 initial equity so total USD gain equals return in %. RSI14 directional strength >=60/>50/<=50 locks 40/60/80% of favorable mark-price movement after 3R; updated at completed 15M close. No fixed TP; confirmed 15M Supertrend flip exit. Both entry filters and RSI50 mandatory; no flip entries. Monthly values are IST mark-to-market USD; replay months use UTC entry month realized P&L. 156 minimum-quantity rejections; funding and additional slippage excluded. Intraminute exit recorded at candle close, not an observed tick timestamp.")
+    # Explicitly registered latest diagnostic, preserving original replay.
+    key="reclaimprogressivemulti"; rid="st-reclaim-progressive-multi-color"
+    name="15M EMA20 Reclaim / Progressive / Multi-Candle / No Volume & Volatility Filters (Latest 2026-11-27)"
+    archive=obj(key,"summary.json"); variant="Lock Progressive NoFilters Multi CandleConfirm"; sr=archive["results"][variant]; ledger=obj(key,"ledger.json")
+    if archive["settings"].get(variant)!=[3,[.4,.6,.8]] or archive["bars"]!=963030 or archive["entry_audit"]["confirmed_wrong_color_entries"]!=0:
+        raise ValueError("Unexpected RSI protection source configuration")
+    if len(ledger)!=sr["trades"] or sr["trades"]!=313 or sr["open_position"] is not None:
+        raise ValueError("RSI protection ledger incomplete")
+    records=[]
+    for i,r in enumerate(ledger):
+        en,ex=stamp(r["entry_utc"]),stamp(r["exit_utc"])
+        direction=side(r["side"]); net=number(r["net_usd"])
+        ep,xp=number(r["entry_price"]),number(r["exit_price"])
+        ctx=dict(r["signal_context"]); trigger=stamp(ctx.pop("signal_utc"))
+        if not en or not ex or not trigger or not trigger<=en<=ex or direction is None or net is None or ep is None or xp is None:
+            raise ValueError("Invalid recorded RSI protection fill")
+        if r["exit_reason"] not in ("flip","lock"):raise ValueError("Unexpected exit")
+        if abs(r["gross_usd"]-r["fee_gst_usd"]-net)>1e-8:raise ValueError("RSI ledger cost mismatch")
+        if not ctx["color_ok"] or direction*(ctx["signal_close"]-ctx["signal_open"])<=0 or direction*(ctx["signal_close"]-ctx["ema20"])<=0 or direction*(ctx["rsi14"]-50)<=0:
+            raise ValueError("Invalid directional reclaim signal")
+        if not (ctx["signal_low"]<ctx["ema20"] if direction==1 else ctx["signal_high"]>ctx["ema20"]):raise ValueError("Missing actual EMA crossing")
+        ctx.update(quantity_btc=r["quantity"],gross_usd=r["gross_usd"],fee_gst_usd=r["fee_gst_usd"])
+        reason={"flip":"Confirmed 15M Supertrend reversal","lock":"RSI adaptive profit protection"}[r["exit_reason"]]
+        records.append(dict(id=f"{rid}-{i}",entry_utc=en,exit_utc=ex,trigger_utc=trigger,side=direction,entry_price=ep,exit_price=xp,entry_reason="15M EMA20 reclaim; aligned Supertrend, directional candle and RSI; prior close unrestricted; no volume/volatility filters",exit_reason=reason,result=r["exit_reason"],net_points=net,stop_price=None,target_price=None,trailing_stop_price=number(r["trailing_stop_price"]),signal_context=ctx,signal_tf=15,audit="Recorded 1M Color replay; lock exits timestamped at execution-minute close"))
+        for field in ("indicator_series","indicator_values"):
+            if field in r:records[-1][field]=r[field]
+    if abs(sum(t["net_points"] for t in records)-sr["net"])>1e-8 or sum(t["net_points"]>0 for t in records)!=sr["wins"]:
+        raise ValueError("RSI ledger summary mismatch")
+    if abs(sr["net"]+36.55162461913736)>1e-8 or sum(r["result"]=="lock" for r in records)!=146:
+        raise ValueError("RSI replay differs from selected sweep")
+    history={}
+    if "indicator_replay" in sources[key]:
+        from dashboard_indicator_history import replay
+        history=replay(root,REPO,sources[key]["indicator_replay"],records,data/"runs"/rid,"BTCUSD")
+    by={}
+    for rec in records:by.setdefault(rec["entry_utc"][:7],[]).append(rec)
+    months=[]
+    for month,rs in sorted(by.items()):
+        dump(data/"runs"/rid/(month+".json"),rs)
+        months.append(dict(month=month,net=round(sum(t["net_points"] for t in rs),6),trades=len(rs),wins=sum(t["net_points"]>0 for t in rs)))
+    dump(data/"runs"/rid/"curve.json",curve(records))
+    index["runs"].append(dict(id=rid,strategy=name,symbol="BTCUSD",unit="account USD",source=link(key,"ledger.json"),audit="Recorded modeled 1M Color fills; lock exits minute-close timestamp",research_reference=True,detail_available=True,target=None,stop=None,months=months,costs="1x; $100 initial equity; 100% target exposure; weekdays IST; 0.05% taker each side + 18% GST; modeled 30-minute exit fee waiver; no additional slippage or funding. Mark-triggered protection, interpolated trade fills.",**stats(records)))
+    if "indicator_definitions" in archive:index["runs"][-1]["indicator_definitions"]=archive["indicator_definitions"]
+    index["runs"][-1].update(history)
+    monthly=[dict(month=k,value=v) for k,v in sorted(sr["monthly"].items())]
+    if len(monthly)!=22 or sum(x["value"]>0 for x in monthly)!=sr["profitable_months"] or abs(sum(x["value"] for x in monthly)-sr["net"])>1e-6:
+        raise ValueError("RSI MTM monthly result mismatch")
+    add(rid,name,key,"summary.json","2025-01–2026-10 IST","Latest diagnostic; failed profitability; not approved",sr["net"],sr["max_drawdown_pct"],sr["profitable_months"],22,sr["trades"],monthly,rid,unit="account USD",notes="Exact 313-trade replay of run 45988989735, independently reproduced in run 45991018625; no volume/volatility filters or prior close restriction. Directional signal candle and RSI50 required, no flip entries; one trade per Supertrend cycle. 1R fee-adjusted breakeven, 1.5R lock 25%, 2R lock 40%, 3R RSI adaptive 40/60/80% of favorable mark move. 15M updates and 1M Color execution. Monthly values are IST mark-to-market USD; replay months are UTC entry-month realized P&L. 2,665 minimum-quantity rejections, last entry August 16 UTC; no September/October fills. Funding and additional slippage excluded. Intraminute exits timestamped at candle close.")
     index["full_configurations"]=sum(r.get("detail_available",True) for r in index["runs"])
     index["supertrend_replay_count"]=sum(r.get("research_reference",False) for r in index["runs"])
     dump(data/"index.json",index);dump(data/"supertrend.json",summaries)

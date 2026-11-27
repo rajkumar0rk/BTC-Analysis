@@ -98,5 +98,32 @@
         "ema.value": 1
       }
     }
+  },
+  {
+    "id": "reclaimprogressivemulti",
+    "sha": "53c6e8008700f3943f5c51bda498f191690ad35c",
+    "folder": "analysis/btc15m_reclaim_progressive_multi_20261127",
+    "files": [
+      "summary.json",
+      "ledger.json"
+    ],
+    "indicator_replay": {
+      "source_commit": "04167dd8162614f4bc223cd8b4a54657d884217d",
+      "source_path": ".github/workflows/isolated-mtf-color-replay.yml",
+      "book_variable": "book",
+      "candle_manifest": "data/delta_india/BTCUSD/1m/manifest.json",
+      "start_utc": "2025-01-01T00:00:00+00:00",
+      "end_utc": "2026-10-31T18:30:00+00:00",
+      "expected_bars": 963030,
+      "signal_fields": {
+        "ema.value": "ema20",
+        "supertrend.line": "supertrend",
+        "rsi.value": "rsi14",
+        "atr.value": "atr14"
+      },
+      "signal_offsets_bars": {
+        "ema.value": 1
+      }
+    }
   }
 ]
