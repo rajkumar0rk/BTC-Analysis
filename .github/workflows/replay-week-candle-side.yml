@@ -1,7 +1,7 @@
 name: Weekly BTC ETH candle-side replay
 on:
   push:
-    branches: ['research/week-candle-side-20261127']
+    branches: ['research/week-candle-side-verified-20261127']
     paths: ['.github/workflows/replay-week-candle-side.yml']
 permissions:
   contents: read
