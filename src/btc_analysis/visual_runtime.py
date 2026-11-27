@@ -45,6 +45,7 @@ class VisualStrategyBase(PythonStrategy):
     take_profit=D(".02")
 
     advanced_controls=None
+    sequence_config=None
 
     def __init__(self):
         super().__init__()
@@ -54,6 +55,7 @@ class VisualStrategyBase(PythonStrategy):
         self.last_flat_signal=None
         self.signal_count=0
         self.pending_cycle=None
+        self.sequence_state={1:(0,None),-1:(0,None)}
 
     @property
     def fixed_point_bracket(self):
@@ -90,6 +92,28 @@ class VisualStrategyBase(PythonStrategy):
     def long_exit(self,ctx):return False
     def short_exit(self,ctx):return False
 
+    def sequence_stage(self,ctx,direction,index):return False
+    def sequence_reset(self,ctx,direction):return False
+
+    def sequence_ready(self,ctx,direction):
+        config=(self.sequence_config or {}).get(direction)
+        if config is None:return True
+        stages,expiry=config
+        index,started=self.sequence_state[direction]
+        # Reset always wins, including on the bar of a potential final stage.
+        if ctx.position_quantity!=0 or self.sequence_reset(ctx,direction):
+            self.sequence_state[direction]=(0,None)
+            return False
+        if started is not None and self.signal_count-started>expiry:
+            index,started=0,None
+        # At most one stage on each completed signal candle. A completed
+        # sequence remains armed until fill, expiry, reset or an open position.
+        if index<stages and self.sequence_stage(ctx,direction,index):
+            if index==0:started=self.signal_count
+            index+=1
+        self.sequence_state[direction]=(index,started)
+        return index==stages
+
     def on_signal(self,ctx):
         bars=ctx.candles(Timeframe(self.signal_seconds),1)
         if not bars or bars[-1].close_utc!=ctx.now_utc:return
@@ -98,7 +122,8 @@ class VisualStrategyBase(PythonStrategy):
         if a is not None:
             self.signal_count+=1
             # Evaluate raw entry conditions even while a position is open.
-            raw={1:self.long_entry(ctx),-1:self.short_entry(ctx)}
+            ready={direction:self.sequence_ready(ctx,direction) for direction in (1,-1)}
+            raw={1:ready[1] and self.long_entry(ctx),-1:ready[-1] and self.short_entry(ctx)}
             for direction,active in raw.items():
                 if active:
                     if self.entry_streak[direction]==0:self.entry_cycle[direction]+=1
@@ -137,6 +162,9 @@ class VisualStrategyBase(PythonStrategy):
                 direction=1 if fill.reason=="visual_long_entry" else -1
                 if self.pending_cycle is not None and self.pending_cycle[0]==direction:self.used_cycle[direction]=self.pending_cycle[1]
                 self.pending_cycle=None
+                if self.sequence_config:
+                    self.sequence_state={1:(0,None),-1:(0,None)}
+                    for d in self.sequence_config:self.entry_streak[d]=0
             elif ctx.position_quantity==0:
                 self.last_flat_signal=self.signal_count
         if fill.reason not in ("visual_long_entry","visual_short_entry"):return

@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react";
 import type {Api,Catalog,Strategy,Revision} from "./api";
 import {frames,ops,keys,initialGraph,newCondition,newGroup,advancedDefaults} from "./visualTypes";
-import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls} from "./visualTypes";
+import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence} from "./visualTypes";
 const captions={long_entry:"Long entry",short_entry:"Short entry",long_exit:"Long exit",short_exit:"Short exit"};
 const opLabels={gt:">",gte:"≥",lt:"<",lte:"≤",eq:"=",cross_up:"Crosses above",cross_down:"Crosses below"};
 const frameLabel=(n:number)=>n>=86400?"1 day":n>=3600?n/3600+"h":n/60+"m";
@@ -43,7 +43,7 @@ export function AdvancedVisualControls({graph,change,disabled}:{graph:Graph;chan
  const a=graph.advanced;
  function edit(patch:Partial<AdvancedControls>){if(a)change({...graph,advanced:{...a,...patch}});}
  return <fieldset className="visual-rule" disabled={disabled}><legend>Advanced entry and risk controls</legend>
- <label className="check"><input type="checkbox" checked={!!a} onChange={e=>{if(e.target.checked)change({...graph,advanced:advancedDefaults()});else{const next={...graph};delete next.advanced;change(next);}}}/> Enable advanced controls</label>
+ <label className="check"><input type="checkbox" checked={!!a} onChange={e=>{if(e.target.checked)change({...graph,advanced:advancedDefaults()});else{const next={...graph};delete next.advanced;delete next.long_sequence;delete next.short_sequence;change(next);}}}/> Enable advanced controls (disabling also removes entry sequences)</label>
  {a&&<><div className="visual-config">
  <label>Entry frequency<select value={a.entry_mode} onChange={e=>edit({entry_mode:e.target.value as AdvancedControls["entry_mode"]})}><option value="continuous">While entry condition is true</option><option value="once_per_true_run">One filled entry per continuous true condition</option></select></label>
  <label>Consecutive signal confirmations<input aria-label="Consecutive signal confirmations" type="number" min={1} max={100} value={a.confirmation_bars} onChange={e=>edit({confirmation_bars:Number(e.target.value)})}/></label>
@@ -53,6 +53,19 @@ export function AdvancedVisualControls({graph,change,disabled}:{graph:Graph;chan
  </div><p>Entry weekdays (IST). Exits remain enabled every day.</p><div className="head">{["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((day,i)=><label className="check" key={day}><input type="checkbox" checked={a.weekdays_ist.includes(i)} onChange={e=>edit({weekdays_ist:e.target.checked?[...a.weekdays_ist,i]:a.weekdays_ist.filter(x=>x!==i)})}/>{day}</label>)}</div>
  <small>Confirmation and re-entry use completed signal candles. Fixed points require exact instrument tick multiples and activate at the entry minute; percentage exits retain next-minute protection. Trailing and profit lock tighten the active stop only on visited modeled prices; gaps, costs and liquidation can reduce realized profit. ATR mode uses only the last completed ATR candle at a new favorable price extreme; the initial stop remains in force until ATR is ready. Both paths remain modeled, not tick execution.</small></>}
  </fieldset>;
+}
+export function SequenceControls({graph,change,catalog,disabled}:{graph:Graph;change:(g:Graph)=>void;catalog:Catalog;disabled:boolean}){
+ function stage():Rule{return {enabled:true,mode:"all",groups:[newGroup()]};}
+ return <section className="scenario"><h3>Sequential entry conditions</h3><p className="muted">Stages advance in order, at most once per completed signal candle, while flat. The directional entry rule still has to be true after the final stage. Reset overrides all stages; expiry starts with the first completed stage. A filled entry clears both sequences.</p>
+ {(["long","short"] as const).map(direction=>{const key=direction==="long"?"long_sequence":"short_sequence",entry=direction==="long"?"long_entry":"short_entry";const seq=graph[key];
+ function update(next:EntrySequence|null){change({...graph,[key]:next,...(next?{advanced:graph.advanced??advancedDefaults(),[entry]:{...graph[entry],enabled:true,groups:graph[entry].groups.length?graph[entry].groups:[newGroup()]}}:{})});}
+ return <fieldset key={direction} className="visual-rule" disabled={disabled}><legend>{direction==="long"?"Long":"Short"} entry sequence</legend><label className="check"><input type="checkbox" checked={!!seq} onChange={e=>update(e.target.checked?{stages:[stage(),stage()],expiry_bars:10}:null)}/> Enable {direction} sequence</label>
+ {seq&&<><label>Maximum signal candles since first stage<input type="number" min={seq.stages.length-1} max={10000} value={seq.expiry_bars} onChange={e=>update({...seq,expiry_bars:Number(e.target.value)})}/></label>
+ {seq.stages.map((s,i)=><div key={i}><RuleEdit rule={s} title={direction+" stage "+(i+1)} catalog={catalog} disabled={disabled} change={value=>update({...seq,stages:seq.stages.map((x,j)=>i===j?{...value,enabled:true}:x)})}/><button type="button" disabled={seq.stages.length<=2} onClick={()=>update({...seq,stages:seq.stages.filter((_,j)=>j!==i)})}>Remove stage {i+1}</button><button type="button" disabled={i===0} onClick={()=>{const stages=[...seq.stages];[stages[i-1],stages[i]]=[stages[i],stages[i-1]];update({...seq,stages});}}>Move stage up</button></div>)}
+ <button type="button" disabled={seq.stages.length>=4} onClick={()=>update({...seq,stages:[...seq.stages,stage()]})}>Add stage</button>
+ <label className="check"><input type="checkbox" checked={!!seq.reset} onChange={e=>update({...seq,reset:e.target.checked?stage():null})}/> Enable reset condition</label>
+ {seq.reset&&<RuleEdit rule={seq.reset} title={direction+" sequence reset"} catalog={catalog} disabled={disabled} change={value=>update({...seq,reset:{...value,enabled:true}})}/>}</>}
+ </fieldset>;})}</section>;
 }
 export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void;openPython:(r:Revision)=>void}){
  const [graph,setGraph]=useState<Graph>(initialGraph);const [catalog,setCatalog]=useState<Catalog|null>(null);
@@ -70,7 +83,7 @@ export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Ap
  <div className="visual-config"><FrameSelect label="Signal timeframe" value={graph.signal_timeframe} disabled={busy} change={v=>edit({...graph,signal_timeframe:v})}/><FrameSelect label="Execution timeframe" value={graph.execution_timeframe} disabled={busy} change={v=>edit({...graph,execution_timeframe:v})}/>
  {(["exposure_pct","stop_loss_pct","take_profit_pct"] as const).map((k,i)=><label key={k}>{["Equity exposure (%)","Stop loss (%)","Take profit (%)"][i]}<input disabled={busy} value={graph[k]} onChange={e=>edit({...graph,[k]:e.target.value})}/></label>)}</div>
  <AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
- {catalog?<div className="visual-rules">{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
+ {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
  <section className="panel"><div className="head"><h2>Generated Python</h2><div className="rule-actions"><button disabled={busy||!catalog} onClick={()=>void generate()}>Generate Python</button><button className="primary" disabled={busy||!catalog||!name.trim()||stale} onClick={()=>void generate(true)}>Save visual strategy</button>{revision&&<button disabled={busy} onClick={()=>openPython(revision)}>Open saved Python</button>}</div></div>
  {stale&&<p role="alert">Newer, frozen or archived revision. Reopen or clone in the strategy library before saving.</p>}
  {error&&<p className="error" role="alert">{error}</p>}{note&&<p role="status">{note}</p>}

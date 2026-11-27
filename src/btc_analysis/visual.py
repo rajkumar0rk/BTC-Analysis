@@ -84,6 +84,19 @@ class Rule(Strict):
         return self
 
 
+class EntrySequence(Strict):
+    stages:list[Rule]=Field(min_length=2,max_length=4)
+    reset:Rule|None=None
+    expiry_bars:int=Field(ge=1,le=10000)
+
+    @model_validator(mode="after")
+    def check(self):
+        if any(not s.enabled for s in self.stages):raise ValueError("sequence stages must be enabled")
+        if self.reset is not None and not self.reset.enabled:raise ValueError("sequence reset must be enabled or absent")
+        if self.expiry_bars<len(self.stages)-1:raise ValueError("sequence expiry too short for stage count")
+        return self
+
+
 class TrailingPoints(Strict):
     activation:DecimalText
     distance:DecimalText
@@ -145,6 +158,8 @@ class Graph(Strict):
     stop_loss_pct:DecimalText="1"
     take_profit_pct:DecimalText="2"
     advanced:AdvancedControls|None=None
+    long_sequence:EntrySequence|None=None
+    short_sequence:EntrySequence|None=None
     long_entry:Rule
     short_entry:Rule
     long_exit:Rule
@@ -152,6 +167,9 @@ class Graph(Strict):
 
     @model_validator(mode="after")
     def check(self):
+        for direction in ("long","short"):
+            if getattr(self,direction+"_sequence") is not None and (self.advanced is None or not getattr(self,direction+"_entry").enabled):
+                raise ValueError("entry sequence requires advanced controls and an enabled directional entry rule")
         if not self.long_entry.enabled and not self.short_entry.enabled:
             raise ValueError("at least one entry rule must be enabled")
         for key,lo,hi in (("exposure_pct",Decimal("0.01"),Decimal(100)),
@@ -181,7 +199,25 @@ class Graph(Strict):
         return self
 
     def rules(self):
-        return (self.long_entry,self.short_entry,self.long_exit,self.short_exit)
+        extra=[]
+        for seq in (self.long_sequence,self.short_sequence):
+            if seq is not None:
+                extra.extend(seq.stages)
+                if seq.reset is not None:extra.append(seq.reset)
+        return (self.long_entry,self.short_entry,self.long_exit,self.short_exit,*extra)
+
+    def sequence_config(self):
+        return {direction: (len(seq.stages),seq.expiry_bars) for direction,seq in ((1,self.long_sequence),(-1,self.short_sequence)) if seq is not None}
+
+
+def raw_rules(raw):
+    for name in ("long_entry","short_entry","long_exit","short_exit"):
+        yield raw[name]
+    for name in ("long_sequence","short_sequence"):
+        seq=raw.get(name)
+        if seq is not None:
+            yield from seq["stages"]
+            if seq.get("reset") is not None:yield seq["reset"]
 
 
 def canonical_graph(graph:Graph):
@@ -197,8 +233,8 @@ def canonical_graph(graph:Graph):
             for key in ("activation","multiplier"):raw["advanced"]["trailing_atr"][key]=to_wire(Decimal(raw["advanced"]["trailing_atr"][key]))
     for key in ("exposure_pct","stop_loss_pct","take_profit_pct"):
         raw[key]=to_wire(Decimal(raw[key]))
-    for rule in ("long_entry","short_entry","long_exit","short_exit"):
-        for group in raw[rule]["groups"]:
+    for rule in raw_rules(raw):
+        for group in rule["groups"]:
             for cond in group["conditions"]:
                 for side in ("left","right"):
                     o=cond[side]
@@ -266,12 +302,26 @@ def compile_graph(graph:Graph):
         # Configuration is generated solely from validated graph data.
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    advanced_controls = "+repr(raw["advanced"]), ""]
+    if g.sequence_config():
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    sequence_config = "+repr(g.sequence_config()), ""]
     for name,tf,params in sorted(specs):
         lines.append("            IndicatorSpec.create("+repr(name)+", Timeframe("+str(tf)+"), "+params+"),")
     lines+=["        )","","    def extra_timeframes(self):",
             "        return ("+", ".join("Timeframe("+str(t)+")" for t in sorted(frames))+",)"]
     for name in ("long_entry","short_entry","long_exit","short_exit"):
         lines+=["","    def "+name+"(self, ctx):","        return "+_rule(getattr(g,name))]
+    if g.sequence_config():
+        lines+=["","    def sequence_stage(self, ctx, direction, index):"]
+        for direction,seq in ((1,g.long_sequence),(-1,g.short_sequence)):
+            if seq is not None:
+                for i,stage in enumerate(seq.stages):
+                    lines+=["        if direction == "+str(direction)+" and index == "+str(i)+":","            return "+_rule(stage)]
+        lines+=["        return False","","    def sequence_reset(self, ctx, direction):"]
+        for direction,seq in ((1,g.long_sequence),(-1,g.short_sequence)):
+            if seq is not None and seq.reset is not None:
+                lines+=["        if direction == "+str(direction)+":","            return "+_rule(seq.reset)]
+        lines+=["        return False"]
     source="\n".join(lines)+"\n"
     if len(source.encode())>MAX_SOURCE:raise ValueError("generated source exceeds limit")
     # The fixed compiler emits only literals and reviewed SDK calls.

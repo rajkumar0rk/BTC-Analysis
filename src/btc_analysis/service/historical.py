@@ -77,6 +77,7 @@ class GraphStrategy(VisualStrategyBase):
         self.stop_loss=D(g.stop_loss_pct)/100
         self.take_profit=D(g.take_profit_pct)/100
         self.advanced_controls=g.advanced.model_dump() if g.advanced is not None else None
+        self.sequence_config=g.sequence_config()
     def indicators(self):
         specs=set()
         if self.g.advanced is not None and self.g.advanced.trailing_atr is not None:
@@ -100,6 +101,12 @@ class GraphStrategy(VisualStrategyBase):
             values=(compare(c.op,self.operand(ctx,c.left),self.operand(ctx,c.right)) for c in g.conditions)
             groups.append(all(values) if g.mode=="all" else any(values))
         return all(groups) if r.mode=="all" else any(groups)
+    def sequence_stage(self,ctx,direction,index):
+        seq=self.g.long_sequence if direction==1 else self.g.short_sequence
+        return self.rule(ctx,seq.stages[index]) if seq is not None else False
+    def sequence_reset(self,ctx,direction):
+        seq=self.g.long_sequence if direction==1 else self.g.short_sequence
+        return self.rule(ctx,seq.reset) if seq is not None and seq.reset is not None else False
     def long_entry(self,ctx):return self.rule(ctx,self.g.long_entry)
     def short_entry(self,ctx):return self.rule(ctx,self.g.short_entry)
     def long_exit(self,ctx):return self.rule(ctx,self.g.long_exit)

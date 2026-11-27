@@ -6,7 +6,7 @@ from itertools import product
 from random import Random
 from typing import Literal, Annotated
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
-from ..visual import Graph, compile_graph, DecimalText
+from ..visual import Graph, compile_graph, DecimalText, raw_rules
 from ..serialization import fingerprint, to_wire
 from .historical import HistoricalRequest, prepare, execute_historical
 from .analytics import summarize
@@ -18,7 +18,7 @@ MAX_CANDIDATE_MINUTES=5760
 
 class Axis(BaseModel):
     model_config=ConfigDict(extra="forbid",strict=True)
-    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|python:[A-Za-z][A-Za-z0-9_]*|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked|trailing_percent\.activation|trailing_percent\.distance|trailing_atr\.activation|trailing_atr\.period|trailing_atr\.multiplier))$",max_length=80)]
+    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|python:[A-Za-z][A-Za-z0-9_]*|sequence:(long|short)\.expiry_bars|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked|trailing_percent\.activation|trailing_percent\.distance|trailing_atr\.activation|trailing_atr\.period|trailing_atr\.multiplier))$",max_length=80)]
     values:list[DecimalText]=Field(min_length=1,max_length=8)
     @model_validator(mode="after")
     def unique(self):
@@ -71,6 +71,12 @@ def variants(graph,search):
             if key in ("exposure_pct","stop_loss_pct","take_profit_pct"):
                 if key!="exposure_pct" and a.get("exit_mode")=="points":raise ValueError("percentage axis inactive in fixed-point mode")
                 g[key]=val;continue
+            if key.startswith("sequence:"):
+                direction=key.split(":",1)[1].split(".",1)[0]
+                seq=g.get(direction+"_sequence")
+                if seq is None:raise ValueError("sequence axis requires enabled sequence")
+                if D(val)!=D(val).to_integral_value():raise ValueError("sequence expiry must be integer")
+                seq["expiry_bars"]=int(D(val));continue
             if key.startswith("advanced:"):
                 name=key.split(":",1)[1]
                 if not a:raise ValueError("advanced axis requires enabled advanced controls")
@@ -90,8 +96,8 @@ def variants(graph,search):
                     else:a[name]=val
                 continue
             name,rest=key.split("@");tf,param=rest.split(":");matched=0
-            for rule in ("long_entry","short_entry","long_exit","short_exit"):
-                for group in g[rule]["groups"]:
+            for rule in raw_rules(g):
+                for group in rule["groups"]:
                     for c in group["conditions"]:
                         for side in ("left","right"):
                             o=c[side]
