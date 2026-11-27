@@ -468,7 +468,7 @@ class Simulator:
             self.install_fixed_bracket(f,ref,phase,bar,path,bracket)
 
     def install_fixed_bracket(self,fill,ref,phase,bar,path,bracket):
-        # The trusted recipe requests exact price-point distances; do not
+        # Strategies request exact price-point distances; do not
         # silently round them into a different risk/reward.
         stop_points,target_points=bracket
         tick=self.cfg.instrument.tick_size
@@ -482,8 +482,8 @@ class Simulator:
         stop_key="__fixed_stop_"+fill.fill_id
         target_key="__fixed_target_"+fill.fill_id
         for key,kind,reason,limit,trigger in (
-            (stop_key,OrderType.STOP_MARKET,"mtf_fixed_stop",None,stop),
-            (target_key,OrderType.LIMIT,"mtf_fixed_target",target,None)):
+            (stop_key,OrderType.STOP_MARKET,"fixed_point_stop",None,stop),
+            (target_key,OrderType.LIMIT,"fixed_point_target",target,None)):
             self.submit(OrderIntent(key,self.cfg.instrument,self.now,side,kind,abs(self.quantity),
                                     reason,limit,trigger,True))
             if key not in self.pending:raise ValueError("fixed-point protective order rejected")
