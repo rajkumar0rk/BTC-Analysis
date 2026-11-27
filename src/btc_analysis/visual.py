@@ -202,6 +202,17 @@ class AdvancedControls(Strict):
         return self
 
 
+class PartialExit(Strict):
+    pct:DecimalText
+    rule:Rule
+
+    @model_validator(mode="after")
+    def check(self):
+        if not Decimal("0.01")<=Decimal(self.pct)<100:raise ValueError("partial exit percent must be in [0.01,100)")
+        if not self.rule.enabled:raise ValueError("partial exit rule must be enabled")
+        return self
+
+
 class Graph(Strict):
     schema_version:Literal[1]=1
     signal_timeframe:Literal[60,180,300,900,1800,3600,14400,86400]=900
@@ -217,6 +228,8 @@ class Graph(Strict):
     short_machine:EntryMachine|None=None
     long_exit_machine:EntryMachine|None=None
     short_exit_machine:EntryMachine|None=None
+    long_partial:PartialExit|None=None
+    short_partial:PartialExit|None=None
     long_entry:Rule
     short_entry:Rule
     long_exit:Rule
@@ -230,6 +243,9 @@ class Graph(Strict):
             if seq is not None and machine is not None:raise ValueError("choose a sequence or a state machine per direction")
             if (seq is not None or machine is not None) and (self.advanced is None or not getattr(self,direction+"_entry").enabled):
                 raise ValueError("entry sequence or state machine requires advanced controls and an enabled directional entry rule")
+            partial=getattr(self,direction+"_partial")
+            if partial is not None and not getattr(self,direction+"_entry").enabled:
+                raise ValueError("partial exit requires enabled directional entry")
             exit_machine=getattr(self,direction+"_exit_machine")
             if exit_machine is not None and (self.advanced is None or not getattr(self,direction+"_exit").enabled or not getattr(self,direction+"_entry").enabled):
                 raise ValueError("exit state machine requires advanced controls and enabled entry and exit rules")
@@ -280,7 +296,12 @@ class Graph(Strict):
             if machine is not None:
                 extra.extend(t.rule for t in machine.transitions)
                 if machine.reset is not None:extra.append(machine.reset)
+        for partial in (self.long_partial,self.short_partial):
+            if partial is not None:extra.append(partial.rule)
         return (self.long_entry,self.short_entry,self.long_exit,self.short_exit,*extra)
+
+    def partial_config(self):
+        return {direction:p.pct for direction,p in ((1,self.long_partial),(-1,self.short_partial)) if p is not None}
 
     def machine_config(self):
         return {direction:(m.state_count-1,m.expiry_bars,tuple((t.source,t.target) for t in m.transitions))
@@ -307,6 +328,9 @@ def raw_rules(raw):
         if m is not None:
             for t in m["transitions"]:yield t["rule"]
             if m.get("reset") is not None:yield m["reset"]
+    for name in ("long_partial","short_partial"):
+        p=raw.get(name)
+        if p is not None:yield p["rule"]
 
 
 def canonical_graph(graph:Graph):
@@ -322,6 +346,8 @@ def canonical_graph(graph:Graph):
             for key in ("activation","multiplier"):raw["advanced"]["trailing_atr"][key]=to_wire(Decimal(raw["advanced"]["trailing_atr"][key]))
     for key in ("exposure_pct","stop_loss_pct","take_profit_pct"):
         raw[key]=to_wire(Decimal(raw[key]))
+    for name in ("long_partial","short_partial"):
+        if name in raw:raw[name]["pct"]=to_wire(Decimal(raw[name]["pct"]))
     for rule in raw_rules(raw):
         for group in rule["groups"]:
             for cond in group["conditions"]:
@@ -405,6 +431,9 @@ def compile_graph(graph:Graph):
     if g.exit_machine_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    exit_machine_config = "+repr(g.exit_machine_config()), ""]
+    if g.partial_config():
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    partial_config = "+repr(g.partial_config()), ""]
     for name,tf,params in sorted(specs):
         lines.append("            IndicatorSpec.create("+repr(name)+", Timeframe("+str(tf)+"), "+params+"),")
     lines+=["        )","","    def extra_timeframes(self):",
@@ -443,6 +472,12 @@ def compile_graph(graph:Graph):
         for direction,m in ((1,g.long_exit_machine),(-1,g.short_exit_machine)):
             if m is not None and m.reset is not None:
                 lines+=["        if direction == "+str(direction)+":","            return "+_rule(m.reset)]
+        lines+=["        return False"]
+    if g.partial_config():
+        lines+=["","    def partial_rule(self, ctx, direction):"]
+        for direction,p in ((1,g.long_partial),(-1,g.short_partial)):
+            if p is not None:
+                lines+=["        if direction == "+str(direction)+":","            return "+_rule(p.rule)]
         lines+=["        return False"]
     source="\n".join(lines)+"\n"
     if len(source.encode())>MAX_SOURCE:raise ValueError("generated source exceeds limit")

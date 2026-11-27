@@ -77,6 +77,7 @@ class VisualStrategyBase(PythonStrategy):
     sequence_config=None
     machine_config=None
     exit_machine_config=None
+    partial_config=None
     custom_config=None
 
     def __init__(self):
@@ -90,6 +91,8 @@ class VisualStrategyBase(PythonStrategy):
         self.sequence_state={1:(0,None),-1:(0,None)}
         self.machine_state={1:(0,None),-1:(0,None)}
         self.exit_machine_state={1:(0,None),-1:(0,None)}
+        self.partial_consumed=False
+        self.partial_pending=False
         self.formula_runtime=formula_program(self.custom_config).make() if self.custom_config else None
 
     def on_completed_candle(self,candle):
@@ -195,6 +198,22 @@ class VisualStrategyBase(PythonStrategy):
         self.sequence_state[direction]=(index,started)
         return index==stages
 
+    def partial_rule(self,ctx,direction):return False
+
+    def maybe_partial(self,ctx,direction):
+        pct=(self.partial_config or {}).get(direction)
+        if pct is None or self.partial_consumed or self.partial_pending or not self.partial_rule(ctx,direction):return
+        total=abs(ctx.position_quantity)
+        lot=ctx.instrument.lot_size
+        qty=(total*D(pct)/100/lot).to_integral_value(rounding=ROUND_FLOOR)*lot
+        # Never silently convert a partial exit into a full exit or round up.
+        if qty<lot or total-qty<lot:return
+        self.order(ctx,Side.SELL if direction>0 else Side.BUY,qty,
+                   "visual_long_partial_exit" if direction>0 else "visual_short_partial_exit",reduce_only=True)
+        # One request per position; market reduction is eligible at next open.
+        # Fail closed after a rejected request rather than issuing duplicates.
+        self.partial_pending=True
+
     def on_signal(self,ctx):
         bars=ctx.candles(Timeframe(self.signal_seconds),1)
         if not bars or bars[-1].close_utc!=ctx.now_utc:return
@@ -215,9 +234,11 @@ class VisualStrategyBase(PythonStrategy):
                 if q*direction<=0:self.exit_machine_state[direction]=(0,None)
         if q>0:
             if self.machine_ready(ctx,1,position_exit=True) and self.long_exit(ctx):self.close_position(ctx,"visual_long_rule_exit")
+            else:self.maybe_partial(ctx,1)
             return
         if q<0:
             if self.machine_ready(ctx,-1,position_exit=True) and self.short_exit(ctx):self.close_position(ctx,"visual_short_rule_exit")
+            else:self.maybe_partial(ctx,-1)
             return
         if ctx.equity<=0:return
         if a is None:
@@ -241,6 +262,11 @@ class VisualStrategyBase(PythonStrategy):
         else:self.sell(ctx,qty,"visual_short_entry")
 
     def on_fill(self,ctx,fill):
+        if self.partial_config:
+            if ctx.position_quantity==0 or fill.reason in ("visual_long_entry","visual_short_entry"):
+                self.partial_consumed=False;self.partial_pending=False
+            elif fill.reason in ("visual_long_partial_exit","visual_short_partial_exit"):
+                self.partial_consumed=True;self.partial_pending=False
         if self.exit_machine_config and (ctx.position_quantity==0 or fill.reason in ("visual_long_entry","visual_short_entry")):
             self.exit_machine_state={1:(0,None),-1:(0,None)}
         if self.advanced_controls is not None:
