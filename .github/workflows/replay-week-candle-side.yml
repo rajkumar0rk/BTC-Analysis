@@ -1,7 +1,7 @@
-name: Weekly BTC ETH candle-side replay
+name: Weekly BTC ETH prior-candle direction replay
 on:
   push:
-    branches: ['research/week-candle-side-verified-20261127']
+    branches: ['research/prior-candle-path-methods-20261127']
     paths: ['.github/workflows/replay-week-candle-side.yml']
 permissions:
   contents: read
@@ -26,6 +26,6 @@ jobs:
         run: python -u scripts/replay_eth_legacy15m_week.py --output "$RUNNER_TEMP/result"
       - uses: actions/upload-artifact@v4
         with:
-          name: weekly-candle-side-${{ matrix.asset }}
+          name: weekly-prior-candle-${{ matrix.asset }}
           path: ${{ runner.temp }}/result
           if-no-files-found: error

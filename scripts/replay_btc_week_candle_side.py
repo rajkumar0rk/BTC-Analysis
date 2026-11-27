@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from btc_quote_book import DeltaBook,BadBook
 from btc_1h_bot_indicators import indicators
+from prior_candle_paths import METHODS,directions,low_first as choose_path
 START=int(pd.Timestamp("2026-11-23 00:00",tz="Asia/Kolkata").timestamp())
 END=int(pd.Timestamp("2026-11-27 09:30",tz="Asia/Kolkata").timestamp())
 FEE=.00059; BUDGET=10.; SHOCK=.01; LOT=.001; TICK=.5; POLL=3; STALE=15
@@ -203,15 +204,16 @@ def quotes(root,sigs,out):
     if result["stats"].get("invalid_poll",0) or result["gap_affected_trades"] or result["open_gap"]:result["coverage_warning"]="Invalid/stale observations occurred; not continuous or exact; gap-affected P&L provisional."
     return result
 def ohlc(sigs,out):
-    a=candles("BTCUSD",START,END);m=candles("MARK:BTCUSD",START,END);results=[]
-    for name in ("COLOR","DIRECTION"):
+    full=candles("BTCUSD",START-60*120,END);a=full.iloc[120:];m=candles("MARK:BTCUSD",START,END);results=[]
+    preds={k:v.reindex(a.index).to_numpy() for k,v in directions(full).items()}
+    for name in METHODS:
         e=Engine(name,sigs)
         for i,(ar,mr) in enumerate(zip(a.to_numpy(),m.to_numpy())):
             t=START+i*60
             # Same minute-open proxy used in previous comparisons; signal processed +12s.
             e.step(t,(mr[0],ar[0],ar[0]),True)
             e.step(t+12,(mr[0],ar[0],ar[0]),True,sigs.get(t+12))
-            low_first=ar[3]>ar[0] or (ar[3]==ar[0] and ar[0]-ar[2]<=ar[1]-ar[0])
+            low_first=choose_path(name,ar,preds[name][i] if name!="COLOR" else 0)
             for ts,k in zip((t+20,t+40,t+59),(2,1,3) if low_first else (1,2,3)):
                 e.step(ts,(mr[k],ar[k],ar[k]),True)
         results.append(e.result(out))
@@ -219,6 +221,5 @@ def ohlc(sigs,out):
 if __name__=="__main__":
     p=argparse.ArgumentParser();p.add_argument("--output",type=Path,required=True);args=p.parse_args();args.output.mkdir(parents=True,exist_ok=True)
     scenarios=ohlc(signals(),args.output)
-    assert (args.output/"COLOR-trades.csv").read_bytes()==(args.output/"DIRECTION-trades.csv").read_bytes(),"same candle rule must give identical ledgers"
     for r in scenarios:print("BTC15_OHLC_RESULT "+json.dumps(r),flush=True)
     (args.output/"summary.json").write_text(json.dumps(scenarios,indent=2))

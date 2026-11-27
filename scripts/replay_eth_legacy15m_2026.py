@@ -92,7 +92,7 @@ def quantize(price, side):
     return (math.ceil((price-1e-9)/TICK) if side==1 else math.floor((price+1e-9)/TICK))*TICK
 
 
-def replay(t,m,bars,path,spread):
+def replay(t,m,bars,path,spread,predictions=None):
     # 15m close observed with the live 10-second finalization delay:
     # first subsequent minute OPEN proxies the bot's +10s entry/flip; exact +10s quote unknown.
     # Mark and trade extremes paired in each explicit OHLC scenario; not tick truth.
@@ -176,6 +176,8 @@ def replay(t,m,bars,path,spread):
                 o,h,l,c=a[i]
                 low_first=c>o or (c==o and o-l<=h-o)
                 seq=(2,1,3) if low_first else (1,2,3)
+            elif predictions is not None and path in predictions:
+                seq=(1,2,3) if predictions[path][i]<0 else (2,1,3)
             else:
                 seq=(1,2,3) if path=="OHLC" else (2,1,3)
             for k in seq:

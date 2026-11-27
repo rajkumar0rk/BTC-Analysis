@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from recover_delta_2024 import fetch, validate, equal, gaps
 from replay_eth_legacy15m_2026 import ROOT, indicators, replay
+from prior_candle_paths import METHODS,directions
 
 START=pd.Timestamp("2026-11-23 00:00",tz="Asia/Kolkata").tz_convert("UTC")
 WARM=pd.Timestamp("2026-11-01",tz="UTC")
@@ -56,7 +57,7 @@ def load(end,output):
     m=mark[["open","high","low","close"]]
     assert t.index.equals(m.index)
     bars=full.resample("15min").agg(dict(open="first",high="max",low="min",close="last",volume="sum"))
-    return t,m,indicators(bars)
+    return t,m,indicators(bars),{k:v.reindex(t.index).to_numpy() for k,v in directions(full).items()}
 if __name__=="__main__":
     p=argparse.ArgumentParser();p.add_argument("--output",type=Path,required=True);args=p.parse_args()
     args.output.mkdir(parents=True,exist_ok=True)
@@ -64,12 +65,12 @@ if __name__=="__main__":
     end=(pd.Timestamp.now(tz="UTC")-pd.Timedelta(minutes=2)).floor("15min")
     end=min(end,pd.Timestamp("2026-11-27 09:30",tz="Asia/Kolkata").tz_convert("UTC"))
     assert end>START
-    t,m,b=load(end,args.output)
+    t,m,b,preds=load(end,args.output)
     print("WEEK_DATA "+json.dumps(dict(start_ist=str(START.tz_convert("Asia/Kolkata")),end_exclusive_ist=str(end.tz_convert("Asia/Kolkata")),trade_candles=len(t),mark_candles=len(m))),flush=True)
     results=[]
     for spread in (0.,):
-        for path in ("COLOR","DIRECTION"):
-            result,trades=replay(t,m,b,path,spread)
+        for path in METHODS:
+            result,trades=replay(t,m,b,path,spread,preds)
             ledger=pd.DataFrame(trades)
             ledger.to_csv(args.output/f"trades-{path}-{spread}.csv",index=False)
             days=[]
@@ -82,5 +83,4 @@ if __name__=="__main__":
             result["days_realized"]=days
             results.append(result)
             print("ETH_WEEK_RESULT "+json.dumps(result),flush=True)
-    assert pd.read_csv(args.output/"trades-COLOR-0.0.csv").equals(pd.read_csv(args.output/"trades-DIRECTION-0.0.csv")),"same candle rule must give identical ledgers"
     (args.output/"summary.json").write_text(json.dumps(dict(start_utc=str(START),end_exclusive_utc=str(end),trade_candles=len(t),mark_candles=len(m),results=results),indent=2))
