@@ -29,3 +29,6 @@ Daily read-only production checks verify health, unauthenticated denial, origin 
 
 ## M39 deployment resilience
 Production health includes the exact verified release SHA. Automatic and manual deploy write steps recheck main before every mutation. A failed initial Worker service GET with 429/502/503/504 may retry at most three times (10/20/40s delay); ambiguous writes, auth/validation errors and other deploy failures stop. D1 info reads can retry transient GETs. No blind retry of migration or secret mutation. Provider output is redacted to method/status; verify actual remote release identity before declaring success.
+
+## M43a superseded deployment handling
+A read-only preflight checks verified SHA against current main before entering the production environment. A superseded release is intentionally skipped, not reported as a deployment failure. A second check before build and third before writes skip remaining steps if main advanced. Failed GitHub API lookup or invalid identity still fails closed. The per-mutation guard remains strict: a change during a mutation sequence is an actual incomplete release and must not report success. No production credential or paper configuration changes.

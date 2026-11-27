@@ -18,8 +18,31 @@ concurrency:
   group: private-cloud-production
   cancel-in-progress: false
 jobs:
-  release:
+  preflight:
     if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.head_repository.full_name == github.repository))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      current: ${{ steps.head.outputs.current }}
+    steps:
+      - name: Check verified release against main
+        id: head
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          current="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)"
+          [[ "$current" =~ ^[0-9a-f]{40}$ && "$VERIFIED_SHA" =~ ^[0-9a-f]{40}$ ]]
+          if [ "$current" != "$VERIFIED_SHA" ]; then
+            echo "current=false" >> "$GITHUB_OUTPUT"
+            echo "Superseded release: intentionally skipped; no cloud writes." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          fi
+  release:
+    needs: preflight
+    if: needs.preflight.outputs.current == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment: cloudflare-production
@@ -34,19 +57,30 @@ jobs:
         with:
           persist-credentials: false
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
-      - name: Reject stale automatic release before build
-        if: github.event_name == 'workflow_run'
+      - name: Check current release before build
+        id: before_build
         env:
           GH_TOKEN: ${{ github.token }}
-          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
-        run: test "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)" = "$VERIFIED_SHA"
+        run: |
+          set -euo pipefail
+          current="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)"
+          [[ "$current" =~ ^[0-9a-f]{40}$ && "$VERIFIED_SHA" =~ ^[0-9a-f]{40}$ ]]
+          if [ "$current" != "$VERIFIED_SHA" ]; then
+            echo "current=false" >> "$GITHUB_OUTPUT"
+            echo "Superseded release: remaining steps intentionally skipped." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-python@v5
+        if: steps.before_build.outputs.current == 'true'
         with:
           python-version: '3.12'
       - uses: actions/setup-node@v4
+        if: steps.before_build.outputs.current == 'true'
         with:
           node-version: '22'
       - name: Validate operator configuration before building
+        if: steps.before_build.outputs.current == 'true'
         run: |
           python - <<'PY'
           import os,re,uuid
@@ -61,21 +95,34 @@ jobs:
               raise SystemExit("Test database IDs prohibited")
           PY
       - run: python scripts/prepare_browser_python.py
+        if: steps.before_build.outputs.current == 'true'
       - working-directory: apps/web
+        if: steps.before_build.outputs.current == 'true'
         run: npm ci --no-audit --no-fund && npm run build -- --mode private
       - name: Generate private deployment config (virtual paper enabled)
+        if: steps.before_build.outputs.current == 'true'
         run: python scripts/prepare_cloud_release.py --worker "$CF_WORKER" --origin "$CF_ORIGIN" --database-id "$CF_DATABASE_ID" --enable-paper --release-sha "$VERIFIED_SHA"
       - name: Bundle and validate without cloud writes
+        if: steps.before_build.outputs.current == 'true'
         working-directory: apps/cloud
         run: npx --yes wrangler@4.157.0 deploy --config wrangler.release.toml --dry-run --outdir "$RUNNER_TEMP/private-bundle"
-      - name: Recheck main before automatic cloud writes
-        if: github.event_name == 'workflow_run'
+      - name: Check current release before cloud writes
+        id: before_writes
+        if: steps.before_build.outputs.current == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
-        run: test "$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)" = "$VERIFIED_SHA"
+        run: |
+          set -euo pipefail
+          current="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)"
+          [[ "$current" =~ ^[0-9a-f]{40}$ && "$VERIFIED_SHA" =~ ^[0-9a-f]{40}$ ]]
+          if [ "$current" != "$VERIFIED_SHA" ]; then
+            echo "current=false" >> "$GITHUB_OUTPUT"
+            echo "Superseded release: remaining steps intentionally skipped." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Verify operator credentials and auth digest map
-        if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
+        if: steps.before_writes.outputs.current == 'true' && (github.event_name == 'workflow_run' || inputs.operation == 'deploy')
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -97,7 +144,7 @@ jobs:
           PY
           python ../../scripts/cloud_deploy_retry.py info
       - name: Apply dedicated database migration and deploy private Studio
-        if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
+        if: steps.before_writes.outputs.current == 'true' && (github.event_name == 'workflow_run' || inputs.operation == 'deploy')
         env:
           GH_TOKEN: ${{ github.token }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
@@ -110,7 +157,7 @@ jobs:
           python ../../scripts/cloud_deploy_retry.py deploy
           python ../../scripts/cloud_deploy_retry.py secret
       - name: Verify deployed public shell and unauthenticated API denial
-        if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
+        if: steps.before_writes.outputs.current == 'true' && (github.event_name == 'workflow_run' || inputs.operation == 'deploy')
         run: |
           set -euo pipefail
           for attempt in $(seq 1 20); do
@@ -126,7 +173,7 @@ jobs:
           printf '### Private Studio deployed (virtual paper enabled; no sessions auto-started)\n%s\n\nAuthenticated data roundtrip and actual quota measurements still require operator verification.\n' "$CF_ORIGIN" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Extended production security and optional authenticated read check
-        if: github.event_name == 'workflow_run' || inputs.operation == 'deploy'
+        if: steps.before_writes.outputs.current == 'true' && (github.event_name == 'workflow_run' || inputs.operation == 'deploy')
         env:
           CF_MONITOR_TOKEN: ${{ secrets.CF_MONITOR_TOKEN }}
         run: python scripts/cloud_health_check.py >> "$GITHUB_STEP_SUMMARY"
