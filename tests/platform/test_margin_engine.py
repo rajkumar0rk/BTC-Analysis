@@ -3,7 +3,7 @@ from dataclasses import replace
 from datetime import timedelta
 from decimal import Decimal as D
 from btc_analysis.contracts import *
-from btc_analysis.margin import MarginProfile,RiskBar,FundingSettlement,funding_payment
+from btc_analysis.margin import MarginProfile,MarginTier,TieredMarginProfile,RiskBar,FundingSettlement,funding_payment
 from btc_analysis.backtest import BaseStrategy,run_backtest
 from test_backtest_engine import T,I,H,MIN,cfg,bars,FLAT,submit
 
@@ -108,5 +108,46 @@ class MarginTests(unittest.TestCase):
         self.assertEqual(r.result_sha256,execute(c,p,Long).result_sha256)
         self.assertEqual(len(r.margin_profile_sha256),64)
         self.assertEqual(len(r.scenarios[0].risk_stream_sha256),64)
+
+class TierTests(unittest.TestCase):
+    def profile(self,base):
+        return TieredMarginProfile(base.profile_id,base.instrument,base.effective_start,base.effective_end,base.source,
+            base.initial_rate_floor,base.maintenance_rate,base.max_notional,base.liquidation_fee_bps,
+            tiers=(MarginTier(D(2050),D(".1"),D(".05")),MarginTier(base.max_notional,D(".2"),D(".15"))))
+    def test_tier_boundaries_and_buffer(self):
+        c,p=setup();p=self.profile(p)
+        self.assertEqual(p.maintenance(D(2050)),D("102.5"))
+        self.assertEqual(p.maintenance(D(2051)),D("307.65"))
+        self.assertFalse(p.allows_leverage(D(2051),D(10)))
+        self.assertEqual(p.initial(D(2051),D(10)),D("410.2"))
+        with self.assertRaises(ValueError):p.maintenance(p.max_notional+1)
+        with self.assertRaises(ValueError):replace(p,tiers=tuple(reversed(p.tiers)))
+        q=replace(p,preliquidation_buffer_points=D(1))
+        self.assertGreater(q.protective_surplus(D(-20),D(1),D(102)),D(100))
+    def test_mark_transition_triggers_short_liquidation(self):
+        class Short(BaseStrategy):
+            def on_start(self,c):submit(c,"short",Side.SELL,qty=20)
+        c,p=setup()
+        marks=bars([(100,100,100,100),(103,103,103,103),(103,103,103,103),(103,103,103,103)])
+        baseline=execute(c,p,Short,marks=marks)
+        result=execute(c,self.profile(p),Short,marks=marks)
+        self.assertFalse(baseline.scenarios[0].liquidations)
+        self.assertEqual(len(result.scenarios[0].liquidations),1)
+        self.assertEqual(result.scenarios[0].liquidations[0].maintenance,D(309))
+        self.assertNotEqual(result.margin_profile_sha256,baseline.margin_profile_sha256)
+        self.assertEqual(result.result_sha256,execute(c,self.profile(p),Short,marks=marks).result_sha256)
+    def test_entry_above_bracket_leverage_rejected(self):
+        class Large(BaseStrategy):
+            def on_start(self,c):submit(c,"large",qty=21)
+        for mode in (MarginMode.ISOLATED,MarginMode.CROSS):
+            c,p=setup(mode)
+            r=execute(c,self.profile(p),Large).scenarios[0]
+            self.assertFalse(r.fills)
+            self.assertTrue(any(o.detail=="initial_margin_or_notional_cap" for o in r.orders))
+    def test_position_above_last_cap_fails_closed(self):
+        c,p=setup()
+        p=replace(self.profile(p),max_notional=D(2050),tiers=(MarginTier(D(2050),D(".1"),D(".05")),))
+        marks=bars([(100,100,100,100),(103,103,103,103),(103,103,103,103),(103,103,103,103)])
+        with self.assertRaisesRegex(ValueError,"notional cap"):execute(c,p,Long,marks=marks)
 
 if __name__=="__main__":unittest.main()

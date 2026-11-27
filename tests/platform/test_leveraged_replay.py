@@ -48,3 +48,12 @@ class LeveragedTests(unittest.TestCase):
         a=replay(csv,json.dumps(g),"BTCUSD",SETTINGS,True,risk=r)
         b=replay(csv,json.dumps(g),"BTCUSD",SETTINGS,True,risk={**r,"scalp_enabled":True})
         self.assertTrue(all(float(x["fees"])>float(y["fees"]) for x,y in zip(a["scenarios"],b["scenarios"])))
+
+    def test_tiered_adapter(self):
+        csv,r=inputs(fund=False)
+        r["tiers_json"]=json.dumps([{"upper_notional":"50000","initial_rate_floor":"0.01","maintenance_rate":"0.005"},{"upper_notional":"100000","initial_rate_floor":"0.02","maintenance_rate":"0.01"}])
+        out=replay(csv,json.dumps(graph()),"BTCUSD",SETTINGS,True,risk=r)
+        self.assertEqual(out["risk"]["profile"]["profile_id"],"user-whole-notional-tiers-v1")
+        self.assertEqual(len(out["risk"]["profile"]["tiers"]),2)
+        r["tiers_json"]="[]"
+        with self.assertRaises(ValueError):replay(csv,json.dumps(graph()),"BTCUSD",SETTINGS,True,risk=r)

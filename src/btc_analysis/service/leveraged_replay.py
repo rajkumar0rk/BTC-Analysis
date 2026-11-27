@@ -1,10 +1,10 @@
 """Explicit user-supplied mark/funding adapter for single-position research."""
-import csv,io,re
+import csv,io,re,json
 from datetime import datetime,timezone,timedelta
 from decimal import Decimal as D
 from hashlib import sha256
 from ..contracts import Candle,DatasetRef,DataKind,MarginMode
-from ..margin import MarginProfile,FundingSettlement,RiskBar
+from ..margin import MarginProfile,MarginTier,TieredMarginProfile,FundingSettlement,RiskBar
 from ..serialization import fingerprint,to_wire
 
 MAX_BYTES=16*1024*1024
@@ -21,11 +21,26 @@ def csv_rows(text,header):
     for row in r:
         if len(row)!=len(header):raise ValueError("invalid risk CSV row")
         yield row
+def parse_tiers(text):
+    if not isinstance(text,str) or len(text.encode())>16384:raise ValueError("invalid margin tiers JSON size")
+    raw=json.loads(text)
+    if not isinstance(raw,list) or not 1<=len(raw)<=32:raise ValueError("select 1–32 explicit margin tiers")
+    out=[]
+    for item in raw:
+        if not isinstance(item,dict) or set(item)!={"upper_notional","initial_rate_floor","maintenance_rate"}:raise ValueError("invalid margin tier fields")
+        out.append(MarginTier(decimal(item["upper_notional"],"1","999999999999999999"),
+                              decimal(item["initial_rate_floor"],"0.00000001","1"),
+                              decimal(item["maintenance_rate"],"0.00000001","1")))
+    return tuple(out)
+def make_profile(risk,*args):
+    if "tiers_json" in risk:
+        return TieredMarginProfile("user-whole-notional-tiers-v1",*args,tiers=parse_tiers(risk["tiers_json"]))
+    return MarginProfile("user-fixed-tier-v1",*args)
 def prepare_risk(risk,rows,i,tf):
     keys={"leverage","margin_mode","initial_rate_floor","maintenance_rate","max_notional","liquidation_fee_bps",
           "profile_start","profile_end","profile_source","preliq_points","scalp_enabled","scalp_start","scalp_end",
           "mark_csv","funding_enabled","funding_interval_seconds","funding_anchor_epoch","funding_csv","acknowledge"}
-    if not isinstance(risk,dict) or set(risk)-{"funding_provenance"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
+    if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
     if type(risk["funding_enabled"]) is not bool or type(risk["scalp_enabled"]) is not bool:raise ValueError("invalid switches")
     provenance=risk.get("funding_provenance","operator_supplied")
     if provenance not in ("operator_supplied","estimated_previous_hour_mark_open") or ("funding_provenance" in risk and not risk["funding_enabled"]):raise ValueError("invalid funding provenance")
@@ -53,7 +68,7 @@ def prepare_risk(risk,rows,i,tf):
         if set(funding)!=required:raise ValueError("funding settlements incomplete or unexpected")
     elif risk["funding_csv"]:raise ValueError("funding data supplied but disabled")
     scalp=risk["scalp_enabled"]
-    profile=MarginProfile("user-fixed-tier-v1",i,epoch(risk["profile_start"]),epoch(risk["profile_end"]),source,
+    profile=make_profile(risk,i,epoch(risk["profile_start"]),epoch(risk["profile_end"]),source,
         decimal(risk["initial_rate_floor"],"0.00000001","1"),decimal(risk["maintenance_rate"],"0.00000001","1"),
         decimal(risk["max_notional"],"1","999999999999999999"),decimal(risk["liquidation_fee_bps"],"0","9999"),
         interval,anchor,decimal(risk["preliq_points"],"0","1000000"),1800 if scalp else 0,

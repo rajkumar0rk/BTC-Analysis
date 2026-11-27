@@ -17,7 +17,7 @@ from ..serialization import to_wire
 from ..backtest import run_backtest
 from ..backtest.archive import Series,ScenarioArchive,MAX_PENDING
 from .historical import frames,GraphStrategy,LongHistoricalRequest
-from .leveraged_replay import decimal as risk_decimal,epoch as risk_epoch,csv_rows
+from .leveraged_replay import decimal as risk_decimal,epoch as risk_epoch,csv_rows,make_profile
 from ..margin import MarginProfile,FundingSettlement,RiskBar
 
 DAY=86400
@@ -128,7 +128,7 @@ def mark_stream(plan,root,i,tf):
 
 def long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf):
     keys={"leverage","margin_mode","initial_rate_floor","maintenance_rate","max_notional","liquidation_fee_bps","profile_start","profile_end","profile_source","preliq_points","scalp_enabled","scalp_start","scalp_end","funding_enabled","funding_interval_seconds","funding_anchor_epoch","funding_csv","acknowledge"}
-    if not isinstance(risk,dict) or set(risk)-{"funding_provenance"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
+    if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
     if type(risk["funding_enabled"]) is not bool or type(risk["scalp_enabled"]) is not bool:raise ValueError("invalid risk switches")
     provenance=risk.get("funding_provenance","operator_supplied")
     if provenance not in ("operator_supplied","estimated_previous_hour_mark_open") or ("funding_provenance" in risk and not risk["funding_enabled"]):raise ValueError("invalid funding provenance")
@@ -155,7 +155,7 @@ def long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf):
         refs.append(DatasetRef("local-funding",i,DataKind.FUNDING,tf,dt(start),dt(end),sha256(risk["funding_csv"].encode()).hexdigest(),"estimated prior hourly observation and mark-open proxy" if provenance=="estimated_previous_hour_mark_open" else "user-supplied settlement CSV; not independently attested",0,True))
     elif risk["funding_csv"]:raise ValueError("funding data supplied but disabled")
     scalp=risk["scalp_enabled"]
-    profile=MarginProfile("user-fixed-tier-v1",i,risk_epoch(risk["profile_start"]),risk_epoch(risk["profile_end"]),source,
+    profile=make_profile(risk,i,risk_epoch(risk["profile_start"]),risk_epoch(risk["profile_end"]),source,
         risk_decimal(risk["initial_rate_floor"],"0.00000001","1"),risk_decimal(risk["maintenance_rate"],"0.00000001","1"),
         risk_decimal(risk["max_notional"],"1","999999999999999999"),risk_decimal(risk["liquidation_fee_bps"],"0","9999"),interval,anchor,
         risk_decimal(risk["preliq_points"],"0","1000000"),1800 if scalp else 0,risk_epoch(risk["scalp_start"]) if scalp else None,risk_epoch(risk["scalp_end"]) if scalp else None)

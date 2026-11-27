@@ -269,7 +269,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         tuple(d.manifest_sha256 for d in config.datasets),tuple(out),worst.path,(
         "Trusted strategy and source adapters only; no untrusted Python execution.",
         ("Linear 1x collateral cap only; no exchange margin, funding, spread or liquidation." if margin_profile is None else
-         "Explicit single-position fixed-tier linear margin simulation; not certified exchange rules."),
+         ("Explicit single-position whole-notional bracket simulation; not certified exchange rules." if getattr(margin_profile,"tiers",()) else "Explicit single-position fixed-tier linear margin simulation; not certified exchange rules.")),
         ("No risk stream used." if margin_profile is None else
          "Mark-first paired OHLC vertices; liquidation modeled as full close at mark with adverse slippage and explicit fee; halt after liquidation."),
         ("Funding excluded." if not config.costs.include_funding else
@@ -285,7 +285,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         "Caller attests pinned source and code; observed candle hash recorded independently.",
         "Indicators use explicit documented seeds and completed UTC-aligned bars; no external library parity claim.",
         "Warmup bars initialize indicators/history only, without orders, callbacks or evaluation P&L.",
-        ("Mark-vertex pre-liquidation buffer is modeled only; gaps can liquidate first, protective close halts the run. No historical bid-ask, tier transitions, partial liquidation or portfolio margin." if margin_profile is not None and margin_profile.preliquidation_buffer_points else "No historical bid-ask, tier transitions, partial exchange liquidation, fee offers or portfolio margin."),
+        ("Mark-vertex pre-liquidation buffer is modeled only; gaps can liquidate first, protective close halts the run. No historical bid-ask, partial liquidation or portfolio margin." if margin_profile is not None and margin_profile.preliquidation_buffer_points else "No historical bid-ask, partial exchange liquidation, fee offers or portfolio margin."),
     ),fingerprint(margin_profile) if margin_profile is not None else None)
 
 
@@ -403,13 +403,25 @@ class Simulator:
                 detail="baseline_collateral_cap"
             else:
                 notional=(abs(self.quantity)+qty)*max(price,self.risk_mark)*self.mult
-                if self.cfg.margin_mode is MarginMode.ISOLATED:
-                    required=self.profile.initial(qty*price*self.mult,self.cfg.leverage)+fee+tax
-                    allowed=required<=self.balance-self.isolated_collateral()
-                else:
+                tiered=bool(getattr(self.profile,"tiers",()))
+                allowed=notional<=self.profile.max_notional
+                if allowed and tiered:
+                    allowed=self.profile.allows_leverage(notional,self.cfg.leverage)
+                if allowed and self.cfg.margin_mode is MarginMode.ISOLATED:
+                    if tiered:
+                        # Re-rate the whole entry-cost basis when adding lots.
+                        basis=sum((q*p*self.mult for q,p in self.lots),ZERO)
+                        added=qty*price*self.mult
+                        allowed=basis+added<=self.profile.max_notional
+                        if allowed:
+                            required=self.profile.initial(basis+added,self.cfg.leverage)-self.profile.initial(basis,self.cfg.leverage)+fee+tax
+                            allowed=required<=self.balance-self.isolated_collateral()
+                    else:
+                        required=self.profile.initial(qty*price*self.mult,self.cfg.leverage)+fee+tax
+                        allowed=required<=self.balance-self.isolated_collateral()
+                elif allowed:
                     required=self.profile.initial(notional,self.cfg.leverage)+fee+tax
                     allowed=required<=self.equity(self.risk_mark)
-                allowed=allowed and notional<=self.profile.max_notional
                 detail="initial_margin_or_notional_cap"
             if not allowed:
                 del self.pending[i];self.log(i,"rejected",detail);return
@@ -459,14 +471,15 @@ class Simulator:
         mark=self.risk_mark
         notional=abs(self.quantity)*mark*self.mult
         if notional>self.profile.max_notional:
-            raise ValueError("position exceeds supported fixed-tier notional; tier transition required")
+            raise ValueError("position exceeds supplied margin notional cap; cannot extrapolate")
         equity=collateral_equity(self.cfg.margin_mode,self.balance,self.isolated_collateral(),self.unrealized(mark))
         maintenance=self.profile.maintenance(notional)
         liquidation=equity<=maintenance
         # Fixed price-point buffer expressed as collateral surplus at this mark.
         # At a gap below maintenance liquidation wins; no guaranteed stop fill.
         sign=D(1) if self.quantity>0 else D(-1)
-        buffer=abs(self.quantity)*self.mult*self.profile.preliquidation_buffer_points*(1-sign*self.profile.maintenance_rate)
+        buffer=(self.profile.protective_surplus(self.quantity,self.mult,mark) if getattr(self.profile,"tiers",()) else
+                abs(self.quantity)*self.mult*self.profile.preliquidation_buffer_points*(1-sign*self.profile.maintenance_rate))
         protective=(not liquidation and trade_ref is not None and buffer>0 and equity-maintenance<=buffer)
         if not liquidation and not protective:return
         self.now=bar.open_utc if phase=="open" else bar.close_utc
