@@ -37,7 +37,7 @@ jobs:
           def rows(path):
               with gzip.open(path,"rt") as f:
                   for r in csv.DictReader(f):
-                      yield int(r["time"]),tuple(float(r[k]) for k in ("open","high","low","close","volume"))
+                      yield int(r["time"]),tuple(float(r[k]) for k in ("open","high","low","close"))+(float(r["volume"] or 0),)
           def color(v):
               o,hi,lo,c=v[:4]
               return (o,lo,hi,c) if c>o or (c==o and o-lo<=hi-o) else (o,hi,lo,c)
@@ -93,7 +93,7 @@ jobs:
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s for _,s in self.trades))
           states={k:State() for k in ("Touch","Reclaim")}
-          groups={900:[],3600:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=timezone.utc).timestamp())
+          groups={900:[],3600:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=ist).timestamp())
           def val(name,tf,p):
               v=book.get(name,tf,p)
               return v[-1] if v else None
@@ -104,6 +104,7 @@ jobs:
               for a,b in zip_longest(rows(trade),rows(mark)):
                   assert a is not None and b is not None and a[0]==b[0],(a,b)
                   t,v=a;_,mv=b
+                  if t>=end:break
                   assert last is None or t==last+60
                   last=t;count+=1
                   for s in states.values():s.execute(t,v,mv)
@@ -131,7 +132,7 @@ jobs:
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          results={"range":"2025-01-01 to 2026-10-31 UTC; first 6000 minutes warmup","bars":count,"execution":"Color paired trade and mark paths; fixed 100/200; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded","results":{k:s.result() for k,s in states.items()}}
+          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"execution":"Color paired trade and mark paths; fixed 100/200; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded","results":{k:s.result() for k,s in states.items()}}
           print(json.dumps(results,indent=2))
           Path("mtf-color-results.json").write_text(json.dumps(results,indent=2))
           
