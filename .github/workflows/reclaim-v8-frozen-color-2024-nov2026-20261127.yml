@@ -136,7 +136,7 @@ jobs:
               weight=np.where(q.index<pd.Timestamp("2025-09-08T16:00:00Z"),1/480,np.where((q.index.minute==0)&(q.index.hour%8==0),1.,0.))
               flow=np.where(weight==0,0.,rate*mark.open.to_numpy()*weight*.001/100)
               missing=~np.isfinite(flow)|~np.isfinite(mark.to_numpy(float)).all(axis=1)
-              assert not missing[q.index>=score_start].any(),(label,int(missing[q.index>=score_start].sum()))
+              assert not missing[q.index>=max(score_start,a+pd.Timedelta(hours=1))].any(),(label,int(missing[q.index>=max(score_start,a+pd.Timedelta(hours=1))].sum()))
               ml=mark.low.to_numpy(float);mh=mark.high.to_numpy(float)
               dl=np.r_[0.,np.cumsum(np.where(missing,0.,np.maximum(flow,0.)))]
               ds=np.r_[0.,np.cumsum(np.where(missing,0.,np.maximum(-flow,0.)))]
@@ -153,7 +153,7 @@ jobs:
               def debit_months(start,stop,prefix):
                   for mo in monthly:
                       l=max(start,q.index.searchsorted(ist(mo+"-01")))
-                      r=min(stop+1,q.index.searchsorted(ist(mo+"-01")+pd.offsets.MonthBegin(1)))
+                      r=min(stop+1,q.index.searchsorted(ist(str(pd.Period(mo,freq="M")+1)+"-01")))
                       if r>l:monthly[mo]-=float(prefix[r]-prefix[l])
               overlay=cfg["overlay"]
               for i,v in enumerate(entries):
@@ -175,6 +175,7 @@ jobs:
                   flips=np.flatnonzero(hs[j//60:]!=side)
                   stop_j=min((j//60+int(flips[0])+1)*60,len(q)) if len(flips) else len(q)
                   ex,gross=replay(j,stop_j,side,mid,5.,.00059,tp,min(.02,cap/100),2,0,o,hi,lo,c)
+                  assert not missing[j:(ex+1 if ex>=0 else len(q))].any(),(label,j,ex)
                   prefix=dl if side==1 else ds
                   if ex<0:
                       # At the data cutoff, retain open position; no invented future fill.
