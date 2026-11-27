@@ -75,6 +75,7 @@ class GraphStrategy(VisualStrategyBase):
         self.exposure=D(g.exposure_pct)/100
         self.stop_loss=D(g.stop_loss_pct)/100
         self.take_profit=D(g.take_profit_pct)/100
+        self.advanced_controls=g.advanced.model_dump() if g.advanced is not None else None
     def indicators(self):
         specs=set()
         for r in self.g.rules():
@@ -179,5 +180,5 @@ def execute_historical(payload,root,progress,*,archive_factory=None):
                 "assumptions":["User-supplied linear contract tick, lot and multiplier; not attested venue specifications.",
                                "1x only; no funding, historical spread or liquidation.",
                                "Verified open timestamp label." if verified else "Raw timestamps assumed to be opens; unverified convention.",
-                               "Entry candle not protected by generated stop/target."],
+                               ("Fixed-point stop/target active from entry minute." if g.advanced is not None and g.advanced.exit_mode=="points" else "Entry candle not protected by generated percentage stop/target.")],
                 "result_sha256":result.result_sha256,"result":to_wire(result)}

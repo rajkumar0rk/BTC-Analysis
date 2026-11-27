@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react";
 import type {Api,Catalog,Strategy,Revision} from "./api";
-import {frames,ops,keys,initialGraph,newCondition,newGroup} from "./visualTypes";
-import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled} from "./visualTypes";
+import {frames,ops,keys,initialGraph,newCondition,newGroup,advancedDefaults} from "./visualTypes";
+import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls} from "./visualTypes";
 const captions={long_entry:"Long entry",short_entry:"Short entry",long_exit:"Long exit",short_exit:"Short exit"};
 const opLabels={gt:">",gte:"≥",lt:"<",lte:"≤",eq:"=",cross_up:"Crosses above",cross_down:"Crosses below"};
 const frameLabel=(n:number)=>n>=86400?"1 day":n>=3600?n/3600+"h":n/60+"m";
@@ -39,6 +39,21 @@ export function RuleEdit({rule,title,change,catalog,disabled}:{rule:Rule;title:s
  <button type="button" disabled={rule.groups.length>=4} onClick={()=>change({...rule,groups:[...rule.groups,newGroup()]})}>Add group</button></>}
  </fieldset>;
 }
+export function AdvancedVisualControls({graph,change,disabled}:{graph:Graph;change:(g:Graph)=>void;disabled:boolean}){
+ const a=graph.advanced;
+ function edit(patch:Partial<AdvancedControls>){if(a)change({...graph,advanced:{...a,...patch}});}
+ return <fieldset className="visual-rule" disabled={disabled}><legend>Advanced entry and risk controls</legend>
+ <label className="check"><input type="checkbox" checked={!!a} onChange={e=>{if(e.target.checked)change({...graph,advanced:advancedDefaults()});else{const next={...graph};delete next.advanced;change(next);}}}/> Enable advanced controls</label>
+ {a&&<><div className="visual-config">
+ <label>Entry frequency<select value={a.entry_mode} onChange={e=>edit({entry_mode:e.target.value as AdvancedControls["entry_mode"]})}><option value="continuous">While entry condition is true</option><option value="once_per_true_run">One filled entry per continuous true condition</option></select></label>
+ <label>Consecutive signal confirmations<input aria-label="Consecutive signal confirmations" type="number" min={1} max={100} value={a.confirmation_bars} onChange={e=>edit({confirmation_bars:Number(e.target.value)})}/></label>
+ <label>Cooldown signal candles after exit<input type="number" min={0} max={10000} value={a.cooldown_bars} onChange={e=>edit({cooldown_bars:Number(e.target.value)})}/></label>
+ <label>Exit distance unit<select aria-label="Exit distance unit" value={a.exit_mode} onChange={e=>edit({exit_mode:e.target.value as AdvancedControls["exit_mode"]})}><option value="percent">Percentage</option><option value="points">Fixed price points</option></select></label>
+ {a.exit_mode==="points"&&<><label>Stop loss points<input value={a.stop_points} onChange={e=>edit({stop_points:e.target.value})}/></label><label>Take profit points<input value={a.target_points} onChange={e=>edit({target_points:e.target.value})}/></label></>}
+ </div><p>Entry weekdays (IST). Exits remain enabled every day.</p><div className="head">{["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((day,i)=><label className="check" key={day}><input type="checkbox" checked={a.weekdays_ist.includes(i)} onChange={e=>edit({weekdays_ist:e.target.checked?[...a.weekdays_ist,i]:a.weekdays_ist.filter(x=>x!==i)})}/>{day}</label>)}</div>
+ <small>Confirmation and re-entry use completed signal candles. Fixed points require exact instrument tick multiples and activate at the entry minute; percentage exits retain next-minute protection. Both paths remain modeled, not tick execution.</small></>}
+ </fieldset>;
+}
 export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void;openPython:(r:Revision)=>void}){
  const [graph,setGraph]=useState<Graph>(initialGraph);const [catalog,setCatalog]=useState<Catalog|null>(null);
  const [compiled,setCompiled]=useState<Compiled|null>(null);const [revision,setRevision]=useState<Revision|null>(null);
@@ -54,7 +69,7 @@ export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Ap
  <label>Strategy name<input value={name} disabled={busy||!!revision} maxLength={100} onChange={e=>setName(e.target.value)}/></label>
  <div className="visual-config"><FrameSelect label="Signal timeframe" value={graph.signal_timeframe} disabled={busy} change={v=>edit({...graph,signal_timeframe:v})}/><FrameSelect label="Execution timeframe" value={graph.execution_timeframe} disabled={busy} change={v=>edit({...graph,execution_timeframe:v})}/>
  {(["exposure_pct","stop_loss_pct","take_profit_pct"] as const).map((k,i)=><label key={k}>{["Equity exposure (%)","Stop loss (%)","Take profit (%)"][i]}<input disabled={busy} value={graph[k]} onChange={e=>edit({...graph,[k]:e.target.value})}/></label>)}</div>
- <small>Stop and target orders become eligible on the execution candle after the entry fill callback. Entry candle is not protected; no same-bar fill assumptions. Position size is notional exposure, not leveraged margin.</small></section>
+ <AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
  {catalog?<div className="visual-rules">{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
  <section className="panel"><div className="head"><h2>Generated Python</h2><div className="rule-actions"><button disabled={busy||!catalog} onClick={()=>void generate()}>Generate Python</button><button className="primary" disabled={busy||!catalog||!name.trim()||stale} onClick={()=>void generate(true)}>Save visual strategy</button>{revision&&<button disabled={busy} onClick={()=>openPython(revision)}>Open saved Python</button>}</div></div>
  {stale&&<p role="alert">Newer, frozen or archived revision. Reopen or clone in the strategy library before saving.</p>}

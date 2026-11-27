@@ -83,6 +83,24 @@ class Rule(Strict):
         return self
 
 
+class AdvancedControls(Strict):
+    entry_mode:Literal["continuous","once_per_true_run"]="continuous"
+    confirmation_bars:int=Field(default=1,ge=1,le=100)
+    cooldown_bars:int=Field(default=0,ge=0,le=10000)
+    weekdays_ist:list[Literal[0,1,2,3,4,5,6]]=Field(default_factory=lambda:list(range(7)),min_length=1,max_length=7)
+    exit_mode:Literal["percent","points"]="percent"
+    stop_points:DecimalText="100"
+    target_points:DecimalText="200"
+
+    @model_validator(mode="after")
+    def check(self):
+        if len(set(self.weekdays_ist))!=len(self.weekdays_ist):raise ValueError("duplicate entry weekday")
+        for key in ("stop_points","target_points"):
+            if not Decimal("0")<Decimal(getattr(self,key))<=Decimal("1000000000"):
+                raise ValueError(key+" outside supported bounds")
+        return self
+
+
 class Graph(Strict):
     schema_version:Literal[1]=1
     signal_timeframe:Literal[60,180,300,900,1800,3600,14400,86400]=900
@@ -90,6 +108,7 @@ class Graph(Strict):
     exposure_pct:DecimalText="50"
     stop_loss_pct:DecimalText="1"
     take_profit_pct:DecimalText="2"
+    advanced:AdvancedControls|None=None
     long_entry:Rule
     short_entry:Rule
     long_exit:Rule
@@ -127,7 +146,10 @@ class Graph(Strict):
 
 def canonical_graph(graph:Graph):
     """Normalize decimal text, indicator defaults and parameter order."""
-    raw=graph.model_dump()
+    raw=graph.model_dump(exclude_none=True)
+    if graph.advanced is not None:
+        raw["advanced"]["weekdays_ist"]=sorted(graph.advanced.weekdays_ist)
+        for k in ("stop_points","target_points"):raw["advanced"][k]=to_wire(Decimal(raw["advanced"][k]))
     for key in ("exposure_pct","stop_loss_pct","take_profit_pct"):
         raw[key]=to_wire(Decimal(raw[key]))
     for rule in ("long_entry","short_entry","long_exit","short_exit"):
@@ -167,7 +189,7 @@ def _rule(rule):
 
 def compile_graph(graph:Graph):
     g=canonical_graph(graph)
-    raw=g.model_dump()
+    raw=g.model_dump(exclude_none=True)
     packed=json.dumps(raw,sort_keys=True,separators=(",",":"),ensure_ascii=True)
     metadata=base64.urlsafe_b64encode(packed.encode()).decode()
     specs=set();frames={g.signal_timeframe,g.execution_timeframe}
@@ -193,6 +215,10 @@ def compile_graph(graph:Graph):
         "",
         "    def indicators(self):",
         "        return ("]
+    if g.advanced is not None:
+        # Configuration is generated solely from validated graph data.
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    advanced_controls = "+repr(raw["advanced"]), ""]
     for name,tf,params in sorted(specs):
         lines.append("            IndicatorSpec.create("+repr(name)+", Timeframe("+str(tf)+"), "+params+"),")
     lines+=["        )","","    def extra_timeframes(self):",
