@@ -1,9 +1,9 @@
-name: 15m RSI adaptive profit lock activation and fraction sweep
+name: Record exact Reclaim 3R Tight dashboard ledger
 on:
   push:
     branches: [research/mtf-color-replay-20261127]
 permissions:
-  contents: read
+  contents: write
 jobs:
   replay:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
                   self.variant=variant;self.activation=activation;self.fractions=fractions;self.risk=0.;self.mfe=0.;self.lock=None;self.armed=False
                   self.line=None;self.exit_pending=None;self.invalid_line=0;self.distances=[]
                   self.cash=100.;self.peak=100.;self.dd=0.;self.pos=None;self.pending=0;self.used=False
-                  self.trades=[];self.month={};self.fees=0.;self.zero=0;self.points=0.;self.opens=0
+                  self.trades=[];self.ledger=[];self.signal={};self.month={};self.fees=0.;self.zero=0;self.points=0.;self.opens=0
               def sample(self,price):
                   eq=self.cash+(self.pos[0]*(price-self.pos[2])*self.pos[1] if self.pos else 0.)
                   self.peak=max(self.peak,eq);self.dd=max(self.dd,(self.peak-eq)/self.peak*100)
@@ -110,19 +110,19 @@ jobs:
                   fee=0. if when-opened<=1800 else exit_price*q*.00059
                   gross=side*(exit_price-entry)*q
                   self.cash+=gross-fee;self.fees+=fee;self.points+=side*(exit_price-entry)
-                  self.trades.append((gross-entry_fee-fee,reason));self.pos=None;self.sample(exit_price)
+                  self.trades.append((gross-entry_fee-fee,reason))
+                  self.ledger.append(dict(entry_utc=dt(opened).isoformat(),exit_utc=dt(when).isoformat(),side=side,entry_price=entry,exit_price=exit_price,entry_reason="EMA20 Reclaim",exit_reason=reason,net_usd=gross-entry_fee-fee,gross_usd=gross,fee_gst_usd=entry_fee+fee,quantity=q,signal_context={**self.signal,"initial_distance":self.risk,"mfe_mark_points":self.mfe,"equity_after_usd":self.cash},trailing_stop_price=self.lock if reason=="lock" else None))
+                  self.pos=None;self.sample(exit_price)
               def result(self):
                   final=list(self.month.values())[-1];prev=100.;monthly={}
                   for k,v in self.month.items():
                       monthly[k]=round(v-prev,8);prev=v
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s=='flip' for _,s in self.trades),target_exits=sum(s=='target' for _,s in self.trades),rsi_exits=sum(s=='rsi' for _,s in self.trades),lock_exits=sum(s=='lock' for _,s in self.trades),protection_losses=sum(p<=0 and s in ('rsi','lock') for p,s in self.trades),invalid_line=self.invalid_line,mean_initial_distance=sum(self.distances)/len(self.distances) if self.distances else None)
-          profiles={"Loose":(.10,.25,.50),"Original":(.25,.50,.75),"Tight":(.40,.60,.80),"VeryTight":(.50,.75,.90)}
-          settings={"FixedTP":(1.,profiles["Original"])}
-          settings.update({f"Lock {a:g}R {p}":(a,f) for a in (1.,1.5,2.,2.5,3.) for p,f in profiles.items()})
+          settings={"Lock 3R Tight":(3.,(.4,.6,.8))}
           variants=tuple(settings)
-          states={f"{mode} {variant}":State(variant,*settings[variant]) for mode in ("Touch","Reclaim") for variant in variants}
-          by_mode={mode:[(variant,states[f"{mode} {variant}"]) for variant in variants] for mode in ("Touch","Reclaim")}
+          states={"Reclaim Lock 3R Tight":State("Lock 3R Tight",*settings["Lock 3R Tight"])}
+          by_mode={"Touch":[],"Reclaim":[("Lock 3R Tight",states["Reclaim Lock 3R Tight"])]}
           audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0,"rsi_blocked_touch":0,"rsi_blocked_reclaim":0}
           volumes=deque(maxlen=20);atrs=deque(maxlen=20);filter_pass=False;filter_stats={"15m_ready":0,"volume_pass":0,"atr_pass":0,"both_pass":0}
           groups={900:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=ist).timestamp())
@@ -192,28 +192,37 @@ jobs:
                               if not rsi_pass:
                                   audit["rsi_blocked_reclaim"]+=1;continue
                               s.pending=alignment;s.line=float(st_line)
+                              s.signal={"signal_utc":dt(t+60).isoformat(),"ema20":old_ema,"supertrend":float(st_line),"rsi14":float(rsi),"atr14":float(atr)}
                   if completed15:prev15=completed15
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          assert states["Touch FixedTP"].opens==237 and states["Reclaim FixedTP"].opens==178
-          assert abs(states["Touch FixedTP"].result()["net"]+20.307398916258293)<1e-8
-          assert abs(states["Reclaim FixedTP"].result()["net"]+10.5028769396652)<1e-8
-          assert all(s.result()["target_exits"]==0 for s in states.values() if s.variant!="FixedTP")
-          assert abs(states["Touch Lock 1R Original"].result()["net"]+20.00619295910211)<1e-8
-          assert abs(states["Reclaim Lock 1R Original"].result()["net"]+6.79249422433675)<1e-8
+          selected=states["Reclaim Lock 3R Tight"];summary=selected.result()
+          assert summary["trades"]==224 and summary["wins"]==74 and summary["open_position"] is None
+          assert abs(summary["net"]-.7980515306245621)<1e-8
+          assert abs(summary["max_drawdown_pct"]-17.689820072751804)<1e-8
+          assert abs(sum(x["net_usd"] for x in selected.ledger)-summary["net"])<1e-8
+          dest=Path("analysis/btc15m_rsi_reclaim_3r_tight_20261127")
+          dest.mkdir(parents=True,exist_ok=True)
+          (dest/"ledger.json").write_text(json.dumps(selected.ledger,separators=(",",":"))+"\n")
+          (dest/"summary.json").write_text(json.dumps({"summary":summary,"source_sweep_run":45977394435,"source_sweep_commit":"38d93178823432b5de0d5c76718818bea5d216ad","bars":count,"settings":settings},indent=2)+"\n")
           results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"15m Supertrend only (no 1h condition); strict Reclaim requires previous and current ST directions equal, strict cross beyond frozen pre-signal EMA20 and close back; strict Touch no flip entry; all variants require latest completed 15m RSI14 >50 for buy and <50 for sell; one entry per 15m Supertrend cycle; Color paired trade and mark paths; 15m completed Supertrend flip exit at next 1m open; FixedTP control 2R; 20 adaptive lock settings per entry mode, no fixed TP, activation 1/1.5/2/2.5/3R mark MFE and fee breakeven; lock fractions by profile for directional RSI >=60/>50/<=50; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; filtered entries use latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean","results":{k:s.result() for k,s in states.items()}}
           # Compact output permits all results to be retrieved without truncation.
           print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
           for k,v in results["results"].items():
               print("SWEEP_ROW "+json.dumps({"name":k,**{x:y for x,y in v.items() if x!="monthly"},"flat_months":sum(x==0 for x in v["monthly"].values())},separators=(",",":"))) 
-          for mode in ("Touch","Reclaim"):
-              best=max((k for k in results["results"] if k.startswith(mode+" Lock")),key=lambda k:results["results"][k]["net"])
-              print("BEST_MONTHLY "+json.dumps({"name":best,"monthly":results["results"][best]["monthly"]},separators=(",",":")))
           Path("mtf-color-results.json").write_text(json.dumps(results,indent=2))
           
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: rsi-adaptive-lock-grid-results
-          path: mtf-color-results.json
+          name: reclaim-3r-tight-recorded-ledger
+          path: analysis/btc15m_rsi_reclaim_3r_tight_20261127/
+      - name: Archive verified ledger on research branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f analysis/btc15m_rsi_reclaim_3r_tight_20261127/ledger.json analysis/btc15m_rsi_reclaim_3r_tight_20261127/summary.json
+          git commit -m 'Archive exact 224-trade Reclaim 3R Tight ledger'
+          git push origin HEAD:research/mtf-color-replay-20261127
+          git rev-parse HEAD
