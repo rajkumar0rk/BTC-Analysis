@@ -1,4 +1,4 @@
-name: Strict post-flip 15m Touch and Reclaim Color replay
+name: Strict 15m Touch Reclaim Color RSI14 filter
 on:
   push:
     branches: [research/mtf-color-replay-20261127]
@@ -32,7 +32,7 @@ jobs:
           ins=Instrument("delta_india","BTCUSD",AssetClass.CRYPTO_PERPETUAL,"USD","USD",D("0.5"),D("1"),D("0.001"))
           m=Timeframe(900)
           params={"period":10,"multiplier":"3"}
-          book=IndicatorBook((spec("supertrend.direction",m,**params),spec("ema.value",m,period=20),spec("supertrend.line",m,**params),spec("atr.value",m,period=14)))
+          book=IndicatorBook((spec("supertrend.direction",m,**params),spec("ema.value",m,period=20),spec("supertrend.line",m,**params),spec("atr.value",m,period=14),spec("rsi.value",m,period=14)))
           ist=ZoneInfo("Asia/Kolkata")
           def rows(path):
               with gzip.open(path,"rt") as f:
@@ -92,9 +92,9 @@ jobs:
                       monthly[k]=round(v-prev,8);prev=v
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s for _,s in self.trades),target_exits=sum(not s for _,s in self.trades),invalid_line=self.invalid_line,mean_initial_distance=sum(self.distances)/len(self.distances) if self.distances else None)
-          states={f"{mode} {variant}":State() for mode in ("Touch","Reclaim") for variant in ("Previous","Strict")}
-          by_mode={mode:[(variant,states[f"{mode} {variant}"]) for variant in ("Previous","Strict")] for mode in ("Touch","Reclaim")}
-          audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0}
+          states={f"{mode} {variant}":State() for mode in ("Touch","Reclaim") for variant in ("Strict","RSI50")}
+          by_mode={mode:[(variant,states[f"{mode} {variant}"]) for variant in ("Strict","RSI50")] for mode in ("Touch","Reclaim")}
+          audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0,"rsi_blocked_touch":0,"rsi_blocked_reclaim":0}
           volumes=deque(maxlen=20);atrs=deque(maxlen=20);filter_pass=False;filter_stats={"15m_ready":0,"volume_pass":0,"atr_pass":0,"both_pass":0}
           groups={900:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=ist).timestamp())
           def val(name,tf,p):
@@ -139,29 +139,36 @@ jobs:
                           if s.pos and int(st15)==-s.pos[0]:s.exit_pending=True
                   alignment=int(st15) if st15 in (-1,1) else 0
                   em=val("ema.value",m,{"period":20});ema=float(em) if em is not None else None
+                  rsi=val("rsi.value",m,{"period":14});rsi_pass=rsi is not None and alignment*(rsi-D(50))>0
                   if alignment!=old_side:
                       for s in states.values():s.used=False
                   if count>=6000 and alignment and dt(t+60).astimezone(ist).weekday()<5:
                       if alignment==old_side and old_ema is not None and prev_min is not None and alignment*(prev_min[3]-old_ema)>0 and alignment*(v[0]-old_ema)>=0 and v[2]<=old_ema<=v[1]:
                           for variant,s in by_mode["Touch"]:
-                              if filter_pass and not s.pos and not s.used and st_line is not None:s.pending=alignment;s.line=float(st_line)
+                              if not (filter_pass and not s.pos and not s.used and st_line is not None):continue
+                              if variant=="RSI50" and not rsi_pass:
+                                  audit["rsi_blocked_touch"]+=1;continue
+                              s.pending=alignment;s.line=float(st_line)
                       if completed15 and prev15 and old_ema is not None and alignment*(prev15[3]-old_ema)>0 and completed15[2]<=old_ema<=completed15[1] and alignment*(completed15[3]-old_ema)>0:
                           crossed=completed15[2]<old_ema if alignment==1 else completed15[1]>old_ema
                           for variant,s in by_mode["Reclaim"]:
                               if not (filter_pass and not s.pos and not s.used and st_line is not None):continue
-                              if variant=="Strict":
-                                  if alignment!=old_side:
-                                      audit["reclaim_flip_signals_blocked"]+=1;continue
-                                  if not crossed:
-                                      audit["reclaim_touch_only_signals_blocked"]+=1;continue
-                                  assert alignment==old_side and crossed
+                              if alignment!=old_side:
+                                  audit["reclaim_flip_signals_blocked"]+=1;continue
+                              if not crossed:
+                                  audit["reclaim_touch_only_signals_blocked"]+=1;continue
+                              assert alignment==old_side and crossed
+                              if variant=="RSI50" and not rsi_pass:
+                                  audit["rsi_blocked_reclaim"]+=1;continue
                               s.pending=alignment;s.line=float(st_line)
                   if completed15:prev15=completed15
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          assert states["Touch Previous"].result()==states["Touch Strict"].result()
-          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"execution":"15m Supertrend only (no 1h condition); strict Reclaim requires previous and current ST directions equal, strict cross beyond frozen pre-signal EMA20 and close back; strict Touch identical to previous with no flip entry; one entry per 15m Supertrend cycle; Color paired trade and mark paths; 15m completed Supertrend flip exit at next 1m open; fixed target 2x signed entry distance to last completed 15m Supertrend line; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; filtered entries use latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean","results":{k:s.result() for k,s in states.items()}}
+          assert states["Touch Strict"].opens==274 and states["Reclaim Strict"].opens==181
+          assert abs(states["Touch Strict"].result()["net"]+20.857651704952048)<1e-8
+          assert abs(states["Reclaim Strict"].result()["net"]+9.018730841872653)<1e-8
+          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"execution":"15m Supertrend only (no 1h condition); strict Reclaim requires previous and current ST directions equal, strict cross beyond frozen pre-signal EMA20 and close back; strict Touch no flip entry; RSI50 variants require latest completed 15m RSI14 >50 for buy and <50 for sell; strict controls have no RSI; one entry per 15m Supertrend cycle; Color paired trade and mark paths; 15m completed Supertrend flip exit at next 1m open; fixed target 2x signed entry distance to last completed 15m Supertrend line; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; filtered entries use latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean","results":{k:s.result() for k,s in states.items()}}
           # Compact output permits all results to be retrieved without truncation.
           print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
           for k,v in results["results"].items():
@@ -171,5 +178,5 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: strict-post-flip-color-results
+          name: strict-post-flip-rsi50-color-results
           path: mtf-color-results.json
