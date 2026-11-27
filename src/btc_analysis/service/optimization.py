@@ -18,7 +18,7 @@ MAX_CANDIDATE_MINUTES=5760
 
 class Axis(BaseModel):
     model_config=ConfigDict(extra="forbid",strict=True)
-    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|custom:[A-Za-z][A-Za-z0-9_]{0,47}\.lookback|python:[A-Za-z][A-Za-z0-9_]*|sequence:(long|short)\.expiry_bars|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked|trailing_percent\.activation|trailing_percent\.distance|trailing_atr\.activation|trailing_atr\.period|trailing_atr\.multiplier))$",max_length=80)]
+    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|custom:[A-Za-z][A-Za-z0-9_]{0,47}\.lookback|python:[A-Za-z][A-Za-z0-9_]*|(sequence|machine):(long|short)\.expiry_bars|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked|trailing_percent\.activation|trailing_percent\.distance|trailing_atr\.activation|trailing_atr\.period|trailing_atr\.multiplier))$",max_length=80)]
     values:list[DecimalText]=Field(min_length=1,max_length=8)
     @model_validator(mode="after")
     def unique(self):
@@ -77,11 +77,12 @@ def variants(graph,search):
                 definition=next((d for d in (g.get("custom_formulas") or []) if d["name"]==name),None)
                 if definition is None:raise ValueError("custom axis not found: "+name)
                 definition["lookback"]=int(D(val));continue
-            if key.startswith("sequence:"):
-                direction=key.split(":",1)[1].split(".",1)[0]
-                seq=g.get(direction+"_sequence")
-                if seq is None:raise ValueError("sequence axis requires enabled sequence")
-                if D(val)!=D(val).to_integral_value():raise ValueError("sequence expiry must be integer")
+            if key.startswith(("sequence:","machine:")):
+                kind,field=key.split(":",1)
+                direction=field.split(".",1)[0]
+                seq=g.get(direction+"_"+kind)
+                if seq is None:raise ValueError("stateful axis requires enabled "+kind)
+                if D(val)!=D(val).to_integral_value():raise ValueError("expiry must be integer")
                 seq["expiry_bars"]=int(D(val));continue
             if key.startswith("advanced:"):
                 name=key.split(":",1)[1]

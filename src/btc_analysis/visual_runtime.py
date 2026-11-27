@@ -75,6 +75,7 @@ class VisualStrategyBase(PythonStrategy):
 
     advanced_controls=None
     sequence_config=None
+    machine_config=None
     custom_config=None
 
     def __init__(self):
@@ -86,6 +87,7 @@ class VisualStrategyBase(PythonStrategy):
         self.signal_count=0
         self.pending_cycle=None
         self.sequence_state={1:(0,None),-1:(0,None)}
+        self.machine_state={1:(0,None),-1:(0,None)}
         self.formula_runtime=formula_program(self.custom_config).make() if self.custom_config else None
 
     def on_completed_candle(self,candle):
@@ -133,7 +135,31 @@ class VisualStrategyBase(PythonStrategy):
     def sequence_stage(self,ctx,direction,index):return False
     def sequence_reset(self,ctx,direction):return False
 
+    def machine_transition(self,ctx,direction,index):return False
+    def machine_reset(self,ctx,direction):return False
+
+    def machine_ready(self,ctx,direction):
+        ready,expiry,edges=self.machine_config[direction]
+        state,started=self.machine_state[direction]
+        if ctx.position_quantity!=0 or self.machine_reset(ctx,direction):
+            self.machine_state[direction]=(0,None)
+            return False
+        if started is not None and self.signal_count-started>expiry:
+            state,started=0,None
+        # A single ordered transition per completed signal candle. Reset and
+        # position checks take priority. Returning to idle restarts the clock.
+        if state!=ready:
+            for i,(source,target) in enumerate(edges):
+                if source==state and self.machine_transition(ctx,direction,i):
+                    if target==0:started=None
+                    elif state==0:started=self.signal_count
+                    state=target
+                    break
+        self.machine_state[direction]=(state,started)
+        return state==ready
+
     def sequence_ready(self,ctx,direction):
+        if direction in (self.machine_config or {}):return self.machine_ready(ctx,direction)
         config=(self.sequence_config or {}).get(direction)
         if config is None:return True
         stages,expiry=config
@@ -203,6 +229,9 @@ class VisualStrategyBase(PythonStrategy):
                 if self.sequence_config:
                     self.sequence_state={1:(0,None),-1:(0,None)}
                     for d in self.sequence_config:self.entry_streak[d]=0
+                if self.machine_config:
+                    self.machine_state={1:(0,None),-1:(0,None)}
+                    for d in self.machine_config:self.entry_streak[d]=0
             elif ctx.position_quantity==0:
                 self.last_flat_signal=self.signal_count
         if fill.reason not in ("visual_long_entry","visual_short_entry"):return

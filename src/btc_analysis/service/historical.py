@@ -79,6 +79,7 @@ class GraphStrategy(VisualStrategyBase):
         self.take_profit=D(g.take_profit_pct)/100
         self.advanced_controls=g.advanced.model_dump() if g.advanced is not None else None
         self.sequence_config=g.sequence_config()
+        self.machine_config=g.machine_config()
     def indicators(self):
         specs=set()
         if self.g.advanced is not None and self.g.advanced.trailing_atr is not None:
@@ -103,6 +104,12 @@ class GraphStrategy(VisualStrategyBase):
             values=(compare(c.op,self.operand(ctx,c.left),self.operand(ctx,c.right)) for c in g.conditions)
             groups.append(all(values) if g.mode=="all" else any(values))
         return all(groups) if r.mode=="all" else any(groups)
+    def machine_transition(self,ctx,direction,index):
+        m=self.g.long_machine if direction==1 else self.g.short_machine
+        return self.rule(ctx,m.transitions[index].rule) if m is not None else False
+    def machine_reset(self,ctx,direction):
+        m=self.g.long_machine if direction==1 else self.g.short_machine
+        return self.rule(ctx,m.reset) if m is not None and m.reset is not None else False
     def sequence_stage(self,ctx,direction,index):
         seq=self.g.long_sequence if direction==1 else self.g.short_sequence
         return self.rule(ctx,seq.stages[index]) if seq is not None else False

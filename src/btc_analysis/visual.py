@@ -110,6 +110,37 @@ class EntrySequence(Strict):
         return self
 
 
+class StateTransition(Strict):
+    source:int=Field(ge=0,le=7)
+    target:int=Field(ge=0,le=7)
+    rule:Rule
+
+
+class EntryMachine(Strict):
+    """Finite directional entry gate; state 0 is idle, last state is armed."""
+    state_count:int=Field(ge=2,le=8)
+    transitions:list[StateTransition]=Field(min_length=1,max_length=24)
+    reset:Rule|None=None
+    expiry_bars:int=Field(ge=1,le=10000)
+
+    @model_validator(mode="after")
+    def check(self):
+        ready=self.state_count-1
+        if self.reset is not None and not self.reset.enabled:raise ValueError("machine reset must be enabled")
+        edges=set()
+        for t in self.transitions:
+            if t.source>=ready or t.target>ready or t.source==t.target or not t.rule.enabled:
+                raise ValueError("invalid machine transition")
+            edge=(t.source,t.target)
+            if edge in edges:raise ValueError("duplicate machine edge; combine alternative conditions in one rule")
+            edges.add(edge)
+        reached={0}
+        for _ in range(self.state_count):
+            reached|={b for a,b in edges if a in reached}
+        if reached!=set(range(self.state_count)):raise ValueError("all machine states must be reachable from idle")
+        return self
+
+
 class TrailingPoints(Strict):
     activation:DecimalText
     distance:DecimalText
@@ -174,6 +205,8 @@ class Graph(Strict):
     custom_formulas:list[CustomFormula]|None=Field(default=None,min_length=1,max_length=16)
     long_sequence:EntrySequence|None=None
     short_sequence:EntrySequence|None=None
+    long_machine:EntryMachine|None=None
+    short_machine:EntryMachine|None=None
     long_entry:Rule
     short_entry:Rule
     long_exit:Rule
@@ -182,8 +215,11 @@ class Graph(Strict):
     @model_validator(mode="after")
     def check(self):
         for direction in ("long","short"):
-            if getattr(self,direction+"_sequence") is not None and (self.advanced is None or not getattr(self,direction+"_entry").enabled):
-                raise ValueError("entry sequence requires advanced controls and an enabled directional entry rule")
+            seq=getattr(self,direction+"_sequence")
+            machine=getattr(self,direction+"_machine")
+            if seq is not None and machine is not None:raise ValueError("choose a sequence or a state machine per direction")
+            if (seq is not None or machine is not None) and (self.advanced is None or not getattr(self,direction+"_entry").enabled):
+                raise ValueError("entry sequence or state machine requires advanced controls and an enabled directional entry rule")
         if not self.long_entry.enabled and not self.short_entry.enabled:
             raise ValueError("at least one entry rule must be enabled")
         for key,lo,hi in (("exposure_pct",Decimal("0.01"),Decimal(100)),
@@ -227,7 +263,15 @@ class Graph(Strict):
             if seq is not None:
                 extra.extend(seq.stages)
                 if seq.reset is not None:extra.append(seq.reset)
+        for machine in (self.long_machine,self.short_machine):
+            if machine is not None:
+                extra.extend(t.rule for t in machine.transitions)
+                if machine.reset is not None:extra.append(machine.reset)
         return (self.long_entry,self.short_entry,self.long_exit,self.short_exit,*extra)
+
+    def machine_config(self):
+        return {direction:(m.state_count-1,m.expiry_bars,tuple((t.source,t.target) for t in m.transitions))
+                for direction,m in ((1,self.long_machine),(-1,self.short_machine)) if m is not None}
 
     def sequence_config(self):
         return {direction: (len(seq.stages),seq.expiry_bars) for direction,seq in ((1,self.long_sequence),(-1,self.short_sequence)) if seq is not None}
@@ -241,6 +285,11 @@ def raw_rules(raw):
         if seq is not None:
             yield from seq["stages"]
             if seq.get("reset") is not None:yield seq["reset"]
+    for name in ("long_machine","short_machine"):
+        m=raw.get(name)
+        if m is not None:
+            for t in m["transitions"]:yield t["rule"]
+            if m.get("reset") is not None:yield m["reset"]
 
 
 def canonical_graph(graph:Graph):
@@ -332,6 +381,9 @@ def compile_graph(graph:Graph):
     if g.sequence_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    sequence_config = "+repr(g.sequence_config()), ""]
+    if g.machine_config():
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    machine_config = "+repr(g.machine_config()), ""]
     for name,tf,params in sorted(specs):
         lines.append("            IndicatorSpec.create("+repr(name)+", Timeframe("+str(tf)+"), "+params+"),")
     lines+=["        )","","    def extra_timeframes(self):",
@@ -348,6 +400,17 @@ def compile_graph(graph:Graph):
         for direction,seq in ((1,g.long_sequence),(-1,g.short_sequence)):
             if seq is not None and seq.reset is not None:
                 lines+=["        if direction == "+str(direction)+":","            return "+_rule(seq.reset)]
+        lines+=["        return False"]
+    if g.machine_config():
+        lines+=["","    def machine_transition(self, ctx, direction, index):"]
+        for direction,m in ((1,g.long_machine),(-1,g.short_machine)):
+            if m is not None:
+                for i,t in enumerate(m.transitions):
+                    lines+=["        if direction == "+str(direction)+" and index == "+str(i)+":","            return "+_rule(t.rule)]
+        lines+=["        return False","","    def machine_reset(self, ctx, direction):"]
+        for direction,m in ((1,g.long_machine),(-1,g.short_machine)):
+            if m is not None and m.reset is not None:
+                lines+=["        if direction == "+str(direction)+":","            return "+_rule(m.reset)]
         lines+=["        return False"]
     source="\n".join(lines)+"\n"
     if len(source.encode())>MAX_SOURCE:raise ValueError("generated source exceeds limit")

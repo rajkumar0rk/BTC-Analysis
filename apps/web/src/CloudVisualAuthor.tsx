@@ -1,5 +1,5 @@
 import {useEffect,useRef,useState} from "react";
-import {FrameSelect,RuleEdit,AdvancedVisualControls,SequenceControls,CustomFormulaControls} from "./VisualBuilder";
+import {FrameSelect,RuleEdit,AdvancedVisualControls,SequenceControls,CustomFormulaControls,StateMachineControls} from "./VisualBuilder";
 import {initialGraph,keys} from "./visualTypes";
 import type {Graph,Compiled} from "./visualTypes";
 import type {Catalog} from "./api";
@@ -27,6 +27,7 @@ export function CloudVisualAuthor({disabled,onSource}:{disabled:boolean;onSource
  {(["exposure_pct","stop_loss_pct","take_profit_pct"] as const).map((k,i)=><label key={k}>{["Exposure %","Stop loss %","Take profit %"][i]}<input value={graph[k]} onChange={e=>setGraph(g=>({...g,[k]:e.target.value}))}/></label>)}</div>
  <CustomFormulaControls graph={graph} change={setGraph} disabled={locked}/><AdvancedVisualControls graph={graph} change={setGraph} disabled={locked}/><p className="muted">Visual strategies use 1m execution. {graph.advanced?.exit_mode==="points"?"Fixed-point protection starts on the entry minute; percentage fields are inactive.":"Percentage protection starts after the entry candle."}</p>
  {catalog&&<SequenceControls graph={graph} change={setGraph} catalog={catalog} disabled={locked}/>}
+ {catalog&&<StateMachineControls graph={graph} change={setGraph} catalog={catalog} disabled={locked}/>}
  {catalog&&keys.map(k=><RuleEdit key={k} title={k.replaceAll("_"," ")} rule={graph[k]} change={v=>setGraph(g=>({...g,[k]:v}))} custom={graph.custom_formulas??[]} catalog={catalog} disabled={locked}/>)}
  <button disabled={!catalog||locked} onClick={()=>request("compile_visual",x=>{const result=x as Compiled;if(typeof result.source!=="string")throw Error("Invalid compiler response");onSource(result.source);})}>Generate visual strategy source</button></fieldset>
  {busy&&<p role="status">Loading local Python compiler…</p>}{error&&<p role="alert" className="error">{error}</p>}

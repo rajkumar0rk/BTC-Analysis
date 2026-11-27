@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react";
 import type {Api,Catalog,Strategy,Revision} from "./api";
 import {frames,ops,keys,initialGraph,newCondition,newGroup,advancedDefaults} from "./visualTypes";
-import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence,CustomFormula} from "./visualTypes";
+import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence,CustomFormula,EntryMachine,StateTransition} from "./visualTypes";
 const captions={long_entry:"Long entry",short_entry:"Short entry",long_exit:"Long exit",short_exit:"Short exit"};
 const opLabels={gt:">",gte:"≥",lt:"<",lte:"≤",eq:"=",cross_up:"Crosses above",cross_down:"Crosses below"};
 const frameLabel=(n:number)=>n>=86400?"1 day":n>=3600?n/3600+"h":n/60+"m";
@@ -47,10 +47,12 @@ export function CustomFormulaControls({graph,change,disabled}:{graph:Graph;chang
   const out={...graph,custom_formulas:defs.map((d,j)=>j===i?next:d)};
   keys.forEach(k=>out[k]=rule(graph[k]));
   for(const k of ["long_sequence","short_sequence"] as const){const s=graph[k];if(s)out[k]={...s,stages:s.stages.map(rule),reset:s.reset?rule(s.reset):s.reset};}
+  for(const k of ["long_machine","short_machine"] as const){const m=graph[k];if(m)out[k]={...m,transitions:m.transitions.map(t=>({...t,rule:rule(t.rule)})),reset:m.reset?rule(m.reset):m.reset};}
   change(out);
  }
  function used(name:string){
   const rules=keys.map(k=>graph[k]);for(const s of [graph.long_sequence,graph.short_sequence])if(s){rules.push(...s.stages);if(s.reset)rules.push(s.reset);}
+  for(const m of [graph.long_machine,graph.short_machine])if(m){rules.push(...m.transitions.map(t=>t.rule));if(m.reset)rules.push(m.reset);}
   return rules.some(r=>r.groups.some(g=>g.conditions.some(c=>[c.left,c.right].some(o=>o.kind==="custom"&&o.name===name))));
  }
  return <fieldset className="visual-rule" disabled={disabled}><legend>Custom indicator formulas</legend><p className="muted">Use a single numeric expression with completed candles (bars), previous output, and bounded SDK helpers. Example: mean(series(bars, "close")). The lookback is the required number of completed candles. Compare a custom formula in any rule or sequence. Names must be unique.</p>
@@ -61,7 +63,7 @@ export function AdvancedVisualControls({graph,change,disabled}:{graph:Graph;chan
  const a=graph.advanced;
  function edit(patch:Partial<AdvancedControls>){if(a)change({...graph,advanced:{...a,...patch}});}
  return <fieldset className="visual-rule" disabled={disabled}><legend>Advanced entry and risk controls</legend>
- <label className="check"><input type="checkbox" checked={!!a} onChange={e=>{if(e.target.checked)change({...graph,advanced:advancedDefaults()});else{const next={...graph};delete next.advanced;delete next.long_sequence;delete next.short_sequence;change(next);}}}/> Enable advanced controls (disabling also removes entry sequences)</label>
+ <label className="check"><input type="checkbox" checked={!!a} onChange={e=>{if(e.target.checked)change({...graph,advanced:advancedDefaults()});else{const next={...graph};delete next.advanced;delete next.long_sequence;delete next.short_sequence;delete next.long_machine;delete next.short_machine;change(next);}}}/> Enable advanced controls (disabling also removes entry sequences and state machines)</label>
  {a&&<><div className="visual-config">
  <label>Entry frequency<select value={a.entry_mode} onChange={e=>edit({entry_mode:e.target.value as AdvancedControls["entry_mode"]})}><option value="continuous">While entry condition is true</option><option value="once_per_true_run">One filled entry per continuous true condition</option></select></label>
  <label>Consecutive signal confirmations<input aria-label="Consecutive signal confirmations" type="number" min={1} max={100} value={a.confirmation_bars} onChange={e=>edit({confirmation_bars:Number(e.target.value)})}/></label>
@@ -75,15 +77,37 @@ export function AdvancedVisualControls({graph,change,disabled}:{graph:Graph;chan
 export function SequenceControls({graph,change,catalog,disabled}:{graph:Graph;change:(g:Graph)=>void;catalog:Catalog;disabled:boolean}){
  function stage():Rule{return {enabled:true,mode:"all",groups:[newGroup()]};}
  return <section className="scenario"><h3>Sequential entry conditions</h3><p className="muted">Stages advance in order, at most once per completed signal candle, while flat. The directional entry rule still has to be true after the final stage. Reset overrides all stages; expiry starts with the first completed stage. A filled entry clears both sequences.</p>
- {(["long","short"] as const).map(direction=>{const key=direction==="long"?"long_sequence":"short_sequence",entry=direction==="long"?"long_entry":"short_entry";const seq=graph[key];
+ {(["long","short"] as const).map(direction=>{const key=direction==="long"?"long_sequence":"short_sequence",entry=direction==="long"?"long_entry":"short_entry";const seq=graph[key];const machine=direction==="long"?graph.long_machine:graph.short_machine;
  function update(next:EntrySequence|null){change({...graph,[key]:next,...(next?{advanced:graph.advanced??advancedDefaults(),[entry]:{...graph[entry],enabled:true,groups:graph[entry].groups.length?graph[entry].groups:[newGroup()]}}:{})});}
- return <fieldset key={direction} className="visual-rule" disabled={disabled}><legend>{direction==="long"?"Long":"Short"} entry sequence</legend><label className="check"><input type="checkbox" checked={!!seq} onChange={e=>update(e.target.checked?{stages:[stage(),stage()],expiry_bars:10}:null)}/> Enable {direction} sequence</label>
+ return <fieldset key={direction} className="visual-rule" disabled={disabled}><legend>{direction==="long"?"Long":"Short"} entry sequence</legend><label className="check"><input type="checkbox" checked={!!seq} disabled={disabled||!!machine} onChange={e=>update(e.target.checked?{stages:[stage(),stage()],expiry_bars:10}:null)}/> Enable {direction} sequence</label>
  {seq&&<><label>Maximum signal candles since first stage<input type="number" min={seq.stages.length-1} max={10000} value={seq.expiry_bars} onChange={e=>update({...seq,expiry_bars:Number(e.target.value)})}/></label>
  {seq.stages.map((s,i)=><div key={i}><RuleEdit rule={s} title={direction+" stage "+(i+1)} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={value=>update({...seq,stages:seq.stages.map((x,j)=>i===j?{...value,enabled:true}:x)})}/><button type="button" disabled={seq.stages.length<=2} onClick={()=>update({...seq,stages:seq.stages.filter((_,j)=>j!==i)})}>Remove stage {i+1}</button><button type="button" disabled={i===0} onClick={()=>{const stages=[...seq.stages];[stages[i-1],stages[i]]=[stages[i],stages[i-1]];update({...seq,stages});}}>Move stage up</button></div>)}
  <button type="button" disabled={seq.stages.length>=4} onClick={()=>update({...seq,stages:[...seq.stages,stage()]})}>Add stage</button>
  <label className="check"><input type="checkbox" checked={!!seq.reset} onChange={e=>update({...seq,reset:e.target.checked?stage():null})}/> Enable reset condition</label>
  {seq.reset&&<RuleEdit rule={seq.reset} title={direction+" sequence reset"} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={value=>update({...seq,reset:{...value,enabled:true}})}/>}</>}
  </fieldset>;})}</section>;
+}
+export function StateMachineControls({graph,change,catalog,disabled}:{graph:Graph;change:(g:Graph)=>void;catalog:Catalog;disabled:boolean}){
+ const newRule=():Rule=>({enabled:true,mode:"all",groups:[newGroup()]});
+ return <section className="scenario"><h3>Directional entry state machines</h3><p className="muted">Choose a state machine or a linear sequence for each direction. State 0 is idle; the last state arms entry. The first matching transition wins per completed signal candle; global reset, an open position, expiry and filled entry clear progress. The directional entry rule remains required.</p>
+ {(["long","short"] as const).map(direction=>{
+  const key=direction==="long"?"long_machine":"short_machine",entry=direction==="long"?"long_entry":"short_entry",seq=direction==="long"?graph.long_sequence:graph.short_sequence,m=graph[key];
+  const update=(next:EntryMachine|null)=>change({...graph,[key]:next,...(next?{advanced:graph.advanced??advancedDefaults(),[entry]:{...graph[entry],enabled:true,groups:graph[entry].groups.length?graph[entry].groups:[newGroup()]}}:{})});
+  const patch=(i:number,t:StateTransition)=>{if(m)update({...m,transitions:m.transitions.map((x,j)=>i===j?t:x)});};
+  return <fieldset className="visual-rule" key={direction} disabled={disabled}><legend>{direction} state machine</legend>
+  <label className="check"><input type="checkbox" checked={!!m} disabled={disabled||!!seq} onChange={e=>update(e.target.checked?{state_count:3,expiry_bars:10,transitions:[{source:0,target:1,rule:newRule()},{source:1,target:2,rule:newRule()}]}:null)}/> Enable {direction} state machine</label>
+  {m&&<><label>State count<select value={m.state_count} onChange={e=>{const n=Number(e.target.value);update({...m,state_count:n,transitions:m.transitions.filter(t=>t.source<n-1&&t.target<n)});}}>{[2,3,4,5,6,7,8].map(n=><option key={n}>{n}</option>)}</select></label>
+  <label>Expiry signal candles<input type="number" min={1} max={10000} value={m.expiry_bars} onChange={e=>update({...m,expiry_bars:Number(e.target.value)})}/></label>
+  <p className="muted">Idle: 0 · Armed: {m.state_count-1}. Every state must be reachable from idle. Add return-to-idle edges for local resets. Transition list order determines priority.</p>
+  {m.transitions.map((t,i)=><div className="rule-group" key={i}><div className="head"><strong>Transition {i+1}</strong><div className="rule-actions"><button type="button" disabled={i===0} onClick={()=>{const next=[...m.transitions];[next[i-1],next[i]]=[next[i],next[i-1]];update({...m,transitions:next});}}>Move up</button><button type="button" disabled={i===m.transitions.length-1} onClick={()=>{const next=[...m.transitions];[next[i+1],next[i]]=[next[i],next[i+1]];update({...m,transitions:next});}}>Move down</button><button type="button" onClick={()=>update({...m,transitions:m.transitions.filter((_,j)=>i!==j)})}>Remove transition</button></div></div>
+  <label>From state<select value={t.source} onChange={e=>patch(i,{...t,source:Number(e.target.value)})}>{Array.from({length:m.state_count-1},(_,j)=><option key={j}>{j}</option>)}</select></label><label>To state<select value={t.target} onChange={e=>patch(i,{...t,target:Number(e.target.value)})}>{Array.from({length:m.state_count},(_,j)=><option key={j} disabled={j===t.source}>{j}</option>)}</select></label>
+  <RuleEdit rule={t.rule} title={direction+" transition "+(i+1)} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={rule=>patch(i,{...t,rule:{...rule,enabled:true}})}/></div>)}
+  <button type="button" disabled={m.transitions.length>=24} onClick={()=>{for(let source=0;source<m.state_count-1;source++)for(let target=0;target<m.state_count;target++)if(source!==target&&!m.transitions.some(t=>t.source===source&&t.target===target)){update({...m,transitions:[...m.transitions,{source,target,rule:newRule()}]});return;}}}>Add transition</button>
+  <label className="check"><input type="checkbox" checked={!!m.reset} onChange={e=>update({...m,reset:e.target.checked?newRule():null})}/> Enable global reset</label>
+  {m.reset&&<RuleEdit rule={m.reset} title={direction+" machine reset"} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={rule=>update({...m,reset:{...rule,enabled:true}})}/>}</>}
+  </fieldset>;
+ })}
+ </section>;
 }
 export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void;openPython:(r:Revision)=>void}){
  const [graph,setGraph]=useState<Graph>(initialGraph);const [catalog,setCatalog]=useState<Catalog|null>(null);
@@ -101,7 +125,7 @@ export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Ap
  <div className="visual-config"><FrameSelect label="Signal timeframe" value={graph.signal_timeframe} disabled={busy} change={v=>edit({...graph,signal_timeframe:v})}/><FrameSelect label="Execution timeframe" value={graph.execution_timeframe} disabled={busy} change={v=>edit({...graph,execution_timeframe:v})}/>
  {(["exposure_pct","stop_loss_pct","take_profit_pct"] as const).map((k,i)=><label key={k}>{["Equity exposure (%)","Stop loss (%)","Take profit (%)"][i]}<input disabled={busy} value={graph[k]} onChange={e=>edit({...graph,[k]:e.target.value})}/></label>)}</div>
  <CustomFormulaControls graph={graph} change={edit} disabled={busy}/><AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
- {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} custom={graph.custom_formulas??[]} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
+ {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} custom={graph.custom_formulas??[]} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
  <section className="panel"><div className="head"><h2>Generated Python</h2><div className="rule-actions"><button disabled={busy||!catalog} onClick={()=>void generate()}>Generate Python</button><button className="primary" disabled={busy||!catalog||!name.trim()||stale} onClick={()=>void generate(true)}>Save visual strategy</button>{revision&&<button disabled={busy} onClick={()=>openPython(revision)}>Open saved Python</button>}</div></div>
  {stale&&<p role="alert">Newer, frozen or archived revision. Reopen or clone in the strategy library before saving.</p>}
  {error&&<p className="error" role="alert">{error}</p>}{note&&<p role="status">{note}</p>}
