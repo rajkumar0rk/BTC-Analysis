@@ -207,7 +207,8 @@ class VisualStrategyBase(PythonStrategy):
     def maybe_lock(self,ctx,direction):
         points=(self.conditional_lock_config or {}).get(direction)
         if points is not None and self.conditional_lock_rule(ctx,direction):
-            ctx.tighten_fixed_stop(D(points))
+            if isinstance(points,tuple):ctx.tighten_fixed_stop(D(points[0]),cost_adjusted=True)
+            else:ctx.tighten_fixed_stop(D(points))
 
     def partial_rule(self,ctx,direction):return False
 

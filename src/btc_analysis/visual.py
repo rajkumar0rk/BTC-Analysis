@@ -215,6 +215,7 @@ class PartialExit(Strict):
 
 class ConditionalLock(Strict):
     locked_points:DecimalText
+    cost_adjusted:Literal[True]|None=None
     rule:Rule
 
     @model_validator(mode="after")
@@ -326,7 +327,7 @@ class Graph(Strict):
         return (self.long_entry,self.short_entry,self.long_exit,self.short_exit,*extra)
 
     def lock_config(self):
-        return {direction:p.locked_points for direction,p in ((1,self.long_lock),(-1,self.short_lock)) if p is not None}
+        return {direction:(p.locked_points,True) if p.cost_adjusted else p.locked_points for direction,p in ((1,self.long_lock),(-1,self.short_lock)) if p is not None}
 
     def partial_levels_config(self):
         return {direction:tuple(p.pct for p in levels) for direction,levels in ((1,self.long_partial_levels),(-1,self.short_partial_levels)) if levels is not None}

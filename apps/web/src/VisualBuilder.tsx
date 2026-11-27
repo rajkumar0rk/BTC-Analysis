@@ -142,13 +142,13 @@ export function PartialLevelControls({graph,change,catalog,disabled}:{graph:Grap
  </section>;
 }
 export function ConditionalLockControls({graph,change,catalog,disabled}:{graph:Graph;change:(g:Graph)=>void;catalog:Catalog;disabled:boolean}){
- return <section className="scenario"><h3>Conditional stop protection</h3><p className="muted">Requires fixed-point protection. When a completed signal satisfies the rule, tighten the existing stop toward entry or locked profit. Never loosens a stop. Zero points means gross price breakeven, not cost-adjusted breakeven.</p>
+ return <section className="scenario"><h3>Conditional stop protection</h3><p className="muted">Requires fixed-point protection. When a completed signal satisfies the rule, tighten the existing stop toward entry or locked profit. Never loosens a stop. Choose gross entry-price protection or estimated net-trade protection including recorded costs, partial realized P&L, projected taker fee, tax and configured slippage. Neither guarantees a breakeven fill through gaps or future funding.</p>
  {(["long","short"] as const).map(direction=>{
   const key=direction==="long"?"long_lock":"short_lock",entry=direction==="long"?"long_entry":"short_entry",p=graph[key];
   const update=(next:ConditionalLock|null)=>change({...graph,[key]:next,...(next?{advanced:{...(graph.advanced??advancedDefaults()),exit_mode:"points" as const},[entry]:{...graph[entry],enabled:true,groups:graph[entry].groups.length?graph[entry].groups:[newGroup()]}}:{})});
   return <fieldset className="visual-rule" key={direction} disabled={disabled}><legend>{direction} conditional stop</legend>
   <label className="check"><input type="checkbox" checked={!!p} onChange={e=>update(e.target.checked?{locked_points:"0",rule:{enabled:true,mode:"all",groups:[{mode:"all",conditions:[{left:{kind:"position",field:"position_return_pct"},op:"gte",right:{kind:"constant",value:"1"}}]}]}}:null)}/> Enable {direction} conditional stop</label>
-  {p&&<><label>Locked price points from entry<input value={p.locked_points} onChange={e=>update({...p,locked_points:e.target.value})}/></label><RuleEdit rule={p.rule} title={direction+" conditional stop rule"} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={rule=>update({...p,rule:{...rule,enabled:true}})}/></>}
+  {p&&<><label>Stop calculation<select value={p.cost_adjusted?"net":"gross"} onChange={e=>update({...p,cost_adjusted:e.target.value==="net"?true:null})}><option value="gross">Gross entry-price lock</option><option value="net">Estimated net-trade breakeven / profit lock</option></select></label><label>{p.cost_adjusted?"Extra net profit points per remaining unit":"Locked price points from entry"}<input value={p.locked_points} onChange={e=>update({...p,locked_points:e.target.value})}/></label><RuleEdit rule={p.rule} title={direction+" conditional stop rule"} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={rule=>update({...p,rule:{...rule,enabled:true}})}/></>}
   </fieldset>;
  })}
  </section>;

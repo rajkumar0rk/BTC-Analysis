@@ -179,7 +179,7 @@ class Context:
         return values[-1] if values else None
     def indicator_history(self,name,timeframe,parameters=None,*,limit=2):
         return self._sim.indicators.get(name,timeframe,parameters,limit)
-    def tighten_fixed_stop(self,locked_points):
+    def tighten_fixed_stop(self,locked_points,*,cost_adjusted=False):
         """Trusted close-time helper; amendments cannot weaken or remove protection."""
         s=self._sim
         if type(locked_points) is not D or not locked_points.is_finite() or not ZERO<=locked_points<=D("1000000000"):
@@ -196,12 +196,34 @@ class Context:
         old=pending.intent
         side=Side.SELL if direction>0 else Side.BUY
         if not old.reduce_only or old.order_type is not OrderType.STOP_MARKET or old.side is not side:return False
-        candidate=s.round_price(entry.price+direction*locked_points,side)
+        reason="conditional_profit_lock_stop"
+        if cost_adjusted:
+            # Net trade P&L at an estimated final market fill F:
+            # gross realized + direction * remaining units * (F - entry basis)
+            # - historical costs - full taker exit fee including tax.
+            # Do not assume future funding, a scalp waiver, or a gap-free fill.
+            units=abs(s.quantity)*s.mult
+            basis=self.position_entry_price
+            paid=sum((x.fee+x.tax for x in (*s.entries,*s.exits)),ZERO)+s.trade_funding
+            rate=s.cfg.costs.taker_bps/BPS*(1+s.cfg.costs.tax_rate)
+            slip=s.cfg.costs.slippage_bps/BPS
+            denominator=direction-rate
+            if direction*denominator<=ZERO:return False
+            target=(direction*basis+(paid-s.trade_gross)/units+locked_points)/denominator
+            if target<=ZERO:return False
+            # Round the required fill and trigger favorably; the engine rounds
+            # actual market fills adversely. This avoids understating costs by a tick.
+            favorable=Side.BUY if direction>0 else Side.SELL
+            target=s.round_price(target,favorable)
+            candidate=s.round_price(target/(1-direction*slip),favorable)
+            reason="conditional_net_profit_lock_stop"
+        else:
+            candidate=s.round_price(entry.price+direction*locked_points,side)
         # Must be strictly protective of the observable trade close; never
         # retroactively trigger against a wick from the candle just completed.
         if candidate<=ZERO or direction*(candidate-old.stop_price)<=ZERO or direction*(history[-1].close-candidate)<=ZERO:return False
-        pending.intent=replace(old,stop_price=candidate,reason="conditional_profit_lock_stop",decision_utc=s.now)
-        s.log(key,"amended","conditional_profit_lock_stop",pending.intent)
+        pending.intent=replace(old,stop_price=candidate,reason=reason,decision_utc=s.now)
+        s.log(key,"amended",reason,pending.intent)
         return True
     def submit(self, intent): self._sim.submit(intent)
     def cancel(self, intent_id): self._sim.cancel(intent_id)
