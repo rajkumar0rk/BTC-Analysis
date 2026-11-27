@@ -62,13 +62,13 @@ if __name__=="__main__":
     args.output.mkdir(parents=True,exist_ok=True)
     # Latest fully finalized 15-minute boundary, with 2-minute source lag allowance.
     end=(pd.Timestamp.now(tz="UTC")-pd.Timedelta(minutes=2)).floor("15min")
-    end=min(end,START+pd.Timedelta(days=7))
+    end=min(end,pd.Timestamp("2026-11-27 09:30",tz="Asia/Kolkata").tz_convert("UTC"))
     assert end>START
     t,m,b=load(end,args.output)
     print("WEEK_DATA "+json.dumps(dict(start_ist=str(START.tz_convert("Asia/Kolkata")),end_exclusive_ist=str(end.tz_convert("Asia/Kolkata")),trade_candles=len(t),mark_candles=len(m))),flush=True)
     results=[]
-    for spread in (0.,.10):
-        for path in ("OHLC","OLHC"):
+    for spread in (0.,):
+        for path in ("COLOR",):
             result,trades=replay(t,m,b,path,spread)
             ledger=pd.DataFrame(trades)
             ledger.to_csv(args.output/f"trades-{path}-{spread}.csv",index=False)

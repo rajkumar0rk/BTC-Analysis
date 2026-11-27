@@ -1,7 +1,7 @@
-name: ETH legacy 15m week open entry replay
+name: ETH legacy 15m week candle color replay
 on:
   push:
-    branches: ['research/eth-legacy15m-week-open-entry-20261127']
+    branches: ['research/eth-legacy15m-week-color-20261127']
     paths: ['scripts/replay_eth_legacy15m_2026.py','scripts/replay_eth_legacy15m_week.py','.github/workflows/replay-eth-legacy15m-week.yml']
   workflow_dispatch:
 permissions:
@@ -16,6 +16,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install numpy==2.2.6 pandas==2.2.3
+      - run: python -m py_compile scripts/replay_eth_legacy15m_2026.py scripts/replay_eth_legacy15m_week.py
       - run: python scripts/replay_eth_legacy15m_week.py --output "$RUNNER_TEMP/eth-week"
       - uses: actions/upload-artifact@v4
         if: always()

@@ -171,7 +171,13 @@ def replay(t,m,bars,path,spread):
                         p=dict(side=side,entry=ep,i=i,qty=q,entry_fee=fee,cash_before=cash,liq=liq,stop=stop,best=ep,active=False,activation=max(TICK,round(ep*150/80000/TICK)*TICK),distance=max(TICK,round(ep*50/80000/TICK)*TICK))
                         cash=after;observe(last)
         if p:
-            seq=(1,2,3) if path=="OHLC" else (2,1,3)
+            # Same color heuristic as the 2025 research replay.
+            if path=="COLOR":
+                o,h,l,c=a[i]
+                low_first=c>o or (c==o and o-l<=h-o)
+                seq=(2,1,3) if low_first else (1,2,3)
+            else:
+                seq=(1,2,3) if path=="OHLC" else (2,1,3)
             for k in seq:
                 manage_sample(i,k)
                 if not p:break
