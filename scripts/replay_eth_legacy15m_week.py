@@ -68,7 +68,7 @@ if __name__=="__main__":
     print("WEEK_DATA "+json.dumps(dict(start_ist=str(START.tz_convert("Asia/Kolkata")),end_exclusive_ist=str(end.tz_convert("Asia/Kolkata")),trade_candles=len(t),mark_candles=len(m))),flush=True)
     results=[]
     for spread in (0.,):
-        for path in ("COLOR",):
+        for path in ("DIRECTION",):
             result,trades=replay(t,m,b,path,spread)
             ledger=pd.DataFrame(trades)
             ledger.to_csv(args.output/f"trades-{path}-{spread}.csv",index=False)

@@ -1,7 +1,7 @@
-name: ETH legacy 15m week candle color replay
+name: ETH legacy 15m week position direction replay
 on:
   push:
-    branches: ['research/eth-legacy15m-week-color-20261127']
+    branches: ['research/eth-legacy15m-week-direction-20261127']
     paths: ['scripts/replay_eth_legacy15m_2026.py','scripts/replay_eth_legacy15m_week.py','.github/workflows/replay-eth-legacy15m-week.yml']
   workflow_dispatch:
 permissions:

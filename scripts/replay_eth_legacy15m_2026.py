@@ -172,7 +172,10 @@ def replay(t,m,bars,path,spread):
                         cash=after;observe(last)
         if p:
             # Same color heuristic as the 2025 research replay.
-            if path=="COLOR":
+            if path=="DIRECTION":
+                # Adverse extreme first for each open position; not observed tick order.
+                seq=(2,1,3) if p["side"]==1 else (1,2,3)
+            elif path=="COLOR":
                 o,h,l,c=a[i]
                 low_first=c>o or (c==o and o-l<=h-o)
                 seq=(2,1,3) if low_first else (1,2,3)
