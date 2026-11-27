@@ -156,24 +156,11 @@ jobs:
           python ../../scripts/cloud_deploy_retry.py migrate
           python ../../scripts/cloud_deploy_retry.py deploy
           python ../../scripts/cloud_deploy_retry.py secret
-      - name: Verify deployed public shell and unauthenticated API denial
-        if: steps.before_writes.outputs.current == 'true' && (github.event_name == 'workflow_run' || inputs.operation == 'deploy')
-        run: |
-          set -euo pipefail
-          for attempt in $(seq 1 20); do
-            if curl -fsS --max-time 10 "$CF_ORIGIN/health" | python -c 'import json,sys,os;d=json.load(sys.stdin);assert d["status"]=="ok" and d["service"]=="btc-analysis-cloud" and d.get("release_sha")==os.environ["VERIFIED_SHA"]'; then break; fi
-            sleep 3
-          done
-          curl -fsS --max-time 15 "$CF_ORIGIN/health" | python -c 'import json,sys,os;d=json.load(sys.stdin);assert d["status"]=="ok" and d["service"]=="btc-analysis-cloud" and d.get("release_sha")==os.environ["VERIFIED_SHA"]'
-          curl -fsS --max-time 15 "$CF_ORIGIN/" -o "$RUNNER_TEMP/private-index.html"
-          grep -q 'Strategy Studio' "$RUNNER_TEMP/private-index.html"
-          status="$(curl -sS --max-time 15 -o "$RUNNER_TEMP/unauth.json" -w '%{http_code}' "$CF_ORIGIN/v1/cloud/capabilities")"
-          test "$status" = 401
-          python -c 'import json,sys;assert json.load(open(sys.argv[1]))["error"]=="invalid_credentials"' "$RUNNER_TEMP/unauth.json"
-          printf '### Private Studio deployed (virtual paper enabled; no sessions auto-started)\n%s\n\nAuthenticated data roundtrip and actual quota measurements still require operator verification.\n' "$CF_ORIGIN" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Extended production security and optional authenticated read check
+      - name: Verify exact deployed release and production security
         if: steps.before_writes.outputs.current == 'true' && (github.event_name == 'workflow_run' || inputs.operation == 'deploy')
         env:
           CF_MONITOR_TOKEN: ${{ secrets.CF_MONITOR_TOKEN }}
-        run: python scripts/cloud_health_check.py >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          set -euo pipefail
+          python scripts/cloud_health_check.py --release | tee -a "$GITHUB_STEP_SUMMARY"
+          printf '### Private Studio deployed (virtual paper enabled; no sessions auto-started)\n%s\n\nActual quota measurements still require operator verification.\n' "$CF_ORIGIN" >> "$GITHUB_STEP_SUMMARY"
