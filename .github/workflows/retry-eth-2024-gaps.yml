@@ -1,0 +1,57 @@
+name: Resume ETH 2024 missing historical data
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - scripts/retry_eth_2024_gaps.py
+      - scripts/test_retry_eth_2024_gaps.py
+      - .github/workflows/retry-eth-2024-gaps.yml
+permissions:
+  contents: write
+concurrency:
+  group: delta-2024-recovery
+  cancel-in-progress: false
+jobs:
+  retry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test resumable acquisition
+        run: |
+          python scripts/test_retry_eth_2024_gaps.py
+          python scripts/test_recover_delta_2024.py
+      - name: Recover only missing source intervals
+        run: python scripts/retry_eth_2024_gaps.py --round "$GITHUB_RUN_NUMBER" --output "$RUNNER_TEMP/eth-recovery.json"
+      - name: Retain validated progress
+        run: |
+          set -euo pipefail
+          git add -- data/delta_india/2024_recovery_candidates/ETHUSD data/delta_india/2024_recovery_candidates/coverage.json
+          if git diff --cached --quiet; then
+            echo "No new genuine rows; no data commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: resume genuine ETH 2024 missing intervals"
+          # Never force or overwrite concurrent main changes. A rejected push
+          # leaves prior main data intact; the artifact retains the new rows.
+          git push origin HEAD:main
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eth-2024-retry-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/eth-recovery.json
+            data/delta_india/2024_recovery_candidates/ETHUSD
+            data/delta_india/2024_recovery_candidates/coverage.json
+          retention-days: 14
+          if-no-files-found: error
