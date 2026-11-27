@@ -1,4 +1,4 @@
-/* Dedicated trusted-code runner. No credentials, arbitrary Python or user JS. */
+/* Dedicated local runner. Custom source is interpreted by a bounded SDK, never eval/exec. */
 let runtime;
 async function start(){
  const indexURL=new URL("./python-runtime/",self.location.href).href;
@@ -62,6 +62,11 @@ self.onmessage=async({data:m})=>{
  const t=performance.now();
  try{
   if(m.action==="long_repository"||m.action==="repository_study"){await longReplay(m,t);return;}
+  if(m.action==="visual_catalog"){
+   runtime??=start();const py=await runtime;
+   const result=py.runPython("from btc_analysis.indicators import CATALOG\nfrom btc_analysis.serialization import to_wire\njson.dumps(to_wire(dict(sdk_version='1',execution_allowed=False,indicators=[dict(name=k,defaults=v[0],outputs=v[1]) for k,v in CATALOG.items()])))");
+   self.postMessage({id:m.id,status:"done",result:JSON.parse(result)});return;
+  }
   if(m.action==="compile_visual"){
    if(typeof m.graph!=="string"||m.graph.length>65536)throw Error("Invalid graph");
    runtime??=start();const py=await runtime;

@@ -20,7 +20,13 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
     if len(csv_text.encode())>MAX_CSV or len(graph_text.encode())>65536:raise ValueError("input too large")
     from ..examples.mtf_pullback import HEADER as PULLBACK_HEADER,recover_pullback,MTFPullbackStrategy
     recipe=graph_text.startswith(PULLBACK_HEADER)
-    if recipe:
+    custom=not recipe and not graph_text.startswith("# btc-visual-v1 ") and not graph_text.lstrip().startswith("{")
+    if custom:
+        from .python_strategy import prepare_python
+        program,signal_seconds,frame_seconds=prepare_python(graph_text)
+        compiled={"source":graph_text,"graph_sha256":program.hash}
+        g=None
+    elif recipe:
         compiled=recover_pullback(graph_text)
         g=None
         signal_seconds=60 if compiled["mode"]=="touch" else 900
@@ -78,6 +84,7 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             if count%128==0:progress(min(99,count*99//(len(rows)*2)))
             yield b
     def strategy():
+        if custom:return program.make(leverage)
         obj=MTFPullbackStrategy(compiled["mode"]) if recipe else GraphStrategy(g)
         # Exposure is percentage of account equity allocated to initial margin.
         obj.exposure*=leverage
@@ -105,4 +112,4 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             scenarios[-1]["details"]={"equity":[{"event_utc":x["event_utc"],"equity":x["equity"]} for x in sampled],"equity_total":len(curve),"closed_trade_total":len(wire["closed_trades"]),"trades":trades,"evidence":evidence}
     return {"engine_version":result.engine_version,"source":"user CSV (unverified provenance)","research_only":True,"data_sha256":h,"graph_sha256":compiled["graph_sha256"],
             "result_sha256":result.result_sha256,"worst_path":result.worst_path,"scenarios":scenarios,"risk":risk_meta,
-            "limitations":list(result.limitations)+(["Reviewed MTF recipe: first 100 hours are initialization, entry only on IST weekdays, fixed-point bracket active on entry minute. OHLC path scenarios, not tick fills."] if recipe else ["No warmup outside CSV; entry candle protection starts on next minute."])}
+            "limitations":list(result.limitations)+(["Restricted SDK Python interpreted locally; unsupported syntax or calls fail. No arbitrary Python runtime or external warmup."] if custom else ["Reviewed MTF recipe: first 100 hours are initialization, entry only on IST weekdays, fixed-point bracket active on entry minute. OHLC path scenarios, not tick fills."] if recipe else ["No warmup outside CSV; entry candle protection starts on next minute."])}
