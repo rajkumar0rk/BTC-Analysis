@@ -16,6 +16,15 @@ const assert=require("node:assert/strict");
   await page.locator("#ledger tr").first().waitFor();
   await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"));
   assert.ok(["BTCUSD","ETHUSD"].includes(await page.locator("#symbol").inputValue()));
+  const newest=await page.evaluate(()=>rankedRuns(index.runs.filter(r=>r.automatic_version))[0]||null);
+  if(newest){
+    assert.equal(await page.locator("#latestRuns tr").count(),await page.evaluate(()=>index.automatic_run_count));
+    assert.equal(await page.locator("#latestRuns tr").first().getAttribute("data-run-id"),newest.id);
+    await page.locator("#latestRuns tr").first().getByRole("button",{name:"Open result"}).click();
+    assert.equal(await page.locator("#run").inputValue(),newest.id);
+    if(newest.trades){await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"))}
+    else{await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("No matching trades"));const sample=await page.evaluate(()=>rankedRuns(index.runs.filter(r=>r.symbol===$("symbol").value&&r.trades>0&&r.detail_available!==false))[0]?.id);assert.ok(sample);await page.locator("#run").selectOption(sample);await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"))}
+  }
   assert.equal(await page.locator("#frozenStrategies tbody tr").count(),2);
   assert.ok(await page.locator("#coverage").innerText().then(t=>t.includes("Supertrend")));
   assert.ok(await page.locator("#supertrendStrategies tbody tr").count()>=12);
@@ -34,9 +43,10 @@ const assert=require("node:assert/strict");
   await page.locator("#chart-reset").click();
   await page.waitForFunction(()=>chart&&nativeRows.length&&chart.timeScale().getVisibleLogicalRange());
   assert.equal(await page.evaluate(()=>window.LightweightCharts.version()),"5.0.9");
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   const beforeRange=await page.evaluate(()=>chart.timeScale().getVisibleLogicalRange());
   await page.locator("#chart-zoom-in").click();
-  const afterRange=await page.evaluate(()=>chart.timeScale().getVisibleLogicalRange());assert.ok(afterRange.to-afterRange.from<beforeRange.to-beforeRange.from);
+  await page.waitForFunction(before=>{const a=chart.timeScale().getVisibleLogicalRange();return a&&a.to-a.from<before.to-before.from-.1},beforeRange);
   await page.locator("#chart-native").scrollIntoViewIfNeeded();
   const box=await page.locator("#chart-native").boundingBox();
   const coords=await page.evaluate(()=>{const ts=chart.timeScale(),w=ts.width(),h=chart.panes()[0].getHeight();return nativeRows.map(r=>[ts.timeToCoordinate(r[0]),candleSeries.priceToCoordinate(r[4])]).filter(([x,y])=>x>20&&x<w-20&&y>20&&y<h-20)});
@@ -51,7 +61,7 @@ const assert=require("node:assert/strict");
   await page.locator("#tool-clear").click();assert.equal(await page.evaluate(()=>drawings.length),0);
   await page.locator("#tool-pan").click();
   const cutoff=await page.evaluate(()=>replayCutoff()),prior=await page.evaluate(()=>chart.timeScale().getVisibleLogicalRange().to);
-  await page.locator("#chart-older").click();assert.ok(await page.evaluate(()=>chart.timeScale().getVisibleLogicalRange().to)<prior);
+  await page.locator("#chart-older").click();await page.waitForFunction(p=>chart.timeScale().getVisibleLogicalRange().to<p,prior);
   await page.locator("#chart-newer").click();assert.equal(await page.evaluate(()=>replayCutoff()),cutoff);
   await page.locator("#replay-start").click();assert.equal(await page.evaluate(()=>limit),1);
   assert.ok(await page.evaluate(()=>nativeRows.every(r=>r[8]<replayCutoff())));
