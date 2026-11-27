@@ -1,0 +1,28 @@
+name: BTC ETH 2025 Color Direction annual replay
+on:
+  push:
+    branches: ['research/btc-eth-2025-color-direction-20261127']
+    paths: ['scripts/replay_btc_eth_2025_color_direction.py','.github/workflows/replay-btc-eth-2025-color-direction.yml']
+permissions:
+  contents: read
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        asset: [BTC, ETH]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.2.6 pandas==2.2.3
+      - run: python -m py_compile scripts/replay_btc_eth_2025_color_direction.py
+      - run: python -u scripts/replay_btc_eth_2025_color_direction.py --asset ${{ matrix.asset }} --output "$RUNNER_TEMP/annual"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: annual-${{ matrix.asset }}-color-direction
+          path: ${{ runner.temp }}/annual
+          if-no-files-found: error
