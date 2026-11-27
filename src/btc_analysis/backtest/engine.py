@@ -269,7 +269,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         tuple(d.manifest_sha256 for d in config.datasets),tuple(out),worst.path,(
         "Trusted strategy and source adapters only; no untrusted Python execution.",
         ("Linear 1x collateral cap only; no exchange margin, funding, spread or liquidation." if margin_profile is None else
-         ("Explicit single-position whole-notional bracket simulation; not certified exchange rules." if getattr(margin_profile,"tiers",()) else "Explicit single-position fixed-tier linear margin simulation; not certified exchange rules.")),
+         ("Single unhedged perpetual stress-margin reference; no exchange portfolio certification." if config.margin_mode is MarginMode.PORTFOLIO else ("Explicit single-position whole-notional bracket simulation; not certified exchange rules." if getattr(margin_profile,"tiers",()) else "Explicit single-position fixed-tier linear margin simulation; not certified exchange rules."))),
         ("No risk stream used." if margin_profile is None else
          "Mark-first paired OHLC vertices; liquidation modeled as full close at mark with adverse slippage and explicit fee; halt after liquidation."),
         ("Funding excluded." if not config.costs.include_funding else
@@ -286,7 +286,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         "Indicators use explicit documented seeds and completed UTC-aligned bars; no external library parity claim.",
         "Warmup bars initialize indicators/history only, without orders, callbacks or evaluation P&L.",
         ("Mark-vertex pre-liquidation buffer is modeled only; gaps can liquidate first, protective close halts the run. No historical bid-ask, partial liquidation or portfolio margin." if margin_profile is not None and margin_profile.preliquidation_buffer_points else "No historical bid-ask, partial exchange liquidation, fee offers or portfolio margin."),
-    ),fingerprint(margin_profile) if margin_profile is not None else None)
+    )+(("No multi-position portfolio offsets, options, order reservations, delta hedging or partial liquidation.",) if config.margin_mode is MarginMode.PORTFOLIO else ()),fingerprint(margin_profile) if margin_profile is not None else None)
 
 
 class Simulator:
@@ -478,7 +478,7 @@ class Simulator:
         # Fixed price-point buffer expressed as collateral surplus at this mark.
         # At a gap below maintenance liquidation wins; no guaranteed stop fill.
         sign=D(1) if self.quantity>0 else D(-1)
-        buffer=(self.profile.protective_surplus(self.quantity,self.mult,mark) if getattr(self.profile,"tiers",()) else
+        buffer=(self.profile.protective_surplus(self.quantity,self.mult,mark) if hasattr(self.profile,"protective_surplus") else
                 abs(self.quantity)*self.mult*self.profile.preliquidation_buffer_points*(1-sign*self.profile.maintenance_rate))
         protective=(not liquidation and trade_ref is not None and buffer>0 and equity-maintenance<=buffer)
         if not liquidation and not protective:return

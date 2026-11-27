@@ -57,3 +57,12 @@ class LeveragedTests(unittest.TestCase):
         self.assertEqual(len(out["risk"]["profile"]["tiers"]),2)
         r["tiers_json"]="[]"
         with self.assertRaises(ValueError):replay(csv,json.dumps(graph()),"BTCUSD",SETTINGS,True,risk=r)
+
+    def test_single_position_stress_adapter(self):
+        csv,r=inputs(fund=False,mode="portfolio")
+        r.update(initial_shock="0.1",maintenance_shock="0.08")
+        out=replay(csv,json.dumps(graph()),"BTCUSD",SETTINGS,True,risk=r)
+        self.assertEqual(out["risk"]["profile"]["profile_id"],"user-single-position-stress-v1")
+        self.assertEqual(out["risk"]["margin_mode"],"portfolio")
+        with self.assertRaises(ValueError):replay(csv,json.dumps(graph()),"BTCUSD",SETTINGS,True,risk={**r,"margin_mode":"cross"})
+        with self.assertRaises(ValueError):replay(csv,json.dumps(graph()),"BTCUSD",SETTINGS,True,risk={**r,"tiers_json":"[]"})

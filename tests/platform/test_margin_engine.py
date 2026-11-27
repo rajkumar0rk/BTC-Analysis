@@ -3,7 +3,7 @@ from dataclasses import replace
 from datetime import timedelta
 from decimal import Decimal as D
 from btc_analysis.contracts import *
-from btc_analysis.margin import MarginProfile,MarginTier,TieredMarginProfile,RiskBar,FundingSettlement,funding_payment
+from btc_analysis.margin import MarginProfile,MarginTier,TieredMarginProfile,SinglePositionStressProfile,RiskBar,FundingSettlement,funding_payment
 from btc_analysis.backtest import BaseStrategy,run_backtest
 from test_backtest_engine import T,I,H,MIN,cfg,bars,FLAT,submit
 
@@ -149,5 +149,33 @@ class TierTests(unittest.TestCase):
         p=replace(self.profile(p),max_notional=D(2050),tiers=(MarginTier(D(2050),D(".1"),D(".05")),))
         marks=bars([(100,100,100,100),(103,103,103,103),(103,103,103,103),(103,103,103,103)])
         with self.assertRaisesRegex(ValueError,"notional cap"):execute(c,p,Long,marks=marks)
+
+class StressMarginTests(unittest.TestCase):
+    def profile(self,base):
+        return SinglePositionStressProfile("synthetic-stress",base.instrument,base.effective_start,base.effective_end,base.source,
+            D(".1"),D(".05"),base.max_notional,base.liquidation_fee_bps,
+            initial_shock=D(".1"),maintenance_shock=D(".08"))
+    def test_stress_reference_rates_and_mode(self):
+        c,p=setup();q=self.profile(p)
+        self.assertEqual(q.initial(D(2000),D(10)),D(200))
+        self.assertEqual(q.maintenance(D(2000)),D(160))
+        with self.assertRaises(ValueError):execute(c,q,Long)
+        c=replace(c,margin_mode=MarginMode.PORTFOLIO)
+        with self.assertRaises(ValueError):execute(c,p,Long)
+        with self.assertRaises(ValueError):execute(replace(c,leverage=D(11)),q,Long)
+        with self.assertRaises(ValueError):replace(q,maintenance_shock=D(".1"))
+    def test_wallet_stress_liquidation(self):
+        c,p=setup(MarginMode.CROSS)
+        class Large(BaseStrategy):
+            def on_start(self,c):submit(c,"entry",qty=90)
+        marks=bars([(100,100,100,100),(96,96,96,96),(96,96,96,96),(96,96,96,96)])
+        cross=execute(c,p,Large,marks=marks).scenarios[0]
+        self.assertFalse(cross.liquidations)
+        c=replace(c,margin_mode=MarginMode.PORTFOLIO)
+        result=execute(c,self.profile(p),Large,marks=marks)
+        self.assertEqual(len(result.scenarios[0].liquidations),1)
+        self.assertEqual(result.scenarios[0].liquidations[0].maintenance,D("691.2"))
+        self.assertEqual(result.scenarios[0].open_quantity,0)
+        self.assertEqual(result.result_sha256,execute(c,self.profile(p),Large,marks=marks).result_sha256)
 
 if __name__=="__main__":unittest.main()

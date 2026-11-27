@@ -128,11 +128,11 @@ def mark_stream(plan,root,i,tf):
 
 def long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf):
     keys={"leverage","margin_mode","initial_rate_floor","maintenance_rate","max_notional","liquidation_fee_bps","profile_start","profile_end","profile_source","preliq_points","scalp_enabled","scalp_start","scalp_end","funding_enabled","funding_interval_seconds","funding_anchor_epoch","funding_csv","acknowledge"}
-    if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
+    if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json","initial_shock","maintenance_shock"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
     if type(risk["funding_enabled"]) is not bool or type(risk["scalp_enabled"]) is not bool:raise ValueError("invalid risk switches")
     provenance=risk.get("funding_provenance","operator_supplied")
     if provenance not in ("operator_supplied","estimated_previous_hour_mark_open") or ("funding_provenance" in risk and not risk["funding_enabled"]):raise ValueError("invalid funding provenance")
-    if risk["margin_mode"] not in ("isolated","cross"):raise ValueError("unsupported margin mode")
+    if risk["margin_mode"] not in ("isolated","cross","portfolio"):raise ValueError("unsupported margin mode")
     lev=risk_decimal(risk["leverage"],"1","100");mode=MarginMode(risk["margin_mode"])
     source=risk["profile_source"]
     if not isinstance(source,str) or not source.strip() or len(source)>150:raise ValueError("profile evidence/source required")

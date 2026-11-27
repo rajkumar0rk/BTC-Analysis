@@ -48,10 +48,12 @@ class MarginProfile:
     def initial_rate(self,leverage):
         return max(self.initial_rate_floor,D(1)/leverage)
 
+    def supported_modes(self):return (MarginMode.ISOLATED,MarginMode.CROSS)
+
     def validate(self,cfg):
         require(cfg.instrument==self.instrument,"margin instrument mismatch")
         require(self.effective_start<=cfg.start_utc<cfg.end_utc<=self.effective_end,"profile does not cover run")
-        require(cfg.margin_mode in (MarginMode.ISOLATED,MarginMode.CROSS),"portfolio/cash not modeled")
+        require(cfg.margin_mode in self.supported_modes(),"margin mode not supported by profile")
         require(D(1)/cfg.leverage>=self.initial_rate_floor,"leverage exceeds profile maximum")
         require(cfg.costs.include_liquidation,"leveraged simulation requires liquidation checks")
         require(not cfg.costs.include_spread,"historical spread model not implemented")
@@ -115,6 +117,39 @@ class TieredMarginProfile(MarginProfile):
 
 
 @dataclass(frozen=True, slots=True)
+class SinglePositionStressProfile(MarginProfile):
+    """Symmetric linear price shocks for one unhedged perpetual only.
+
+    This is a portfolio-style stress reference, not a venue portfolio
+    calculation. No option greeks, offsets, multi-instrument or order risk.
+    """
+    initial_shock: D = ZERO
+    maintenance_shock: D = ZERO
+
+    def __post_init__(self):
+        MarginProfile.__post_init__(self)
+        dec(self.initial_shock,"initial price shock",positive=True)
+        dec(self.maintenance_shock,"maintenance price shock",positive=True)
+        require(0<self.maintenance_shock<self.initial_shock<=1,"invalid stress shock rates")
+        require(self.effective_maintenance_rate()<max(self.initial_rate_floor,self.initial_shock),
+                "stress maintenance must be below initial floor")
+
+    def supported_modes(self):return (MarginMode.PORTFOLIO,)
+    def effective_maintenance_rate(self):return max(self.maintenance_rate,self.maintenance_shock)
+    def initial_rate(self,leverage):return max(self.initial_rate_floor,self.initial_shock,D(1)/leverage)
+    def validate(self,cfg):
+        MarginProfile.validate(self,cfg)
+        require(D(1)/cfg.leverage>=max(self.initial_rate_floor,self.initial_shock),
+                "leverage exceeds stress profile maximum")
+    def maintenance(self,notional):return notional*self.effective_maintenance_rate()
+    def protective_surplus(self,quantity,multiplier,mark):
+        sign=D(1) if quantity>0 else D(-1)
+        size=abs(quantity)*multiplier
+        adverse=max(ZERO,min(self.max_notional/size,mark-sign*self.preliquidation_buffer_points))
+        return max(ZERO,size*abs(mark-adverse)+self.maintenance(min(self.max_notional,size*adverse))-self.maintenance(size*mark))
+
+
+@dataclass(frozen=True, slots=True)
 class FundingSettlement:
     event_utc: datetime
     rate: D  # fraction; positive longs pay, negative longs receive
@@ -157,5 +192,5 @@ def funding_payment(quantity,multiplier,rate,mark):
 
 def collateral_equity(mode,balance,isolated_collateral,unrealized):
     if mode is MarginMode.ISOLATED:return isolated_collateral+unrealized
-    if mode is MarginMode.CROSS:return balance+unrealized
+    if mode in (MarginMode.CROSS,MarginMode.PORTFOLIO):return balance+unrealized
     raise ValueError("unsupported margin mode")
