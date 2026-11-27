@@ -163,16 +163,16 @@ jobs:
                       monthly[k]=round(v-prev,8);prev=v
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s=='flip' for _,s in self.trades),target_exits=sum(s=='target' for _,s in self.trades),rsi_exits=sum(s=='rsi' for _,s in self.trades),lock_exits=sum(s=='lock' for _,s in self.trades),protection_losses=sum(p<=0 and s in ('rsi','lock') for p,s in self.trades),invalid_line=self.invalid_line,mean_initial_distance=sum(self.distances)/len(self.distances) if self.distances else None)
-          settings={"Lock Progressive NoFilters Multi CloseCross FeeIntraminute Delay6 CandleConfirm":(3.,(.4,.6,.8),0.)}
+          settings={"Lock Progressive NoFilters Multi CloseCross TrueReclaim FeeIntraminute Delay6 2025 CandleConfirm":(3.,(.4,.6,.8),0.)}
           states={k:State(k,*v) for k,v in settings.items()}
-          audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0,"rsi_blocked_reclaim":0,"candle_color_blocked":0,"candle_color_blocked_long":0,"candle_color_blocked_short":0,"confirmed_wrong_color_entries":0,"baseline_wrong_color_entries":0}
+          audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0,"initial_crossovers_blocked":0,"rsi_blocked_reclaim":0,"candle_color_blocked":0,"candle_color_blocked_long":0,"candle_color_blocked_short":0,"confirmed_wrong_color_entries":0,"baseline_wrong_color_entries":0}
           volumes=deque(maxlen=20);atrs=deque(maxlen=20);filter_pass=False;filter_stats={"15m_ready":0,"volume_pass":0,"atr_pass":0,"both_pass":0}
-          groups={900:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=ist).timestamp())
+          groups={900:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,1,1,tzinfo=ist).timestamp());trend_seed=None;cycle_start=None
           def val(name,tf,p):
               v=book.get(name,tf,p)
               return v[-1] if v else None
           for p in manifest["partitions"]:
-              if p["file"]>"2026-10.csv.gz":break
+              if p["file"]>"2025-12.csv.gz":break
               trade=root/"1m"/p["file"];mark=root/"institutional/history/mark_1m"/p["file"]
               assert hashlib.sha256(trade.read_bytes()).hexdigest()==p["sha256_gzip"]
               for a,b in zip_longest(rows(trade),rows(mark)):
@@ -214,6 +214,7 @@ jobs:
                   if completed15:
                       for s in states.values():s.protect(rsi,completed15[3],t+60)
                   if alignment!=old_side:
+                      trend_seed=None;cycle_start=t+60
                       for s in states.values():s.used=False
                   if count>=6000 and alignment and dt(t+60).astimezone(ist).weekday()<5:
                       if completed15 and prev15 and old_ema is not None and ema is not None:
@@ -227,6 +228,9 @@ jobs:
                               if alignment!=old_side:
                                   audit["reclaim_flip_signals_blocked"]+=1;continue
                               assert alignment==old_side
+                              if trend_seed is None:
+                                  audit["initial_crossovers_blocked"]+=1;continue
+                              assert cycle_start<=trend_seed["time"]<t+60-900
                               if not rsi_pass:
                                   audit["rsi_blocked_reclaim"]+=1;continue
                               color_ok=alignment*(completed15[3]-completed15[0])>0
@@ -235,16 +239,21 @@ jobs:
                                   audit["candle_color_blocked_long" if alignment==1 else "candle_color_blocked_short"]+=1
                                   continue
                               s.pending=alignment;s.line=float(st_line);s.signal_color_ok=color_ok
-                              s.signal={"previous_close":prev15[3],"previous_ema20":old_ema,"signal_close_ema20":ema,"close_cross":close_signal,"signal_utc":dt(t+60).isoformat(),"signal_open_utc":dt(t+60-900).isoformat(),"signal_open":completed15[0],"signal_high":completed15[1],"signal_low":completed15[2],"signal_close":completed15[3],"ema20":old_ema,"supertrend":float(st_line),"rsi14":float(rsi),"atr14":float(atr),"color_ok":color_ok}
-                  if completed15:prev15=completed15
+                              s.signal={"trend_cycle_start_utc":dt(cycle_start).isoformat(),"prior_aligned_close_utc":dt(trend_seed["time"]).isoformat(),"prior_aligned_close":trend_seed["close"],"prior_aligned_ema20":trend_seed["ema"],"prior_aligned_supertrend_direction":trend_seed["direction"],"previous_close":prev15[3],"previous_ema20":old_ema,"signal_close_ema20":ema,"close_cross":close_signal,"signal_utc":dt(t+60).isoformat(),"signal_open_utc":dt(t+60-900).isoformat(),"signal_open":completed15[0],"signal_high":completed15[1],"signal_low":completed15[2],"signal_close":completed15[3],"ema20":old_ema,"supertrend":float(st_line),"rsi14":float(rsi),"atr14":float(atr),"color_ok":color_ok}
+                  if completed15:
+                      # Record the earlier trend-side close only after checking this candle for a reclaim.
+                      if alignment and ema is not None and alignment*(completed15[3]-ema)>0 and trend_seed is None:
+                          trend_seed={"time":t+60,"close":completed15[3],"ema":ema,"direction":alignment}
+                          if cycle_start is None:cycle_start=t+60
+                      prev15=completed15
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          confirmed=states["Lock Progressive NoFilters Multi CloseCross FeeIntraminute Delay6 CandleConfirm"]
+          confirmed=states["Lock Progressive NoFilters Multi CloseCross TrueReclaim FeeIntraminute Delay6 2025 CandleConfirm"]
           assert audit["confirmed_wrong_color_entries"]==0
           assert all(t["side"]*(t["signal_context"]["signal_close"]-t["signal_context"]["signal_open"])>0 for t in confirmed.ledger)
           assert all(s.result()["target_exits"]==0 for s in states.values())
-          assert count==963030
+          assert count==525270
           for name,state in states.items():
               if "CloseCross" not in name:continue
               for tr in state.ledger:
@@ -252,8 +261,12 @@ jobs:
                   assert side*(ctx["previous_close"]-ctx["previous_ema20"])<0
                   assert side*(ctx["signal_close"]-ctx["signal_close_ema20"])>0
                   assert ctx["close_cross"] and ctx["color_ok"]
+                  assert ctx["prior_aligned_supertrend_direction"]==side
+                  assert side*(ctx["prior_aligned_close"]-ctx["prior_aligned_ema20"])>0
+                  assert datetime.fromisoformat(ctx["trend_cycle_start_utc"])<=datetime.fromisoformat(ctx["prior_aligned_close_utc"])<datetime.fromisoformat(ctx["signal_open_utc"])
                   assert tr["entry_utc"]==ctx["signal_utc"]
-              assert not any(tr["entry_utc"]=="2026-08-04T08:15:00+00:00" for tr in state.ledger)
+              assert not any(ev["kind"]=="entry_fill" and ev["time_utc"]=="2025-02-26T15:15:00+00:00" for ev in state.events)
+          print("TRUE_RECLAIM_AUDIT "+json.dumps({"initial_crossovers_blocked":audit["initial_crossovers_blocked"],"screenshot_entry_blocked":True,"verified_closed_trades":len(confirmed.ledger)}))
           assert confirmed.first_activation==0.
           # Verify the exact intraminute activation/exit sequence for the screenshot trade if it is entered.
           example=next((tr for tr in confirmed.ledger if tr["entry_utc"]=="2025-02-10T18:15:00+00:00"),None)
@@ -277,7 +290,7 @@ jobs:
               elif ev["kind"]=="exit_fill":opened_at=None
           print("DELAY_AUDIT "+json.dumps({"minimum_delay_seconds":5400,"verified_protection_amendments":amendments,"early_amendments":0,"invalid_fee_activations":0}))
           if confirmed.pos is None:assert abs(sum(x["net_usd"] for x in confirmed.ledger)-confirmed.result()["net"])<1e-8
-          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"15m Supertrend; previous and current ST directions equal; CloseCross variants require previous completed 15m close strictly opposite EMA20 at that close, current completed 15m close strictly on trade side of its own EMA20; no high/low touch entry; require bullish signal candle for long and bearish for short, excludes doji; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; progressive: first activation fee-adjusted breakeven plus 0.5 point only, no R threshold, 1.5R 25% MFE, 2R 40% MFE, 3R onwards existing RSI 40/60/80% of MFE; first fee protection arms on first qualifying traded price along the causal 1m Color path, no candle close requirement; subsequent R-stage amendments retain completed 15m timing, mark MFE thresholds and fractions, and current close eligibility; skip unreachable higher-stage floor in favor of eligible fee floor; all protection stages disabled until six full 15m candles after entry (90 minutes); then first fee activation intraminute and later R amendments at completed 15m close, never loosens, trade-price trigger and trade-price fill at stop or available worse price on gaps; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; All variants bypass volume and volatility entry filters; strict variants use close-to-close crossover only; ATR remains diagnostic and Supertrend still uses ATR10","results":{k:s.result() for k,s in states.items()}}
+          results={"range":"2025-01-01 UTC to 2026-01-01 00:00 IST exclusive; 2025 only; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"15m Supertrend; previous and current ST directions equal; True reclaim requires an earlier completed close on the trend side of its own EMA20 within the same Supertrend cycle, then the previous completed close strictly opposite EMA20, then the current completed close strictly back on the trend side of its own EMA20; reset earlier-close evidence on every Supertrend direction change; no high/low touch entry; require bullish signal candle for long and bearish for short, excludes doji; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; progressive: first activation fee-adjusted breakeven plus 0.5 point only, no R threshold, 1.5R 25% MFE, 2R 40% MFE, 3R onwards existing RSI 40/60/80% of MFE; first fee protection arms on first qualifying traded price along the causal 1m Color path, no candle close requirement; subsequent R-stage amendments retain completed 15m timing, mark MFE thresholds and fractions, and current close eligibility; skip unreachable higher-stage floor in favor of eligible fee floor; all protection stages disabled until six full 15m candles after entry (90 minutes); then first fee activation intraminute and later R amendments at completed 15m close, never loosens, trade-price trigger and trade-price fill at stop or available worse price on gaps; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; All variants bypass volume and volatility entry filters; strict variants require trend-side close, opposite-side pullback close, then close back to trend side within the same Supertrend cycle; ATR remains diagnostic and Supertrend still uses ATR10","results":{k:s.result() for k,s in states.items()}}
           # Compact output permits all results to be retrieved without truncation.
           print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
           for k,v in results["results"].items():
@@ -301,7 +314,7 @@ jobs:
                   row["net_points"]=row.pop("net_usd")
                   row["trigger_utc"]=row["signal_context"]["signal_utc"]
                   trades.append(row)
-              variants.append(dict(key=hashlib.sha256(name.encode()).hexdigest()[:24],name=name,parameters={"activation_r":state.activation,"first_activation_r":state.first_activation,"breakeven_activation":"intraminute_trade_price_fee_gst_plus_0.5_point","protection_trigger":"trade_price","protection_delay_candles":6,"protection_delay_minutes":90,"entry_mode":"close_to_close" if "CloseCross" in name else "historical_wick_control","fractions":list(state.fractions),"variant":name},summary=state.result(),trades=trades,events=state.events))
+              variants.append(dict(key=hashlib.sha256(name.encode()).hexdigest()[:24],name=name,parameters={"activation_r":state.activation,"first_activation_r":state.first_activation,"breakeven_activation":"intraminute_trade_price_fee_gst_plus_0.5_point","protection_trigger":"trade_price","protection_delay_candles":6,"protection_delay_minutes":90,"entry_mode":"same_supertrend_cycle_true_reclaim","year":2025,"fractions":list(state.fractions),"variant":name},summary=state.result(),trades=trades,events=state.events))
           export_bundle("backtest-export/backtest.json",family="reclaim-color-progressive",symbol="BTCUSD",unit="account USD",start_utc=start.isoformat(),end_utc=dt(end).isoformat(),execution_timeframe_minutes=1,signal_timeframe_minutes=m.seconds//60,costs=results["execution"],variants=variants,recorder=recorder,data_provenance={"trade_manifest_sha256":hashlib.sha256((root/"1m/manifest.json").read_bytes()).hexdigest(),"input_bars":count,"execution":"1m Color paired trade and mark paths","range":results["range"]})
           
           PY
