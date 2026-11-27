@@ -1,0 +1,133 @@
+{
+  "range": "2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup",
+  "bars": 963030,
+  "filter_stats": {
+    "15m_ready": 64169,
+    "volume_pass": 13723,
+    "atr_pass": 26774,
+    "both_pass": 8201
+  },
+  "entry_audit": {
+    "reclaim_flip_signals_blocked": 346,
+    "reclaim_touch_only_signals_blocked": 0,
+    "rsi_blocked_reclaim": 248,
+    "candle_color_blocked": 2558,
+    "candle_color_blocked_long": 1314,
+    "candle_color_blocked_short": 1244,
+    "confirmed_wrong_color_entries": 0,
+    "baseline_wrong_color_entries": 0
+  },
+  "settings": {
+    "Lock Progressive NoFilters CandleConfirm": [
+      3.0,
+      [
+        0.4,
+        0.6,
+        0.8
+      ]
+    ],
+    "Lock Progressive NoFilters Multi CandleConfirm": [
+      3.0,
+      [
+        0.4,
+        0.6,
+        0.8
+      ]
+    ]
+  },
+  "execution": "Reclaim only; 15m Supertrend; previous and current ST directions equal; strict cross beyond frozen pre-signal EMA20 and close back; both require bullish signal candle for long and bearish for short, excludes doji; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; both variants progressive: 1R fee-adjusted breakeven, 1.5R 25% MFE, 2R 40% MFE, 3R onwards existing RSI 40/60/80% of MFE; all stages require MFE >= fee-adjusted breakeven; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; Both variants bypass volume and volatility entry filters; Multi removes prior close side restriction while retaining actual signal candle crossing and close back above/below pre-signal EMA; ATR remains diagnostic and Supertrend still uses ATR10",
+  "results": {
+    "Lock Progressive NoFilters CandleConfirm": {
+      "final_equity": 75.47471436103974,
+      "net": -24.525285638960256,
+      "trades": 352,
+      "entries": 352,
+      "wins": 142,
+      "win_rate": 40.34090909090909,
+      "profit_factor": 0.8234270249216941,
+      "max_drawdown_pct": 40.541756494008915,
+      "fees_gst": 31.189369757515426,
+      "profitable_months": 3,
+      "monthly": {
+        "2025-01": -0.91936158,
+        "2025-02": -0.7145933,
+        "2025-03": -1.00614815,
+        "2025-04": -3.85380583,
+        "2025-05": 0.0,
+        "2025-06": 0.0,
+        "2025-07": 0.0,
+        "2025-08": 0.0,
+        "2025-09": 0.0,
+        "2025-10": 0.0,
+        "2025-11": -5.23624659,
+        "2025-12": -0.76740241,
+        "2026-01": 1.62928987,
+        "2026-02": -1.50525398,
+        "2026-03": 1.34160578,
+        "2026-04": -4.39341872,
+        "2026-05": -5.20664541,
+        "2026-06": -6.69973898,
+        "2026-07": -6.50289742,
+        "2026-08": 10.44475425,
+        "2026-09": -1.13542316,
+        "2026-10": 0.0
+      },
+      "zero_qty_signals": 788,
+      "closed_points": 6664.084118555198,
+      "open_position": null,
+      "stop_exits": 186,
+      "target_exits": 0,
+      "rsi_exits": 0,
+      "lock_exits": 166,
+      "protection_losses": 41,
+      "invalid_line": 0,
+      "mean_initial_distance": 671.0443796889706
+    },
+    "Lock Progressive NoFilters Multi CandleConfirm": {
+      "final_equity": 63.44837538086264,
+      "net": -36.55162461913736,
+      "trades": 313,
+      "entries": 313,
+      "wins": 128,
+      "win_rate": 40.894568690095845,
+      "profit_factor": 0.7197221714959026,
+      "max_drawdown_pct": 44.05037845872604,
+      "fees_gst": 27.379636012524404,
+      "profitable_months": 3,
+      "monthly": {
+        "2025-01": 1.40735461,
+        "2025-02": -12.35759932,
+        "2025-03": -0.1376241,
+        "2025-04": -4.70789633,
+        "2025-05": 0.0,
+        "2025-06": 0.0,
+        "2025-07": 0.0,
+        "2025-08": 0.0,
+        "2025-09": 0.0,
+        "2025-10": 0.0,
+        "2025-11": 0.0,
+        "2025-12": 0.0,
+        "2026-01": 0.10368133,
+        "2026-02": -2.84048716,
+        "2026-03": -2.99495064,
+        "2026-04": -3.23505504,
+        "2026-05": -1.57159193,
+        "2026-06": -5.02790728,
+        "2026-07": -5.55013218,
+        "2026-08": 0.36058343,
+        "2026-09": 0.0,
+        "2026-10": 0.0
+      },
+      "zero_qty_signals": 2665,
+      "closed_points": -9171.98860661286,
+      "open_position": null,
+      "stop_exits": 167,
+      "target_exits": 0,
+      "rsi_exits": 0,
+      "lock_exits": 146,
+      "protection_losses": 33,
+      "invalid_line": 0,
+      "mean_initial_distance": 710.3286993645021
+    }
+  }
+}
