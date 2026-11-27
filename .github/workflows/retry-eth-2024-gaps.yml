@@ -17,7 +17,7 @@ concurrency:
 jobs:
   retry:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,22 +29,13 @@ jobs:
         run: |
           python scripts/test_retry_eth_2024_gaps.py
           python scripts/test_recover_delta_2024.py
-      - name: Recover only missing source intervals
-        run: python scripts/retry_eth_2024_gaps.py --round "$GITHUB_RUN_NUMBER" --output "$RUNNER_TEMP/eth-recovery.json"
-      - name: Retain validated progress
+      - name: Configure checkpoint commits
         run: |
-          set -euo pipefail
-          git add -- data/delta_india/2024_recovery_candidates/ETHUSD data/delta_india/2024_recovery_candidates/coverage.json
-          if git diff --cached --quiet; then
-            echo "No new genuine rows; no data commit."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "data: resume genuine ETH 2024 missing intervals"
-          # Never force or overwrite concurrent main changes. A rejected push
-          # leaves prior main data intact; the artifact retains the new rows.
-          git push origin HEAD:main
+      - name: Continuously retry until all intervals are present
+        run: |
+          python scripts/retry_eth_2024_gaps.py --round "$GITHUB_RUN_NUMBER" --max-runtime-seconds 18000 --checkpoint-git --output "$RUNNER_TEMP/eth-recovery.json"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
