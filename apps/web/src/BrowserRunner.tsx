@@ -102,7 +102,7 @@ export function BrowserRunner({api,strategies=[],initialGraph}:{api?:Api;strateg
  <RunComparison runs={runs} disabled={busy||batchBusy||historyBusy||runBusy||riskBusy||studyBusy} savedIds={savedIds} note={runNote} save={()=>void storage("save")} remove={id=>void storage("remove",id)} clear={()=>void storage("clear")} restore={r=>void restoreRun(r)}/>
  <ParallelRunner input={{csv,symbol,settings,assume}} graph={graph} disabled={busy||historyBusy||runBusy||riskBusy||studyBusy} onComplete={(input,rows)=>addRuns(rows.flatMap(r=>r.result?[recordRun(input,r.graph,r.name,r.result,r.elapsedMs??0,r.totalMs??0)]:[]))} onBusy={v=>{if(v){seq.current++;worker.current?.terminate();worker.current=null;window.clearTimeout(timer.current);}setBatchBusy(v);}}/>
  <LeveragedRunner onStudyRisk={setStudyRisk} from={historyFrom} to={historyTo} input={{csv,symbol,settings,assume}} graph={graph} disabled={busy||historyBusy||runBusy||batchBusy||studyBusy} onBusy={v=>{if(v){seq.current++;worker.current?.terminate();worker.current=null;window.clearTimeout(timer.current);}setRiskBusy(v);}}/>
- <p className="muted">Parameter-grid and walk-forward optimization currently require a visual graph; direct Python scripts support ordinary and leveraged replay.</p>
+ <p className="muted">Walk-forward grid/random optimization supports visual graphs and declared handwritten Python parameters. Use python:parameter_name axes for SDK scripts.</p>
  <WalkForwardRunner riskSnapshot={studyRisk} from={historyFrom} to={historyTo} input={{csv,symbol,settings,assume}} graph={graph} disabled={busy||historyBusy||runBusy||batchBusy||riskBusy} onBusy={v=>{if(v){seq.current++;worker.current?.terminate();worker.current=null;window.clearTimeout(timer.current);}setStudyBusy(v);}}/>
  </section>;
 }

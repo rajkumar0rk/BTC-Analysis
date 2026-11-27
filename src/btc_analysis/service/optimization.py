@@ -18,7 +18,7 @@ MAX_CANDIDATE_MINUTES=5760
 
 class Axis(BaseModel):
     model_config=ConfigDict(extra="forbid",strict=True)
-    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+)$",max_length=80)]
+    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|python:[A-Za-z][A-Za-z0-9_]*|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked))$",max_length=80)]
     values:list[DecimalText]=Field(min_length=1,max_length=8)
     @model_validator(mode="after")
     def unique(self):
@@ -49,7 +49,7 @@ class OptimizationRequest(HistoricalRequest):
 def historical_request(r):
     return HistoricalRequest.model_validate({**r.model_dump(exclude={"search","acknowledge_training_only"}),"kind":"historical_visual"})
 
-def variants(graph,search):
+def combinations_for(search):
     axes=sorted(search.axes,key=lambda x:x.key)
     combinations=list(product(*(sorted((to_wire(D(v)) for v in a.values),key=D) for a in axes)))
     if len(combinations)>MAX_GRID:raise ValueError("grid exceeds 512 combinations")
@@ -59,12 +59,33 @@ def variants(graph,search):
     else:
         if search.samples>len(combinations):raise ValueError("samples exceed unique combinations")
         selected=Random(search.seed).sample(combinations,search.samples)
+    return [dict(zip((a.key for a in axes),combo)) for combo in selected]
+
+def variants(graph,search):
     result=[]
-    for combo in selected:
-        g=deepcopy(graph);params=dict(zip((a.key for a in axes),combo))
+    for params in combinations_for(search):
+        g=deepcopy(graph)
         for key,val in params.items():
+            a=g.get("advanced") or {}
+            if key.startswith("python:"):raise ValueError("Python axes require handwritten SDK source")
             if key in ("exposure_pct","stop_loss_pct","take_profit_pct"):
+                if key!="exposure_pct" and a.get("exit_mode")=="points":raise ValueError("percentage axis inactive in fixed-point mode")
                 g[key]=val;continue
+            if key.startswith("advanced:"):
+                name=key.split(":",1)[1]
+                if not a:raise ValueError("advanced axis requires enabled advanced controls")
+                if name in ("confirmation_bars","cooldown_bars"):
+                    if D(val)!=D(val).to_integral_value():raise ValueError("advanced candle count must be integer")
+                    a[name]=int(D(val))
+                else:
+                    if a.get("exit_mode")!="points":raise ValueError("point exit axis requires fixed-point mode")
+                    if name=="target_points" and a.get("target_enabled") is False:raise ValueError("take profit disabled")
+                    if "." in name:
+                        group,field=name.split(".",1)
+                        if not isinstance(a.get(group),dict):raise ValueError("managed exit axis requires enabled policy")
+                        a[group][field]=val
+                    else:a[name]=val
+                continue
             name,rest=key.split("@");tf,param=rest.split(":");matched=0
             for rule in ("long_entry","short_entry","long_exit","short_exit"):
                 for group in g[rule]["groups"]:

@@ -59,7 +59,7 @@ class VisualStrategyBase(PythonStrategy):
     def fixed_point_bracket(self):
         a=self.advanced_controls
         if a is None or a["exit_mode"]!="points":return None
-        return D(a["stop_points"]),D(a["target_points"])
+        return D(a["stop_points"]),None if a.get("target_enabled") is False else D(a["target_points"])
 
     @property
     def trailing_stop_points(self):

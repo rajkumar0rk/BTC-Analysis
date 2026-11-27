@@ -100,6 +100,7 @@ class AdvancedControls(Strict):
     exit_mode:Literal["percent","points"]="percent"
     stop_points:DecimalText="100"
     target_points:DecimalText="200"
+    target_enabled:bool|None=None
     trailing:TrailingPoints|None=None
     profit_lock:ProfitLockPoints|None=None
 
@@ -109,6 +110,7 @@ class AdvancedControls(Strict):
         for key in ("stop_points","target_points"):
             if not Decimal("0")<Decimal(getattr(self,key))<=Decimal("1000000000"):
                 raise ValueError(key+" outside supported bounds")
+        if self.target_enabled is False and self.exit_mode!="points":raise ValueError("target disabling requires fixed price-point exits")
         if self.trailing is not None or self.profit_lock is not None:
             if self.exit_mode!="points":raise ValueError("managed exits require fixed price-point exits")
             validate_exit_controls((Decimal(self.stop_points),Decimal(self.target_points)),

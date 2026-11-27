@@ -19,7 +19,7 @@ from ..contracts import (AssetClass, BacktestConfig, Candle, ClosedTrade, Fill,
 from ..serialization import canonical_bytes, fingerprint
 
 from ..indicators import IndicatorBook, IndicatorSpec
-from ..exit_controls import validate_exit_controls
+from ..exit_controls import validate_exit_controls,validate_bracket
 
 from ..margin import (MarginProfile, RiskBar, FundingSettlement, FundingRecord,
     LiquidationRecord, funding_payment, collateral_equity)
@@ -480,18 +480,18 @@ class Simulator:
         # silently round them into a different risk/reward.
         stop_points,target_points=bracket
         tick=self.cfg.instrument.tick_size
-        if any(not isinstance(v,D) or not v.is_finite() or v<=0 or v%tick for v in bracket):
-            raise ValueError("fixed-point bracket distances must be positive tick multiples")
+        validate_bracket(bracket,tick)
         direction=D(1) if self.quantity>0 else D(-1)
         stop=fill.price-direction*stop_points
-        target=fill.price+direction*target_points
-        if min(stop,target)<=0:raise ValueError("nonpositive fixed-point bracket price")
+        target=fill.price+direction*target_points if target_points is not None else None
+        if stop<=0 or target is not None and target<=0:raise ValueError("nonpositive fixed-point bracket price")
         side=Side.SELL if direction>0 else Side.BUY
         stop_key="__fixed_stop_"+fill.fill_id
         target_key="__fixed_target_"+fill.fill_id
         for key,kind,reason,limit,trigger in (
             (stop_key,OrderType.STOP_MARKET,"fixed_point_stop",None,stop),
             (target_key,OrderType.LIMIT,"fixed_point_target",target,None)):
+            if key==target_key and target is None:continue
             self.submit(OrderIntent(key,self.cfg.instrument,self.now,side,kind,abs(self.quantity),
                                     reason,limit,trigger,True))
             if key not in self.pending:raise ValueError("fixed-point protective order rejected")
@@ -502,7 +502,7 @@ class Simulator:
         p=self.pending[stop_key]
         if self.stop_hit(p.intent,ref):
             self._fill(p,ref,phase,bar,path)
-        elif self.limit_hit(self.pending[target_key].intent,ref):
+        elif target_key in self.pending and self.limit_hit(self.pending[target_key].intent,ref):
             self._fill(self.pending[target_key],ref,phase,bar,path,limit=True)
 
     def ratchet_protection(self,price):

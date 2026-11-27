@@ -7,7 +7,9 @@ from pydantic import BaseModel,ConfigDict,Field,model_validator
 from ..visual import Graph,compile_graph,recover_graph,DecimalText
 from ..serialization import fingerprint,to_wire
 from .historical import frames
-from .optimization import Search,variants,rank_candidate
+from .optimization import Search,variants,rank_candidate,combinations_for
+from .python_strategy import prepare_python
+from .strategy_authoring import apply_parameters
 from .fixture import Cancelled
 
 class Study(BaseModel):
@@ -38,17 +40,30 @@ class Study(BaseModel):
 
 def compiled_source(text):
     if len(text.encode())>65536:raise ValueError("source too large")
-    return recover_graph(text) if text.startswith("# btc-visual-v1 ") else compile_graph(Graph.model_validate_json(text))
+    if text.startswith("# btc-visual-v1 "):return recover_graph(text)
+    if text.lstrip().startswith("{"):return compile_graph(Graph.model_validate_json(text))
+    p,signal,clocks=prepare_python(text)
+    return dict(source=text,graph_sha256=p.hash,kind="python",timeframes=clocks,signal_seconds=signal)
 
 def plan(base,study,*,budget):
-    choices=variants(base["graph"],study.search)
+    if base.get("kind")=="python":
+        choices=[]
+        for params in combinations_for(study.search):
+            if not all(k.startswith("python:") for k in params):raise ValueError("handwritten source requires python:parameter_name axes")
+            changed=apply_parameters(base["source"],{k.split(":",1)[1]:v for k,v in params.items()})
+            choices.append((params,compiled_source(changed["source"])))
+        if len({c["graph_sha256"] for _,c in choices})!=len(choices):raise ValueError("duplicate Python candidates")
+        clocks={f for c in [base]+[c for _,c in choices] for f in c["timeframes"]}
+    else:
+        choices=variants(base["graph"],study.search)
+        g=Graph.model_validate(base["graph"])
+        if g.execution_timeframe!=60:raise ValueError("walk-forward requires 1m execution")
+        clocks=set(frames(g))
     if study.leverage_values:
         choices=[({**p,"leverage":to_wire(D(v))},c) for p,c in choices for v in sorted(study.leverage_values,key=D)]
         if len(choices)>8:raise ValueError("combined leverage and graph candidates exceed eight")
     if len(choices)<2:raise ValueError("walk-forward needs at least two distinct candidates")
-    g=Graph.model_validate(base["graph"])
-    if g.execution_timeframe!=60:raise ValueError("walk-forward requires 1m execution")
-    clock=lcm(*frames(g));windows=[]
+    clock=lcm(*clocks);windows=[]
     total=0
     for n in range(study.folds):
         cut=study.start+60*(study.train_minutes+n*study.test_minutes)

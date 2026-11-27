@@ -9,7 +9,7 @@ import re
 from collections import deque
 from types import MappingProxyType
 from ..serialization import to_wire
-from ..exit_controls import validate_exit_controls
+from ..exit_controls import validate_exit_controls,validate_bracket
 from datetime import datetime
 from decimal import Decimal as D, localcontext
 from hashlib import sha256
@@ -229,7 +229,7 @@ class InterpretedStrategy(PythonStrategy):
         self.exposure=self.state["exposure"]
         bracket=self.state.get("fixed_point_bracket")
         if bracket is not None:
-            if not isinstance(bracket,tuple) or len(bracket)!=2 or any(type(x) is not D or x<=0 for x in bracket):raise ValueError("fixed_point_bracket requires two positive Decimals")
+            validate_bracket(bracket)
             self.fixed_point_bracket=bracket
         self.trailing_stop_points=self.state.get("trailing_stop_points")
         self.profit_lock_points=self.state.get("profit_lock_points")
