@@ -1,9 +1,9 @@
-name: Record exact Reclaim 3R Tight dashboard ledger
+name: Reclaim 3R Tight directional signal candle confirmation
 on:
   push:
     branches: [research/mtf-color-replay-20261127]
 permissions:
-  contents: write
+  contents: read
 jobs:
   replay:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
                   self.variant=variant;self.activation=activation;self.fractions=fractions;self.risk=0.;self.mfe=0.;self.lock=None;self.armed=False
                   self.line=None;self.exit_pending=None;self.invalid_line=0;self.distances=[]
                   self.cash=100.;self.peak=100.;self.dd=0.;self.pos=None;self.pending=0;self.used=False
-                  self.trades=[];self.ledger=[];self.signal={};self.month={};self.fees=0.;self.zero=0;self.points=0.;self.opens=0
+                  self.trades=[];self.signal_color_ok=None;self.ledger=[];self.signal={};self.month={};self.fees=0.;self.zero=0;self.points=0.;self.opens=0
               def sample(self,price):
                   eq=self.cash+(self.pos[0]*(price-self.pos[2])*self.pos[1] if self.pos else 0.)
                   self.peak=max(self.peak,eq);self.dd=max(self.dd,(self.peak-eq)/self.peak*100)
@@ -71,6 +71,9 @@ jobs:
                           self.pos=(side,q,entry,t,fee,entry+side*2*distance if self.variant=='FixedTP' else None)
                           self.risk=distance;self.mfe=0.;self.lock=None;self.armed=False
                           self.distances.append(distance);self.used=True;self.opens+=1
+                          if not self.signal_color_ok:
+                              audit["confirmed_wrong_color_entries" if self.variant.endswith("CandleConfirm") else "baseline_wrong_color_entries"]+=1
+                          if self.variant.endswith("CandleConfirm"):assert self.signal_color_ok
                   self.sample(b[0])
                   if self.pos:
                       side,q,entry,opened,entry_fee,target=self.pos
@@ -119,11 +122,9 @@ jobs:
                       monthly[k]=round(v-prev,8);prev=v
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s=='flip' for _,s in self.trades),target_exits=sum(s=='target' for _,s in self.trades),rsi_exits=sum(s=='rsi' for _,s in self.trades),lock_exits=sum(s=='lock' for _,s in self.trades),protection_losses=sum(p<=0 and s in ('rsi','lock') for p,s in self.trades),invalid_line=self.invalid_line,mean_initial_distance=sum(self.distances)/len(self.distances) if self.distances else None)
-          settings={"Lock 3R Tight":(3.,(.4,.6,.8))}
-          variants=tuple(settings)
-          states={"Reclaim Lock 3R Tight":State("Lock 3R Tight",*settings["Lock 3R Tight"])}
-          by_mode={"Touch":[],"Reclaim":[("Lock 3R Tight",states["Reclaim Lock 3R Tight"])]}
-          audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0,"rsi_blocked_touch":0,"rsi_blocked_reclaim":0}
+          settings={"Lock 3R Tight Baseline":(3.,(.4,.6,.8)),"Lock 3R Tight CandleConfirm":(3.,(.4,.6,.8))}
+          states={k:State(k,*v) for k,v in settings.items()}
+          audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0,"rsi_blocked_reclaim":0,"candle_color_blocked":0,"candle_color_blocked_long":0,"candle_color_blocked_short":0,"confirmed_wrong_color_entries":0,"baseline_wrong_color_entries":0}
           volumes=deque(maxlen=20);atrs=deque(maxlen=20);filter_pass=False;filter_stats={"15m_ready":0,"volume_pass":0,"atr_pass":0,"both_pass":0}
           groups={900:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=ist).timestamp())
           def val(name,tf,p):
@@ -174,15 +175,9 @@ jobs:
                   if alignment!=old_side:
                       for s in states.values():s.used=False
                   if count>=6000 and alignment and dt(t+60).astimezone(ist).weekday()<5:
-                      if alignment==old_side and old_ema is not None and prev_min is not None and alignment*(prev_min[3]-old_ema)>0 and alignment*(v[0]-old_ema)>=0 and v[2]<=old_ema<=v[1]:
-                          for variant,s in by_mode["Touch"]:
-                              if not (filter_pass and not s.pos and not s.used and st_line is not None):continue
-                              if not rsi_pass:
-                                  audit["rsi_blocked_touch"]+=1;continue
-                              s.pending=alignment;s.line=float(st_line)
                       if completed15 and prev15 and old_ema is not None and alignment*(prev15[3]-old_ema)>0 and completed15[2]<=old_ema<=completed15[1] and alignment*(completed15[3]-old_ema)>0:
                           crossed=completed15[2]<old_ema if alignment==1 else completed15[1]>old_ema
-                          for variant,s in by_mode["Reclaim"]:
+                          for variant,s in states.items():
                               if not (filter_pass and not s.pos and not s.used and st_line is not None):continue
                               if alignment!=old_side:
                                   audit["reclaim_flip_signals_blocked"]+=1;continue
@@ -191,38 +186,40 @@ jobs:
                               assert alignment==old_side and crossed
                               if not rsi_pass:
                                   audit["rsi_blocked_reclaim"]+=1;continue
-                              s.pending=alignment;s.line=float(st_line)
-                              s.signal={"signal_utc":dt(t+60).isoformat(),"ema20":old_ema,"supertrend":float(st_line),"rsi14":float(rsi),"atr14":float(atr)}
+                              color_ok=alignment*(completed15[3]-completed15[0])>0
+                              if variant.endswith("CandleConfirm") and not color_ok:
+                                  audit["candle_color_blocked"]+=1
+                                  audit["candle_color_blocked_long" if alignment==1 else "candle_color_blocked_short"]+=1
+                                  continue
+                              s.pending=alignment;s.line=float(st_line);s.signal_color_ok=color_ok
+                              s.signal={"signal_utc":dt(t+60).isoformat(),"signal_open_utc":dt(t+60-900).isoformat(),"signal_open":completed15[0],"signal_high":completed15[1],"signal_low":completed15[2],"signal_close":completed15[3],"ema20":old_ema,"supertrend":float(st_line),"rsi14":float(rsi),"atr14":float(atr),"color_ok":color_ok}
                   if completed15:prev15=completed15
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          selected=states["Reclaim Lock 3R Tight"];summary=selected.result()
-          assert summary["trades"]==224 and summary["wins"]==74 and summary["open_position"] is None
-          assert abs(summary["net"]-.7980515306245621)<1e-8
-          assert abs(summary["max_drawdown_pct"]-17.689820072751804)<1e-8
-          assert abs(sum(x["net_usd"] for x in selected.ledger)-summary["net"])<1e-8
-          dest=Path("analysis/btc15m_rsi_reclaim_3r_tight_20261127")
-          dest.mkdir(parents=True,exist_ok=True)
-          (dest/"ledger.json").write_text(json.dumps(selected.ledger,separators=(",",":"))+"\n")
-          (dest/"summary.json").write_text(json.dumps({"summary":summary,"source_sweep_run":45977394435,"source_sweep_commit":"38d93178823432b5de0d5c76718818bea5d216ad","bars":count,"settings":settings},indent=2)+"\n")
-          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"15m Supertrend only (no 1h condition); strict Reclaim requires previous and current ST directions equal, strict cross beyond frozen pre-signal EMA20 and close back; strict Touch no flip entry; all variants require latest completed 15m RSI14 >50 for buy and <50 for sell; one entry per 15m Supertrend cycle; Color paired trade and mark paths; 15m completed Supertrend flip exit at next 1m open; FixedTP control 2R; 20 adaptive lock settings per entry mode, no fixed TP, activation 1/1.5/2/2.5/3R mark MFE and fee breakeven; lock fractions by profile for directional RSI >=60/>50/<=50; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; filtered entries use latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean","results":{k:s.result() for k,s in states.items()}}
+          base=states["Lock 3R Tight Baseline"];confirmed=states["Lock 3R Tight CandleConfirm"]
+          assert base.opens==224 and base.result()["wins"]==74
+          assert abs(base.result()["net"]-.7980515306245621)<1e-8
+          assert abs(base.result()["max_drawdown_pct"]-17.689820072751804)<1e-8
+          assert audit["confirmed_wrong_color_entries"]==0
+          assert all(t["side"]*(t["signal_context"]["signal_close"]-t["signal_context"]["signal_open"])>0 for t in confirmed.ledger)
+          assert all(s.result()["target_exits"]==0 for s in states.values())
+          assert count==963030
+          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"Reclaim only; 15m Supertrend; previous and current ST directions equal; strict cross beyond frozen pre-signal EMA20 and close back; CandleConfirm additionally requires bullish signal candle for long and bearish for short, excludes doji; baseline unchanged; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; activation 3R mark MFE and fee breakeven; lock 40/60/80% for directional RSI >=60/>50/<=50; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; filtered entries use latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean","results":{k:s.result() for k,s in states.items()}}
           # Compact output permits all results to be retrieved without truncation.
           print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
           for k,v in results["results"].items():
               print("SWEEP_ROW "+json.dumps({"name":k,**{x:y for x,y in v.items() if x!="monthly"},"flat_months":sum(x==0 for x in v["monthly"].values())},separators=(",",":"))) 
+          for k,v in results["results"].items():
+              print("MONTHLY "+json.dumps({"name":k,"monthly":v["monthly"]},separators=(",",":")))
+          target=Path("reclaim-candle-confirm")
+          target.mkdir(exist_ok=True)
+          (target/"ledger.json").write_text(json.dumps(confirmed.ledger,separators=(",",":"))+"\n")
+          (target/"summary.json").write_text(json.dumps(results,indent=2)+"\n")
           Path("mtf-color-results.json").write_text(json.dumps(results,indent=2))
           
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: reclaim-3r-tight-recorded-ledger
-          path: analysis/btc15m_rsi_reclaim_3r_tight_20261127/
-      - name: Archive verified ledger on research branch
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f analysis/btc15m_rsi_reclaim_3r_tight_20261127/ledger.json analysis/btc15m_rsi_reclaim_3r_tight_20261127/summary.json
-          git commit -m 'Archive exact 224-trade Reclaim 3R Tight ledger'
-          git push origin HEAD:research/mtf-color-replay-20261127
-          git rev-parse HEAD
+          name: reclaim-candle-confirm-results
+          path: reclaim-candle-confirm/
