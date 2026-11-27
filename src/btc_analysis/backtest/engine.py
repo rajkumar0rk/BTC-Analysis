@@ -271,7 +271,7 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         ("Linear 1x collateral cap only; no exchange margin, funding, spread or liquidation." if margin_profile is None else
          ("Single unhedged perpetual stress-margin reference; no exchange portfolio certification." if config.margin_mode is MarginMode.PORTFOLIO else ("Explicit single-position whole-notional bracket simulation; not certified exchange rules." if getattr(margin_profile,"tiers",()) else "Explicit single-position fixed-tier linear margin simulation; not certified exchange rules."))),
         ("No risk stream used." if margin_profile is None else
-         "Mark-first paired OHLC vertices; liquidation modeled as full close at mark with adverse slippage and explicit fee; halt after liquidation."),
+         ("Mark-first paired OHLC vertices; bounded partial reductions with full fallback at modeled mark, adverse slippage and explicit fee; strategy halted after first step." if getattr(margin_profile,"partial_policy",None) else "Mark-first paired OHLC vertices; liquidation modeled as full close at mark with adverse slippage and explicit fee; halt after liquidation.")),
         ("Funding excluded." if not config.costs.include_funding else
          "Funding supplied as explicit settlement events, applied before opening orders at each boundary."),
         "OHLC paths are assumptions; limit touch assumes full fill, no volume or queue modeling.",
@@ -285,8 +285,8 @@ def run_backtest(config: BacktestConfig, strategy_factory: Callable[[], BaseStra
         "Caller attests pinned source and code; observed candle hash recorded independently.",
         "Indicators use explicit documented seeds and completed UTC-aligned bars; no external library parity claim.",
         "Warmup bars initialize indicators/history only, without orders, callbacks or evaluation P&L.",
-        ("Mark-vertex pre-liquidation buffer is modeled only; gaps can liquidate first, protective close halts the run. No historical bid-ask, partial liquidation or portfolio margin." if margin_profile is not None and margin_profile.preliquidation_buffer_points else "No historical bid-ask, partial exchange liquidation, fee offers or portfolio margin."),
-    )+(("No multi-position portfolio offsets, options, order reservations, delta hedging or partial liquidation.",) if config.margin_mode is MarginMode.PORTFOLIO else ()),fingerprint(margin_profile) if margin_profile is not None else None)
+        ("Partial liquidation is a research model; no exchange-certified liquidation or full portfolio margin." if getattr(margin_profile,"partial_policy",None) else "Mark-vertex pre-liquidation buffer is modeled only; gaps can liquidate first, protective close halts the run. No historical bid-ask, partial liquidation or portfolio margin." if margin_profile is not None and margin_profile.preliquidation_buffer_points else "No historical bid-ask, partial exchange liquidation, fee offers or portfolio margin."),
+    )+(("No multi-position portfolio offsets, options, order reservations or delta hedging.",) if config.margin_mode is MarginMode.PORTFOLIO and getattr(margin_profile,"partial_policy",None) else ("No multi-position portfolio offsets, options, order reservations, delta hedging or partial liquidation.",) if config.margin_mode is MarginMode.PORTFOLIO else ())+(("Partial reference only; residual exposure stays risk-monitored after strategy halt; no exchange-certified sizing or recovery.",) if getattr(margin_profile,"partial_policy",None) else ()),fingerprint(margin_profile) if margin_profile is not None else None)
 
 
 class Simulator:
@@ -484,17 +484,33 @@ class Simulator:
         if not liquidation and not protective:return
         self.now=bar.open_utc if phase=="open" else bar.close_utc
         reason="modeled_liquidation" if liquidation else "modeled_preliquidation_stop"
-        if liquidation:self.liquidations.append(LiquidationRecord(self.now,mark,equity,maintenance,self.quantity,phase))
         for key in list(self.pending):
             del self.pending[key];self.log(key,"cancelled",reason)
+        policy=getattr(self.profile,"partial_policy",None)
+        if liquidation and policy is not None:
+            for _ in range(policy.max_steps):
+                if equity<=0:break
+                lot=self.cfg.instrument.lot_size
+                qty=(abs(self.quantity)*policy.reduction_fraction/lot).to_integral_value(rounding=ROUND_CEILING)*lot
+                if qty>=abs(self.quantity):break
+                self.risk_close(bar,phase,path,mark,qty,True,"modeled_partial_liquidation",equity,maintenance)
+                equity=self.equity(mark)
+                maintenance=self.profile.maintenance(abs(self.quantity)*mark*self.mult)
+                if equity>=maintenance*policy.recovery_ratio:return
+        self.risk_close(bar,phase,path,mark if liquidation else trade_ref,abs(self.quantity),liquidation,reason,equity,maintenance)
+
+    def risk_close(self,bar,phase,path,ref,qty,liquidation,reason,equity,maintenance):
+        if liquidation:
+            if len(self.liquidations)>=MAX_EVENTS:raise ValueError("liquidation event quota exceeded")
+            self.liquidations.append(LiquidationRecord(self.now,self.risk_mark,equity,maintenance,self.quantity,phase))
         key=f"__risk_close_{len(self.fills)+1}"
         if key in self.seen:raise ValueError("reserved liquidation intent ID collision")
         self.seen.add(key)
         side=Side.SELL if self.quantity>0 else Side.BUY
-        o=OrderIntent(key,self.cfg.instrument,self.now,side,OrderType.MARKET,abs(self.quantity),reason,reduce_only=True)
+        o=OrderIntent(key,self.cfg.instrument,self.now,side,OrderType.MARKET,qty,reason,reduce_only=True)
         p=Pending(o);self.pending[key]=p;self.log(key,"accepted",reason,o)
         self.liquidating=liquidation;self.halted=True
-        try:self._fill(p,mark if liquidation else trade_ref,phase,bar,path)
+        try:self._fill(p,ref,phase,bar,path)
         finally:self.liquidating=False
 
     def risk_open(self,bar,risk,path):

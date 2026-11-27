@@ -150,6 +150,38 @@ class SinglePositionStressProfile(MarginProfile):
 
 
 @dataclass(frozen=True, slots=True)
+class PartialLiquidationPolicy:
+    reduction_fraction: D
+    recovery_ratio: D
+    max_steps: int
+    def __post_init__(self):
+        dec(self.reduction_fraction,"reduction fraction",positive=True)
+        dec(self.recovery_ratio,"recovery ratio",positive=True)
+        require(D(".1")<=self.reduction_fraction<=D(".9"),"invalid reduction fraction")
+        require(D("1.05")<=self.recovery_ratio<=D(2),"invalid recovery ratio")
+        require(type(self.max_steps) is int and 1<=self.max_steps<=4,"invalid reduction step count")
+
+class _PartialMixin:
+    def supported_modes(self):
+        return tuple(m for m in super().supported_modes() if m in (MarginMode.CROSS,MarginMode.PORTFOLIO))
+    def __post_init__(self):
+        super().__post_init__()
+        require(isinstance(self.partial_policy,PartialLiquidationPolicy),"explicit partial policy required")
+
+@dataclass(frozen=True, slots=True)
+class PartialMarginProfile(_PartialMixin,MarginProfile):
+    partial_policy: PartialLiquidationPolicy | None = None
+
+@dataclass(frozen=True, slots=True)
+class PartialTieredMarginProfile(_PartialMixin,TieredMarginProfile):
+    partial_policy: PartialLiquidationPolicy | None = None
+
+@dataclass(frozen=True, slots=True)
+class PartialStressProfile(_PartialMixin,SinglePositionStressProfile):
+    partial_policy: PartialLiquidationPolicy | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class FundingSettlement:
     event_utc: datetime
     rate: D  # fraction; positive longs pay, negative longs receive

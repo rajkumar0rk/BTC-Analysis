@@ -65,10 +65,13 @@ class DigestSeries(Series):
     def __init__(self,name,tail=0):
         self.name=name+".ndjson";self.file=Discard()
         self.digest=sha256();self.count=0;self.bytes=0;self.tail=deque(maxlen=tail)
-        self.gain=D(0);self.loss=D(0);self.wins=0;self.losses=0;self.preliq=0
+        self.gain=D(0);self.loss=D(0);self.wins=0;self.losses=0;self.preliq=0;self.partial=0;self.full=0
     def append(self,value):
         super().append(value)
-        if self.name=="fills.ndjson" and value.reason=="modeled_preliquidation_stop":self.preliq+=1
+        if self.name=="fills.ndjson":
+            if value.reason=="modeled_preliquidation_stop":self.preliq+=1
+            if value.reason=="modeled_partial_liquidation":self.partial+=1
+            if value.reason=="modeled_liquidation":self.full+=1
     def ref(self):
         return {"rows":self.count,"bytes":self.bytes,"sha256":self.digest.hexdigest()}
 
@@ -79,7 +82,7 @@ class DigestArchive(ScenarioArchive):
     def bind(self,sim):
         self.series={}
         for attr,name in (("orders","orders"),("fills","fills"),("evidence","execution_evidence"),("trades","closed_trades"),("curve","equity_curve")):
-            s=DigestSeries(name,MAX_PENDING+1 if attr=="fills" else 0);self.series[name]=s;setattr(sim,attr,s)
+            s=DigestSeries(name,MAX_PENDING+20 if attr=="fills" else 0);self.series[name]=s;setattr(sim,attr,s)
 
 class RiskDigestArchive(DigestArchive):
     supports_risk=True
@@ -89,7 +92,7 @@ class RiskDigestArchive(DigestArchive):
             s=DigestSeries(attr);self.series[attr]=s;setattr(sim,attr,s)
     def finish(self,s,e,unreal):
         result=super().finish(s,e,unreal)
-        summary={**result.summary,"funding_paid":s.funding,"liquidation_count":len(s.liquidations),"preliq_count":self.series["fills"].preliq}
+        summary={**result.summary,"funding_paid":s.funding,"liquidation_count":len(s.liquidations),"preliq_count":self.series["fills"].preliq,"partial_liquidation_count":self.series["fills"].partial,"full_liquidation_count":self.series["fills"].full}
         return replace(result,summary=summary,risk_stream_sha256=s.risk_digest.hexdigest())
 
 def verify_files(plan,root):
@@ -128,7 +131,7 @@ def mark_stream(plan,root,i,tf):
 
 def long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf):
     keys={"leverage","margin_mode","initial_rate_floor","maintenance_rate","max_notional","liquidation_fee_bps","profile_start","profile_end","profile_source","preliq_points","scalp_enabled","scalp_start","scalp_end","funding_enabled","funding_interval_seconds","funding_anchor_epoch","funding_csv","acknowledge"}
-    if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json","initial_shock","maintenance_shock"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
+    if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json","initial_shock","maintenance_shock","partial_policy"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
     if type(risk["funding_enabled"]) is not bool or type(risk["scalp_enabled"]) is not bool:raise ValueError("invalid risk switches")
     provenance=risk.get("funding_provenance","operator_supplied")
     if provenance not in ("operator_supplied","estimated_previous_hour_mark_open") or ("funding_provenance" in risk and not risk["funding_enabled"]):raise ValueError("invalid funding provenance")
@@ -226,5 +229,5 @@ def replay_archive(manifest_text,from_date,to_date,graph_text,symbol,settings,as
         with localcontext() as ctx:
             ctx.prec=50
             metrics["account_return_pct"]=q["net_pnl"]/q["initial_equity"]*100
-        scenarios.append(dict(path=s.path,bars=s.bars,metrics=metrics,monthly=s.monthly,yearly=yearly(s.monthly),final_equity=s.final_equity,fees=q["fees"],taxes=q["taxes"],observed_candle_sha256=s.observed_candle_sha256,event_digests=s.files,risk_stream_sha256=s.risk_stream_sha256,funding_paid=q.get("funding_paid",D(0)),liquidation_count=q.get("liquidation_count",0),preliq_count=q.get("preliq_count",0)))
+        scenarios.append(dict(path=s.path,bars=s.bars,metrics=metrics,monthly=s.monthly,yearly=yearly(s.monthly),final_equity=s.final_equity,fees=q["fees"],taxes=q["taxes"],observed_candle_sha256=s.observed_candle_sha256,event_digests=s.files,risk_stream_sha256=s.risk_stream_sha256,funding_paid=q.get("funding_paid",D(0)),liquidation_count=q.get("liquidation_count",0),preliq_count=q.get("preliq_count",0),partial_liquidation_count=q.get("partial_liquidation_count",0),full_liquidation_count=q.get("full_liquidation_count",0),remaining_quantity=q.get("open_quantity",D(0))))
     return to_wire(dict(engine_version=result.engine_version,source="repository leveraged long replay" if profile is not None else "repository long replay",risk=meta,research_only=True,data_sha256=h,graph_sha256=c["graph_sha256"],result_sha256=result.result_sha256,worst_path=result.worst_path,scenarios=scenarios,limitations=list(result.limitations)+["Manifest SHA-256 identifies the published snapshot; observed candle and event digests are separate.","Monthly and yearly performance use Asia/Kolkata accounting; date selection is UTC.","No external warmup; entry candle protection starts on next minute.","Summary only; event records are hashed and discarded. Order-ID memory and event quotas remain bounded by engine limits."]))

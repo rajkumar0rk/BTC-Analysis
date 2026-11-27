@@ -3,7 +3,7 @@ from dataclasses import replace
 from datetime import timedelta
 from decimal import Decimal as D
 from btc_analysis.contracts import *
-from btc_analysis.margin import MarginProfile,MarginTier,TieredMarginProfile,SinglePositionStressProfile,RiskBar,FundingSettlement,funding_payment
+from btc_analysis.margin import MarginProfile,MarginTier,TieredMarginProfile,SinglePositionStressProfile,PartialLiquidationPolicy,PartialMarginProfile,RiskBar,FundingSettlement,funding_payment
 from btc_analysis.backtest import BaseStrategy,run_backtest
 from test_backtest_engine import T,I,H,MIN,cfg,bars,FLAT,submit
 
@@ -177,5 +177,42 @@ class StressMarginTests(unittest.TestCase):
         self.assertEqual(result.scenarios[0].liquidations[0].maintenance,D("691.2"))
         self.assertEqual(result.scenarios[0].open_quantity,0)
         self.assertEqual(result.result_sha256,execute(c,self.profile(p),Large,marks=marks).result_sha256)
+
+class PartialLiquidationTests(unittest.TestCase):
+    class Large(BaseStrategy):
+        def on_start(self,c):submit(c,"entry",qty=90)
+    def profile(self,base,steps=3,ratio="1.25"):
+        return PartialMarginProfile(base.profile_id,base.instrument,base.effective_start,base.effective_end,base.source,
+            base.initial_rate_floor,base.maintenance_rate,base.max_notional,base.liquidation_fee_bps,
+            partial_policy=PartialLiquidationPolicy(D(".5"),D(ratio),steps))
+    def test_recovery(self):
+        c,p=setup(MarginMode.CROSS)
+        marks=bars([(100,100,100,100)]+[(93,93,93,93)]*3)
+        a=execute(c,self.profile(p),self.Large,marks=marks).scenarios[0]
+        self.assertEqual(a.open_quantity,D(45))
+        self.assertEqual(len(a.liquidations),1)
+        self.assertEqual(a.fills[-1].reason,"modeled_partial_liquidation")
+        self.assertEqual(a.fees,D("10.4625"))
+        self.assertEqual(a.final_equity,D("359.5375"))
+        self.assertFalse(a.closed_trades)
+        b=execute(c,p,self.Large,marks=marks).scenarios[0]
+        self.assertEqual(b.open_quantity,0)
+    def test_full_fallback(self):
+        c,p=setup(MarginMode.CROSS)
+        marks=bars([(100,100,100,100)]+[(93,93,93,93)]*3)
+        a=execute(c,self.profile(p,steps=1,ratio="2"),self.Large,marks=marks).scenarios[0]
+        self.assertEqual(a.open_quantity,0)
+        self.assertEqual([x.reason for x in a.fills[-2:]],["modeled_partial_liquidation","modeled_liquidation"])
+        self.assertEqual(a.closed_trades[0].net_pnl,a.net_pnl)
+    def test_nonpositive_equity_and_isolated(self):
+        c,p=setup(MarginMode.CROSS)
+        marks=bars([(100,100,100,100)]+[(80,80,80,80)]*3)
+        a=execute(c,self.profile(p),self.Large,marks=marks).scenarios[0]
+        self.assertEqual(a.open_quantity,0)
+        self.assertEqual(len(a.liquidations),1)
+        self.assertEqual(a.fills[-1].reason,"modeled_liquidation")
+        c,p=setup()
+        with self.assertRaises(ValueError):execute(c,self.profile(p),Long)
+        with self.assertRaises(ValueError):PartialLiquidationPolicy(D(".5"),D(1),3)
 
 if __name__=="__main__":unittest.main()

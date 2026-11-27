@@ -85,7 +85,7 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
         scenarios.append({"path":s.path,"bars":s.bars,"metrics":summarize(wire),"monthly":wire["monthly"],
                           "final_equity":wire["final_equity"],"fees":wire["fees"],"taxes":wire["taxes"],
                           "funding_paid":wire["funding_paid"],"liquidation_count":len(s.liquidations),
-                          "preliq_count":sum(f.reason=="modeled_preliquidation_stop" for f in s.fills)})
+                          "preliq_count":sum(f.reason=="modeled_preliquidation_stop" for f in s.fills),"partial_liquidation_count":sum(f.reason=="modeled_partial_liquidation" for f in s.fills),"full_liquidation_count":sum(f.reason=="modeled_liquidation" for f in s.fills),"remaining_quantity":wire["open_quantity"]})
         if details:
             # Presentation data only: the canonical simulator result hash is unchanged.
             curve=wire["equity_curve"];stride=max(1,(len(curve)+599)//600)

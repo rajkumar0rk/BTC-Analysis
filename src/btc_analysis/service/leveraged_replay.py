@@ -4,7 +4,7 @@ from datetime import datetime,timezone,timedelta
 from decimal import Decimal as D
 from hashlib import sha256
 from ..contracts import Candle,DatasetRef,DataKind,MarginMode
-from ..margin import MarginProfile,MarginTier,TieredMarginProfile,SinglePositionStressProfile,FundingSettlement,RiskBar
+from ..margin import MarginProfile,MarginTier,TieredMarginProfile,SinglePositionStressProfile,PartialLiquidationPolicy,PartialMarginProfile,PartialTieredMarginProfile,PartialStressProfile,FundingSettlement,RiskBar
 from ..serialization import fingerprint,to_wire
 
 MAX_BYTES=16*1024*1024
@@ -33,20 +33,26 @@ def parse_tiers(text):
                               decimal(item["maintenance_rate"],"0.00000001","1")))
     return tuple(out)
 def make_profile(risk,*args):
+    partial={}
+    if "partial_policy" in risk:
+        p=risk["partial_policy"]
+        if not isinstance(p,dict) or set(p)!={"reduction_fraction","recovery_ratio","max_steps"}:raise ValueError("invalid partial liquidation policy")
+        if risk["margin_mode"]=="isolated":raise ValueError("partial liquidation requires wallet-backed margin")
+        partial={"partial_policy":PartialLiquidationPolicy(decimal(p["reduction_fraction"],"0.1","0.9"),decimal(p["recovery_ratio"],"1.05","2"),p["max_steps"])}
     stress={"initial_shock","maintenance_shock"}
     if risk["margin_mode"]=="portfolio":
         if not stress<=risk.keys() or "tiers_json" in risk:raise ValueError("single-position stress reference requires both shocks and no tier JSON")
-        return SinglePositionStressProfile("user-single-position-stress-v1",*args,
-            initial_shock=decimal(risk["initial_shock"],"0.00000001","1"),maintenance_shock=decimal(risk["maintenance_shock"],"0.00000001","1"))
+        return (PartialStressProfile if partial else SinglePositionStressProfile)("user-single-position-stress-partial-v1" if partial else "user-single-position-stress-v1",*args,
+            initial_shock=decimal(risk["initial_shock"],"0.00000001","1"),maintenance_shock=decimal(risk["maintenance_shock"],"0.00000001","1"),**partial)
     if stress & risk.keys():raise ValueError("stress shocks require portfolio reference mode")
     if "tiers_json" in risk:
-        return TieredMarginProfile("user-whole-notional-tiers-v1",*args,tiers=parse_tiers(risk["tiers_json"]))
-    return MarginProfile("user-fixed-tier-v1",*args)
+        return (PartialTieredMarginProfile if partial else TieredMarginProfile)("user-whole-notional-tiers-partial-v1" if partial else "user-whole-notional-tiers-v1",*args,tiers=parse_tiers(risk["tiers_json"]),**partial)
+    return (PartialMarginProfile if partial else MarginProfile)("user-fixed-tier-partial-v1" if partial else "user-fixed-tier-v1",*args,**partial)
 def prepare_risk(risk,rows,i,tf):
     keys={"leverage","margin_mode","initial_rate_floor","maintenance_rate","max_notional","liquidation_fee_bps",
           "profile_start","profile_end","profile_source","preliq_points","scalp_enabled","scalp_start","scalp_end",
           "mark_csv","funding_enabled","funding_interval_seconds","funding_anchor_epoch","funding_csv","acknowledge"}
-    if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json","initial_shock","maintenance_shock"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
+    if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json","initial_shock","maintenance_shock","partial_policy"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
     if type(risk["funding_enabled"]) is not bool or type(risk["scalp_enabled"]) is not bool:raise ValueError("invalid switches")
     provenance=risk.get("funding_provenance","operator_supplied")
     if provenance not in ("operator_supplied","estimated_previous_hour_mark_open") or ("funding_provenance" in risk and not risk["funding_enabled"]):raise ValueError("invalid funding provenance")

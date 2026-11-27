@@ -87,3 +87,5 @@ M45 exact-head edb029a all eight CI/deploy workflows passed. M46a opt-in single 
 M46a initial foundation, multi-year replay, readiness and cache CI passed; web/Pages/release builds failed on extra JSX closing brace in margin-mode select. Corrected the syntax and added browser regression for portfolio stress inputs and mode switching. No engine changes; release re-verification pending.
 
 M46a correction 9647c88 foundation, release verification, Pages and Cloudflare deploy 45919460830 passed; web CI failed because the exact accessible label locator could not find the margin-mode select. Added an explicit accessible name and role-based locator, preserving regression assertions and engine logic. New CI pending.
+
+M46a fbc0380 web/foundation/dashboard/release/private deployment passed. M46b optional wallet-backed partial liquidation research policy implemented; tests added; CI pending. Isolated partial liquidation and venue reconciliation remain outstanding.
