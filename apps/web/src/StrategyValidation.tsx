@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState} from "react";
 import type {Diagnostic} from "./api";
 type Parameter={name:string;kind:"integer"|"decimal";default:string;minimum:string;maximum:string;line:number};
-export type SourceValidation={source_sha256:string;valid:boolean;kind:"python"|"visual";diagnostics:Diagnostic[];parameters:Parameter[];timeframes:number[];indicators:{name:string;timeframe:number;parameters:Record<string,unknown>}[]};
+export type SourceValidation={source_sha256:string;valid:boolean;kind:"python"|"visual";diagnostics:Diagnostic[];parameters:Parameter[];timeframes:number[];indicators:{name:string;timeframe:number;parameters:Record<string,unknown>}[];custom_indicators:{name:string;timeframe:number;lookback:number;method:string}[]};
 type Applied={source:string;validation:SourceValidation};
 function request<T>(action:"validate_strategy"|"apply_parameters",source:string,values?:Record<string,string>):{promise:Promise<T>;cancel:()=>void}{
  const worker=new Worker(new URL("./browser-python-worker.js",document.baseURI));
@@ -46,6 +46,7 @@ export function StrategyValidation({source,controller,disabled}:{source:string;c
  {valid&&<><p role="status">{valid.valid?"Source validation passed":"Source validation failed"}</p>
  {!valid.valid&&valid.diagnostics.map((d,i)=><p className="error" key={i}>Line {d.line}, column {d.column}: {d.message}</p>)}
  {valid.valid&&<><p>Mode: {valid.kind==="python"?"SDK Python":"Visual"} · Timeframes: {valid.timeframes.map(t=>t/60+"m").join(", ")}</p><details><summary>Declared indicators ({valid.indicators.length})</summary>{valid.indicators.map((v,i)=><p key={i}>{v.name} · {v.timeframe/60}m · {JSON.stringify(v.parameters)}</p>)}</details>
+ <details><summary>Custom indicators ({valid.custom_indicators.length})</summary>{valid.custom_indicators.map(v=><p key={v.name}>{v.name} · {v.timeframe/60}m · {v.lookback} completed candles · {v.method}</p>)}</details>
  {valid.parameters.length>0?<><div className="visual-config">{valid.parameters.map(p=><label key={p.name}>{p.name} ({p.minimum}–{p.maximum})<input aria-label={"Parameter "+p.name} value={values[p.name]??p.default} disabled={locked} onChange={e=>setValues(old=>({...old,[p.name]:e.target.value}))}/></label>)}</div><button disabled={locked} onClick={()=>void apply().catch(()=>{})}>Apply parameter values to source</button><small>Edits the declared defaults in your source, preserving all other trading logic and the exact saved version.</small></>:<p className="muted">No declared editable parameters. Python class fields can use parameter(default, minimum, maximum), with integer or Decimal literals.</p>}</>}
  </>}
  </section>;

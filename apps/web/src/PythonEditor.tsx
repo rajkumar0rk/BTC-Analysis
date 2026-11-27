@@ -9,6 +9,12 @@ import type {Catalog,Diagnostic} from "./api";
 
 self.MonacoEnvironment={getWorker:()=>new EditorWorker()};
 const sdkItems=[
+ ["custom_indicators","def custom_indicators(self):\n        return ((\"my_indicator\", Timeframe(900), 20, \"my_formula\"),)","Declare a bounded custom indicator; formula signature (self, bars, previous)"],
+ ["self.custom_value","self.custom_value(\"my_indicator\")","Latest completed custom indicator value"],
+ ["self.custom_history","self.custom_history(\"my_indicator\", 2)","Completed custom indicator output history"],
+ ["series","series(bars, \"close\")","Extract completed candle values"],
+ ["mean","mean(series(bars, \"close\"))","Decimal arithmetic mean"],
+ ["stddev","stddev(series(bars, \"close\"))","Population standard deviation"],
  ["parameter","parameter(20, 2, 100)","Declare an editable integer class parameter; defaults and bounds must be literals"],
  ["weekday_ist","weekday_ist(ctx.now_utc)","IST weekday, Monday=0"],
  ["ctx.candles","ctx.candles(Timeframe(60), 20)","Completed candle history"],

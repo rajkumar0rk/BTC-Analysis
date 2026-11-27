@@ -52,3 +52,14 @@ test("handwritten SDK strategy validation and editable parameters",async({page})
  await page.getByRole("button",{name:"Validate strategy source"}).click();
  await expect(page.getByText("Source validation failed",{exact:true})).toBeVisible({timeout:125000});
 });
+
+test("custom indicator declaration is validated and visible",async({page})=>{
+ test.setTimeout(180000);
+ await page.goto("/");
+ await page.getByRole("button",{name:"Open local Python runner"}).click();
+ await page.getByLabel("Local visual source").fill("from btc_analysis.strategy import PythonStrategy\nfrom btc_analysis.contracts import Timeframe\nclass Strategy(PythonStrategy):\n    def custom_indicators(self):\n        return ((\"user_formula\", Timeframe(900), 3, \"formula\"),)\n    def formula(self, bars, previous):\n        return mean(series(bars, \"close\"))\n    def on_signal(self, ctx):\n        pass\n");
+ await page.getByRole("button",{name:"Validate strategy source"}).click();
+ await expect(page.getByText("Source validation passed",{exact:true})).toBeVisible({timeout:125000});
+ await page.getByText("Custom indicators (1)",{exact:true}).click();
+ await expect(page.getByText("user_formula · 15m · 3 completed candles · formula")).toBeVisible();
+});

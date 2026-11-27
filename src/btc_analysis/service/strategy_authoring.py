@@ -22,7 +22,7 @@ def diagnostic(exc):
 
 def validate_source(source):
     if not isinstance(source,str) or len(source.encode())>65536:raise ValueError("invalid source size")
-    out=dict(source_sha256=sha256(source.encode()).hexdigest(),valid=False,kind="python",diagnostics=[],parameters=[],timeframes=[],indicators=[])
+    out=dict(source_sha256=sha256(source.encode()).hexdigest(),valid=False,kind="python",diagnostics=[],parameters=[],timeframes=[],indicators=[],custom_indicators=[])
     try:
         if source.startswith("# btc-visual-v1 ") or source.lstrip().startswith("{"):
             out["kind"]="visual"
@@ -32,7 +32,7 @@ def validate_source(source):
             out.update(timeframes=[t.seconds for t in g.extra_timeframes()],indicators=[dict(name=s.name,timeframe=s.timeframe.seconds,parameters=to_wire(dict(s.parameters))) for s in g.indicators()])
         else:
             p=Program(source);sample=p.make()
-            out.update(parameters=list(p.parameters.values()),timeframes=[t.seconds for t in sample.frames],
+            out.update(parameters=list(p.parameters.values()),timeframes=[t.seconds for t in sample.frames],custom_indicators=sample.custom_definitions,
                        indicators=[dict(name=s.name,timeframe=s.timeframe.seconds,parameters=to_wire(dict(s.parameters))) for s in sample.specs])
         out["valid"]=True
     except (ValueError,TypeError,ArithmeticError,SyntaxError,IndexError,KeyError,AttributeError,RecursionError) as exc:

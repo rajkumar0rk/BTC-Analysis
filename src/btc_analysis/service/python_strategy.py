@@ -6,6 +6,8 @@ values, or arbitrary attribute lookup. This is not a general Python sandbox.
 import ast
 import operator
 import re
+from collections import deque
+from types import MappingProxyType
 from ..serialization import to_wire
 from datetime import datetime
 from decimal import Decimal as D, localcontext
@@ -26,6 +28,9 @@ SDK_IMPORTS={
 CONTEXT_FIELDS={"now_utc","instrument","position_quantity","equity"}
 CONTEXT_CALLS={"candles","indicator","indicator_history","cancel"}
 ORDER_CALLS={"buy","sell","order","close_position"}
+CUSTOM_CALLS={"custom_value","custom_history"}
+DECLARATIONS={"indicators","extra_timeframes","custom_indicators"}
+RESERVED=ORDER_CALLS|CUSTOM_CALLS|CALLBACKS|{"on_completed_candle"}
 FIELDS={
     Candle:{"open","high","low","close","volume","open_utc","close_utc"},
     Fill:{"price","quantity","side","reason","event_utc","fee","tax"},
@@ -99,7 +104,34 @@ def limited_range(*args):
     if not 1<=len(args)<=3 or any(type(v) is not int or abs(v)>4096 for v in args):raise ValueError("range exceeds bound")
     return bounded(range(*args))
 
-FUNCS={"D":decimal_value,"Decimal":decimal_value,"Timeframe":frame,"spec":spec,
+def numeric_series(values):
+    if type(values) not in (tuple,list) or not 1<=len(values)<=4096:raise ValueError("numeric series requires 1–4096 values")
+    return tuple(D(number(v)) for v in values)
+
+def series(bars,field):
+    if type(bars) not in (tuple,list) or len(bars)>4096 or field not in ("open","high","low","close","volume"):
+        raise ValueError("invalid candle series")
+    if any(type(b) is not Candle for b in bars):raise ValueError("series requires completed candles")
+    return tuple(getattr(b,field) for b in bars)
+
+def aggregate(values,kind):
+    vals=numeric_series(values)
+    with localcontext() as c:
+        c.prec=50
+        total=sum(vals,D(0))
+        if kind=="sum":return bounded(total)
+        mean=total/D(len(vals))
+        if kind=="mean":return bounded(mean)
+        return bounded((sum(((v-mean)*(v-mean) for v in vals),D(0))/D(len(vals))).sqrt())
+
+def sqrt_value(v):
+    with localcontext() as c:
+        c.prec=50
+        return bounded(D(number(v)).sqrt())
+
+FUNCS={"series":series,"sum":lambda v:aggregate(v,"sum"),"mean":lambda v:aggregate(v,"mean"),
+       "stddev":lambda v:aggregate(v,"stddev"),"sqrt":sqrt_value,
+       "D":decimal_value,"Decimal":decimal_value,"Timeframe":frame,"spec":spec,
        "quantity_for_notional":quantity_for_notional,"crossover":crossover,"crossunder":crossunder,
        "weekday_ist":weekday,"abs":abs,"min":min,"max":max,"len":len,"range":limited_range,
        "int":lambda v:bounded(int(number(v)))}
@@ -139,13 +171,13 @@ class Program:
                 if node.decorator_list or node.returns or a.posonlyargs or a.kwonlyargs or a.vararg or a.kwarg or a.defaults or any(x.annotation for x in a.args):reject(node,"only simple method parameters supported")
                 params=[x.arg for x in a.args]
                 if not params or params[0]!="self" or len(params)!=len(set(params)) or any(x.startswith("_") for x in params):reject(node,"invalid method signature")
-                if node.name in self.methods or node.name in ORDER_CALLS or node.name.startswith("_") and node.name!="__init__":reject(node,"invalid method name")
+                if node.name in self.methods or node.name in (ORDER_CALLS|CUSTOM_CALLS|{"on_completed_candle"}) or node.name.startswith("_") and node.name!="__init__":reject(node,"invalid method name")
                 if node.name in CALLBACKS and params!= (["self","ctx","fill"] if node.name=="on_fill" else ["self","ctx"]):reject(node,"invalid callback signature")
-                if node.name in ("__init__","indicators","extra_timeframes") and params!=["self"]:reject(node,"invalid declaration signature")
+                if node.name in ({"__init__"}|DECLARATIONS) and params!=["self"]:reject(node,"invalid declaration signature")
                 self.methods[node.name]=node
             elif isinstance(node,ast.Assign) and len(node.targets)==1 and isinstance(node.targets[0],ast.Name):
                 name=node.targets[0].id
-                if name in self.constants or name in ORDER_CALLS or name in CALLBACKS:reject(node,"invalid class constant")
+                if name in self.constants or name in RESERVED or name in DECLARATIONS:reject(node,"invalid class constant")
                 if isinstance(node.value,ast.Call) and isinstance(node.value.func,ast.Name) and node.value.func.id=="parameter":
                     if len(self.parameters)>=32:reject(node,"maximum 32 declared parameters")
                     self.parameters[name]=declared_parameter(name,node.value,self.aliases)
@@ -167,7 +199,7 @@ class Program:
             if isinstance(target,ast.Name) and self.aliases.get(target.id,target.id) in allowed_names:continue
             if isinstance(target,ast.Attribute) and isinstance(target.value,ast.Name):
                 base=target.value.id;name=target.attr
-                if base=="self" and (name in ORDER_CALLS or name in self.methods and name not in CALLBACKS and name!="__init__"):continue
+                if base=="self" and (name in ORDER_CALLS or name in CUSTOM_CALLS or name in self.methods and name not in CALLBACKS and name not in DECLARATIONS and name!="__init__"):continue
                 if self.aliases.get(base,base)=="IndicatorSpec" and name=="create":continue
                 if name in CONTEXT_CALLS:continue
             reject(n,"call not in SDK allowlist")
@@ -180,9 +212,11 @@ class InterpretedStrategy(PythonStrategy):
     def __init__(self,program,leverage):
         super().__init__()
         self.program=program;self.state={};self.steps=0;self.depth=0
-        self.ctx=None
+        self.ctx=None;self.indicator_mode=False;self.custom={};self.indicator_constants={}
         for k,v in program.constants.items():
             self.state[k]=self.expr(v,{})
+        # Formula evaluation reads only immutable scalar class constants, not trading state.
+        self.indicator_constants=MappingProxyType({k:v for k,v in self.state.items() if type(v) in (int,D,str,bool,type(None))})
         if "__init__" in program.methods:self.invoke("__init__",[])
         self.signal_seconds=self.state.get("signal_seconds",60)
         if type(self.signal_seconds) is not int or self.signal_seconds not in FRAMES:raise ValueError("invalid signal_seconds")
@@ -200,7 +234,61 @@ class InterpretedStrategy(PythonStrategy):
         if not isinstance(self.specs,tuple) or len(self.specs)>64 or any(type(v) is not IndicatorSpec for v in self.specs):raise ValueError("indicators must return a tuple of SDK specs")
         extra=self.invoke("extra_timeframes",[]) if "extra_timeframes" in program.methods else ()
         if not isinstance(extra,tuple) or len(extra)>8 or any(type(v) is not Timeframe or v.seconds not in FRAMES for v in extra):raise ValueError("invalid extra_timeframes")
-        self.frames=tuple(sorted({Timeframe(60),Timeframe(self.signal_seconds),*extra,*(s.timeframe for s in self.specs)},key=lambda t:t.seconds))
+        definitions=self.invoke("custom_indicators",[]) if "custom_indicators" in program.methods else ()
+        if type(definitions) is not tuple or len(definitions)>16:raise ValueError("custom_indicators must return a tuple of at most 16 declarations")
+        self.custom_definitions=[]
+        for item in definitions:
+            if type(item) is not tuple or len(item)!=4:raise ValueError("custom declaration requires (name, Timeframe, lookback, method_name)")
+            name,tf,lookback,method=item
+            if type(name) is not str or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,47}",name) or name in self.custom:raise ValueError("invalid or duplicate custom indicator name")
+            if type(tf) is not Timeframe or tf.seconds not in FRAMES or type(lookback) is not int or not 1<=lookback<=4096:raise ValueError("invalid custom indicator timeframe or lookback")
+            if type(method) is not str or method in RESERVED or method in DECLARATIONS or method=="__init__" or method not in program.methods:raise ValueError("invalid custom indicator formula method")
+            if [arg.arg for arg in program.methods[method].args.args]!=["self","bars","previous"]:reject(program.methods[method],"formula signature must be (self, bars, previous)")
+            self.check_formula(method,set())
+            self.custom_definitions.append(dict(name=name,timeframe=tf.seconds,lookback=lookback,method=method))
+            self.custom[name]=(tf,method,deque(maxlen=lookback),deque(maxlen=4096))
+        self.frames=tuple(sorted({Timeframe(60),Timeframe(self.signal_seconds),*extra,*(s.timeframe for s in self.specs),*(v[0] for v in self.custom.values())},key=lambda t:t.seconds))
+
+    def check_formula(self,method,seen):
+        if method in seen:return
+        seen.add(method)
+        for n in ast.walk(self.program.methods[method]):
+            if isinstance(n,ast.Attribute) and isinstance(n.value,ast.Name) and n.value.id=="self":
+                if isinstance(n.ctx,ast.Store):reject(n,"custom indicator formulas cannot mutate strategy state")
+                if n.attr in ORDER_CALLS|CUSTOM_CALLS|DECLARATIONS:reject(n,"custom indicator formulas cannot access trading or other indicator state")
+                if n.attr in self.program.methods:self.check_formula(n.attr,seen)
+                elif n.attr not in self.indicator_constants:reject(n,"formula may only read immutable scalar class constants")
+            if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr in CONTEXT_CALLS:
+                reject(n,"custom indicator formulas cannot access trading context")
+
+    def on_completed_candle(self,candle):
+        # Engine invokes this trusted hook only when a bar has fully completed.
+        # Every indicator has private rolling history and previous output.
+        if not self.custom:return
+        for tf,method,bars,history in self.custom.values():
+            if candle.timeframe!=tf:continue
+            if bars and candle.open_utc!=bars[-1].close_utc:raise ValueError("noncontiguous custom indicator candles")
+            bars.append(candle)
+            if len(bars)<bars.maxlen:
+                history.append(None);continue
+            self.indicator_mode=True;self.steps=0
+            try:
+                result=self.invoke(method,[tuple(bars),history[-1] if history else None])
+                if result is not None:
+                    if type(result) not in (D,int):reject(self.program.methods[method],"custom indicator must return a number or None")
+                    result=bounded(D(result))
+                history.append(result)
+            finally:self.indicator_mode=False
+
+    def custom_history(self,name,limit=2):
+        if self.indicator_mode or self.ctx is None:raise ValueError("custom indicator history is available only to strategy callbacks")
+        if type(name) is not str or name not in self.custom:raise ValueError("custom indicator must be declared")
+        if type(limit) is not int or not 1<=limit<=4096:raise ValueError("invalid custom indicator history limit")
+        return tuple(self.custom[name][3])[-limit:]
+
+    def custom_value(self,name):
+        values=self.custom_history(name,1)
+        return values[-1] if values else None
 
     def charge(self,node):
         self.steps+=1
@@ -248,7 +336,8 @@ class InterpretedStrategy(PythonStrategy):
         if isinstance(target,ast.Name) and target.id not in ("self","ctx"):
             env[target.id]=value;return
         if isinstance(target,ast.Attribute) and isinstance(target.value,ast.Name) and target.value.id=="self":
-            if target.attr in ORDER_CALLS or target.attr in self.program.methods:reject(target,"reserved state field")
+            if self.indicator_mode:reject(target,"custom indicator formulas cannot mutate strategy state")
+            if target.attr in RESERVED or target.attr in self.program.methods:reject(target,"reserved state field")
             if target.attr in self.program.parameters:reject(target,"declared parameters are immutable; change the source default")
             if self.ctx is not None and target.attr in ("signal_seconds","execution_seconds","fixed_point_bracket","leverage"):reject(target,"execution configuration is immutable")
             if target.attr not in self.state and len(self.state)>=128:reject(target,"state field limit")
@@ -284,7 +373,10 @@ class InterpretedStrategy(PythonStrategy):
         if isinstance(n,ast.Attribute):
             if isinstance(n.value,ast.Name):
                 base=n.value.id;alias=self.program.aliases.get(base,base)
-                if base=="self" and n.attr in self.state:return self.state[n.attr]
+                if base=="self":
+                    values=self.indicator_constants if self.indicator_mode else self.state
+                    if n.attr in values:return values[n.attr]
+                    reject(n,"unknown or unavailable strategy field "+n.attr)
                 if alias=="Side" and n.attr in ("BUY","SELL"):return Side[n.attr]
                 if alias=="OrderType" and n.attr in ("MARKET","LIMIT","STOP_MARKET","STOP_LIMIT"):return OrderType[n.attr]
             obj=self.expr(n.value,env)
@@ -323,8 +415,9 @@ class InterpretedStrategy(PythonStrategy):
             if isinstance(n.func,ast.Attribute) and isinstance(n.func.value,ast.Name):
                 base=n.func.value.id;name=n.func.attr
                 if base=="self":
-                    if name in self.program.methods and name not in CALLBACKS and name!="__init__" and not kw:return self.invoke(name,args)
-                    if name in ORDER_CALLS and self.ctx is not None and args and args[0] is self.ctx:
+                    if name in CUSTOM_CALLS and self.ctx is not None and not self.indicator_mode:return bounded(getattr(self,name)(*args,**kw))
+                    if name in self.program.methods and name not in CALLBACKS and name not in DECLARATIONS and name!="__init__" and not kw:return self.invoke(name,args)
+                    if name in ORDER_CALLS and not self.indicator_mode and self.ctx is not None and args and args[0] is self.ctx:
                         return bounded(getattr(PythonStrategy,name)(self,*args,**kw))
                 if self.program.aliases.get(base,base)=="IndicatorSpec" and name=="create":return IndicatorSpec.create(*args,**kw)
                 if env.get(base) is self.ctx and self.ctx is not None and name in CONTEXT_CALLS:return bounded(getattr(self.ctx,name)(*args,**kw))

@@ -649,6 +649,8 @@ class Simulator:
     def _publish(self,bar):
         e=self.cfg.execution_timeframe.seconds;s=self.cfg.signal_timeframe.seconds
         self.history[e].append(bar);self.indicators.update(bar)
+        custom_update=getattr(self.strategy,"on_completed_candle",None)
+        if custom_update is not None:custom_update(bar)
         signal_complete=e==s
         for seconds,group in self.groups.items():
             group.append(bar)
@@ -658,6 +660,7 @@ class Simulator:
                           max(c.high for c in group),min(c.low for c in group),
                           b.close,sum((c.volume for c in group),ZERO))
             self.history[seconds].append(candle);self.indicators.update(candle);group.clear()
+            if custom_update is not None:custom_update(candle)
             if seconds==s:signal_complete=True
         return signal_complete
 
