@@ -28,6 +28,15 @@ def main():
             ids=[d["id"] for d in declared]
             assert len(ids)==len(set(ids)) and all(isinstance(i,str) and i for i in ids)
             assert all(isinstance(d["name"],str) and type(d["timeframe_minutes"]) is int and d["timeframe_minutes"]>0 and d["panel"] in ("price","panel") and isinstance(d.get("parameters",{}),dict) for d in declared)
+            days=r.get("indicator_days",[])
+            assert days==sorted(set(days))
+            for day in days:
+                series=read(ROOT/"runs"/r["id"]/"indicators"/(day+".json"))
+                assert set(series)==set(ids)
+                for points in series.values():
+                    assert len(points)<=1441
+                    assert all(type(p[0]) is int and (p[1] is None or (type(p[1]) in (int,float) and math.isfinite(p[1]))) for p in points)
+                    assert all(a[0]<b[0] for a,b in zip(points,points[1:]))
         assert sum(m["trades"] for m in r["months"])==r["trades"]
         assert abs(sum(m["net"] for m in r["months"])-r["net"])<.1
         cv=read(ROOT/"runs"/r["id"]/"curve.json")

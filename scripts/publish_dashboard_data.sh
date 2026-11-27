@@ -45,7 +45,7 @@ cp "$work/_sources/eth-trades.csv.gz" "$eth_dir/full_trade_ledger.csv.gz"
 export DASHBOARD_ETH_RUN="$old_run"
 # Fingerprint relevant content rather than main HEAD; unrelated commits and unchanged runs are no-ops.
 fingerprint=$({
-  git ls-tree -r HEAD -- data/delta_india/BTCUSD/1m data/delta_india/ETHUSD/1m analysis/delta_points_200_500/individual_trade_replay.csv analysis/institutional_discovery_stage24_failed_auction/original_trade_ledger.csv.gz scripts/export_dashboard.py scripts/dashboard_archive.py scripts/verify_dashboard_export.py scripts/curate_dashboard.py scripts/import_supertrend_dashboard.py dashboard/supertrend-sources.json dashboard/frozen-strategies.json scripts/publish_dashboard_data.sh
+  git ls-tree -r HEAD -- data/delta_india/BTCUSD/1m data/delta_india/ETHUSD/1m analysis/delta_points_200_500/individual_trade_replay.csv analysis/institutional_discovery_stage24_failed_auction/original_trade_ledger.csv.gz scripts/dashboard_indicator_history.py src/btc_analysis/indicators.py src/btc_analysis/contracts.py scripts/export_dashboard.py scripts/dashboard_archive.py scripts/verify_dashboard_export.py scripts/curate_dashboard.py scripts/import_supertrend_dashboard.py dashboard/supertrend-sources.json dashboard/frozen-strategies.json scripts/publish_dashboard_data.sh
   git ls-files analysis | grep -E '(ledger|_trades)[^/]*\.csv(\.gz)?$' || true
   sha256sum "$eth_dir/full_trade_ledger.csv.gz"
   printf '%s\n' "$DASHBOARD_ETH_RUN"

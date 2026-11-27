@@ -112,6 +112,10 @@ def main(root,out):
         raise ValueError("RSI ledger summary mismatch")
     if abs(sr["net"]-.7980515306245621)>1e-8 or sum(r["result"]=="lock" for r in records)!=54:
         raise ValueError("RSI replay differs from selected sweep")
+    history={}
+    if "indicator_replay" in sources[key]:
+        from dashboard_indicator_history import replay
+        history=replay(root,REPO,sources[key]["indicator_replay"],records,data/"runs"/rid,"BTCUSD")
     by={}
     for rec in records:by.setdefault(rec["entry_utc"][:7],[]).append(rec)
     months=[]
@@ -121,6 +125,7 @@ def main(root,out):
     dump(data/"runs"/rid/"curve.json",curve(records))
     index["runs"].append(dict(id=rid,strategy=name,symbol="BTCUSD",unit="account USD",source=link(key,"ledger.json"),audit="Recorded modeled 1M Color fills; lock exits minute-close timestamp",research_reference=True,detail_available=True,target=None,stop=None,months=months,costs="1x; $100 initial equity; 100% target exposure; weekdays IST; 0.05% taker each side + 18% GST; modeled 30-minute exit fee waiver; no additional slippage or funding. Mark-triggered protection, interpolated trade fills.",**stats(records)))
     if "indicator_definitions" in archive:index["runs"][-1]["indicator_definitions"]=archive["indicator_definitions"]
+    index["runs"][-1].update(history)
     monthly=[dict(month=k,value=v) for k,v in sorted(sr["monthly"].items())]
     if len(monthly)!=22 or sum(x["value"]>0 for x in monthly)!=sr["profitable_months"] or abs(sum(x["value"] for x in monthly)-sr["net"])>1e-6:
         raise ValueError("RSI MTM monthly result mismatch")

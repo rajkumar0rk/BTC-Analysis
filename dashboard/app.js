@@ -1,6 +1,6 @@
 "use strict";
 const $=id=>document.getElementById(id),fmt=n=>n==null?"Not recorded":Number(n).toLocaleString("en-US",{maximumFractionDigits:4}), esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),sign=n=>n>0?"pos":n<0?"neg":"";
-let index,run,ledger=[],trade,bars=[],limit=0,timer,monthToken=0,tradeToken=0,windowDay=0,sourceBars=[],chartFrame=1,frameRun=null,curveToken=0,curves=[],page=0;const PAGE=100;
+let index,run,ledger=[],trade,bars=[],limit=0,timer,monthToken=0,tradeToken=0,windowDay=0,sourceBars=[],dayIndicatorSeries={},chartFrame=1,frameRun=null,curveToken=0,curves=[],page=0;const PAGE=100;
 const cache=new Map();
 const RAW="https://raw.githubusercontent.com/rajkumar0rk/BTC-Analysis/";
 const LOCAL=["127.0.0.1","localhost"].includes(location.hostname)&&!new URLSearchParams(location.search).has("remote");
@@ -26,7 +26,7 @@ function aggregate(rows,minutes,complete=false){
 // Generic recorded indicator transport. No strategy-name dispatch.
 function recordedIndicators(r,t){
  const defs=Array.isArray(r?.indicator_definitions)?r.indicator_definitions:[];
- const series=t?.indicator_series||{},values=t?.indicator_values||{},seen=new Set(),out=[];
+ const series={...(t?.indicator_series||{}),...(t===trade?dayIndicatorSeries:{})},values=t?.indicator_values||{},seen=new Set(),out=[];
  for(const d of defs.slice(0,64)){
   if(!d||typeof d.id!=="string"||!d.id||seen.has(d.id)||typeof d.name!=="string"||!Number.isInteger(d.timeframe_minutes)||d.timeframe_minutes<1||!["price","panel"].includes(d.panel))continue;
   seen.add(d.id);
@@ -42,9 +42,9 @@ function legacySignalValues(t){
 const indicatorColors=["#f0c36a","#67d4c0","#c5a1ff","#79baff","#fb7785","#f59e0b","#b8d68c","#f2a1c7"];
 function indicatorLabel(d){const params=Object.entries(d.parameters||{}).map(([k,v])=>k+"="+String(v)).join(", ");return d.name+" ("+d.timeframe_minutes+"m"+(params?"; "+params:"")+")"}
 async function loadWindow(){
- const token=++tradeToken,t=trade,r=run;stop();bars=[];sourceBars=[];draw();if(!t)return;
+ const token=++tradeToken,t=trade,r=run;stop();bars=[];sourceBars=[];dayIndicatorSeries={};draw();if(!t)return;
  const available=new Set(index.candle_days?.[r.symbol]||[]),day=new Date(windowDay*1000).toISOString().slice(0,10);if(!available.has(day)){if(token===tradeToken)$("cursor").textContent="No source candles for "+day;return}
- const data=await get("candles/"+r.symbol+"/"+day+".json");if(token!==tradeToken)return;sourceBars=data;
+ const [data,series]=await Promise.all([get("candles/"+r.symbol+"/"+day+".json"),(r.indicator_days||[]).includes(day)?get("runs/"+r.id+"/indicators/"+day+".json"):Promise.resolve({})]);if(token!==tradeToken)return;sourceBars=data;dayIndicatorSeries=series;
  const anchor=Math.min(secs(t.entry_utc),secs(t.trigger_utc)||secs(t.entry_utc)),start=Math.max(windowDay,Math.floor((anchor-1800)/14400)*14400),end=Math.min(windowDay+86399,secs(t.exit_utc)+1800);
  bars=data.filter(c=>c[0]>=start&&c[0]<=end);if(!bars.length)bars=data;limit=bars.length;draw()
 }
@@ -54,7 +54,7 @@ function draw(){
  const panelDefs=show?declared.filter(d=>d.panel==="panel"&&d.points.length):[];
  const h=400+panelDefs.length*100;c.style.height=h+"px";c.width=w*dpr;c.height=h*dpr;const x=c.getContext("2d");x.scale(dpr,dpr);
  $("chartFrame").textContent=chartFrame+"m chart · recorded 1m execution · UTC";
- $("indicatorInfo").textContent=trade?(declared.length?"Declared strategy indicators · recorded data only; missing series are not reconstructed.":Array.isArray(run?.indicator_definitions)?"No indicators declared for this strategy.":legacy.length?"Legacy archive: recorded signal fields only; indicator declarations and time series unavailable.":"Legacy archive: no indicator declarations or recorded indicator fields."):"";
+ $("indicatorInfo").textContent=trade?(declared.length?(run.indicator_provenance?.method==="pinned_input_replay_snapshot_verified"?"Strategy indicators · reproduced from pinned original inputs and verified against recorded signal values.":"Declared strategy indicators · recorded data only; missing series are not reconstructed."):Array.isArray(run?.indicator_definitions)?"No indicators declared for this strategy.":legacy.length?"Legacy archive: recorded signal fields only; indicator declarations and time series unavailable.":"Legacy archive: no indicator declarations or recorded indicator fields."):"";
  const host=$("indicatorValues");host.replaceChildren();
  if(!bars.length||!trade){$("cursor").textContent="";return}
  const visible=bars.slice(0,limit),cutoff=visible.at(-1)?.[0]+60,b=aggregate(visible,chartFrame),pad=12,right=76,bottom=26;if(!b.length)return;

@@ -17,6 +17,10 @@ on:
       - 'analysis/**'
       - 'data/delta_india/BTCUSD/1m/**'
       - 'data/delta_india/ETHUSD/1m/**'
+      - 'scripts/dashboard_indicator_history.py'
+      - 'scripts/test_dashboard_indicator_history.py'
+      - 'src/btc_analysis/indicators.py'
+      - 'src/btc_analysis/contracts.py'
       - 'scripts/export_dashboard.py'
       - 'scripts/dashboard_archive.py'
       - 'scripts/curate_dashboard.py'
@@ -46,6 +50,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install pandas==2.2.3 numpy==2.2.6
+      - run: python scripts/test_dashboard_indicator_history.py
       - run: python scripts/test_dashboard_archive.py
       - run: python scripts/test_curate_dashboard.py
       - name: Publish verified data only, never deploy Pages
