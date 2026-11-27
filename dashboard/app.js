@@ -459,7 +459,8 @@ async function refreshData(force=false){
   let manifest,base;
   if(LOCAL){manifest={data_commit:"local",published_at:"local"};base="./data/"}
   else{
-   manifest=await json(RAW+"dashboard-data/latest.json?minute="+Math.floor(Date.now()/60000),{cache:"no-store"});
+   // Use a fresh URL per request, including manual refreshes within the same minute.
+   manifest=await json(RAW+"dashboard-data/latest.json?refresh="+Date.now(),{cache:"no-store"});
    if(manifest.schema!==1||manifest.data_schema!==2||! /^[a-f0-9]{40}$/.test(manifest.data_commit))throw Error("Invalid or incompatible published data pointer");
    base=RAW+manifest.data_commit+"/data/";
   }
