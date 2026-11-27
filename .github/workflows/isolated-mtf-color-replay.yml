@@ -1,4 +1,4 @@
-name: MTF Color Supertrend flip 2R volume and ATR filters
+name: Single 15m Supertrend Color flip 2R filtered replay
 on:
   push:
     branches: [research/mtf-color-replay-20261127]
@@ -30,9 +30,9 @@ jobs:
           root=Path("data/delta_india/BTCUSD")
           manifest=json.loads((root/"1m/manifest.json").read_text())
           ins=Instrument("delta_india","BTCUSD",AssetClass.CRYPTO_PERPETUAL,"USD","USD",D("0.5"),D("1"),D("0.001"))
-          h=Timeframe(3600); m=Timeframe(900)
+          m=Timeframe(900)
           params={"period":10,"multiplier":"3"}
-          book=IndicatorBook((spec("supertrend.direction",h,**params),spec("supertrend.direction",m,**params),spec("ema.value",m,period=20),spec("supertrend.line",m,**params),spec("atr.value",m,period=14)))
+          book=IndicatorBook((spec("supertrend.direction",m,**params),spec("ema.value",m,period=20),spec("supertrend.line",m,**params),spec("atr.value",m,period=14)))
           ist=ZoneInfo("Asia/Kolkata")
           def rows(path):
               with gzip.open(path,"rt") as f:
@@ -92,10 +92,10 @@ jobs:
                       monthly[k]=round(v-prev,8);prev=v
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s for _,s in self.trades),target_exits=sum(not s for _,s in self.trades),invalid_line=self.invalid_line,mean_initial_distance=sum(self.distances)/len(self.distances) if self.distances else None)
-          states={f"{mode} {variant}":State() for mode in ("Touch","Reclaim") for variant in ("Baseline","Filtered")}
-          by_mode={mode:[(variant,states[f"{mode} {variant}"]) for variant in ("Baseline","Filtered")] for mode in ("Touch","Reclaim")}
+          states={f"{mode} {variant}":State() for mode in ("Touch","Reclaim") for variant in ("Filtered",)}
+          by_mode={mode:[(variant,states[f"{mode} {variant}"]) for variant in ("Filtered",)] for mode in ("Touch","Reclaim")}
           volumes=deque(maxlen=20);atrs=deque(maxlen=20);filter_pass=False;filter_stats={"15m_ready":0,"volume_pass":0,"atr_pass":0,"both_pass":0}
-          groups={900:[],3600:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=ist).timestamp())
+          groups={900:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=ist).timestamp())
           def val(name,tf,p):
               v=book.get(name,tf,p)
               return v[-1] if v else None
@@ -131,27 +131,27 @@ jobs:
                           filter_stats["15m_ready"]+=1;filter_stats["volume_pass"]+=int(vp);filter_stats["atr_pass"]+=int(ap);filter_stats["both_pass"]+=int(filter_pass)
                       volumes.append(volume)
                       if atr is not None:atrs.append(atr)
-                  st1=val("supertrend.direction",h,params);st15=val("supertrend.direction",m,params)
+                  st15=val("supertrend.direction",m,params)
                   st_line=val("supertrend.line",m,params)
                   if completed15 and st15 in (-1,1):
                       for s in states.values():
                           if s.pos and int(st15)==-s.pos[0]:s.exit_pending=True
-                  alignment=int(st1) if st1 in (-1,1) and st1==st15 else 0
+                  alignment=int(st15) if st15 in (-1,1) else 0
                   em=val("ema.value",m,{"period":20});ema=float(em) if em is not None else None
                   if alignment!=old_side:
                       for s in states.values():s.used=False
                   if count>=6000 and alignment and dt(t+60).astimezone(ist).weekday()<5:
                       if alignment==old_side and old_ema is not None and prev_min is not None and alignment*(prev_min[3]-old_ema)>0 and alignment*(v[0]-old_ema)>=0 and v[2]<=old_ema<=v[1]:
                           for variant,s in by_mode["Touch"]:
-                              if (variant=="Baseline" or filter_pass) and not s.pos and not s.used and st_line is not None:s.pending=alignment;s.line=float(st_line)
+                              if filter_pass and not s.pos and not s.used and st_line is not None:s.pending=alignment;s.line=float(st_line)
                       if completed15 and prev15 and old_ema is not None and alignment*(prev15[3]-old_ema)>0 and completed15[2]<=old_ema<=completed15[1] and alignment*(completed15[3]-old_ema)>0:
                           for variant,s in by_mode["Reclaim"]:
-                              if (variant=="Baseline" or filter_pass) and not s.pos and not s.used and st_line is not None:s.pending=alignment;s.line=float(st_line)
+                              if filter_pass and not s.pos and not s.used and st_line is not None:s.pending=alignment;s.line=float(st_line)
                   if completed15:prev15=completed15
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"execution":"Color paired trade and mark paths; 15m completed Supertrend flip exit at next 1m open; fixed target 2x signed entry distance to last completed 15m Supertrend line; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; filtered entries use latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean; unfiltered controls","results":{k:s.result() for k,s in states.items()}}
+          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"execution":"15m Supertrend only (no 1h condition); one entry per 15m Supertrend cycle; Color paired trade and mark paths; 15m completed Supertrend flip exit at next 1m open; fixed target 2x signed entry distance to last completed 15m Supertrend line; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; filtered entries use latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean","results":{k:s.result() for k,s in states.items()}}
           # Compact output permits all results to be retrieved without truncation.
           print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
           for k,v in results["results"].items():
@@ -161,5 +161,5 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: mtf-color-filter-results
+          name: single-15m-color-filter-results
           path: mtf-color-results.json
