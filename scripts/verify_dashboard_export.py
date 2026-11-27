@@ -8,8 +8,13 @@ def main():
     index=read(ROOT/"index.json")
     runs=index["runs"]
     assert runs and len({r["id"] for r in runs})==len(runs)
-    assert all(r.get("research_reference") or (r["net"]>0 and r["profit_factor"]>1 and r.get("detail_available",True)) for r in runs)
-    assert index["selection_policy"]["retained"]+index["supertrend_replay_count"]==len(runs)
+    assert all(r.get("automatic_version") or r.get("research_reference") or (r["net"]>0 and r["profit_factor"]>1 and r.get("detail_available",True)) for r in runs)
+    assert index["selection_policy"]["retained"]+index["supertrend_replay_count"]+index.get("automatic_run_count",0)==len(runs)
+    automatic=[r for r in runs if r.get("automatic_version")]
+    assert len(automatic)==index.get("automatic_run_count",0)
+    assert len({(r["source_run_id"],r["source_attempt"],r["family"],r["variant_key"]) for r in automatic})==len(automatic)
+    for k in {(r["symbol"],r["family"],r["variant_key"]) for r in automatic}:
+        assert sum(r["latest_version"] for r in automatic if (r["symbol"],r["family"],r["variant_key"])==k)==1
     research=read(ROOT/"supertrend.json")
     assert len(research)>=12 and any(r["id"]=="locked15-100" for r in research)
     assert {r["replay_id"] for r in research if r["replay_id"]}=={r["id"] for r in runs if r.get("research_reference")}

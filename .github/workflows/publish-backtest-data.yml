@@ -2,15 +2,15 @@ name: Publish backtest data
 on:
   workflow_dispatch:
   schedule:
-    - cron: '23 */6 * * *'
+    - cron: '*/15 * * * *'
   workflow_run:
     workflows:
       - ETHUSD native ATR price-action strategy research
       - BTCUSD daily 200–500 point feasibility
       - Research BTC Stage24 two-hour failed auction 22 months
       - Prune verified duplicate research branches
+      - Reclaim single and multi candle without volume volatility filters
     types: [completed]
-    branches: [main]
   push:
     branches: [main]
     paths:
@@ -22,6 +22,9 @@ on:
       - 'src/btc_analysis/indicators.py'
       - 'src/btc_analysis/contracts.py'
       - 'scripts/export_dashboard.py'
+      - 'scripts/backtest_bundle.py'
+      - 'scripts/publish_backtest_bundles.py'
+      - 'scripts/test_publish_backtest_bundles.py'
       - 'scripts/dashboard_archive.py'
       - 'scripts/curate_dashboard.py'
       - 'scripts/import_supertrend_dashboard.py'
@@ -52,6 +55,7 @@ jobs:
       - run: python -m pip install pandas==2.2.3 numpy==2.2.6
       - run: python scripts/test_dashboard_indicator_history.py
       - run: python scripts/test_dashboard_archive.py
+      - run: python scripts/test_publish_backtest_bundles.py
       - run: python scripts/test_curate_dashboard.py
       - name: Publish verified data only, never deploy Pages
         env:

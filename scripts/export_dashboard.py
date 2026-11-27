@@ -67,5 +67,9 @@ def main():
     curate(ROOT,OUT)
     from import_supertrend_dashboard import main as import_supertrend
     import_supertrend(ROOT,OUT)
+    bundle_cache=os.getenv("DASHBOARD_BUNDLE_CACHE")
+    if bundle_cache:
+        from publish_backtest_bundles import publish
+        publish(Path(bundle_cache),OUT/"data")
     print(f"Imported {len(runs)} actual BTC configurations, {len(trades)} recorded trades; no backtest rerun")
 if __name__=="__main__":main()
