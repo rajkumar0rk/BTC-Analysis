@@ -50,6 +50,7 @@ export function CustomFormulaControls({graph,change,disabled}:{graph:Graph;chang
   for(const k of ["long_machine","short_machine","long_exit_machine","short_exit_machine"] as const){const m=graph[k];if(m)out[k]={...m,transitions:m.transitions.map(t=>({...t,rule:rule(t.rule)})),reset:m.reset?rule(m.reset):m.reset};}
   for(const k of ["long_partial","short_partial"] as const){const p=graph[k];if(p)out[k]={...p,rule:rule(p.rule)};}
   for(const k of ["long_lock","short_lock"] as const){const p=graph[k];if(p)out[k]={...p,rule:rule(p.rule)};}
+  for(const k of ["long_partial_levels","short_partial_levels"] as const){const levels=graph[k];if(levels)out[k]=levels.map(p=>({...p,rule:rule(p.rule)}));}
   change(out);
  }
  function used(name:string){
@@ -57,6 +58,7 @@ export function CustomFormulaControls({graph,change,disabled}:{graph:Graph;chang
   for(const m of [graph.long_machine,graph.short_machine,graph.long_exit_machine,graph.short_exit_machine])if(m){rules.push(...m.transitions.map(t=>t.rule));if(m.reset)rules.push(m.reset);}
   for(const p of [graph.long_partial,graph.short_partial])if(p)rules.push(p.rule);
   for(const p of [graph.long_lock,graph.short_lock])if(p)rules.push(p.rule);
+  for(const levels of [graph.long_partial_levels,graph.short_partial_levels])if(levels)rules.push(...levels.map(p=>p.rule));
   return rules.some(r=>r.groups.some(g=>g.conditions.some(c=>[c.left,c.right].some(o=>o.kind==="custom"&&o.name===name))));
  }
  return <fieldset className="visual-rule" disabled={disabled}><legend>Custom indicator formulas</legend><p className="muted">Use a single numeric expression with completed candles (bars), previous output, and bounded SDK helpers. Example: mean(series(bars, "close")). The lookback is the required number of completed candles. Compare a custom formula in any rule or sequence. Names must be unique.</p>
@@ -116,11 +118,25 @@ export function StateMachineControls({graph,change,catalog,disabled,positionExit
 export function PartialExitControls({graph,change,catalog,disabled}:{graph:Graph;change:(g:Graph)=>void;catalog:Catalog;disabled:boolean}){
  return <section className="scenario"><h3>Conditional partial exits</h3><p className="muted">At most one partial reduction per position. Full rule exits take priority; protective orders remain active and reduce-only fills are clipped to the remaining quantity. Orders use the next execution open and round down to the instrument lot. Partial fee waivers are not modeled.</p>
  {(["long","short"] as const).map(direction=>{
-  const key=direction==="long"?"long_partial":"short_partial",entry=direction==="long"?"long_entry":"short_entry",p=graph[key];
+  const key=direction==="long"?"long_partial":"short_partial",entry=direction==="long"?"long_entry":"short_entry",p=graph[key],levels=direction==="long"?graph.long_partial_levels:graph.short_partial_levels;
   const update=(next:PartialExit|null)=>change({...graph,[key]:next,...(next?{[entry]:{...graph[entry],enabled:true,groups:graph[entry].groups.length?graph[entry].groups:[newGroup()]}}:{})});
   return <fieldset className="visual-rule" key={direction} disabled={disabled}><legend>{direction} partial exit</legend>
-  <label className="check"><input type="checkbox" checked={!!p} onChange={e=>update(e.target.checked?{pct:"50",rule:{enabled:true,mode:"all",groups:[{mode:"all",conditions:[{left:{kind:"position",field:"position_return_pct"},op:"gte",right:{kind:"constant",value:"1"}}]}]}}:null)}/> Enable {direction} partial exit</label>
+  <label className="check"><input type="checkbox" checked={!!p} disabled={disabled||!!levels} onChange={e=>update(e.target.checked?{pct:"50",rule:{enabled:true,mode:"all",groups:[{mode:"all",conditions:[{left:{kind:"position",field:"position_return_pct"},op:"gte",right:{kind:"constant",value:"1"}}]}]}}:null)}/> Enable {direction} partial exit</label>
   {p&&<><label>Reduce current quantity (%)<input value={p.pct} onChange={e=>update({...p,pct:e.target.value})}/></label><RuleEdit rule={p.rule} title={direction+" partial exit condition"} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={rule=>update({...p,rule:{...rule,enabled:true}})}/></>}
+  </fieldset>;
+ })}
+ </section>;
+}
+export function PartialLevelControls({graph,change,catalog,disabled}:{graph:Graph;change:(g:Graph)=>void;catalog:Catalog;disabled:boolean}){
+ const fresh=(i:number):PartialExit=>({pct:"25",rule:{enabled:true,mode:"all",groups:[{mode:"all",conditions:[{left:{kind:"position",field:"position_return_pct"},op:"gte",right:{kind:"constant",value:String(i+1)}}]}]}});
+ return <section className="scenario"><h3>Ordered partial exit levels</h3><p className="muted">Choose two to four levels instead of a single partial exit. Each level uses its own condition and a percentage of remaining quantity. The next level becomes eligible only after the previous fill; full exits and protection retain priority. A level that cannot leave a whole residual lot is not submitted.</p>
+ {(["long","short"] as const).map(direction=>{
+  const key=direction==="long"?"long_partial_levels":"short_partial_levels",entry=direction==="long"?"long_entry":"short_entry",single=direction==="long"?graph.long_partial:graph.short_partial,levels=graph[key];
+  const update=(next:PartialExit[]|null)=>change({...graph,[key]:next,...(next?{[entry]:{...graph[entry],enabled:true,groups:graph[entry].groups.length?graph[entry].groups:[newGroup()]}}:{})});
+  const edit=(i:number,p:PartialExit)=>{if(levels)update(levels.map((x,j)=>j===i?p:x));};
+  return <fieldset className="visual-rule" key={direction} disabled={disabled}><legend>{direction} ordered partial exits</legend>
+  <label className="check"><input type="checkbox" checked={!!levels} disabled={disabled||!!single} onChange={e=>update(e.target.checked?[fresh(0),fresh(1)]:null)}/> Enable {direction} partial levels</label>
+  {levels&&<>{levels.map((p,i)=><div className="rule-group" key={i}><strong>Level {i+1}</strong><label>Reduce remaining quantity (%)<input value={p.pct} onChange={e=>edit(i,{...p,pct:e.target.value})}/></label><RuleEdit rule={p.rule} title={direction+" partial level "+(i+1)} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={rule=>edit(i,{...p,rule:{...rule,enabled:true}})}/><button type="button" disabled={levels.length<=2} onClick={()=>update(levels.filter((_,j)=>j!==i))}>Remove level</button><button type="button" disabled={i===0} onClick={()=>{const next=[...levels];[next[i-1],next[i]]=[next[i],next[i-1]];update(next);}}>Move level up</button></div>)}<button type="button" disabled={levels.length>=4} onClick={()=>update([...levels,fresh(levels.length)])}>Add level</button></>}
   </fieldset>;
  })}
  </section>;
@@ -153,7 +169,7 @@ export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Ap
  <div className="visual-config"><FrameSelect label="Signal timeframe" value={graph.signal_timeframe} disabled={busy} change={v=>edit({...graph,signal_timeframe:v})}/><FrameSelect label="Execution timeframe" value={graph.execution_timeframe} disabled={busy} change={v=>edit({...graph,execution_timeframe:v})}/>
  {(["exposure_pct","stop_loss_pct","take_profit_pct"] as const).map((k,i)=><label key={k}>{["Equity exposure (%)","Stop loss (%)","Take profit (%)"][i]}<input disabled={busy} value={graph[k]} onChange={e=>edit({...graph,[k]:e.target.value})}/></label>)}</div>
  <CustomFormulaControls graph={graph} change={edit} disabled={busy}/><AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
- {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls positionExit graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialExitControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><ConditionalLockControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} custom={graph.custom_formulas??[]} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
+ {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls positionExit graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialExitControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialLevelControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><ConditionalLockControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} custom={graph.custom_formulas??[]} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
  <section className="panel"><div className="head"><h2>Generated Python</h2><div className="rule-actions"><button disabled={busy||!catalog} onClick={()=>void generate()}>Generate Python</button><button className="primary" disabled={busy||!catalog||!name.trim()||stale} onClick={()=>void generate(true)}>Save visual strategy</button>{revision&&<button disabled={busy} onClick={()=>openPython(revision)}>Open saved Python</button>}</div></div>
  {stale&&<p role="alert">Newer, frozen or archived revision. Reopen or clone in the strategy library before saving.</p>}
  {error&&<p className="error" role="alert">{error}</p>}{note&&<p role="status">{note}</p>}

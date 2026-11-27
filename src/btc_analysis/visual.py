@@ -242,6 +242,8 @@ class Graph(Strict):
     short_exit_machine:EntryMachine|None=None
     long_partial:PartialExit|None=None
     short_partial:PartialExit|None=None
+    long_partial_levels:list[PartialExit]|None=Field(default=None,min_length=2,max_length=4)
+    short_partial_levels:list[PartialExit]|None=Field(default=None,min_length=2,max_length=4)
     long_lock:ConditionalLock|None=None
     short_lock:ConditionalLock|None=None
     long_entry:Rule
@@ -261,7 +263,9 @@ class Graph(Strict):
             if lock is not None and (self.advanced is None or self.advanced.exit_mode!="points" or not getattr(self,direction+"_entry").enabled):
                 raise ValueError("conditional lock requires fixed-point protection and enabled directional entry")
             partial=getattr(self,direction+"_partial")
-            if partial is not None and not getattr(self,direction+"_entry").enabled:
+            levels=getattr(self,direction+"_partial_levels")
+            if partial is not None and levels is not None:raise ValueError("choose single partial exit or ordered partial levels per direction")
+            if (partial is not None or levels is not None) and not getattr(self,direction+"_entry").enabled:
                 raise ValueError("partial exit requires enabled directional entry")
             exit_machine=getattr(self,direction+"_exit_machine")
             if exit_machine is not None and (self.advanced is None or not getattr(self,direction+"_exit").enabled or not getattr(self,direction+"_entry").enabled):
@@ -313,6 +317,8 @@ class Graph(Strict):
             if machine is not None:
                 extra.extend(t.rule for t in machine.transitions)
                 if machine.reset is not None:extra.append(machine.reset)
+        for levels in (self.long_partial_levels,self.short_partial_levels):
+            if levels is not None:extra.extend(p.rule for p in levels)
         for partial in (self.long_partial,self.short_partial):
             if partial is not None:extra.append(partial.rule)
         for lock in (self.long_lock,self.short_lock):
@@ -321,6 +327,9 @@ class Graph(Strict):
 
     def lock_config(self):
         return {direction:p.locked_points for direction,p in ((1,self.long_lock),(-1,self.short_lock)) if p is not None}
+
+    def partial_levels_config(self):
+        return {direction:tuple(p.pct for p in levels) for direction,levels in ((1,self.long_partial_levels),(-1,self.short_partial_levels)) if levels is not None}
 
     def partial_config(self):
         return {direction:p.pct for direction,p in ((1,self.long_partial),(-1,self.short_partial)) if p is not None}
@@ -353,6 +362,8 @@ def raw_rules(raw):
     for name in ("long_partial","short_partial"):
         p=raw.get(name)
         if p is not None:yield p["rule"]
+    for name in ("long_partial_levels","short_partial_levels"):
+        for p in raw.get(name) or ():yield p["rule"]
     for name in ("long_lock","short_lock"):
         p=raw.get(name)
         if p is not None:yield p["rule"]
@@ -373,6 +384,8 @@ def canonical_graph(graph:Graph):
         raw[key]=to_wire(Decimal(raw[key]))
     for name in ("long_partial","short_partial"):
         if name in raw:raw[name]["pct"]=to_wire(Decimal(raw[name]["pct"]))
+    for name in ("long_partial_levels","short_partial_levels"):
+        for p in raw.get(name) or ():p["pct"]=to_wire(Decimal(p["pct"]))
     for name in ("long_lock","short_lock"):
         if name in raw:raw[name]["locked_points"]=to_wire(Decimal(raw[name]["locked_points"]))
     for rule in raw_rules(raw):
@@ -458,6 +471,9 @@ def compile_graph(graph:Graph):
     if g.exit_machine_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    exit_machine_config = "+repr(g.exit_machine_config()), ""]
+    if g.partial_levels_config():
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    partial_levels_config = "+repr(g.partial_levels_config()), ""]
     if g.partial_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    partial_config = "+repr(g.partial_config()), ""]
@@ -514,6 +530,13 @@ def compile_graph(graph:Graph):
         for direction,p in ((1,g.long_lock),(-1,g.short_lock)):
             if p is not None:
                 lines+=["        if direction == "+str(direction)+":","            return "+_rule(p.rule)]
+        lines+=["        return False"]
+    if g.partial_levels_config():
+        lines+=["","    def partial_level_rule(self, ctx, direction, index):"]
+        for direction,levels in ((1,g.long_partial_levels),(-1,g.short_partial_levels)):
+            if levels is not None:
+                for i,p in enumerate(levels):
+                    lines+=["        if direction == "+str(direction)+" and index == "+str(i)+":","            return "+_rule(p.rule)]
         lines+=["        return False"]
     source="\n".join(lines)+"\n"
     if len(source.encode())>MAX_SOURCE:raise ValueError("generated source exceeds limit")

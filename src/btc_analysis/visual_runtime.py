@@ -78,6 +78,7 @@ class VisualStrategyBase(PythonStrategy):
     machine_config=None
     exit_machine_config=None
     partial_config=None
+    partial_levels_config=None
     conditional_lock_config=None
     custom_config=None
 
@@ -94,6 +95,8 @@ class VisualStrategyBase(PythonStrategy):
         self.exit_machine_state={1:(0,None),-1:(0,None)}
         self.partial_consumed=False
         self.partial_pending=False
+        self.partial_level_index=0
+        self.partial_level_pending=None
         self.formula_runtime=formula_program(self.custom_config).make() if self.custom_config else None
 
     def on_completed_candle(self,candle):
@@ -208,7 +211,24 @@ class VisualStrategyBase(PythonStrategy):
 
     def partial_rule(self,ctx,direction):return False
 
+    def partial_level_rule(self,ctx,direction,index):return False
+
+    def maybe_partial_level(self,ctx,direction,levels):
+        index=self.partial_level_index
+        if index>=len(levels) or self.partial_level_pending is not None:return
+        if not self.partial_level_rule(ctx,direction,index):return
+        total=abs(ctx.position_quantity);lot=ctx.instrument.lot_size
+        qty=(total*D(levels[index])/100/lot).to_integral_value(rounding=ROUND_FLOOR)*lot
+        if qty<lot or total-qty<lot:return
+        reason=("visual_long_partial_level_" if direction>0 else "visual_short_partial_level_")+str(index+1)
+        self.order(ctx,Side.SELL if direction>0 else Side.BUY,qty,reason,reduce_only=True)
+        self.partial_level_pending=reason
+
     def maybe_partial(self,ctx,direction):
+        levels=(self.partial_levels_config or {}).get(direction)
+        if levels is not None:
+            self.maybe_partial_level(ctx,direction,levels)
+            return
         pct=(self.partial_config or {}).get(direction)
         if pct is None or self.partial_consumed or self.partial_pending or not self.partial_rule(ctx,direction):return
         total=abs(ctx.position_quantity)
@@ -274,6 +294,11 @@ class VisualStrategyBase(PythonStrategy):
         else:self.sell(ctx,qty,"visual_short_entry")
 
     def on_fill(self,ctx,fill):
+        if self.partial_levels_config:
+            if ctx.position_quantity==0 or fill.reason in ("visual_long_entry","visual_short_entry"):
+                self.partial_level_index=0;self.partial_level_pending=None
+            elif self.partial_level_pending is not None and fill.reason==self.partial_level_pending:
+                self.partial_level_index+=1;self.partial_level_pending=None
         if self.partial_config:
             if ctx.position_quantity==0 or fill.reason in ("visual_long_entry","visual_short_entry"):
                 self.partial_consumed=False;self.partial_pending=False

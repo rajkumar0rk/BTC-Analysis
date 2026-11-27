@@ -82,6 +82,7 @@ class GraphStrategy(VisualStrategyBase):
         self.machine_config=g.machine_config()
         self.exit_machine_config=g.exit_machine_config()
         self.partial_config=g.partial_config()
+        self.partial_levels_config=g.partial_levels_config()
         self.conditional_lock_config=g.lock_config()
     def indicators(self):
         specs=set()
@@ -111,6 +112,9 @@ class GraphStrategy(VisualStrategyBase):
     def conditional_lock_rule(self,ctx,direction):
         p=self.g.long_lock if direction==1 else self.g.short_lock
         return self.rule(ctx,p.rule) if p is not None else False
+    def partial_level_rule(self,ctx,direction,index):
+        levels=self.g.long_partial_levels if direction==1 else self.g.short_partial_levels
+        return self.rule(ctx,levels[index].rule) if levels is not None else False
     def partial_rule(self,ctx,direction):
         p=self.g.long_partial if direction==1 else self.g.short_partial
         return self.rule(ctx,p.rule) if p is not None else False
