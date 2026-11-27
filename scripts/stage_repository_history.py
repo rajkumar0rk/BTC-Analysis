@@ -148,7 +148,7 @@ def stage_recovered_2024(root,history):
             hashes={x["sha256_gzip"] for x in m["partitions"]}
             for blob in out.glob("*.bin"):
                 if blob.stem not in hashes:blob.unlink()
-            manifest.write_text(json.dumps(m,sort_keys=True,separators=(",",":"))+"\\n")
+            manifest.write_text(json.dumps(m,sort_keys=True,separators=(",",":"))+"\n")
             print("Published",symbol,kind,"2024 rows",sum(x["observed_candles"] for x in selected),"missing",sum(x["missing_minutes"] for x in selected))
 
 def stage_extended_history(root,history):
