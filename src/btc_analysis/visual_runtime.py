@@ -80,6 +80,7 @@ class VisualStrategyBase(PythonStrategy):
     partial_config=None
     partial_levels_config=None
     conditional_lock_config=None
+    conditional_target_config=None
     custom_config=None
 
     def __init__(self):
@@ -202,6 +203,14 @@ class VisualStrategyBase(PythonStrategy):
         self.sequence_state[direction]=(index,started)
         return index==stages
 
+    def conditional_target_rule(self,ctx,direction):return False
+
+    def maybe_target(self,ctx,direction):
+        config=(self.conditional_target_config or {}).get(direction)
+        if config is not None and self.conditional_target_rule(ctx,direction):
+            points,mode=config
+            ctx.adjust_fixed_target(D(points),mode=mode)
+
     def conditional_lock_rule(self,ctx,direction):return False
 
     def maybe_lock(self,ctx,direction):
@@ -265,12 +274,14 @@ class VisualStrategyBase(PythonStrategy):
             if self.machine_ready(ctx,1,position_exit=True) and self.long_exit(ctx):self.close_position(ctx,"visual_long_rule_exit")
             else:
                 self.maybe_lock(ctx,1)
+                self.maybe_target(ctx,1)
                 self.maybe_partial(ctx,1)
             return
         if q<0:
             if self.machine_ready(ctx,-1,position_exit=True) and self.short_exit(ctx):self.close_position(ctx,"visual_short_rule_exit")
             else:
                 self.maybe_lock(ctx,-1)
+                self.maybe_target(ctx,-1)
                 self.maybe_partial(ctx,-1)
             return
         if ctx.equity<=0:return

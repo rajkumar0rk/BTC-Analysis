@@ -226,6 +226,19 @@ class ConditionalLock(Strict):
         return self
 
 
+class ConditionalTarget(Strict):
+    target_points:DecimalText
+    mode:Literal["extend","bring_closer"]
+    rule:Rule
+
+    @model_validator(mode="after")
+    def check(self):
+        if not Decimal(0)<Decimal(self.target_points)<=Decimal("1000000000"):
+            raise ValueError("conditional target points outside supported bounds")
+        if not self.rule.enabled:raise ValueError("conditional target rule must be enabled")
+        return self
+
+
 class Graph(Strict):
     schema_version:Literal[1]=1
     signal_timeframe:Literal[60,180,300,900,1800,3600,14400,86400]=900
@@ -247,6 +260,8 @@ class Graph(Strict):
     short_partial_levels:list[PartialExit]|None=Field(default=None,min_length=2,max_length=4)
     long_lock:ConditionalLock|None=None
     short_lock:ConditionalLock|None=None
+    long_target:ConditionalTarget|None=None
+    short_target:ConditionalTarget|None=None
     long_entry:Rule
     short_entry:Rule
     long_exit:Rule
@@ -260,6 +275,9 @@ class Graph(Strict):
             if seq is not None and machine is not None:raise ValueError("choose a sequence or a state machine per direction")
             if (seq is not None or machine is not None) and (self.advanced is None or not getattr(self,direction+"_entry").enabled):
                 raise ValueError("entry sequence or state machine requires advanced controls and an enabled directional entry rule")
+            target=getattr(self,direction+"_target")
+            if target is not None and (self.advanced is None or self.advanced.exit_mode!="points" or self.advanced.target_enabled is False or not getattr(self,direction+"_entry").enabled):
+                raise ValueError("conditional target requires an enabled fixed-point target and directional entry")
             lock=getattr(self,direction+"_lock")
             if lock is not None and (self.advanced is None or self.advanced.exit_mode!="points" or not getattr(self,direction+"_entry").enabled):
                 raise ValueError("conditional lock requires fixed-point protection and enabled directional entry")
@@ -324,7 +342,12 @@ class Graph(Strict):
             if partial is not None:extra.append(partial.rule)
         for lock in (self.long_lock,self.short_lock):
             if lock is not None:extra.append(lock.rule)
+        for target in (self.long_target,self.short_target):
+            if target is not None:extra.append(target.rule)
         return (self.long_entry,self.short_entry,self.long_exit,self.short_exit,*extra)
+
+    def target_config(self):
+        return {direction:(p.target_points,p.mode) for direction,p in ((1,self.long_target),(-1,self.short_target)) if p is not None}
 
     def lock_config(self):
         return {direction:(p.locked_points,True) if p.cost_adjusted else p.locked_points for direction,p in ((1,self.long_lock),(-1,self.short_lock)) if p is not None}
@@ -365,6 +388,9 @@ def raw_rules(raw):
         if p is not None:yield p["rule"]
     for name in ("long_partial_levels","short_partial_levels"):
         for p in raw.get(name) or ():yield p["rule"]
+    for name in ("long_target","short_target"):
+        p=raw.get(name)
+        if p is not None:yield p["rule"]
     for name in ("long_lock","short_lock"):
         p=raw.get(name)
         if p is not None:yield p["rule"]
@@ -389,6 +415,8 @@ def canonical_graph(graph:Graph):
         for p in raw.get(name) or ():p["pct"]=to_wire(Decimal(p["pct"]))
     for name in ("long_lock","short_lock"):
         if name in raw:raw[name]["locked_points"]=to_wire(Decimal(raw[name]["locked_points"]))
+    for name in ("long_target","short_target"):
+        if name in raw:raw[name]["target_points"]=to_wire(Decimal(raw[name]["target_points"]))
     for rule in raw_rules(raw):
         for group in rule["groups"]:
             for cond in group["conditions"]:
@@ -481,6 +509,9 @@ def compile_graph(graph:Graph):
     if g.lock_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    conditional_lock_config = "+repr(g.lock_config()), ""]
+    if g.target_config():
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    conditional_target_config = "+repr(g.target_config()), ""]
     for name,tf,params in sorted(specs):
         lines.append("            IndicatorSpec.create("+repr(name)+", Timeframe("+str(tf)+"), "+params+"),")
     lines+=["        )","","    def extra_timeframes(self):",
@@ -538,6 +569,12 @@ def compile_graph(graph:Graph):
             if levels is not None:
                 for i,p in enumerate(levels):
                     lines+=["        if direction == "+str(direction)+" and index == "+str(i)+":","            return "+_rule(p.rule)]
+        lines+=["        return False"]
+    if g.target_config():
+        lines+=["","    def conditional_target_rule(self, ctx, direction):"]
+        for direction,p in ((1,g.long_target),(-1,g.short_target)):
+            if p is not None:
+                lines+=["        if direction == "+str(direction)+":","            return "+_rule(p.rule)]
         lines+=["        return False"]
     source="\n".join(lines)+"\n"
     if len(source.encode())>MAX_SOURCE:raise ValueError("generated source exceeds limit")

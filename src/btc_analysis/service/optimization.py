@@ -18,7 +18,7 @@ MAX_CANDIDATE_MINUTES=5760
 
 class Axis(BaseModel):
     model_config=ConfigDict(extra="forbid",strict=True)
-    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|custom:[A-Za-z][A-Za-z0-9_]{0,47}\.lookback|lock:(long|short)\.locked_points|partial_level:(long|short)\.[1-4]\.pct|partial:(long|short)\.pct|python:[A-Za-z][A-Za-z0-9_]*|(sequence|machine|exit_machine):(long|short)\.expiry_bars|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked|trailing_percent\.activation|trailing_percent\.distance|trailing_atr\.activation|trailing_atr\.period|trailing_atr\.multiplier))$",max_length=80)]
+    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|custom:[A-Za-z][A-Za-z0-9_]{0,47}\.lookback|target:(long|short)\.target_points|lock:(long|short)\.locked_points|partial_level:(long|short)\.[1-4]\.pct|partial:(long|short)\.pct|python:[A-Za-z][A-Za-z0-9_]*|(sequence|machine|exit_machine):(long|short)\.expiry_bars|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked|trailing_percent\.activation|trailing_percent\.distance|trailing_atr\.activation|trailing_atr\.period|trailing_atr\.multiplier))$",max_length=80)]
     values:list[DecimalText]=Field(min_length=1,max_length=8)
     @model_validator(mode="after")
     def unique(self):
@@ -77,6 +77,11 @@ def variants(graph,search):
                 definition=next((d for d in (g.get("custom_formulas") or []) if d["name"]==name),None)
                 if definition is None:raise ValueError("custom axis not found: "+name)
                 definition["lookback"]=int(D(val));continue
+            if key.startswith("target:"):
+                direction=key.split(":",1)[1].split(".",1)[0]
+                target=g.get(direction+"_target")
+                if target is None:raise ValueError("target axis requires enabled conditional target")
+                target["target_points"]=val;continue
             if key.startswith("lock:"):
                 direction=key.split(":",1)[1].split(".",1)[0]
                 lock=g.get(direction+"_lock")

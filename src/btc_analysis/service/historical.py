@@ -84,6 +84,7 @@ class GraphStrategy(VisualStrategyBase):
         self.partial_config=g.partial_config()
         self.partial_levels_config=g.partial_levels_config()
         self.conditional_lock_config=g.lock_config()
+        self.conditional_target_config=g.target_config()
     def indicators(self):
         specs=set()
         if self.g.advanced is not None and self.g.advanced.trailing_atr is not None:
@@ -109,6 +110,9 @@ class GraphStrategy(VisualStrategyBase):
             values=(compare(c.op,self.operand(ctx,c.left),self.operand(ctx,c.right)) for c in g.conditions)
             groups.append(all(values) if g.mode=="all" else any(values))
         return all(groups) if r.mode=="all" else any(groups)
+    def conditional_target_rule(self,ctx,direction):
+        p=self.g.long_target if direction==1 else self.g.short_target
+        return self.rule(ctx,p.rule) if p is not None else False
     def conditional_lock_rule(self,ctx,direction):
         p=self.g.long_lock if direction==1 else self.g.short_lock
         return self.rule(ctx,p.rule) if p is not None else False

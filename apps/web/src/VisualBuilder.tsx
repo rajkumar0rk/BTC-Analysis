@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react";
 import type {Api,Catalog,Strategy,Revision} from "./api";
 import {frames,ops,keys,initialGraph,newCondition,newGroup,advancedDefaults,positionFields} from "./visualTypes";
-import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence,CustomFormula,EntryMachine,StateTransition,PartialExit,ConditionalLock} from "./visualTypes";
+import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence,CustomFormula,EntryMachine,StateTransition,PartialExit,ConditionalLock,ConditionalTarget} from "./visualTypes";
 const captions={long_entry:"Long entry",short_entry:"Short entry",long_exit:"Long exit",short_exit:"Short exit"};
 const opLabels={gt:">",gte:"≥",lt:"<",lte:"≤",eq:"=",cross_up:"Crosses above",cross_down:"Crosses below"};
 const frameLabel=(n:number)=>n>=86400?"1 day":n>=3600?n/3600+"h":n/60+"m";
@@ -51,6 +51,7 @@ export function CustomFormulaControls({graph,change,disabled}:{graph:Graph;chang
   for(const k of ["long_partial","short_partial"] as const){const p=graph[k];if(p)out[k]={...p,rule:rule(p.rule)};}
   for(const k of ["long_lock","short_lock"] as const){const p=graph[k];if(p)out[k]={...p,rule:rule(p.rule)};}
   for(const k of ["long_partial_levels","short_partial_levels"] as const){const levels=graph[k];if(levels)out[k]=levels.map(p=>({...p,rule:rule(p.rule)}));}
+  for(const k of ["long_target","short_target"] as const){const p=graph[k];if(p)out[k]={...p,rule:rule(p.rule)};}
   change(out);
  }
  function used(name:string){
@@ -59,6 +60,7 @@ export function CustomFormulaControls({graph,change,disabled}:{graph:Graph;chang
   for(const p of [graph.long_partial,graph.short_partial])if(p)rules.push(p.rule);
   for(const p of [graph.long_lock,graph.short_lock])if(p)rules.push(p.rule);
   for(const levels of [graph.long_partial_levels,graph.short_partial_levels])if(levels)rules.push(...levels.map(p=>p.rule));
+  for(const p of [graph.long_target,graph.short_target])if(p)rules.push(p.rule);
   return rules.some(r=>r.groups.some(g=>g.conditions.some(c=>[c.left,c.right].some(o=>o.kind==="custom"&&o.name===name))));
  }
  return <fieldset className="visual-rule" disabled={disabled}><legend>Custom indicator formulas</legend><p className="muted">Use a single numeric expression with completed candles (bars), previous output, and bounded SDK helpers. Example: mean(series(bars, "close")). The lookback is the required number of completed candles. Compare a custom formula in any rule or sequence. Names must be unique.</p>
@@ -67,9 +69,9 @@ export function CustomFormulaControls({graph,change,disabled}:{graph:Graph;chang
 }
 export function AdvancedVisualControls({graph,change,disabled}:{graph:Graph;change:(g:Graph)=>void;disabled:boolean}){
  const a=graph.advanced;
- function edit(patch:Partial<AdvancedControls>){if(a)change({...graph,advanced:{...a,...patch},...(patch.exit_mode==="percent"?{long_lock:null,short_lock:null}:{})});}
+ function edit(patch:Partial<AdvancedControls>){if(a)change({...graph,advanced:{...a,...patch},...(patch.exit_mode==="percent"?{long_lock:null,short_lock:null,long_target:null,short_target:null}:patch.target_enabled===false?{long_target:null,short_target:null}:{})});}
  return <fieldset className="visual-rule" disabled={disabled}><legend>Advanced entry and risk controls</legend>
- <label className="check"><input type="checkbox" checked={!!a} onChange={e=>{if(e.target.checked)change({...graph,advanced:advancedDefaults()});else{const next={...graph};delete next.advanced;delete next.long_sequence;delete next.short_sequence;delete next.long_machine;delete next.short_machine;delete next.long_exit_machine;delete next.short_exit_machine;delete next.long_lock;delete next.short_lock;change(next);}}}/> Enable advanced controls (disabling also removes entry sequences and state machines)</label>
+ <label className="check"><input type="checkbox" checked={!!a} onChange={e=>{if(e.target.checked)change({...graph,advanced:advancedDefaults()});else{const next={...graph};delete next.advanced;delete next.long_sequence;delete next.short_sequence;delete next.long_machine;delete next.short_machine;delete next.long_exit_machine;delete next.short_exit_machine;delete next.long_lock;delete next.short_lock;delete next.long_target;delete next.short_target;change(next);}}}/> Enable advanced controls (disabling also removes entry sequences and state machines)</label>
  {a&&<><div className="visual-config">
  <label>Entry frequency<select value={a.entry_mode} onChange={e=>edit({entry_mode:e.target.value as AdvancedControls["entry_mode"]})}><option value="continuous">While entry condition is true</option><option value="once_per_true_run">One filled entry per continuous true condition</option></select></label>
  <label>Consecutive signal confirmations<input aria-label="Consecutive signal confirmations" type="number" min={1} max={100} value={a.confirmation_bars} onChange={e=>edit({confirmation_bars:Number(e.target.value)})}/></label>
@@ -153,6 +155,18 @@ export function ConditionalLockControls({graph,change,catalog,disabled}:{graph:G
  })}
  </section>;
 }
+export function ConditionalTargetControls({graph,change,catalog,disabled}:{graph:Graph;change:(g:Graph)=>void;catalog:Catalog;disabled:boolean}){
+ return <section className="scenario"><h3>Conditional take-profit adjustment</h3><p className="muted">Amend an existing fixed-point target on a completed signal. Choose extend or bring closer, measured from actual entry fill. The new target must remain beyond the current close and protective stop. Existing stop and residual reduce-only protection remain intact.</p>
+ {(["long","short"] as const).map(direction=>{
+  const key=direction==="long"?"long_target":"short_target",entry=direction==="long"?"long_entry":"short_entry",p=graph[key];
+  const update=(next:ConditionalTarget|null)=>change({...graph,[key]:next,...(next?{advanced:{...(graph.advanced??advancedDefaults()),exit_mode:"points" as const,target_enabled:null},[entry]:{...graph[entry],enabled:true,groups:graph[entry].groups.length?graph[entry].groups:[newGroup()]}}:{})});
+  return <fieldset className="visual-rule" key={direction} disabled={disabled}><legend>{direction} conditional target</legend>
+  <label className="check"><input type="checkbox" checked={!!p} onChange={e=>update(e.target.checked?{target_points:"300",mode:"extend",rule:{enabled:true,mode:"all",groups:[{mode:"all",conditions:[{left:{kind:"position",field:"position_return_pct"},op:"gte",right:{kind:"constant",value:"1"}}]}]}}:null)}/> Enable {direction} conditional target</label>
+  {p&&<><label>Adjustment mode<select value={p.mode} onChange={e=>update({...p,mode:e.target.value as ConditionalTarget["mode"]})}><option value="extend">Extend target</option><option value="bring_closer">Bring target closer</option></select></label><label>New target points from entry<input value={p.target_points} onChange={e=>update({...p,target_points:e.target.value})}/></label><RuleEdit rule={p.rule} title={direction+" conditional target rule"} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={rule=>update({...p,rule:{...rule,enabled:true}})}/></>}
+  </fieldset>;
+ })}
+ </section>;
+}
 export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void;openPython:(r:Revision)=>void}){
  const [graph,setGraph]=useState<Graph>(initialGraph);const [catalog,setCatalog]=useState<Catalog|null>(null);
  const [compiled,setCompiled]=useState<Compiled|null>(null);const [revision,setRevision]=useState<Revision|null>(null);
@@ -169,7 +183,7 @@ export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Ap
  <div className="visual-config"><FrameSelect label="Signal timeframe" value={graph.signal_timeframe} disabled={busy} change={v=>edit({...graph,signal_timeframe:v})}/><FrameSelect label="Execution timeframe" value={graph.execution_timeframe} disabled={busy} change={v=>edit({...graph,execution_timeframe:v})}/>
  {(["exposure_pct","stop_loss_pct","take_profit_pct"] as const).map((k,i)=><label key={k}>{["Equity exposure (%)","Stop loss (%)","Take profit (%)"][i]}<input disabled={busy} value={graph[k]} onChange={e=>edit({...graph,[k]:e.target.value})}/></label>)}</div>
  <CustomFormulaControls graph={graph} change={edit} disabled={busy}/><AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
- {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls positionExit graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialExitControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialLevelControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><ConditionalLockControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} custom={graph.custom_formulas??[]} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
+ {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls positionExit graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialExitControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialLevelControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><ConditionalLockControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><ConditionalTargetControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} custom={graph.custom_formulas??[]} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
  <section className="panel"><div className="head"><h2>Generated Python</h2><div className="rule-actions"><button disabled={busy||!catalog} onClick={()=>void generate()}>Generate Python</button><button className="primary" disabled={busy||!catalog||!name.trim()||stale} onClick={()=>void generate(true)}>Save visual strategy</button>{revision&&<button disabled={busy} onClick={()=>openPython(revision)}>Open saved Python</button>}</div></div>
  {stale&&<p role="alert">Newer, frozen or archived revision. Reopen or clone in the strategy library before saving.</p>}
  {error&&<p className="error" role="alert">{error}</p>}{note&&<p role="status">{note}</p>}

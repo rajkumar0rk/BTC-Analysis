@@ -225,6 +225,37 @@ class Context:
         pending.intent=replace(old,stop_price=candidate,reason=reason,decision_utc=s.now)
         s.log(key,"amended",reason,pending.intent)
         return True
+    def adjust_fixed_target(self,target_points,*,mode):
+        """Amend an existing fixed reduce-only target at a completed close."""
+        s=self._sim
+        if type(target_points) is not D or not target_points.is_finite() or not ZERO<target_points<=D("1000000000"):
+            raise ValueError("invalid conditional target points")
+        if mode not in ("extend","bring_closer"):raise ValueError("invalid target adjustment mode")
+        if not s.active or s.halted or not s.quantity or len(s.entries)!=1:return False
+        if getattr(s.strategy,"fixed_point_bracket",None) is None:return False
+        history=s.history[s.cfg.execution_timeframe.seconds]
+        if not history or history[-1].close_utc!=s.now:return False
+        direction=D(1) if s.quantity>0 else D(-1)
+        entry=s.entries[0]
+        key="__fixed_target_"+entry.fill_id
+        pending=s.pending.get(key)
+        stop=s.pending.get("__fixed_stop_"+entry.fill_id)
+        if pending is None or stop is None:return False
+        old=pending.intent
+        side=Side.SELL if direction>0 else Side.BUY
+        if not old.reduce_only or old.order_type is not OrderType.LIMIT or old.side is not side:return False
+        # Round outward from entry. Preserve a strictly nonmarketable target
+        # and a valid stop/target ordering. Never create or remove protection.
+        favorable=Side.BUY if direction>0 else Side.SELL
+        candidate=s.round_price(entry.price+direction*target_points,favorable)
+        delta=direction*(candidate-old.limit_price)
+        if candidate<=ZERO or direction*(candidate-history[-1].close)<=ZERO:return False
+        if direction*(candidate-stop.intent.stop_price)<=ZERO:return False
+        if (mode=="extend" and delta<=ZERO) or (mode=="bring_closer" and delta>=ZERO):return False
+        reason="conditional_target_"+mode
+        pending.intent=replace(old,limit_price=candidate,reason=reason,decision_utc=s.now)
+        s.log(key,"amended",reason,pending.intent)
+        return True
     def submit(self, intent): self._sim.submit(intent)
     def cancel(self, intent_id): self._sim.cancel(intent_id)
 
