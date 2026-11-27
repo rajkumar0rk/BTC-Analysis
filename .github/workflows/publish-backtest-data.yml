@@ -2,6 +2,15 @@ name: Publish backtest data
 # Publication checkpoints: include completed intraminute fee protection replay 46001364599.
 on:
   workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: Backtest producer run ID (optional)
+        type: string
+        required: false
+      source_attempt:
+        description: Producer run attempt (optional)
+        type: string
+        required: false
   schedule:
     - cron: '*/15 * * * *'
   workflow_run:
@@ -59,4 +68,6 @@ jobs:
       - name: Publish verified data only, never deploy Pages
         env:
           GH_TOKEN: ${{ github.token }}
+          REQUIRED_BACKTEST_RUN: ${{ inputs.source_run_id || '' }}
+          REQUIRED_BACKTEST_ATTEMPT: ${{ inputs.source_attempt || '' }}
         run: bash scripts/publish_dashboard_data.sh

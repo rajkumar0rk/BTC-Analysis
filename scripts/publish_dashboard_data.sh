@@ -54,6 +54,9 @@ fingerprint=$({
   find "$DASHBOARD_BUNDLE_CACHE" -maxdepth 1 -type f -name "*.json" -print0 | sort -z | xargs -0 -r sha256sum | sed "s|$DASHBOARD_BUNDLE_CACHE/||"
 } | sha256sum | cut -d' ' -f1)
 if [ "$fingerprint" = "$old_fingerprint" ] && [ -s "$work/data/index.json" ]; then
+  if [ -n "${REQUIRED_BACKTEST_RUN:-}" ]; then
+    python -c 'import json,os,sys; d=json.load(open(sys.argv[1])); assert any(r.get("source_run_id")==int(os.environ["REQUIRED_BACKTEST_RUN"]) and r.get("source_attempt")==int(os.environ["REQUIRED_BACKTEST_ATTEMPT"]) for r in d["runs"]), "Requested backtest missing from existing snapshot"' "$work/data/index.json"
+  fi
   echo "No changed backtest or market-data inputs; skipping export and publication"
   exit 0
 fi
@@ -61,6 +64,9 @@ git ls-remote --heads origin > .dashboard-branches.txt
 export DASHBOARD_PREVIOUS_DATA="$work/data"
 python scripts/export_dashboard.py
 python scripts/verify_dashboard_export.py
+if [ -n "${REQUIRED_BACKTEST_RUN:-}" ]; then
+  python -c 'import json,os; d=json.load(open("dashboard-dist/data/index.json")); assert any(r.get("source_run_id")==int(os.environ["REQUIRED_BACKTEST_RUN"]) and r.get("source_attempt")==int(os.environ["REQUIRED_BACKTEST_ATTEMPT"]) for r in d["runs"]), "Requested backtest missing from published index"'
+fi
 mkdir -p "$work/data"
 rsync -a --delete dashboard-dist/data/ "$work/data/"
 git -C "$work" add -A -- data _sources

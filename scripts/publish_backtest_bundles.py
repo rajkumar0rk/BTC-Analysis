@@ -69,11 +69,31 @@ def validate(b,run=None):
     return b
 
 def api(path):return json.loads(subprocess.check_output(["gh","api",path]))
+def wait_for_producer(repo,run_id,attempt):
+    import time
+    require(re.fullmatch(r"[1-9][0-9]{0,14}",run_id) and re.fullmatch(r"[1-9][0-9]{0,3}",attempt),"invalid requested run identity")
+    for _ in range(60):
+        r=api(f"repos/{repo}/actions/runs/{run_id}")
+        require((r.get("head_repository") or {}).get("full_name")==repo and r.get("run_attempt")==int(attempt),"producer repository or attempt mismatch")
+        if r.get("status")=="completed":
+            require(r.get("conclusion")=="success","producer did not complete successfully")
+            return
+        time.sleep(5)
+    raise ValueError("Timed out waiting for producer completion")
+
 def collect(cache,repo):
+    required=os.getenv("REQUIRED_BACKTEST_RUN","")
+    attempt=os.getenv("REQUIRED_BACKTEST_ATTEMPT","")
+    if required or attempt:wait_for_producer(repo,required,attempt)
     cache.mkdir(parents=True,exist_ok=True)
     pages=subprocess.check_output(["gh","api","--paginate",f"repos/{repo}/actions/artifacts?name={ARTIFACT}&per_page=100","--jq",".artifacts[] | @json"],text=True)
-    for line in pages.splitlines():
-        a=json.loads(line)
+    artifacts=[json.loads(line) for line in pages.splitlines() if line.strip()]
+    if required:
+        specific=api(f"repos/{repo}/actions/runs/{required}/artifacts?per_page=100")
+        for a in specific.get("artifacts",[]):
+            a["workflow_run"]={"id":int(required)}
+        artifacts=list({a["id"]:a for a in artifacts+specific.get("artifacts",[])}.values())
+    for a in artifacts:
         if a.get("name")!=ARTIFACT or a.get("expired"):continue
         aid=a["id"];run_id=a.get("workflow_run",{}).get("id")
         if not integer(aid,1,10**16) or not integer(run_id,1,10**15):continue
@@ -94,6 +114,13 @@ def collect(cache,repo):
             print("Accepted completed backtest",run_id,aid,len(b["variants"]))
         except (ValueError,KeyError,TypeError,zipfile.BadZipFile,subprocess.CalledProcessError) as e:
             print(f"::warning::Backtest artifact {aid} not imported: {e}")
+    if required:
+        accepted=False
+        for p in cache.glob("*.json"):
+            b=json.loads(p.read_text())["bundle"]
+            if b["source_run_id"]==int(required) and b["source_attempt"]==int(attempt):
+                accepted=True;break
+        require(accepted,"Requested producer artifact was not accepted; publication cannot report success")
 
 def month_keys(start,end):
     a=datetime.fromisoformat(start);b=datetime.fromisoformat(end)
