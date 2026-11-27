@@ -209,7 +209,13 @@ def compile_graph(graph:Graph):
 def recover_graph(source):
     if not isinstance(source,str) or len(source.encode())>MAX_SOURCE:
         raise ValueError("invalid source size")
-    first=source.split("\n",1)[0]
+    # Editors and Windows clipboard can convert LF to CRLF or add horizontal
+    # whitespace to the metadata line. Normalize only those transport changes;
+    # never execute source, relax Base64 validation, or ignore Python body edits.
+    source=source.replace("\r\n","\n")
+    first,sep,body=source.partition("\n")
+    first=first.rstrip(" \t")
+    source=first+sep+body
     if not first.startswith(HEADER):raise ValueError("source is not an intact visual strategy")
     try:
         payload=base64.b64decode(first[len(HEADER):],altchars=b"-_",validate=True)

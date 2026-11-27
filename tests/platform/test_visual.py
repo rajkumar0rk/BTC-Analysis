@@ -30,6 +30,18 @@ class VisualTests(unittest.TestCase):
         with self.assertRaises(ValueError):recover_graph(a["source"]+"# edited\n")
         with self.assertRaises(ValueError):recover_graph("pass")
 
+    def test_pasted_python_transport_normalization(self):
+        compiled=compile_graph(Graph.model_validate(graph()))
+        source=compiled["source"]
+        first,rest=source.split("\n",1)
+        for pasted in (source.replace("\n","\r\n"),
+                       first+" \t\r\n"+rest.replace("\n","\r\n")):
+            self.assertEqual(recover_graph(pasted),compiled)
+        with self.assertRaises(ValueError):
+            recover_graph(source.replace("return False","return True").replace("\n","\r\n"))
+        with self.assertRaises(ValueError):
+            recover_graph(first+"!\r\n"+rest)
+
     def test_validation(self):
         for patch in ({"stop_loss_pct":"0"},{"exposure_pct":"101"},{"signal_timeframe":60,"execution_timeframe":300},
                       {"long_entry":disabled()},{"long_entry":{"enabled":True,"groups":[]}},{"unknown":1}):
