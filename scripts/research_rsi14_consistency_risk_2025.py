@@ -141,7 +141,7 @@ def run():
             for label,score in (("consistency",(s["profitable_months"],s["stress_extra_50_points_roundtrip"]["months"],-s["realized_drawdown_points"],s["net"])),("net",(s["net"],)),("dd",(-s["realized_drawdown_points"],s["net"])),("robust",(s["stress_extra_50_points_roundtrip"]["months"],s["profitable_months"],-s["realized_drawdown_points"]))):
                 group=tops.setdefault((name,kind,label),[])
                 group.append((score,key,v));group.sort(key=lambda a:(a[0],a[1]),reverse=True);del group[2:]
-    assert len(rows)==4608,len(rows)
+    assert len(rows)==2304,len(rows)
     with (OUT/"all_results.csv").open("w",newline="") as f:
         w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
     chosen={}
