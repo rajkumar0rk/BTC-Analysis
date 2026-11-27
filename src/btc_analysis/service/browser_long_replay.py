@@ -128,8 +128,10 @@ def mark_stream(plan,root,i,tf):
 
 def long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf):
     keys={"leverage","margin_mode","initial_rate_floor","maintenance_rate","max_notional","liquidation_fee_bps","profile_start","profile_end","profile_source","preliq_points","scalp_enabled","scalp_start","scalp_end","funding_enabled","funding_interval_seconds","funding_anchor_epoch","funding_csv","acknowledge"}
-    if not isinstance(risk,dict) or set(risk)!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
+    if not isinstance(risk,dict) or set(risk)-{"funding_provenance"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
     if type(risk["funding_enabled"]) is not bool or type(risk["scalp_enabled"]) is not bool:raise ValueError("invalid risk switches")
+    provenance=risk.get("funding_provenance","operator_supplied")
+    if provenance not in ("operator_supplied","estimated_previous_hour_mark_open") or ("funding_provenance" in risk and not risk["funding_enabled"]):raise ValueError("invalid funding provenance")
     if risk["margin_mode"] not in ("isolated","cross"):raise ValueError("unsupported margin mode")
     lev=risk_decimal(risk["leverage"],"1","100");mode=MarginMode(risk["margin_mode"])
     source=risk["profile_source"]
@@ -146,11 +148,11 @@ def long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf):
         for row in csv_rows(risk["funding_csv"],["time","rate","reference_mark"]):
             when=risk_epoch(row[0]);t=int(when.timestamp())
             if not start<=t<end or (t-anchor)%interval or t in funding:raise ValueError("duplicate or unexpected funding settlement")
-            funding[t]=FundingSettlement(when,risk_decimal(row[1],"-0.1","0.1"),risk_decimal(row[2],"0.000000000000000001","999999999999999999"),"user-funding-csv")
+            funding[t]=FundingSettlement(when,risk_decimal(row[1],"-0.1","0.1"),risk_decimal(row[2],"0.000000000000000001","999999999999999999"),"estimated-funding-proxy" if provenance=="estimated_previous_hour_mark_open" else "user-funding-csv")
         first=start+(anchor-start)%interval
         required=max(0,(end-1-first)//interval+1)
         if len(funding)!=required:raise ValueError("funding settlements incomplete")
-        refs.append(DatasetRef("local-funding",i,DataKind.FUNDING,tf,dt(start),dt(end),sha256(risk["funding_csv"].encode()).hexdigest(),"user-supplied settlement CSV; not independently attested",0,True))
+        refs.append(DatasetRef("local-funding",i,DataKind.FUNDING,tf,dt(start),dt(end),sha256(risk["funding_csv"].encode()).hexdigest(),"estimated prior hourly observation and mark-open proxy" if provenance=="estimated_previous_hour_mark_open" else "user-supplied settlement CSV; not independently attested",0,True))
     elif risk["funding_csv"]:raise ValueError("funding data supplied but disabled")
     scalp=risk["scalp_enabled"]
     profile=MarginProfile("user-fixed-tier-v1",i,risk_epoch(risk["profile_start"]),risk_epoch(risk["profile_end"]),source,
@@ -160,7 +162,7 @@ def long_risk(risk,plan,mark_manifest,symbol,from_date,to_date,root,i,tf):
     def factory():
         for bar in mark_stream(mp,root,i,tf):
             yield RiskBar(bar,funding.get(int(bar.open_utc.timestamp())))
-    meta={"leverage":lev,"margin_mode":mode.value,"profile":profile,"funding_enabled":risk["funding_enabled"],"risk_dataset_sha256s":[d.manifest_sha256 for d in refs],"funding_provenance":"user settlement CSV, not exchange verified" if risk["funding_enabled"] else "excluded"}
+    meta={"leverage":lev,"margin_mode":mode.value,"profile":profile,"funding_enabled":risk["funding_enabled"],"risk_dataset_sha256s":[d.manifest_sha256 for d in refs],"funding_provenance":provenance if risk["funding_enabled"] else "excluded"}
     return lev,mode,profile,tuple(refs),factory,meta
 
 def yearly(monthly):
