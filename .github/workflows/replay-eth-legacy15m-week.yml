@@ -1,0 +1,25 @@
+name: ETH legacy 15m this week historical replay
+on:
+  push:
+    branches: ['research/eth-legacy15m-week-20261127']
+    paths: ['scripts/replay_eth_legacy15m_week.py','.github/workflows/replay-eth-legacy15m-week.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.2.6 pandas==2.2.3
+      - run: python scripts/replay_eth_legacy15m_week.py --output "$RUNNER_TEMP/eth-week"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eth-legacy15m-week
+          path: ${{ runner.temp }}/eth-week
+          if-no-files-found: warn
