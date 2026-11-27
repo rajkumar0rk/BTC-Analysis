@@ -85,6 +85,43 @@ def main(root,out):
     original=obj("original","summary.json")["comparison"]["one_minute"]["assumed_30m_offer"]
     mo=[dict(month=r["month"],value=r["net_usd"]) for r in original["monthly"] if r["complete"]]
     add("original15","Original 15M EMA20 + Supertrend / 1M execution audit","original","summary.json","2025-01–2026-10 complete months","Failed realistic 1M OHLC replay",original["net_usd"],original["max_closed_drawdown_pct"],original["positive_complete_months"],original["completed_months"],original["trades"],mo,unit="account USD",dd_label="Closed DD %",notes="Old +$828.50 15M OHLC result is not the 1M result. Assumed 30-minute fee offer, 100x isolated, no funding; source summary only here.")
+    # Selected 15M Color RSI adaptive protection sweep: exact independently re-recorded fills.
+    key="rsi3rtight"; rid="st-rsi-reclaim-3r-tight-color"
+    name="15M EMA20 Reclaim + RSI Adaptive Lock / 3R Tight / Color"
+    archive=obj(key,"summary.json"); sr=archive["summary"]; ledger=obj(key,"ledger.json")
+    if archive["settings"]!={"Lock 3R Tight":[3,[.4,.6,.8]]} or archive["bars"]!=963030 or archive["source_sweep_run"]!=45977394435:
+        raise ValueError("Unexpected RSI protection source configuration")
+    if len(ledger)!=sr["trades"] or sr["trades"]!=224 or sr["open_position"] is not None:
+        raise ValueError("RSI protection ledger incomplete")
+    records=[]
+    for i,r in enumerate(ledger):
+        en,ex=stamp(r["entry_utc"]),stamp(r["exit_utc"])
+        direction=side(r["side"]); net=number(r["net_usd"])
+        ep,xp=number(r["entry_price"]),number(r["exit_price"])
+        ctx=dict(r["signal_context"]); trigger=stamp(ctx.pop("signal_utc"))
+        if not en or not ex or not trigger or not trigger<=en<=ex or direction is None or net is None or ep is None or xp is None:
+            raise ValueError("Invalid recorded RSI protection fill")
+        if r["exit_reason"] not in ("flip","lock"):raise ValueError("Unexpected exit")
+        if abs(r["gross_usd"]-r["fee_gst_usd"]-net)>1e-8:raise ValueError("RSI ledger cost mismatch")
+        ctx.update(quantity_btc=r["quantity"],gross_usd=r["gross_usd"],fee_gst_usd=r["fee_gst_usd"])
+        reason={"flip":"Confirmed 15M Supertrend reversal","lock":"RSI adaptive profit protection"}[r["exit_reason"]]
+        records.append(dict(id=f"{rid}-{i}",entry_utc=en,exit_utc=ex,trigger_utc=trigger,side=direction,entry_price=ep,exit_price=xp,entry_reason="15M EMA20 cross and reclaim; aligned Supertrend, volume, volatility and RSI filters",exit_reason=reason,result=r["exit_reason"],net_points=net,stop_price=None,target_price=None,trailing_stop_price=number(r["trailing_stop_price"]),signal_context=ctx,signal_tf=15,audit="Recorded 1M Color replay; lock exits timestamped at execution-minute close"))
+    if abs(sum(t["net_points"] for t in records)-sr["net"])>1e-8 or sum(t["net_points"]>0 for t in records)!=sr["wins"]:
+        raise ValueError("RSI ledger summary mismatch")
+    if abs(sr["net"]-.7980515306245621)>1e-8 or sum(r["result"]=="lock" for r in records)!=54:
+        raise ValueError("RSI replay differs from selected sweep")
+    by={}
+    for rec in records:by.setdefault(rec["entry_utc"][:7],[]).append(rec)
+    months=[]
+    for month,rs in sorted(by.items()):
+        dump(data/"runs"/rid/(month+".json"),rs)
+        months.append(dict(month=month,net=round(sum(t["net_points"] for t in rs),6),trades=len(rs),wins=sum(t["net_points"]>0 for t in rs)))
+    dump(data/"runs"/rid/"curve.json",curve(records))
+    index["runs"].append(dict(id=rid,strategy=name,symbol="BTCUSD",unit="account USD",source=link(key,"ledger.json"),audit="Recorded modeled 1M Color fills; lock exits minute-close timestamp",research_reference=True,detail_available=True,target=None,stop=None,months=months,costs="1x; $100 initial equity; 100% target exposure; weekdays IST; 0.05% taker each side + 18% GST; modeled 30-minute exit fee waiver; no additional slippage or funding. Mark-triggered protection, interpolated trade fills.",**stats(records)))
+    monthly=[dict(month=k,value=v) for k,v in sorted(sr["monthly"].items())]
+    if len(monthly)!=22 or sum(x["value"]>0 for x in monthly)!=sr["profitable_months"] or abs(sum(x["value"] for x in monthly)-sr["net"])>1e-6:
+        raise ValueError("RSI MTM monthly result mismatch")
+    add(rid,name,key,"summary.json","2025-01–2026-10 IST","In-sample best of 40; marginal positive result, not approved",sr["net"],sr["max_drawdown_pct"],sr["profitable_months"],22,sr["trades"],monthly,rid,unit="account USD",notes="Exact 224-trade replay of sweep run 45977394435; $100 initial equity so total USD gain equals return in %. RSI14 directional strength >=60/>50/<=50 locks 40/60/80% of favorable mark-price movement after 3R; updated at completed 15M close. No fixed TP; confirmed 15M Supertrend flip exit. Both entry filters and RSI50 mandatory; no flip entries. Monthly values are IST mark-to-market USD; replay months use UTC entry month realized P&L. 156 minimum-quantity rejections; funding and additional slippage excluded. Intraminute exit recorded at candle close, not an observed tick timestamp.")
     index["full_configurations"]=sum(r.get("detail_available",True) for r in index["runs"])
     index["supertrend_replay_count"]=sum(r.get("research_reference",False) for r in index["runs"])
     dump(data/"index.json",index);dump(data/"supertrend.json",summaries)

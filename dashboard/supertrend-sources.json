@@ -71,5 +71,14 @@
       "RESEARCH_REPORT.md",
       "assumed_30m_offer_1m_monthly.csv"
     ]
+  },
+  {
+    "id": "rsi3rtight",
+    "sha": "9b4afba31742887fda626429323e26f6e975586b",
+    "folder": "analysis/btc15m_rsi_reclaim_3r_tight_20261127",
+    "files": [
+      "summary.json",
+      "ledger.json"
+    ]
   }
 ]
