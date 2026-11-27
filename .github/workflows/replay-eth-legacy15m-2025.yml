@@ -1,7 +1,7 @@
-name: ETH legacy 15m portfolio paper replay 2025
+name: ETH legacy 15m 2025 corrected OLHC zero spread
 on:
   push:
-    branches: ['research/eth-legacy15m-2025-replay-20261127']
+    branches: ['research/eth-legacy15m-2025-open-olhc-20261127']
     paths: ['scripts/replay_eth_legacy15m_2025.py','.github/workflows/replay-eth-legacy15m-2025.yml']
   workflow_dispatch:
 permissions:

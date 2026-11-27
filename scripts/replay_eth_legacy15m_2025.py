@@ -95,7 +95,7 @@ def quantize(price, side):
 
 def replay(t,m,bars,path,spread):
     # 15m close observed with the live 10-second finalization delay:
-    # first subsequent minute CLOSE is the simulated entry/flip execution.
+    # first subsequent minute OPEN proxies the bot's +10s entry/flip; exact +10s quote unknown.
     # Mark and trade extremes paired in each explicit OHLC scenario; not tick truth.
     a=t[["open","high","low","close"]].to_numpy(float)
     b=m[["open","high","low","close"]].to_numpy(float)
@@ -123,37 +123,39 @@ def replay(t,m,bars,path,spread):
         if reason=="liquidation_proxy":realized=max(-cash,realized)
         cash=max(0.,cash+realized)
         net=cash-p["cash_before"]
-        trades.append(dict(entry_utc=str(t.index[p["i"]]+pd.Timedelta(minutes=1)),exit_utc=str(t.index[i]+pd.Timedelta(minutes=1)),side=p["side"],entry=p["entry"],exit=xp,qty=q,net=net,gross=gross,fees_gst=p["entry_fee"]+fee,reason=reason,hold_minutes=hold,wallet=cash))
+        trades.append(dict(entry_utc=str(t.index[p["i"]]),exit_utc=str(t.index[i]+pd.Timedelta(minutes=1)),side=p["side"],entry=p["entry"],exit=xp,qty=q,net=net,gross=gross,fees_gst=p["entry_fee"]+fee,reason=reason,hold_minutes=hold,wallet=cash))
         month_trades+=1;p=None
         observe(price)
+    def manage_sample(i,k):
+        if not p:return
+        mark=b[i,k];trade=a[i,k];side=p["side"]
+        observe(trade)
+        if p["liq"] is not None and side*(mark-p["liq"])<=0:
+            close(trade,i,"liquidation_proxy");return
+        if side*(mark-p["entry"])>=p["activation"]:p["active"]=True
+        if p["active"]:
+            p["best"]=max(p["best"],mark) if side==1 else min(p["best"],mark)
+            new=p["best"]-side*p["distance"]
+            p["stop"]=max(p["stop"],new) if side==1 else min(p["stop"],new)
+        if side*(mark-p["stop"])<=0:
+            # Sampled extreme fill (no favorable assumption of exact stop fill).
+            close(trade,i,"trailing" if p["active"] else "atr_or_preliq");return
     for i in range(len(a)):
         if t.index[i].month!=month_id:
             end=equity(a[i-1,3]);months.append(dict(month=f"2025-{month_id:02d}",net=end-start_month,equity=end,trades=month_trades,return_pct=100*(end-start_month)/start_month if start_month else None))
             month_id=t.index[i].month;start_month=end;month_trades=0
-        if p:
-            seq=(0,1,2,3) if path=="OHLC" else (0,2,1,3)
-            for k in seq:
-                mark=b[i,k];trade=a[i,k];side=p["side"]
-                observe(trade)
-                if p["liq"] is not None and side*(mark-p["liq"])<=0:
-                    close(trade,i,"liquidation_proxy");break
-                if side*(mark-p["entry"])>=p["activation"]:p["active"]=True
-                if p["active"]:
-                    p["best"]=max(p["best"],mark) if side==1 else min(p["best"],mark)
-                    new=p["best"]-side*p["distance"]
-                    p["stop"]=max(p["stop"],new) if side==1 else min(p["stop"],new)
-                if side*(mark-p["stop"])<=0:
-                    # Sampled extreme fill (no favorable assumption of exact stop fill).
-                    close(trade,i,"trailing" if p["active"] else "atr_or_preliq");break
+        # Observe boundary open first; process the completed 15m signal
+        # at the first available 1m open proxy, not the next minute close.
+        manage_sample(i,0)
         if i%15==0:
             k=i//15;o,h,l,c,ema,atr,ar,vr,d=s[k];pr=prev[k]
             if p:
                 if (p["side"]==1 and pr==-1 and d==1) or (p["side"]==-1 and pr==1 and d==-1):
-                    close(a[i,3],i,"supertrend_flip")
+                    close(a[i,0],i,"supertrend_flip")
             elif np.isfinite([ema,atr,ar,vr]).all() and ar>=1 and vr>=1.5:
                 side=1 if d==pr==-1 and l<=ema<c else -1 if d==pr==1 and h>=ema>c else 0
                 if side:
-                    signals+=1;last=a[i,3]
+                    signals+=1;last=a[i,0]
                     ep=fill(last,side)
                     q=math.floor(min(BUDGET*LEVERAGE,BUDGET/SHOCK)/(ep*LOT)+1e-10)*LOT
                     fee=ep*q*FEE;margin=ep*q*SHOCK
@@ -169,9 +171,14 @@ def replay(t,m,bars,path,spread):
                             if side*(ep-pre)>0:stop=max(stop,pre) if side==1 else min(stop,pre)
                         p=dict(side=side,entry=ep,i=i,qty=q,entry_fee=fee,cash_before=cash,liq=liq,stop=stop,best=ep,active=False,activation=max(TICK,round(ep*150/80000/TICK)*TICK),distance=max(TICK,round(ep*50/80000/TICK)*TICK))
                         cash=after;observe(last)
+        if p:
+            seq=(1,2,3) if path=="OHLC" else (2,1,3)
+            for k in seq:
+                manage_sample(i,k)
+                if not p:break
         observe(a[i,3])
     end=equity(a[-1,3])
-    months.append(dict(month="2025-12",net=end-start_month,equity=end,trades=month_trades,return_pct=100*(end-start_month)/start_month if start_month else None))
+    months.append(dict(month=f"2025-{month_id:02d}",net=end-start_month,equity=end,trades=month_trades,return_pct=100*(end-start_month)/start_month if start_month else None))
     nets=np.array([x["net"] for x in trades])
     grosswin=nets[nets>0].sum();grossloss=-nets[nets<0].sum()
     summary=dict(path=path,spread_usd=spread,starting_equity=START,ending_equity=end,net_profit=end-START,closed_trades=len(trades),win_rate_pct=100*(nets>0).mean() if len(nets) else None,profit_factor=grosswin/grossloss if grossloss else None,max_mark_to_market_dd_pct=dd,profitable_months=sum(x["net"]>0 for x in months),liquidations=sum(x["reason"]=="liquidation_proxy" for x in trades),fees_gst=sum(x["fees_gst"] for x in trades)+(p["entry_fee"] if p else 0),open_at_end=p is not None,signals=signals,skipped=skipped,monthly=months)
@@ -184,10 +191,10 @@ if __name__=="__main__":
     args.output.mkdir(parents=True,exist_ok=True)
     t,m,b=load()
     results=[]
-    for spread in (0.,.10):
-        for path in ("OHLC","OLHC"):
+    for spread in (0.,):
+        for path in ("OLHC",)
             result,trades=replay(t,m,b,path,spread)
             results.append(result)
             pd.DataFrame(trades).to_csv(args.output/f"trades-{path}-{spread}.csv",index=False)
             print("ETH_2025_RESULT "+json.dumps(result),flush=True)
-    (args.output/"summary.json").write_text(json.dumps(dict(trade_candles=len(t),mark_candles=len(m),assumptions="Portfolio proxy; fixed $100 initial/$10 budget/100x ceiling; 1m sampled trade extremes as proxy fills; two paired mark/trade paths; no historical quotes or actual funding settlements; fees+GST/30m waiver as paper ledger; December 2024 warmup only.",results=results),indent=2))
+    (args.output/"summary.json").write_text(json.dumps(dict(trade_candles=len(t),mark_candles=len(m),assumptions="Portfolio proxy; fixed $100 initial/$10 budget/100x ceiling; 1m sampled trade extremes as proxy fills; OLHC paired mark/trade path; first 1m open entry proxy; no historical quotes or actual funding settlements; fees+GST/30m waiver as paper ledger; December 2024 warmup only.",results=results),indent=2))
