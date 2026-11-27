@@ -6,8 +6,8 @@
   "resolution": "1m",
   "timestamp_unit": "unix_seconds_utc",
   "timestamp_label": "as_returned_by_API",
-  "requested_through_utc": "2026-11-25",
-  "generated_at_utc": "2026-11-26T11:17:20.050589+00:00",
+  "requested_through_utc": "2026-11-26",
+  "generated_at_utc": "2026-11-27T11:12:02.313736+00:00",
   "note": "Missing candles are reported but never fabricated; OHLCV is not bid/ask/order book.",
   "partitions": [
     {
@@ -211,11 +211,11 @@
     {
       "file": "2026-11.csv.gz",
       "utc_start": "2026-11-01T00:00:00+00:00",
-      "utc_end_exclusive": "2026-11-26T00:00:00+00:00",
-      "expected_minutes": 36000,
-      "observed_candles": 36000,
+      "utc_end_exclusive": "2026-11-27T00:00:00+00:00",
+      "expected_minutes": 37440,
+      "observed_candles": 37440,
       "missing_minutes": 0,
-      "sha256_gzip": "ae872a5793b25f5b9866ead4b1a8fbd53fee284485efeade6868efc88fc382af"
+      "sha256_gzip": "9a8a5f779413d7482dbc179aaf9e41c1722eb59492da5fff5f1b52c5b76496f9"
     }
   ]
 }
