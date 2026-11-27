@@ -1,0 +1,26 @@
+name: BTC ETH weekly opposite color replay
+on:
+  push:
+    branches: ['research/week-opposite-color-20261127']
+    paths: ['.github/workflows/replay-week-opposite-color.yml']
+permissions:
+  contents: read
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        asset: [btc, eth]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy==2.2.6 pandas==2.2.3
+      - run: python -u scripts/replay_${{ matrix.asset }}_week_opposite.py --output "$RUNNER_TEMP/week"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: week-${{ matrix.asset }}-opposite
+          path: ${{ runner.temp }}/week
