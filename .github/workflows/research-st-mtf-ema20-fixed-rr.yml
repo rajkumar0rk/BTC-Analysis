@@ -1,0 +1,27 @@
+name: Research MTF Supertrend EMA20 fixed RR
+on:
+  push:
+    branches: [research/st-mtf-ema20-fixed-rr-20261127]
+    paths:
+      - scripts/research_st_mtf_ema20_fixed_rr.py
+      - .github/workflows/research-st-mtf-ema20-fixed-rr.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas
+      - run: python scripts/research_st_mtf_ema20_fixed_rr.py | tee /tmp/replay.txt
+      - run: cat /tmp/replay.txt >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: st-mtf-ema20-fixed-rr
+          path: analysis/st_mtf_ema20_fixed_rr/
+          if-no-files-found: error
