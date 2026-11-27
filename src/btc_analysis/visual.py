@@ -207,6 +207,8 @@ class Graph(Strict):
     short_sequence:EntrySequence|None=None
     long_machine:EntryMachine|None=None
     short_machine:EntryMachine|None=None
+    long_exit_machine:EntryMachine|None=None
+    short_exit_machine:EntryMachine|None=None
     long_entry:Rule
     short_entry:Rule
     long_exit:Rule
@@ -220,6 +222,9 @@ class Graph(Strict):
             if seq is not None and machine is not None:raise ValueError("choose a sequence or a state machine per direction")
             if (seq is not None or machine is not None) and (self.advanced is None or not getattr(self,direction+"_entry").enabled):
                 raise ValueError("entry sequence or state machine requires advanced controls and an enabled directional entry rule")
+            exit_machine=getattr(self,direction+"_exit_machine")
+            if exit_machine is not None and (self.advanced is None or not getattr(self,direction+"_exit").enabled or not getattr(self,direction+"_entry").enabled):
+                raise ValueError("exit state machine requires advanced controls and enabled entry and exit rules")
         if not self.long_entry.enabled and not self.short_entry.enabled:
             raise ValueError("at least one entry rule must be enabled")
         for key,lo,hi in (("exposure_pct",Decimal("0.01"),Decimal(100)),
@@ -263,7 +268,7 @@ class Graph(Strict):
             if seq is not None:
                 extra.extend(seq.stages)
                 if seq.reset is not None:extra.append(seq.reset)
-        for machine in (self.long_machine,self.short_machine):
+        for machine in (self.long_machine,self.short_machine,self.long_exit_machine,self.short_exit_machine):
             if machine is not None:
                 extra.extend(t.rule for t in machine.transitions)
                 if machine.reset is not None:extra.append(machine.reset)
@@ -272,6 +277,10 @@ class Graph(Strict):
     def machine_config(self):
         return {direction:(m.state_count-1,m.expiry_bars,tuple((t.source,t.target) for t in m.transitions))
                 for direction,m in ((1,self.long_machine),(-1,self.short_machine)) if m is not None}
+
+    def exit_machine_config(self):
+        return {direction:(m.state_count-1,m.expiry_bars,tuple((t.source,t.target) for t in m.transitions))
+                for direction,m in ((1,self.long_exit_machine),(-1,self.short_exit_machine)) if m is not None}
 
     def sequence_config(self):
         return {direction: (len(seq.stages),seq.expiry_bars) for direction,seq in ((1,self.long_sequence),(-1,self.short_sequence)) if seq is not None}
@@ -285,7 +294,7 @@ def raw_rules(raw):
         if seq is not None:
             yield from seq["stages"]
             if seq.get("reset") is not None:yield seq["reset"]
-    for name in ("long_machine","short_machine"):
+    for name in ("long_machine","short_machine","long_exit_machine","short_exit_machine"):
         m=raw.get(name)
         if m is not None:
             for t in m["transitions"]:yield t["rule"]
@@ -384,6 +393,9 @@ def compile_graph(graph:Graph):
     if g.machine_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    machine_config = "+repr(g.machine_config()), ""]
+    if g.exit_machine_config():
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    exit_machine_config = "+repr(g.exit_machine_config()), ""]
     for name,tf,params in sorted(specs):
         lines.append("            IndicatorSpec.create("+repr(name)+", Timeframe("+str(tf)+"), "+params+"),")
     lines+=["        )","","    def extra_timeframes(self):",
@@ -409,6 +421,17 @@ def compile_graph(graph:Graph):
                     lines+=["        if direction == "+str(direction)+" and index == "+str(i)+":","            return "+_rule(t.rule)]
         lines+=["        return False","","    def machine_reset(self, ctx, direction):"]
         for direction,m in ((1,g.long_machine),(-1,g.short_machine)):
+            if m is not None and m.reset is not None:
+                lines+=["        if direction == "+str(direction)+":","            return "+_rule(m.reset)]
+        lines+=["        return False"]
+    if g.exit_machine_config():
+        lines+=["","    def exit_machine_transition(self, ctx, direction, index):"]
+        for direction,m in ((1,g.long_exit_machine),(-1,g.short_exit_machine)):
+            if m is not None:
+                for i,t in enumerate(m.transitions):
+                    lines+=["        if direction == "+str(direction)+" and index == "+str(i)+":","            return "+_rule(t.rule)]
+        lines+=["        return False","","    def exit_machine_reset(self, ctx, direction):"]
+        for direction,m in ((1,g.long_exit_machine),(-1,g.short_exit_machine)):
             if m is not None and m.reset is not None:
                 lines+=["        if direction == "+str(direction)+":","            return "+_rule(m.reset)]
         lines+=["        return False"]

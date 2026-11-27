@@ -76,6 +76,7 @@ class VisualStrategyBase(PythonStrategy):
     advanced_controls=None
     sequence_config=None
     machine_config=None
+    exit_machine_config=None
     custom_config=None
 
     def __init__(self):
@@ -88,6 +89,7 @@ class VisualStrategyBase(PythonStrategy):
         self.pending_cycle=None
         self.sequence_state={1:(0,None),-1:(0,None)}
         self.machine_state={1:(0,None),-1:(0,None)}
+        self.exit_machine_state={1:(0,None),-1:(0,None)}
         self.formula_runtime=formula_program(self.custom_config).make() if self.custom_config else None
 
     def on_completed_candle(self,candle):
@@ -138,11 +140,20 @@ class VisualStrategyBase(PythonStrategy):
     def machine_transition(self,ctx,direction,index):return False
     def machine_reset(self,ctx,direction):return False
 
-    def machine_ready(self,ctx,direction):
-        ready,expiry,edges=self.machine_config[direction]
-        state,started=self.machine_state[direction]
-        if ctx.position_quantity!=0 or self.machine_reset(ctx,direction):
-            self.machine_state[direction]=(0,None)
+    def exit_machine_transition(self,ctx,direction,index):return False
+    def exit_machine_reset(self,ctx,direction):return False
+
+    def machine_ready(self,ctx,direction,position_exit=False):
+        config=self.exit_machine_config if position_exit else self.machine_config
+        states=self.exit_machine_state if position_exit else self.machine_state
+        transition=self.exit_machine_transition if position_exit else self.machine_transition
+        reset=self.exit_machine_reset if position_exit else self.machine_reset
+        if direction not in (config or {}):return True
+        ready,expiry,edges=config[direction]
+        state,started=states[direction]
+        invalid_position=ctx.position_quantity*direction<=0 if position_exit else ctx.position_quantity!=0
+        if invalid_position or reset(ctx,direction):
+            states[direction]=(0,None)
             return False
         if started is not None and self.signal_count-started>expiry:
             state,started=0,None
@@ -150,12 +161,12 @@ class VisualStrategyBase(PythonStrategy):
         # position checks take priority. Returning to idle restarts the clock.
         if state!=ready:
             for i,(source,target) in enumerate(edges):
-                if source==state and self.machine_transition(ctx,direction,i):
+                if source==state and transition(ctx,direction,i):
                     if target==0:started=None
                     elif state==0:started=self.signal_count
                     state=target
                     break
-        self.machine_state[direction]=(state,started)
+        states[direction]=(state,started)
         return state==ready
 
     def sequence_ready(self,ctx,direction):
@@ -193,11 +204,14 @@ class VisualStrategyBase(PythonStrategy):
                     if self.entry_streak[direction]==0:self.entry_cycle[direction]+=1
                     self.entry_streak[direction]+=1
                 else:self.entry_streak[direction]=0
+        if self.exit_machine_config:
+            for direction in (1,-1):
+                if q*direction<=0:self.exit_machine_state[direction]=(0,None)
         if q>0:
-            if self.long_exit(ctx):self.close_position(ctx,"visual_long_rule_exit")
+            if self.machine_ready(ctx,1,position_exit=True) and self.long_exit(ctx):self.close_position(ctx,"visual_long_rule_exit")
             return
         if q<0:
-            if self.short_exit(ctx):self.close_position(ctx,"visual_short_rule_exit")
+            if self.machine_ready(ctx,-1,position_exit=True) and self.short_exit(ctx):self.close_position(ctx,"visual_short_rule_exit")
             return
         if ctx.equity<=0:return
         if a is None:
@@ -221,6 +235,8 @@ class VisualStrategyBase(PythonStrategy):
         else:self.sell(ctx,qty,"visual_short_entry")
 
     def on_fill(self,ctx,fill):
+        if self.exit_machine_config and (ctx.position_quantity==0 or fill.reason in ("visual_long_entry","visual_short_entry")):
+            self.exit_machine_state={1:(0,None),-1:(0,None)}
         if self.advanced_controls is not None:
             if fill.reason in ("visual_long_entry","visual_short_entry"):
                 direction=1 if fill.reason=="visual_long_entry" else -1
