@@ -11,6 +11,7 @@ import {recordRun,mergeRuns,loadRuns,persistRuns,removeRun,clearRuns} from "./ru
 import type {RunRecord} from "./runHistory";
 import {RunComparison} from "./RunComparison";
 import {ResultVisuals} from "./ResultVisuals";
+import {SpreadCalibration} from "./SpreadCalibration";
 const rule=(op:string)=>({enabled:true,groups:[{conditions:[{left:{kind:"price",timeframe:300,field:"close"},op,right:{kind:"indicator",timeframe:300,name:"ema.value",parameters:{period:3}}}]}]});
 const off={enabled:false,groups:[]};
 const starter=JSON.stringify({signal_timeframe:300,execution_timeframe:60,exposure_pct:"20",stop_loss_pct:"1",take_profit_pct:"2",long_entry:rule("cross_up"),long_exit:rule("cross_down"),short_entry:off,short_exit:off},null,2);
@@ -83,6 +84,7 @@ export function BrowserRunner({api,strategies=[],initialGraph}:{api?:Api;strateg
  <label>Experiment name<input aria-label="Experiment name" value={experiment} maxLength={80} onChange={e=>setExperiment(e.target.value)}/></label>
  <label>Visual graph JSON or exact generated Python<textarea aria-label="Local visual source" rows={12} style={{width:"100%",fontFamily:"monospace"}} value={graph} onChange={e=>{setGraph(e.target.value);setResult(null);}}/></label>
  <div className="visual-config">{Object.entries(settings).map(([key,value])=><label key={key}>{key}<input value={value} onChange={e=>{setSettings(old=>({...old,[key]:e.target.value}));setResult(null);}}/></label>)}</div>
+ <SpreadCalibration symbol={symbol} from={historyFrom} slippage={settings.slippage_bps} onApply={value=>{setSettings(old=>({...old,slippage_bps:value}));setResult(null);}}/>
  <label className="check"><input type="checkbox" checked={assume} onChange={e=>{setAssume(e.target.checked);setResult(null);}}/> Assume CSV times are candle opens; provenance and contract specs are unverified.</label>
  <label className="check"><input type="checkbox" checked={remember} onChange={e=>setRemember(e.target.checked)}/> Remember completed experiments on this device (optional).</label>
  <button className="primary" disabled={!csv||!assume||graph.length===0||graph.length>65536} onClick={()=>run()}>Run local Python</button>

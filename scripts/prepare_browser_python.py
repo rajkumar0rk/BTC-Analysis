@@ -63,3 +63,6 @@ print("Staged verified BTCUSD/ETHUSD monthly archive snapshots.")
 # Validate and stage historical risk series and retained 2024 BTC trade archive.
 from stage_repository_history import stage_extended_history
 stage_extended_history(ROOT,history)
+
+from stage_spread_calibration import stage as stage_spread
+stage_spread(ROOT,history)
