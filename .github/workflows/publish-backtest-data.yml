@@ -1,5 +1,5 @@
 name: Publish backtest data
-# Publication checkpoints: collect completed versioned research bundles, including strict Reclaim run 45993024689.
+# Publication checkpoints: collect completed versioned research bundles, including fee-only run 45997195759 and five-candle delay run 45997747350.
 on:
   workflow_dispatch:
   schedule:
