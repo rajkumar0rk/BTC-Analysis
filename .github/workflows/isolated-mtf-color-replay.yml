@@ -1,0 +1,142 @@
+name: Isolated MTF Color replay
+on:
+  push:
+    branches: [research/mtf-color-replay-20261127]
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run isolated reference replay using project indicators and archive
+        env:
+          PYTHONPATH: src
+        run: |
+          python - <<'PY'
+          import csv,gzip,json,math,hashlib
+          from pathlib import Path
+          from datetime import datetime,timezone,timedelta
+          from decimal import Decimal as D
+          from itertools import zip_longest
+          from collections import defaultdict
+          from btc_analysis.contracts import Candle,Timeframe,Instrument,AssetClass
+          from btc_analysis.indicators import IndicatorBook,spec
+          from zoneinfo import ZoneInfo
+          root=Path("data/delta_india/BTCUSD")
+          manifest=json.loads((root/"1m/manifest.json").read_text())
+          ins=Instrument("delta_india","BTCUSD",AssetClass.CRYPTO_PERPETUAL,"USD","USD",D("0.5"),D("1"),D("0.001"))
+          h=Timeframe(3600); m=Timeframe(900)
+          params={"period":10,"multiplier":"3"}
+          book=IndicatorBook((spec("supertrend.direction",h,**params),spec("supertrend.direction",m,**params),spec("ema.value",m,period=20)))
+          ist=ZoneInfo("Asia/Kolkata")
+          def rows(path):
+              with gzip.open(path,"rt") as f:
+                  for r in csv.DictReader(f):
+                      yield int(r["time"]),tuple(float(r[k]) for k in ("open","high","low","close","volume"))
+          def color(v):
+              o,hi,lo,c=v[:4]
+              return (o,lo,hi,c) if c>o or (c==o and o-lo<=hi-o) else (o,hi,lo,c)
+          def crossing(a,b,level,side):
+              if side*(a-level)>=0:return 0.
+              if side*(b-level)<0:return None
+              return (level-a)/(b-a)
+          def dt(t):return datetime.fromtimestamp(t,timezone.utc)
+          class State:
+              def __init__(self):
+                  self.cash=100.;self.peak=100.;self.dd=0.;self.pos=None;self.pending=0;self.used=False
+                  self.trades=[];self.month={};self.fees=0.;self.zero=0;self.points=0.;self.opens=0
+              def sample(self,price):
+                  eq=self.cash+(self.pos[0]*(price-self.pos[2])*self.pos[1] if self.pos else 0.)
+                  self.peak=max(self.peak,eq);self.dd=max(self.dd,(self.peak-eq)/self.peak*100)
+                  return eq
+              def execute(self,t,v,mark):
+                  if self.pending:
+                      side=self.pending;self.pending=0
+                      # 100% target notional; reserve entry costs and round to venue contract increment.
+                      q=math.floor(self.cash/(v[0]*1.00059)/.001)*.001
+                      if q<=0:self.zero+=1
+                      else:
+                          entry=v[0];fee=entry*q*.00059;self.cash-=fee;self.fees+=fee
+                          self.pos=(side,q,entry,t,fee);self.used=True;self.opens+=1
+                  a=color(v);b=color(mark)
+                  self.sample(b[0])
+                  if self.pos:
+                      side,q,entry,opened,entry_fee=self.pos
+                      stop=entry-side*100;target=entry+side*200
+                      for j in range(3):
+                          sl=crossing(b[j],b[j+1],stop,-side)
+                          tp=crossing(a[j],a[j+1],target,side)
+                          if sl is None and tp is None:
+                              self.sample(b[j+1]);continue
+                          hit_stop=sl is not None and (tp is None or sl<=tp)
+                          frac=sl if hit_stop else tp
+                          self.sample(b[j]+frac*(b[j+1]-b[j]))
+                          # Linear paired-vertex interpolation; not observed trade tape.
+                          exit_price=a[j]+frac*(a[j+1]-a[j]) if hit_stop else target
+                          # Intrabar completion time is conservative for the 30-minute waiver.
+                          fee=0. if t+60-opened<=1800 else exit_price*q*.00059
+                          gross=side*(exit_price-entry)*q
+                          net=gross-entry_fee-fee
+                          self.cash+=gross-fee;self.fees+=fee;self.points+=side*(exit_price-entry)
+                          self.trades.append((net,hit_stop));self.pos=None;self.sample(exit_price);break
+                  eq=self.sample(mark[3])
+                  self.month[dt(t).astimezone(ist).strftime("%Y-%m")]=eq
+              def result(self):
+                  final=list(self.month.values())[-1];prev=100.;monthly={}
+                  for k,v in self.month.items():
+                      monthly[k]=round(v-prev,8);prev=v
+                  wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
+                  return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s for _,s in self.trades))
+          states={k:State() for k in ("Touch","Reclaim")}
+          groups={900:[],3600:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=timezone.utc).timestamp())
+          def val(name,tf,p):
+              v=book.get(name,tf,p)
+              return v[-1] if v else None
+          for p in manifest["partitions"]:
+              if p["file"]>"2026-10.csv.gz":break
+              trade=root/"1m"/p["file"];mark=root/"institutional/history/mark_1m"/p["file"]
+              assert hashlib.sha256(trade.read_bytes()).hexdigest()==p["sha256_gzip"]
+              for a,b in zip_longest(rows(trade),rows(mark)):
+                  assert a is not None and b is not None and a[0]==b[0],(a,b)
+                  t,v=a;_,mv=b
+                  assert last is None or t==last+60
+                  last=t;count+=1
+                  for s in states.values():s.execute(t,v,mv)
+                  old_side=alignment;old_ema=ema;completed15=None
+                  for seconds,group in groups.items():
+                      group.append(v)
+                      if len(group)!=seconds//60:continue
+                      o,hi,lo,c,vol=group[0][0],max(x[1] for x in group),min(x[2] for x in group),group[-1][3],sum(x[4] for x in group)
+                      candle=Candle(ins,Timeframe(seconds),dt(t+60-seconds),dt(t+60),*(D(str(x)) for x in (o,hi,lo,c,vol)))
+                      book.update(candle);group.clear()
+                      if seconds==900:completed15=(o,hi,lo,c,vol)
+                  st1=val("supertrend.direction",h,params);st15=val("supertrend.direction",m,params)
+                  alignment=int(st1) if st1 in (-1,1) and st1==st15 else 0
+                  em=val("ema.value",m,{"period":20});ema=float(em) if em is not None else None
+                  if alignment!=old_side:
+                      for s in states.values():s.used=False
+                  if count>=6000 and alignment and dt(t+60).astimezone(ist).weekday()<5:
+                      s=states["Touch"]
+                      if not s.pos and not s.used and alignment==old_side and old_ema is not None and prev_min is not None:
+                          if alignment*(prev_min[3]-old_ema)>0 and alignment*(v[0]-old_ema)>=0 and v[2]<=old_ema<=v[1]:s.pending=alignment
+                      s=states["Reclaim"]
+                      if not s.pos and not s.used and completed15 and prev15 and old_ema is not None:
+                          if alignment*(prev15[3]-old_ema)>0 and completed15[2]<=old_ema<=completed15[1] and alignment*(completed15[3]-old_ema)>0:s.pending=alignment
+                  if completed15:prev15=completed15
+                  prev_min=v
+              print("Processed",p["file"],count,flush=True)
+          assert last==end-60
+          results={"range":"2025-01-01 to 2026-10-31 UTC; first 6000 minutes warmup","bars":count,"execution":"Color paired trade and mark paths; fixed 100/200; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded","results":{k:s.result() for k,s in states.items()}}
+          print(json.dumps(results,indent=2))
+          Path("mtf-color-results.json").write_text(json.dumps(results,indent=2))
+          
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mtf-color-results
+          path: mtf-color-results.json
