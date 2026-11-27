@@ -1,0 +1,28 @@
+name: BTC ETH 2025 Color fixed profit protection grid
+on:
+  push:
+    branches: ['research/2025-color-fixed-profit-lock-20261127']
+    paths: ['scripts/replay_2025_color_profit_lock.py','.github/workflows/replay-2025-color-profit-lock.yml']
+permissions:
+  contents: read
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        asset: [BTC, ETH]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.2.6 pandas==2.2.3
+      - run: python -m py_compile scripts/replay_2025_color_profit_lock.py
+      - run: python -u scripts/replay_2025_color_profit_lock.py --asset ${{ matrix.asset }} --output "$RUNNER_TEMP/annual"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: annual-${{ matrix.asset }}-profit-lock
+          path: ${{ runner.temp }}/annual
+          if-no-files-found: error
