@@ -12,6 +12,12 @@ def main():
     assert index["selection_policy"]["retained"]+index["supertrend_replay_count"]+index.get("automatic_run_count",0)==len(runs)
     automatic=[r for r in runs if r.get("automatic_version")]
     assert len(automatic)==index.get("automatic_run_count",0)
+    registry=index.get("backtest_number_registry",{})
+    assert all(type(n) is int and n>0 for n in registry.values())
+    assert len(set(registry.values()))==len(registry)
+    for r in automatic:
+        assert r["backtest_number"]==registry[r["id"]]
+        assert r["strategy"]==f'BT-{r["backtest_number"]:04d} | {r["original_strategy"]}'
     assert len({(r["source_run_id"],r["source_attempt"],r["family"],r["variant_key"]) for r in automatic})==len(automatic)
     for k in {(r["symbol"],r["family"],r["variant_key"]) for r in automatic}:
         assert sum(r["latest_version"] for r in automatic if (r["symbol"],r["family"],r["variant_key"])==k)==1

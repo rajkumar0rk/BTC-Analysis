@@ -146,7 +146,21 @@ def publish(cache,data):
         rank=(r["completed_at"],r["source_run_id"],r["source_attempt"])
         if k not in latest or rank>latest[k][0]:latest[k]=(rank,r["id"])
     for r in auto:r["latest_version"]=r["id"]==latest[(r["symbol"],r["family"],r["variant_key"])][1]
-    index["runs"]=runs+sorted(auto,key=lambda r:(r["completed_at"],r["source_run_id"],r["source_attempt"]),reverse=True)
+    # Allocate permanent catalog numbers, in completion order for new entries.
+    # Keep the registry even when an older bundle is no longer present.
+    previous=os.getenv("DASHBOARD_PREVIOUS_DATA")
+    prior=Path(previous)/"index.json" if previous else None
+    registry=dict(json.loads(prior.read_text()).get("backtest_number_registry",{}) if prior and prior.is_file() else index.get("backtest_number_registry",{}))
+    require(all(isinstance(k,str) and integer(n,1,10**12) for k,n in registry.items()) and len(set(registry.values()))==len(registry),"invalid backtest number registry")
+    next_number=max(registry.values(),default=0)+1
+    for r in sorted(auto,key=lambda r:(r["completed_at"],r["source_run_id"],r["source_attempt"])):
+        if r["id"] not in registry:
+            registry[r["id"]]=next_number;next_number+=1
+        r["backtest_number"]=registry[r["id"]]
+        r["original_strategy"]=r["strategy"]
+        r["strategy"]=f'BT-{r["backtest_number"]:04d} | {r["original_strategy"]}'
+    index["backtest_number_registry"]=registry
+    index["runs"]=runs+sorted(auto,key=lambda r:r["backtest_number"],reverse=True)
     index["automatic_run_count"]=len(auto);index["full_configurations"]=sum(r.get("detail_available",True) for r in index["runs"])
     dump(data/"index.json",index)
     print("Published versioned backtests:",len(auto))
