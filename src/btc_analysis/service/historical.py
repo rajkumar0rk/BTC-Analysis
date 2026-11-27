@@ -5,7 +5,7 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Literal, Annotated
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
-from ..visual import Graph, Indicator, Constant, compile_graph, recover_graph, DecimalText
+from ..visual import Graph, Indicator, Constant, CustomOperand, compile_graph, recover_graph, DecimalText
 from ..visual_runtime import VisualStrategyBase, compare, constant, price, indicator
 from ..contracts import (Instrument, AssetClass, Timeframe, DatasetRef, DataKind,
     StrategyRef, BacktestConfig, CostModel, MarginMode, IntrabarPolicy)
@@ -51,7 +51,7 @@ class HistoricalRequest(BaseModel):
         return self
 
 def frames(g):
-    out={g.signal_timeframe,g.execution_timeframe}
+    out={g.signal_timeframe,g.execution_timeframe,*(d.timeframe for d in (g.custom_formulas or []))}
     if g.advanced is not None and g.advanced.trailing_atr is not None:out.add(g.advanced.trailing_atr.timeframe)
     for r in g.rules():
         for group in r.groups:
@@ -69,6 +69,7 @@ def validate_clock(g,r):
 class GraphStrategy(VisualStrategyBase):
     """Same SDK runtime as generated Python; no exec/eval or dynamic imports."""
     def __init__(self,g):
+        self.custom_config=[d.model_dump() for d in g.custom_formulas] if g.custom_formulas else None
         super().__init__()
         self.g=g
         self.signal_seconds=g.signal_timeframe
@@ -93,6 +94,7 @@ class GraphStrategy(VisualStrategyBase):
     def operand(self,ctx,o):
         if isinstance(o,Constant):return constant(o.value)
         if isinstance(o,Indicator):return indicator(ctx,o.name,o.timeframe,o.parameters)
+        if isinstance(o,CustomOperand):return self.custom_pair(o.name)
         return price(ctx,o.timeframe,o.field)
     def rule(self,ctx,r):
         if not r.enabled:return False

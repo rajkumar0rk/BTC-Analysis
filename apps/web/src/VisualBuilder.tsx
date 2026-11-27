@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react";
 import type {Api,Catalog,Strategy,Revision} from "./api";
 import {frames,ops,keys,initialGraph,newCondition,newGroup,advancedDefaults} from "./visualTypes";
-import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence} from "./visualTypes";
+import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence,CustomFormula} from "./visualTypes";
 const captions={long_entry:"Long entry",short_entry:"Short entry",long_exit:"Long exit",short_exit:"Short exit"};
 const opLabels={gt:">",gte:"≥",lt:"<",lte:"≤",eq:"=",cross_up:"Crosses above",cross_down:"Crosses below"};
 const frameLabel=(n:number)=>n>=86400?"1 day":n>=3600?n/3600+"h":n/60+"m";
@@ -9,13 +9,13 @@ const message=(e:unknown)=>e instanceof Error?e.message:"Request failed";
 export function FrameSelect({value,change,label,disabled}:{value:Frame;change:(v:Frame)=>void;label:string;disabled:boolean}){
  return <label>{label}<select aria-label={label} value={value} disabled={disabled} onChange={e=>change(Number(e.target.value) as Frame)}>{frames.map(f=><option key={f} value={f}>{frameLabel(f)}</option>)}</select></label>;
 }
-function OperandEdit({value,change,catalog,label,disabled}:{value:Operand;change:(o:Operand)=>void;catalog:Catalog;label:string;disabled:boolean}){
+function OperandEdit({value,change,catalog,label,disabled,custom}:{value:Operand;change:(o:Operand)=>void;catalog:Catalog;label:string;disabled:boolean;custom:CustomFormula[]}){
  const options=catalog.indicators.flatMap(i=>i.outputs.map(o=>({name:i.name+"."+o,defaults:i.defaults})));
  const selected=value.kind==="indicator"?options.find(x=>x.name===value.name):undefined;
  return <div className="operand"><label>{label}<select aria-label={label+" type"} disabled={disabled} value={value.kind} onChange={e=>{
- const k=e.target.value;if(k==="constant")change({kind:k,value:"0"});else if(k==="price")change({kind:k,timeframe:900,field:"close"});else{const o=options.find(x=>x.name==="ema.value")??options[0];change({kind:"indicator",timeframe:900,name:o.name,parameters:{...o.defaults}});}
- }}><option value="price">Candle field</option><option value="indicator">Indicator</option><option value="constant">Number</option></select></label>
- {value.kind==="constant"?<label>Value<input aria-label={label+" value"} disabled={disabled} value={value.value} onChange={e=>change({...value,value:e.target.value})}/></label>:<>
+ const k=e.target.value;if(k==="constant")change({kind:k,value:"0"});else if(k==="price")change({kind:k,timeframe:900,field:"close"});else if(k==="custom"){const d=custom[0];if(d)change({kind:"custom",name:d.name,timeframe:d.timeframe});}else{const o=options.find(x=>x.name==="ema.value")??options[0];change({kind:"indicator",timeframe:900,name:o.name,parameters:{...o.defaults}});}
+ }}><option value="price">Candle field</option><option value="indicator">Indicator</option><option value="constant">Number</option>{(custom.length>0||value.kind==="custom")&&<option value="custom">Custom formula</option>}</select></label>
+ {value.kind==="custom"?<label>Custom formula<select aria-label={label+" custom formula"} disabled={disabled} value={value.name} onChange={e=>{const d=custom.find(x=>x.name===e.target.value);if(d)change({kind:"custom",name:d.name,timeframe:d.timeframe});}}>{!custom.some(x=>x.name===value.name)&&<option>{value.name}</option>}{custom.map(d=><option key={d.name} value={d.name}>{d.name} · {frameLabel(d.timeframe)}</option>)}</select></label>:value.kind==="constant"?<label>Value<input aria-label={label+" value"} disabled={disabled} value={value.value} onChange={e=>change({...value,value:e.target.value})}/></label>:<>
  <FrameSelect label={label+" timeframe"} value={value.timeframe} disabled={disabled} change={timeframe=>change({...value,timeframe})}/>
  {value.kind==="price"?<label>Field<select aria-label={label+" field"} disabled={disabled} value={value.field} onChange={e=>change({...value,field:e.target.value as Extract<Operand,{kind:"price"}>["field"]})}>{["open","high","low","close","volume"].map(f=><option key={f}>{f}</option>)}</select></label>:
  <><label>Indicator<select aria-label={label+" indicator"} disabled={disabled} value={value.name} onChange={e=>{const o=options.find(x=>x.name===e.target.value)!;change({...value,name:o.name,parameters:{...o.defaults}});}}>{options.map(o=><option key={o.name}>{o.name}</option>)}</select></label>
@@ -23,7 +23,7 @@ function OperandEdit({value,change,catalog,label,disabled}:{value:Operand;change
  </>}
  </div>;
 }
-export function RuleEdit({rule,title,change,catalog,disabled}:{rule:Rule;title:string;change:(r:Rule)=>void;catalog:Catalog;disabled:boolean}){
+export function RuleEdit({rule,title,change,catalog,disabled,custom=[]}:{rule:Rule;title:string;change:(r:Rule)=>void;catalog:Catalog;disabled:boolean;custom?:CustomFormula[]}){
  function group(i:number,g:Group){change({...rule,groups:rule.groups.map((x,j)=>j===i?g:x)});}
  function move(i:number,j:number){if(j<0||j>=rule.groups.length||i===j)return;const g=[...rule.groups];g.splice(j,0,g.splice(i,1)[0]);change({...rule,groups:g});}
  return <fieldset className="visual-rule" disabled={disabled}><legend>{title}</legend><label className="check"><input type="checkbox" checked={rule.enabled} onChange={e=>change({...rule,enabled:e.target.checked,groups:e.target.checked&&!rule.groups.length?[newGroup()]:rule.groups})}/> Enable {title.toLowerCase()}</label>
@@ -32,12 +32,30 @@ export function RuleEdit({rule,title,change,catalog,disabled}:{rule:Rule;title:s
  <div className="head"><strong>Group {i+1}</strong><div className="rule-actions"><button type="button" disabled={i===0} onClick={()=>move(i,i-1)} aria-label={title+" group "+(i+1)+" move up"}>↑</button><button type="button" disabled={i===rule.groups.length-1} onClick={()=>move(i,i+1)} aria-label={title+" group "+(i+1)+" move down"}>↓</button><button type="button" disabled={rule.groups.length===1} onClick={()=>change({...rule,groups:rule.groups.filter((_,j)=>i!==j)})}>Remove group</button></div></div>
  <label>Combine conditions<select value={g.mode} onChange={e=>group(i,{...g,mode:e.target.value as Group["mode"]})}><option value="all">AND — all conditions</option><option value="any">OR — any condition</option></select></label>
  {g.conditions.map((c,j)=>{const update=(v:Condition)=>group(i,{...g,conditions:g.conditions.map((x,k)=>k===j?v:x)});const label=title+" group "+(i+1)+" condition "+(j+1);return <div className="condition" key={j}><div className="condition-head"><small>{label}</small><button type="button" disabled={g.conditions.length===1} onClick={()=>group(i,{...g,conditions:g.conditions.filter((_,k)=>k!==j)})}>Remove condition</button></div><div className="condition-grid">
- <OperandEdit label={label+" left"} value={c.left} catalog={catalog} disabled={disabled} change={left=>update({...c,left})}/>
+ <OperandEdit label={label+" left"} value={c.left} custom={custom} catalog={catalog} disabled={disabled} change={left=>update({...c,left})}/>
  <label>Comparison<select aria-label={label+" comparison"} value={c.op} onChange={e=>update({...c,op:e.target.value as Condition["op"]})}>{ops.map(o=><option key={o} value={o}>{opLabels[o]}</option>)}</select></label>
- <OperandEdit label={label+" right"} value={c.right} catalog={catalog} disabled={disabled} change={right=>update({...c,right})}/></div></div>;})}
+ <OperandEdit label={label+" right"} value={c.right} custom={custom} catalog={catalog} disabled={disabled} change={right=>update({...c,right})}/></div></div>;})}
  <button type="button" disabled={g.conditions.length>=8} onClick={()=>group(i,{...g,conditions:[...g.conditions,newCondition()]})}>Add condition</button></section>)}
  <button type="button" disabled={rule.groups.length>=4} onClick={()=>change({...rule,groups:[...rule.groups,newGroup()]})}>Add group</button></>}
  </fieldset>;
+}
+export function CustomFormulaControls({graph,change,disabled}:{graph:Graph;change:(g:Graph)=>void;disabled:boolean}){
+ const defs=graph.custom_formulas??[];
+ function update(i:number,next:CustomFormula){
+  const old=defs[i];const operand=(o:Operand):Operand=>o.kind==="custom"&&o.name===old.name?{kind:"custom",name:next.name,timeframe:next.timeframe}:o;
+  const rule=(r:Rule):Rule=>({...r,groups:r.groups.map(g=>({...g,conditions:g.conditions.map(c=>({...c,left:operand(c.left),right:operand(c.right)}))}))});
+  const out={...graph,custom_formulas:defs.map((d,j)=>j===i?next:d)};
+  keys.forEach(k=>out[k]=rule(graph[k]));
+  for(const k of ["long_sequence","short_sequence"] as const){const s=graph[k];if(s)out[k]={...s,stages:s.stages.map(rule),reset:s.reset?rule(s.reset):s.reset};}
+  change(out);
+ }
+ function used(name:string){
+  const rules=keys.map(k=>graph[k]);for(const s of [graph.long_sequence,graph.short_sequence])if(s){rules.push(...s.stages);if(s.reset)rules.push(s.reset);}
+  return rules.some(r=>r.groups.some(g=>g.conditions.some(c=>[c.left,c.right].some(o=>o.kind==="custom"&&o.name===name))));
+ }
+ return <fieldset className="visual-rule" disabled={disabled}><legend>Custom indicator formulas</legend><p className="muted">Use a single numeric expression with completed candles (bars), previous output, and bounded SDK helpers. Example: mean(series(bars, "close")). The lookback is the required number of completed candles. Compare a custom formula in any rule or sequence. Names must be unique.</p>
+ {defs.map((d,i)=><div key={i} className="rule-group"><label>Name<input aria-label={"Custom formula "+(i+1)+" name"} maxLength={48} value={d.name} onChange={e=>update(i,{...d,name:e.target.value})}/></label><FrameSelect label={"Custom formula "+(i+1)+" timeframe"} value={d.timeframe} disabled={disabled} change={timeframe=>update(i,{...d,timeframe})}/><label>Lookback<input type="number" min={1} max={4096} value={d.lookback} onChange={e=>update(i,{...d,lookback:Number(e.target.value)})}/></label><label>Expression<textarea maxLength={512} value={d.expression} onChange={e=>update(i,{...d,expression:e.target.value})}/></label><button type="button" disabled={used(d.name)} onClick={()=>{const remaining=defs.filter((_,j)=>i!==j);change({...graph,custom_formulas:remaining.length?remaining:null});}}>Remove formula</button></div>)}
+ <button type="button" disabled={defs.length>=16} onClick={()=>{let n=1;while(defs.some(d=>d.name==="formula"+n))n++;change({...graph,custom_formulas:[...defs,{name:"formula"+n,timeframe:graph.signal_timeframe,lookback:20,expression:'mean(series(bars, "close"))'}]});}}>Add custom formula</button></fieldset>;
 }
 export function AdvancedVisualControls({graph,change,disabled}:{graph:Graph;change:(g:Graph)=>void;disabled:boolean}){
  const a=graph.advanced;
@@ -61,10 +79,10 @@ export function SequenceControls({graph,change,catalog,disabled}:{graph:Graph;ch
  function update(next:EntrySequence|null){change({...graph,[key]:next,...(next?{advanced:graph.advanced??advancedDefaults(),[entry]:{...graph[entry],enabled:true,groups:graph[entry].groups.length?graph[entry].groups:[newGroup()]}}:{})});}
  return <fieldset key={direction} className="visual-rule" disabled={disabled}><legend>{direction==="long"?"Long":"Short"} entry sequence</legend><label className="check"><input type="checkbox" checked={!!seq} onChange={e=>update(e.target.checked?{stages:[stage(),stage()],expiry_bars:10}:null)}/> Enable {direction} sequence</label>
  {seq&&<><label>Maximum signal candles since first stage<input type="number" min={seq.stages.length-1} max={10000} value={seq.expiry_bars} onChange={e=>update({...seq,expiry_bars:Number(e.target.value)})}/></label>
- {seq.stages.map((s,i)=><div key={i}><RuleEdit rule={s} title={direction+" stage "+(i+1)} catalog={catalog} disabled={disabled} change={value=>update({...seq,stages:seq.stages.map((x,j)=>i===j?{...value,enabled:true}:x)})}/><button type="button" disabled={seq.stages.length<=2} onClick={()=>update({...seq,stages:seq.stages.filter((_,j)=>j!==i)})}>Remove stage {i+1}</button><button type="button" disabled={i===0} onClick={()=>{const stages=[...seq.stages];[stages[i-1],stages[i]]=[stages[i],stages[i-1]];update({...seq,stages});}}>Move stage up</button></div>)}
+ {seq.stages.map((s,i)=><div key={i}><RuleEdit rule={s} title={direction+" stage "+(i+1)} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={value=>update({...seq,stages:seq.stages.map((x,j)=>i===j?{...value,enabled:true}:x)})}/><button type="button" disabled={seq.stages.length<=2} onClick={()=>update({...seq,stages:seq.stages.filter((_,j)=>j!==i)})}>Remove stage {i+1}</button><button type="button" disabled={i===0} onClick={()=>{const stages=[...seq.stages];[stages[i-1],stages[i]]=[stages[i],stages[i-1]];update({...seq,stages});}}>Move stage up</button></div>)}
  <button type="button" disabled={seq.stages.length>=4} onClick={()=>update({...seq,stages:[...seq.stages,stage()]})}>Add stage</button>
  <label className="check"><input type="checkbox" checked={!!seq.reset} onChange={e=>update({...seq,reset:e.target.checked?stage():null})}/> Enable reset condition</label>
- {seq.reset&&<RuleEdit rule={seq.reset} title={direction+" sequence reset"} catalog={catalog} disabled={disabled} change={value=>update({...seq,reset:{...value,enabled:true}})}/>}</>}
+ {seq.reset&&<RuleEdit rule={seq.reset} title={direction+" sequence reset"} catalog={catalog} custom={graph.custom_formulas??[]} disabled={disabled} change={value=>update({...seq,reset:{...value,enabled:true}})}/>}</>}
  </fieldset>;})}</section>;
 }
 export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void;openPython:(r:Revision)=>void}){
@@ -82,8 +100,8 @@ export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Ap
  <label>Strategy name<input value={name} disabled={busy||!!revision} maxLength={100} onChange={e=>setName(e.target.value)}/></label>
  <div className="visual-config"><FrameSelect label="Signal timeframe" value={graph.signal_timeframe} disabled={busy} change={v=>edit({...graph,signal_timeframe:v})}/><FrameSelect label="Execution timeframe" value={graph.execution_timeframe} disabled={busy} change={v=>edit({...graph,execution_timeframe:v})}/>
  {(["exposure_pct","stop_loss_pct","take_profit_pct"] as const).map((k,i)=><label key={k}>{["Equity exposure (%)","Stop loss (%)","Take profit (%)"][i]}<input disabled={busy} value={graph[k]} onChange={e=>edit({...graph,[k]:e.target.value})}/></label>)}</div>
- <AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
- {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
+ <CustomFormulaControls graph={graph} change={edit} disabled={busy}/><AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
+ {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} custom={graph.custom_formulas??[]} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
  <section className="panel"><div className="head"><h2>Generated Python</h2><div className="rule-actions"><button disabled={busy||!catalog} onClick={()=>void generate()}>Generate Python</button><button className="primary" disabled={busy||!catalog||!name.trim()||stale} onClick={()=>void generate(true)}>Save visual strategy</button>{revision&&<button disabled={busy} onClick={()=>openPython(revision)}>Open saved Python</button>}</div></div>
  {stale&&<p role="alert">Newer, frozen or archived revision. Reopen or clone in the strategy library before saving.</p>}
  {error&&<p className="error" role="alert">{error}</p>}{note&&<p role="status">{note}</p>}

@@ -34,6 +34,35 @@ def compare(op,left,right):
     raise ValueError("unsupported comparison")
 
 
+def formula_program(definitions):
+    """Compile only bounded expressions through the existing SDK interpreter."""
+    import ast
+    from .service.python_strategy import Program
+    allowed={"series","sum","mean","stddev","sqrt","D","Decimal","abs","min","max","len","int"}
+    methods=[];decl=[]
+    for i,d in enumerate(definitions):
+        expression=d["expression"]
+        if "\n" in expression or "\r" in expression:raise ValueError("custom formula must be a single expression")
+        try:node=ast.parse(expression,mode="eval")
+        except SyntaxError as exc:raise ValueError("invalid custom formula expression") from exc
+        for n in ast.walk(node):
+            if isinstance(n,ast.Name) and n.id not in allowed|{"bars","previous"}:
+                raise ValueError("unknown custom formula name: "+n.id)
+            if isinstance(n,ast.Call) and (not isinstance(n.func,ast.Name) or n.func.id not in allowed):
+                raise ValueError("custom formula call not allowed")
+            if isinstance(n,ast.Attribute) and n.attr not in {"open","high","low","close","volume"}:
+                raise ValueError("custom formula attribute not allowed")
+        method="formula"+str(i)
+        decl.append("("+repr(d["name"])+", Timeframe("+str(d["timeframe"])+"), "+str(d["lookback"])+", "+repr(method)+")")
+        methods.append("    def "+method+"(self, bars, previous):\n        return ("+expression+")")
+    source="class Strategy(PythonStrategy):\n    def on_signal(self, ctx):\n        pass\n    def custom_indicators(self):\n        return ("+", ".join(decl)+",)\n"+"\n".join(methods)+"\n"
+    try:
+        program=Program(source)
+        program.make()
+        return program
+    except SyntaxError as exc:raise ValueError("invalid custom formula") from exc
+
+
 class VisualStrategyBase(PythonStrategy):
     """One net position, no pyramiding. Signal entry and exits use next open.
     Stop/target submitted from fill callback, active from following execution bar.
@@ -46,6 +75,7 @@ class VisualStrategyBase(PythonStrategy):
 
     advanced_controls=None
     sequence_config=None
+    custom_config=None
 
     def __init__(self):
         super().__init__()
@@ -56,6 +86,14 @@ class VisualStrategyBase(PythonStrategy):
         self.signal_count=0
         self.pending_cycle=None
         self.sequence_state={1:(0,None),-1:(0,None)}
+        self.formula_runtime=formula_program(self.custom_config).make() if self.custom_config else None
+
+    def on_completed_candle(self,candle):
+        if self.formula_runtime is not None:self.formula_runtime.on_completed_candle(candle)
+
+    def custom_pair(self,name):
+        history=self.formula_runtime.custom[name][3]
+        return (history[-2] if len(history)>1 else None,history[-1] if history else None)
 
     @property
     def fixed_point_bracket(self):

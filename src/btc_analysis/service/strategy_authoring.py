@@ -29,7 +29,7 @@ def validate_source(source):
             c=recover_graph(source) if source.startswith("# btc-visual-v1 ") else compile_graph(Graph.model_validate_json(source))
             from .historical import GraphStrategy
             g=GraphStrategy(Graph.model_validate(c["graph"]))
-            out.update(timeframes=[t.seconds for t in g.extra_timeframes()],indicators=[dict(name=s.name,timeframe=s.timeframe.seconds,parameters=to_wire(dict(s.parameters))) for s in g.indicators()])
+            out.update(custom_indicators=g.formula_runtime.custom_definitions if g.formula_runtime is not None else [],timeframes=[t.seconds for t in g.extra_timeframes()],indicators=[dict(name=s.name,timeframe=s.timeframe.seconds,parameters=to_wire(dict(s.parameters))) for s in g.indicators()])
         else:
             p=Program(source);sample=p.make()
             out.update(parameters=list(p.parameters.values()),timeframes=[t.seconds for t in sample.frames],custom_indicators=sample.custom_definitions,

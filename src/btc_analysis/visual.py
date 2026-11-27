@@ -51,7 +51,20 @@ class Indicator(Strict):
         return self
 
 
-Operand=Annotated[Price|Constant|Indicator,Field(discriminator="kind")]
+class CustomOperand(Strict):
+    kind:Literal["custom"]
+    name:Annotated[str,StringConstraints(pattern=r"^[A-Za-z][A-Za-z0-9_]{0,47}$")]
+    timeframe:Literal[60,180,300,900,1800,3600,14400,86400]
+
+
+class CustomFormula(Strict):
+    name:Annotated[str,StringConstraints(pattern=r"^[A-Za-z][A-Za-z0-9_]{0,47}$")]
+    timeframe:Literal[60,180,300,900,1800,3600,14400,86400]
+    lookback:int=Field(ge=1,le=4096)
+    expression:Annotated[str,StringConstraints(min_length=1,max_length=512)]
+
+
+Operand=Annotated[Price|Constant|Indicator|CustomOperand,Field(discriminator="kind")]
 
 
 class Condition(Strict):
@@ -158,6 +171,7 @@ class Graph(Strict):
     stop_loss_pct:DecimalText="1"
     take_profit_pct:DecimalText="2"
     advanced:AdvancedControls|None=None
+    custom_formulas:list[CustomFormula]|None=Field(default=None,min_length=1,max_length=16)
     long_sequence:EntrySequence|None=None
     short_sequence:EntrySequence|None=None
     long_entry:Rule
@@ -179,6 +193,13 @@ class Graph(Strict):
                 raise ValueError(key+" outside supported bounds")
         if self.signal_timeframe%self.execution_timeframe:
             raise ValueError("execution timeframe must divide signal timeframe")
+        custom={d.name:d for d in (self.custom_formulas or [])}
+        if len(custom)!=len(self.custom_formulas or []):raise ValueError("duplicate custom formula name")
+        if custom:
+            from .visual_runtime import formula_program
+            for d in custom.values():
+                if d.timeframe%self.execution_timeframe:raise ValueError("custom timeframe must divide into execution bars")
+            formula_program([d.model_dump() for d in custom.values()])
         specs=set()
         if self.advanced is not None and self.advanced.trailing_atr is not None:
             a=self.advanced.trailing_atr
@@ -193,6 +214,8 @@ class Graph(Strict):
                                 raise ValueError("operand timeframe must divide into execution bars")
                             if cond.op.startswith("cross_") and o.timeframe!=self.signal_timeframe:
                                 raise ValueError("crossing series must use the signal timeframe")
+                        if isinstance(o,CustomOperand) and (o.name not in custom or custom[o.name].timeframe!=o.timeframe):
+                            raise ValueError("custom operand must reference a declared formula with matching timeframe")
                         if isinstance(o,Indicator):
                             specs.add(IndicatorSpec.create(o.name,Timeframe(o.timeframe),o.parameters))
         if len(specs)>64:raise ValueError("too many unique indicators")
@@ -252,6 +275,7 @@ def _params(o):
 def _operand(o):
     if isinstance(o,Constant):return "constant("+repr(o.value)+")"
     if isinstance(o,Price):return "price(ctx, "+str(o.timeframe)+", "+repr(o.field)+")"
+    if isinstance(o,CustomOperand):return "self.custom_pair("+repr(o.name)+")"
     return "indicator(ctx, "+repr(o.name)+", "+str(o.timeframe)+", "+_params(o)+")"
 
 
@@ -273,7 +297,7 @@ def compile_graph(graph:Graph):
     raw=g.model_dump(exclude_none=True)
     packed=json.dumps(raw,sort_keys=True,separators=(",",":"),ensure_ascii=True)
     metadata=base64.urlsafe_b64encode(packed.encode()).decode()
-    specs=set();frames={g.signal_timeframe,g.execution_timeframe}
+    specs=set();frames={g.signal_timeframe,g.execution_timeframe,*(d.timeframe for d in (g.custom_formulas or []))}
     if g.advanced is not None and g.advanced.trailing_atr is not None:
         a=g.advanced.trailing_atr;frames.add(a.timeframe);specs.add(("atr.value",a.timeframe,repr({"period":a.period})))
     for rule in g.rules():
@@ -302,6 +326,9 @@ def compile_graph(graph:Graph):
         # Configuration is generated solely from validated graph data.
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    advanced_controls = "+repr(raw["advanced"]), ""]
+    if g.custom_formulas:
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    custom_config = "+repr(raw["custom_formulas"]), ""]
     if g.sequence_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    sequence_config = "+repr(g.sequence_config()), ""]
