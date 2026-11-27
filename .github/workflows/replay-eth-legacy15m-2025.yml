@@ -1,7 +1,7 @@
-name: ETH legacy 15m 2025 corrected OLHC zero spread
+name: ETH legacy 15m 2025 candle color zero spread
 on:
   push:
-    branches: ['research/eth-legacy15m-2025-open-olhc-20261127']
+    branches: ['research/eth-legacy15m-2025-candle-color-20261127']
     paths: ['scripts/replay_eth_legacy15m_2025.py','.github/workflows/replay-eth-legacy15m-2025.yml']
   workflow_dispatch:
 permissions:
@@ -16,6 +16,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install numpy==2.2.6 pandas==2.2.3
+      - run: python -m py_compile scripts/replay_eth_legacy15m_2025.py
       - run: python scripts/replay_eth_legacy15m_2025.py --output "$RUNNER_TEMP/eth-2025"
       - uses: actions/upload-artifact@v4
         with:

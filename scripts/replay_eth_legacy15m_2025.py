@@ -172,7 +172,11 @@ def replay(t,m,bars,path,spread):
                         p=dict(side=side,entry=ep,i=i,qty=q,entry_fee=fee,cash_before=cash,liq=liq,stop=stop,best=ep,active=False,activation=max(TICK,round(ep*150/80000/TICK)*TICK),distance=max(TICK,round(ep*50/80000/TICK)*TICK))
                         cash=after;observe(last)
         if p:
-            seq=(1,2,3) if path=="OHLC" else (2,1,3)
+            # Bullish: low first; bearish: high first. Doji: nearer extreme first.
+            # Shared trade/mark scenario; candle color is not known at entry.
+            o,h,l,c=a[i]
+            low_first=c>o or (c==o and o-l<=h-o)
+            seq=(2,1,3) if low_first else (1,2,3)
             for k in seq:
                 manage_sample(i,k)
                 if not p:break
@@ -192,9 +196,9 @@ if __name__=="__main__":
     t,m,b=load()
     results=[]
     for spread in (0.,):
-        for path in ("OLHC",)
+        for path in ("COLOR",):
             result,trades=replay(t,m,b,path,spread)
             results.append(result)
             pd.DataFrame(trades).to_csv(args.output/f"trades-{path}-{spread}.csv",index=False)
             print("ETH_2025_RESULT "+json.dumps(result),flush=True)
-    (args.output/"summary.json").write_text(json.dumps(dict(trade_candles=len(t),mark_candles=len(m),assumptions="Portfolio proxy; fixed $100 initial/$10 budget/100x ceiling; 1m sampled trade extremes as proxy fills; OLHC paired mark/trade path; first 1m open entry proxy; no historical quotes or actual funding settlements; fees+GST/30m waiver as paper ledger; December 2024 warmup only.",results=results),indent=2))
+    (args.output/"summary.json").write_text(json.dumps(dict(trade_candles=len(t),mark_candles=len(m),assumptions="Portfolio proxy; fixed $100 initial/$10 budget/100x ceiling; 1m sampled trade extremes as proxy fills; candle-color paired mark/trade path (bullish OLHC, bearish OHLC, doji nearer extreme first, tie low first); first 1m open entry proxy; color is ex-post execution-path heuristic, not a signal; no historical quotes or actual funding settlements; fees+GST/30m waiver as paper ledger; December 2024 warmup only.",results=results),indent=2))
