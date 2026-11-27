@@ -9,7 +9,7 @@ import re
 from collections import deque
 from types import MappingProxyType
 from ..serialization import to_wire
-from ..exit_controls import validate_exit_controls,validate_bracket
+from ..exit_controls import validate_exit_controls,validate_bracket,validate_dynamic_trailing,atr_trailing_spec
 from datetime import datetime
 from decimal import Decimal as D, localcontext
 from hashlib import sha256
@@ -71,7 +71,7 @@ def parameter_number(node,aliases):
 
 def declared_parameter(name,node,aliases):
     if len(node.args)!=3 or node.keywords:reject(node,"parameter(default, minimum, maximum) requires three positional literals")
-    if name in ("signal_seconds","execution_seconds","fixed_point_bracket","trailing_stop_points","profit_lock_points","leverage","exposure"):reject(node,"reserved execution setting; declare a separate strategy parameter")
+    if name in ("signal_seconds","execution_seconds","fixed_point_bracket","trailing_stop_points","profit_lock_points","trailing_stop_pct","trailing_stop_atr","leverage","exposure"):reject(node,"reserved execution setting; declare a separate strategy parameter")
     default,lo,hi=(parameter_number(n,aliases) for n in node.args)
     if not type(default) is type(lo) is type(hi) or not lo<=default<=hi or lo>=hi:reject(node,"parameter default and bounds must have one numeric type and minimum < maximum")
     return dict(name=name,kind="integer" if type(default) is int else "decimal",default=str(to_wire(default)),minimum=str(to_wire(lo)),maximum=str(to_wire(hi)),line=node.lineno)
@@ -234,8 +234,15 @@ class InterpretedStrategy(PythonStrategy):
         self.trailing_stop_points=self.state.get("trailing_stop_points")
         self.profit_lock_points=self.state.get("profit_lock_points")
         validate_exit_controls(bracket,self.trailing_stop_points,self.profit_lock_points)
+        self.trailing_stop_pct=self.state.get("trailing_stop_pct")
+        self.trailing_stop_atr=self.state.get("trailing_stop_atr")
+        validate_dynamic_trailing(bracket,self.trailing_stop_points,self.trailing_stop_pct,self.trailing_stop_atr)
         self.specs=self.invoke("indicators",[]) if "indicators" in program.methods else ()
         if not isinstance(self.specs,tuple) or len(self.specs)>64 or any(type(v) is not IndicatorSpec for v in self.specs):raise ValueError("indicators must return a tuple of SDK specs")
+        atr_spec=atr_trailing_spec(self.trailing_stop_atr)
+        if atr_spec is not None and atr_spec not in self.specs:
+            if len(self.specs)>=64:raise ValueError("too many indicator declarations including ATR trailing")
+            self.specs=(*self.specs,atr_spec)
         extra=self.invoke("extra_timeframes",[]) if "extra_timeframes" in program.methods else ()
         if not isinstance(extra,tuple) or len(extra)>8 or any(type(v) is not Timeframe or v.seconds not in FRAMES for v in extra):raise ValueError("invalid extra_timeframes")
         definitions=self.invoke("custom_indicators",[]) if "custom_indicators" in program.methods else ()
@@ -343,7 +350,7 @@ class InterpretedStrategy(PythonStrategy):
             if self.indicator_mode:reject(target,"custom indicator formulas cannot mutate strategy state")
             if target.attr in RESERVED or target.attr in self.program.methods:reject(target,"reserved state field")
             if target.attr in self.program.parameters:reject(target,"declared parameters are immutable; change the source default")
-            if self.ctx is not None and target.attr in ("signal_seconds","execution_seconds","fixed_point_bracket","trailing_stop_points","profit_lock_points","leverage"):reject(target,"execution configuration is immutable")
+            if self.ctx is not None and target.attr in ("signal_seconds","execution_seconds","fixed_point_bracket","trailing_stop_points","profit_lock_points","trailing_stop_pct","trailing_stop_atr","leverage"):reject(target,"execution configuration is immutable")
             if target.attr not in self.state and len(self.state)>=128:reject(target,"state field limit")
             # Prevent retaining context/host objects; state may retain ordinary
             # numbers, strings, immutable candle snapshots, bounded sequences.

@@ -13,7 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_vali
 from .contracts import Timeframe
 from .indicators import IndicatorSpec
 from .serialization import fingerprint, to_wire
-from .exit_controls import validate_exit_controls
+from .exit_controls import validate_exit_controls,validate_dynamic_trailing
 
 FRAMES=(60,180,300,900,1800,3600,14400,86400)
 DecimalText=Annotated[str,StringConstraints(pattern=r"^-?[0-9]{1,12}(?:\.[0-9]{1,8})?$")]
@@ -88,6 +88,16 @@ class TrailingPoints(Strict):
     activation:DecimalText
     distance:DecimalText
 
+class TrailingPercent(Strict):
+    activation:DecimalText
+    distance:DecimalText
+
+class TrailingATR(Strict):
+    activation:DecimalText
+    timeframe:Literal[60,180,300,900,1800,3600,14400,86400]
+    period:int=Field(ge=1,le=4096)
+    multiplier:DecimalText
+
 class ProfitLockPoints(Strict):
     activation:DecimalText
     locked:DecimalText
@@ -102,6 +112,8 @@ class AdvancedControls(Strict):
     target_points:DecimalText="200"
     target_enabled:bool|None=None
     trailing:TrailingPoints|None=None
+    trailing_percent:TrailingPercent|None=None
+    trailing_atr:TrailingATR|None=None
     profit_lock:ProfitLockPoints|None=None
 
     @model_validator(mode="after")
@@ -116,6 +128,12 @@ class AdvancedControls(Strict):
             validate_exit_controls((Decimal(self.stop_points),Decimal(self.target_points)),
                 (Decimal(self.trailing.activation),Decimal(self.trailing.distance)) if self.trailing is not None else None,
                 (Decimal(self.profit_lock.activation),Decimal(self.profit_lock.locked)) if self.profit_lock is not None else None)
+        if self.trailing_percent is not None or self.trailing_atr is not None:
+            if self.exit_mode!="points":raise ValueError("dynamic trailing requires fixed price-point initial exits")
+            validate_dynamic_trailing((Decimal(self.stop_points),Decimal(self.target_points)),
+                (Decimal(self.trailing.activation),Decimal(self.trailing.distance)) if self.trailing is not None else None,
+                (Decimal(self.trailing_percent.activation),Decimal(self.trailing_percent.distance)) if self.trailing_percent is not None else None,
+                (Decimal(self.trailing_atr.activation),Timeframe(self.trailing_atr.timeframe),self.trailing_atr.period,Decimal(self.trailing_atr.multiplier)) if self.trailing_atr is not None else None)
         return self
 
 
@@ -144,6 +162,10 @@ class Graph(Strict):
         if self.signal_timeframe%self.execution_timeframe:
             raise ValueError("execution timeframe must divide signal timeframe")
         specs=set()
+        if self.advanced is not None and self.advanced.trailing_atr is not None:
+            a=self.advanced.trailing_atr
+            if a.timeframe%self.execution_timeframe:raise ValueError("ATR timeframe must divide into execution bars")
+            specs.add(IndicatorSpec.create("atr.value",Timeframe(a.timeframe),{"period":a.period}))
         for rule in self.rules():
             for group in rule.groups:
                 for cond in group.conditions:
@@ -168,9 +190,11 @@ def canonical_graph(graph:Graph):
     if graph.advanced is not None:
         raw["advanced"]["weekdays_ist"]=sorted(graph.advanced.weekdays_ist)
         for k in ("stop_points","target_points"):raw["advanced"][k]=to_wire(Decimal(raw["advanced"][k]))
-        for key in ("trailing","profit_lock"):
+        for key in ("trailing","profit_lock","trailing_percent"):
             if key in raw["advanced"]:
                 raw["advanced"][key]={k:to_wire(Decimal(value)) for k,value in raw["advanced"][key].items()}
+        if "trailing_atr" in raw["advanced"]:
+            for key in ("activation","multiplier"):raw["advanced"]["trailing_atr"][key]=to_wire(Decimal(raw["advanced"]["trailing_atr"][key]))
     for key in ("exposure_pct","stop_loss_pct","take_profit_pct"):
         raw[key]=to_wire(Decimal(raw[key]))
     for rule in ("long_entry","short_entry","long_exit","short_exit"):
@@ -214,6 +238,8 @@ def compile_graph(graph:Graph):
     packed=json.dumps(raw,sort_keys=True,separators=(",",":"),ensure_ascii=True)
     metadata=base64.urlsafe_b64encode(packed.encode()).decode()
     specs=set();frames={g.signal_timeframe,g.execution_timeframe}
+    if g.advanced is not None and g.advanced.trailing_atr is not None:
+        a=g.advanced.trailing_atr;frames.add(a.timeframe);specs.add(("atr.value",a.timeframe,repr({"period":a.period})))
     for rule in g.rules():
         for group in rule.groups:
             for cond in group.conditions:

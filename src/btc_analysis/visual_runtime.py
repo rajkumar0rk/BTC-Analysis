@@ -68,6 +68,18 @@ class VisualStrategyBase(PythonStrategy):
         return (D(policy["activation"]),D(policy["distance"])) if policy is not None else None
 
     @property
+    def trailing_stop_pct(self):
+        a=self.advanced_controls
+        policy=a.get("trailing_percent") if a is not None else None
+        return (D(policy["activation"]),D(policy["distance"])) if policy is not None else None
+
+    @property
+    def trailing_stop_atr(self):
+        a=self.advanced_controls
+        policy=a.get("trailing_atr") if a is not None else None
+        return (D(policy["activation"]),Timeframe(policy["timeframe"]),policy["period"],D(policy["multiplier"])) if policy is not None else None
+
+    @property
     def profit_lock_points(self):
         a=self.advanced_controls
         policy=a.get("profit_lock") if a is not None else None

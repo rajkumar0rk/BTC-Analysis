@@ -18,7 +18,7 @@ MAX_CANDIDATE_MINUTES=5760
 
 class Axis(BaseModel):
     model_config=ConfigDict(extra="forbid",strict=True)
-    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|python:[A-Za-z][A-Za-z0-9_]*|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked))$",max_length=80)]
+    key:Annotated[str,StringConstraints(pattern=r"^(exposure_pct|stop_loss_pct|take_profit_pct|[a-z_]+\.[a-z_]+@[0-9]+:[a-z_]+|python:[A-Za-z][A-Za-z0-9_]*|advanced:(stop_points|target_points|confirmation_bars|cooldown_bars|trailing\.activation|trailing\.distance|profit_lock\.activation|profit_lock\.locked|trailing_percent\.activation|trailing_percent\.distance|trailing_atr\.activation|trailing_atr\.period|trailing_atr\.multiplier))$",max_length=80)]
     values:list[DecimalText]=Field(min_length=1,max_length=8)
     @model_validator(mode="after")
     def unique(self):
@@ -83,7 +83,10 @@ def variants(graph,search):
                     if "." in name:
                         group,field=name.split(".",1)
                         if not isinstance(a.get(group),dict):raise ValueError("managed exit axis requires enabled policy")
-                        a[group][field]=val
+                        if group=="trailing_atr" and field=="period":
+                            if D(val)!=D(val).to_integral_value():raise ValueError("ATR period must be integer")
+                            a[group][field]=int(D(val))
+                        else:a[group][field]=val
                     else:a[name]=val
                 continue
             name,rest=key.split("@");tf,param=rest.split(":");matched=0

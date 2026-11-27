@@ -19,7 +19,7 @@ from ..contracts import (AssetClass, BacktestConfig, Candle, ClosedTrade, Fill,
 from ..serialization import canonical_bytes, fingerprint
 
 from ..indicators import IndicatorBook, IndicatorSpec
-from ..exit_controls import validate_exit_controls,validate_bracket
+from ..exit_controls import validate_exit_controls,validate_bracket,validate_dynamic_trailing,atr_trailing_spec
 
 from ..margin import (MarginProfile, RiskBar, FundingSettlement, FundingRecord,
     LiquidationRecord, funding_payment, collateral_equity)
@@ -304,10 +304,15 @@ class Simulator:
         self.trailing_policy=getattr(strategy,"trailing_stop_points",None)
         self.lock_policy=getattr(strategy,"profit_lock_points",None)
         validate_exit_controls(getattr(strategy,"fixed_point_bracket",None),self.trailing_policy,self.lock_policy,cfg.instrument.tick_size)
+        self.percent_policy=getattr(strategy,"trailing_stop_pct",None)
+        self.atr_policy=getattr(strategy,"trailing_stop_atr",None)
+        validate_dynamic_trailing(getattr(strategy,"fixed_point_bracket",None),self.trailing_policy,self.percent_policy,self.atr_policy)
+        self.atr_spec=atr_trailing_spec(self.atr_policy)
         self.managed_stop=None
         self.trades=[]; self.curve=[]; self.monthly=[]
         self.peak=cfg.initial_equity; self.dd=ZERO
         self.definitions=getattr(strategy,"indicators",lambda:())()
+        if self.atr_spec is not None and self.atr_spec not in self.definitions:self.definitions=(*self.definitions,self.atr_spec)
         self.indicators=IndicatorBook(self.definitions,MAX_HISTORY)
         self.extra_frames=getattr(strategy,"extra_timeframes",lambda:())()
         if not isinstance(self.extra_frames,tuple) or len(self.extra_frames)>16 or any(not isinstance(t,Timeframe) for t in self.extra_frames):
@@ -495,7 +500,7 @@ class Simulator:
             self.submit(OrderIntent(key,self.cfg.instrument,self.now,side,kind,abs(self.quantity),
                                     reason,limit,trigger,True))
             if key not in self.pending:raise ValueError("fixed-point protective order rejected")
-        if self.trailing_policy is not None or self.lock_policy is not None:
+        if any(policy is not None for policy in (self.trailing_policy,self.lock_policy,self.percent_policy,self.atr_policy)):
             self.managed_stop=(stop_key,fill.price,direction,fill.price)
         # At the entry open, adverse execution slippage may already place
         # the raw trade reference beyond the stop. Check stop first.
@@ -529,6 +534,21 @@ class Simulator:
                 candidate=self.round_price(candidate,Side.SELL if direction>0 else Side.BUY)
                 if direction*(candidate-desired)>0:
                     desired=candidate;reason="trailing_point_stop"
+        if self.percent_policy is not None:
+            activation,distance=self.percent_policy
+            if gain>=entry*activation/100:
+                candidate=self.round_price(best*(1-direction*distance/100),Side.SELL if direction>0 else Side.BUY)
+                if direction*(candidate-desired)>0:
+                    desired=candidate;reason="trailing_percent_stop"
+        if self.atr_policy is not None:
+            activation,tf,period,multiplier=self.atr_policy
+            if gain>=entry*activation/100:
+                values=self.indicators.get("atr.value",tf,{"period":period},1)
+                atr=values[-1] if values else None
+                if atr is not None and atr>0:
+                    candidate=self.round_price(best-direction*atr*multiplier,Side.SELL if direction>0 else Side.BUY)
+                    if direction*(candidate-desired)>0:
+                        desired=candidate;reason="trailing_atr_stop"
         if direction*(desired-old)>0 and desired>0:
             p.intent=replace(p.intent,stop_price=desired,reason=reason,decision_utc=self.now)
             self.log(key,"amended",reason,p.intent)

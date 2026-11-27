@@ -52,6 +52,7 @@ class HistoricalRequest(BaseModel):
 
 def frames(g):
     out={g.signal_timeframe,g.execution_timeframe}
+    if g.advanced is not None and g.advanced.trailing_atr is not None:out.add(g.advanced.trailing_atr.timeframe)
     for r in g.rules():
         for group in r.groups:
             for c in group.conditions:
@@ -78,6 +79,8 @@ class GraphStrategy(VisualStrategyBase):
         self.advanced_controls=g.advanced.model_dump() if g.advanced is not None else None
     def indicators(self):
         specs=set()
+        if self.g.advanced is not None and self.g.advanced.trailing_atr is not None:
+            a=self.g.advanced.trailing_atr;specs.add(IndicatorSpec.create("atr.value",Timeframe(a.timeframe),{"period":a.period}))
         for r in self.g.rules():
             for group in r.groups:
                 for c in group.conditions:
