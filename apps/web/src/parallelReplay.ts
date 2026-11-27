@@ -1,7 +1,7 @@
 /** Bounded batch orchestration. Each worker owns its own Python runtime/cache. */
 import type {Trade} from "./api";
 export type CustomIndicatorSeries={name:string;timeframe:number;total:number;points:{event_utc:string;value:string|null;close:string}[]};
-export type LocalDetails={custom_indicators?:CustomIndicatorSeries[];equity:{event_utc:string;equity:string}[];equity_total:number;closed_trade_total:number;trades:Trade[];evidence:{fill_id:string;bar_open_utc:string;bar_close_utc:string;phase:string;path:string}[]};
+export type LocalDetails={strategy_audit?:{event_utc:string;detail:string}[];strategy_audit_total?:number;custom_indicators?:CustomIndicatorSeries[];equity:{event_utc:string;equity:string}[];equity_total:number;closed_trade_total:number;trades:Trade[];evidence:{fill_id:string;bar_open_utc:string;bar_close_utc:string;phase:string;path:string}[]};
 export type LocalScenario={path:string;bars:number;final_equity:string;fees:string;taxes:string;metrics:Record<string,string|number|null>;details?:LocalDetails;monthly:{month:string;pnl:string;return_pct:string|null;opening_equity?:string;closing_equity?:string}[];yearly?:{year:string;pnl:string;return_pct:string|null}[]};
 export type LocalResult={engine_version:string;source:string;data_sha256:string;graph_sha256:string;result_sha256:string;worst_path:string;scenarios:LocalScenario[];limitations:string[]};
 export type BatchInput={csv:string;symbol:"BTCUSD"|"ETHUSD";settings:Record<string,string>;assume:boolean};

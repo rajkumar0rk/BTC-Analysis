@@ -81,6 +81,7 @@ class VisualStrategyBase(PythonStrategy):
     partial_levels_config=None
     conditional_lock_config=None
     conditional_target_config=None
+    management_config=None
     custom_config=None
 
     def __init__(self):
@@ -157,6 +158,13 @@ class VisualStrategyBase(PythonStrategy):
     def exit_machine_transition(self,ctx,direction,index):return False
     def exit_machine_reset(self,ctx,direction):return False
 
+    def audit(self,ctx,detail):
+        if (self.management_config or {}).get("audit"):ctx.visual_audit(detail)
+
+    def audit_state(self,ctx,family,direction,old,new,cause):
+        if old!=new:
+            self.audit(ctx,f"{family}:{'long' if direction>0 else 'short'}:{old}->{new}:{cause}")
+
     def machine_ready(self,ctx,direction,position_exit=False):
         config=self.exit_machine_config if position_exit else self.machine_config
         states=self.exit_machine_state if position_exit else self.machine_state
@@ -165,11 +173,14 @@ class VisualStrategyBase(PythonStrategy):
         if direction not in (config or {}):return True
         ready,expiry,edges=config[direction]
         state,started=states[direction]
+        family="exit_machine" if position_exit else "entry_machine"
         invalid_position=ctx.position_quantity*direction<=0 if position_exit else ctx.position_quantity!=0
         if invalid_position or reset(ctx,direction):
+            self.audit_state(ctx,family,direction,state,0,"position_reset" if invalid_position else "rule_reset")
             states[direction]=(0,None)
             return False
         if started is not None and self.signal_count-started>expiry:
+            self.audit_state(ctx,family,direction,state,0,"expiry")
             state,started=0,None
         # A single ordered transition per completed signal candle. Reset and
         # position checks take priority. Returning to idle restarts the clock.
@@ -178,6 +189,7 @@ class VisualStrategyBase(PythonStrategy):
                 if source==state and transition(ctx,direction,i):
                     if target==0:started=None
                     elif state==0:started=self.signal_count
+                    self.audit_state(ctx,family,direction,state,target,"transition_"+str(i+1))
                     state=target
                     break
         states[direction]=(state,started)
@@ -191,14 +203,17 @@ class VisualStrategyBase(PythonStrategy):
         index,started=self.sequence_state[direction]
         # Reset always wins, including on the bar of a potential final stage.
         if ctx.position_quantity!=0 or self.sequence_reset(ctx,direction):
+            self.audit_state(ctx,"entry_sequence",direction,index,0,"position_reset" if ctx.position_quantity!=0 else "rule_reset")
             self.sequence_state[direction]=(0,None)
             return False
         if started is not None and self.signal_count-started>expiry:
+            self.audit_state(ctx,"entry_sequence",direction,index,0,"expiry")
             index,started=0,None
         # At most one stage on each completed signal candle. A completed
         # sequence remains armed until fill, expiry, reset or an open position.
         if index<stages and self.sequence_stage(ctx,direction,index):
             if index==0:started=self.signal_count
+            self.audit_state(ctx,"entry_sequence",direction,index,index+1,"stage")
             index+=1
         self.sequence_state[direction]=(index,started)
         return index==stages
@@ -209,15 +224,15 @@ class VisualStrategyBase(PythonStrategy):
         config=(self.conditional_target_config or {}).get(direction)
         if config is not None and self.conditional_target_rule(ctx,direction):
             points,mode=config
-            ctx.adjust_fixed_target(D(points),mode=mode)
+            return ctx.adjust_fixed_target(D(points),mode=mode)
 
     def conditional_lock_rule(self,ctx,direction):return False
 
     def maybe_lock(self,ctx,direction):
         points=(self.conditional_lock_config or {}).get(direction)
         if points is not None and self.conditional_lock_rule(ctx,direction):
-            if isinstance(points,tuple):ctx.tighten_fixed_stop(D(points[0]),cost_adjusted=True)
-            else:ctx.tighten_fixed_stop(D(points))
+            if isinstance(points,tuple):return ctx.tighten_fixed_stop(D(points[0]),cost_adjusted=True)
+            return ctx.tighten_fixed_stop(D(points))
 
     def partial_rule(self,ctx,direction):return False
 
@@ -233,12 +248,12 @@ class VisualStrategyBase(PythonStrategy):
         reason=("visual_long_partial_level_" if direction>0 else "visual_short_partial_level_")+str(index+1)
         self.order(ctx,Side.SELL if direction>0 else Side.BUY,qty,reason,reduce_only=True)
         self.partial_level_pending=reason
+        return True
 
     def maybe_partial(self,ctx,direction):
         levels=(self.partial_levels_config or {}).get(direction)
         if levels is not None:
-            self.maybe_partial_level(ctx,direction,levels)
-            return
+            return self.maybe_partial_level(ctx,direction,levels)
         pct=(self.partial_config or {}).get(direction)
         if pct is None or self.partial_consumed or self.partial_pending or not self.partial_rule(ctx,direction):return
         total=abs(ctx.position_quantity)
@@ -251,6 +266,15 @@ class VisualStrategyBase(PythonStrategy):
         # One request per position; market reduction is eligible at next open.
         # Fail closed after a rejected request rather than issuing duplicates.
         self.partial_pending=True
+        return True
+
+    def manage_position(self,ctx,direction):
+        config=self.management_config or {"priority":("lock","target","partial"),"mode":"all"}
+        actions={"lock":self.maybe_lock,"target":self.maybe_target,"partial":self.maybe_partial}
+        for name in config["priority"]:
+            if actions[name](ctx,direction):
+                self.audit(ctx,f"management:{'long' if direction>0 else 'short'}:{name}:"+("requested" if name=="partial" else "amended"))
+                if config["mode"]=="first_success":break
 
     def on_signal(self,ctx):
         bars=ctx.candles(Timeframe(self.signal_seconds),1)
@@ -269,20 +293,18 @@ class VisualStrategyBase(PythonStrategy):
                 else:self.entry_streak[direction]=0
         if self.exit_machine_config:
             for direction in (1,-1):
-                if q*direction<=0:self.exit_machine_state[direction]=(0,None)
+                if q*direction<=0:
+                    self.audit_state(ctx,"exit_machine",direction,self.exit_machine_state[direction][0],0,"position_reset")
+                    self.exit_machine_state[direction]=(0,None)
         if q>0:
             if self.machine_ready(ctx,1,position_exit=True) and self.long_exit(ctx):self.close_position(ctx,"visual_long_rule_exit")
             else:
-                self.maybe_lock(ctx,1)
-                self.maybe_target(ctx,1)
-                self.maybe_partial(ctx,1)
+                self.manage_position(ctx,1)
             return
         if q<0:
             if self.machine_ready(ctx,-1,position_exit=True) and self.short_exit(ctx):self.close_position(ctx,"visual_short_rule_exit")
             else:
-                self.maybe_lock(ctx,-1)
-                self.maybe_target(ctx,-1)
-                self.maybe_partial(ctx,-1)
+                self.manage_position(ctx,-1)
             return
         if ctx.equity<=0:return
         if a is None:
@@ -307,6 +329,8 @@ class VisualStrategyBase(PythonStrategy):
 
     def on_fill(self,ctx,fill):
         if self.partial_levels_config:
+            if self.partial_level_pending is not None and fill.reason==self.partial_level_pending:
+                self.audit(ctx,"partial_level:filled:"+str(self.partial_level_index+1))
             if ctx.position_quantity==0 or fill.reason in ("visual_long_entry","visual_short_entry"):
                 self.partial_level_index=0;self.partial_level_pending=None
             elif self.partial_level_pending is not None and fill.reason==self.partial_level_pending:
@@ -315,8 +339,10 @@ class VisualStrategyBase(PythonStrategy):
             if ctx.position_quantity==0 or fill.reason in ("visual_long_entry","visual_short_entry"):
                 self.partial_consumed=False;self.partial_pending=False
             elif fill.reason in ("visual_long_partial_exit","visual_short_partial_exit"):
+                self.audit(ctx,"partial_exit:filled")
                 self.partial_consumed=True;self.partial_pending=False
         if self.exit_machine_config and (ctx.position_quantity==0 or fill.reason in ("visual_long_entry","visual_short_entry")):
+            for d,(state,_) in self.exit_machine_state.items():self.audit_state(ctx,"exit_machine",d,state,0,"fill_reset")
             self.exit_machine_state={1:(0,None),-1:(0,None)}
         if self.advanced_controls is not None:
             if fill.reason in ("visual_long_entry","visual_short_entry"):
@@ -324,9 +350,11 @@ class VisualStrategyBase(PythonStrategy):
                 if self.pending_cycle is not None and self.pending_cycle[0]==direction:self.used_cycle[direction]=self.pending_cycle[1]
                 self.pending_cycle=None
                 if self.sequence_config:
+                    for d,(state,_) in self.sequence_state.items():self.audit_state(ctx,"entry_sequence",d,state,0,"entry_fill")
                     self.sequence_state={1:(0,None),-1:(0,None)}
                     for d in self.sequence_config:self.entry_streak[d]=0
                 if self.machine_config:
+                    for d,(state,_) in self.machine_state.items():self.audit_state(ctx,"entry_machine",d,state,0,"entry_fill")
                     self.machine_state={1:(0,None),-1:(0,None)}
                     for d in self.machine_config:self.entry_streak[d]=0
             elif ctx.position_quantity==0:

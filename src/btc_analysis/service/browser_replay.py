@@ -129,6 +129,10 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             evidence=[e for e in wire["execution_evidence"] if e["fill_id"] in ids]
             scenarios[-1]["details"]={"equity":[{"event_utc":x["event_utc"],"equity":x["equity"]} for x in sampled],"equity_total":len(curve),"closed_trade_total":len(wire["closed_trades"]),"trades":trades,"evidence":evidence}
             if indicator_samples[scenario_index]:scenarios[-1]["details"]["custom_indicators"]=indicator_samples[scenario_index]
+            audit=[{"event_utc":x["event_utc"],"detail":x["detail"]} for x in wire["orders"] if x["status"]=="strategy_audit"]
+            if audit:
+                scenarios[-1]["details"]["strategy_audit"]=audit[:500]
+                scenarios[-1]["details"]["strategy_audit_total"]=len(audit)
     return {"engine_version":result.engine_version,"source":"user CSV (unverified provenance)","research_only":True,"data_sha256":h,"graph_sha256":compiled["graph_sha256"],
             "result_sha256":result.result_sha256,"worst_path":result.worst_path,"scenarios":scenarios,"risk":risk_meta,
             "limitations":list(result.limitations)+(["Restricted SDK Python interpreted locally; unsupported syntax or calls fail. No arbitrary Python runtime or external warmup."] if custom else ["No warmup outside CSV; fixed-point protection active on entry minute." if g.advanced is not None and g.advanced.exit_mode=="points" else "No warmup outside CSV; entry candle percentage protection starts on next minute."])}

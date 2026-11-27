@@ -256,6 +256,15 @@ class Context:
         pending.intent=replace(old,limit_price=candidate,reason=reason,decision_utc=s.now)
         s.log(key,"amended",reason,pending.intent)
         return True
+    def visual_audit(self,detail):
+        """Bounded opt-in strategy events in the existing replay event ledger."""
+        s=self._sim
+        if not isinstance(detail,str) or not 1<=len(detail)<=160:
+            raise ValueError("invalid visual audit event")
+        if s.visual_audit_count>=10000:return
+        s.visual_audit_count+=1
+        s.log("__visual_audit_"+str(s.visual_audit_count),"strategy_audit",
+              detail if s.visual_audit_count<10000 else "audit_limit_reached")
     def submit(self, intent): self._sim.submit(intent)
     def cancel(self, intent_id): self._sim.cancel(intent_id)
 
@@ -403,6 +412,7 @@ class Simulator:
         self.risk_mark=None;self.funding=ZERO;self.trade_funding=ZERO;self.iso_adjustment=ZERO
         self.funding_records=[];self.liquidations=[];self.halted=False;self.liquidating=False
         self.pending={}; self.seen=set(); self.orders=[]; self.fills=[]; self.evidence=[]
+        self.visual_audit_count=0
         self.trailing_policy=getattr(strategy,"trailing_stop_points",None)
         self.lock_policy=getattr(strategy,"profit_lock_points",None)
         validate_exit_controls(getattr(strategy,"fixed_point_bracket",None),self.trailing_policy,self.lock_policy,cfg.instrument.tick_size)

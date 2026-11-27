@@ -85,6 +85,7 @@ class GraphStrategy(VisualStrategyBase):
         self.partial_levels_config=g.partial_levels_config()
         self.conditional_lock_config=g.lock_config()
         self.conditional_target_config=g.target_config()
+        self.management_config=g.management.model_dump() if g.management is not None else None
     def indicators(self):
         specs=set()
         if self.g.advanced is not None and self.g.advanced.trailing_atr is not None:

@@ -239,6 +239,17 @@ class ConditionalTarget(Strict):
         return self
 
 
+class ManagementControls(Strict):
+    priority:list[Literal["lock","target","partial"]]=Field(min_length=3,max_length=3)
+    mode:Literal["all","first_success"]="all"
+    audit:bool=False
+
+    @model_validator(mode="after")
+    def check(self):
+        if len(set(self.priority))!=3:raise ValueError("management priority must contain each action exactly once")
+        return self
+
+
 class Graph(Strict):
     schema_version:Literal[1]=1
     signal_timeframe:Literal[60,180,300,900,1800,3600,14400,86400]=900
@@ -262,6 +273,7 @@ class Graph(Strict):
     short_lock:ConditionalLock|None=None
     long_target:ConditionalTarget|None=None
     short_target:ConditionalTarget|None=None
+    management:ManagementControls|None=None
     long_entry:Rule
     short_entry:Rule
     long_exit:Rule
@@ -512,6 +524,9 @@ def compile_graph(graph:Graph):
     if g.target_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    conditional_target_config = "+repr(g.target_config()), ""]
+    if g.management is not None:
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    management_config = "+repr(raw["management"]), ""]
     for name,tf,params in sorted(specs):
         lines.append("            IndicatorSpec.create("+repr(name)+", Timeframe("+str(tf)+"), "+params+"),")
     lines+=["        )","","    def extra_timeframes(self):",

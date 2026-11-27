@@ -1,7 +1,7 @@
 import {useEffect,useState} from "react";
 import type {Api,Catalog,Strategy,Revision} from "./api";
 import {frames,ops,keys,initialGraph,newCondition,newGroup,advancedDefaults,positionFields} from "./visualTypes";
-import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence,CustomFormula,EntryMachine,StateTransition,PartialExit,ConditionalLock,ConditionalTarget} from "./visualTypes";
+import type {Graph,Frame,Operand,Condition,Rule,Group,Compiled,AdvancedControls,EntrySequence,CustomFormula,EntryMachine,StateTransition,PartialExit,ConditionalLock,ConditionalTarget,ManagementControls,ManagementAction} from "./visualTypes";
 const captions={long_entry:"Long entry",short_entry:"Short entry",long_exit:"Long exit",short_exit:"Short exit"};
 const opLabels={gt:">",gte:"≥",lt:"<",lte:"≤",eq:"=",cross_up:"Crosses above",cross_down:"Crosses below"};
 const frameLabel=(n:number)=>n>=86400?"1 day":n>=3600?n/3600+"h":n/60+"m";
@@ -167,6 +167,18 @@ export function ConditionalTargetControls({graph,change,catalog,disabled}:{graph
  })}
  </section>;
 }
+export function ManagementActionControls({graph,change,disabled}:{graph:Graph;change:(g:Graph)=>void;disabled:boolean}){
+ const config=graph.management;
+ const labels:Record<ManagementAction,string>={lock:"Tighten stop",target:"Adjust target",partial:"Partial exit"};
+ const update=(next:ManagementControls|null)=>change({...graph,management:next});
+ return <fieldset className="scenario" disabled={disabled}><legend>Management action priority</legend>
+ <p className="muted">Full rule exits and engine risk protection always have priority. Configure only the optional actions below.</p>
+ <label className="check"><input type="checkbox" checked={!!config} onChange={e=>update(e.target.checked?{priority:["lock","target","partial"],mode:"all",audit:false}:null)}/> Customize management execution</label>
+ {config&&<><label>Execution mode<select value={config.mode} onChange={e=>update({...config,mode:e.target.value as ManagementControls["mode"]})}><option value="all">All successful actions</option><option value="first_success">First successful amendment or partial request</option></select></label>
+ {config.priority.map((action,i)=><div className="rule-actions" key={action}><span>{i+1}. {labels[action]}</span><button type="button" disabled={i===0} onClick={()=>{const priority=[...config.priority];[priority[i-1],priority[i]]=[priority[i],priority[i-1]];update({...config,priority});}}>Move up</button><button type="button" disabled={i===config.priority.length-1} onClick={()=>{const priority=[...config.priority];[priority[i+1],priority[i]]=[priority[i],priority[i+1]];update({...config,priority});}}>Move down</button></div>)}
+ <label className="check"><input type="checkbox" checked={config.audit} onChange={e=>update({...config,audit:e.target.checked})}/> Record bounded strategy state/action audit</label></>}
+ </fieldset>;
+}
 export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Api;strategies:Strategy[];refresh:()=>Promise<void>;report:(e:unknown)=>void;openPython:(r:Revision)=>void}){
  const [graph,setGraph]=useState<Graph>(initialGraph);const [catalog,setCatalog]=useState<Catalog|null>(null);
  const [compiled,setCompiled]=useState<Compiled|null>(null);const [revision,setRevision]=useState<Revision|null>(null);
@@ -182,7 +194,7 @@ export function VisualBuilder({api,strategies,refresh,report,openPython}:{api:Ap
  <label>Strategy name<input value={name} disabled={busy||!!revision} maxLength={100} onChange={e=>setName(e.target.value)}/></label>
  <div className="visual-config"><FrameSelect label="Signal timeframe" value={graph.signal_timeframe} disabled={busy} change={v=>edit({...graph,signal_timeframe:v})}/><FrameSelect label="Execution timeframe" value={graph.execution_timeframe} disabled={busy} change={v=>edit({...graph,execution_timeframe:v})}/>
  {(["exposure_pct","stop_loss_pct","take_profit_pct"] as const).map((k,i)=><label key={k}>{["Equity exposure (%)","Stop loss (%)","Take profit (%)"][i]}<input disabled={busy} value={graph[k]} onChange={e=>edit({...graph,[k]:e.target.value})}/></label>)}</div>
- <CustomFormulaControls graph={graph} change={edit} disabled={busy}/><AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
+ <CustomFormulaControls graph={graph} change={edit} disabled={busy}/><AdvancedVisualControls graph={graph} change={edit} disabled={busy}/><ManagementActionControls graph={graph} change={edit} disabled={busy}/><small>{graph.advanced?.exit_mode==="points"?"Fixed-point protection activates on the entry minute. Percentage fields are inactive.":"Percentage protection activates on the candle after the entry fill callback."} Position size is notional exposure at 1×.</small></section>
  {catalog?<div className="visual-rules"><SequenceControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><StateMachineControls positionExit graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialExitControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><PartialLevelControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><ConditionalLockControls graph={graph} change={edit} catalog={catalog} disabled={busy}/><ConditionalTargetControls graph={graph} change={edit} catalog={catalog} disabled={busy}/>{keys.map(k=><RuleEdit key={k} title={captions[k]} rule={graph[k]} change={r=>edit({...graph,[k]:r})} custom={graph.custom_formulas??[]} catalog={catalog} disabled={busy}/>)}</div>:<section className="panel">Loading SDK catalog…</section>}
  <section className="panel"><div className="head"><h2>Generated Python</h2><div className="rule-actions"><button disabled={busy||!catalog} onClick={()=>void generate()}>Generate Python</button><button className="primary" disabled={busy||!catalog||!name.trim()||stale} onClick={()=>void generate(true)}>Save visual strategy</button>{revision&&<button disabled={busy} onClick={()=>openPython(revision)}>Open saved Python</button>}</div></div>
  {stale&&<p role="alert">Newer, frozen or archived revision. Reopen or clone in the strategy library before saving.</p>}
