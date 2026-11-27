@@ -51,3 +51,6 @@
 .chart-workspace:fullscreen .chart-main,.chart-expanded .chart-main{flex:1}.chart-workspace:fullscreen #chart-native,.chart-expanded #chart-native{height:max(500px,calc(100dvh - 115px))}
 .chart-workspace:fullscreen .chart-topbar,.chart-expanded .chart-topbar{position:sticky;top:0}
 @media(max-width:600px){.chart-main{grid-template-columns:36px minmax(0,1fr)}.chart-sidebar .chart-icon{width:30px;height:34px;padding:5px}.chart-topbar button,.chart-topbar summary{min-height:40px;padding:6px}.chart-topbar strong{flex-basis:100%}.chart-settings-body{position:fixed;top:20vh;right:12px;width:calc(100vw - 24px)}.chart-footer{font-size:10px}#chartInspect{min-height:34px}}
+
+/* One legend per indicator family/parameter group; optional diagnostic in settings. */
+.indicator-control strong{white-space:normal;overflow-wrap:anywhere;font-weight:500}.indicator-control[data-family=supertrend] strong{font-weight:600}.indicator-reference{display:block;margin:0 0 9px 22px;color:#b3a4d1;font-size:11px}.chart-settings-body .indicator-diagnostic{display:flex;align-items:center;gap:6px;margin:0 0 9px 22px;color:#a7b1c2}.indicator-control{max-width:100%}

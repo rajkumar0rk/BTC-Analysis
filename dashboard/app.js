@@ -102,47 +102,126 @@ const indicatorColors=["#f0c36a","#67d4c0","#c5a1ff","#79baff","#fb7785","#f59e0
 // Presentation registry is keyed by indicator output type, never strategy/run ID.
 // It changes only visual styles; declared observations and native frames stay intact.
 function indicatorType(d){return String(d.name).toLowerCase()}
-function indicatorLabel(d){
- const type=indicatorType(d),p=d.parameters||{},period=p.period,frame=d.timeframe_minutes>=60&&d.timeframe_minutes%60===0?d.timeframe_minutes/60+"h":d.timeframe_minutes+"m";
- const known={"ema.value":"EMA","sma.value":"SMA","atr.value":"ATR","rsi.value":"RSI","supertrend.line":"Supertrend","supertrend.direction":"Supertrend direction","adx.value":"ADX","vwap.value":"VWAP"};
- const name=known[type];if(!name)return d.name+" ("+Object.entries(p).map(([k,v])=>k+"="+String(v)).join(", ")+(Object.keys(p).length?", ":"")+frame+")";
- return name+(period!=null?" "+period:"")+(p.multiplier!=null?" × "+p.multiplier:"")+" · "+frame;
+// Only recognized output families are grouped; unknown custom outputs retain
+// independent identities. Never infer or calculate missing outputs.
+const indicatorCatalog={
+ supertrend:{label:"Supertrend",outputs:["line","direction"],primary:"line"},
+ bollinger:{label:"Bollinger Bands",outputs:["middle","upper","lower"],primary:"middle"},
+ donchian:{label:"Donchian Channel",outputs:["middle","upper","lower"],primary:"middle"},
+ macd:{label:"MACD",outputs:["line","signal","histogram"],primary:"line",levels:[0]},
+ stochastic:{label:"Stochastic",outputs:["value","k","d","%k","%d","fast","slow"],primary:"k",levels:[20,50,80],range:[0,100]},
+ stoch:{label:"Stochastic",outputs:["value","k","d","%k","%d","fast","slow"],primary:"k",levels:[20,50,80],range:[0,100]},
+ rsi:{label:"RSI",outputs:["value"],primary:"value",levels:[30,50,70],range:[0,100]},
+ williams:{label:"Williams %R",outputs:["value","r","percent_r"],primary:"value",levels:[-80,-50,-20],range:[-100,0]},
+ williams_r:{label:"Williams %R",outputs:["value","r","percent_r"],primary:"value",levels:[-80,-50,-20],range:[-100,0]},
+ williamsr:{label:"Williams %R",outputs:["value","r","percent_r"],primary:"value",levels:[-80,-50,-20],range:[-100,0]},
+ cci:{label:"CCI",outputs:["value"],primary:"value",levels:[-100,0,100]},
+ ema:{label:"EMA",outputs:["value"],primary:"value"},
+ sma:{label:"SMA",outputs:["value"],primary:"value"},
+ atr:{label:"ATR",outputs:["value"],primary:"value"},
+ adx:{label:"ADX",outputs:["value"],primary:"value"},
+ vwap:{label:"VWAP",outputs:["value"],primary:"value"}
+};
+function indicatorFamily(name){
+ const [family,output,...rest]=String(name).toLowerCase().split(".");
+ return !rest.length&&indicatorCatalog[family]?.outputs.includes(output)?family:null
 }
-function sameIndicatorParams(a,b){return a.timeframe_minutes===b.timeframe_minutes&&JSON.stringify(Object.entries(a.parameters||{}).sort(([x],[y])=>x.localeCompare(y)))===JSON.stringify(Object.entries(b.parameters||{}).sort(([x],[y])=>x.localeCompare(y)))}
+function indicatorLevels(family){return [...(indicatorCatalog[family]?.levels||[])]}
+function parameterEntries(d){return Object.entries(d.parameters||{}).sort(([x],[y])=>x.localeCompare(y))}
+function sameIndicatorParams(a,b){return a.timeframe_minutes===b.timeframe_minutes&&JSON.stringify(parameterEntries(a))===JSON.stringify(parameterEntries(b))}
 function pairedDirection(d,defs){return defs.find(x=>indicatorType(x)==="supertrend.direction"&&sameIndicatorParams(x,d))}
-function indicatorKey(d){return JSON.stringify([d.name,d.timeframe_minutes,Object.entries(d.parameters||{}).sort(([x],[y])=>x.localeCompare(y))])}
+function indicatorKey(d){return JSON.stringify([d.name,d.timeframe_minutes,parameterEntries(d)])}
+function indicatorFrame(d){return d.timeframe_minutes>=60&&d.timeframe_minutes%60===0?d.timeframe_minutes/60+"h":d.timeframe_minutes+"m"}
+function indicatorLabel(d){
+ const type=indicatorType(d),family=indicatorFamily(type),p=d.parameters||{},frame=indicatorFrame(d);
+ if(!family)return d.name+" ("+parameterEntries(d).map(([k,v])=>k+"="+String(v)).join(", ")+(Object.keys(p).length?", ":"")+frame+")";
+ const name=type==="supertrend.direction"?"Supertrend direction":indicatorCatalog[family].label;
+ const params=p.fast!=null&&p.slow!=null&&p.signal!=null?" "+[p.fast,p.slow,p.signal].join(", "):(p.period!=null?" "+p.period:"")+(p.multiplier!=null?" × "+p.multiplier:"");
+ const extras=parameterEntries(d).filter(([k])=>!["period","multiplier","fast","slow","signal"].includes(k)).map(([k,v])=>k+"="+String(v));
+ return name+params+(extras.length?" ("+extras.join(", ")+")":"")+" · "+frame
+}
+function groupIndicators(defs){
+ const groups=new Map();
+ for(const d of defs){
+  const family=indicatorFamily(d.name),type=indicatorType(d);
+  // Supertrend line and direction may be declared in different panels.
+  const key=family?JSON.stringify([family,d.timeframe_minutes,parameterEntries(d),family==="supertrend"?"combined":d.panel]):"custom:"+d.id;
+  let g=groups.get(key);
+  // A second declaration with an identical output cannot overwrite the first.
+  if(g?.outputs.some(o=>indicatorType(o)===type)){g=null}
+  if(!g){g={key:groups.has(key)?key+":"+d.id:key,family,outputs:[]};groups.set(g.key,g)}
+  g.outputs.push(d)
+ }
+ return [...groups.values()].map(g=>{
+  const cfg=indicatorCatalog[g.family],primary=g.outputs.find(d=>indicatorType(d)===g.family+"."+cfg?.primary)||g.outputs[0];
+  const direction=g.family==="supertrend"?g.outputs.find(d=>indicatorType(d)==="supertrend.direction"):null;
+  const helper=direction&&direction!==primary?direction:null;
+  return {...g,primary,helper,label:indicatorLabel(primary),panel:primary.panel,plotted:g.outputs.filter(d=>d!==helper)}
+ })
+}
 function indicatorVisual(d,i,defs){
  const type=indicatorType(d),paired=type==="supertrend.direction"&&defs.some(x=>indicatorType(x)==="supertrend.line"&&sameIndicatorParams(x,d));
- const color=({"ema.value":"#f0b44c","sma.value":"#60a5fa","supertrend.line":"#26a69a","supertrend.direction":"#26a69a","rsi.value":"#b794f4","atr.value":"#60a5fa"})[type]||indicatorColors[i%indicatorColors.length];
+ const color=({"ema.value":"#f0b44c","sma.value":"#60a5fa","supertrend.line":"#26a69a","supertrend.direction":"#26a69a","rsi.value":"#b794f4","atr.value":"#60a5fa","macd.line":"#42a5f5","macd.signal":"#ff9800","macd.histogram":"#26a69a","bollinger.middle":"#f0b44c","bollinger.upper":"#60a5fa","bollinger.lower":"#60a5fa","donchian.middle":"#f0b44c","donchian.upper":"#60a5fa","donchian.lower":"#60a5fa","stochastic.k":"#60a5fa","stochastic.d":"#ff9800"})[type]||indicatorColors[i%indicatorColors.length];
  const pref=indicatorPreferences.get(indicatorKey(d))||{};
  return {visible:pref.visible??!paired,color:pref.color||color,width:pref.width||2,type,paired};
 }
+function visibleIndicatorDefs(groups,all){
+ const out=[];
+ for(const [i,g] of groups.entries()){
+  const style=indicatorVisual(g.primary,i,all);
+  if(!style.visible)continue;
+  for(const [j,d] of g.plotted.entries()){
+   const own=indicatorVisual(d,i+j,all);
+   out.push({...d,panel:g.panel,groupKey:g.key,family:g.family,visual:{...own,width:style.width,visible:true}})
+  }
+  // Diagnostic is opt-in and not a second normal legend item. Ignore old
+  // per-output visibility preferences from the ungrouped UI.
+  if(g.helper&&indicatorPreferences.get(indicatorKey(g.primary))?.diagnostic===true)
+   out.push({...g.helper,panel:"panel",groupKey:g.key+":diagnostic",family:null,visual:{...indicatorVisual(g.helper,i,all),visible:true}})
+ }
+ return out
+}
 function setIndicatorPref(d,patch){const k=indicatorKey(d);indicatorPreferences.set(k,{...indicatorPreferences.get(k),...patch});saveChartPreferences();draw()}
 function saveChartPreferences(){try{localStorage.setItem("btc-chart-ui-v1",JSON.stringify({indicators:[...indicatorPreferences],options:displayOptions}))}catch{}}
-function restoreChartPreferences(){try{const p=JSON.parse(localStorage.getItem("btc-chart-ui-v1")||"{}");if(Array.isArray(p.indicators))for(const [k,v] of p.indicators.slice(0,256)){if(typeof k!=="string"||!v||typeof v!=="object")continue;indicatorPreferences.set(k,{...(typeof v.visible==="boolean"?{visible:v.visible}:{}),...(/^#[0-9a-f]{6}$/i.test(v.color||"")?{color:v.color}:{}),...([1,2,3,4].includes(v.width)?{width:v.width}:{})})}for(const k of Object.keys(displayOptions))if(typeof p.options?.[k]==="boolean")displayOptions[k]=p.options[k]}catch{}}
+function restoreChartPreferences(){try{const p=JSON.parse(localStorage.getItem("btc-chart-ui-v1")||"{}");if(Array.isArray(p.indicators))for(const [k,v] of p.indicators.slice(0,256)){if(typeof k!=="string"||!v||typeof v!=="object")continue;indicatorPreferences.set(k,{...(typeof v.visible==="boolean"?{visible:v.visible}:{}),...(typeof v.diagnostic==="boolean"?{diagnostic:v.diagnostic}:{}),...(/^#[0-9a-f]{6}$/i.test(v.color||"")?{color:v.color}:{}),...([1,2,3,4].includes(v.width)?{width:v.width}:{})})}for(const k of Object.keys(displayOptions))if(typeof p.options?.[k]==="boolean")displayOptions[k]=p.options[k]}catch{}}
 restoreChartPreferences();
 function indicatorValueLabel(d,v){if(!Number.isFinite(v))return "—";if(indicatorType(d)==="supertrend.direction")return v===1?"Bullish":v===-1?"Bearish":fmt(v);return fmt(v)}
-function updateIndicatorLegend(values){for(const [id,{d,value}] of indicatorLegend){const v=values.get(id);value.textContent=indicatorValueLabel(d,v);if(indicatorType(d)==="supertrend.direction"){value.className=v===1?"pos":v===-1?"neg":""}}}
-function renderIndicatorControls(defs){
+function outputLabel(d){const name=indicatorType(d).split(".").at(-1);return ({middle:"Basis",upper:"Upper",lower:"Lower",line:"Line",signal:"Signal",histogram:"Hist",k:"%K",d:"%D"})[name]||name}
+function updateIndicatorLegend(values){
+ for(const {group:g,value,swatch} of indicatorLegend.values()){
+  if(g.helper){
+   const side=values.get(g.helper.id),state=side===1?"Bullish":side===-1?"Bearish":"Direction unavailable";
+   value.textContent=indicatorValueLabel(g.primary,values.get(g.primary.id))+" · "+state;
+   value.className=side===1?"pos":side===-1?"neg":"";
+   swatch.style.background=side===1?"#26a69a":side===-1?"#ef5350":"#8492a6";
+  }else{
+   value.textContent=g.plotted.length===1?indicatorValueLabel(g.primary,values.get(g.primary.id)):g.plotted.map(d=>outputLabel(d)+" "+indicatorValueLabel(d,values.get(d.id))).join(" · ");
+   value.className=""
+  }
+ }
+}
+function renderIndicatorControls(groups,defs){
  const host=$("indicatorValues");host.replaceChildren();indicatorLegend=new Map();
- for(const [i,d] of defs.entries()){
-  const visual=indicatorVisual(d,i,defs),row=document.createElement("span");row.className="indicator-control"+(visual.visible?"":" indicator-hidden");
-  const toggle=document.createElement("button");toggle.type="button";toggle.className="indicator-eye";toggle.textContent=visual.visible?"◉":"○";toggle.title=(visual.visible?"Hide ":"Show ")+indicatorLabel(d);toggle.setAttribute("aria-label",toggle.title);toggle.setAttribute("aria-pressed",String(visual.visible));toggle.onclick=()=>setIndicatorPref(d,{visible:!visual.visible});
+ for(const [i,g] of groups.entries()){
+  const d=g.primary,visual=indicatorVisual(d,i,defs),row=document.createElement("span");row.className="indicator-control"+(visual.visible?"":" indicator-hidden");row.dataset.family=g.family||"custom";
+  const toggle=document.createElement("button");toggle.type="button";toggle.className="indicator-eye";toggle.textContent=visual.visible?"◉":"○";toggle.title=(visual.visible?"Hide ":"Show ")+g.label;toggle.setAttribute("aria-label",toggle.title);toggle.setAttribute("aria-pressed",String(visual.visible));toggle.onclick=()=>setIndicatorPref(d,{visible:!visual.visible});
   const swatch=document.createElement("span");swatch.className="indicator-swatch";swatch.style.background=visual.color;
-  const label=document.createElement("span");label.textContent=indicatorLabel(d);label.title=d.name+" · "+JSON.stringify(d.parameters||{});
-  const value=document.createElement("strong");value.textContent="—";indicatorLegend.set(d.id,{d,value});row.append(toggle,swatch,label,value);host.append(row);
+  const label=document.createElement("span");label.textContent=g.label;label.title=g.outputs.map(x=>x.name).join(", ")+" · "+JSON.stringify(d.parameters||{});
+  const value=document.createElement("strong");value.textContent="—";indicatorLegend.set(g.key,{group:g,value,swatch});row.append(toggle,swatch,label,value);host.append(row);
  }
 }
 function renderIndicatorSettings(defs){
- const host=$("indicatorSettings");host.replaceChildren();
- for(const [i,d] of defs.entries()){
-  const visual=indicatorVisual(d,i,defs),row=document.createElement("div");row.className="indicator-setting";
-  const label=document.createElement("label"),enabled=document.createElement("input");enabled.type="checkbox";enabled.checked=visual.visible;enabled.onchange=()=>setIndicatorPref(d,{visible:enabled.checked});label.append(enabled,document.createTextNode(indicatorLabel(d)));
-  const color=document.createElement("input");color.type="color";color.value=visual.color;color.setAttribute("aria-label","Color "+indicatorLabel(d));color.disabled=visual.type==="supertrend.line"&&!!pairedDirection(d,defs);color.title=color.disabled?"Uses recorded bullish/bearish direction":"Line color";color.onchange=()=>setIndicatorPref(d,{color:color.value});
-  const width=document.createElement("select");width.setAttribute("aria-label","Line width "+indicatorLabel(d));options(width,[1,2,3,4].map(n=>[String(n),n+" px"]));width.value=String(visual.width);width.onchange=()=>setIndicatorPref(d,{width:Number(width.value)});
-  row.append(label,color,width);host.append(row)
+ const host=$("indicatorSettings");host.replaceChildren();const groups=groupIndicators(defs);
+ for(const [i,g] of groups.entries()){
+  const d=g.primary,visual=indicatorVisual(d,i,defs),row=document.createElement("div");row.className="indicator-setting";
+  const label=document.createElement("label"),enabled=document.createElement("input");enabled.type="checkbox";enabled.checked=visual.visible;enabled.onchange=()=>setIndicatorPref(d,{visible:enabled.checked});label.append(enabled,document.createTextNode(g.label));
+  const color=document.createElement("input");color.type="color";color.value=visual.color;color.setAttribute("aria-label","Color "+g.label);color.disabled=!!g.helper;color.title=color.disabled?"Uses recorded bullish/bearish direction":"Primary output color";color.onchange=()=>setIndicatorPref(d,{color:color.value});
+  const width=document.createElement("select");width.setAttribute("aria-label","Line width "+g.label);options(width,[1,2,3,4].map(n=>[String(n),n+" px"]));width.value=String(visual.width);width.onchange=()=>setIndicatorPref(d,{width:Number(width.value)});
+  row.append(label,color,width);host.append(row);
+  if(g.helper){const diagnostic=document.createElement("label"),check=document.createElement("input");diagnostic.className="indicator-diagnostic";check.type="checkbox";check.checked=indicatorPreferences.get(indicatorKey(d))?.diagnostic===true;check.onchange=()=>setIndicatorPref(d,{diagnostic:check.checked});diagnostic.append(check,document.createTextNode("Show "+g.label+" direction diagnostic"));host.append(diagnostic)}
+  const levels=indicatorLevels(g.family);if(levels.length){const info=document.createElement("small");info.className="indicator-reference";info.textContent="Display guides: "+levels.slice().reverse().join(" / ");host.append(info)}
  }
- if(!defs.length)host.textContent="No indicator definitions available for this result.";
+ if(!groups.length)host.textContent="No indicator definitions available for this result.";
 }
 function sampleIndicator(d,rows,cutoff){
  let j=-1;return rows.map(r=>{const end=Math.min(r[8]+60,cutoff);while(j+1<d.points.length&&d.points[j+1][0]<=end)j++;const v=j>=0&&end-d.points[j][0]<d.timeframe_minutes*60?d.points[j][1]:null;return [r[0],Number.isFinite(v)?v:null]})
@@ -162,17 +241,26 @@ function createNativeChart(defs){
  const lib=window.LightweightCharts;
  if(!lib||typeof lib.createChart!=="function")throw Error("TradingView Lightweight Charts bundle missing; run scripts/prepare_dashboard_chart.sh");
  if(chart)chart.remove();seriesById=new Map();priceLines=[];markers=null;
- const host=$("chart-native");host.style.setProperty("--chart-height",(440+defs.filter(d=>d.panel==="panel").length*145)+"px");
+ const host=$("chart-native");host.style.setProperty("--chart-height",(440+new Set(defs.filter(d=>d.panel==="panel").map(d=>d.groupKey)).size*160)+"px");
  chart=lib.createChart(host,{autoSize:true,layout:{background:{type:"solid",color:"#131722"},textColor:"#a7b1c2",fontSize:12,attributionLogo:true,panes:{enableResize:true,separatorColor:"#303849",separatorHoverColor:"#53617a"}},grid:{vertLines:{color:"#242b38",visible:displayOptions.grid},horzLines:{color:"#242b38",visible:displayOptions.grid}},crosshair:{mode:lib.CrosshairMode.Normal,vertLine:{color:"#758096",width:1,style:lib.LineStyle.Dashed,labelBackgroundColor:"#364152"},horzLine:{color:"#758096",width:1,style:lib.LineStyle.Dashed,labelBackgroundColor:"#364152"}},rightPriceScale:{borderColor:"#26364a",minimumWidth:80},timeScale:{borderColor:"#26364a",timeVisible:true,secondsVisible:false,rightOffset:3,barSpacing:10,minBarSpacing:2,fixLeftEdge:false,fixRightEdge:false},handleScroll:{mouseWheel:true,pressedMouseMove:true,horzTouchDrag:true,vertTouchDrag:false},handleScale:{axisPressedMouseMove:true,mouseWheel:true,pinch:true},kineticScroll:{mouse:true,touch:true}});
  candleSeries=chart.addSeries(lib.CandlestickSeries,{upColor:"#26a69a",downColor:"#ef5350",borderVisible:false,wickUpColor:"#26a69a",wickDownColor:"#ef5350",priceFormat:{type:"price",precision:2,minMove:.01}});
- let pane=0;
- for(const [i,d] of defs.entries()){
-  const visual=d.visual,panel=d.panel==="panel"?++pane:0,stepLine=visual.type==="supertrend.line"||visual.type==="supertrend.direction";
-  const opts={title:indicatorLabel(d),color:visual.color,lineWidth:visual.width,lineType:stepLine?lib.LineType.WithSteps:lib.LineType.Simple,priceLineVisible:false,lastValueVisible:true,crosshairMarkerVisible:true,priceFormat:{type:"price",precision:2,minMove:.01}};
-  if(visual.type==="rsi.value"){opts.autoscaleInfoProvider=()=>({priceRange:{minValue:0,maxValue:100}})}
-  const s=chart.addSeries(lib.LineSeries,opts,panel);seriesById.set(d.id,s);
-  if(visual.type==="rsi.value")for(const value of [30,50,70])s.createPriceLine({price:value,color:value===50?"#626d82":"#8272a6",lineWidth:1,lineStyle:value===50?lib.LineStyle.Dotted:lib.LineStyle.Dashed,axisLabelVisible:true,title:String(value)});
-  if(visual.type==="supertrend.direction")s.createPriceLine({price:0,color:"#526075",lineWidth:1,lineStyle:lib.LineStyle.Dotted,axisLabelVisible:false,title:""});
+ let pane=0;const panesByGroup=new Map(),guidesApplied=new Set();
+ for(const d of defs){
+  const visual=d.visual;
+  if(d.panel==="panel"&&!panesByGroup.has(d.groupKey))panesByGroup.set(d.groupKey,++pane);
+  const panel=d.panel==="panel"?panesByGroup.get(d.groupKey):0,stepLine=visual.type==="supertrend.line"||visual.type==="supertrend.direction";
+  const cfg=indicatorCatalog[d.family],levels=indicatorLevels(d.family),hist=visual.type==="macd.histogram";
+  const opts={title:indicatorLabel(d)+(d.family&&["bollinger","donchian","macd","stochastic","stoch"].includes(d.family)?" · "+outputLabel(d):""),color:visual.color,priceLineVisible:false,lastValueVisible:true,priceFormat:{type:"price",precision:2,minMove:.01}};
+  if(!hist)Object.assign(opts,{lineWidth:visual.width,lineType:stepLine?lib.LineType.WithSteps:lib.LineType.Simple,crosshairMarkerVisible:true});
+  else opts.base=0;
+  if(cfg?.range)opts.autoscaleInfoProvider=()=>({priceRange:{minValue:cfg.range[0],maxValue:cfg.range[1]}});
+  else if(levels.length)opts.autoscaleInfoProvider=original=>{const a=original();if(!a?.priceRange)return a;return {...a,priceRange:{minValue:Math.min(a.priceRange.minValue,...levels),maxValue:Math.max(a.priceRange.maxValue,...levels)}}};
+  const series=chart.addSeries(hist?lib.HistogramSeries:lib.LineSeries,opts,panel);seriesById.set(d.id,series);
+  if(panel>0&&!guidesApplied.has(d.groupKey)){
+   for(const [i,value] of levels.entries()){const middle=levels.length===1||i===Math.floor(levels.length/2);series.createPriceLine({price:value,color:middle?"#65738a":"#9a80c7",lineWidth:1,lineStyle:middle?lib.LineStyle.Dotted:lib.LineStyle.Dashed,axisLabelVisible:true,title:levels.length===1?"Zero":middle?"Middle":i===0?"Lower":"Upper"})}
+   if(visual.type==="supertrend.direction")series.createPriceLine({price:0,color:"#526075",lineWidth:1,lineStyle:lib.LineStyle.Dotted,axisLabelVisible:false,title:""});
+   guidesApplied.add(d.groupKey)
+  }
  }
  markers=lib.createSeriesMarkers(candleSeries,[]);
  chart.timeScale().subscribeVisibleLogicalRangeChange(()=>{queueDrawings();if(!chartUpdating){updateRangeLabel();queueHistory()}});
@@ -184,17 +272,17 @@ function createNativeChart(defs){
   const values=new Map();for(const [id,lookup] of sampledIndicators)values.set(id,lookup.get(param.time));
   updateIndicatorLegend(values);$("chartInspect").textContent=pieces.filter(Boolean).join("  ·  ")
  });
- const panes=chart.panes();if(panes.length>1){for(const p of panes.slice(1))p.setHeight(145)}
+ const panes=chart.panes();if(panes.length>1){for(const p of panes.slice(1))p.setHeight(160)}
 }
 function updateRangeLabel(){const range=chart?.timeScale().getVisibleRange();if(!range)return;const label=t=>new Date(Number(t)*1000).toISOString().slice(0,16).replace("T"," ");$("chartRange").textContent="View: "+label(range.from)+" – "+label(range.to)+" UTC · "+historyDays.size+" loaded day"+(historyDays.size===1?"":"s")}
 let sampledIndicators=new Map();
 function draw(){
- const declared=trade?recordedIndicators(run,trade):[],legacy=trade&&!Array.isArray(run?.indicator_definitions)?legacySignalValues(trade):[],show=$("overlay").checked,defs=show?declared.map((d,i)=>({...d,visual:indicatorVisual(d,i,declared)})).filter(d=>d.visual.visible):[];
+ const declared=trade?recordedIndicators(run,trade):[],legacy=trade&&!Array.isArray(run?.indicator_definitions)?legacySignalValues(trade):[],show=$("overlay").checked,groups=groupIndicators(declared),defs=show?visibleIndicatorDefs(groups,declared):[];
  updateChartHeading();
  $("chartFrame").textContent=chartFrame+"m chart · recorded 1m execution · UTC";
  $("indicatorInfo").textContent=trade?(declared.length?(run.indicator_provenance?.method==="pinned_input_replay_snapshot_verified"?"Strategy indicators · reproduced from pinned original inputs and verified against recorded signal values.":"Declared strategy indicators · recorded data only; missing series are not reconstructed."):Array.isArray(run?.indicator_definitions)?"No indicators declared for this strategy.":legacy.length?"Legacy archive: recorded signal fields only; indicator declarations and time series unavailable.":"Legacy archive: no indicator declarations or recorded indicator fields."):"";
- $("chartHistory").textContent=historyStatus;$("chartInspect").textContent="Hover a candle to inspect OHLC and indicator values.";renderIndicatorControls(show?declared:[]);if($("chart-settings").open)renderIndicatorSettings(declared);
- const structure=JSON.stringify(defs.map(d=>[d.id,d.name,d.panel,d.timeframe_minutes,d.parameters,d.visual]));
+ $("chartHistory").textContent=historyStatus;$("chartInspect").textContent="Hover a candle to inspect OHLC and indicator values.";renderIndicatorControls(show?groups:[],declared);if($("chart-settings").open)renderIndicatorSettings(declared);
+ const structure=JSON.stringify(defs.map(d=>[d.id,d.name,d.panel,d.groupKey,d.family,d.timeframe_minutes,d.parameters,d.visual]));
  const previous=chart&&!resetRange&&chartFrameRendered===chartFrame?visibleTimes():null;
  chartUpdating=true;
  try{
@@ -213,7 +301,7 @@ function draw(){
   latestIndicatorValues=new Map(declared.map(d=>[d.id,sampledIndicators.get(d.id)?.get(nativeRows.at(-1)?.[0])]));
   for(const d of defs){
    const lookup=sampledIndicators.get(d.id),direction=d.visual.type==="supertrend.line"?pairedDirection(d,declared):null,dir=direction?sampledIndicators.get(direction.id):null;
-   const data=nativeTimes.map(time=>{const v=lookup.get(time);if(!Number.isFinite(v))return {time};const side=dir?.get(time)??(d.visual.type==="supertrend.direction"?v:null);return {time,value:v,...(side===1?{color:"#26a69a"}:side===-1?{color:"#ef5350"}:{})}});
+   const data=nativeTimes.map(time=>{const v=lookup.get(time);if(!Number.isFinite(v))return {time};const side=dir?.get(time)??(d.visual.type==="supertrend.direction"?v:d.visual.type==="macd.histogram"?Math.sign(v):null);return {time,value:v,...(side===1?{color:"#26a69a"}:side===-1?{color:"#ef5350"}:direction?{color:"#8492a6"}:{})}});
    seriesById.get(d.id).setData(data);
   }
   updateIndicatorLegend(latestIndicatorValues);

@@ -84,6 +84,20 @@ const assert=require("node:assert/strict");
   const research=page.locator("#supertrendStrategies button").filter({hasText:"Replay"}).first();await research.click();await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));assert.equal(await page.locator("#netUnit").innerText(),"Net account USD");
   const style=await page.evaluate(()=>{const defs=[{id:"st",name:"supertrend.line",timeframe_minutes:15,panel:"price",parameters:{period:10,multiplier:3}},{id:"dir",name:"supertrend.direction",timeframe_minutes:15,panel:"panel",parameters:{multiplier:3,period:10}},{id:"rsi",name:"rsi.value",timeframe_minutes:15,panel:"panel",parameters:{period:14}}];return {paired:pairedDirection(defs[0],defs)?.id,hidden:!indicatorVisual(defs[1],1,defs).visible,label:indicatorLabel(defs[2]),direction:indicatorValueLabel(defs[1],-1)}});
   assert.deepEqual(style,{paired:"dir",hidden:true,label:"RSI 14 · 15m",direction:"Bearish"});
+  const grouped=await page.evaluate(()=>{
+    const def=(id,name,panel="panel",parameters={period:14},timeframe_minutes=15)=>({id,name,panel,parameters,timeframe_minutes});
+    const defs=[def("st","supertrend.line","price",{period:10,multiplier:3}),def("dir","supertrend.direction","panel",{multiplier:3,period:10}),def("other","supertrend.line","price",{period:20,multiplier:3}),def("m","bollinger.middle","price"),def("u","bollinger.upper","price"),def("l","bollinger.lower","price"),def("mac","macd.line"),def("sig","macd.signal"),def("hist","macd.histogram"),def("rsi","rsi.value"),def("rsi2","rsi.value","panel",{period:14},60),def("unknown","my_custom.signal")];
+    const groups=groupIndicators(defs),visible=visibleIndicatorDefs(groups,defs);
+    const host=document.createElement("div");const old=$("indicatorValues").innerHTML;
+    renderIndicatorControls(groups,defs);updateIndicatorLegend(new Map([["st",123],["dir",-1],["m",100],["u",110],["l",90]]));
+    const stText=$("indicatorValues").querySelector('[data-family="supertrend"]').textContent;
+    const legendCount=$("indicatorValues").children.length;
+    draw();
+    return {groups:groups.map(g=>g.plotted.map(d=>d.id)),panes:visible.filter(d=>d.panel==="panel").map(d=>d.groupKey),dirHidden:!visible.some(d=>d.id==="dir"),stText,legendCount,levels:["rsi","stochastic","williams","cci","macd","atr"].map(indicatorLevels)}
+  });
+  assert.deepEqual(grouped.groups,[["st"],["other"],["m","u","l"],["mac","sig","hist"],["rsi"],["rsi2"],["unknown"]]);
+  assert.equal(grouped.legendCount,7);assert.equal(grouped.dirHidden,true);assert.ok(grouped.stText.includes("Bearish"));assert.equal(new Set(grouped.panes).size,4);
+  assert.deepEqual(grouped.levels,[[30,50,70],[20,50,80],[-80,-50,-20],[-100,0,100],[0],[]]);
   await page.locator("#chart-settings summary").click();await page.locator("#chart-setting-grid").uncheck();assert.equal(await page.evaluate(()=>displayOptions.grid),false);await page.locator("#chart-setting-grid").check();await page.locator("#chart-settings summary").click();
   const generic=await page.evaluate(()=>{
     const r={id:"arbitrary-future-run",indicator_definitions:[{id:"custom1",name:"My custom formula",timeframe_minutes:30,panel:"panel",parameters:{lookback:17}}]};
