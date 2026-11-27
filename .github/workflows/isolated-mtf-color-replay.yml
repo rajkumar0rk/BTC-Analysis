@@ -3,7 +3,7 @@ on:
   push:
     branches: [research/mtf-color-replay-20261127]
 permissions:
-  contents: read
+  contents: write
 jobs:
   replay:
     runs-on: ubuntu-latest
@@ -212,6 +212,10 @@ jobs:
           assert all(t["side"]*(t["signal_context"]["signal_close"]-t["signal_context"]["signal_open"])>0 for t in confirmed.ledger)
           assert all(s.result()["target_exits"]==0 for s in states.values())
           assert count==963030
+          assert confirmed.result()["trades"]==313 and confirmed.result()["wins"]==128
+          assert abs(confirmed.result()["net"]+36.55162461913736)<1e-8
+          assert abs(confirmed.result()["max_drawdown_pct"]-44.05037845872604)<1e-8
+          assert abs(sum(x["net_usd"] for x in confirmed.ledger)-confirmed.result()["net"])<1e-8
           results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"Reclaim only; 15m Supertrend; previous and current ST directions equal; strict cross beyond frozen pre-signal EMA20 and close back; both require bullish signal candle for long and bearish for short, excludes doji; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; both variants progressive: 1R fee-adjusted breakeven, 1.5R 25% MFE, 2R 40% MFE, 3R onwards existing RSI 40/60/80% of MFE; all stages require MFE >= fee-adjusted breakeven; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; Both variants bypass volume and volatility entry filters; Multi removes prior close side restriction while retaining actual signal candle crossing and close back above/below pre-signal EMA; ATR remains diagnostic and Supertrend still uses ATR10","results":{k:s.result() for k,s in states.items()}}
           # Compact output permits all results to be retrieved without truncation.
           print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
@@ -230,3 +234,14 @@ jobs:
         with:
           name: reclaim-progressive-multi-results
           path: reclaim-progressive-multi/
+      - name: Archive verified multi-candle replay
+        run: |
+          dest=analysis/btc15m_reclaim_progressive_multi_20261127
+          mkdir -p "$dest"
+          cp reclaim-progressive-multi/{summary,ledger}.json "$dest/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$dest/summary.json" "$dest/ledger.json"
+          git commit -m 'Archive exact 313-trade multi-candle Reclaim replay'
+          git push origin HEAD:research/mtf-color-replay-20261127
+          git rev-parse HEAD
