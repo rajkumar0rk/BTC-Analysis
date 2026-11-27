@@ -24,11 +24,21 @@ class AdvancedVisualTests(unittest.TestCase):
         self.assertEqual(a,recover_graph(a["source"]))
         ns={};exec(compile(a["source"],"<trusted-compiler-fixture>","exec"),ns)
         d=bars([(1000,1001,999,1000),(1000,1001,999,1000),(1000,1025,985,1000),(1000,1001,999,1000)])
-        x=run(cfg(),lambda:GraphStrategy(g),d)
-        y=run(cfg(),ns["VisualStrategy"],d)
+        # Fixture lot size is one whole unit. At 20% exposure and a
+        # 1000-point entry, 1000 equity would round quantity down to zero.
+        # Fund two units explicitly so this actually exercises the bracket.
+        config=cfg(initial_equity=D(10000))
+        x=run(config,lambda:GraphStrategy(g),d)
+        y=run(config,ns["VisualStrategy"],d)
         self.assertEqual(x.scenarios,y.scenarios)
         for s in x.scenarios:
             self.assertEqual(len(s.closed_trades),1)
+            self.assertEqual(len(s.fills),2)
+            self.assertEqual(s.fills[0].quantity,D(2))
+            self.assertEqual(s.fills[0].price,D(1000))
+            self.assertEqual(s.fills[0].event_utc,T+timedelta(minutes=2))
+            self.assertEqual(s.fills[-1].event_utc,T+timedelta(minutes=3))
+            self.assertEqual(s.open_quantity,D(0))
             self.assertEqual(s.fills[-1].reason,"fixed_point_target" if s.path=="O-H-L-C" else "fixed_point_stop")
             self.assertEqual(s.fills[-1].price,D(1020 if s.path=="O-H-L-C" else 990))
 
