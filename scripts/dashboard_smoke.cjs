@@ -22,7 +22,15 @@ const assert=require("node:assert/strict");
   await page.locator("#supertrendStrategies button").filter({hasText:"Details"}).first().click();
   assert.ok(await page.locator("#supertrendMonthly").innerText().then(t=>t.includes("Exact monthly series")));
   assert.ok(await page.locator("#details").innerText().then(t=>t.includes("Why entered")&&t.includes("Why exited")));
-  assert.ok(requests.filter(x=>x.includes("/candles/")).length<=1);
+  assert.ok(requests.filter(x=>x.includes("/candles/")).length<=4);
+  const before=await page.locator("#cursor").innerText();
+  await page.locator("#timeframe").selectOption("15");
+  assert.ok((await page.locator("#chartFrame").innerText()).startsWith("15m chart"));
+  assert.equal((await page.locator("#cursor").innerText()).split(" · ")[0],before.split(" · ")[0]);
+  const agg=await page.evaluate(()=>aggregate([[0,1,3,1,2,5],[60,2,5,2,4,7],[120,4,4,3,3,2]],3,true));
+  assert.deepEqual(agg,[[0,1,5,1,3,14,3,0,120]]);
+  assert.equal(await page.evaluate(()=>aggregate([[0,1,3,1,2,5],[120,4,4,3,3,2]],3,true).length),0);
+  await page.locator("#timeframe").selectOption("1");
   if(remote){assert.ok(requests.some(x=>/^https:\/\/raw\.githubusercontent\.com\/rajkumar0rk\/BTC-Analysis\/[a-f0-9]{40}\/data\/index\.json$/.test(x)),"remote pinned index");assert.ok(requests.every(x=>x.startsWith("https://raw.githubusercontent.com/")),"no bundled data");await page.locator("#refreshData").click();await page.locator("#ledger tr").first().waitFor();}
   await page.locator("#play").click();await page.waitForTimeout(250);await page.locator("#full").click();
   await page.locator("#showCoverage").click();await page.locator("#archiveCoverage table").waitFor();
@@ -36,6 +44,8 @@ const assert=require("node:assert/strict");
     await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));
   }
   const research=page.locator("#supertrendStrategies button").filter({hasText:"Replay"}).first();await research.click();await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));assert.equal(await page.locator("#netUnit").innerText(),"Net account USD");
+  const exact=await page.locator("#run option").evaluateAll(opts=>opts.find(o=>o.value==="st-rsi-reclaim-3r-tight-color")?.value);
+  if(exact){await page.locator("#run").selectOption(exact);await page.waitForFunction(()=>document.querySelector("#indicatorInfo").textContent.includes("ST ATR10"));await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"));assert.equal(await page.locator("#timeframe").inputValue(),"15");assert.ok((await page.locator("#indicatorValues").innerText()).includes("EMA20"));await page.locator("#timeframe").selectOption("60");assert.ok((await page.locator("#chartFrame").innerText()).startsWith("60m chart"));}
   await page.setViewportSize({width:390,height:844});
   const nav=page.getByRole("navigation",{name:"Workspace navigation"});
   assert.equal(await nav.getByRole("link").count(),3);
