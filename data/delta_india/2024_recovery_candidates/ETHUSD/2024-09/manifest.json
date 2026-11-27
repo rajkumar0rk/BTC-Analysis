@@ -1,0 +1,72 @@
+{
+  "symbol": "ETHUSD",
+  "month": "2024-09",
+  "source": "https://api.india.delta.exchange/v2/history/candles",
+  "source_timestamp_label": "as_returned_by_API",
+  "funding_is_settlement": false,
+  "series": [
+    {
+      "series": "trade_1m",
+      "month": "2024-09",
+      "utc_start": "2024-09-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-10-01T00:00:00+00:00",
+      "expected": 43200,
+      "seed_rows": 0,
+      "observed": 43198,
+      "recovered": 43198,
+      "missing": 2,
+      "gaps_exclusive": [
+        [
+          1725148800,
+          1725148860
+        ],
+        [
+          1726012800,
+          1726012860
+        ]
+      ],
+      "requests": 39,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "trade_1m.csv.gz",
+      "sha256": "08f53fe5e3a7f1376cdfc01b4830c1c3f69f384ce4ccba22217b7906f2b74a19"
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-09",
+      "utc_start": "2024-09-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-10-01T00:00:00+00:00",
+      "expected": 43200,
+      "seed_rows": 0,
+      "observed": 43200,
+      "recovered": 43200,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 36,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "mark_1m.csv.gz",
+      "sha256": "a52bcfe565ea97d7471e04490f21c6d1caef3e41f45fde66aee4992c1b611c7b"
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-09",
+      "utc_start": "2024-09-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-10-01T00:00:00+00:00",
+      "expected": 720,
+      "seed_rows": 0,
+      "observed": 720,
+      "recovered": 720,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 1,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "funding_1h.csv.gz",
+      "sha256": "15e64b9a8f948e2f15cfcea0318df86d04c727210af9b9bb775470b37e52af45"
+    }
+  ]
+}

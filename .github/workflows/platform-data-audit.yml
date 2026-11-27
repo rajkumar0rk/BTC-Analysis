@@ -28,7 +28,10 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r requirements/platform-linux.lock && python -m pip install --no-deps '.[data]' && python -m pip check
       - name: Actual retained 2024 risk archive validation
-        run: python scripts/test_stage_repository_history.py
+        run: |
+          python scripts/test_stage_repository_history.py
+          python scripts/validate_recovered_2024.py data/delta_india/2024_recovery_candidates
+          git diff --exit-code -- data/delta_india/2024_recovery_candidates/coverage.json
       - name: Data engine unit tests
         run: python -m unittest discover -s tests/platform -p test_data_engine.py -v
       - name: Ingest actual BTC and ETH source partitions and verify streaming parity

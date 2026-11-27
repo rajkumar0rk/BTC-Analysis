@@ -1,0 +1,85 @@
+{
+  "symbol": "ETHUSD",
+  "month": "2024-03",
+  "source": "https://api.india.delta.exchange/v2/history/candles",
+  "source_timestamp_label": "as_returned_by_API",
+  "funding_is_settlement": false,
+  "series": [
+    {
+      "series": "trade_1m",
+      "month": "2024-03",
+      "utc_start": "2024-03-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-04-01T00:00:00+00:00",
+      "expected": 44640,
+      "seed_rows": 0,
+      "observed": 44627,
+      "recovered": 44627,
+      "missing": 13,
+      "gaps_exclusive": [
+        [
+          1710907200,
+          1710907260
+        ],
+        [
+          1711483200,
+          1711483740
+        ],
+        [
+          1711771200,
+          1711771260
+        ],
+        [
+          1711843200,
+          1711843320
+        ]
+      ],
+      "requests": 43,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "trade_1m.csv.gz",
+      "sha256": "c1f38d25e5f9946f2b245883759e4d22872f23ebf4c4bd264328e3c31d833a04"
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-03",
+      "utc_start": "2024-03-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-04-01T00:00:00+00:00",
+      "expected": 44640,
+      "seed_rows": 0,
+      "observed": 44080,
+      "recovered": 44080,
+      "missing": 560,
+      "gaps_exclusive": [
+        [
+          1711339200,
+          1711372800
+        ]
+      ],
+      "requests": 39,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "mark_1m.csv.gz",
+      "sha256": "429627afa2ef22a657975371cc47124158e04b1b87794629b7c4e87b64e36cea"
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-03",
+      "utc_start": "2024-03-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-04-01T00:00:00+00:00",
+      "expected": 744,
+      "seed_rows": 0,
+      "observed": 744,
+      "recovered": 744,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 1,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "funding_1h.csv.gz",
+      "sha256": "a3064c03144163f165fe101e6719df3f9d1c2f26f4eccbe43bba671be41faf7e"
+    }
+  ]
+}

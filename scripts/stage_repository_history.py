@@ -117,7 +117,42 @@ def stage_risk(root,history,symbol):
         obj={"symbol":symbol,"resolution":"1m" if step==60 else "1h","timestamp_unit":"unix_seconds_utc","timestamp_label":"as_returned_by_API","requested_through_utc":dt(stamp(m["requested_end_exclusive_utc"])-1).date().isoformat(),"partitions":entries,"series":kind,"note":"Funding observations, not settlements." if step==3600 else "Native mark candles, not executable prices."}
         if symbol=="BTCUSD":obj["retained_2024_source"]="cda60e8e4aa0808469db5d07304dbaed52e190bb; original source hashes checked; UTC month normalization; no synthetic rows"
         (out/"manifest.json").write_text(json.dumps(obj,sort_keys=True,separators=(",",":"))+"\n")
+def stage_recovered_2024(root,history):
+    # Import lazily: validator imports source_rows and seed helpers.
+    from validate_recovered_2024 import verify
+    source=root/"data/delta_india/2024_recovery_candidates"
+    report=verify(source)
+    if report!=json.loads((source/"coverage.json").read_text()):raise ValueError("recovery coverage report mismatch")
+    if any(x["overlap_conflicts"] or x["request_error_count"] for x in report):raise ValueError("unresolved recovery errors/conflicts")
+    for symbol in ("BTCUSD","ETHUSD"):
+        for kind,step in (("trade_1m",60),("mark_1m",60),("funding_1h",3600)):
+            out=history/symbol if kind=="trade_1m" else history/symbol/kind
+            manifest=out/"manifest.json";m=json.loads(manifest.read_text())
+            old={x["file"]:x for x in m["partitions"]}
+            for month_dir in sorted((source/symbol).iterdir()):
+                month=month_dir.name
+                doc=json.loads((month_dir/"manifest.json").read_text())
+                meta=next(x for x in doc["series"] if x["series"]==kind)
+                raw,rows=source_rows(month_dir/meta["file"],meta["sha256"],meta["observed"],step=step,signed=kind=="funding_1h",blank_volume=kind!="trade_1m")
+                a,b=month_bounds(month);name=month+".csv.gz"
+                old[name]=entry(name,a,b,len(rows),meta["sha256"],step)
+                (out/(meta["sha256"]+".bin")).write_bytes(raw)
+            m["partitions"]=sorted(old.values(),key=lambda x:x["utc_start"])
+            m["recovery_2024_source"]="22abca13e92cc8472aa3ed9395b79b57f7083d43; workflow 45859162161; original BTC rows preserved; UTC missing intervals retained"
+            if kind=="trade_1m":m["note"]+=" Recovered native UTC 2024 data published; remaining gaps are not filled."
+            selected=[x for x in m["partitions"] if x["file"].startswith("2024-")]
+            expected={"BTCUSD":{"trade_1m":497409,"mark_1m":527040,"funding_1h":8784},"ETHUSD":{"trade_1m":466154,"mark_1m":475297,"funding_1h":7932}}
+            if len(selected)!=12 or sum(x["observed_candles"] for x in selected)!=expected[symbol][kind] or sum(x["expected_minutes"] for x in selected)!=366*86400//step:
+                raise ValueError("unexpected published 2024 coverage: "+symbol+" "+kind)
+            # Delete only generated blobs no longer referenced by this manifest.
+            hashes={x["sha256_gzip"] for x in m["partitions"]}
+            for blob in out.glob("*.bin"):
+                if blob.stem not in hashes:blob.unlink()
+            manifest.write_text(json.dumps(m,sort_keys=True,separators=(",",":"))+"\\n")
+            print("Published",symbol,kind,"2024 rows",sum(x["observed_candles"] for x in selected),"missing",sum(x["missing_minutes"] for x in selected))
+
 def stage_extended_history(root,history):
     stage_retained_trade(root,history)
     for symbol in ("BTCUSD","ETHUSD"):stage_risk(root,history,symbol)
-    print("Staged normalized retained BTC 2024 trade/mark/funding observations and checked 2025–2026 risk series.")
+    stage_recovered_2024(root,history)
+    print("Staged validated BTC/ETH 2024 recovery and 2025–2026 risk series.")

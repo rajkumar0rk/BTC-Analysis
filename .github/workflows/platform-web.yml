@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['apps/web/**', 'scripts/prepare_browser_python.py','scripts/stage_repository_history.py','data/delta_india/*/1m/**','data/delta_india/*/institutional/history/**','data/delta_india/*/institutional/history_manifest.json','data/delta_india/BTCUSD/2024_verified_archive/**', 'src/btc_analysis/**', 'pyproject.toml', 'requirements/platform-linux.lock', '.github/workflows/platform-web.yml']
+    paths: ['apps/web/**', 'scripts/prepare_browser_python.py','scripts/stage_repository_history.py','data/delta_india/*/1m/**','data/delta_india/*/institutional/history/**','data/delta_india/*/institutional/history_manifest.json','data/delta_india/BTCUSD/2024_verified_archive/**','data/delta_india/2024_recovery_candidates/**','scripts/validate_recovered_2024.py','scripts/recover_delta_2024.py', 'src/btc_analysis/**', 'pyproject.toml', 'requirements/platform-linux.lock', '.github/workflows/platform-web.yml']
   pull_request:
-    paths: ['apps/web/**', 'scripts/prepare_browser_python.py','scripts/stage_repository_history.py','data/delta_india/*/1m/**','data/delta_india/*/institutional/history/**','data/delta_india/*/institutional/history_manifest.json','data/delta_india/BTCUSD/2024_verified_archive/**', 'src/btc_analysis/**', 'pyproject.toml', 'requirements/platform-linux.lock', '.github/workflows/platform-web.yml']
+    paths: ['apps/web/**', 'scripts/prepare_browser_python.py','scripts/stage_repository_history.py','data/delta_india/*/1m/**','data/delta_india/*/institutional/history/**','data/delta_india/*/institutional/history_manifest.json','data/delta_india/BTCUSD/2024_verified_archive/**','data/delta_india/2024_recovery_candidates/**','scripts/validate_recovered_2024.py','scripts/recover_delta_2024.py', 'src/btc_analysis/**', 'pyproject.toml', 'requirements/platform-linux.lock', '.github/workflows/platform-web.yml']
 permissions:
   contents: read
 jobs:

@@ -1,0 +1,76 @@
+{
+  "symbol": "ETHUSD",
+  "month": "2024-07",
+  "source": "https://api.india.delta.exchange/v2/history/candles",
+  "source_timestamp_label": "as_returned_by_API",
+  "funding_is_settlement": false,
+  "series": [
+    {
+      "series": "trade_1m",
+      "month": "2024-07",
+      "utc_start": "2024-07-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-08-01T00:00:00+00:00",
+      "expected": 44640,
+      "seed_rows": 0,
+      "observed": 44635,
+      "recovered": 44635,
+      "missing": 5,
+      "gaps_exclusive": [
+        [
+          1720224000,
+          1720224060
+        ],
+        [
+          1720656000,
+          1720656120
+        ],
+        [
+          1721520000,
+          1721520120
+        ]
+      ],
+      "requests": 45,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "trade_1m.csv.gz",
+      "sha256": "367852dc8e8910097b917d2a080c2d8c443a7c2e67707107f8d4901e8a1984d1"
+    },
+    {
+      "series": "mark_1m",
+      "month": "2024-07",
+      "utc_start": "2024-07-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-08-01T00:00:00+00:00",
+      "expected": 44640,
+      "seed_rows": 0,
+      "observed": 44640,
+      "recovered": 44640,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 38,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "mark_1m.csv.gz",
+      "sha256": "023c6a47e626994b82012ea0a6ddfb440b612d79e296261dc143d64cd6f298cd"
+    },
+    {
+      "series": "funding_1h",
+      "month": "2024-07",
+      "utc_start": "2024-07-01T00:00:00+00:00",
+      "utc_end_exclusive": "2024-08-01T00:00:00+00:00",
+      "expected": 744,
+      "seed_rows": 0,
+      "observed": 744,
+      "recovered": 744,
+      "missing": 0,
+      "gaps_exclusive": [],
+      "requests": 1,
+      "request_errors": [],
+      "overlap_conflicts": 0,
+      "synthetic_rows": 0,
+      "file": "funding_1h.csv.gz",
+      "sha256": "e3f97abb402126633736aa8eccf4a50ae483eda389b14a11398044b6f5491e38"
+    }
+  ]
+}
