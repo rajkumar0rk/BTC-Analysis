@@ -1,0 +1,61 @@
+name: Build verified Cloud Supertrend EMA20 Python scripts
+on:
+  push:
+    branches: [research/st-mtf-ema20-fixed-rr-20261127]
+    paths: [.github/workflows/build-cloud-supertrend-python.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'pydantic>=2,<3'
+      - name: Generate and recover every script using actual SDK
+        env:
+          PYTHONPATH: src
+        run: |
+          python - <<'PY'
+          from btc_analysis.visual import Graph,compile_graph,recover_graph
+          from decimal import Decimal as D
+          from pathlib import Path
+          import ast, hashlib
+          out=Path("cloud-python");out.mkdir()
+          pairs=[(100,200),(100,300),(100,400),(200,400),(200,600),(200,800),(300,600),(300,900),(300,1200),(400,800),(400,1200),(500,1000),(500,1500)]
+          def const(n):return {'kind':'constant','value':str(n)}
+          def price(t,f):return {'kind':'price','timeframe':t,'field':f}
+          def ind(t,n,p):return {'kind':'indicator','timeframe':t,'name':n,'parameters':p}
+          def cond(a,op,b):return {'left':a,'op':op,'right':b}
+          def rule(cs):return {'enabled':True,'mode':'any','groups':[{'mode':'all','conditions':cs}]}
+          def pct(x):return format(D(x)/D(62500)*100,'f').rstrip('0').rstrip('.')
+          for mode in ('touch','reclaim'):
+            t=60 if mode=='touch' else 900
+            ema=ind(900,'ema.value',{'period':20})
+            def side(s):
+              cs=[cond(ind(tf,'supertrend.direction',{'multiplier':'3','period':10}),'eq',const(s)) for tf in (900,3600)]
+              cs += [cond(price(t,'open'),'gte' if s==1 else 'lte',ema),cond(price(t,'low'),'lte',ema),cond(price(t,'high'),'gte',ema)]
+              if mode=='reclaim':cs += [cond(price(t,'close'),'gt' if s==1 else 'lt',ema)]
+              return rule(cs)
+            off={'enabled':False,'mode':'any','groups':[]}
+            for sl,tp in pairs:
+              g={'schema_version':1,'signal_timeframe':t,'execution_timeframe':60,'exposure_pct':'50','stop_loss_pct':pct(sl),'take_profit_pct':pct(tp),'long_entry':side(1),'short_entry':side(-1),'long_exit':off,'short_exit':off}
+              compiled=compile_graph(Graph.model_validate(g))
+              source=compiled['source']
+              assert recover_graph(source)==compiled
+              ast.parse(source)
+              p=out/f'ema20_{mode}_sl{sl}_tp{tp}.py'
+              p.write_bytes(source.encode())
+              assert recover_graph(p.read_text())==compiled
+              print(p.name,hashlib.sha256(p.read_bytes()).hexdigest())
+          assert len(list(out.glob('*.py')))==26
+          print('PASS: all 26 actual compiler and recovery round trips')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Cloud_Supertrend_EMA20_Verified_Python
+          path: cloud-python/*.py
+          if-no-files-found: error
