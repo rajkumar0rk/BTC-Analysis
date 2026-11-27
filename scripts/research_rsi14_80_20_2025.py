@@ -32,6 +32,9 @@ def signal(prev, current):
         return -1
     return 0
 
+def opposite_color(direction, opening, closing):
+    return closing < opening if direction == 1 else closing > opening
+
 def candles():
     manifest = json.loads((ROOT / "manifest.json").read_text())
     parts = [p for p in manifest["partitions"] if p["file"].startswith("2025-")]
@@ -55,32 +58,36 @@ def candles():
 def run():
     assert signal(D(80), D(81)) == 1 and signal(D(20), D(19)) == -1
     assert signal(D(81), D(82)) == 0 and signal(D(19), D(18)) == 0
+    assert opposite_color(1, D(10), D(9)) and opposite_color(-1, D(9), D(10))
+    assert not opposite_color(1, D(10), D(10)) and not opposite_color(-1, D(10), D(10))
     book = IndicatorBook((spec("rsi", TF, period=14),), history_limit=2)
     recorder = IndicatorRecorder(book)
     trades, group = [], []
-    pos, pending, prev = None, None, None
+    pos, pending, prev, setup, exit_pending = None, None, None, None, False
     last = None
     def close_position(t, price, reason):
         nonlocal pos
-        side, entry, ep, rsi = pos
+        side, entry, ep, rsi, trigger, confirm_rsi, confirm_open, confirm_close = pos
         gross = side * (price - ep)
         fee = (ep + price) * FEE
-        trades.append(dict(entry_utc=dt(entry).isoformat(), trigger_utc=dt(entry).isoformat(),
+        trades.append(dict(entry_utc=dt(entry).isoformat(), trigger_utc=dt(trigger).isoformat(),
             exit_utc=dt(t).isoformat(), side=side, entry_price=ep, exit_price=price,
-            entry_reason="RSI14 crosses above 80" if side == 1 else "RSI14 crosses below 20",
+            entry_reason="RSI14 crosses above 80, then bearish candle" if side == 1 else "RSI14 crosses below 20, then bullish candle",
             exit_reason=reason, net_points=gross-fee, gross_points=gross, fee_points=fee,
-            assumed_slippage_points=0, signal_context={"rsi14":rsi},
+            assumed_slippage_points=0, signal_context={"rsi14":rsi,"confirmation_rsi14":confirm_rsi,"confirmation_utc":dt(entry).isoformat(),"confirmation_open":confirm_open,"confirmation_close":confirm_close},
             indicator_values={"indicator_0":rsi}))
         pos = None
     for t,o,h,l,c,v in candles():
         last = float(c)
+        if exit_pending:
+            assert pos is not None
+            close_position(t, float(o), "Opposite RSI crossing")
+            exit_pending = False
         if pending is not None:
-            direction, trigger, value = pending
-            assert t == trigger
-            if pos and pos[0] != direction:
-                close_position(t, float(o), "Opposite RSI crossing")
-            if pos is None:
-                pos = (direction, t, float(o), value)
+            direction, trigger, value, confirm, confirm_rsi, co, cc = pending
+            assert t == confirm and confirm >= trigger + 900
+            assert pos is None and opposite_color(direction, co, cc)
+            pos = (direction, t, float(o), value, trigger, confirm_rsi, co, cc)
             pending = None
         group.append((o,h,l,c,v))
         if len(group) == 15:
@@ -91,8 +98,23 @@ def run():
             recorder.completed(candle)
             current = book.get("rsi", TF, {"period":14})[-1]
             direction = signal(prev, current)
-            if direction and end < END:
-                pending = (direction, end, float(current))
+            if end < END:
+                if direction:
+                    if pos is not None and pos[0] != direction:
+                        exit_pending = True
+                    if pos is None or exit_pending:
+                        # A contrary crossing supersedes any unfilled setup.
+                        # A repeated same-direction crossing does not postpone it.
+                        if setup is None or setup[0] != direction:
+                            setup = (direction, end, float(current))
+                    else:
+                        setup = None
+                if setup is not None:
+                    d, trigger, value = setup
+                    if end > trigger and opposite_color(d, candle.open, candle.close):
+                        assert pos is None or exit_pending
+                        pending = (d, trigger, value, end, float(current), float(candle.open), float(candle.close))
+                        setup = None
             prev = current
             group.clear()
     assert not group and last is not None
@@ -117,9 +139,9 @@ def run():
         unit="price points", start_utc=dt(START).isoformat(), end_utc=dt(END).isoformat(),
         execution_timeframe_minutes=1, signal_timeframe_minutes=15,
         costs="0.05% taker per side + 18% GST; no Scalper Offer waiver, zero slippage, funding not modeled; unleveraged fixed price-point accounting; no liquidation model.",
-        variants=[dict(key="opposite-cross", name="15M RSI14 80/20 momentum | opposite crossing exit",
+        variants=[dict(key="opposite-color-entry", name="15M RSI14 80/20 momentum | wait for opposite candle",
             parameters=dict(rsi_period=14, long_threshold=80, short_threshold=20, exit="opposite crossing", 
-                signal="completed 15m", execution="next 1m open", trading_days="all", stop_loss=None, take_profit=None),
+                signal="completed 15m", entry_confirmation="first subsequent opposite-color 15m candle; doji ignored; contrary crossing replaces setup", execution="next 1m open", trading_days="all", stop_loss=None, take_profit=None),
             summary=summary, trades=trades)], recorder=recorder,
         data_provenance=dict(manifest=str(ROOT/"manifest.json"), manifest_sha256=hashlib.sha256((ROOT/"manifest.json").read_bytes()).hexdigest(),
             input_minutes=END//60-START//60, timestamp_label="assumed open UTC", warmup="first 15 completed 15m candles in 2025"))
