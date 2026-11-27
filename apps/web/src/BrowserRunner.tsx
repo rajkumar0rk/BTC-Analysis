@@ -13,11 +13,13 @@ import {RunComparison} from "./RunComparison";
 import {ResultVisuals} from "./ResultVisuals";
 import {SpreadCalibration} from "./SpreadCalibration";
 import {pythonStrategyStarter} from "./pythonStrategyStarter";
+import {StrategyValidation,useStrategyValidation} from "./StrategyValidation";
 const rule=(op:string)=>({enabled:true,groups:[{conditions:[{left:{kind:"price",timeframe:300,field:"close"},op,right:{kind:"indicator",timeframe:300,name:"ema.value",parameters:{period:3}}}]}]});
 const off={enabled:false,groups:[]};
 const starter=JSON.stringify({signal_timeframe:300,execution_timeframe:60,exposure_pct:"20",stop_loss_pct:"1",take_profit_pct:"2",long_entry:rule("cross_up"),long_exit:rule("cross_down"),short_entry:off,short_exit:off},null,2);
 export function BrowserRunner({api,strategies=[],initialGraph}:{api?:Api;strategies?:Strategy[];initialGraph?:string}){
  const [graph,setGraph]=useState(initialGraph??starter),[csv,setCsv]=useState(""),[file,setFile]=useState(""),[symbol,setSymbol]=useState<SymbolName>("BTCUSD"),[assume,setAssume]=useState(false),[sid,setSid]=useState("");
+ const validation=useStrategyValidation(graph,s=>{setGraph(s);setResult(null);});
  const [settings,setSettings]=useState({initial_equity:"100",maker_bps:"2",taker_bps:"5",tax_rate:"0.18",slippage_bps:"0",tick_size:"0.1",lot_size:"0.001",multiplier:"1"});
  const [status,setStatus]=useState("Ready"),[busy,setBusy]=useState(false),[progress,setProgress]=useState(0),[error,setError]=useState(""),[result,setResult]=useState<Result|null>(null),[timing,setTiming]=useState("");
  const [studyRisk,setStudyRisk]=useState<StudyRiskSnapshot|null>(null);
@@ -74,7 +76,7 @@ export function BrowserRunner({api,strategies=[],initialGraph}:{api?:Api;strateg
   }catch(e){stop();setStatus("Failed");setError(String(e));}
  }
  return <section className="panel"><h2>Local Python backtest</h2><p className="notice">Runs visual rules and compatible handwritten SDK Python on this device. No API call for execution. 1× only, two modeled OHLC paths, no funding or liquidation. CSV runs up to 31 days; repository long runs up to 1098 days subject to published coverage and device resources. No external warmup. Handwritten Python uses a restricted interpreter (no arbitrary imports, I/O or host execution).</p>
- <fieldset disabled={busy||historyBusy||batchBusy||runBusy||riskBusy||studyBusy}><label>Local instrument<select value={symbol} onChange={e=>{readSeq.current++;setSymbol(e.target.value as SymbolName);setCsv("");setFile("");setAssume(false);setResult(null);setCacheStats(null);setCacheNote("");}}><option>BTCUSD</option><option>ETHUSD</option></select></label>
+ <fieldset disabled={busy||historyBusy||batchBusy||runBusy||riskBusy||studyBusy||validation.busy}><label>Local instrument<select value={symbol} onChange={e=>{readSeq.current++;setSymbol(e.target.value as SymbolName);setCsv("");setFile("");setAssume(false);setResult(null);setCacheStats(null);setCacheNote("");}}><option>BTCUSD</option><option>ETHUSD</option></select></label>
  <h3>Existing historical data (Delta India)</h3><p className="muted">Load the published repository snapshot directly. UTC date range is inclusive. Load existing historical data for up to 31 days, or use the continuous long backtest below for up to 1098 days. Coverage and gaps are checked, not filled.</p>
  <div className="table-wrap"><table aria-label="Published historical coverage"><thead><tr><th>Series</th><th>From UTC</th><th>Through UTC</th><th>Rows</th><th>Reported gaps</th></tr></thead><tbody>{coverage.map(x=><tr key={x.kind}><td>{x.kind==="trade"?"Trade 1m":x.kind==="mark"?"Mark 1m":"Funding 1h observations"}</td><td>{x.from}</td><td>{x.through}</td><td>{x.rows.toLocaleString()}</td><td>{x.missing.toLocaleString()}</td></tr>)}</tbody></table></div>{coverageError&&<p className="muted">Coverage unavailable: {coverageError}</p>}<p className="muted">Funding candles are observations, not verified settlement events. No historical spread/tick data inferred.</p>
  <div className="visual-config"><label>History from (UTC)<input type="date" value={historyFrom} onChange={e=>setHistoryFrom(e.target.value)}/></label><label>History to (UTC)<input type="date" value={historyTo} onChange={e=>setHistoryTo(e.target.value)}/></label></div>
@@ -92,6 +94,7 @@ export function BrowserRunner({api,strategies=[],initialGraph}:{api?:Api;strateg
  <label className="check"><input type="checkbox" checked={remember} onChange={e=>setRemember(e.target.checked)}/> Remember completed experiments on this device (optional).</label>
  <button className="primary" disabled={!csv||!assume||graph.length===0||graph.length>65536} onClick={()=>run()}>Run local Python</button>
  <button className="primary" disabled={!assume||!historyFrom||!historyTo||graph.length===0||graph.length>65536} onClick={()=>run(true)}>Run continuous multi-year backtest</button><p className="muted">Long replay uses the selected repository dates, not imported CSV. Downloads compressed partitions; no monthly resets. Summary and event hashes only, no full trade ledger, batch, leverage or saved experiment support in this mode. Keep this tab open; desktop recommended for long runs.</p></fieldset>
+ <StrategyValidation source={graph} controller={validation} disabled={busy||historyBusy||batchBusy||runBusy||riskBusy||studyBusy}/>
  {historyBusy&&archiveAbort.current&&<button onClick={()=>archiveAbort.current?.abort()}>Cancel history download</button>}
  {busy&&<button onClick={()=>{stop();setStatus("Cancelled");}}>Cancel local run</button>}
  <p role="status">{status} · {progress}% {timing}</p>{cacheStats&&<p className="muted" aria-label="Cache statistics">Candle cache: {cacheStats.candle_hit?"hit":"miss"} · Indicator series hits: {cacheStats.indicator_hits} · misses: {cacheStats.indicator_misses} · reused updates: {cacheStats.indicator_updates_reused}</p>}{error&&<pre role="alert" className="error" style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}>{error}</pre>}

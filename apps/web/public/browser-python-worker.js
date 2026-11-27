@@ -62,6 +62,17 @@ self.onmessage=async({data:m})=>{
  const t=performance.now();
  try{
   if(m.action==="long_repository"||m.action==="repository_study"){await longReplay(m,t);return;}
+  if(m.action==="validate_strategy"||m.action==="apply_parameters"){
+   if(typeof m.graph!=="string"||new TextEncoder().encode(m.graph).length>65536)throw Error("Invalid bounded source");
+   runtime??=start();const py=await runtime;
+   py.globals.set("authoring_json",JSON.stringify({source:m.graph,values:m.values??{}}));
+   try{
+    py.runPython("from btc_analysis.service.strategy_authoring import validate_source, apply_parameters");
+    const result=py.runPython(m.action==="validate_strategy"?"json.dumps(validate_source(json.loads(authoring_json)['source']),allow_nan=False)":"json.dumps(apply_parameters(**json.loads(authoring_json)),allow_nan=False)");
+    self.postMessage({id:m.id,status:"done",result:JSON.parse(result)});
+   }finally{py.globals.delete("authoring_json");}
+   return;
+  }
   if(m.action==="visual_catalog"){
    runtime??=start();const py=await runtime;
    const result=py.runPython("from btc_analysis.indicators import CATALOG\nfrom btc_analysis.serialization import to_wire\njson.dumps(to_wire(dict(sdk_version='1',execution_allowed=False,indicators=[dict(name=k,defaults=v[0],outputs=v[1]) for k,v in CATALOG.items()])))");

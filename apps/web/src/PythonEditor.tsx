@@ -9,6 +9,8 @@ import type {Catalog,Diagnostic} from "./api";
 
 self.MonacoEnvironment={getWorker:()=>new EditorWorker()};
 const sdkItems=[
+ ["parameter","parameter(20, 2, 100)","Declare an editable integer class parameter; defaults and bounds must be literals"],
+ ["weekday_ist","weekday_ist(ctx.now_utc)","IST weekday, Monday=0"],
  ["ctx.candles","ctx.candles(Timeframe(60), 20)","Completed candle history"],
  ["ctx.indicator","ctx.indicator(\"ema\", Timeframe(900), {\"period\": 20})","Declared indicator value"],
  ["ctx.indicator_history","ctx.indicator_history(\"ema\", Timeframe(900), {\"period\": 20}, limit=2)","Completed indicator history"],

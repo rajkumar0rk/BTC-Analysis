@@ -36,3 +36,19 @@ test("standalone Python worker matches native Python and supports warm rerun",as
  await expect(page.getByRole("alert")).toBeVisible({timeout:10000});
  expect(apiCalls).toEqual([]);
 });
+
+test("handwritten SDK strategy validation and editable parameters",async({page})=>{
+ test.setTimeout(180000);
+ await page.goto("/");
+ await page.getByRole("button",{name:"Open local Python runner"}).click();
+ const source=page.getByLabel("Local visual source");
+ await source.fill("from decimal import Decimal as D\nfrom btc_analysis.strategy import PythonStrategy\nclass Strategy(PythonStrategy):\n    period = parameter(20, 2, 50)\n    def on_signal(self, ctx):\n        pass\n");
+ await page.getByRole("button",{name:"Validate strategy source"}).click();
+ await expect(page.getByText("Source validation passed",{exact:true})).toBeVisible({timeout:125000});
+ await page.getByLabel("Parameter period").fill("30");
+ await page.getByRole("button",{name:"Apply parameter values to source"}).click();
+ await expect(source).toHaveValue(/parameter\(30, 2, 50\)/,{timeout:125000});
+ await source.fill("import os");
+ await page.getByRole("button",{name:"Validate strategy source"}).click();
+ await expect(page.getByText("Source validation failed",{exact:true})).toBeVisible({timeout:125000});
+});

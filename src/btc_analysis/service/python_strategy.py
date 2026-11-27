@@ -5,6 +5,8 @@ values, or arbitrary attribute lookup. This is not a general Python sandbox.
 """
 import ast
 import operator
+import re
+from ..serialization import to_wire
 from datetime import datetime
 from decimal import Decimal as D, localcontext
 from hashlib import sha256
@@ -39,8 +41,35 @@ class Returned(Exception):
 class BreakLoop(Exception):pass
 class ContinueLoop(Exception):pass
 
+class StrategyDiagnostic(ValueError):
+    def __init__(self,node,message):
+        self.line=max(1,getattr(node,"lineno",1))
+        self.column=getattr(node,"col_offset",0)+1
+        self.end_line=max(self.line,getattr(node,"end_lineno",self.line) or self.line)
+        self.end_column=(getattr(node,"end_col_offset",None) or self.column)+1
+        self.message=str(message)[:500]
+        super().__init__(f"Python strategy line {self.line}: {self.message}")
+
 def reject(node,msg):
-    raise ValueError("Python strategy line "+str(getattr(node,"lineno",0))+": "+msg)
+    raise StrategyDiagnostic(node,msg)
+
+def parameter_number(node,aliases):
+    # Parameter bounds/defaults are literals, never evaluated as user expressions.
+    if isinstance(node,ast.Constant) and type(node.value) is int:return bounded(node.value)
+    if isinstance(node,ast.UnaryOp) and isinstance(node.op,ast.USub) and isinstance(node.operand,ast.Constant) and type(node.operand.value) is int:
+        return bounded(-node.operand.value)
+    if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and aliases.get(node.func.id,node.func.id) in ("D","Decimal") and len(node.args)==1 and not node.keywords and isinstance(node.args[0],ast.Constant) and type(node.args[0].value) is str:
+        try:return decimal_value(node.args[0].value)
+        except (ValueError,ArithmeticError):reject(node,"invalid Decimal parameter literal")
+    reject(node,"parameter requires integer literals or Decimal string literals")
+
+def declared_parameter(name,node,aliases):
+    if len(node.args)!=3 or node.keywords:reject(node,"parameter(default, minimum, maximum) requires three positional literals")
+    if name in ("signal_seconds","execution_seconds","fixed_point_bracket","leverage","exposure"):reject(node,"reserved execution setting; declare a separate strategy parameter")
+    default,lo,hi=(parameter_number(n,aliases) for n in node.args)
+    if not type(default) is type(lo) is type(hi) or not lo<=default<=hi or lo>=hi:reject(node,"parameter default and bounds must have one numeric type and minimum < maximum")
+    return dict(name=name,kind="integer" if type(default) is int else "decimal",default=str(to_wire(default)),minimum=str(to_wire(lo)),maximum=str(to_wire(hi)),line=node.lineno)
+
 
 def bounded(value):
     if type(value) is int and abs(value)>10**18:raise ValueError("integer bound exceeded")
@@ -89,7 +118,7 @@ class Program:
             if isinstance(node,ast.Constant) and type(node.value) not in (str,int,bool,type(None)):reject(node,"use Decimal strings instead of floats")
             if isinstance(node,ast.Constant):bounded(node.value)
             if isinstance(node,ast.keyword) and node.arg is None:reject(node,"keyword expansion forbidden")
-        self.methods={};self.constants={};self.aliases={};cls=None
+        self.methods={};self.constants={};self.aliases={};self.parameters={};self.parameter_nodes={};cls=None
         for node in tree.body:
             if isinstance(node,ast.Expr) and isinstance(node.value,ast.Constant) and isinstance(node.value.value,str):continue
             if isinstance(node,ast.ImportFrom):
@@ -117,10 +146,31 @@ class Program:
             elif isinstance(node,ast.Assign) and len(node.targets)==1 and isinstance(node.targets[0],ast.Name):
                 name=node.targets[0].id
                 if name in self.constants or name in ORDER_CALLS or name in CALLBACKS:reject(node,"invalid class constant")
-                self.constants[name]=node.value
+                if isinstance(node.value,ast.Call) and isinstance(node.value.func,ast.Name) and node.value.func.id=="parameter":
+                    if len(self.parameters)>=32:reject(node,"maximum 32 declared parameters")
+                    self.parameters[name]=declared_parameter(name,node.value,self.aliases)
+                    self.parameter_nodes[name]=node.value
+                    self.constants[name]=node.value.args[0]
+                else:self.constants[name]=node.value
             else:reject(node,"unsupported class member")
         if not CALLBACKS.intersection(self.methods):raise ValueError("define at least one SDK callback")
         if set(self.methods)&set(self.constants):raise ValueError("duplicate class member")
+        # Check every call, including branches not reached during initialization.
+        # Context aliases may be passed to helper methods; runtime verifies
+        # receiver identity and arguments again before any SDK operation.
+        allowed_names=set(FUNCS)
+        declaration_ids={id(n) for n in self.parameter_nodes.values()}
+        for n in nodes:
+            if not isinstance(n,ast.Call):continue
+            if id(n) in declaration_ids:continue
+            target=n.func
+            if isinstance(target,ast.Name) and self.aliases.get(target.id,target.id) in allowed_names:continue
+            if isinstance(target,ast.Attribute) and isinstance(target.value,ast.Name):
+                base=target.value.id;name=target.attr
+                if base=="self" and (name in ORDER_CALLS or name in self.methods and name not in CALLBACKS and name!="__init__"):continue
+                if self.aliases.get(base,base)=="IndicatorSpec" and name=="create":continue
+                if name in CONTEXT_CALLS:continue
+            reject(n,"call not in SDK allowlist")
         self.hash=sha256(("restricted-python-v1\n"+source).encode()).hexdigest()
 
     def make(self,leverage=D(1)):
@@ -199,6 +249,7 @@ class InterpretedStrategy(PythonStrategy):
             env[target.id]=value;return
         if isinstance(target,ast.Attribute) and isinstance(target.value,ast.Name) and target.value.id=="self":
             if target.attr in ORDER_CALLS or target.attr in self.program.methods:reject(target,"reserved state field")
+            if target.attr in self.program.parameters:reject(target,"declared parameters are immutable; change the source default")
             if self.ctx is not None and target.attr in ("signal_seconds","execution_seconds","fixed_point_bracket","leverage"):reject(target,"execution configuration is immutable")
             if target.attr not in self.state and len(self.state)>=128:reject(target,"state field limit")
             # Prevent retaining context/host objects; state may retain ordinary
@@ -215,6 +266,12 @@ class InterpretedStrategy(PythonStrategy):
             return bounded(BIN[type(op)](a,b))
 
     def expr(self,n,env):
+        try:return self.evaluate(n,env)
+        except StrategyDiagnostic:raise
+        except (ValueError,TypeError,ArithmeticError,IndexError,KeyError,AttributeError) as exc:
+            reject(n,str(exc) or type(exc).__name__)
+
+    def evaluate(self,n,env):
         self.charge(n)
         if isinstance(n,ast.Constant):return bounded(n.value)
         if isinstance(n,ast.Name):
