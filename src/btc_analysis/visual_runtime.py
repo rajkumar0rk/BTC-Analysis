@@ -61,6 +61,18 @@ class VisualStrategyBase(PythonStrategy):
         if a is None or a["exit_mode"]!="points":return None
         return D(a["stop_points"]),D(a["target_points"])
 
+    @property
+    def trailing_stop_points(self):
+        a=self.advanced_controls
+        policy=a.get("trailing") if a is not None else None
+        return (D(policy["activation"]),D(policy["distance"])) if policy is not None else None
+
+    @property
+    def profit_lock_points(self):
+        a=self.advanced_controls
+        policy=a.get("profit_lock") if a is not None else None
+        return (D(policy["activation"]),D(policy["locked"])) if policy is not None else None
+
     def long_entry(self,ctx):return False
     def short_entry(self,ctx):return False
     def long_exit(self,ctx):return False

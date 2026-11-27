@@ -7,7 +7,7 @@ export type Group={mode:"all"|"any";conditions:Condition[]};
 export type Rule={enabled:boolean;mode:"all"|"any";groups:Group[]};
 export const keys=["long_entry","short_entry","long_exit","short_exit"] as const;
 export type RuleKey=typeof keys[number];
-export type AdvancedControls={entry_mode:"continuous"|"once_per_true_run";confirmation_bars:number;cooldown_bars:number;weekdays_ist:number[];exit_mode:"percent"|"points";stop_points:string;target_points:string};
+export type AdvancedControls={entry_mode:"continuous"|"once_per_true_run";confirmation_bars:number;cooldown_bars:number;weekdays_ist:number[];exit_mode:"percent"|"points";stop_points:string;target_points:string;trailing?:{activation:string;distance:string}|null;profit_lock?:{activation:string;locked:string}|null};
 export const advancedDefaults=():AdvancedControls=>({entry_mode:"continuous",confirmation_bars:1,cooldown_bars:0,weekdays_ist:[0,1,2,3,4,5,6],exit_mode:"percent",stop_points:"100",target_points:"200"});
 export type Graph={advanced?:AdvancedControls|null;schema_version:1;signal_timeframe:Frame;execution_timeframe:Frame;exposure_pct:string;stop_loss_pct:string;take_profit_pct:string}&Record<RuleKey,Rule>;
 export type Compiled={graph:Graph;graph_sha256:string;source:string;compiler_version:string;execution_allowed:false};

@@ -7,7 +7,7 @@ The execution clock is deterministic; intrabar prices are scenarios, not tick ev
 from __future__ import annotations
 
 from collections import deque
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timedelta
 from decimal import Decimal as D, localcontext, ROUND_CEILING, ROUND_FLOOR
 from hashlib import sha256
@@ -19,6 +19,7 @@ from ..contracts import (AssetClass, BacktestConfig, Candle, ClosedTrade, Fill,
 from ..serialization import canonical_bytes, fingerprint
 
 from ..indicators import IndicatorBook, IndicatorSpec
+from ..exit_controls import validate_exit_controls
 
 from ..margin import (MarginProfile, RiskBar, FundingSettlement, FundingRecord,
     LiquidationRecord, funding_payment, collateral_equity)
@@ -300,6 +301,10 @@ class Simulator:
         self.risk_mark=None;self.funding=ZERO;self.trade_funding=ZERO;self.iso_adjustment=ZERO
         self.funding_records=[];self.liquidations=[];self.halted=False;self.liquidating=False
         self.pending={}; self.seen=set(); self.orders=[]; self.fills=[]; self.evidence=[]
+        self.trailing_policy=getattr(strategy,"trailing_stop_points",None)
+        self.lock_policy=getattr(strategy,"profit_lock_points",None)
+        validate_exit_controls(getattr(strategy,"fixed_point_bracket",None),self.trailing_policy,self.lock_policy,cfg.instrument.tick_size)
+        self.managed_stop=None
         self.trades=[]; self.curve=[]; self.monthly=[]
         self.peak=cfg.initial_equity; self.dd=ZERO
         self.definitions=getattr(strategy,"indicators",lambda:())()
@@ -354,6 +359,8 @@ class Simulator:
         self.log(i,"accepted","eligible_next_execution_bar",intent)
 
     def cancel(self,i):
+        if self.managed_stop is not None and i==self.managed_stop[0]:
+            self.log(i,"cancel_rejected","engine_managed_protection");return
         if i in self.pending:
             del self.pending[i]; self.log(i,"cancelled","strategy_cancel")
         else:
@@ -448,6 +455,7 @@ class Simulator:
             self.lots.append((qty,price));self.entries.append(f)
         self.quantity+=sign*qty
         if self.quantity==0:
+            self.managed_stop=None
             allfills=self.entries+self.exits
             fees=sum((x.fee for x in allfills),ZERO);taxes=sum((x.tax for x in allfills),ZERO)
             self.trades.append(ClosedTrade(f"trade-{len(self.trades)+1}",tuple(self.entries),tuple(self.exits),
@@ -487,6 +495,8 @@ class Simulator:
             self.submit(OrderIntent(key,self.cfg.instrument,self.now,side,kind,abs(self.quantity),
                                     reason,limit,trigger,True))
             if key not in self.pending:raise ValueError("fixed-point protective order rejected")
+        if self.trailing_policy is not None or self.lock_policy is not None:
+            self.managed_stop=(stop_key,fill.price,direction,fill.price)
         # At the entry open, adverse execution slippage may already place
         # the raw trade reference beyond the stop. Check stop first.
         p=self.pending[stop_key]
@@ -494,6 +504,34 @@ class Simulator:
             self._fill(p,ref,phase,bar,path)
         elif self.limit_hit(self.pending[target_key].intent,ref):
             self._fill(self.pending[target_key],ref,phase,bar,path,limit=True)
+
+    def ratchet_protection(self,price):
+        if self.managed_stop is None or not self.quantity or self.halted:return
+        key,entry,direction,best=self.managed_stop
+        if key not in self.pending:raise ValueError("managed protective stop missing")
+        # A visited vertex is observable; never inspect future high/low.
+        if direction*(price-best)<=0:return
+        best=price
+        self.managed_stop=(key,entry,direction,best)
+        gain=direction*(best-entry)
+        p=self.pending[key];old=p.intent.stop_price
+        desired=old;reason=p.intent.reason
+        if self.lock_policy is not None:
+            activation,locked=self.lock_policy
+            candidate=entry+direction*locked
+            if gain>=activation and direction*(candidate-desired)>0:
+                desired=candidate;reason="profit_lock_stop"
+        if self.trailing_policy is not None:
+            activation,distance=self.trailing_policy
+            if gain>=activation:
+                candidate=best-direction*distance
+                # Round away from best, preserving at least the requested distance.
+                candidate=self.round_price(candidate,Side.SELL if direction>0 else Side.BUY)
+                if direction*(candidate-desired)>0:
+                    desired=candidate;reason="trailing_point_stop"
+        if direction*(desired-old)>0 and desired>0:
+            p.intent=replace(p.intent,stop_price=desired,reason=reason,decision_utc=self.now)
+            self.log(key,"amended",reason,p.intent)
 
     def isolated_collateral(self):
         if self.profile is None:return ZERO
@@ -596,6 +634,7 @@ class Simulator:
                     self._fill(p,price,phase,bar,path,limit=True,resting=not at_open)
             elif self.limit_hit(o,price):
                 self._fill(p,price,phase,bar,path,limit=True,resting=not at_open)
+        self.ratchet_protection(price)
         self.sample(price)
 
     def _segment(self,a,b,idx,bar,path):

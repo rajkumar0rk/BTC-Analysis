@@ -15,6 +15,8 @@ const sdkItems=[
  ["series","series(bars, \"close\")","Extract completed candle values"],
  ["mean","mean(series(bars, \"close\"))","Decimal arithmetic mean"],
  ["stddev","stddev(series(bars, \"close\"))","Population standard deviation"],
+ ["trailing_stop_points","trailing_stop_points = (D(\"150\"), D(\"50\"))","Optional fixed-point trailing activation and distance; requires fixed_point_bracket"],
+ ["profit_lock_points","profit_lock_points = (D(\"100\"), D(\"0\"))","Optional fixed-point activation and locked profit; requires fixed_point_bracket"],
  ["parameter","parameter(20, 2, 100)","Declare an editable integer class parameter; defaults and bounds must be literals"],
  ["weekday_ist","weekday_ist(ctx.now_utc)","IST weekday, Monday=0"],
  ["ctx.candles","ctx.candles(Timeframe(60), 20)","Completed candle history"],

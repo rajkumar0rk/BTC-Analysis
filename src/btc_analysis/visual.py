@@ -13,6 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_vali
 from .contracts import Timeframe
 from .indicators import IndicatorSpec
 from .serialization import fingerprint, to_wire
+from .exit_controls import validate_exit_controls
 
 FRAMES=(60,180,300,900,1800,3600,14400,86400)
 DecimalText=Annotated[str,StringConstraints(pattern=r"^-?[0-9]{1,12}(?:\.[0-9]{1,8})?$")]
@@ -83,6 +84,14 @@ class Rule(Strict):
         return self
 
 
+class TrailingPoints(Strict):
+    activation:DecimalText
+    distance:DecimalText
+
+class ProfitLockPoints(Strict):
+    activation:DecimalText
+    locked:DecimalText
+
 class AdvancedControls(Strict):
     entry_mode:Literal["continuous","once_per_true_run"]="continuous"
     confirmation_bars:int=Field(default=1,ge=1,le=100)
@@ -91,6 +100,8 @@ class AdvancedControls(Strict):
     exit_mode:Literal["percent","points"]="percent"
     stop_points:DecimalText="100"
     target_points:DecimalText="200"
+    trailing:TrailingPoints|None=None
+    profit_lock:ProfitLockPoints|None=None
 
     @model_validator(mode="after")
     def check(self):
@@ -98,6 +109,11 @@ class AdvancedControls(Strict):
         for key in ("stop_points","target_points"):
             if not Decimal("0")<Decimal(getattr(self,key))<=Decimal("1000000000"):
                 raise ValueError(key+" outside supported bounds")
+        if self.trailing is not None or self.profit_lock is not None:
+            if self.exit_mode!="points":raise ValueError("managed exits require fixed price-point exits")
+            validate_exit_controls((Decimal(self.stop_points),Decimal(self.target_points)),
+                (Decimal(self.trailing.activation),Decimal(self.trailing.distance)) if self.trailing is not None else None,
+                (Decimal(self.profit_lock.activation),Decimal(self.profit_lock.locked)) if self.profit_lock is not None else None)
         return self
 
 
@@ -150,6 +166,9 @@ def canonical_graph(graph:Graph):
     if graph.advanced is not None:
         raw["advanced"]["weekdays_ist"]=sorted(graph.advanced.weekdays_ist)
         for k in ("stop_points","target_points"):raw["advanced"][k]=to_wire(Decimal(raw["advanced"][k]))
+        for key in ("trailing","profit_lock"):
+            if key in raw["advanced"]:
+                raw["advanced"][key]={k:to_wire(Decimal(value)) for k,value in raw["advanced"][key].items()}
     for key in ("exposure_pct","stop_loss_pct","take_profit_pct"):
         raw[key]=to_wire(Decimal(raw[key]))
     for rule in ("long_entry","short_entry","long_exit","short_exit"):
