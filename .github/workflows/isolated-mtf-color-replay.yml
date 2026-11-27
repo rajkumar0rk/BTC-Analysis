@@ -314,3 +314,17 @@ jobs:
           name: btc-analysis-backtest-v1
           path: backtest-export/backtest.json
           if-no-files-found: error
+
+  request-publication:
+    needs: replay
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Dispatch trusted main publisher for this exact run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run publish-backtest-data.yml --repo "$GITHUB_REPOSITORY" --ref main -f source_run_id="$GITHUB_RUN_ID" -f source_attempt="$GITHUB_RUN_ATTEMPT"
