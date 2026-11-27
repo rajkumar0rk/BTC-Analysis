@@ -85,3 +85,5 @@ M44 exact-head c0680618 web/dashboard/foundation/release/private deploy passed. 
 M45 exact-head edb029a all eight CI/deploy workflows passed. M46a opt-in single unhedged perpetual portfolio-style stress reference with explicit shocks and floors, wallet collateral, stress leverage cap, mark-based full liquidation and pre-liq buffer. Both browser replay adapters use same profile; regression tests added; CI pending. Genuine multi-position portfolio margin and incremental liquidation remain outstanding; no venue-certified claim.
 
 M46a initial foundation, multi-year replay, readiness and cache CI passed; web/Pages/release builds failed on extra JSX closing brace in margin-mode select. Corrected the syntax and added browser regression for portfolio stress inputs and mode switching. No engine changes; release re-verification pending.
+
+M46a correction 9647c88 foundation, release verification, Pages and Cloudflare deploy 45919460830 passed; web CI failed because the exact accessible label locator could not find the margin-mode select. Added an explicit accessible name and role-based locator, preserving regression assertions and engine logic. New CI pending.
