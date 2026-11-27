@@ -59,7 +59,7 @@ def replay(bars,ind,setups,start,end,plan,snapshots):
     O,H,L,C=bars;atr=ind[-1];out=[];free=0
     def allowed(i,d,depth,level):
         ema=snapshots[(i//15)*15][1]
-        return q.eligible(bars,ind,i,d,depth,old) and (not dist or 0<d*(C[i-1]-level)<=250) and depth>=min_depth and (not trend or (ema is not None and d*(C[i-1]-ema)>0))
+        return q.eligible(bars,ind,i,d,depth,old) and (not dist or 0<d*(C[i-1]-level)<=250) and (not min_depth or depth>=min_depth) and (not trend or (ema is not None and d*(C[i-1]-ema)>0))
     for first,d,rsi,trigger,level,pull,depth,until,retries in setups:
         if first<free or not allowed(first,d,depth,level):continue
         i=first
