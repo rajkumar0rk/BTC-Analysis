@@ -1,4 +1,4 @@
-name: ETH legacy 15m 2025 corrected OLHC zero spread
+name: ETH legacy 15m 2025 corrected OHLC vs OLHC zero spread
 on:
   push:
     branches: ['research/eth-legacy15m-2025-open-olhc-20261127']

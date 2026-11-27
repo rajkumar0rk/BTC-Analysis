@@ -192,9 +192,9 @@ if __name__=="__main__":
     t,m,b=load()
     results=[]
     for spread in (0.,):
-        for path in ("OLHC",)
+        for path in ("OHLC","OLHC"):
             result,trades=replay(t,m,b,path,spread)
             results.append(result)
             pd.DataFrame(trades).to_csv(args.output/f"trades-{path}-{spread}.csv",index=False)
             print("ETH_2025_RESULT "+json.dumps(result),flush=True)
-    (args.output/"summary.json").write_text(json.dumps(dict(trade_candles=len(t),mark_candles=len(m),assumptions="Portfolio proxy; fixed $100 initial/$10 budget/100x ceiling; 1m sampled trade extremes as proxy fills; OLHC paired mark/trade path; first 1m open entry proxy; no historical quotes or actual funding settlements; fees+GST/30m waiver as paper ledger; December 2024 warmup only.",results=results),indent=2))
+    (args.output/"summary.json").write_text(json.dumps(dict(trade_candles=len(t),mark_candles=len(m),assumptions="Portfolio proxy; fixed $100 initial/$10 budget/100x ceiling; 1m sampled trade extremes as proxy fills; both paired mark/trade paths; first 1m open entry proxy; no historical quotes or actual funding settlements; fees+GST/30m waiver as paper ledger; December 2024 warmup only.",results=results),indent=2))
