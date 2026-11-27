@@ -5,7 +5,7 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Literal, Annotated
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
-from ..visual import Graph, Indicator, Constant, CustomOperand, compile_graph, recover_graph, DecimalText
+from ..visual import Graph, Indicator, Constant, CustomOperand, PositionOperand, compile_graph, recover_graph, DecimalText
 from ..visual_runtime import VisualStrategyBase, compare, constant, price, indicator
 from ..contracts import (Instrument, AssetClass, Timeframe, DatasetRef, DataKind,
     StrategyRef, BacktestConfig, CostModel, MarginMode, IntrabarPolicy)
@@ -57,7 +57,7 @@ def frames(g):
         for group in r.groups:
             for c in group.conditions:
                 for o in (c.left,c.right):
-                    if not isinstance(o,Constant):out.add(o.timeframe)
+                    if not isinstance(o,(Constant,PositionOperand)):out.add(o.timeframe)
     return tuple(sorted(out))
 
 def validate_clock(g,r):
@@ -97,6 +97,7 @@ class GraphStrategy(VisualStrategyBase):
         if isinstance(o,Constant):return constant(o.value)
         if isinstance(o,Indicator):return indicator(ctx,o.name,o.timeframe,o.parameters)
         if isinstance(o,CustomOperand):return self.custom_pair(o.name)
+        if isinstance(o,PositionOperand):return self.position_pair(ctx,o.field)
         return price(ctx,o.timeframe,o.field)
     def rule(self,ctx,r):
         if not r.enabled:return False

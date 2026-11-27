@@ -144,6 +144,30 @@ class Context:
     def position_quantity(self): return self._sim.quantity
     @property
     def equity(self): return self._sim.equity(self._sim.mark)
+    @property
+    def position_entry_price(self):
+        s=self._sim
+        return sum((q*p for q,p in s.lots),ZERO)/abs(s.quantity) if s.quantity else None
+    @property
+    def position_unrealized_pnl(self):
+        s=self._sim
+        return s.unrealized(s.mark) if s.quantity else None
+    @property
+    def position_return_pct(self):
+        s=self._sim
+        entry=self.position_entry_price
+        if entry is None or s.mark is None:return None
+        return (s.mark-entry)/entry*100*(D(1) if s.quantity>0 else D(-1))
+    @property
+    def position_holding_minutes(self):
+        s=self._sim
+        return D(int((s.now-s.entries[0].event_utc).total_seconds()))/60 if s.quantity and s.entries else None
+    @property
+    def position_mfe_points(self):
+        return self._sim.position_mfe if self._sim.quantity else None
+    @property
+    def position_mae_points(self):
+        return self._sim.position_mae if self._sim.quantity else None
     def candles(self, timeframe, limit):
         if type(limit) is not int or not 1 <= limit <= MAX_HISTORY:
             raise ValueError("history limit outside engine bound")
@@ -296,6 +320,7 @@ class Simulator:
         self.now=cfg.start_utc; self.mark=None
         self.balance=cfg.initial_equity; self.quantity=ZERO
         self.lots=deque(); self.entries=[]; self.exits=[]; self.trade_gross=ZERO
+        self.position_mfe=ZERO;self.position_mae=ZERO
         self.gross=ZERO; self.fees=ZERO; self.taxes=ZERO
         self.profile=profile;self.risk_stream=risk_stream;self.risk_digest=sha256()
         self.risk_mark=None;self.funding=ZERO;self.trade_funding=ZERO;self.iso_adjustment=ZERO
@@ -460,6 +485,7 @@ class Simulator:
             self.lots.append((qty,price));self.entries.append(f)
         self.quantity+=sign*qty
         if self.quantity==0:
+            self.position_mfe=ZERO;self.position_mae=ZERO
             self.managed_stop=None
             allfills=self.entries+self.exits
             fees=sum((x.fee for x in allfills),ZERO);taxes=sum((x.tax for x in allfills),ZERO)
@@ -768,6 +794,10 @@ class Simulator:
             risk=next(self.risk_stream,None) if self.risk_stream is not None else None
             fills=self._execute(bar,risk)
             complete=self._publish(bar)
+            if self.quantity and self.entries and self.mark is not None:
+                move=(self.mark-self.entries[0].price)*(D(1) if self.quantity>0 else D(-1))
+                self.position_mfe=max(self.position_mfe,move)
+                self.position_mae=max(self.position_mae,-move)
             # These callbacks see only the now-complete bar and final bar position;
             # all submitted orders become eligible at the next bar.
             for f in fills:self.strategy.on_fill(self.context,f)

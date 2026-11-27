@@ -26,7 +26,9 @@ SDK_IMPORTS={
     "btc_analysis.contracts":{"Timeframe","Side","OrderType"},
     "btc_analysis.indicators":{"IndicatorSpec","spec"},
 }
-CONTEXT_FIELDS={"now_utc","instrument","position_quantity","equity"}
+CONTEXT_FIELDS={"now_utc","instrument","position_quantity","equity",
+    "position_entry_price","position_unrealized_pnl","position_return_pct",
+    "position_holding_minutes","position_mfe_points","position_mae_points"}
 CONTEXT_CALLS={"candles","indicator","indicator_history","cancel"}
 ORDER_CALLS={"buy","sell","order","close_position"}
 CUSTOM_CALLS={"custom_value","custom_history"}

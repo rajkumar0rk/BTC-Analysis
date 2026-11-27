@@ -1,7 +1,8 @@
 export const frames=[60,180,300,900,1800,3600,14400,86400] as const;
 export type Frame=typeof frames[number];
 export type CustomFormula={name:string;timeframe:Frame;lookback:number;expression:string};
-export type Operand={kind:"custom";name:string;timeframe:Frame}|{kind:"price";timeframe:Frame;field:"open"|"high"|"low"|"close"|"volume"}|{kind:"constant";value:string}|{kind:"indicator";timeframe:Frame;name:string;parameters:Record<string,number|string>};
+export const positionFields=["position_entry_price","position_unrealized_pnl","position_return_pct","position_holding_minutes","position_mfe_points","position_mae_points","position_quantity"] as const;
+export type Operand={kind:"position";field:typeof positionFields[number]}|{kind:"custom";name:string;timeframe:Frame}|{kind:"price";timeframe:Frame;field:"open"|"high"|"low"|"close"|"volume"}|{kind:"constant";value:string}|{kind:"indicator";timeframe:Frame;name:string;parameters:Record<string,number|string>};
 export const ops=["gt","gte","lt","lte","eq","cross_up","cross_down"] as const;
 export type Condition={left:Operand;op:typeof ops[number];right:Operand};
 export type Group={mode:"all"|"any";conditions:Condition[]};

@@ -95,6 +95,12 @@ class VisualStrategyBase(PythonStrategy):
     def on_completed_candle(self,candle):
         if self.formula_runtime is not None:self.formula_runtime.on_completed_candle(candle)
 
+    def position_pair(self,ctx,field):
+        # Undefined while flat (except signed quantity). No synthetic previous
+        # snapshot is exposed, so crossovers are rejected during validation.
+        value=getattr(ctx,field) if field=="position_quantity" or ctx.position_quantity else None
+        return (None,value)
+
     def custom_pair(self,name):
         history=self.formula_runtime.custom[name][3]
         return (history[-2] if len(history)>1 else None,history[-1] if history else None)
