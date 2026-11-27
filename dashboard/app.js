@@ -2,6 +2,69 @@
 const $=id=>document.getElementById(id),fmt=n=>n==null?"Not recorded":Number(n).toLocaleString("en-US",{maximumFractionDigits:4}), esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),sign=n=>n>0?"pos":n<0?"neg":"";
 let index,run,ledger=[],trade,bars=[],limit=0,timer,monthToken=0,tradeToken=0,windowDay=0,sourceBars=[],dayIndicatorSeries={},chartFrame=1,frameRun=null,curveToken=0,curves=[],page=0;const PAGE=100;
 const cache=new Map();
+// View state is independent of the replay cursor. History can only extend backward.
+const DAY=86400,MAX_HISTORY_DAYS=31,MIN_VISIBLE=6,MAX_VISIBLE=600;
+let viewEnd=null,viewCount=80,historyDays=new Map(),historyBusy=false,historyStatus="",historySerial=0;
+let chartGeometry=null,chartHover=null,chartMode="pan",drawings=[],draft=null,drag=null,pointers=new Map(),pinch=null,drawQueued=false;
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+function replayCutoff(){return bars.length&&limit?bars[Math.min(limit,bars.length)-1][0]+60:null}
+function resetViewport(clear=true){viewEnd=null;viewCount=80;chartHover=null;draft=null;drag=null;pinch=null;pointers.clear();if(clear)drawings=[]}
+function scheduleDraw(){if(!drawQueued){drawQueued=true;requestAnimationFrame(()=>{drawQueued=false;draw()})}}
+function viewportBounds(cutoff,frame=chartFrame,count=viewCount,end=viewEnd){
+ const seconds=frame*60,right=Math.min(cutoff,end??cutoff),last=Math.floor((right-1)/seconds)*seconds;
+ return {start:last-(count-1)*seconds,end:last+seconds,right,seconds}
+}
+function mergeHistory(){
+ const sorted=[...historyDays.entries()].sort((a,b)=>a[0]-b[0]);
+ sourceBars=sorted.flatMap(([,d])=>d.candles);
+ const merged={};
+ for(const [,d] of sorted)for(const [id,points] of Object.entries(d.series||{})){
+  const m=merged[id]??(merged[id]=new Map());
+  for(const p of points)if(Array.isArray(p)&&p.length===2)m.set(p[0],p[1])
+ }
+ dayIndicatorSeries=Object.fromEntries(Object.entries(merged).map(([id,m])=>[id,[...m].sort((a,b)=>a[0]-b[0])]))
+}
+async function fetchHistoryDay(day,r){
+ const key=new Date(day*1000).toISOString().slice(0,10);
+ const [candles,series]=await Promise.all([get("candles/"+r.symbol+"/"+key+".json"),(r.indicator_days||[]).includes(key)?get("runs/"+r.id+"/indicators/"+key+".json"):Promise.resolve({})]);
+ return {candles,series}
+}
+async function extendHistory(){
+ if(historyBusy||!trade||!historyDays.size)return;
+ const cutoff=replayCutoff();if(cutoff===null)return;
+ const requested=viewportBounds(cutoff).start,earliest=Math.min(...historyDays.keys());
+ if(requested>=earliest)return;
+ if(historyDays.size>=MAX_HISTORY_DAYS){historyStatus="Loaded history limit (31 days). Use Previous day to navigate farther.";scheduleDraw();return}
+ const prior=earliest-DAY,key=new Date(prior*1000).toISOString().slice(0,10);
+ if(!(index.candle_days?.[run.symbol]||[]).includes(key)){historyStatus="No archived candles for "+key; scheduleDraw();return}
+ const token=tradeToken,serial=historySerial,r=run;historyBusy=true;historyStatus="Loading earlier candles…";scheduleDraw();
+ try{
+  const data=await fetchHistoryDay(prior,r);
+  if(token!==tradeToken||serial!==historySerial)return;
+  historyDays.set(prior,data);mergeHistory();historyStatus="";
+ }catch(e){if(token===tradeToken&&serial===historySerial)historyStatus="Earlier history unavailable: "+e.message}
+ finally{if(token===tradeToken&&serial===historySerial){historyBusy=false;scheduleDraw()}}
+}
+function panBy(seconds){
+ const cutoff=replayCutoff();if(cutoff===null||!historyDays.size)return;stop();chartHover=null;
+ const current=viewEnd??cutoff,earliest=Math.min(...historyDays.keys()),minEnd=earliest-DAY+(MIN_VISIBLE-1)*chartFrame*60;
+ const next=clamp(current+seconds,Math.min(minEnd,cutoff),cutoff);
+ viewEnd=next>=cutoff?null:next;scheduleDraw();void extendHistory()
+}
+function zoomBy(factor,anchor=.5){
+ const cutoff=replayCutoff();if(cutoff===null)return;stop();
+ const old=viewCount,next=clamp(Math.round(old*factor),MIN_VISIBLE,MAX_VISIBLE);
+ if(next===old)return;
+ const right=viewEnd??cutoff;viewCount=next;
+ // Keep the timestamp under the pointer approximately stationary.
+ const nextEnd=Math.min(cutoff,right+(next-old)*chartFrame*60*(1-clamp(anchor,0,1)));
+ viewEnd=nextEnd>=cutoff?null:nextEnd;chartHover=null;scheduleDraw();void extendHistory()
+}
+function setChartMode(mode){chartMode=mode;draft=null;drag=null;for(const id of ["pan","measure","trend","horizontal"]){$("tool-"+id).setAttribute("aria-pressed",String(id===mode))}$("chart").dataset.mode=mode;scheduleDraw()}
+function elapsedLabel(seconds){const m=Math.round(Math.abs(seconds)/60),d=Math.floor(m/1440),h=Math.floor(m%1440/60);return (d?d+"d ":"")+(h?h+"h ":"")+(m%60||!d&&!h?m%60+"m":"")}
+function measurement(a,b){const delta=b.price-a.price;return {delta,pct:a.price?delta/a.price*100:null,bars:Math.round(Math.abs(b.time-a.time)/(chartFrame*60)),elapsed:elapsedLabel(b.time-a.time)}}
+function measurementText(a,b){const m=measurement(a,b),signed=n=>(n>=0?"+":"")+fmt(n);return signed(m.delta)+" pts · "+(m.pct===null?"n/a":signed(m.pct)+"%")+" · "+m.bars+" bars · "+m.elapsed}
+
 const RAW="https://raw.githubusercontent.com/rajkumar0rk/BTC-Analysis/";
 const LOCAL=["127.0.0.1","localhost"].includes(location.hostname)&&!new URLSearchParams(location.search).has("remote");
 let dataBase=LOCAL?"./data/":"",activeSnapshot=null,refreshBusy=false;
@@ -14,7 +77,7 @@ function renderRun(){run=index.runs.find(r=>r.id===$("run").value);if(!run)retur
 async function loadMonth(){const seq=++monthToken;++tradeToken;stop();trade=null;bars=[];draw();$("details").textContent="Loading trades…";$("ledger").replaceChildren();$("notice").textContent="";ledger=[];page=0;if(run.detail_available===false){$("details").textContent="Summary only: full trade detail exceeds publication budget. Original ledger: "+run.source;$("count").textContent="Summary only";return}const data=await get("runs/"+run.id+"/"+$("month").value+".json");if(seq!==monthToken)return;ledger=data;renderLedger()}
 function renderLedger(){const filter=$("filter").value,list=ledger.filter(t=>!filter||(filter==="win"?t.net_points>0:t.net_points<=0));page=Math.max(0,Math.min(page,Math.ceil(list.length/PAGE)-1));const shown=list.slice(page*PAGE,(page+1)*PAGE);$("count").textContent=list.length+" trades · page "+(page+1)+" / "+Math.max(1,Math.ceil(list.length/PAGE));$("ledger").replaceChildren(...shown.map(t=>{const tr=document.createElement("tr");tr.tabIndex=0;tr.innerHTML='<td>'+esc(t.entry_utc.slice(0,16))+'</td><td>'+(t.side===1?"LONG":"SHORT")+'</td><td>'+esc(t.result)+'</td><td class="'+sign(t.net_points)+'">'+fmt(t.net_points)+'</td>';tr.onclick=()=>selectTrade(t,tr).catch(fail);tr.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tr.click()}};return tr}));if(shown.length)$("ledger").firstElementChild.click();else{++tradeToken;stop();trade=null;bars=[];draw();$("details").textContent="No matching trades."}}
 function secs(t){return t?Date.parse(t.replace(" ","T"))/1000:NaN}
-async function selectTrade(t,row){stop();trade=t;if(frameRun!==run.id){chartFrame=Number(t.signal_tf)||1;if(![1,3,5,15,30,60,240].includes(chartFrame))chartFrame=1;$("timeframe").value=String(chartFrame);frameRun=run.id}windowDay=Math.floor(secs(t.entry_utc)/86400)*86400;$("ledger").querySelectorAll("tr").forEach(x=>x.classList.toggle("active",x===row));const pairs=o=>'<dl>'+Object.entries(o).map(([k,v])=>'<dt>'+esc(k.replaceAll("_"," "))+'</dt><dd>'+esc(v==null?"Not recorded":typeof v==="number"?fmt(v):v)+'</dd>').join("")+'</dl>';$("details").innerHTML='<div class="details"><article><h3>Why entered</h3><p>'+esc(t.entry_reason||"Not recorded in source ledger")+'</p>'+pairs({audit:run.audit,signal_utc:t.trigger_utc,signal_minutes:t.signal_tf,entry_utc:t.entry_utc,entry_price:t.entry_price,...t.signal_context})+'</article><article><h3>Why exited</h3><p>'+esc(t.exit_reason||"Not recorded in source ledger")+'</p>'+pairs({exit_utc:t.exit_utc,exit_price:t.exit_price,stop_price:t.stop_price,target_price:t.target_price,trailing_stop_price:t.trailing_stop_price,liquidation_price:t.liquidation_price,gross_points:t.gross_points,fee_points:t.fee_points,slippage_points:t.assumed_slippage_points,[run.unit==="account USD"?"net_account_usd":"net_points"]:t.net_points,split:t.split})+'</article></div>';await loadWindow()}
+async function selectTrade(t,row){stop();resetViewport();trade=t;if(frameRun!==run.id){chartFrame=Number(t.signal_tf)||1;if(![1,3,5,15,30,60,240].includes(chartFrame))chartFrame=1;$("timeframe").value=String(chartFrame);frameRun=run.id}windowDay=Math.floor(secs(t.entry_utc)/86400)*86400;$("ledger").querySelectorAll("tr").forEach(x=>x.classList.toggle("active",x===row));const pairs=o=>'<dl>'+Object.entries(o).map(([k,v])=>'<dt>'+esc(k.replaceAll("_"," "))+'</dt><dd>'+esc(v==null?"Not recorded":typeof v==="number"?fmt(v):v)+'</dd>').join("")+'</dl>';$("details").innerHTML='<div class="details"><article><h3>Why entered</h3><p>'+esc(t.entry_reason||"Not recorded in source ledger")+'</p>'+pairs({audit:run.audit,signal_utc:t.trigger_utc,signal_minutes:t.signal_tf,entry_utc:t.entry_utc,entry_price:t.entry_price,...t.signal_context})+'</article><article><h3>Why exited</h3><p>'+esc(t.exit_reason||"Not recorded in source ledger")+'</p>'+pairs({exit_utc:t.exit_utc,exit_price:t.exit_price,stop_price:t.stop_price,target_price:t.target_price,trailing_stop_price:t.trailing_stop_price,liquidation_price:t.liquidation_price,gross_points:t.gross_points,fee_points:t.fee_points,slippage_points:t.assumed_slippage_points,[run.unit==="account USD"?"net_account_usd":"net_points"]:t.net_points,split:t.split})+'</article></div>';await loadWindow()}
 function aggregate(rows,minutes,complete=false){
  const seconds=minutes*60,out=[];let g=null;
  for(const row of rows){const [t,o,h,l,c,v]=row,bucket=Math.floor(t/seconds)*seconds;
@@ -42,11 +105,11 @@ function legacySignalValues(t){
 const indicatorColors=["#f0c36a","#67d4c0","#c5a1ff","#79baff","#fb7785","#f59e0b","#b8d68c","#f2a1c7"];
 function indicatorLabel(d){const params=Object.entries(d.parameters||{}).map(([k,v])=>k+"="+String(v)).join(", ");return d.name+" ("+d.timeframe_minutes+"m"+(params?"; "+params:"")+")"}
 async function loadWindow(){
- const token=++tradeToken,t=trade,r=run;stop();bars=[];sourceBars=[];dayIndicatorSeries={};draw();if(!t)return;
+ const token=++tradeToken,t=trade,r=run;stop();historySerial++;historyBusy=false;historyStatus="";historyDays=new Map();bars=[];sourceBars=[];dayIndicatorSeries={};resetViewport(false);draw();if(!t)return;
  const available=new Set(index.candle_days?.[r.symbol]||[]),day=new Date(windowDay*1000).toISOString().slice(0,10);if(!available.has(day)){if(token===tradeToken)$("cursor").textContent="No source candles for "+day;return}
- const [data,series]=await Promise.all([get("candles/"+r.symbol+"/"+day+".json"),(r.indicator_days||[]).includes(day)?get("runs/"+r.id+"/indicators/"+day+".json"):Promise.resolve({})]);if(token!==tradeToken)return;sourceBars=data;dayIndicatorSeries=series;
+ const data=await fetchHistoryDay(windowDay,r);if(token!==tradeToken)return;historyDays.set(windowDay,data);mergeHistory();
  const anchor=Math.min(secs(t.entry_utc),secs(t.trigger_utc)||secs(t.entry_utc)),start=Math.max(windowDay,Math.floor((anchor-1800)/14400)*14400),end=Math.min(windowDay+86399,secs(t.exit_utc)+1800);
- bars=data.filter(c=>c[0]>=start&&c[0]<=end);if(!bars.length)bars=data;limit=bars.length;draw()
+ bars=data.candles.filter(c=>c[0]>=start&&c[0]<=end);if(!bars.length)bars=data.candles;limit=bars.length;draw()
 }
 function draw(){
  const c=$("chart"),w=c.clientWidth,dpr=window.devicePixelRatio||1;
@@ -56,17 +119,23 @@ function draw(){
  $("chartFrame").textContent=chartFrame+"m chart · recorded 1m execution · UTC";
  $("indicatorInfo").textContent=trade?(declared.length?(run.indicator_provenance?.method==="pinned_input_replay_snapshot_verified"?"Strategy indicators · reproduced from pinned original inputs and verified against recorded signal values.":"Declared strategy indicators · recorded data only; missing series are not reconstructed."):Array.isArray(run?.indicator_definitions)?"No indicators declared for this strategy.":legacy.length?"Legacy archive: recorded signal fields only; indicator declarations and time series unavailable.":"Legacy archive: no indicator declarations or recorded indicator fields."):"";
  const host=$("indicatorValues");host.replaceChildren();
+ chartGeometry=null;
+ $("chartHistory").textContent=historyStatus;
+ $("chartInspect").textContent="";
  if(!bars.length||!trade){$("cursor").textContent="";return}
- const visible=bars.slice(0,limit),cutoff=visible.at(-1)?.[0]+60,b=aggregate(visible,chartFrame),pad=12,right=76,bottom=26;if(!b.length)return;
+ const cutoff=replayCutoff();if(cutoff===null)return;
+ const bounds=viewportBounds(cutoff),visible=sourceBars.filter(row=>row[0]>=bounds.start&&row[0]<Math.min(bounds.right,cutoff)),b=aggregate(visible,chartFrame),pad=12,right=76,bottom=26;
+ if(!b.length){$("cursor").textContent=new Date(cutoff*1000).toISOString().slice(0,16).replace("T"," ")+" UTC";$("chartInspect").textContent="No source candles in this view. Pan right or reset.";return}
  const signal=secs(trade.trigger_utc),signalVisible=Number.isFinite(signal)&&signal<=cutoff;
  const chip=(label,color)=>{const el=document.createElement("span");el.className="indicator-chip";el.textContent=label;if(color)el.style.borderColor=color;host.append(el)};
- const plotted=show?declared.map((d,i)=>{let j=-1;return {...d,color:indicatorColors[i%indicatorColors.length],samples:b.map(row=>{while(j+1<d.points.length&&d.points[j+1][0]<=Math.min(row[8]+60,cutoff))j++;return j>=0?d.points[j][1]:null})}}):[];
+ const plotted=show?declared.map((d,i)=>{let j=-1;return {...d,color:indicatorColors[i%indicatorColors.length],samples:b.map(row=>{while(j+1<d.points.length&&d.points[j+1][0]<=Math.min(row[8]+60,cutoff))j++;return j>=0&&Math.min(row[8]+60,cutoff)-d.points[j][0]<d.timeframe_minutes*60?d.points[j][1]:null})}}):[];
  if(show){for(const d of plotted){const v=d.samples.at(-1),snap=signalVisible?d.snapshot:null;chip(indicatorLabel(d)+(Number.isFinite(v)?" · "+fmt(v):Number.isFinite(snap)?" · signal "+fmt(snap):" · series unavailable"),d.color)}
   if(signalVisible)for(const [key,value] of legacy)chip(key.replaceAll("_"," ").toUpperCase()+": "+fmt(value));
   else if(legacy.length)host.textContent="Recorded signal fields become available at the signal timestamp.";
  }
- const priceBottom=400-bottom,step=(w-right-pad)/Math.max(b.length,1),at=i=>pad+(i+.5)*step;
- const markerIndex=time=>{const t=secs(time);if(!Number.isFinite(t)||t>cutoff)return -1;let i=b.findIndex(v=>t>=v[0]&&t<v[0]+chartFrame*60&&t<=v[8]+60);if(i<0&&t===cutoff)i=b.length-1;return i};
+ const priceBottom=400-bottom,slots=Math.max(1,(bounds.end-bounds.start)/bounds.seconds),step=Math.max(1,w-right-pad)/slots,at=i=>pad+((b[i][0]-bounds.start)/bounds.seconds+.5)*step;
+ const atTime=t=>pad+((Math.floor(t/bounds.seconds)*bounds.seconds-bounds.start)/bounds.seconds+.5)*step;
+ const markerIndex=time=>{const t=secs(time);if(!Number.isFinite(t)||t>cutoff)return -1;let i=b.findIndex(v=>t>=v[0]&&t<v[0]+chartFrame*60&&t<=v[8]+60);if(i<0&&t===cutoff&&b.at(-1)[8]+60===cutoff)i=b.length-1;return i};
  const tradeMarkers=[[trade.entry_utc,trade.entry_price,"#66b5ff","ENTRY"],[trade.exit_utc,trade.exit_price,"#c5a1ff","EXIT"]].map(m=>[...m,markerIndex(m[0])]).filter(m=>m[4]>=0&&Number.isFinite(m[1]));
  const signalIndex=markerIndex(trade.trigger_utc);
  const recordedPrice=show&&signalIndex>=0?declared.length?plotted.filter(d=>d.panel==="price"&&Number.isFinite(d.snapshot)).map(d=>[d.name,d.snapshot,d.color]):legacy.filter(([key])=>/^(ema\d+|sma\d+|supertrend|vwap|prior_high|prior_low|bollinger_(upper|middle|lower))$/i.test(key)).map(([k,v])=>[k.toUpperCase(),v,"#fff"]):[];
@@ -74,10 +143,13 @@ function draw(){
  const levels=[[trade.stop_price,"SL",entryVisible],[trade.target_price,"TP",entryVisible],[trade.trailing_stop_price,"TRAIL (recorded)",exitVisible],[trade.liquidation_price,"LIQ (recorded)",exitVisible]].filter(m=>m[2]&&Number.isFinite(m[0]));
  const priceSeries=plotted.filter(d=>d.panel==="price").flatMap(d=>d.samples).filter(Number.isFinite);
  const lo=Math.min(...b.map(v=>v[3]),...levels.map(m=>m[0]),...priceSeries,...tradeMarkers.map(m=>m[1]),...recordedPrice.map(m=>m[1])),hi=Math.max(...b.map(v=>v[2]),...levels.map(m=>m[0]),...priceSeries,...tradeMarkers.map(m=>m[1]),...recordedPrice.map(m=>m[1])),range=Math.max(hi-lo,.000001),y=p=>pad+(hi-p)/range*(priceBottom-pad);
+ chartGeometry={b,plotted,bounds,step,pad,right:w-right,priceBottom,height:h,y,at,atTime,priceAt:yy=>hi-(yy-pad)*range/(priceBottom-pad)};
+ x.save();x.beginPath();x.rect(pad,pad,w-right-pad,priceBottom-pad);x.clip();
+ x.restore();
  x.font="11px system-ui";
  for(let i=0;i<=4;i++){const v=lo+range*i/4,yy=y(v);x.strokeStyle="#26364a";x.beginPath();x.moveTo(pad,yy);x.lineTo(w-right,yy);x.stroke();x.fillStyle="#9aafc2";x.fillText(fmt(v),w-right+4,yy+4)}
  for(const [i,[t,o,high,low,cl,vol,count]] of b.entries()){const xx=at(i);x.strokeStyle=x.fillStyle=cl>=o?"#36d8aa":"#fb7785";x.globalAlpha=count<chartFrame?.55:1;x.beginPath();x.moveTo(xx,y(high));x.lineTo(xx,y(low));x.stroke();x.fillRect(xx-Math.max(1,step*.32),Math.min(y(o),y(cl)),Math.max(1,step*.64),Math.max(1,Math.abs(y(o)-y(cl))));x.globalAlpha=1}
- function line(values,color,scale){x.strokeStyle=color;x.beginPath();let started=false;values.forEach((v,i)=>{if(!Number.isFinite(v)){started=false;return}if(started)x.lineTo(at(i),scale(v));else{x.moveTo(at(i),scale(v));started=true}});x.stroke()}
+ function line(values,color,scale){x.strokeStyle=color;x.beginPath();let started=false;values.forEach((v,i)=>{if(!Number.isFinite(v)){started=false;return}if(started&&i>0&&b[i][0]-b[i-1][0]===bounds.seconds)x.lineTo(at(i),scale(v));else{x.moveTo(at(i),scale(v));started=true}});x.stroke()}
  for(const d of plotted.filter(d=>d.panel==="price"))line(d.samples,d.color,y);
  for(const [price,label] of levels){x.strokeStyle=x.fillStyle="#eab66b";x.setLineDash([4,4]);x.beginPath();x.moveTo(pad,y(price));x.lineTo(w-right,y(price));x.stroke();x.setLineDash([]);x.fillText(label,pad,y(price)-4)}
  for(const [time,p,color,label,i] of tradeMarkers){const xx=at(i),yy=y(p);x.fillStyle=color;x.beginPath();x.arc(xx,yy,5,0,Math.PI*2);x.fill();x.fillText(label,Math.max(pad,Math.min(xx,w-right-40)),Math.max(12,yy-9))}
@@ -86,10 +158,92 @@ function draw(){
   const top=400+i*100+20,bot=top+58,values=d.samples.filter(Number.isFinite),min=values.length?Math.min(...values):0,max=values.length?Math.max(...values):1,scale=v=>bot-(v-min)/Math.max(max-min,.000001)*(bot-top);
   x.strokeStyle="#26364a";x.beginPath();x.moveTo(pad,top);x.lineTo(w-right,top);x.stroke();x.fillStyle=d.color;x.fillText(indicatorLabel(d),pad,top-5);line(d.samples,d.color,scale);x.fillStyle="#9aafc2";x.fillText(fmt(max),w-right+4,top+9);x.fillText(fmt(min),w-right+4,bot)
  }
- x.fillStyle="#9aafc2";for(let i=0;i<Math.min(5,b.length);i++){const k=Math.floor(i*(b.length-1)/Math.max(1,Math.min(5,b.length)-1));x.fillText(new Date(b[k][0]*1000).toISOString().slice(11,16),Math.min(at(k),w-right-28),400-7)}
- $("cursor").textContent=new Date(cutoff*1000).toISOString().slice(0,16).replace("T"," ")+" UTC · "+visible.length+" source minutes · "+b.length+" chart candles";
+ x.fillStyle="#9aafc2";for(let i=0;i<Math.min(5,b.length);i++){const k=Math.floor(i*(b.length-1)/Math.max(1,Math.min(5,b.length)-1));x.fillText(new Date(b[k][0]*1000).toISOString().slice(5,16).replace("T"," "),Math.max(pad,Math.min(at(k)-28,w-right-62)),400-7)}
+ paintInteraction(x,chartGeometry);
+ $("cursor").textContent=new Date(cutoff*1000).toISOString().slice(0,16).replace("T"," ")+" UTC · "+visible.length+" visible minutes · "+b.length+" chart candles";
+ $("chartRange").textContent="View: "+new Date(b[0][0]*1000).toISOString().slice(0,16).replace("T"," ")+" – "+new Date(b.at(-1)[0]*1000).toISOString().slice(0,16).replace("T"," ")+" UTC · "+historyDays.size+" loaded day"+(historyDays.size===1?"":"s");
 }
-$("run").onchange=renderRun;$("month").onchange=()=>loadMonth().catch(fail);$("filter").onchange=()=>{page=0;renderLedger()};$("tradePrev").onclick=()=>{page--;renderLedger()};$("tradeNext").onclick=()=>{page++;renderLedger()};$("prev").onclick=()=>{stop();limit=Math.max(1,limit-1);draw()};$("next").onclick=()=>{stop();limit=Math.min(bars.length,limit+1);draw()};$("full").onclick=()=>{stop();limit=bars.length;draw()};$("play").onclick=()=>{if(timer){stop();return}if(!bars.length)return;if(limit>=bars.length)limit=1;timer=setInterval(()=>{limit=Math.min(bars.length,limit+1);draw();if(limit>=bars.length)stop()},120)};window.addEventListener("resize",()=>{draw();drawCurves()});$("overlay").onchange=draw;$("timeframe").onchange=()=>{stop();chartFrame=Number($("timeframe").value);draw()};$("windowPrev").onclick=()=>{if(trade){windowDay-=86400;loadWindow().catch(fail)}};$("windowNext").onclick=()=>{if(trade){windowDay+=86400;loadWindow().catch(fail)}};
+function localPoint(e){const r=$("chart").getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}
+function chartPoint(p){
+ const g=chartGeometry;if(!g||p.x<g.pad||p.x>g.right||p.y<g.pad||p.y>g.priceBottom)return null;
+ const slot=Math.floor((p.x-g.pad)/g.step),time=g.bounds.start+slot*g.bounds.seconds;
+ if(time>=g.bounds.right)return null;
+ const row=g.b.find(row=>row[0]===time);if(!row)return null;
+ return {time,price:g.priceAt(p.y)}
+}
+function paintInteraction(x,g){
+ const {pad,right,priceBottom,height,atTime,y,b,plotted}=g;
+ x.save();x.beginPath();x.rect(pad,pad,right-pad,priceBottom-pad);x.clip();
+ function paint(d){
+  const x1=atTime(d.a.time),y1=y(d.a.price),x2=d.kind==="horizontal"?right:atTime(d.b.time),y2=d.kind==="horizontal"?y1:y(d.b.price);
+  x.strokeStyle=d.kind==="measure"?"#78bcff":"#eab66b";x.lineWidth=1.5;x.setLineDash(d.kind==="horizontal"?[5,4]:[]);
+  if(d.kind==="measure"){x.fillStyle="rgba(120,188,255,.12)";x.fillRect(Math.min(x1,x2),Math.min(y1,y2),Math.abs(x2-x1),Math.abs(y2-y1))}
+  x.beginPath();x.moveTo(d.kind==="horizontal"?pad:x1,y1);x.lineTo(x2,y2);x.stroke();x.setLineDash([]);
+  if(d.kind!=="horizontal"){for(const [xx,yy] of [[x1,y1],[x2,y2]]){x.fillStyle=x.strokeStyle;x.beginPath();x.arc(xx,yy,3,0,Math.PI*2);x.fill()}}
+  const text=d.kind==="measure"?measurementText(d.a,d.b):d.kind==="horizontal"?fmt(d.a.price):fmt(d.b.price-d.a.price)+" pts";
+  x.font="12px system-ui";const width=x.measureText(text).width+12,xx=clamp((d.kind==="horizontal"?right-width:Math.min(x1,x2)),pad,Math.max(pad,right-width)),yy=clamp(Math.min(y1,y2)-24,pad,priceBottom-20);
+  x.fillStyle="#152335";x.fillRect(xx,yy,width,20);x.fillStyle="#e3edf5";x.fillText(text,xx+6,yy+14);
+ }
+ for(const d of drawings)paint(d);
+ if(draft&&draft.b)paint(draft);
+ x.restore();
+ if(!chartHover)return;
+ const p=chartHover;if(p.x<pad||p.x>right||p.y<pad||p.y>height)return;
+ const slot=Math.floor((p.x-pad)/g.step),time=g.bounds.start+slot*g.bounds.seconds,i=b.findIndex(row=>row[0]===time);
+ if(i<0)return;
+ const xx=g.at(i),row=b[i];x.save();x.strokeStyle="#9aafc2";x.lineWidth=1;x.setLineDash([3,4]);
+ x.beginPath();x.moveTo(xx,pad);x.lineTo(xx,height-10);
+ if(p.y<=priceBottom){x.moveTo(pad,p.y);x.lineTo(right,p.y)}x.stroke();x.setLineDash([]);
+ if(p.y<=priceBottom){x.fillStyle="#26364a";x.fillRect(right,p.y-9,74,18);x.fillStyle="#e3edf5";x.fillText(fmt(g.priceAt(p.y)),right+3,p.y+4)}
+ x.restore();
+ const pieces=[new Date(row[0]*1000).toISOString().slice(0,16).replace("T"," ")+" UTC","O "+fmt(row[1]),"H "+fmt(row[2]),"L "+fmt(row[3]),"C "+fmt(row[4]),"Vol "+fmt(row[5])];
+ for(const d of plotted)pieces.push(d.name+" "+fmt(d.samples[i]));
+ $("chartInspect").textContent=pieces.join(" · ");
+}
+function bindChart(){
+ const canvas=$("chart");
+ const modes=["pan","measure","trend","horizontal"];
+ for(const mode of modes)$("tool-"+mode).onclick=()=>setChartMode(mode);
+ $("tool-clear").onclick=()=>{drawings=[];draft=null;scheduleDraw()};
+ $("chart-reset").onclick=()=>{resetViewport(false);historyStatus="";scheduleDraw()};
+ $("chart-older").onclick=()=>panBy(-Math.max(1,Math.floor(viewCount/3))*chartFrame*60);
+ $("chart-newer").onclick=()=>panBy(Math.max(1,Math.floor(viewCount/3))*chartFrame*60);
+ $("chart-zoom-in").onclick=()=>zoomBy(.75);
+ $("chart-zoom-out").onclick=()=>zoomBy(1.35);
+ canvas.addEventListener("wheel",e=>{if(!chartGeometry)return;e.preventDefault();const p=localPoint(e);if(e.shiftKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))panBy(Math.sign(e.deltaX||e.deltaY)*Math.max(1,Math.round(viewCount/10))*chartFrame*60);else zoomBy(e.deltaY<0?.8:1.25,(p.x-chartGeometry.pad)/(chartGeometry.right-chartGeometry.pad))},{passive:false});
+ canvas.addEventListener("pointerdown",e=>{
+  if(!chartGeometry||e.button>0)return;e.preventDefault();canvas.focus({preventScroll:true});canvas.setPointerCapture(e.pointerId);
+  const p=localPoint(e);pointers.set(e.pointerId,p);chartHover=p;
+  if(pointers.size===2){const [a,b]=[...pointers.values()];pinch={distance:Math.max(1,Math.abs(a.x-b.x)),center:(a.x+b.x)/2};drag=null;draft=null;return}
+  if(pointers.size!==1)return;
+  const point=chartPoint(p);drag={id:e.pointerId,x:p.x,y:p.y,lastX:p.x,moved:false,point};
+  if(chartMode==="pan"){stop();return}
+  if(chartMode==="horizontal"&&point){drawings.push({kind:"horizontal",a:point,b:point});if(drawings.length>50)drawings.shift();drag=null;scheduleDraw();return}
+  if(point&&(chartMode==="measure"||chartMode==="trend")){if(draft){draft.b=point;drawings.push(draft);if(drawings.length>50)drawings.shift();draft=null;drag=null}else draft={kind:chartMode,a:point,b:point};scheduleDraw()}
+ });
+ canvas.addEventListener("pointermove",e=>{
+  const p=localPoint(e);chartHover=p;
+  if(pointers.has(e.pointerId))pointers.set(e.pointerId,p);
+  if(pinch&&pointers.size===2){const [a,b]=[...pointers.values()],distance=Math.max(1,Math.abs(a.x-b.x)),center=(a.x+b.x)/2;if(Math.abs(distance-pinch.distance)>6){zoomBy(pinch.distance/distance,(center-(chartGeometry?.pad||12))/Math.max(1,(chartGeometry?.right||canvas.clientWidth)-12));pinch.distance=distance}if(Math.abs(center-pinch.center)>8){panBy(Math.round((pinch.center-center)/Math.max(1,chartGeometry?.step||8))*chartFrame*60);pinch.center=center}return}
+  if(drag&&drag.id===e.pointerId){if(Math.abs(p.x-drag.x)>4||Math.abs(p.y-drag.y)>4)drag.moved=true;
+   if(chartMode==="pan"&&chartGeometry){const dx=p.x-drag.lastX,n=Math.trunc(dx/chartGeometry.step);if(n){drag.lastX+=n*chartGeometry.step;panBy(-n*chartFrame*60)}}
+  }
+  if(draft&&chartMode!=="pan"){const point=chartPoint(p);if(point)draft.b=point}
+  scheduleDraw();
+ });
+ function finish(e,cancel=false){
+  pointers.delete(e.pointerId);
+  if(pinch){if(pointers.size<2)pinch=null;drag=null;return}
+  if(drag&&drag.id===e.pointerId){if(!cancel&&drag.moved&&draft&&(chartMode==="measure"||chartMode==="trend")){const p=chartPoint(localPoint(e));if(p){draft.b=p;drawings.push(draft);if(drawings.length>50)drawings.shift();draft=null}}drag=null}
+  if(cancel)draft=null;scheduleDraw()
+ }
+ canvas.addEventListener("pointerup",e=>finish(e));canvas.addEventListener("pointercancel",e=>finish(e,true));
+ canvas.addEventListener("pointerleave",()=>{if(!pointers.size){chartHover=null;scheduleDraw()}});
+ canvas.addEventListener("keydown",e=>{if(e.key==="ArrowLeft"){e.preventDefault();panBy(-chartFrame*60*5)}else if(e.key==="ArrowRight"){e.preventDefault();panBy(chartFrame*60*5)}else if(e.key==="+"||e.key==="="){e.preventDefault();zoomBy(.8)}else if(e.key==="-"){e.preventDefault();zoomBy(1.25)}else if(e.key==="Home"){e.preventDefault();resetViewport(false);scheduleDraw()}else if(e.key==="Escape"){draft=null;setChartMode("pan")}});
+ canvas.addEventListener("dblclick",()=>{if(chartMode==="pan"){resetViewport(false);scheduleDraw()}});
+}
+bindChart();
+$("run").onchange=renderRun;$("month").onchange=()=>loadMonth().catch(fail);$("filter").onchange=()=>{page=0;renderLedger()};$("tradePrev").onclick=()=>{page--;renderLedger()};$("tradeNext").onclick=()=>{page++;renderLedger()};$("prev").onclick=()=>{stop();limit=Math.max(1,limit-1);viewEnd=null;draw()};$("next").onclick=()=>{stop();limit=Math.min(bars.length,limit+1);viewEnd=null;draw()};$("full").onclick=()=>{stop();limit=bars.length;viewEnd=null;draw()};$("play").onclick=()=>{if(timer){stop();return}if(!bars.length)return;if(limit>=bars.length)limit=1;viewEnd=null;timer=setInterval(()=>{limit=Math.min(bars.length,limit+1);draw();if(limit>=bars.length)stop()},120)};window.addEventListener("resize",()=>{draw();drawCurves()});$("overlay").onchange=draw;$("timeframe").onchange=()=>{stop();chartFrame=Number($("timeframe").value);chartHover=null;draw()};$("windowPrev").onclick=()=>{if(trade){windowDay-=86400;loadWindow().catch(fail)}};$("windowNext").onclick=()=>{if(trade){windowDay+=86400;loadWindow().catch(fail)}};
 function runLabel(r){return r.strategy+(r.target==null?"":" / TP "+r.target+" / SL "+r.stop)+(r.detail_available===false?" [summary only]":"")+(r.research_reference?" [research diagnostic · USD]":"")}
 function chooseSymbol(preferred=null){const same=index.runs.filter(r=>r.symbol===$("symbol").value);options($("run"),same.map(r=>[r.id,runLabel(r)]));if(same.some(r=>r.id===preferred))$("run").value=preferred;options($("compare"),[["","None"],...same.map(r=>[r.id,runLabel(r)])]);renderRun()}
 $("showBranches").onclick=async()=>{try{const rows=await get("branches.json");$("branchCoverage").replaceChildren(...rows.map(r=>{const a=document.createElement("a");a.href="https://github.com/rajkumar0rk/BTC-Analysis/tree/"+r.sha;a.textContent=r.name;const p=document.createElement("p");p.append(a);return p}))}catch(e){fail(e)}};
