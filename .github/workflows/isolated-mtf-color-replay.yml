@@ -1,4 +1,4 @@
-name: Reclaim directional candle progressive profit protection
+name: Reclaim progressive protection without volume or volatility filters
 on:
   push:
     branches: [research/mtf-color-replay-20261127]
@@ -128,7 +128,7 @@ jobs:
                       monthly[k]=round(v-prev,8);prev=v
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s=='flip' for _,s in self.trades),target_exits=sum(s=='target' for _,s in self.trades),rsi_exits=sum(s=='rsi' for _,s in self.trades),lock_exits=sum(s=='lock' for _,s in self.trades),protection_losses=sum(p<=0 and s in ('rsi','lock') for p,s in self.trades),invalid_line=self.invalid_line,mean_initial_distance=sum(self.distances)/len(self.distances) if self.distances else None)
-          settings={"Lock 3R Tight CandleConfirm":(3.,(.4,.6,.8)),"Lock Progressive CandleConfirm":(3.,(.4,.6,.8))}
+          settings={"Lock Progressive Filtered CandleConfirm":(3.,(.4,.6,.8)),"Lock Progressive NoFilters CandleConfirm":(3.,(.4,.6,.8))}
           states={k:State(k,*v) for k,v in settings.items()}
           audit={"reclaim_flip_signals_blocked":0,"reclaim_touch_only_signals_blocked":0,"rsi_blocked_reclaim":0,"candle_color_blocked":0,"candle_color_blocked_long":0,"candle_color_blocked_short":0,"confirmed_wrong_color_entries":0,"baseline_wrong_color_entries":0}
           volumes=deque(maxlen=20);atrs=deque(maxlen=20);filter_pass=False;filter_stats={"15m_ready":0,"volume_pass":0,"atr_pass":0,"both_pass":0}
@@ -184,7 +184,8 @@ jobs:
                       if completed15 and prev15 and old_ema is not None and alignment*(prev15[3]-old_ema)>0 and completed15[2]<=old_ema<=completed15[1] and alignment*(completed15[3]-old_ema)>0:
                           crossed=completed15[2]<old_ema if alignment==1 else completed15[1]>old_ema
                           for variant,s in states.items():
-                              if not (filter_pass and not s.pos and not s.used and st_line is not None):continue
+                              if not (not s.pos and not s.used and st_line is not None):continue
+                              if "NoFilters" not in variant and not filter_pass:continue
                               if alignment!=old_side:
                                   audit["reclaim_flip_signals_blocked"]+=1;continue
                               if not crossed:
@@ -203,22 +204,22 @@ jobs:
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          base=states["Lock 3R Tight CandleConfirm"];confirmed=states["Lock Progressive CandleConfirm"]
-          assert base.opens==117 and base.result()["wins"]==36
-          assert abs(base.result()["net"]+13.015391172734937)<1e-8
-          assert abs(base.result()["max_drawdown_pct"]-21.32653487371686)<1e-8
+          base=states["Lock Progressive Filtered CandleConfirm"];confirmed=states["Lock Progressive NoFilters CandleConfirm"]
+          assert base.opens==106 and base.result()["wins"]==43
+          assert abs(base.result()["net"]+16.849186814277076)<1e-8
+          assert abs(base.result()["max_drawdown_pct"]-20.371133353765476)<1e-8
           assert audit["confirmed_wrong_color_entries"]==0
           assert all(t["side"]*(t["signal_context"]["signal_close"]-t["signal_context"]["signal_open"])>0 for t in confirmed.ledger)
           assert all(s.result()["target_exits"]==0 for s in states.values())
           assert count==963030
-          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"Reclaim only; 15m Supertrend; previous and current ST directions equal; strict cross beyond frozen pre-signal EMA20 and close back; both require bullish signal candle for long and bearish for short, excludes doji; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; control activation 3R; Progressive 1R fee-adjusted breakeven, 1.5R 25% MFE, 2R 40% MFE, 3R onwards existing RSI 40/60/80% of MFE; all stages require MFE >= fee-adjusted breakeven; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; filtered entries use latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean","results":{k:s.result() for k,s in states.items()}}
+          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"filter_stats":filter_stats,"entry_audit":audit,"settings":settings,"execution":"Reclaim only; 15m Supertrend; previous and current ST directions equal; strict cross beyond frozen pre-signal EMA20 and close back; both require bullish signal candle for long and bearish for short, excludes doji; RSI14 >50 for buy and <50 for sell; one entry per ST cycle; 1m Color paired paths; ST reversal exit next open; no fixed TP; both variants progressive: 1R fee-adjusted breakeven, 1.5R 25% MFE, 2R 40% MFE, 3R onwards existing RSI 40/60/80% of MFE; all stages require MFE >= fee-adjusted breakeven; updates only at completed 15m close, never loosens, mark trigger and interpolated trade fill; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded; Filtered control requires latest completed 15m volume >= 1.5x prior 20 mean and ATR14 >= prior 20 ATR14 mean; NoFilters variant bypasses both checks; ATR remains diagnostic and Supertrend still uses ATR10","results":{k:s.result() for k,s in states.items()}}
           # Compact output permits all results to be retrieved without truncation.
           print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
           for k,v in results["results"].items():
               print("SWEEP_ROW "+json.dumps({"name":k,**{x:y for x,y in v.items() if x!="monthly"},"flat_months":sum(x==0 for x in v["monthly"].values())},separators=(",",":"))) 
           for k,v in results["results"].items():
               print("MONTHLY "+json.dumps({"name":k,"monthly":v["monthly"]},separators=(",",":")))
-          target=Path("reclaim-progressive")
+          target=Path("reclaim-progressive-no-filters")
           target.mkdir(exist_ok=True)
           (target/"ledger.json").write_text(json.dumps(confirmed.ledger,separators=(",",":"))+"\n")
           (target/"summary.json").write_text(json.dumps(results,indent=2)+"\n")
@@ -227,5 +228,5 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: reclaim-progressive-results
-          path: reclaim-progressive/
+          name: reclaim-progressive-no-filters-results
+          path: reclaim-progressive-no-filters/
