@@ -1,4 +1,4 @@
-name: Isolated MTF Color replay
+name: MTF Color 13 bracket sweep
 on:
   push:
     branches: [research/mtf-color-replay-20261127]
@@ -47,14 +47,15 @@ jobs:
               return (level-a)/(b-a)
           def dt(t):return datetime.fromtimestamp(t,timezone.utc)
           class State:
-              def __init__(self):
+              def __init__(self,sl,tp):
+                  self.sl=sl;self.tp=tp
                   self.cash=100.;self.peak=100.;self.dd=0.;self.pos=None;self.pending=0;self.used=False
                   self.trades=[];self.month={};self.fees=0.;self.zero=0;self.points=0.;self.opens=0
               def sample(self,price):
                   eq=self.cash+(self.pos[0]*(price-self.pos[2])*self.pos[1] if self.pos else 0.)
                   self.peak=max(self.peak,eq);self.dd=max(self.dd,(self.peak-eq)/self.peak*100)
                   return eq
-              def execute(self,t,v,mark):
+              def execute(self,t,v,mark,a,b,month):
                   if self.pending:
                       side=self.pending;self.pending=0
                       # 100% target notional; reserve entry costs and round to venue contract increment.
@@ -63,11 +64,10 @@ jobs:
                       else:
                           entry=v[0];fee=entry*q*.00059;self.cash-=fee;self.fees+=fee
                           self.pos=(side,q,entry,t,fee);self.used=True;self.opens+=1
-                  a=color(v);b=color(mark)
                   self.sample(b[0])
                   if self.pos:
                       side,q,entry,opened,entry_fee=self.pos
-                      stop=entry-side*100;target=entry+side*200
+                      stop=entry-side*self.sl;target=entry+side*self.tp
                       for j in range(3):
                           sl=crossing(b[j],b[j+1],stop,-side)
                           tp=crossing(a[j],a[j+1],target,side)
@@ -85,14 +85,16 @@ jobs:
                           self.cash+=gross-fee;self.fees+=fee;self.points+=side*(exit_price-entry)
                           self.trades.append((net,hit_stop));self.pos=None;self.sample(exit_price);break
                   eq=self.sample(mark[3])
-                  self.month[dt(t).astimezone(ist).strftime("%Y-%m")]=eq
+                  self.month[month]=eq
               def result(self):
                   final=list(self.month.values())[-1];prev=100.;monthly={}
                   for k,v in self.month.items():
                       monthly[k]=round(v-prev,8);prev=v
                   wins=sum(p>0 for p,_ in self.trades);g=sum(max(p,0) for p,_ in self.trades);loss=-sum(min(p,0) for p,_ in self.trades)
                   return dict(final_equity=final,net=final-100,trades=len(self.trades),entries=self.opens,wins=wins,win_rate=100*wins/len(self.trades) if self.trades else None,profit_factor=g/loss if loss else None,max_drawdown_pct=self.dd,fees_gst=self.fees,profitable_months=sum(x>0 for x in monthly.values()),monthly=monthly,zero_qty_signals=self.zero,closed_points=self.points,open_position=self.pos,stop_exits=sum(s for _,s in self.trades))
-          states={k:State() for k in ("Touch","Reclaim")}
+          combos=[("1:2",100,200),("1:3",100,300),("1:4",100,400),("2:4",200,400),("2:6",200,600),("2:8",200,800),("3:6",300,600),("3:9",300,900),("3:12",300,1200),("4:8",400,800),("4:12",400,1200),("5:10",500,1000),("5:15",500,1500)]
+          states={f"{mode} {key}":State(sl,tp) for key,sl,tp in combos for mode in ("Touch","Reclaim")}
+          by_mode={mode:[s for k,s in states.items() if k.startswith(mode+" ")] for mode in ("Touch","Reclaim")}
           groups={900:[],3600:[]};alignment=0;ema=None;prev_min=None;prev15=None;count=0;last=None;start=dt(1735689600);end=int(datetime(2026,11,1,tzinfo=ist).timestamp())
           def val(name,tf,p):
               v=book.get(name,tf,p)
@@ -107,7 +109,10 @@ jobs:
                   if t>=end:break
                   assert last is None or t==last+60
                   last=t;count+=1
-                  for s in states.values():s.execute(t,v,mv)
+                  month=dt(t).astimezone(ist).strftime("%Y-%m");a_path=color(v);b_path=color(mv)
+                  for s in states.values():
+                      if s.pending or s.pos:s.execute(t,v,mv,a_path,b_path,month)
+                      else:s.month[month]=s.cash
                   old_side=alignment;old_ema=ema;completed15=None
                   for seconds,group in groups.items():
                       group.append(v)
@@ -122,18 +127,21 @@ jobs:
                   if alignment!=old_side:
                       for s in states.values():s.used=False
                   if count>=6000 and alignment and dt(t+60).astimezone(ist).weekday()<5:
-                      s=states["Touch"]
-                      if not s.pos and not s.used and alignment==old_side and old_ema is not None and prev_min is not None:
-                          if alignment*(prev_min[3]-old_ema)>0 and alignment*(v[0]-old_ema)>=0 and v[2]<=old_ema<=v[1]:s.pending=alignment
-                      s=states["Reclaim"]
-                      if not s.pos and not s.used and completed15 and prev15 and old_ema is not None:
-                          if alignment*(prev15[3]-old_ema)>0 and completed15[2]<=old_ema<=completed15[1] and alignment*(completed15[3]-old_ema)>0:s.pending=alignment
+                      if alignment==old_side and old_ema is not None and prev_min is not None and alignment*(prev_min[3]-old_ema)>0 and alignment*(v[0]-old_ema)>=0 and v[2]<=old_ema<=v[1]:
+                          for s in by_mode["Touch"]:
+                              if not s.pos and not s.used:s.pending=alignment
+                      if completed15 and prev15 and old_ema is not None and alignment*(prev15[3]-old_ema)>0 and completed15[2]<=old_ema<=completed15[1] and alignment*(completed15[3]-old_ema)>0:
+                          for s in by_mode["Reclaim"]:
+                              if not s.pos and not s.used:s.pending=alignment
                   if completed15:prev15=completed15
                   prev_min=v
               print("Processed",p["file"],count,flush=True)
           assert last==end-60
-          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"execution":"Color paired trade and mark paths; fixed 100/200; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded","results":{k:s.result() for k,s in states.items()}}
-          print(json.dumps(results,indent=2))
+          results={"range":"2025-01-01 UTC to 2026-11-01 00:00 IST exclusive; first 6000 minutes warmup","bars":count,"execution":"Color paired trade and mark paths; 13 fixed point brackets; 1x, 100% target exposure, .001 BTC quantity step, entry cost reserve; taker fee both sides 0.05% + GST 18%, exit waiver <=30min, zero additional slippage, actual funding excluded","results":{k:s.result() for k,s in states.items()}}
+          # Compact output permits all results to be retrieved without truncation.
+          print("SWEEP_META "+json.dumps({k:v for k,v in results.items() if k!="results"}))
+          for k,v in results["results"].items():
+              print("SWEEP_ROW "+json.dumps({"name":k,**v},separators=(",",":")))
           Path("mtf-color-results.json").write_text(json.dumps(results,indent=2))
           
           PY
