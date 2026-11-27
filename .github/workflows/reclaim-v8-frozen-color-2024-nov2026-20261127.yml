@@ -1,0 +1,222 @@
+name: Frozen V8 Color 2024 and November 2026
+on:
+  push:
+    branches: [research/reclaim-v5-validation-20261124]
+    paths: [.github/workflows/reclaim-v8-frozen-color-2024-nov2026-20261127.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 48aec054282bf96d48cdee49c67e583f50ad35b7
+      - name: Restore immutable 57-rule candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download 45366169753 --repo rajkumar0rk/BTC-Analysis --name reclaim-2025-2026-profit-refinement --dir frozen-v8
+      - name: Pin recovered 2024 and latest November native archives
+        run: |
+          git fetch --depth=1 origin bb9998f72c12673c2104e6e04ffcbffae66205f9
+          git checkout FETCH_HEAD -- data/delta_india/BTCUSD/2024_verified_archive
+          git fetch --depth=1 origin 097564fcc1f8ec4f5ed86c665ed769c690764699
+          mkdir -p nov-data
+          for folder in 1m institutional/history/mark_1m institutional/history/funding_1h; do
+            mkdir -p "nov-data/$folder"
+            git show "FETCH_HEAD:data/delta_india/BTCUSD/$folder/2026-11.csv.gz" > "nov-data/$folder/2026-11.csv.gz"
+          done
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba
+      - name: Replay original rules and Color only on recovered and forward archives
+        run: |
+          PYTHONPATH=scripts python -u - <<'PY'
+          import hashlib,json,pathlib
+          import numpy as np,pandas as pd
+          from numba import njit
+          from research_st_ema20_initial_sl_grid_20261122 import eng
+          from research_st_ema20_reclaim_loss_months_20261122 import indicator_features,signal_table
+          e=eng()
+          raw=pathlib.Path("frozen-v8/candidate.json").read_bytes()
+          assert hashlib.sha256(raw).hexdigest()=="28fdb61028220a1bd2fa0ee1354ac125c934230849b804d35afec6e44d1b94c9"
+          cfg=json.loads(raw);assert len(cfg["rules"])==57
+          IST="Asia/Kolkata"
+          def ist(s):return pd.Timestamp(s,tz=IST).tz_convert("UTC")
+          root=pathlib.Path("data/delta_india/BTCUSD")
+          arch=root/"2024_verified_archive"
+          manifest=json.loads((arch/"manifest.json").read_text())
+          assert manifest["synthetic_rows"]==0
+          cols=["open","high","low","close","volume"]
+          mkcols=["open","high","low"]
+          def read(p,columns):
+              x=pd.read_csv(p,usecols=["time"]+columns);t=x.pop("time")
+              x.index=pd.to_datetime(t,unit="s",utc=True) if pd.api.types.is_numeric_dtype(t) else pd.to_datetime(t,utc=True)
+              assert not x.index.has_duplicates and np.isfinite(x.to_numpy(float)).all(),str(p)
+              return x.sort_index()
+          def load24(label,columns,step):
+              frames=[]
+              for month in range(2,13):
+                  s=f"2024-{month:02d}";p=arch/label/(s+".csv.gz")
+                  a=[x for x in manifest["months"] if x["series"]==label and x["month"]==s]
+                  assert len(a)==1 and a[0]["missing"]==0 and a[0]["observed"]==a[0]["expected"]
+                  assert hashlib.sha256(p.read_bytes()).hexdigest()==a[0]["sha256"]
+                  x=read(p,columns);assert len(x)==a[0]["expected"];frames.append(x)
+              z=pd.concat(frames).sort_index()
+              assert not z.index.has_duplicates and z.index.to_series().diff().dropna().eq(pd.Timedelta(seconds=step)).all()
+              return z
+          def load_forward(folder,columns):
+              parts=[read(p,columns) for p in sorted((root/folder).glob("20??-??.csv.gz")) if p.name[:4] in ["2025","2026"] and p.name<"2026-11"]
+              parts.append(read(pathlib.Path("nov-data")/folder/"2026-11.csv.gz",columns))
+              z=pd.concat(parts).sort_index()
+              assert not z.index.has_duplicates
+              return z
+          m24=load24("trade_1m",cols,60);mk24=load24("mark_1m",mkcols,60);f24=load24("funding_1h",["close"],3600).close
+          mf=load_forward("1m",cols);mkf=load_forward("institutional/history/mark_1m",mkcols);ff=load_forward("institutional/history/funding_1h",["close"]).close
+          nov_start=ist("2026-11-01")
+          # Cap at the last contiguous minute for which all original risk/cost inputs exist.
+          last=min(mf.index.max()+pd.Timedelta(minutes=1),mkf.index.max()+pd.Timedelta(minutes=1),ff.index.max()+pd.Timedelta(hours=2),ist("2026-12-01"))
+          required_idx=pd.date_range(nov_start,last-pd.Timedelta(minutes=1),freq="min")
+          ok=required_idx.isin(mf.index)&required_idx.isin(mkf.index)&(required_idx.floor("h")-pd.Timedelta(hours=1)).isin(ff.index)
+          if not ok.all():last=required_idx[np.flatnonzero(~ok)[0]]
+          cutoff=last.floor("h")
+          assert cutoff>nov_start
+          print("COLOR_COVERAGE",json.dumps(dict(trade_end=str(mf.index.max().tz_convert(IST)),mark_end=str(mkf.index.max().tz_convert(IST)),funding_end=str(ff.index.max().tz_convert(IST)),nov_start=str(nov_start.tz_convert(IST)),end_exclusive=str(cutoff.tz_convert(IST)),minutes=int((cutoff-nov_start).total_seconds()/60),month_complete=cutoff>=ist("2026-12-01"),jan2024_missing=25719)),flush=True)
+          @njit
+          def replay(jstart,end,side,mid,slip,fee,tp,sl,path,delay,o,hi,lo,c):
+              jstart+=delay
+              if jstart>=end:return -1,0.
+              if delay:mid=o[jstart]
+              entry=mid+side*slip;stop=entry-side*entry*sl
+              target=entry+side*entry*tp/100
+              for j in range(jstart,end):
+                  high_first=path==0 if path<2 else (c[j]<o[j] or (c[j]==o[j] and o[j]-lo[j]>hi[j]-o[j]))
+                  first=hi[j] if high_first else lo[j];second=lo[j] if high_first else hi[j]
+                  nodes=(o[j],first,second,c[j])
+                  active=j!=jstart or delay>0 or side*(o[j]-mid)>=-1e-9
+                  ex=0.;hit=False
+                  if j!=jstart and side*(o[j]-stop)<-1e-9:ex=o[j];hit=True
+                  elif active and tp>0 and side*(o[j]-target)>=-1e-9:ex=target;hit=True
+                  if not hit:
+                      for k in range(3):
+                          a,b=nodes[k],nodes[k+1]
+                          if not active:
+                              if side*(b-a)<=0 or side*(b-mid)<-1e-9:continue
+                              a=mid;active=True
+                          if side*(b-a)>0:
+                              if tp>0 and side*(a-target)<1e-9 and side*(b-target)>=-1e-9:ex=target;hit=True;break
+                              for rung in (2.,3.,5.):
+                                  z=entry+side*entry*rung/100
+                                  if side*(a-z)<-1e-9 and side*(b-z)>=-1e-9 and side*(z-stop)>1e-9:stop=z
+                          else:
+                              if side*(a-stop)<-1e-9:ex=a;hit=True;break
+                              if side*(a-stop)>=-1e-9 and side*(b-stop)<=1e-9:ex=stop;hit=True;break
+                  if hit:
+                      fill=ex-side*slip
+                      return j,.001*side*(fill-entry)-.001*fee*(entry+fill)
+              if end<len(o):
+                  fill=o[end]-side*slip
+                  return end,.001*side*(fill-entry)-.001*fee*(entry+fill)
+              return -1,0.
+
+          def run(q,mk,fund,score_start,end,initial_cash=100.,label=""):
+              # Hour-aligned signal data, no synthetic rows or gap bridging.
+              a=q.index.min().ceil("h");b=end.floor("h")
+              q=q.loc[(q.index>=a)&(q.index<b)]
+              assert q.index.equals(pd.date_range(a,b-pd.Timedelta(minutes=1),freq="min"))
+              assert (q.low<=q[["open","close"]].min(axis=1)).all() and (q.high>=q[["open","close"]].max(axis=1)).all()
+              h=indicator_features(e.features(q.resample("1h").agg(dict(open="first",high="max",low="min",close="last",volume="sum"))))
+              entries=e.entry_candidates(q,h,"reclaim");features=signal_table(entries,h)
+              o,hi,lo,c=(q[x].to_numpy(float) for x in ["open","high","low","close"]);hs=h.side.to_numpy()
+              mark=mk.reindex(q.index);rate=fund.reindex(q.index.floor("h")-pd.Timedelta(hours=1)).to_numpy(float)
+              weight=np.where(q.index<pd.Timestamp("2025-09-08T16:00:00Z"),1/480,np.where((q.index.minute==0)&(q.index.hour%8==0),1.,0.))
+              flow=np.where(weight==0,0.,rate*mark.open.to_numpy()*weight*.001/100)
+              missing=~np.isfinite(flow)|~np.isfinite(mark.to_numpy(float)).all(axis=1)
+              assert not missing[q.index>=score_start].any(),(label,int(missing[q.index>=score_start].sum()))
+              ml=mark.low.to_numpy(float);mh=mark.high.to_numpy(float)
+              dl=np.r_[0.,np.cumsum(np.where(missing,0.,np.maximum(flow,0.)))]
+              ds=np.r_[0.,np.cumsum(np.where(missing,0.,np.maximum(-flow,0.)))]
+              def gate(row,g):
+                  for atom in g.split(" AND "):
+                      if atom=="ALL":continue
+                      k,op,v=atom.split();v=float(v);x=row[k]
+                      if not ((x<=v) if op=="<=" else (x>=v) if op==">=" else (x==v)):return False
+                  return True
+              cash=initial_cash;peak=cash;dd=0.;active=-1;ledger=[];skips=0;overlap=0;risk=0;open_position=None
+              monthly={str(x):0. for x in pd.period_range(score_start.tz_convert(IST).tz_localize(None).to_period("M"),(b-pd.Timedelta(minutes=1)).tz_convert(IST).tz_localize(None).to_period("M"),freq="M")}
+              monthly_counts={k:0 for k in monthly}
+              # Allocate funding to the actual accrual month, matching the original workflow.
+              def debit_months(start,stop,prefix):
+                  for mo in monthly:
+                      l=max(start,q.index.searchsorted(ist(mo+"-01")))
+                      r=min(stop+1,q.index.searchsorted(ist(mo+"-01")+pd.offsets.MonthBegin(1)))
+                      if r>l:monthly[mo]-=float(prefix[r]-prefix[l])
+              overlay=cfg["overlay"]
+              for i,v in enumerate(entries):
+                  j=int(v["entry_j"]);side=int(v["side"])
+                  if q.index[j]<score_start:continue
+                  row=features.iloc[i];tp=0.;cap=0.
+                  for rule in cfg["rules"]:
+                      if not gate(row,rule["gate"]):continue
+                      if rule["mode"]=="selected_only" and tp==0:continue
+                      if rule["mode"]=="new_only" and tp!=0:continue
+                      tp=float(rule["target"]);cap=float(rule["stop_cap_pct"])
+                  if cash<overlay["wallet_cap"] and gate(row,overlay["gate"]):
+                      if overlay["mode"]=="override" or (overlay["mode"]=="selected_only" and tp!=0) or (overlay["mode"]=="new_only" and tp==0):
+                          tp=float(overlay["target"]);cap=float(overlay["stop_cap_pct"])
+                  if tp==0:continue
+                  mid=float(v["entry"])-side*5.;entry=mid+side*5.
+                  if entry*.001*(1+.00059)>cash:skips+=1;continue
+                  if j<=active:overlap+=1;continue
+                  flips=np.flatnonzero(hs[j//60:]!=side)
+                  stop_j=min((j//60+int(flips[0])+1)*60,len(q)) if len(flips) else len(q)
+                  ex,gross=replay(j,stop_j,side,mid,5.,.00059,tp,min(.02,cap/100),2,0,o,hi,lo,c)
+                  prefix=dl if side==1 else ds
+                  if ex<0:
+                      # At the data cutoff, retain open position; no invented future fill.
+                      debit=float(prefix[len(q)]-prefix[j])
+                      debit_months(j,len(q)-1,prefix)
+                      cash-=debit
+                      open_position=dict(entry=str(q.index[j].tz_convert(IST)),side=side,entry_price=entry,mark_to_trade_close_pnl=.001*side*(c[-1]-entry)-.001*.00059*(entry+c[-1]),funding_debit=debit)
+                      active=len(q);break
+                  debit=float(prefix[ex+1]-prefix[j]);net=float(gross-debit)
+                  adverse=float(np.min(ml[j:ex+1])*.995 if side==1 else np.max(mh[j:ex+1])*1.005)
+                  maint=entry*.001*.00059+debit-.001*side*(adverse-entry)+.001*adverse*(.0025+.00059+.0025*.5*1.18)
+                  if maint>=cash:risk+=1
+                  debit_months(j,ex,prefix)
+                  mo=q.index[ex].tz_convert(IST).strftime("%Y-%m");monthly[mo]+=float(gross);monthly_counts[mo]+=1
+                  cash+=net;active=ex;peak=max(peak,cash);dd=max(dd,100*(peak-cash)/peak)
+                  ledger.append(dict(entry=str(q.index[j].tz_convert(IST)),exit=str(q.index[ex].tz_convert(IST)),month=mo,side=side,net=net,funding=debit,entry_price=entry,tp=tp,sl_cap=cap,wallet_after=cash))
+              assert abs(sum(monthly.values())-(cash-initial_cash))<1e-7,(label,monthly,cash)
+              wins=sum(x["net"]>0 for x in ledger);losses=sum(x["net"]<0 for x in ledger)
+              p=sum(x["net"] for x in ledger if x["net"]>0);l=-sum(x["net"] for x in ledger if x["net"]<0)
+              return dict(label=label,score_start=str(score_start.tz_convert(IST)),end_exclusive=str(b.tz_convert(IST)),start_balance=initial_cash,end_balance=cash,net=cash-initial_cash,return_pct=100*(cash-initial_cash)/initial_cash,monthly=monthly,monthly_trades=monthly_counts,profitable=sum(v>1e-8 for v in monthly.values()),loss_months=sum(v< -1e-8 for v in monthly.values()),flat=sum(abs(v)<=1e-8 for v in monthly.values()),trades=len(ledger),wins=wins,losses=losses,win_rate=100*wins/max(1,len(ledger)),profit_factor=p/l if l else None,closed_dd=dd,capital_skips=skips,overlap_skips=overlap,margin_breaches=risk,open_position=open_position,ledger=ledger)
+          r24=run(m24,mk24,f24,m24.index.min().ceil("h")+pd.Timedelta(days=7),ist("2025-01-01"),label="2024")
+          # Reproduce original archive's continuous wallet and signal history, then extend through November.
+          rf=run(mf,mkf,ff,mf.index.min(),cutoff,label="2025_to_nov2026")
+          prior=sum(v for k,v in rf["monthly"].items() if "2025-01"<=k<="2026-10")
+          assert abs(prior-124.90574577630194)<1e-6,(prior,rf["monthly"])
+          nov=rf["monthly"]["2026-11"];novledger=[x for x in rf["ledger"] if x["month"]=="2026-11"]
+          start=100+prior
+          print("COLOR_PRIOR_PARITY_OK",prior,flush=True)
+          rn=run(mf,mkf,ff,nov_start,cutoff,label="nov2026_reset")
+          # Warmup and cycle consumption preserved from continuous history in both cases.
+          def summary(r):return {k:v for k,v in r.items() if k!="ledger"}
+          carried=dict(start_balance=start,end_balance=start+nov,net=nov,return_pct=100*nov/start,trades=len(novledger),wins=sum(x["net"]>0 for x in novledger),losses=sum(x["net"]<0 for x in novledger),open_position=rf["open_position"],end_exclusive=rf["end_exclusive"],ledger=novledger)
+          results=dict(year2024=r24,continuous=rf,november_carried=carried,november_reset=rn)
+          out=pathlib.Path("analysis/frozen_color_2024_nov2026");out.mkdir(parents=True,exist_ok=True)
+          (out/"results.json").write_text(json.dumps(results,indent=2))
+          print("COLOR_2024_RESULT",json.dumps(summary(r24)),flush=True)
+          print("COLOR_NOV_CARRIED_RESULT",json.dumps(carried),flush=True)
+          print("COLOR_NOV_RESET_RESULT",json.dumps(summary(rn)),flush=True)
+          print("COLOR_EXTENDED_COMPLETE",flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frozen-color-2024-nov2026
+          path: analysis/frozen_color_2024_nov2026/
+          if-no-files-found: error
