@@ -93,6 +93,9 @@
         "supertrend.line": "supertrend",
         "rsi.value": "rsi14",
         "atr.value": "atr14"
+      },
+      "signal_offsets_bars": {
+        "ema.value": 1
       }
     }
   }

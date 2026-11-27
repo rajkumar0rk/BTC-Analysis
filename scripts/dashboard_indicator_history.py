@@ -76,6 +76,14 @@ def metadata(definitions):
 def epoch(value):return int(datetime.fromisoformat(value).timestamp())
 def dt(value):return datetime.fromtimestamp(value,timezone.utc)
 
+def snapshot_timestamp(signal_timestamp,definition,offsets):
+    # Archived signals can reference an earlier completed indicator observation.
+    # Offsets are explicit source metadata in native indicator bars, never future bars.
+    bars=offsets.get(definition.name,0)
+    if type(bars) is not int or not 0<=bars<=1000:
+        raise ValueError("invalid causal indicator snapshot offset")
+    return signal_timestamp-bars*definition.timeframe.seconds
+
 def replay(root,repo,config,records,run_dir,symbol):
     sha=config["source_commit"]
     fetch=lambda path:source_fetch(repo,sha,path)
@@ -124,16 +132,20 @@ def replay(root,repo,config,records,run_dir,symbol):
     if count!=config["expected_bars"] or last!=end-60:raise ValueError("pinned replay bar count mismatch")
     maps={key:dict(points) for key,points in series.items()}
     fields=config["signal_fields"];checks=0
+    offsets=config.get("signal_offsets_bars",{})
+    if not isinstance(offsets,dict) or not set(offsets)<=set(fields):raise ValueError("unknown indicator snapshot offset")
     for trade in records:
         ts=epoch(trade["trigger_utc"]);snap={}
         for d,m in zip(defs,meta):
             field=fields.get(d.name)
             if not field:continue
             expected=trade["signal_context"].get(field)
-            actual=maps[m["id"]].get(ts)
+            observation_ts=snapshot_timestamp(ts,d,offsets)
+            actual=maps[m["id"]].get(observation_ts)
             if expected is None or actual is None or not math.isclose(float(expected),actual,rel_tol=1e-10,abs_tol=1e-8):
                 raise ValueError(f"indicator snapshot mismatch {trade['id']} {field}: {expected} != {actual}")
             snap[m["id"]]=float(expected);checks+=1
+            trade.setdefault("signal_context",{})[field+"_observed_utc"]=dt(observation_ts).isoformat()
         trade["indicator_values"]=snap
     if not records or checks!=len(records)*len(fields):raise ValueError("incomplete archived snapshot verification")
     # Shard by observation date, plus the previous observation for step continuity.
@@ -148,4 +160,4 @@ def replay(root,repo,config,records,run_dir,symbol):
             shard[key]=points[max(0,lo-1):hi]
         dump(run_dir/"indicators"/(day+".json"),shard)
     print(f"Verified {checks} archived indicator snapshots, {count} input minutes, {len(days)} indicator days",flush=True)
-    return dict(indicator_definitions=meta,indicator_days=days,indicator_provenance={"source_commit":sha,"source_path":config["source_path"],"method":"pinned_input_replay_snapshot_verified","verified_snapshots":checks,"input_bars":count})
+    return dict(indicator_definitions=meta,indicator_days=days,indicator_provenance={"source_commit":sha,"source_path":config["source_path"],"method":"pinned_input_replay_snapshot_verified","verified_snapshots":checks,"input_bars":count,"signal_offsets_bars":offsets})
