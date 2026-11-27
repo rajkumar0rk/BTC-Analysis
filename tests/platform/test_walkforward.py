@@ -64,3 +64,23 @@ class WalkForwardTests(unittest.TestCase):
                 for key in ("test","worst_return_pct","max_drawdown_pct","min_trades","passed"):self.assertEqual(a[key],b[key])
             with self.assertRaisesRegex(ValueError,"outside selected"):
                 repository_fold(m,"BTCUSD","2025-01-01","2025-01-01",json.dumps(graph()),{**study(),"train_minutes":1440},1,SETTINGS,True,tmp)
+
+    def test_leveraged_candidates_and_funding_stress(self):
+        from btc_analysis.service.study_risk import StudyRisk
+        s=study();s["leverage_values"]=["2","5"]
+        text=csv_text()
+        mark="time,open,high,low,close\n"+"\n".join(x.rsplit(",",1)[0] for x in text.splitlines()[1:])+"\n"
+        r=dict(leverage="2",margin_mode="cross",initial_rate_floor="0.01",maintenance_rate="0.005",max_notional="100000",
+            liquidation_fee_bps="5",profile_start=str(T),profile_end=str(T+3600),profile_source="synthetic fixture",
+            preliq_points="0",scalp_enabled=False,scalp_start="",scalp_end="",mark_csv=mark,funding_enabled=True,
+            funding_interval_seconds=600,funding_anchor_epoch=T,funding_csv="time,rate,reference_mark\n"+"".join(f"{T+i*600},0.001,100\n" for i in range(6)),acknowledge=True)
+        sliced=StudyRisk(r,True).window(T+1200,T+1800,"5","funding_negative","2")
+        self.assertIn(", -0.002,".replace(" ",""),sliced["funding_csv"])
+        self.assertEqual(sliced["funding_provenance"],"stress_synthetic")
+        out=browser_fold(text,json.dumps(graph()),"BTCUSD",SETTINGS,True,s,1,risk=r)
+        self.assertEqual(len(out["training"]),4)
+        self.assertEqual({x["parameters"]["leverage"] for x in out["training"]},{"2","5"})
+        self.assertIsNotNone(out["winner_parameters"])
+        self.assertEqual(len(out["tests"]),9)
+        self.assertTrue(all(x["leverage"]==out["winner_parameters"]["leverage"] for x in out["tests"] if x["test"]!="parameter_neighbor"))
+        with self.assertRaises(ValueError):browser_fold(text,json.dumps(graph()),"BTCUSD",SETTINGS,True,s,1)

@@ -29,14 +29,14 @@ async function longReplay(m,t){
  const markRoot=new URL("mark_1m/",root);
  const markManifest=m.risk?new TextDecoder("utf-8",{fatal:true}).decode(await archiveBytes(new URL("manifest.json",markRoot),262144)):null;
  const common={manifest_text:manifest,symbol:m.symbol,from_date:m.from,to_date:m.to,graph_text:m.graph,settings:m.settings,assume_open:m.assume,folder:"/long-history"};
- const input=studyMode?{...common,study:m.study,fold:m.fold}:{...common,risk:m.risk??null,mark_manifest:markManifest};
+ const input=studyMode?{...common,study:m.study,fold:m.fold,...(m.risk?{risk:m.risk,mark_manifest:markManifest}:{})}:{...common,risk:m.risk??null,mark_manifest:markManifest};
  py.globals.set("long_json",JSON.stringify(input));
  const progress=p=>{self.postMessage({id:m.id,status:"progress",progress:Math.min(99,15+Math.floor(p*.85))});return true;};
  py.globals.set("report_progress",progress);
  let folder=false;
  try{
   const plan=JSON.parse(py.runPython(studyMode?"json.dumps(study_download_plan(**{k:v for k,v in json.loads(long_json).items() if k in ('manifest_text','symbol','from_date','to_date','graph_text','study','fold')}))":"json.dumps(plan_archive(**{k:v for k,v in json.loads(long_json).items() if k in ('manifest_text','symbol','from_date','to_date')}))"));
-  const markPlan=markManifest?JSON.parse(py.runPython("json.dumps(plan_archive(json.loads(long_json)['mark_manifest'],json.loads(long_json)['symbol'],json.loads(long_json)['from_date'],json.loads(long_json)['to_date']))")):null;
+  const markPlan=markManifest?JSON.parse(py.runPython(studyMode?"json.dumps(study_download_plan(**{**{k:v for k,v in json.loads(long_json).items() if k in ('symbol','from_date','to_date','graph_text','study','fold')}, 'manifest_text':json.loads(long_json)['mark_manifest']}))":"json.dumps(plan_archive(json.loads(long_json)['mark_manifest'],json.loads(long_json)['symbol'],json.loads(long_json)['from_date'],json.loads(long_json)['to_date']))")):null;
   const parts=[...plan.parts.map(part=>({part,root})),...(markPlan?.parts??[]).map(part=>({part,root:markRoot}))];
   py.FS.mkdir("/long-history");folder=true;
   let total=0,done=0;
@@ -75,7 +75,7 @@ self.onmessage=async({data:m})=>{
   runtime??=start();const py=await runtime;
   self.postMessage({id:m.id,status:"running"});
   const args={csv_text:m.csv,graph_text:m.graph,symbol:m.symbol,settings:m.settings,assume_open:m.assume};
-  py.globals.set("request_json",JSON.stringify(m.study?{...args,study:m.study,fold:m.fold}:{...args,risk:m.risk??null,details:m.details===true}));
+  py.globals.set("request_json",JSON.stringify(m.study?{...args,study:m.study,fold:m.fold,...(m.risk?{risk:m.risk}:{})}:{...args,risk:m.risk??null,details:m.details===true}));
   const progress=p=>{self.postMessage({id:m.id,status:"progress",progress:p});return true;};
   py.globals.set("report_progress",progress);
   const started=performance.now();

@@ -23,22 +23,26 @@ def prepare_study(manifest_text,symbol,from_date,to_date,graph_text,study,fold):
 def study_download_plan(manifest_text,symbol,from_date,to_date,graph_text,study,fold):
     return prepare_study(manifest_text,symbol,from_date,to_date,graph_text,study,fold)[-1]
 
-def repository_fold(manifest_text,symbol,from_date,to_date,graph_text,study,fold,settings,assume_open,folder,progress=lambda p:True):
+def repository_fold(manifest_text,symbol,from_date,to_date,graph_text,study,fold,settings,assume_open,folder,progress=lambda p:True,risk=None,mark_manifest=None):
     if assume_open is not True:raise ValueError("acknowledge unverified timestamp convention")
     spec,base,choices,window,total,selected=prepare_study(manifest_text,symbol,from_date,to_date,graph_text,study,fold)
     # Only the training window is provided to the training replay. The pinned
     # full snapshot hash identifies provenance, not a claim of unseen holdout.
-    completed=0;n=len(choices)+5
-    def runner(c,lo,hi,cost):
+    if bool(spec.leverage_values)!=(risk is not None) or (risk is None)!=(mark_manifest is None):raise ValueError("explicit leveraged study and mark archive required together")
+    if risk is not None:
+        from .study_risk import StudyRisk
+        risk_source=StudyRisk(risk,require_marks=False)
+    completed=0;n=len(choices)+5+(4 if risk is not None and risk["funding_enabled"] else 0)
+    def runner(c,lo,hi,cost,leverage=None,label="baseline"):
         nonlocal completed
         def report(p):
             if not progress(min(99,(completed*100+p)//n)):raise Cancelled()
             return True
-        r=replay_archive(manifest_text,from_date,to_date,c["source"],symbol,cost,True,folder,progress=report,window=(lo,hi))
+        r=replay_archive(manifest_text,from_date,to_date,c["source"],symbol,cost,True,folder,progress=report,window=(lo,hi),risk=risk_source.window(lo,hi,leverage,label,spec.funding_stress_multiplier) if risk is not None else None,mark_manifest=mark_manifest)
         completed+=1
         return r
-    out=evaluate_fold(base,spec,choices,window,settings,runner,progress)
-    out["limitations"] += ["Repository compressed archive; maximum 5 million candidate-minutes across all folds, two paths per replay.","Study uses explicit costs, 1x only. No actual exchange funding or liquidation."]
+    out=evaluate_fold(base,spec,choices,window,settings,runner,progress,risk=risk)
+    out["limitations"] += ["Repository compressed archive; maximum 5 million candidate-minutes across all folds, two paths per replay.",("Study uses explicit risk assumptions; no actual exchange funding or liquidation attestation." if risk is not None else "Study uses explicit costs, 1x only. No actual exchange funding or liquidation.")]
     # Recompute fold digest because the limitations are part of its evidence.
     out["fold_sha256"]=fingerprint({k:v for k,v in out.items() if k!="fold_sha256"})
-    return dict(study_sha256=fingerprint(dict(study=spec.model_dump(),data_sha256=selected["manifest_sha256"],graph_sha256=base["graph_sha256"],symbol=symbol,settings=settings,from_date=from_date,to_date=to_date)),total_candidate_minutes=total,**out)
+    return dict(study_sha256=fingerprint(dict(study=spec.model_dump(),data_sha256=selected["manifest_sha256"],graph_sha256=base["graph_sha256"],symbol=symbol,settings=settings,from_date=from_date,to_date=to_date,**({"risk_sha256":fingerprint(risk),"mark_manifest_sha256":fingerprint(mark_manifest)} if risk is not None else {}))),total_candidate_minutes=total,**out)

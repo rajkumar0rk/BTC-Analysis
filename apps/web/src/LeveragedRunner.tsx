@@ -6,7 +6,8 @@ import type {BatchInput,LocalResult} from "./parallelReplay";
 type RiskScenario=LocalResult["scenarios"][number]&{funding_paid:string;liquidation_count:number;preliq_count:number;partial_liquidation_count:number;full_liquidation_count:number;remaining_quantity:string};
 type RiskResult=Omit<LocalResult,"scenarios">&{scenarios:RiskScenario[];risk:unknown};
 const defaults={leverage:"1",margin_mode:"isolated",initial_rate_floor:"",maintenance_rate:"",max_notional:"",liquidation_fee_bps:"",profile_start:"",profile_end:"",profile_source:"",preliq_points:"0",scalp_start:"",scalp_end:""};
-export function LeveragedRunner({input,graph,disabled,onBusy,from,to}:{input:BatchInput;graph:string;disabled:boolean;onBusy:(v:boolean)=>void;from:string;to:string}){
+export type StudyRiskSnapshot={symbol:string;csv:string;risk:Record<string,unknown>;mark:string};
+export function LeveragedRunner({input,graph,disabled,onBusy,from,to,onStudyRisk}:{input:BatchInput;graph:string;disabled:boolean;onBusy:(v:boolean)=>void;from:string;to:string;onStudyRisk:(r:StudyRiskSnapshot)=>void}){
  const [partial,setPartial]=useState(false),[partialConfig,setPartialConfig]=useState({reduction_fraction:"0.5",recovery_ratio:"1.25",max_steps:"3"});
  const [shock,setShock]=useState({initial_shock:"",maintenance_shock:""}),[tiered,setTiered]=useState(false),[tiers,setTiers]=useState(""),[v,setV]=useState(defaults),[mark,setMark]=useState(""),[funding,setFunding]=useState(""),[fund,setFund]=useState(false),[scalp,setScalp]=useState(false),[ack,setAck]=useState(false),[interval,setInterval]=useState("28800"),[anchor,setAnchor]=useState("0");
  const [fundingMode,setFundingMode]=useState<"operator_supplied"|"estimated_previous_hour_mark_open">("operator_supplied"),[unit,setUnit]=useState<FundingRateUnit|"">(""),[fundingNote,setFundingNote]=useState("");
@@ -45,6 +46,7 @@ export function LeveragedRunner({input,graph,disabled,onBusy,from,to}:{input:Bat
   }catch(e){setError(String(e));}finally{setLoading(false);onBusy(false);}
  }
  function clearEstimate(){if(fundingMode==="estimated_previous_hour_mark_open"){setFunding("");setFundingNote("");}setResult(null);}
+ function riskConfig(){return {...v,...(v.margin_mode==="portfolio"?shock:tiered?{tiers_json:tiers}:{}),...(v.margin_mode!=="isolated"&&partial?{partial_policy:{...partialConfig,max_steps:Number(partialConfig.max_steps)}}:{}),funding_enabled:fund,funding_csv:fund?funding:"",...(fund?{funding_provenance:fundingMode}:{}),funding_interval_seconds:Number(interval),funding_anchor_epoch:Number(anchor),scalp_enabled:scalp,acknowledge:ack};}
  function run(long=false){
   if(disabled||busy||loading)return;setError("");setResult(null);setBusy(true);onBusy(true);setStatus(long?"Initializing continuous leveraged replay":"Initializing risk replay");
   const id=++seq.current;
@@ -57,7 +59,7 @@ export function LeveragedRunner({input,graph,disabled,onBusy,from,to}:{input:Bat
    };
    w.onerror=()=>{if(seq.current===id){setError("Risk worker failed.");setStatus("Failed");close();}};
    timer.current=window.setTimeout(()=>{if(seq.current===id){setError(long?"Long risk run exceeded 30 minutes.":"Risk run exceeded 120 seconds.");setStatus("Timed out");close();}},long?1800000:120000);
-   const risk={...v,...(v.margin_mode==="portfolio"?shock:tiered?{tiers_json:tiers}:{}),...(v.margin_mode!=="isolated"&&partial?{partial_policy:{...partialConfig,max_steps:Number(partialConfig.max_steps)}}:{}),funding_enabled:fund,funding_csv:fund?funding:"",...(fund?{funding_provenance:fundingMode}:{}),funding_interval_seconds:Number(interval),funding_anchor_epoch:Number(anchor),scalp_enabled:scalp,acknowledge:ack};
+   const risk=riskConfig();
    w.postMessage(long?{id,action:"long_repository",from,to,symbol:input.symbol,settings:input.settings,assume:input.assume,graph,risk}:{id,...input,graph,details:true,risk:{...risk,mark_csv:mark}});
   }catch(e){setError(String(e));close();}
  }
@@ -78,6 +80,7 @@ export function LeveragedRunner({input,graph,disabled,onBusy,from,to}:{input:Bat
  <label className="check"><input type="checkbox" checked={scalp} onChange={e=>setScalp(e.target.checked)}/> Assume eligible 30-minute closing fee waiver (single entry, full close; no vouchers)</label>
  {scalp&&<>{(["scalp_start","scalp_end"] as const).map(k=><label key={k}>{k} UTC epoch seconds<input value={v[k]} onChange={e=>setV(old=>({...old,[k]:e.target.value}))}/></label>)}</>}
  <label className="check"><input type="checkbox" checked={ack} onChange={e=>setAck(e.target.checked)}/> I acknowledge supplied historical margin/fee assumptions, mark and funding provenance, and simulation limitations.</label>
+ <button disabled={!riskReady} onClick={()=>onStudyRisk({symbol:input.symbol,csv:input.csv,risk:riskConfig(),mark:markInput?.csv===input.csv&&markInput?.symbol===input.symbol?mark:""})}>Copy risk assumptions to walk-forward study</button><p className="muted">Copies an explicit snapshot. After changing risk settings, copy again before studying.</p>
  <button className="primary" disabled={!ready} onClick={()=>run()}>Run leveraged replay</button>
  <button className="primary" disabled={!riskReady||!from||!to||(fund&&fundingMode==="estimated_previous_hour_mark_open")} onClick={()=>run(true)}>Run continuous leveraged backtest</button><p className="muted">Uses repository trade and mark prices for {from} to {to} UTC, up to 1098 days within common coverage, no CSV needed except explicit settlements if enabled. Summary only; funding excluded unless operator CSV supplied. Repository funding estimate is limited to short replay. Fixed-tier and bracket assumptions are not exchange-certified.</p></fieldset>
  {busy&&<button onClick={()=>{close();setStatus("Cancelled");}}>Cancel leveraged replay</button>}<p role="status">{status}</p>{error&&<pre role="alert" className="error" style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}>{error}</pre>}

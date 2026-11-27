@@ -55,7 +55,7 @@ def prepare_risk(risk,rows,i,tf):
     if not isinstance(risk,dict) or set(risk)-{"funding_provenance","tiers_json","initial_shock","maintenance_shock","partial_policy"}!=keys or risk["acknowledge"] is not True:raise ValueError("explicit risk assumptions required")
     if type(risk["funding_enabled"]) is not bool or type(risk["scalp_enabled"]) is not bool:raise ValueError("invalid switches")
     provenance=risk.get("funding_provenance","operator_supplied")
-    if provenance not in ("operator_supplied","estimated_previous_hour_mark_open") or ("funding_provenance" in risk and not risk["funding_enabled"]):raise ValueError("invalid funding provenance")
+    if provenance not in ("operator_supplied","estimated_previous_hour_mark_open","stress_synthetic") or ("funding_provenance" in risk and not risk["funding_enabled"]):raise ValueError("invalid funding provenance")
     leverage=decimal(risk["leverage"],"1","100")
     if risk["margin_mode"] not in ("isolated","cross","portfolio"):raise ValueError("unsupported margin mode")
     mode=MarginMode(risk["margin_mode"])
@@ -75,7 +75,7 @@ def prepare_risk(risk,rows,i,tf):
         for row in csv_rows(risk["funding_csv"],["time","rate","reference_mark"]):
             t=epoch(row[0])
             if t in funding or not start<=t<end or len(funding)>=len(rows):raise ValueError("duplicate/out-of-range funding")
-            funding[t]=FundingSettlement(t,decimal(row[1],"-0.1","0.1"),decimal(row[2],"0.000000000000000001","999999999999999999"),"estimated-funding-proxy" if provenance=="estimated_previous_hour_mark_open" else "user-funding-csv")
+            funding[t]=FundingSettlement(t,decimal(row[1],"-0.1","0.1"),decimal(row[2],"0.000000000000000001","999999999999999999"),"synthetic-funding-stress" if provenance=="stress_synthetic" else "estimated-funding-proxy" if provenance=="estimated_previous_hour_mark_open" else "user-funding-csv")
         required={b.open_utc for b in rows if (int(b.open_utc.timestamp())-anchor)%interval==0}
         if set(funding)!=required:raise ValueError("funding settlements incomplete or unexpected")
     elif risk["funding_csv"]:raise ValueError("funding data supplied but disabled")
@@ -87,7 +87,7 @@ def prepare_risk(risk,rows,i,tf):
         epoch(risk["scalp_start"]) if scalp else None,epoch(risk["scalp_end"]) if scalp else None)
     refs=[DatasetRef("local-mark",i,DataKind.MARK,tf,start,end,sha256(risk["mark_csv"].encode()).hexdigest(),"user-supplied mark CSV",0,True)]
     if risk["funding_enabled"]:
-        refs.append(DatasetRef("local-funding",i,DataKind.FUNDING,tf,start,end,sha256(risk["funding_csv"].encode()).hexdigest(),"estimated prior hourly observation and mark-open proxy" if provenance=="estimated_previous_hour_mark_open" else "user-supplied funding CSV; not independently attested",0,True))
+        refs.append(DatasetRef("local-funding",i,DataKind.FUNDING,tf,start,end,sha256(risk["funding_csv"].encode()).hexdigest(),"synthetic signed funding stress" if provenance=="stress_synthetic" else "estimated prior hourly observation and mark-open proxy" if provenance=="estimated_previous_hour_mark_open" else "user-supplied funding CSV; not independently attested",0,True))
     stream=tuple(RiskBar(m,funding.get(m.open_utc)) for m in marks)
     metadata={"leverage":to_wire(leverage),"margin_mode":mode.value,"profile":to_wire(profile),
               "risk_dataset_sha256s":[d.manifest_sha256 for d in refs],"funding_enabled":risk["funding_enabled"]}
