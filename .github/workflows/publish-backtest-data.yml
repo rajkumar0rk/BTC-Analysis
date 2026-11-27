@@ -1,4 +1,5 @@
 name: Publish backtest data
+# Publication checkpoints: collect completed versioned research bundles, including strict Reclaim run 45993024689.
 on:
   workflow_dispatch:
   schedule:
