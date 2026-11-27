@@ -6,13 +6,15 @@ const cache=new Map();
 const DAY=86400,MAX_HISTORY_DAYS=31,MIN_VISIBLE=6,MAX_VISIBLE=600;
 let replayMode=false,browseAnchor=null,historyDays=new Map(),historyBusy=false,historyStatus="",historySerial=0;
 let chart=null,candleSeries=null,markers=null,seriesById=new Map(),priceLines=[],nativeRows=[],nativeTimes=[],chartFrameRendered=null,chartStructure="",chartUpdating=false,resetRange=true,drawQueued=false,historyTimer=null;
-let chartMode="pan",drawings=[],draft=null,drawingPointer=null,drawingQueued=false;
+let chartMode="pan",drawings=[],draft=null,drawingPointer=null,drawingQueued=false,undoStack=[],redoStack=[];
+const drawingModes=["pan","measure","trend","horizontal","rectangle","ray","fib"];
+let indicatorPreferences=new Map(),indicatorLegend=new Map(),latestIndicatorValues=new Map(),displayOptions={grid:true,marks:true,levels:true};
 function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
 function replayCutoff(){return bars.length&&limit?bars[Math.min(limit,bars.length)-1][0]+60:null}
 function dayKeys(){return (index?.candle_days?.[run?.symbol]||[]).map(d=>Date.parse(d+"T00:00:00Z")/1000)}
 function archiveBounds(){const keys=dayKeys();return keys.length?{min:keys[0],max:keys.at(-1)+DAY}:{min:windowDay,max:windowDay+DAY}}
 function chartCutoff(){return replayMode?replayCutoff():archiveBounds().max}
-function resetViewport(clear=true){resetRange=true;draft=null;drawingPointer=null;if(clear)drawings=[];scheduleDraw()}
+function resetViewport(clear=true){resetRange=true;draft=null;drawingPointer=null;if(clear){drawings=[];undoStack=[];redoStack=[];syncDrawingButtons()}scheduleDraw()}
 function scheduleDraw(){if(!drawQueued){drawQueued=true;requestAnimationFrame(()=>{drawQueued=false;draw()})}}
 function queueDrawings(){if(!drawingQueued){drawingQueued=true;requestAnimationFrame(()=>{drawingQueued=false;paintDrawings()})}}
 function mergeHistory(){
@@ -54,7 +56,7 @@ function syncReplayControls(){
 }
 function setReplayMode(on,reset=false){stop();replayMode=on;if(on&&reset)limit=1;resetRange=true;syncReplayControls();draw()}
 function stepReplay(n){if(!bars.length)return;if(!replayMode)setReplayMode(true,true);limit=clamp(limit+n,1,bars.length);resetRange=true;syncReplayControls();draw()}
-function setChartMode(mode){chartMode=mode;draft=null;drawingPointer=null;for(const id of ["pan","measure","trend","horizontal"])$("tool-"+id).setAttribute("aria-pressed",String(id===mode));$("chart-drawings").style.pointerEvents=mode==="pan"?"none":"auto";$("chart-drawings").style.cursor=mode==="pan"?"default":"crosshair";queueDrawings()}
+function setChartMode(mode){chartMode=mode;draft=null;drawingPointer=null;for(const id of drawingModes)$("tool-"+id).setAttribute("aria-pressed",String(id===mode));$("chart-drawings").style.pointerEvents=mode==="pan"?"none":"auto";$("chart-drawings").style.cursor=mode==="pan"?"default":"crosshair";queueDrawings()}
 function elapsedLabel(seconds){const m=Math.round(Math.abs(seconds)/60),d=Math.floor(m/1440),h=Math.floor(m%1440/60);return (d?d+"d ":"")+(h?h+"h ":"")+(m%60||!d&&!h?m%60+"m":"")}
 function measurement(a,b){const delta=b.price-a.price;return {delta,pct:a.price?delta/a.price*100:null,bars:Math.round(Math.abs(b.time-a.time)/(chartFrame*60)),elapsed:elapsedLabel(b.time-a.time)}}
 function measurementText(a,b){const m=measurement(a,b),signed=n=>(n>=0?"+":"")+fmt(n);return signed(m.delta)+" pts · "+(m.pct===null?"n/a":signed(m.pct)+"%")+" · "+m.bars+" bars · "+m.elapsed}
@@ -97,7 +99,57 @@ function legacySignalValues(t){
  return Object.entries(t?.signal_context||{}).filter(([key,v])=>Number.isFinite(v)&&/^(ema\d+|sma\d+|supertrend|rsi\d*|atr\d*|signal_atr|volume_ratio|atr_ratio|prior_high|prior_low|adx\d*|macd(?:_signal|_histogram)?|vwap|bollinger_(?:upper|middle|lower))$/i.test(key))
 }
 const indicatorColors=["#f0c36a","#67d4c0","#c5a1ff","#79baff","#fb7785","#f59e0b","#b8d68c","#f2a1c7"];
-function indicatorLabel(d){const params=Object.entries(d.parameters||{}).map(([k,v])=>k+"="+String(v)).join(", ");return d.name+" ("+d.timeframe_minutes+"m"+(params?"; "+params:"")+")"}
+// Presentation registry is keyed by indicator output type, never strategy/run ID.
+// It changes only visual styles; declared observations and native frames stay intact.
+function indicatorType(d){return String(d.name).toLowerCase()}
+function indicatorLabel(d){
+ const type=indicatorType(d),p=d.parameters||{},period=p.period,frame=d.timeframe_minutes>=60&&d.timeframe_minutes%60===0?d.timeframe_minutes/60+"h":d.timeframe_minutes+"m";
+ const known={"ema.value":"EMA","sma.value":"SMA","atr.value":"ATR","rsi.value":"RSI","supertrend.line":"Supertrend","supertrend.direction":"Supertrend direction","adx.value":"ADX","vwap.value":"VWAP"};
+ const name=known[type];if(!name)return d.name+" ("+Object.entries(p).map(([k,v])=>k+"="+String(v)).join(", ")+(Object.keys(p).length?", ":"")+frame+")";
+ return name+(period!=null?" "+period:"")+(p.multiplier!=null?" × "+p.multiplier:"")+" · "+frame;
+}
+function sameIndicatorParams(a,b){return a.timeframe_minutes===b.timeframe_minutes&&JSON.stringify(Object.entries(a.parameters||{}).sort(([x],[y])=>x.localeCompare(y)))===JSON.stringify(Object.entries(b.parameters||{}).sort(([x],[y])=>x.localeCompare(y)))}
+function pairedDirection(d,defs){return defs.find(x=>indicatorType(x)==="supertrend.direction"&&sameIndicatorParams(x,d))}
+function indicatorKey(d){return JSON.stringify([d.name,d.timeframe_minutes,Object.entries(d.parameters||{}).sort(([x],[y])=>x.localeCompare(y))])}
+function indicatorVisual(d,i,defs){
+ const type=indicatorType(d),paired=type==="supertrend.direction"&&defs.some(x=>indicatorType(x)==="supertrend.line"&&sameIndicatorParams(x,d));
+ const color=({"ema.value":"#f0b44c","sma.value":"#60a5fa","supertrend.line":"#26a69a","supertrend.direction":"#26a69a","rsi.value":"#b794f4","atr.value":"#60a5fa"})[type]||indicatorColors[i%indicatorColors.length];
+ const pref=indicatorPreferences.get(indicatorKey(d))||{};
+ return {visible:pref.visible??!paired,color:pref.color||color,width:pref.width||2,type,paired};
+}
+function setIndicatorPref(d,patch){const k=indicatorKey(d);indicatorPreferences.set(k,{...indicatorPreferences.get(k),...patch});saveChartPreferences();draw()}
+function saveChartPreferences(){try{localStorage.setItem("btc-chart-ui-v1",JSON.stringify({indicators:[...indicatorPreferences],options:displayOptions}))}catch{}}
+function restoreChartPreferences(){try{const p=JSON.parse(localStorage.getItem("btc-chart-ui-v1")||"{}");if(Array.isArray(p.indicators))for(const [k,v] of p.indicators.slice(0,256)){if(typeof k!=="string"||!v||typeof v!=="object")continue;indicatorPreferences.set(k,{...(typeof v.visible==="boolean"?{visible:v.visible}:{}),...(/^#[0-9a-f]{6}$/i.test(v.color||"")?{color:v.color}:{}),...([1,2,3,4].includes(v.width)?{width:v.width}:{})})}for(const k of Object.keys(displayOptions))if(typeof p.options?.[k]==="boolean")displayOptions[k]=p.options[k]}catch{}}
+restoreChartPreferences();
+function indicatorValueLabel(d,v){if(!Number.isFinite(v))return "—";if(indicatorType(d)==="supertrend.direction")return v===1?"Bullish":v===-1?"Bearish":fmt(v);return fmt(v)}
+function updateIndicatorLegend(values){for(const [id,{d,value}] of indicatorLegend){const v=values.get(id);value.textContent=indicatorValueLabel(d,v);if(indicatorType(d)==="supertrend.direction"){value.className=v===1?"pos":v===-1?"neg":""}}}
+function renderIndicatorControls(defs){
+ const host=$("indicatorValues");host.replaceChildren();indicatorLegend=new Map();
+ for(const [i,d] of defs.entries()){
+  const visual=indicatorVisual(d,i,defs),row=document.createElement("span");row.className="indicator-control"+(visual.visible?"":" indicator-hidden");
+  const toggle=document.createElement("button");toggle.type="button";toggle.className="indicator-eye";toggle.textContent=visual.visible?"◉":"○";toggle.title=(visual.visible?"Hide ":"Show ")+indicatorLabel(d);toggle.setAttribute("aria-label",toggle.title);toggle.setAttribute("aria-pressed",String(visual.visible));toggle.onclick=()=>setIndicatorPref(d,{visible:!visual.visible});
+  const swatch=document.createElement("span");swatch.className="indicator-swatch";swatch.style.background=visual.color;
+  const label=document.createElement("span");label.textContent=indicatorLabel(d);label.title=d.name+" · "+JSON.stringify(d.parameters||{});
+  const value=document.createElement("strong");value.textContent="—";indicatorLegend.set(d.id,{d,value});row.append(toggle,swatch,label,value);host.append(row);
+ }
+}
+function renderIndicatorSettings(defs){
+ const host=$("indicatorSettings");host.replaceChildren();
+ for(const [i,d] of defs.entries()){
+  const visual=indicatorVisual(d,i,defs),row=document.createElement("div");row.className="indicator-setting";
+  const label=document.createElement("label"),enabled=document.createElement("input");enabled.type="checkbox";enabled.checked=visual.visible;enabled.onchange=()=>setIndicatorPref(d,{visible:enabled.checked});label.append(enabled,document.createTextNode(indicatorLabel(d)));
+  const color=document.createElement("input");color.type="color";color.value=visual.color;color.setAttribute("aria-label","Color "+indicatorLabel(d));color.disabled=visual.type==="supertrend.line"&&!!pairedDirection(d,defs);color.title=color.disabled?"Uses recorded bullish/bearish direction":"Line color";color.onchange=()=>setIndicatorPref(d,{color:color.value});
+  const width=document.createElement("select");width.setAttribute("aria-label","Line width "+indicatorLabel(d));options(width,[1,2,3,4].map(n=>[String(n),n+" px"]));width.value=String(visual.width);width.onchange=()=>setIndicatorPref(d,{width:Number(width.value)});
+  row.append(label,color,width);host.append(row)
+ }
+ if(!defs.length)host.textContent="No indicator definitions available for this result.";
+}
+function sampleIndicator(d,rows,cutoff){
+ let j=-1;return rows.map(r=>{const end=Math.min(r[8]+60,cutoff);while(j+1<d.points.length&&d.points[j+1][0]<=end)j++;const v=j>=0&&end-d.points[j][0]<d.timeframe_minutes*60?d.points[j][1]:null;return [r[0],Number.isFinite(v)?v:null]})
+}
+function syncTimeframeButtons(){for(const b of $("frameButtons").querySelectorAll("button"))b.setAttribute("aria-pressed",String(Number(b.dataset.frame)===chartFrame))}
+function updateChartHeading(){const title=$("chartInstrument");title.textContent=(run?.symbol||"Market")+" · "+(chartFrame>=60&&chartFrame%60===0?chartFrame/60+"h":chartFrame+"m")+" · UTC";syncTimeframeButtons()}
+
 async function loadWindow(){
  const token=++tradeToken,t=trade,r=run;stop();historySerial++;historyBusy=false;historyStatus="";historyDays=new Map();bars=[];sourceBars=[];dayIndicatorSeries={};resetRange=true;draw();if(!t)return;
  const available=new Set(index.candle_days?.[r.symbol]||[]),day=new Date(windowDay*1000).toISOString().slice(0,10);if(!available.has(day)){if(token===tradeToken)$("cursor").textContent="No source candles for "+day;return}
@@ -110,37 +162,44 @@ function createNativeChart(defs){
  const lib=window.LightweightCharts;
  if(!lib||typeof lib.createChart!=="function")throw Error("TradingView Lightweight Charts bundle missing; run scripts/prepare_dashboard_chart.sh");
  if(chart)chart.remove();seriesById=new Map();priceLines=[];markers=null;
- const host=$("chart-native");host.style.height=(420+defs.filter(d=>d.panel==="panel").length*120)+"px";
- chart=lib.createChart(host,{autoSize:true,layout:{background:{type:"solid",color:"#0b1420"},textColor:"#9aafc2",attributionLogo:true,panes:{enableResize:true,separatorColor:"#26364a",separatorHoverColor:"#40546b"}},grid:{vertLines:{color:"#1c2a3b"},horzLines:{color:"#26364a"}},crosshair:{mode:lib.CrosshairMode.Normal},rightPriceScale:{borderColor:"#26364a",minimumWidth:80},timeScale:{borderColor:"#26364a",timeVisible:true,secondsVisible:false,rightOffset:3,barSpacing:10,minBarSpacing:2,fixLeftEdge:false,fixRightEdge:false},handleScroll:{mouseWheel:true,pressedMouseMove:true,horzTouchDrag:true,vertTouchDrag:false},handleScale:{axisPressedMouseMove:true,mouseWheel:true,pinch:true},kineticScroll:{mouse:true,touch:true}});
- candleSeries=chart.addSeries(lib.CandlestickSeries,{upColor:"#36d8aa",downColor:"#fb7785",borderVisible:false,wickUpColor:"#36d8aa",wickDownColor:"#fb7785",priceFormat:{type:"price",precision:4,minMove:.0001}});
+ const host=$("chart-native");host.style.setProperty("--chart-height",(440+defs.filter(d=>d.panel==="panel").length*145)+"px");
+ chart=lib.createChart(host,{autoSize:true,layout:{background:{type:"solid",color:"#131722"},textColor:"#a7b1c2",fontSize:12,attributionLogo:true,panes:{enableResize:true,separatorColor:"#303849",separatorHoverColor:"#53617a"}},grid:{vertLines:{color:"#242b38",visible:displayOptions.grid},horzLines:{color:"#242b38",visible:displayOptions.grid}},crosshair:{mode:lib.CrosshairMode.Normal,vertLine:{color:"#758096",width:1,style:lib.LineStyle.Dashed,labelBackgroundColor:"#364152"},horzLine:{color:"#758096",width:1,style:lib.LineStyle.Dashed,labelBackgroundColor:"#364152"}},rightPriceScale:{borderColor:"#26364a",minimumWidth:80},timeScale:{borderColor:"#26364a",timeVisible:true,secondsVisible:false,rightOffset:3,barSpacing:10,minBarSpacing:2,fixLeftEdge:false,fixRightEdge:false},handleScroll:{mouseWheel:true,pressedMouseMove:true,horzTouchDrag:true,vertTouchDrag:false},handleScale:{axisPressedMouseMove:true,mouseWheel:true,pinch:true},kineticScroll:{mouse:true,touch:true}});
+ candleSeries=chart.addSeries(lib.CandlestickSeries,{upColor:"#26a69a",downColor:"#ef5350",borderVisible:false,wickUpColor:"#26a69a",wickDownColor:"#ef5350",priceFormat:{type:"price",precision:2,minMove:.01}});
  let pane=0;
  for(const [i,d] of defs.entries()){
-  const color=indicatorColors[i%indicatorColors.length],panel=d.panel==="panel"?++pane:0;
-  const s=chart.addSeries(lib.LineSeries,{title:indicatorLabel(d),color,lineWidth:1,priceLineVisible:false,lastValueVisible:true,crosshairMarkerVisible:true,priceFormat:{type:"price",precision:4,minMove:.0001}},panel);seriesById.set(d.id,s)
+  const visual=d.visual,panel=d.panel==="panel"?++pane:0,stepLine=visual.type==="supertrend.line"||visual.type==="supertrend.direction";
+  const opts={title:indicatorLabel(d),color:visual.color,lineWidth:visual.width,lineType:stepLine?lib.LineType.WithSteps:lib.LineType.Simple,priceLineVisible:false,lastValueVisible:true,crosshairMarkerVisible:true,priceFormat:{type:"price",precision:2,minMove:.01}};
+  if(visual.type==="rsi.value"){opts.autoscaleInfoProvider=()=>({priceRange:{minValue:0,maxValue:100}})}
+  const s=chart.addSeries(lib.LineSeries,opts,panel);seriesById.set(d.id,s);
+  if(visual.type==="rsi.value")for(const value of [30,50,70])s.createPriceLine({price:value,color:value===50?"#626d82":"#8272a6",lineWidth:1,lineStyle:value===50?lib.LineStyle.Dotted:lib.LineStyle.Dashed,axisLabelVisible:true,title:String(value)});
+  if(visual.type==="supertrend.direction")s.createPriceLine({price:0,color:"#526075",lineWidth:1,lineStyle:lib.LineStyle.Dotted,axisLabelVisible:false,title:""});
  }
  markers=lib.createSeriesMarkers(candleSeries,[]);
  chart.timeScale().subscribeVisibleLogicalRangeChange(()=>{queueDrawings();if(!chartUpdating){updateRangeLabel();queueHistory()}});
  chart.subscribeCrosshairMove(param=>{
-  if(!param.time||typeof param.time!=="number"){$("chartInspect").textContent="";return}
+  if(!param.time||typeof param.time!=="number"){updateIndicatorLegend(latestIndicatorValues);return}
   const row=param.seriesData.get(candleSeries);
   if(!row||row.open===undefined){$("chartInspect").textContent="No source candle at this time";return}
   const source=nativeRows.find(r=>r[0]===param.time),pieces=[new Date(param.time*1000).toISOString().slice(0,16).replace("T"," ")+" UTC","O "+fmt(row.open),"H "+fmt(row.high),"L "+fmt(row.low),"C "+fmt(row.close),source?"Vol "+fmt(source[5]):""];
-  for(const [id,s] of seriesById){const v=param.seriesData.get(s);if(v&&Number.isFinite(v.value))pieces.push(s.options().title+" "+fmt(v.value))}
-  $("chartInspect").textContent=pieces.filter(Boolean).join(" · ")
+  const values=new Map();for(const [id,lookup] of sampledIndicators)values.set(id,lookup.get(param.time));
+  updateIndicatorLegend(values);$("chartInspect").textContent=pieces.filter(Boolean).join("  ·  ")
  });
- const panes=chart.panes();if(panes.length>1){panes[0].setHeight(400);for(const p of panes.slice(1))p.setHeight(120)}
+ const panes=chart.panes();if(panes.length>1){for(const p of panes.slice(1))p.setHeight(145)}
 }
 function updateRangeLabel(){const range=chart?.timeScale().getVisibleRange();if(!range)return;const label=t=>new Date(Number(t)*1000).toISOString().slice(0,16).replace("T"," ");$("chartRange").textContent="View: "+label(range.from)+" – "+label(range.to)+" UTC · "+historyDays.size+" loaded day"+(historyDays.size===1?"":"s")}
+let sampledIndicators=new Map();
 function draw(){
- const declared=trade?recordedIndicators(run,trade):[],legacy=trade&&!Array.isArray(run?.indicator_definitions)?legacySignalValues(trade):[],show=$("overlay").checked,defs=show?declared:[];
+ const declared=trade?recordedIndicators(run,trade):[],legacy=trade&&!Array.isArray(run?.indicator_definitions)?legacySignalValues(trade):[],show=$("overlay").checked,defs=show?declared.map((d,i)=>({...d,visual:indicatorVisual(d,i,declared)})).filter(d=>d.visual.visible):[];
+ updateChartHeading();
  $("chartFrame").textContent=chartFrame+"m chart · recorded 1m execution · UTC";
  $("indicatorInfo").textContent=trade?(declared.length?(run.indicator_provenance?.method==="pinned_input_replay_snapshot_verified"?"Strategy indicators · reproduced from pinned original inputs and verified against recorded signal values.":"Declared strategy indicators · recorded data only; missing series are not reconstructed."):Array.isArray(run?.indicator_definitions)?"No indicators declared for this strategy.":legacy.length?"Legacy archive: recorded signal fields only; indicator declarations and time series unavailable.":"Legacy archive: no indicator declarations or recorded indicator fields."):"";
- $("chartHistory").textContent=historyStatus;$("chartInspect").textContent="";$("indicatorValues").replaceChildren();
- const structure=JSON.stringify(defs.map(d=>[d.id,d.name,d.panel,d.timeframe_minutes,d.parameters]));
+ $("chartHistory").textContent=historyStatus;$("chartInspect").textContent="Hover a candle to inspect OHLC and indicator values.";renderIndicatorControls(show?declared:[]);if($("chart-settings").open)renderIndicatorSettings(declared);
+ const structure=JSON.stringify(defs.map(d=>[d.id,d.name,d.panel,d.timeframe_minutes,d.parameters,d.visual]));
  const previous=chart&&!resetRange&&chartFrameRendered===chartFrame?visibleTimes():null;
  chartUpdating=true;
  try{
   if(!chart||structure!==chartStructure){createNativeChart(defs);chartStructure=structure}
+  chart.applyOptions({grid:{vertLines:{visible:displayOptions.grid},horzLines:{visible:displayOptions.grid}}});
   const cutoff=chartCutoff(),step=chartFrame*60;
   nativeRows=trade&&bars.length&&cutoff!==null?aggregate(sourceBars.filter(r=>r[0]<cutoff),chartFrame):[];
   nativeTimes=[];
@@ -150,10 +209,14 @@ function draw(){
   const byTime=new Map(nativeRows.map(r=>[r[0],r]));
   candleSeries.setData(nativeTimes.map(time=>{const r=byTime.get(time);return r?{time,open:r[1],high:r[2],low:r[3],close:r[4],...(r[6]<chartFrame?{color:r[4]>=r[1]?"#217e69":"#984954",wickColor:r[4]>=r[1]?"#217e69":"#984954"}:{})}:{time}}));
   const chip=(label,color)=>{const el=document.createElement("span");el.className="indicator-chip";el.textContent=label;if(color)el.style.borderColor=color;$("indicatorValues").append(el)};
-  for(const [i,d] of defs.entries()){
-   let j=-1,lastValue=null;const data=nativeTimes.map(time=>{const r=byTime.get(time);if(!r)return {time};const end=Math.min(r[8]+60,cutoff);while(j+1<d.points.length&&d.points[j+1][0]<=end)j++;const v=j>=0&&end-d.points[j][0]<d.timeframe_minutes*60?d.points[j][1]:null;if(Number.isFinite(v)){lastValue=v;return {time,value:v}}return {time}});
-   seriesById.get(d.id).setData(data);chip(indicatorLabel(d)+(lastValue!==null?" · "+fmt(lastValue):" · series unavailable"),indicatorColors[i%indicatorColors.length])
+  sampledIndicators=new Map(declared.map(d=>[d.id,new Map(sampleIndicator(d,nativeRows,cutoff))]));
+  latestIndicatorValues=new Map(declared.map(d=>[d.id,sampledIndicators.get(d.id)?.get(nativeRows.at(-1)?.[0])]));
+  for(const d of defs){
+   const lookup=sampledIndicators.get(d.id),direction=d.visual.type==="supertrend.line"?pairedDirection(d,declared):null,dir=direction?sampledIndicators.get(direction.id):null;
+   const data=nativeTimes.map(time=>{const v=lookup.get(time);if(!Number.isFinite(v))return {time};const side=dir?.get(time)??(d.visual.type==="supertrend.direction"?v:null);return {time,value:v,...(side===1?{color:"#26a69a"}:side===-1?{color:"#ef5350"}:{})}});
+   seriesById.get(d.id).setData(data);
   }
+  updateIndicatorLegend(latestIndicatorValues);
   if(show&&trade&&secs(trade.trigger_utc)<=cutoff)for(const [key,value] of legacy)chip(key.toUpperCase()+": "+fmt(value));
   for(const p of priceLines)candleSeries.removePriceLine(p);priceLines=[];
   if(trade&&nativeTimes.length){
@@ -161,8 +224,8 @@ function draw(){
    for(const [time,price,text,color] of [[secs(trade.entry_utc),trade.entry_price,"ENTRY","#66b5ff"],[secs(trade.exit_utc),trade.exit_price,"EXIT","#c5a1ff"]]){
     const bucket=Math.floor(time/step)*step;if(time<=cutoff&&byTime.has(bucket)&&Number.isFinite(price))mark.push({time:bucket,position:text==="ENTRY"?"belowBar":"aboveBar",shape:text==="ENTRY"?"arrowUp":"arrowDown",color,text:text+" "+fmt(price)})
    }
-   markers.setMarkers(mark.sort((a,b)=>a.time-b.time));
-   for(const [price,title,when] of [[trade.stop_price,"SL",secs(trade.entry_utc)],[trade.target_price,"TP",secs(trade.entry_utc)],[trade.trailing_stop_price,"TRAIL (recorded)",secs(trade.exit_utc)],[trade.liquidation_price,"LIQ (recorded)",secs(trade.exit_utc)]])if(Number.isFinite(price)&&when<=cutoff)priceLines.push(candleSeries.createPriceLine({price,color:"#eab66b",lineWidth:1,lineStyle:window.LightweightCharts.LineStyle.Dashed,axisLabelVisible:true,title}))
+   markers.setMarkers(displayOptions.marks?mark.sort((a,b)=>a.time-b.time):[]);
+   for(const [price,title,when] of [[trade.stop_price,"SL",secs(trade.entry_utc)],[trade.target_price,"TP",secs(trade.entry_utc)],[trade.trailing_stop_price,"TRAIL (recorded)",secs(trade.exit_utc)],[trade.liquidation_price,"LIQ (recorded)",secs(trade.exit_utc)]])if(displayOptions.levels&&Number.isFinite(price)&&when<=cutoff)priceLines.push(candleSeries.createPriceLine({price,color:"#eab66b",lineWidth:1,lineStyle:window.LightweightCharts.LineStyle.Dashed,axisLabelVisible:true,title}))
    const first=nativeTimes[0],last=nativeTimes.at(-1),ts=chart.timeScale();
    if(previous){ts.setVisibleLogicalRange({from:(previous.from-first)/step,to:(previous.to-first)/step})}
    else{const anchor=replayMode?replayCutoff():browseAnchor??replayCutoff(),right=clamp((Math.floor((anchor-1)/step)*step-first)/step+3,3,nativeTimes.length+3);ts.setVisibleLogicalRange({from:right-80,to:right})}
@@ -178,6 +241,9 @@ function drawingPoint(e){
  return {time:t,price}
 }
 function svgNode(tag,attrs,text){const node=document.createElementNS("http://www.w3.org/2000/svg",tag);for(const [k,v] of Object.entries(attrs))node.setAttribute(k,String(v));if(text!==undefined)node.textContent=text;return node}
+function syncDrawingButtons(){$("tool-undo").disabled=!undoStack.length;$("tool-redo").disabled=!redoStack.length}
+function rememberDrawing(){undoStack.push(drawings.slice());if(undoStack.length>50)undoStack.shift();redoStack=[];syncDrawingButtons()}
+function addDrawing(d){rememberDrawing();drawings.push(d);if(drawings.length>50)drawings.shift();queueDrawings()}
 function paintDrawings(){
  const svg=$("chart-drawings");svg.replaceChildren();if(!chart||!candleSeries)return;
  const w=chart.timeScale().width(),h=chart.panes()[0].getHeight();svg.style.width=w+"px";svg.style.height=h+"px";svg.setAttribute("viewBox","0 0 "+w+" "+h);
@@ -187,17 +253,36 @@ function paintDrawings(){
   const x1=chart.timeScale().timeToCoordinate(d.a.time),x2=d.kind==="horizontal"?w:chart.timeScale().timeToCoordinate(d.b.time),y1=candleSeries.priceToCoordinate(d.a.price),y2=d.kind==="horizontal"?y1:candleSeries.priceToCoordinate(d.b.price);
   if([x1,x2,y1,y2].some(v=>v===null||!Number.isFinite(v)))continue;
   const color=d.kind==="measure"?"#78bcff":"#eab66b";
-  if(d.kind==="measure")svg.append(svgNode("rect",{x:Math.min(x1,x2),y:Math.min(y1,y2),width:Math.abs(x2-x1),height:Math.abs(y2-y1),fill:color,"fill-opacity":.13,stroke:color,"stroke-dasharray":"4 3"}));
-  svg.append(svgNode("line",{x1:d.kind==="horizontal"?0:x1,y1,x2,y2,stroke:color,"stroke-width":1.5}));
+  if(d.kind==="measure"||d.kind==="rectangle")svg.append(svgNode("rect",{x:Math.min(x1,x2),y:Math.min(y1,y2),width:Math.abs(x2-x1),height:Math.abs(y2-y1),fill:color,"fill-opacity":.13,stroke:color,"stroke-dasharray":d.kind==="measure"?"4 3":""}));
+  if(d.kind==="fib"){
+   for(const ratio of [0,.236,.382,.5,.618,.786,1]){
+    const price=d.a.price+(d.b.price-d.a.price)*ratio,yy=candleSeries.priceToCoordinate(price);
+    if(yy===null)continue;
+    const left=Math.min(x1,x2),right=Math.max(x1,x2);svg.append(svgNode("line",{x1:left,y1:yy,x2:right,y2:yy,stroke:ratio===.618?"#26a69a":"#8e9ab0","stroke-width":1,"stroke-dasharray":"4 2"}),svgNode("text",{x:clamp(left+4,0,Math.max(0,w-120)),y:yy-4,fill:"#cbd5e1","font-size":11},ratio+" · "+fmt(price)))
+   }
+  }else if(d.kind==="ray"){const end=x2>=x1?w:0,yy=x2===x1?y2:y1+(y2-y1)*(end-x1)/(x2-x1);svg.append(svgNode("line",{x1,y1,x2:x2===x1?x2:end,y2:yy,stroke:color,"stroke-width":1.5}))}
+  else if(d.kind!=="rectangle")svg.append(svgNode("line",{x1:d.kind==="horizontal"?0:x1,y1,x2,y2,stroke:color,"stroke-width":1.5}));
   if(d.kind!=="horizontal")for(const [cx,cy] of [[x1,y1],[x2,y2]])svg.append(svgNode("circle",{cx,cy,r:3,fill:color}));
+  if(d.kind==="fib")continue;
   const label=d.kind==="measure"?measurementText(d.a,d.b):d.kind==="horizontal"?fmt(d.a.price):fmt(d.b.price-d.a.price)+" pts",width=Math.min(w,Math.max(90,label.length*6.5+12)),x=clamp(Math.min(x1,x2),0,Math.max(0,w-width)),y=clamp(Math.min(y1,y2)-25,0,Math.max(0,h-22));
   svg.append(svgNode("rect",{x,y,width,height:22,rx:4,fill:"#152335",stroke:color}),svgNode("text",{x:x+6,y:y+15,fill:"#e3edf5","font-size":11},label))
  }
 }
 function bindChart(){
  const host=$("chart"),svg=$("chart-drawings");
- for(const mode of ["pan","measure","trend","horizontal"])$("tool-"+mode).onclick=()=>setChartMode(mode);
- $("tool-clear").onclick=()=>{drawings=[];draft=null;queueDrawings()};
+ for(const mode of drawingModes)$("tool-"+mode).onclick=()=>setChartMode(mode);
+ $("tool-clear").onclick=()=>{if(drawings.length)rememberDrawing();drawings=[];draft=null;queueDrawings()};
+ $("tool-undo").onclick=()=>{if(undoStack.length){redoStack.push(drawings.slice());drawings=undoStack.pop();draft=null;syncDrawingButtons();queueDrawings()}};
+ $("tool-redo").onclick=()=>{if(redoStack.length){undoStack.push(drawings.slice());drawings=redoStack.pop();draft=null;syncDrawingButtons();queueDrawings()}};
+ syncDrawingButtons();
+ for(const b of $("frameButtons").querySelectorAll("button"))b.onclick=()=>{$("timeframe").value=b.dataset.frame;$("timeframe").dispatchEvent(new Event("change"))};
+ $("chart-settings").addEventListener("toggle",()=>{if($("chart-settings").open)renderIndicatorSettings(trade?recordedIndicators(run,trade):[])});
+ for(const k of Object.keys(displayOptions)){const el=$("chart-setting-"+k);el.checked=displayOptions[k];el.onchange=()=>{displayOptions[k]=el.checked;saveChartPreferences();draw()}}
+ $("chart-setting-reset").onclick=()=>{indicatorPreferences.clear();displayOptions={grid:true,marks:true,levels:true};for(const k of Object.keys(displayOptions))$("chart-setting-"+k).checked=true;saveChartPreferences();draw()};
+ const shell=$("chartWorkspace"),expand=$("chart-expand");
+ expand.onclick=async()=>{if(document.fullscreenElement===shell){await document.exitFullscreen();return}if(shell.classList.contains("chart-expanded")){shell.classList.remove("chart-expanded");expand.setAttribute("aria-pressed","false");expand.textContent="⛶";return}if(shell.requestFullscreen){try{await shell.requestFullscreen();return}catch{}}shell.classList.add("chart-expanded");expand.setAttribute("aria-pressed","true");expand.textContent="×"};
+ document.addEventListener("fullscreenchange",()=>{const on=document.fullscreenElement===shell;expand.setAttribute("aria-pressed",String(on));expand.textContent=on?"×":"⛶";queueDrawings()});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&shell.classList.contains("chart-expanded")){shell.classList.remove("chart-expanded");expand.setAttribute("aria-pressed","false");expand.textContent="⛶"}});
  $("chart-reset").onclick=()=>{resetViewport(false);queueHistory()};
  $("chart-mode").onchange=()=>setReplayMode($("chart-mode").value==="replay",true);
  $("replay-start").onclick=()=>setReplayMode(true,true);$("replay-end").onclick=()=>setReplayMode(false);
@@ -206,13 +291,13 @@ function bindChart(){
  $("chart-zoom-in").onclick=()=>zoomBy(.75);$("chart-zoom-out").onclick=()=>zoomBy(1.35);
  svg.addEventListener("pointerdown",e=>{
   if(e.button>0||chartMode==="pan")return;const p=drawingPoint(e);if(!p)return;e.preventDefault();svg.setPointerCapture(e.pointerId);
-  if(chartMode==="horizontal"){drawings.push({kind:"horizontal",a:p,b:p});draft=null}
-  else if(draft){draft.b=p;drawings.push(draft);draft=null}
+  if(chartMode==="horizontal"){addDrawing({kind:"horizontal",a:p,b:p});draft=null}
+  else if(draft){draft.b=p;addDrawing(draft);draft=null}
   else{draft={kind:chartMode,a:p,b:p};drawingPointer={id:e.pointerId,x:e.clientX,y:e.clientY}}
-  if(drawings.length>50)drawings.shift();queueDrawings()
+  queueDrawings()
  });
  svg.addEventListener("pointermove",e=>{if(draft){const p=drawingPoint(e);if(p){draft.b=p;queueDrawings()}}});
- svg.addEventListener("pointerup",e=>{if(draft&&drawingPointer?.id===e.pointerId&&Math.hypot(e.clientX-drawingPointer.x,e.clientY-drawingPointer.y)>4){const p=drawingPoint(e);if(p){draft.b=p;drawings.push(draft);if(drawings.length>50)drawings.shift();draft=null}}drawingPointer=null;queueDrawings()});
+ svg.addEventListener("pointerup",e=>{if(draft&&drawingPointer?.id===e.pointerId&&Math.hypot(e.clientX-drawingPointer.x,e.clientY-drawingPointer.y)>4){const p=drawingPoint(e);if(p){draft.b=p;addDrawing(draft);draft=null}}drawingPointer=null;queueDrawings()});
  svg.addEventListener("pointercancel",()=>{draft=null;drawingPointer=null;queueDrawings()});
  host.addEventListener("keydown",e=>{if(e.key==="ArrowLeft"){e.preventDefault();panBy(-5*chartFrame*60)}else if(e.key==="ArrowRight"){e.preventDefault();panBy(5*chartFrame*60)}else if(e.key==="+"||e.key==="="){e.preventDefault();zoomBy(.8)}else if(e.key==="-"){e.preventDefault();zoomBy(1.25)}else if(e.key==="Home"){e.preventDefault();resetViewport(false)}else if(e.key==="Escape")setChartMode("pan")});
  // Price-axis zoom and pane resizing also move the drawing coordinates.

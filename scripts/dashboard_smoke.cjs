@@ -57,6 +57,8 @@ const assert=require("node:assert/strict");
   const b=await page.locator("#chart-native").boundingBox(),a=coords[Math.floor(coords.length/3)],z=coords[Math.floor(coords.length*2/3)];
   await page.mouse.move(b.x+a[0],b.y+a[1]);await page.mouse.down();await page.mouse.move(b.x+z[0],b.y+z[1],{steps:8});await page.mouse.up();
   assert.ok(await page.evaluate(()=>drawings.some(d=>d.kind==="measure")));
+  await page.locator("#tool-undo").click();assert.equal(await page.evaluate(()=>drawings.length),0);
+  await page.locator("#tool-redo").click();assert.ok(await page.evaluate(()=>drawings.some(d=>d.kind==="measure")));
   assert.deepEqual(await page.evaluate(()=>measurement({time:0,price:100},{time:900,price:110})),{delta:10,pct:10,bars:15,elapsed:"15m"});
   await page.locator("#tool-clear").click();assert.equal(await page.evaluate(()=>drawings.length),0);
   await page.locator("#tool-pan").click();
@@ -80,6 +82,9 @@ const assert=require("node:assert/strict");
     await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));
   }
   const research=page.locator("#supertrendStrategies button").filter({hasText:"Replay"}).first();await research.click();await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));assert.equal(await page.locator("#netUnit").innerText(),"Net account USD");
+  const style=await page.evaluate(()=>{const defs=[{id:"st",name:"supertrend.line",timeframe_minutes:15,panel:"price",parameters:{period:10,multiplier:3}},{id:"dir",name:"supertrend.direction",timeframe_minutes:15,panel:"panel",parameters:{multiplier:3,period:10}},{id:"rsi",name:"rsi.value",timeframe_minutes:15,panel:"panel",parameters:{period:14}}];return {paired:pairedDirection(defs[0],defs)?.id,hidden:!indicatorVisual(defs[1],1,defs).visible,label:indicatorLabel(defs[2]),direction:indicatorValueLabel(defs[1],-1)}});
+  assert.deepEqual(style,{paired:"dir",hidden:true,label:"RSI 14 · 15m",direction:"Bearish"});
+  await page.locator("#chart-settings summary").click();await page.locator("#chart-setting-grid").uncheck();assert.equal(await page.evaluate(()=>displayOptions.grid),false);await page.locator("#chart-setting-grid").check();await page.locator("#chart-settings summary").click();
   const generic=await page.evaluate(()=>{
     const r={id:"arbitrary-future-run",indicator_definitions:[{id:"custom1",name:"My custom formula",timeframe_minutes:30,panel:"panel",parameters:{lookback:17}}]};
     const t={indicator_series:{custom1:[[60,10],[120,null],[180,20]],unused:[[60,99]]},indicator_values:{custom1:10,unused:99}};

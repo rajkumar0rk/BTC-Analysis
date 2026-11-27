@@ -18,3 +18,36 @@
 #chart{height:auto;position:relative;touch-action:auto;cursor:default;overflow:hidden;border-radius:6px;background:#0b1420;margin-top:8px}#chart-native{width:100%;height:420px;min-width:0}#chart-native canvas{margin:0!important;background:transparent!important;border-radius:0!important;width:auto;height:auto;display:block}#chart-drawings{position:absolute;left:0;top:0;pointer-events:none;touch-action:none;overflow:hidden;z-index:3}#chart:focus-visible{outline:2px solid #78bcff}
 
 .latest-results{max-height:360px}.latest-results td:first-child{white-space:normal;min-width:220px}.latest-results td:nth-child(5),.latest-results td:nth-child(6){font-variant-numeric:tabular-nums}.latest-results button{white-space:nowrap}.latest-results td{vertical-align:middle}
+
+/* TradingView-inspired workspace: native chart, restrained grid, dedicated tool rail. */
+.chart-workspace{position:relative;isolation:isolate;border:1px solid #303849;border-radius:7px;background:#131722;color:#d1d4dc;min-width:0;margin:8px 0 12px}
+.chart-topbar{display:flex;align-items:center;gap:3px;flex-wrap:wrap;padding:5px 7px;border-bottom:1px solid #303849;background:#171b26;position:relative;z-index:6}
+.chart-topbar strong{font-size:13px;padding:0 8px 0 2px;white-space:nowrap}
+#frameButtons{display:flex;gap:1px;flex-wrap:wrap;border-right:1px solid #303849;padding-right:5px}
+.chart-topbar button,.chart-topbar summary{border:0;background:transparent;border-radius:4px;padding:7px 8px;font-size:12px;color:#bfc7d5;min-height:32px;cursor:pointer}
+.chart-topbar button:hover,.chart-topbar summary:hover,.chart-topbar button[aria-pressed=true],.chart-icon[aria-pressed=true]{background:#26354a;color:#79adff}
+.chart-main{display:grid;grid-template-columns:42px minmax(0,1fr)}
+.chart-sidebar{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 3px;border-right:1px solid #303849;background:#171b26}
+.chart-sidebar .chart-icon{width:34px;height:35px;padding:6px;display:grid;place-items:center;background:transparent;border:0;color:#c3cad6;border-radius:4px}
+.chart-sidebar .chart-icon:hover{background:#26354a;color:#79adff}
+.chart-icon svg{width:21px;height:21px;display:block}
+.chart-content{min-width:0;position:relative}
+#chartInspect{background:#131722;margin:0;height:auto;min-height:24px;padding:5px 10px;color:#a7b1c2;line-height:1.4;font-size:11px;border-radius:0}
+#indicatorValues{margin:0;gap:5px 12px;padding:3px 10px 6px;min-height:8px}
+.indicator-control{display:inline-flex;align-items:center;gap:5px;white-space:normal;font-size:12px;color:#c7d0df}
+.indicator-control strong{font-size:12px;font-variant-numeric:tabular-nums}
+.indicator-hidden{opacity:.65}
+.indicator-eye{background:transparent;border:0;padding:1px 3px;font-size:14px;color:#a7b1c2}
+.indicator-swatch{width:9px;height:3px;border-radius:2px;display:inline-block;flex:none}
+#chart{border-radius:0;background:#131722;margin:0;min-width:0}#chart-native{height:var(--chart-height,440px);width:100%}
+.chart-footer{display:flex;justify-content:space-between;gap:8px;padding:5px 9px;border-top:1px solid #303849;flex-wrap:wrap}
+#chart-settings{position:relative}#chart-settings summary{list-style:none}#chart-settings summary::-webkit-details-marker{display:none}
+.chart-settings-body{position:absolute;right:0;top:100%;width:min(430px,78vw);max-height:65vh;overflow:auto;box-shadow:0 10px 32px #0009;padding:13px;background:#1d2430;border:1px solid #40506a;border-radius:6px;z-index:20}
+.chart-settings-body>strong{display:block;margin:5px 0 8px}.chart-settings-options{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:13px}
+.chart-settings-options label,.indicator-setting label{display:flex;flex-direction:row;align-items:center;gap:6px;color:#cbd5e1}
+.indicator-setting{display:grid;grid-template-columns:minmax(0,1fr) 34px 65px;gap:6px;align-items:center;margin:6px 0}.indicator-setting input[type=color]{width:32px;height:25px;padding:0;background:none;border:0}.indicator-setting select{padding:4px}
+.chart-workspace:fullscreen,.chart-workspace.chart-expanded{background:#131722;overflow:auto;display:flex;flex-direction:column}
+.chart-workspace.chart-expanded{position:fixed;inset:8px;z-index:1000;box-shadow:0 0 0 20px #000b}
+.chart-workspace:fullscreen .chart-main,.chart-expanded .chart-main{flex:1}.chart-workspace:fullscreen #chart-native,.chart-expanded #chart-native{height:max(500px,calc(100dvh - 115px))}
+.chart-workspace:fullscreen .chart-topbar,.chart-expanded .chart-topbar{position:sticky;top:0}
+@media(max-width:600px){.chart-main{grid-template-columns:36px minmax(0,1fr)}.chart-sidebar .chart-icon{width:30px;height:34px;padding:5px}.chart-topbar button,.chart-topbar summary{min-height:40px;padding:6px}.chart-topbar strong{flex-basis:100%}.chart-settings-body{position:fixed;top:20vh;right:12px;width:calc(100vw - 24px)}.chart-footer{font-size:10px}#chartInspect{min-height:34px}}
