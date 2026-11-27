@@ -57,7 +57,11 @@ def run():
     checks()
     bars, momentum, snapshots, extra, rec = load()
     signals = [(i, -d, r, hi, lo) for i,d,r,hi,lo in momentum]
-    rsi_id = next(m["id"] for m in rec.definitions if m["name"] == "rsi")
+    # Recorder names are canonical (e.g. rsi.value), not base aliases.
+    rsi_defs = [m for d, m in zip(rec.specs, rec.definitions)
+                if d.base == "rsi" and m["timeframe_minutes"] == 15]
+    assert len(rsi_defs) == 1, rec.definitions
+    rsi_id = rsi_defs[0]["id"]
     rsi = {(t-START)//60: r for t,r in rec.series[rsi_id]}
     n = len(bars[0])//15+1
     atr, st, line = (np.full(n, np.nan) for _ in range(3))
