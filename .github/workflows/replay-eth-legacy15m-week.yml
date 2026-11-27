@@ -1,8 +1,8 @@
-name: ETH legacy 15m this week historical replay
+name: ETH legacy 15m week open entry replay
 on:
   push:
-    branches: ['research/eth-legacy15m-week-20261127']
-    paths: ['scripts/replay_eth_legacy15m_week.py','.github/workflows/replay-eth-legacy15m-week.yml']
+    branches: ['research/eth-legacy15m-week-open-entry-20261127']
+    paths: ['scripts/replay_eth_legacy15m_2026.py','scripts/replay_eth_legacy15m_week.py','.github/workflows/replay-eth-legacy15m-week.yml']
   workflow_dispatch:
 permissions:
   contents: read
