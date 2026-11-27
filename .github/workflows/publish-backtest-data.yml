@@ -1,5 +1,5 @@
 name: Publish backtest data
-# Publication checkpoints: include completed trade-price fee protection replay 45999369162.
+# Publication checkpoints: include completed intraminute fee protection replay 46001364599.
 on:
   workflow_dispatch:
   schedule:
