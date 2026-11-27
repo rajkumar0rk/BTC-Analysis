@@ -15,8 +15,8 @@ def key(p):
 def signals_for(rec,extra,start,end,eval_start,upper):
     # Read the same indicator book's completed 15m RSI observations,
     # not a different implementation or partially formed candles.
-    ids=[d["id"] for d in rec.definitions if d["name"]=="rsi" and d["timeframe_minutes"]==15]
-    assert len(ids)==1
+    ids=[d["id"] for d in rec.definitions if d["name"].split(".")[0]=="rsi" and d["timeframe_minutes"]==15]
+    assert len(ids)==1,rec.definitions
     out=[];prev=None
     for ts,value in rec.series[ids[0]]:
         if value is not None and prev is not None and eval_start<=ts<end:
