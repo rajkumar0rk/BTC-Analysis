@@ -22,7 +22,7 @@ const assert=require("node:assert/strict");
   await page.locator("#supertrendStrategies button").filter({hasText:"Details"}).first().click();
   assert.ok(await page.locator("#supertrendMonthly").innerText().then(t=>t.includes("Exact monthly series")));
   assert.ok(await page.locator("#details").innerText().then(t=>t.includes("Why entered")&&t.includes("Why exited")));
-  assert.ok(requests.filter(x=>x.includes("/candles/")).length<=4);
+  assert.ok(requests.filter(x=>x.includes("/candles/")).length<=1);
   const before=await page.locator("#cursor").innerText();
   await page.locator("#timeframe").selectOption("15");
   assert.ok((await page.locator("#chartFrame").innerText()).startsWith("15m chart"));
@@ -44,8 +44,14 @@ const assert=require("node:assert/strict");
     await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));
   }
   const research=page.locator("#supertrendStrategies button").filter({hasText:"Replay"}).first();await research.click();await page.locator("#ledger tr").first().waitFor();await page.waitForFunction(()=>document.querySelector("#details").textContent.includes("Why entered"));assert.equal(await page.locator("#netUnit").innerText(),"Net account USD");
-  const exact=await page.locator("#run option").evaluateAll(opts=>opts.find(o=>o.value==="st-rsi-reclaim-3r-tight-color")?.value);
-  if(exact){await page.locator("#run").selectOption(exact);await page.waitForFunction(()=>document.querySelector("#indicatorInfo").textContent.includes("ST ATR10"));await page.waitForFunction(()=>document.querySelector("#cursor").textContent.includes("UTC"));assert.equal(await page.locator("#timeframe").inputValue(),"15");assert.ok((await page.locator("#indicatorValues").innerText()).includes("EMA20"));await page.locator("#timeframe").selectOption("60");assert.ok((await page.locator("#chartFrame").innerText()).startsWith("60m chart"));}
+  const generic=await page.evaluate(()=>{
+    const r={id:"arbitrary-future-run",indicator_definitions:[{id:"custom1",name:"My custom formula",timeframe_minutes:30,panel:"panel",parameters:{lookback:17}}]};
+    const t={indicator_series:{custom1:[[60,10],[120,null],[180,20]],unused:[[60,99]]},indicator_values:{custom1:10,unused:99}};
+    return {declared:recordedIndicators(r,t),none:recordedIndicators({indicator_definitions:[]},t),legacy:recordedIndicators({},t),fields:legacySignalValues({signal_context:{ema20:123,rsi14:51,equity_after_usd:500}})}
+  });
+  assert.equal(generic.declared.length,1);assert.equal(generic.declared[0].id,"custom1");assert.equal(generic.declared[0].timeframe_minutes,30);assert.equal(generic.declared[0].points.length,3);
+  assert.deepEqual(generic.none,[]);assert.deepEqual(generic.legacy,[]);assert.deepEqual(generic.fields,[["ema20",123],["rsi14",51]]);
+  await page.locator("#timeframe").selectOption("60");assert.ok((await page.locator("#chartFrame").innerText()).startsWith("60m chart"));
   await page.setViewportSize({width:390,height:844});
   const nav=page.getByRole("navigation",{name:"Workspace navigation"});
   assert.equal(await nav.getByRole("link").count(),3);

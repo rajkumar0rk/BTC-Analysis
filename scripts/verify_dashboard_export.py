@@ -22,6 +22,12 @@ def main():
         assert any(r["symbol"]=="ETHUSD" and r.get("detail_available",True) for r in runs), "ETH artifact exists but no full ETH import"
     for r in runs:
         assert math.isfinite(r["net"])
+        declared=r.get("indicator_definitions")
+        if declared is not None:
+            assert isinstance(declared,list) and len(declared)<=64
+            ids=[d["id"] for d in declared]
+            assert len(ids)==len(set(ids)) and all(isinstance(i,str) and i for i in ids)
+            assert all(isinstance(d["name"],str) and type(d["timeframe_minutes"]) is int and d["timeframe_minutes"]>0 and d["panel"] in ("price","panel") and isinstance(d.get("parameters",{}),dict) for d in declared)
         assert sum(m["trades"] for m in r["months"])==r["trades"]
         assert abs(sum(m["net"] for m in r["months"])-r["net"])<.1
         cv=read(ROOT/"runs"/r["id"]/"curve.json")
@@ -32,6 +38,16 @@ def main():
             assert len(rows)==m["trades"]
             assert all(t["entry_utc"]<=t["exit_utc"] and math.isfinite(t["net_points"]) for t in rows)
             assert len({t["id"] for t in rows})==len(rows)
+            for t in rows:
+                for field in ("indicator_series","indicator_values"):
+                    if field not in t:continue
+                    assert declared is not None and isinstance(t[field],dict) and set(t[field])<=set(ids)
+                    for val in t[field].values():
+                        if field=="indicator_values":assert val is None or (type(val) in (int,float) and math.isfinite(val))
+                        else:
+                            assert isinstance(val,list) and len(val)<=100000
+                            assert all(isinstance(p,list) and len(p)==2 and type(p[0]) is int and (p[1] is None or (type(p[1]) in (int,float) and math.isfinite(p[1]))) for p in val)
+                            assert all(a[0]<b[0] for a,b in zip(val,val[1:]))
     for symbol,days in index["candle_days"].items():
         assert days==sorted(set(days))
         for day in days:

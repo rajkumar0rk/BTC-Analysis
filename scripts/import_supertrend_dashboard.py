@@ -106,6 +106,8 @@ def main(root,out):
         ctx.update(quantity_btc=r["quantity"],gross_usd=r["gross_usd"],fee_gst_usd=r["fee_gst_usd"])
         reason={"flip":"Confirmed 15M Supertrend reversal","lock":"RSI adaptive profit protection"}[r["exit_reason"]]
         records.append(dict(id=f"{rid}-{i}",entry_utc=en,exit_utc=ex,trigger_utc=trigger,side=direction,entry_price=ep,exit_price=xp,entry_reason="15M EMA20 cross and reclaim; aligned Supertrend, volume, volatility and RSI filters",exit_reason=reason,result=r["exit_reason"],net_points=net,stop_price=None,target_price=None,trailing_stop_price=number(r["trailing_stop_price"]),signal_context=ctx,signal_tf=15,audit="Recorded 1M Color replay; lock exits timestamped at execution-minute close"))
+        for field in ("indicator_series","indicator_values"):
+            if field in r:records[-1][field]=r[field]
     if abs(sum(t["net_points"] for t in records)-sr["net"])>1e-8 or sum(t["net_points"]>0 for t in records)!=sr["wins"]:
         raise ValueError("RSI ledger summary mismatch")
     if abs(sr["net"]-.7980515306245621)>1e-8 or sum(r["result"]=="lock" for r in records)!=54:
@@ -118,6 +120,7 @@ def main(root,out):
         months.append(dict(month=month,net=round(sum(t["net_points"] for t in rs),6),trades=len(rs),wins=sum(t["net_points"]>0 for t in rs)))
     dump(data/"runs"/rid/"curve.json",curve(records))
     index["runs"].append(dict(id=rid,strategy=name,symbol="BTCUSD",unit="account USD",source=link(key,"ledger.json"),audit="Recorded modeled 1M Color fills; lock exits minute-close timestamp",research_reference=True,detail_available=True,target=None,stop=None,months=months,costs="1x; $100 initial equity; 100% target exposure; weekdays IST; 0.05% taker each side + 18% GST; modeled 30-minute exit fee waiver; no additional slippage or funding. Mark-triggered protection, interpolated trade fills.",**stats(records)))
+    if "indicator_definitions" in archive:index["runs"][-1]["indicator_definitions"]=archive["indicator_definitions"]
     monthly=[dict(month=k,value=v) for k,v in sorted(sr["monthly"].items())]
     if len(monthly)!=22 or sum(x["value"]>0 for x in monthly)!=sr["profitable_months"] or abs(sum(x["value"] for x in monthly)-sr["net"])>1e-6:
         raise ValueError("RSI MTM monthly result mismatch")
