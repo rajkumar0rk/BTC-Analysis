@@ -1,5 +1,5 @@
 import {useMemo,useState} from "react";
-import type {LocalResult,LocalDetails} from "./parallelReplay";
+import type {LocalResult,LocalDetails,CustomIndicatorSeries} from "./parallelReplay";
 import type {Trade} from "./api";
 const fmt=(x:unknown)=>x==null||!Number.isFinite(Number(x))?"—":Number(x).toLocaleString("en-US",{maximumFractionDigits:4});
 const sign=(x:unknown)=>Number(x)>0?"gain":Number(x)<0?"loss":"";
@@ -19,6 +19,37 @@ function Chart({points,bars=false,label}:{points:Point[];bars?:boolean;label:str
  <line x1={x(idx)} x2={x(idx)} y1="20" y2="195" stroke="#a8b7cb" strokeDasharray="4 4"/><circle cx={x(idx)} cy={y(visible[idx].value)} r="4" fill="#f5d58a"/>
  </svg><label>Chart point<input aria-label={label+" cursor"} type="range" min={0} max={visible.length-1} value={idx} onChange={e=>setCursor(Number(e.target.value))}/></label>
  {points.length>2&&<label>Chart start point<input aria-label={label+" zoom"} type="range" min={0} max={points.length-2} value={Math.min(zoom,points.length-2)} onChange={e=>{setZoom(Number(e.target.value));setCursor(0);}}/></label>}</section>;
+}
+function IndicatorChart({series}:{series:CustomIndicatorSeries[]}){
+ const [name,setName]=useState(series[0]?.name??""),[overlay,setOverlay]=useState(false),[cursor,setCursor]=useState(0);
+ const selected=series.find(s=>s.name===name)??series[0];
+ if(!selected)return null;
+ const points=selected.points,idx=Math.min(cursor,Math.max(0,points.length-1));
+ const valid=(v:string|null)=>v!==null&&Number.isFinite(Number(v));
+ const values=points.flatMap(p=>[...(valid(p.value)?[Number(p.value)]:[]),...(overlay&&valid(p.close)?[Number(p.close)]:[])]);
+ const lo=values.length?Math.min(...values):0,hi=values.length?Math.max(...values):1,span=Math.max(hi-lo,Math.abs(hi)*.000001,.000001);
+ const start=Date.parse(points[0]?.event_utc??""),end=Date.parse(points.at(-1)?.event_utc??"");
+ const x=(i:number)=>52+(Date.parse(points[i].event_utc)-start)*720/Math.max(1,end-start),y=(v:number)=>190-(v-lo)*160/span;
+ function segments(field:"value"|"close"){
+  const lines:string[][]=[];let line:string[]=[];
+  points.forEach((p,i)=>{if(!valid(p[field])){if(line.length)lines.push(line);line=[];}else line.push(x(i)+","+y(Number(p[field])));});
+  if(line.length)lines.push(line);return lines;
+ }
+ const active=points[idx];
+ return <section className="result-chart"><h4>Custom indicator history (completed candles)</h4>
+ <label>Custom indicator series<select value={selected.name} onChange={e=>{setName(e.target.value);setCursor(0);setOverlay(false);}}>{series.map(s=><option key={s.name} value={s.name}>{s.name} · {s.timeframe/60}m</option>)}</select></label>
+ <label className="check"><input type="checkbox" checked={overlay} onChange={e=>setOverlay(e.target.checked)}/> Overlay candle close (use only for formulas in price units)</label>
+ <p className="muted">{points.length} of {selected.total} completed candles sampled. Missing values remain blank; lines between samples are illustrative.</p>
+ {active&&<p aria-live="polite">{active.event_utc} · {selected.name}: {fmt(active.value)}{overlay?" · Close: "+fmt(active.close):""}</p>}
+ {values.length>0&&points.length>0?<svg viewBox="0 0 800 225" role="img" aria-label="Custom indicator history chart">
+ {[0,1,2,3,4].map(i=>{const v=lo+(hi-lo)*i/4;return <g key={i}><line x1="52" x2="772" y1={y(v)} y2={y(v)} stroke="#304058"/><text x="47" y={y(v)+4} textAnchor="end" fill="currentColor" fontSize="11">{Number(v.toPrecision(4))}</text></g>})}
+ {segments("value").map((line,i)=>line.length===1?<circle key={i} cx={Number(line[0].split(",")[0])} cy={Number(line[0].split(",")[1])} r="3" fill="#43cabb"/>:<polyline key={i} points={line.join(" ")} stroke="#43cabb" strokeWidth="2" fill="none"/>)}
+ {overlay&&segments("close").map((line,i)=><polyline key={i} points={line.join(" ")} stroke="#f5d58a" strokeWidth="1.5" fill="none"/>)}
+ <line x1={x(idx)} x2={x(idx)} y1="20" y2="195" stroke="#a8b7cb" strokeDasharray="4 4"/>
+ {valid(active.value)&&<circle cx={x(idx)} cy={y(Number(active.value))} r="4" fill="#43cabb"/>}
+ </svg>:<p>No ready formula values in the sampled history.</p>}
+ {points.length>0&&<label>Indicator chart point<input type="range" min={0} max={points.length-1} value={idx} onChange={e=>setCursor(Number(e.target.value))}/></label>}
+ </section>;
 }
 function exportTrades(trades:Trade[]){
  const cells=(v:string)=>'"'+(/^[=+@-]/.test(v)&&!/^-\d+(\.\d+)?$/.test(v)?"'"+v:v).replace(/"/g,'""')+'"';
@@ -57,5 +88,6 @@ export function ResultVisuals({result,csv}:{result:LocalResult;csv:string}){
  <div className="analytics-metrics">{[["Net USD",s.metrics.account_net],["Return %",s.metrics.account_return_pct],["Max event DD %",s.metrics.max_event_drawdown_pct],["Profit factor",s.metrics.profit_factor],["Trades",s.metrics.trades],["Win rate %",s.metrics.win_rate_pct],["Positive months",s.metrics.positive_months],["Negative months",s.metrics.negative_months]].map(([k,v])=><div className="metric-tile" key={String(k)}><small>{k}</small><strong className={k==="Net USD"?sign(v):""}>{fmt(v)}</strong></div>)}</div>
  <div className="scenarios"><Chart key={path+"pnl"} points={points} bars label="Monthly net P&L (IST)"/><Chart key={path+"equity"} points={equity.filter(p=>Number.isFinite(p.value))} label={s.details?"Sampled account equity (UTC)":"Month-end equity (IST)"}/></div><p className="muted">{s.details?"Equity chart samples "+s.details.equity.length+" of "+s.details.equity_total+" recorded equity points.":"Long replay shows actual month-end equity only."} Max event drawdown is the engine metric, not derived from chart samples. Calendar-month segments may be partial.</p>
  <div className="month-tiles">{s.monthly.map(m=><div key={m.month} className={"month-tile "+(Number(m.pnl)>0?"positive":Number(m.pnl)<0?"negative":"")}><small>{m.month}</small><strong>{fmt(m.pnl)} USD</strong><span>{fmt(m.return_pct)}%</span></div>)}</div>
+ {s.details?.custom_indicators?.length?<IndicatorChart key={s.path+"indicators"} series={s.details.custom_indicators}/>:null}
  {s.details?<Ledger key={path} details={s.details} csv={csv}/>:<p className="muted">Detailed trades are unavailable for summary-only long replay. Use a short CSV replay for trade inspection.</p>}</section>;
 }

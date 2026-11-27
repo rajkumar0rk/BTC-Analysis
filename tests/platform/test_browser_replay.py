@@ -17,6 +17,23 @@ class BrowserReplayTests(unittest.TestCase):
         self.assertTrue(a["research_only"])
         self.assertTrue(any(s["metrics"]["trades"] for s in a["scenarios"]))
         print("Native browser replay reference hash:",a["result_sha256"])
+    def test_custom_indicator_details_preserve_result_hash(self):
+        g=graph()
+        g["custom_formulas"]=[dict(name="avg",timeframe=60,lookback=2,expression='mean(series(bars, "close"))')]
+        g["long_entry"]["groups"][0]["conditions"][0]["right"]=dict(kind="custom",name="avg",timeframe=60)
+        c=compile_graph(Graph.model_validate(g))
+        a=replay(csv_text(),c["source"],"BTCUSD",SETTINGS,True)
+        b=replay(csv_text(),c["source"],"BTCUSD",SETTINGS,True,details=True)
+        self.assertEqual(a["result_sha256"],b["result_sha256"])
+        for scenario in b["scenarios"]:
+            s=scenario["details"]["custom_indicators"][0]
+            self.assertEqual(s["total"],60)
+            self.assertEqual(len(s["points"]),60)
+            self.assertIsNone(s["points"][0]["value"])
+            self.assertEqual(s["points"][1]["value"],"102.5")
+            self.assertEqual(s["points"][1]["close"],"103")
+        self.assertEqual(b["scenarios"][0]["details"]["custom_indicators"],b["scenarios"][1]["details"]["custom_indicators"])
+
     def test_bad_source_and_gaps_fail(self):
         c=compile_graph(Graph.model_validate(graph()))
         for source in ("import os",c["source"]+"\nraise RuntimeError('inert')"):

@@ -69,6 +69,8 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
         Timeframe(signal_seconds),tf,v["initial_equity"],"USD",leverage,mode,
         CostModel(v["maker_bps"],v["taker_bps"],v["tax_rate"],v["slippage_bps"],bool(risk_meta and risk_meta["funding_enabled"]),False,profile is not None,"local-assumptions"),
         IntrabarPolicy.BOTH_PATHS,"Asia/Kolkata","crypto-24x7")
+    if type(details) is not bool:raise ValueError("invalid details switch")
+    indicator_samples=[]
     count=0
     def stream():
         nonlocal count
@@ -77,18 +79,41 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             if count%128==0:progress(min(99,count*99//(len(rows)*2)))
             yield b
     def strategy():
-        if custom:return program.make(leverage)
-        obj=GraphStrategy(g)
-        # Exposure is percentage of account equity allocated to initial margin.
-        obj.exposure*=leverage
+        if custom:obj=program.make(leverage)
+        else:
+            obj=GraphStrategy(g)
+            # Exposure is percentage of account equity allocated to initial margin.
+            obj.exposure*=leverage
+        if details:
+            runtime=obj if custom else obj.formula_runtime
+            series=[]
+            indicator_samples.append(series)
+            if runtime is not None and runtime.custom:
+                records={}
+                for name,(frame,method,bars,history) in runtime.custom.items():
+                    total=len(rows)*60//frame.seconds
+                    record={"name":name,"timeframe":frame.seconds,"total":0,"points":[]}
+                    series.append(record)
+                    records[name]=(record,max(1,(total+598)//599))
+                original=obj.on_completed_candle
+                def observe(candle):
+                    original(candle)
+                    for name,(frame,method,bars,history) in runtime.custom.items():
+                        if candle.timeframe!=frame:continue
+                        record,stride=records[name]
+                        record["total"]+=1
+                        if (record["total"]-1)%stride==0 or candle.close_utc==end:
+                            record["points"].append({"event_utc":to_wire(candle.close_utc),
+                                "value":to_wire(history[-1]) if history else None,
+                                "close":to_wire(candle.close)})
+                obj.on_completed_candle=observe
         return obj
     result=run_backtest(cfg,strategy,stream,linear_contract=True,dataset_manifest_sha256=h,
         indicator_book_factory=cache.book if cache is not None else None,margin_profile=profile,
         risk_factory=(lambda:iter(risk_rows)) if profile is not None else None,
         risk_manifest_sha256s=tuple(d.manifest_sha256 for d in risk_refs))
-    if type(details) is not bool:raise ValueError("invalid details switch")
     scenarios=[]
-    for s in result.scenarios:
+    for scenario_index,s in enumerate(result.scenarios):
         wire=to_wire(s)
         scenarios.append({"path":s.path,"bars":s.bars,"metrics":summarize(wire),"monthly":wire["monthly"],
                           "final_equity":wire["final_equity"],"fees":wire["fees"],"taxes":wire["taxes"],
@@ -103,6 +128,7 @@ def replay(csv_text,graph_text,symbol,settings,assume_open,progress=lambda p:Tru
             ids={f["fill_id"] for t in trades for f in t["entry_fills"]+t["exit_fills"]}
             evidence=[e for e in wire["execution_evidence"] if e["fill_id"] in ids]
             scenarios[-1]["details"]={"equity":[{"event_utc":x["event_utc"],"equity":x["equity"]} for x in sampled],"equity_total":len(curve),"closed_trade_total":len(wire["closed_trades"]),"trades":trades,"evidence":evidence}
+            if indicator_samples[scenario_index]:scenarios[-1]["details"]["custom_indicators"]=indicator_samples[scenario_index]
     return {"engine_version":result.engine_version,"source":"user CSV (unverified provenance)","research_only":True,"data_sha256":h,"graph_sha256":compiled["graph_sha256"],
             "result_sha256":result.result_sha256,"worst_path":result.worst_path,"scenarios":scenarios,"risk":risk_meta,
             "limitations":list(result.limitations)+(["Restricted SDK Python interpreted locally; unsupported syntax or calls fail. No arbitrary Python runtime or external warmup."] if custom else ["No warmup outside CSV; fixed-point protection active on entry minute." if g.advanced is not None and g.advanced.exit_mode=="points" else "No warmup outside CSV; entry candle percentage protection starts on next minute."])}
