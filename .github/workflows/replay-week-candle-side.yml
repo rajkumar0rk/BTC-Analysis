@@ -1,0 +1,31 @@
+name: Weekly BTC ETH candle-side replay
+on:
+  push:
+    branches: ['research/week-candle-side-20261127']
+    paths: ['.github/workflows/replay-week-candle-side.yml']
+permissions:
+  contents: read
+jobs:
+  replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        asset: [BTC, ETH]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.2.6 pandas==2.2.3
+      - run: python -m py_compile scripts/replay_btc_week_candle_side.py scripts/replay_eth_legacy15m_week.py scripts/replay_eth_legacy15m_2026.py
+      - if: matrix.asset == 'BTC'
+        run: python -u scripts/replay_btc_week_candle_side.py --output "$RUNNER_TEMP/result"
+      - if: matrix.asset == 'ETH'
+        run: python -u scripts/replay_eth_legacy15m_week.py --output "$RUNNER_TEMP/result"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: weekly-candle-side-${{ matrix.asset }}
+          path: ${{ runner.temp }}/result
+          if-no-files-found: error

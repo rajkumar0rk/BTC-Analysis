@@ -68,7 +68,7 @@ if __name__=="__main__":
     print("WEEK_DATA "+json.dumps(dict(start_ist=str(START.tz_convert("Asia/Kolkata")),end_exclusive_ist=str(end.tz_convert("Asia/Kolkata")),trade_candles=len(t),mark_candles=len(m))),flush=True)
     results=[]
     for spread in (0.,):
-        for path in ("COLOR",):
+        for path in ("COLOR","DIRECTION"):
             result,trades=replay(t,m,b,path,spread)
             ledger=pd.DataFrame(trades)
             ledger.to_csv(args.output/f"trades-{path}-{spread}.csv",index=False)
@@ -82,4 +82,5 @@ if __name__=="__main__":
             result["days_realized"]=days
             results.append(result)
             print("ETH_WEEK_RESULT "+json.dumps(result),flush=True)
+    assert pd.read_csv(args.output/"trades-COLOR-0.0.csv").equals(pd.read_csv(args.output/"trades-DIRECTION-0.0.csv")),"same candle rule must give identical ledgers"
     (args.output/"summary.json").write_text(json.dumps(dict(start_utc=str(START),end_exclusive_utc=str(end),trade_candles=len(t),mark_candles=len(m),results=results),indent=2))
