@@ -1,5 +1,5 @@
 import {useEffect,useRef,useState} from "react";
-import {FrameSelect,RuleEdit,AdvancedVisualControls,SequenceControls,CustomFormulaControls,StateMachineControls,PartialExitControls} from "./VisualBuilder";
+import {FrameSelect,RuleEdit,AdvancedVisualControls,SequenceControls,CustomFormulaControls,StateMachineControls,PartialExitControls,ConditionalLockControls} from "./VisualBuilder";
 import {initialGraph,keys} from "./visualTypes";
 import type {Graph,Compiled} from "./visualTypes";
 import type {Catalog} from "./api";
@@ -30,6 +30,7 @@ export function CloudVisualAuthor({disabled,onSource}:{disabled:boolean;onSource
  {catalog&&<StateMachineControls graph={graph} change={setGraph} catalog={catalog} disabled={locked}/>}
  {catalog&&<StateMachineControls positionExit graph={graph} change={setGraph} catalog={catalog} disabled={locked}/>}
  {catalog&&<PartialExitControls graph={graph} change={setGraph} catalog={catalog} disabled={locked}/>}
+ {catalog&&<ConditionalLockControls graph={graph} change={setGraph} catalog={catalog} disabled={locked}/>}
  {catalog&&keys.map(k=><RuleEdit key={k} title={k.replaceAll("_"," ")} rule={graph[k]} change={v=>setGraph(g=>({...g,[k]:v}))} custom={graph.custom_formulas??[]} catalog={catalog} disabled={locked}/>)}
  <button disabled={!catalog||locked} onClick={()=>request("compile_visual",x=>{const result=x as Compiled;if(typeof result.source!=="string")throw Error("Invalid compiler response");onSource(result.source);})}>Generate visual strategy source</button></fieldset>
  {busy&&<p role="status">Loading local Python compiler…</p>}{error&&<p role="alert" className="error">{error}</p>}

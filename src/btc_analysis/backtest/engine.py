@@ -179,6 +179,30 @@ class Context:
         return values[-1] if values else None
     def indicator_history(self,name,timeframe,parameters=None,*,limit=2):
         return self._sim.indicators.get(name,timeframe,parameters,limit)
+    def tighten_fixed_stop(self,locked_points):
+        """Trusted close-time helper; amendments cannot weaken or remove protection."""
+        s=self._sim
+        if type(locked_points) is not D or not locked_points.is_finite() or not ZERO<=locked_points<=D("1000000000"):
+            raise ValueError("invalid conditional locked points")
+        if not s.active or s.halted or not s.quantity or len(s.entries)!=1:return False
+        if getattr(s.strategy,"fixed_point_bracket",None) is None:return False
+        history=s.history[s.cfg.execution_timeframe.seconds]
+        if not history or history[-1].close_utc!=s.now:return False
+        direction=D(1) if s.quantity>0 else D(-1)
+        entry=s.entries[0]
+        key="__fixed_stop_"+entry.fill_id
+        pending=s.pending.get(key)
+        if pending is None:return False
+        old=pending.intent
+        side=Side.SELL if direction>0 else Side.BUY
+        if not old.reduce_only or old.order_type is not OrderType.STOP_MARKET or old.side is not side:return False
+        candidate=s.round_price(entry.price+direction*locked_points,side)
+        # Must be strictly protective of the observable trade close; never
+        # retroactively trigger against a wick from the candle just completed.
+        if candidate<=ZERO or direction*(candidate-old.stop_price)<=ZERO or direction*(history[-1].close-candidate)<=ZERO:return False
+        pending.intent=replace(old,stop_price=candidate,reason="conditional_profit_lock_stop",decision_utc=s.now)
+        s.log(key,"amended","conditional_profit_lock_stop",pending.intent)
+        return True
     def submit(self, intent): self._sim.submit(intent)
     def cancel(self, intent_id): self._sim.cancel(intent_id)
 

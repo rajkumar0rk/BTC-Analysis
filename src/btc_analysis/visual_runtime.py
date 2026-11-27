@@ -78,6 +78,7 @@ class VisualStrategyBase(PythonStrategy):
     machine_config=None
     exit_machine_config=None
     partial_config=None
+    conditional_lock_config=None
     custom_config=None
 
     def __init__(self):
@@ -198,6 +199,13 @@ class VisualStrategyBase(PythonStrategy):
         self.sequence_state[direction]=(index,started)
         return index==stages
 
+    def conditional_lock_rule(self,ctx,direction):return False
+
+    def maybe_lock(self,ctx,direction):
+        points=(self.conditional_lock_config or {}).get(direction)
+        if points is not None and self.conditional_lock_rule(ctx,direction):
+            ctx.tighten_fixed_stop(D(points))
+
     def partial_rule(self,ctx,direction):return False
 
     def maybe_partial(self,ctx,direction):
@@ -234,11 +242,15 @@ class VisualStrategyBase(PythonStrategy):
                 if q*direction<=0:self.exit_machine_state[direction]=(0,None)
         if q>0:
             if self.machine_ready(ctx,1,position_exit=True) and self.long_exit(ctx):self.close_position(ctx,"visual_long_rule_exit")
-            else:self.maybe_partial(ctx,1)
+            else:
+                self.maybe_lock(ctx,1)
+                self.maybe_partial(ctx,1)
             return
         if q<0:
             if self.machine_ready(ctx,-1,position_exit=True) and self.short_exit(ctx):self.close_position(ctx,"visual_short_rule_exit")
-            else:self.maybe_partial(ctx,-1)
+            else:
+                self.maybe_lock(ctx,-1)
+                self.maybe_partial(ctx,-1)
             return
         if ctx.equity<=0:return
         if a is None:

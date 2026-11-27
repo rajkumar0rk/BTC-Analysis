@@ -213,6 +213,18 @@ class PartialExit(Strict):
         return self
 
 
+class ConditionalLock(Strict):
+    locked_points:DecimalText
+    rule:Rule
+
+    @model_validator(mode="after")
+    def check(self):
+        if not Decimal(0)<=Decimal(self.locked_points)<=Decimal("1000000000"):
+            raise ValueError("conditional locked points outside supported bounds")
+        if not self.rule.enabled:raise ValueError("conditional lock rule must be enabled")
+        return self
+
+
 class Graph(Strict):
     schema_version:Literal[1]=1
     signal_timeframe:Literal[60,180,300,900,1800,3600,14400,86400]=900
@@ -230,6 +242,8 @@ class Graph(Strict):
     short_exit_machine:EntryMachine|None=None
     long_partial:PartialExit|None=None
     short_partial:PartialExit|None=None
+    long_lock:ConditionalLock|None=None
+    short_lock:ConditionalLock|None=None
     long_entry:Rule
     short_entry:Rule
     long_exit:Rule
@@ -243,6 +257,9 @@ class Graph(Strict):
             if seq is not None and machine is not None:raise ValueError("choose a sequence or a state machine per direction")
             if (seq is not None or machine is not None) and (self.advanced is None or not getattr(self,direction+"_entry").enabled):
                 raise ValueError("entry sequence or state machine requires advanced controls and an enabled directional entry rule")
+            lock=getattr(self,direction+"_lock")
+            if lock is not None and (self.advanced is None or self.advanced.exit_mode!="points" or not getattr(self,direction+"_entry").enabled):
+                raise ValueError("conditional lock requires fixed-point protection and enabled directional entry")
             partial=getattr(self,direction+"_partial")
             if partial is not None and not getattr(self,direction+"_entry").enabled:
                 raise ValueError("partial exit requires enabled directional entry")
@@ -298,7 +315,12 @@ class Graph(Strict):
                 if machine.reset is not None:extra.append(machine.reset)
         for partial in (self.long_partial,self.short_partial):
             if partial is not None:extra.append(partial.rule)
+        for lock in (self.long_lock,self.short_lock):
+            if lock is not None:extra.append(lock.rule)
         return (self.long_entry,self.short_entry,self.long_exit,self.short_exit,*extra)
+
+    def lock_config(self):
+        return {direction:p.locked_points for direction,p in ((1,self.long_lock),(-1,self.short_lock)) if p is not None}
 
     def partial_config(self):
         return {direction:p.pct for direction,p in ((1,self.long_partial),(-1,self.short_partial)) if p is not None}
@@ -331,6 +353,9 @@ def raw_rules(raw):
     for name in ("long_partial","short_partial"):
         p=raw.get(name)
         if p is not None:yield p["rule"]
+    for name in ("long_lock","short_lock"):
+        p=raw.get(name)
+        if p is not None:yield p["rule"]
 
 
 def canonical_graph(graph:Graph):
@@ -348,6 +373,8 @@ def canonical_graph(graph:Graph):
         raw[key]=to_wire(Decimal(raw[key]))
     for name in ("long_partial","short_partial"):
         if name in raw:raw[name]["pct"]=to_wire(Decimal(raw[name]["pct"]))
+    for name in ("long_lock","short_lock"):
+        if name in raw:raw[name]["locked_points"]=to_wire(Decimal(raw[name]["locked_points"]))
     for rule in raw_rules(raw):
         for group in rule["groups"]:
             for cond in group["conditions"]:
@@ -434,6 +461,9 @@ def compile_graph(graph:Graph):
     if g.partial_config():
         pos=lines.index("    def indicators(self):")
         lines[pos:pos]=["    partial_config = "+repr(g.partial_config()), ""]
+    if g.lock_config():
+        pos=lines.index("    def indicators(self):")
+        lines[pos:pos]=["    conditional_lock_config = "+repr(g.lock_config()), ""]
     for name,tf,params in sorted(specs):
         lines.append("            IndicatorSpec.create("+repr(name)+", Timeframe("+str(tf)+"), "+params+"),")
     lines+=["        )","","    def extra_timeframes(self):",
@@ -476,6 +506,12 @@ def compile_graph(graph:Graph):
     if g.partial_config():
         lines+=["","    def partial_rule(self, ctx, direction):"]
         for direction,p in ((1,g.long_partial),(-1,g.short_partial)):
+            if p is not None:
+                lines+=["        if direction == "+str(direction)+":","            return "+_rule(p.rule)]
+        lines+=["        return False"]
+    if g.lock_config():
+        lines+=["","    def conditional_lock_rule(self, ctx, direction):"]
+        for direction,p in ((1,g.long_lock),(-1,g.short_lock)):
             if p is not None:
                 lines+=["        if direction == "+str(direction)+":","            return "+_rule(p.rule)]
         lines+=["        return False"]
