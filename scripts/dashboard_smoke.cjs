@@ -35,16 +35,30 @@ const assert=require("node:assert/strict");
   const viewBefore=await page.evaluate(()=>({count:viewCount,cutoff:replayCutoff()}));
   await page.locator("#chart-zoom-in").click();
   assert.ok(await page.evaluate(()=>viewCount)<viewBefore.count);
-  const cross=await page.locator("#chart").boundingBox();await page.mouse.move(cross.x+cross.width*.65,cross.y+130);
+  await page.locator("#chart").scrollIntoViewIfNeeded();await page.waitForFunction(()=>chartGeometry&&baseValid);
+  const cross=await page.locator("#chart").boundingBox(),points=await page.evaluate(()=>{const g=chartGeometry,ids=g.b.map((_,i)=>i).filter(i=>g.at(i)>g.pad+10&&g.at(i)<g.right-10);return [g.at(ids[Math.floor(ids.length/3)]),g.at(ids[Math.floor(ids.length*2/3)])]});
+  await page.mouse.move(cross.x+points[0],cross.y+130);
   await page.waitForFunction(()=>document.querySelector("#chartInspect").textContent.includes("O "));
   await page.locator("#tool-measure").click();
-  const box=await page.locator("#chart").boundingBox();await page.mouse.move(box.x+box.width*.62,box.y+100);await page.mouse.down();await page.mouse.move(box.x+box.width*.78,box.y+180,{steps:8});await page.mouse.up();
+  await page.locator("#chart").scrollIntoViewIfNeeded();const box=await page.locator("#chart").boundingBox();await page.mouse.move(box.x+points[0],box.y+100);await page.mouse.down();await page.mouse.move(box.x+points[1],box.y+180,{steps:8});await page.mouse.up();
   assert.ok(await page.evaluate(()=>drawings.some(d=>d.kind==="measure")));
   assert.deepEqual(await page.evaluate(()=>measurement({time:0,price:100},{time:900,price:110})),{delta:10,pct:10,bars:15,elapsed:"15m"});
   await page.locator("#tool-clear").click();assert.equal(await page.evaluate(()=>drawings.length),0);
   await page.locator("#tool-pan").click();await page.locator("#chart-older").click();
   assert.ok(await page.evaluate(()=>viewEnd!==null));assert.equal(await page.evaluate(()=>replayCutoff()),viewBefore.cutoff);
   await page.locator("#chart-reset").click();assert.equal(await page.evaluate(()=>viewEnd),null);
+  // Browse forward without advancing causal execution; replay starts with a usable Next button.
+  const beforeForward=await page.evaluate(()=>({right:currentRight(),cutoff:replayCutoff(),max:archiveBounds().max}));
+  await page.locator("#chart-newer").click();
+  assert.equal(await page.evaluate(()=>replayCutoff()),beforeForward.cutoff);
+  if(beforeForward.right<beforeForward.max)assert.ok(await page.evaluate(()=>currentRight())>beforeForward.right);
+  await page.locator("#replay-start").click();assert.equal(await page.evaluate(()=>limit),1);
+  assert.equal(await page.evaluate(()=>chartCutoff()),await page.evaluate(()=>replayCutoff()));
+  const first=await page.evaluate(()=>replayCutoff());
+  if(await page.evaluate(()=>bars.length)>1){await page.locator("#next").click();assert.ok(await page.evaluate(()=>replayCutoff())>first)}
+  await page.locator("#replay-end").click();assert.equal(await page.evaluate(()=>replayMode),false);
+  // Sub-candle pans do not snap to integer bars.
+  const moved=await page.evaluate(()=>{const a=currentRight();panBy(-15);return a-currentRight()});assert.equal(moved,15);
   if(remote){assert.ok(requests.some(x=>/^https:\/\/raw\.githubusercontent\.com\/rajkumar0rk\/BTC-Analysis\/[a-f0-9]{40}\/data\/index\.json$/.test(x)),"remote pinned index");assert.ok(requests.every(x=>x.startsWith("https://raw.githubusercontent.com/")),"no bundled data");await page.locator("#refreshData").click();await page.locator("#ledger tr").first().waitFor();}
   await page.locator("#play").click();await page.waitForTimeout(250);await page.locator("#full").click();
   await page.locator("#showCoverage").click();await page.locator("#archiveCoverage table").waitFor();
