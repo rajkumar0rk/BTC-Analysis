@@ -1,0 +1,33 @@
+name: R43 C01 clean retrospective replay
+on:
+  push:
+    branches: [research/r43-c01-clean-20261128]
+    paths:
+      - scripts/research_r43_c01_clean.py
+      - .github/workflows/research-r43-c01-clean.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git fetch --depth=1 origin 2322033bef409d8c722571876b34f064fc418a72
+          git checkout FETCH_HEAD -- data/delta_india/BTCUSD/2024_verified_archive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas numba scikit-learn tabulate
+      - run: python -m py_compile scripts/research_r43_c01_clean.py
+      - run: python scripts/research_r43_c01_clean.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r43-clean
+          path: analysis/r43_clean/
