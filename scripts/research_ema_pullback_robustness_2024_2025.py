@@ -19,7 +19,7 @@ def historical_rows(year,series,start,end):
     if year==2024:
         files=sorted((ROOT/"BTCUSD/2024_verified_archive"/series).glob("2024-*.csv.gz"))
         files+=sorted((ROOT/"2024_recovery_candidates/BTCUSD").glob("2024-*/"+series+".csv.gz"))
-    else:files=sorted((ROOT/"BTCUSD/institutional/history"/series).glob("2025-*.csv.gz"))
+    else:files=sorted((ROOT/"BTCUSD/institutional/history"/series).glob(f"{year}-*.csv.gz"))
     values={}
     for p in files:
         with gzip.open(p,"rt") as f:
