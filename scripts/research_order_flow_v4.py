@@ -26,16 +26,31 @@ class Fixed(Candidate):
 def imbalance(s,v):return s/v if v>0 else 0.
 def trim(q,t,seconds):
     while q and q[0][0]<t-seconds*NS:q.popleft()
-def signals(rows,ois,t):
+def trim_signal_history(rows,t):
+    # Retain the single observation at or before the 600s cutoff.
+    # A count of 120 is not guaranteed by a >=5s event-driven evaluation cadence.
+    cutoff=t-600*NS
+    while len(rows)>1 and rows[1][0]<=cutoff:rows.popleft()
+
+def signals(rows,ois,t,stats=None):
     out={n:0 for n in NAMES}
     cur=rows[-1];mid=cur[1];biddepth=cur[3];askdepth=cur[4]
-    if len(rows)<120 or t-rows[0][0]<590*NS:return out
+    if stats is None:stats=collections.Counter()
+    if t-rows[0][0]<600*NS:
+        stats['warmup_elapsed_block']+=1
+        return out
+    if t-600*NS-rows[0][0]>10*NS:
+        stats['warmup_anchor_stale']+=1
+        return out
     def recent(sec):return [r for r in rows if r[0]>=t-sec*NS]
     r30=recent(30);r60=recent(60);r300=recent(300)
     prior60=[r for r in r60 if r[0]<t]
     prev300=[r for r in rows if t-600*NS<=r[0]<t-300*NS]
     prior300=[r for r in r300 if r[0]<t]
-    if len(r30)<5 or len(prior60)<10 or len(prior300)<55 or len(prev300)<55:return out
+    if len(r30)<5 or len(prior60)<10 or len(prior300)<55 or len(prev300)<55:
+        stats['window_sample_coverage_block']+=1
+        return out
+    stats['signal_evaluations_ready']+=1
     m30=statistics.mean(r[2] for r in r30)
     ret30=mid/r30[0][1]-1;ret60=mid/r60[0][1]-1
     if m30>=.25 and ret60>=.0003:out[NAMES[0]]=1
@@ -105,8 +120,9 @@ def main():
             micro=(bq-aq)/(bq+aq) if bq+aq>0 else 0.
             rows.append((t,mid,micro,sum(q for _,q in b),sum(q for _,q in a),signed,vol,*replen,bq,aq))
             signed=vol=0.;replen=[0.]*4
-            trim(rows,t,600);trim(ois,t,1200)
-            if (ap-bp)/mid<=.0002:sig=signals(rows,ois,t)
+            trim_signal_history(rows,t);trim(ois,t,1200)
+            if (ap-bp)/mid<=.0002:sig=signals(rows,ois,t,stats)
+            else:stats['spread_block']+=1
             for n,d in sig.items():
                 if d:signal_counts[n]+=1
         for sim in sims:
@@ -114,6 +130,8 @@ def main():
     for sim in sims:sim.gap(hi,'end_of_archive')
     args.output.mkdir(parents=True,exist_ok=True)
     report={'window':[args.start,args.end],'files':[len(primary),len(backup),len(rest)],'stats':dict(stats),'evaluations_by_day':dict(days),'signal_counts':dict(signal_counts),'rules':RULES,'settings':{'capital_usd':100,'lot_btc':LOT,'fee_per_side_incl_gst':FEE,'stop_pct':.3,'target_pct':.6,'hold_minutes':30,'cooldown_seconds':300,'signal_interval_seconds':5,'funding':'hourly boundary avoidance; no funding cashflows simulated','scope':'fixed rules on previously examined week; not independent validation; no tuning; gap exposure unresolved, PnL incomplete when unresolved','proxies':'same-price visible replenishment not proven iceberg; OI decline not confirmed liquidation'},'results':[s.report() for s in sims]}
+    if not stats['signal_evaluations_ready']:
+        raise RuntimeError('No eligible signal evaluations; coverage diagnostics: '+json.dumps(dict(stats)))
     (args.output/'summary.json').write_text(json.dumps(report,indent=2))
     for i,s in enumerate(sims):
         (args.output/f'candidate_{i:02d}.json').write_text(json.dumps({'config':s.report(),'closed_trades':s.trades,'unresolved':s.unresolved}))
