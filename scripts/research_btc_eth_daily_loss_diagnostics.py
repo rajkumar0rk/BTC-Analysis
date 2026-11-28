@@ -131,6 +131,6 @@ def main():
     (OUT/"coverage.json").write_text(json.dumps(coverage,indent=2))
     print("coverage",json.dumps(coverage),flush=True)
     print("both profitable count",int(pair.both_profitable.sum()),flush=True)
-    print("baseline diagnostics",summary[(summary.mask==0)].to_json(orient="records"),flush=True)
+    print("baseline diagnostics",summary[(summary["mask"]==0)].to_json(orient="records"),flush=True)
     print("ranked",pair.sort_values("min_return",ascending=False).head(20).to_json(orient="records"),flush=True)
 if __name__=="__main__":main()
