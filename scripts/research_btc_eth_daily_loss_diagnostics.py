@@ -97,7 +97,7 @@ def replay(a,sig,atr,trend,expand,volume,body,ema,mask,side,hold,regime,fee):
         else:shortnet+=net
         peak=max(peak,equity);dd=max(dd,(peak-equity)/peak)
         i=x+1
-    return (equity-1,gross,costs,trades,wins,posgain,negloss,dd,int(np.sum(daily>0)),int(np.sum(daily<0)),int(np.sum(daily==0)),longnet,shortnet,*exitcounts)
+    return (equity-1,gross,costs,trades,wins,posgain,negloss,dd,int(np.sum(daily>0)),int(np.sum(daily<0)),int(np.sum(daily==0)),longnet,shortnet,exitcounts[0],exitcounts[1],exitcounts[2],exitcounts[3],exitcounts[4])
 def main():
     results=[]; coverage=[]
     for symbol in ("BTCUSD","ETHUSD"):
