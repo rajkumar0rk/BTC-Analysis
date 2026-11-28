@@ -16,7 +16,7 @@ def run(validation):
     next_free=0
     for j in anchors:
         if j<211 or j<next_free or dates[j] not in valid_days: continue
-        if j+5>=len(ix) or ix[j]-ix[j-210]!=pd.Timedelta(minutes=210): continue
+        if j+5>=len(ix) or ix[j]-ix[j-211]!=pd.Timedelta(minutes=211): continue
         # Remove regime routing and majority votes: direction of completed hour.
         delta=c[j-1]-o[j-60]
         if delta==0: continue
@@ -59,6 +59,8 @@ def run(validation):
     st=ledger.start.to_numpy(np.int64); en=ledger.end.to_numpy(np.int64)
     sd=ledger.side.to_numpy(np.int8); gg=ledger.gross.to_numpy(float)
     assert len(st)>0 and (st[1:]>en[:-1]).all()
+    assert (local[st].weekday<5).all()
+    assert (dates[st]==dates[en]).all()
     path=pricing(st,sd,en-st,gg,o,mh,ml,pre,post,old,slips,modes)
     assert np.isfinite(path).all()
     d=local[st]; y=np.asarray(d.year-(2026 if validation else 2024),np.int64)
