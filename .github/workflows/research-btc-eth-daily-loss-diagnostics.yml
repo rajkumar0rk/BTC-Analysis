@@ -1,0 +1,27 @@
+name: BTC ETH daily loss diagnostics 2024-2025
+on:
+  push:
+    branches: ['research/btc-eth-daily-loss-diagnostics-2024-2025']
+    paths:
+      - 'scripts/research_btc_eth_daily_loss_diagnostics.py'
+      - '.github/workflows/research-btc-eth-daily-loss-diagnostics.yml'
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.2.6 pandas==2.2.3 numba==0.61.2
+      - run: python scripts/research_btc_eth_daily_loss_diagnostics.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daily-loss-diagnostics-2024-2025
+          path: scratch/daily_loss_diagnostics/
+          if-no-files-found: error
