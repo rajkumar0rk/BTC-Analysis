@@ -75,7 +75,7 @@ def lane_events(paths,lo,hi,lane):
         elif m.get('type')=='trades' and m.get('sy')=='BTCUSD':
             yield t,lane,'trade',m
 def merged(paths,backup,rest,lo,hi,stats):
-    active=None;fresh={};vendor_floor=None;last_vendor=None
+    active=None;fresh={}
     o=((t,'rest','oi',m) for t,k,m in oi_events(rest,lo,hi))
     for t,lane,k,m in heapq.merge(lane_events(paths,lo,hi,'primary'),lane_events(backup,lo,hi,'backup'),o,key=lambda x:x[0]):
         if k=='oi':yield t,'oi',m;continue
@@ -125,7 +125,7 @@ class Sim:
                 self.equity+=net;self.peak=max(self.peak,self.equity);self.dd=max(self.dd,(self.peak-self.equity)/self.peak)
                 self.trades.append({'entry_ns':et,'exit_ns':t,'day':day(t),'side':ed,'entry':ep,'exit':p,'net':net,'fee':fee,'reason':why})
                 self.pos=None;self.cool=t+30*NS
-        # No modeled funding crossing: flatten well before any UTC hour boundary.
+        # Avoid assumed BTC eight-hour funding boundaries; do not model funding cashflows.
         # 1x, one contract, no exchange liquidation assumption.
         remain=28800-(t//NS)%28800
         if self.pos:
@@ -177,7 +177,7 @@ def main():
             except (ValueError,KeyError,TypeError):stats['trade_bad_size']+=1;continue
             if role not in ('m','t') or not math.isfinite(q) or q<=0:
                 stats['trade_unknown_side']+=1;continue
-            stats['trade_valid_side']+=1
+            stats['trade_documented_buyer_role']+=1
             if last_book is not None:
                 x=q if role=='t' else -q;prints.append((t,x,q));signed+=x;volume+=q
             continue
@@ -224,10 +224,11 @@ def main():
                     change=oi[-1][1]/oi[0][1]-1
                     if change>=.002:sig['OI_MOMENTUM']=side(ret,.0005)
                 if (ap-bp)/mid>.0002:sig={}
-        for sim in sims:sim.step(t,b,a,sig.get(sim.name,0) if evaluate else None)
+        for sim in sims:
+            if evaluate or sim.pos or sim.pending:sim.step(t,b,a,sig.get(sim.name,0) if evaluate else None)
     for sim in sims:sim.gap(hi,'end_of_archive')
     args.output.mkdir(parents=True,exist_ok=True)
-    result={'window':[args.start,args.end],'primary_only':False,'sealed_backup_files':len(backup),'sealed_primary_files':len(paths),'sealed_rest_files':len(rest),'stats':dict(stats),'eligible_evaluation_seconds_by_IST_day':dict(days),'settings':{'capital_usd':100,'one_lot_btc':LOT,'fee_per_side_incl_gst':FEE,'stop_pct':.2,'target_pct':.4,'max_hold_seconds':[300,900,1800,3600],'signal_min_interval_seconds':1,'funding':'assumed BTC eight-hour UTC funding boundaries; no position may cross; boundary-crossed positions unresolved','unresolved':'not counted as closed PnL; incomplete result if any','train_validation':'no fitting; Nov23-25 descriptive, Nov26-28 chronological check'},'results':[s.report() for s in sims]}
+    result={'window':[args.start,args.end],'primary_only':False,'sealed_backup_files':len(backup),'sealed_primary_files':len(paths),'sealed_rest_files':len(rest),'stats':dict(stats),'eligible_evaluation_seconds_by_IST_day':dict(days),'settings':{'capital_usd':100,'one_lot_btc':LOT,'fee_per_side_incl_gst':FEE,'stop_pct':.2,'target_pct':.4,'max_hold_seconds':[300,900,1800,3600],'signal_min_interval_seconds':1,'funding':'assumed BTC eight-hour UTC funding boundaries; no position may cross; boundary-crossed positions unresolved','unresolved':'not counted as closed PnL; incomplete result if any','train_validation':'exploratory grid on same week; not independent holdout'},'results':[s.report() for s in sims]}
     (args.output/'summary.json').write_text(json.dumps(result,indent=2))
     for s in sims:
         (args.output/f'{s.name}_{s.hold}_{s.persistence}.json').write_text(json.dumps({'closed_trades':s.trades,'unresolved':s.unresolved}))
