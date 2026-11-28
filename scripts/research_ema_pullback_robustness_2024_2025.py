@@ -11,6 +11,9 @@ CANDIDATES={"A":"1h","B":"none","C":"1h-4h"}
 PAIRS=((15,40),(20,50),(25,60));MULTS=(1.5,2.,2.5);DAYS=("all","weekdays");SLIPS=(0,10,50,100,200);WARM=("reset","continuous")
 EXPECTED={2024:{"A":31511.67895,"B":20392.73849,"C":16871.682875},2025:{"A":12681.484125,"B":16581.102135,"C":8274.811835}}
 ROOT=Path("data/delta_india")
+def json_scalar(value):
+    if isinstance(value,np.generic):return value.item()
+    raise TypeError(f"Unsupported JSON type: {type(value).__name__}")
 def historical_rows(year,series,start,end):
     # Only 2024/2025 archives; merge by absolute timestamps, not partition name.
     if year==2024:
@@ -100,6 +103,7 @@ def funded(ts,months):
     s=risk.risk_summary(adjusted,months)
     s["funding_proxy_cost"]=math.fsum(t["funding_proxy_cost"] for t in ts);return s
 def tests():
+    assert json.loads(json.dumps({"count":np.int64(2),"cost":np.float64(1.5),"valid":np.bool_(True)},default=json_scalar))=={"count":2,"cost":1.5,"valid":True}
     audit.tests()
     rng=np.random.default_rng(17);c=100+np.cumsum(rng.normal(0,.2,240*65));o=np.r_[c[0],c[:-1]];bars=np.array([o,np.maximum(o,c)+.2,np.minimum(o,c)-.2,c])
     p=indicator_pack(bars,(20,50));q=indicator_pack(bars[:,:240*60],(20,50))
@@ -123,7 +127,7 @@ def run():
                     if pair==(20,50) and mult==2 and days=="all" and slip==0 and w=="reset":
                         assert math.isclose(s["net"],EXPECTED[year][candidate],abs_tol=1e-6),(year,key,s["net"])
                     fs=funded(ts,list(s["monthly_entry_attribution"]));by_year[year][key]=(s,ts,fs)
-                    ledger.write(json.dumps(dict(year=year,key=key,summary=s,proxy_summary=fs,trades=ts),separators=(",",":"),allow_nan=False)+"\n")
+                    ledger.write(json.dumps(dict(year=year,key=key,summary=s,proxy_summary=fs,trades=ts),separators=(",",":"),allow_nan=False,default=json_scalar)+"\n")
             print("YEAR_COMPLETE",year,len(by_year[year]),flush=True)
     fields=("trades","net","profit_factor","profitable_months","realized_drawdown_points","fee_R","fee_pf","fee_months","fee_dd_R","points_without_top1","points_without_top3","points_without_top5","fee_R_without_top3")
     rows=[]
@@ -134,7 +138,7 @@ def run():
         for prefix,ys in (("2024_",a),("2025_",b),("proxy_",fs),("2024_proxy_",fa),("2025_proxy_",fb)):
             row.update({prefix+k:ys[k] if ys is not None else None for k in fields})
         row["proxy_funding_cost"]=fs["funding_proxy_cost"] if fs is not None else None
-        rows.append(row);print("RESULT",json.dumps(row,separators=(",",":"),allow_nan=False))
+        rows.append(row);print("RESULT",json.dumps(row,separators=(",",":"),allow_nan=False,default=json_scalar))
     assert len(rows)==540
     with (OUT/"all_results.csv").open("w",newline="") as f:
         writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
